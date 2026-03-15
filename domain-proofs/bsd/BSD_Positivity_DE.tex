@@ -1,0 +1,828 @@
+\documentclass[aps,prd,twocolumn,superscriptaddress,nofootinbib]{revtex4-2}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Sel}{Sel}
+\DeclareMathOperator{\Reg}{Reg}
+\DeclareMathOperator{\Sha}{Sha}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+
+\usepackage{hyperref}
+\hypersetup{
+    pdftitle={Die BSD-Vermutung als Positivitaets-Normalform-Theorem: Hoehensaettigung und die Unmoeglichkeit von Rang-Ordnungs-Diskrepanz},
+    pdfauthor={Lukas Geiger},
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=black
+}
+
+\begin{document}
+
+% ===================================================================
+% TITELSEITE
+% ===================================================================
+
+\title{Die BSD-Vermutung als Positivitaets-Normalform-Theorem:\\Hoehensaettigung und die Unmoeglichkeit\\von Rang-Ordnungs-Diskrepanz}
+
+\author{Lukas Geiger}
+\email{https://orcid.org/0009-0005-7296-1534}
+\affiliation{Unabhaengiger Forscher, Bernau im Schwarzwald, Deutschland}
+
+\date{\today}
+
+\begin{abstract}
+Wir formulieren die Birch-und-Swinnerton-Dyer-Vermutung als \textit{Positivitaets-Normalform-Theorem} um: der analytische Rang $\ord_{s=1} L(E,s)$ und der algebraische Rang $\rank E(\mathbb{Q})$ muessen uebereinstimmen, weil jede Diskrepanz eine von vier axiomatischen Zwangsbedingungen verletzen wuerde -- endliche arithmetische Kapazitaet, kooperative Hoehenpositivitaet, monotone Iwasawa-Kontrolle und Euler-System-Kompositionskohaerenz. Wir zeigen, dass die N\'eron-Tate-Hoehenpaarung die kanonische Positivitaetsstruktur liefert und fuer BSD dieselbe Rolle spielt, die die Hodge-Riemann-Form fuer die Hodge-Vermutung und die Frobenius-Positivitaet fuer die Weil-Vermutungen spielt. Die Fuehrungstermformel $L^{(r)}(E,1)/r! \sim \Omega_E \cdot R_E \cdot \prod c_p \cdot |\Sha|/|E(\mathbb{Q})_{\mathrm{tors}}|^2$ wird als einziges ,,Saettigungsprofil'' identifiziert, das mit allen vier Axiomen kompatibel ist -- keine alternative Fuehrungstermstruktur (z.B.\ analytische Nullstellen ohne geometrische Richtungen oder geometrischer Rang ohne analytische Ableitungen) kann Positivitaet und Kompositionskohaerenz gleichzeitig erfuellen. Wir beweisen, dass das Gross-Zagier-Theorem die Rang-1-Instantiierung dieses Frameworks ist: $L'(E,1) \sim \hat{h}(P_K)$ ist eine Positivitaetsidentitaet, die eine analytische Ableitung an eine nichtnegative Hoehe koppelt. Wir formulieren die \textit{Hoehensaettigungsvermutung}: fuer allgemeinen Rang $r$ ist die $r$-te Ableitung $L^{(r)}(E,1)$ proportional zur Determinante der Hoehenmatrix ueber $r$ unabhaengigen Punkten -- dem Regulator $R_E$ -- und die Nichtnegativitaet dieser Determinante (aus der Positiv-Definitheit von $\hat{h}$) erzwingt die Gleichheit $\ord_{s=1} L(E,s) = \rank E(\mathbb{Q})$. Wir identifizieren die praezise Obstruktion fuer einen vollstaendigen Beweis: das Fehlen einer universellen ,,hoeheren Gross-Zagier''-Formel und eines vollstaendigen Kolyvagin-Systems fuer beliebigen Rang, die die Positivitaets-Kompositionsschleife schliessen wuerden.
+\end{abstract}
+
+\keywords{Birch-und-Swinnerton-Dyer-Vermutung, N\'eron-Tate-Hoehe, Positivitaet, Euler-Systeme, Gross-Zagier, Iwasawa-Theorie, No-Go-Theorem}
+
+\thanks{KI-Werkzeuge (Claude, Anthropic) wurden fuer mathematische Formalisierung und Texterstellung verwendet. Alle mathematischen Inhalte, Vermutungen und die Verantwortung fuer die Korrektheit liegen ausschliesslich beim Autor.}
+
+\maketitle
+
+
+% ===================================================================
+% 1. EINFUEHRUNG
+% ===================================================================
+\section{Einfuehrung}
+\label{sec:intro}
+
+\subsection{Die BSD-Vermutung}
+
+Sei $E/\mathbb{Q}$ eine elliptische Kurve mit Fuehrer $N$ und $L$-Funktion $L(E,s) = \sum_{n \geq 1} a_n n^{-s}$. Die \textit{Birch-und-Swinnerton-Dyer-Vermutung} (BSD) \cite{BSD1965} behauptet:
+
+\begin{conjecture}[BSD -- Schwache Form]
+\label{conj:bsd_weak}
+$\ord_{s=1} L(E,s) = \rank E(\mathbb{Q})$.
+\end{conjecture}
+
+\begin{conjecture}[BSD -- Starke Form]
+\label{conj:bsd_strong}
+Der Fuehrungskoeffizient von $L(E,s)$ bei $s = 1$ erfuellt:
+\begin{equation}
+\frac{L^{(r)}(E,1)}{r!} = \frac{\Omega_E \cdot R_E \cdot \prod_p c_p \cdot |\Sha(E/\mathbb{Q})|}{|E(\mathbb{Q})_{\mathrm{tors}}|^2}\,,
+\label{eq:bsd_formula}
+\end{equation}
+wobei $r = \rank E(\mathbb{Q})$, $\Omega_E$ die reelle Periode, $R_E$ der Regulator (Determinante der N\'eron-Tate-Hoehenpaarung), $c_p$ die Tamagawa-Zahlen und $\Sha(E/\mathbb{Q})$ die Tate-Shafarevich-Gruppe ist.
+\end{conjecture}
+
+Die Vermutung ist bekannt fuer:
+\begin{itemize}
+\item \textbf{Rang 0:} Wenn $L(E,1) \neq 0$, dann $\rank E(\mathbb{Q}) = 0$ und $|\Sha| < \infty$ (Kolyvagin \cite{Kolyvagin1990}, unter Verwendung von Gross-Zagier \cite{GrossZagier1986}).
+\item \textbf{Rang 1:} Wenn $\ord_{s=1} L(E,s) = 1$, dann $\rank E(\mathbb{Q}) = 1$ und $|\Sha| < \infty$ (Gross-Zagier + Kolyvagin).
+\item \textbf{Rang $\geq 2$:} Im Allgemeinen offen.
+\end{itemize}
+
+\subsection{Die Positivitaetsperspektive}
+
+Diese Arbeit schlaegt vor, dass die BSD-Vermutung, wie die Hodge-Vermutung und die Weil-Vermutungen, fundamental eine \textit{Positivitaetsaussage} ist. Die zentrale Beobachtung:
+
+\begin{quote}
+\textit{Die N\'eron-Tate-Hoehenpaarung ist eine kanonische positiv-definite quadratische Form auf der Mordell-Weil-Gruppe. Sie detektiert arithmetische ,,Richtungen'' -- rationale Punkte modulo Torsion -- ueber ihre positiven Energiekosten. Die BSD-Vermutung behauptet, dass die $L$-Funktion genau diese Richtungen ,,sieht'', nicht mehr und nicht weniger.}
+\end{quote}
+
+Die Parallele zu bestehenden Positivitaetsbeweisen ist:
+
+\begin{center}
+\begin{tabular}{lll}
+\hline
+Vermutung & Positive Form & Resultat \\
+\hline
+Weil & Frobenius-Eigenwerte & Deligne 1974 \\
+Hodge & Hodge-Riemann-Form & Offen (dieses Programm) \\
+\textbf{BSD} & \textbf{N\'eron-Tate-Hoehe} & \textbf{Rang $\leq 1$} \\
+\hline
+\end{tabular}
+\end{center}
+
+Das Gross-Zagier-Theorem \cite{GrossZagier1986} ist das kanonische Beispiel: es koppelt die erste Ableitung $L'(E,1)$ an die Hoehe $\hat{h}(P_K)$ eines Heegner-Punktes und etabliert:
+\begin{equation}
+L'(E,1) \neq 0 \iff \hat{h}(P_K) > 0 \iff P_K \text{ Nicht-Torsion}\,.
+\end{equation}
+Dies ist eine \textit{Positivitaetsidentitaet}: ein analytisches Objekt (Ableitung von $L$) gleicht einem nichtnegativen geometrischen Objekt (Hoehe), und Nicht-Verschwinden auf einer Seite erzwingt Nichttrivialitaet auf der anderen.
+
+\subsection{Struktur dieser Arbeit}
+
+Wir entwickeln vier Axiome (Abschnitt~\ref{sec:axioms}), deren Konjunktion die BSD-Fuehrungstermformel als einzige ,,Normalform'' erzwingt. Wir zeigen, wie der Fall Rang $\leq 1$ bereits innerhalb dieses Frameworks bewiesen ist (Abschnitt~\ref{sec:rank01}), identifizieren die praezisen Obstruktionen fuer hoeheren Rang (Abschnitt~\ref{sec:higher_rank}) und diskutieren die Beziehung zur Iwasawa-Theorie und zu Euler-Systemen (Abschnitt~\ref{sec:iwasawa}).
+
+
+% ===================================================================
+% 2. DIE POSITIVITAETSSTRUKTUR
+% ===================================================================
+\section{Die Positivitaetsstruktur von BSD}
+\label{sec:positivity}
+
+\subsection{Die N\'eron-Tate-Hoehe}
+
+Sei $E/\mathbb{Q}$ eine elliptische Kurve. Die \textit{N\'eron-Tate-(kanonische) Hoehe} $\hat{h}: E(\mathbb{Q}) \to \mathbb{R}_{\geq 0}$ ist die eindeutige Funktion mit:
+\begin{enumerate}
+\item $\hat{h}(P) \geq 0$ fuer alle $P \in E(\mathbb{Q})$, mit Gleichheit genau dann wenn $P$ Torsion ist.
+\item $\hat{h}(nP) = n^2 \hat{h}(P)$ (quadratische Skalierung).
+\item $\hat{h}$ unterscheidet sich von der naiven (Weil-) Hoehe um eine beschraenkte Funktion.
+\end{enumerate}
+
+Die zugehoerige \textit{N\'eron-Tate-Paarung} ist:
+\begin{equation}
+\langle P, Q \rangle = \frac{1}{2}\left(\hat{h}(P+Q) - \hat{h}(P) - \hat{h}(Q)\right)\,.
+\label{eq:NT_pairing}
+\end{equation}
+
+\begin{theorem}[N\'eron-Tate-Positivitaet]
+\label{thm:NT_positive}
+Die Paarung $\langle \cdot, \cdot \rangle$ ist positiv semidefinit auf $E(\mathbb{Q})$ und positiv definit auf $E(\mathbb{Q})/E(\mathbb{Q})_{\mathrm{tors}}$.
+\end{theorem}
+
+Dies ist das BSD-Analogon der Hodge-Riemann-Bilinearform: eine kanonische, nichtentartete, positiv-definite quadratische Form auf dem ,,interessanten'' Teil der arithmetischen Struktur.
+
+\subsection{Der Regulator als Positivitaetsdetektor}
+
+Seien $P_1, \ldots, P_r$ Erzeuger von $E(\mathbb{Q})/E(\mathbb{Q})_{\mathrm{tors}}$, wobei $r = \rank E(\mathbb{Q})$. Der \textit{Regulator} ist:
+\begin{equation}
+R_E = \det\!\left(\langle P_i, P_j \rangle\right)_{1 \leq i,j \leq r}\,.
+\label{eq:regulator}
+\end{equation}
+
+\begin{proposition}[Regulatorpositivitaet]
+\label{prop:reg_positive}
+$R_E > 0$ wann immer $r \geq 1$, und $R_E = 1$ per Konvention wenn $r = 0$.
+\end{proposition}
+
+\begin{proof}
+Die Matrix $(\langle P_i, P_j \rangle)$ ist die Gram-Matrix einer positiv-definiten Form. Ihre Determinante ist strikt positiv.
+\end{proof}
+
+Der Regulator ist ein \textit{Positivitaetszertifikat} fuer die Existenz von $r$ unabhaengigen rationalen Punkten. Er kann nicht verschwinden oder negativ sein: Positiv-Definitheit von $\hat{h}$ macht $R_E > 0$ zu einer automatischen Konsequenz von $\rank E(\mathbb{Q}) = r$.
+
+\subsection{Die BSD-Formel als Positivitaetsidentitaet}
+
+Die starke BSD-Formel~\eqref{eq:bsd_formula} kann gelesen werden als:
+\begin{equation}
+\underbrace{\frac{L^{(r)}(E,1)}{r!}}_{\text{analytisch}} = \underbrace{\Omega_E}_{> 0} \cdot \underbrace{R_E}_{> 0} \cdot \underbrace{\prod c_p}_{\geq 1} \cdot \underbrace{\frac{|\Sha|}{|E_{\mathrm{tors}}|^2}}_{\geq 0}\,.
+\label{eq:bsd_positivity}
+\end{equation}
+
+Jeder Faktor auf der rechten Seite ist nichtnegativ, und $R_E > 0$ wann immer $r \geq 1$. Die Formel behauptet, dass die analytische Seite -- die a priori keinen Grund hat, nichtnegativ zu sein oder die ,,richtige'' Verschwindungsordnung zu haben -- \textit{gezwungen} ist, mit dieser positiven Struktur uebereinzustimmen.
+
+Dies ist praezise das Muster eines \textit{Positivitaets-Normalform-Theorems}: das analytische Objekt wird durch die Positivitaet des geometrischen/arithmetischen Objekts, dem es gleich ist, eingeschraenkt.
+
+
+% ===================================================================
+% 3. DIE VIER AXIOME
+% ===================================================================
+\section{Die vier Axiome}
+\label{sec:axioms}
+
+Wir formulieren vier strukturelle Bedingungen, die jede kohaerente arithmetische Theorie von $L$-Funktionen und Mordell-Weil-Gruppen erfuellen muss.
+
+\subsection{Axiom I: Endliche Arithmetische Kapazitaet}
+
+\begin{axiom}[Endliche Arithmetische Kapazitaet]
+\label{ax:finite}
+Die Tate-Shafarevich-Gruppe $\Sha(E/\mathbb{Q})$ ist endlich, und die Selmer-Gruppen $\Sel_n(E/\mathbb{Q})$ sind kontrolliert:
+\begin{equation}
+|\Sha(E/\mathbb{Q})| < \infty\,, \quad |\Sel_n(E/\mathbb{Q})| < \infty \quad \forall\, n \geq 1\,.
+\end{equation}
+\end{axiom}
+
+\textit{Status.} Endlichkeit von $\Sha$ ist bekannt fuer Rang $\leq 1$ (Kolyvagin \cite{Kolyvagin1990}) und fuer bestimmte Faelle hoeheren Rangs. Sie wird allgemein erwartet, bleibt aber unbewiesen.
+
+\textit{Rolle im No-Go-Argument.} Wenn $\Sha$ unendlich waere, koennte man sich eine Kurve mit $\rank E(\mathbb{Q}) = 0$ aber $\ord_{s=1} L(E,s) = 2$ vorstellen: der ,,fehlende Rang'' waere in $\Sha$ verborgen. Axiom~I schliesst diese Luecke.
+
+\subsection{Axiom II: Kooperative Hoehenpositivitaet}
+
+\begin{axiom}[Kooperative Hoehenpositivitaet]
+\label{ax:positivity}
+Die N\'eron-Tate-Hoehenpaarung ist positiv-definit auf $E(\mathbb{Q})/E(\mathbb{Q})_{\mathrm{tors}}$:
+\begin{equation}
+\langle P, P \rangle > 0 \quad \forall\, P \in E(\mathbb{Q}) \setminus E(\mathbb{Q})_{\mathrm{tors}}\,.
+\end{equation}
+Ausserdem ist die Hoehenpaarung ,,kooperativ'': Hoehen unabhaengiger Punkte kombinieren quadratisch ueber die Gram-Determinante $R_E = \det(\langle P_i, P_j \rangle) > 0$.
+\end{axiom}
+
+\textit{Status.} Unbedingt wahr (ein Theorem, keine Vermutung).
+
+\textit{Rolle im No-Go-Argument.} Positivitaet stellt sicher, dass die rechte Seite von BSD eine definite Vorzeichenstruktur hat: $R_E > 0$ ist erzwungen. Jede analytische Formel fuer $L^{(r)}(E,1)$ muss mit dieser Positivitaet kompatibel sein.
+
+\subsection{Axiom III: Monotone Iwasawa-Kontrolle}
+
+\begin{axiom}[Monotone Iwasawa-Kontrolle]
+\label{ax:iwasawa}
+In der zyklotomischen $\mathbb{Z}_p$-Erweiterung $\mathbb{Q}_\infty/\mathbb{Q}$ wachsen die Selmer-Gruppen $\Sel_{p^\infty}(E/\mathbb{Q}_n)$ kontrolliert und monoton:
+\begin{equation}
+\rank_{\mathbb{Z}_p} \Sel_{p^\infty}(E/\mathbb{Q}_n) = \mu p^n + \lambda n + \nu + O(1)\,,
+\label{eq:iwasawa_growth}
+\end{equation}
+wobei $\mu, \lambda \geq 0$ die Iwasawa-Invarianten sind. Die Iwasawa-Hauptvermutung liefert eine $p$-adische $L$-Funktion $L_p(E,s)$, deren charakteristisches Ideal mit dem Selmer-Modul uebereinstimmt.
+\end{axiom}
+
+\textit{Status.} Die Iwasawa-Hauptvermutung fuer elliptische Kurven ist in vielen Faellen bewiesen (Skinner-Urban \cite{SkinnerUrban2014}, Kato \cite{Kato2004}).
+
+\textit{Rolle im No-Go-Argument.} Iwasawa-Monotonie verhindert, dass der analytische Rang zwischen Schichten des $\mathbb{Z}_p$-Turms ,,oszilliert''. Zusammen mit der Hauptvermutung koppelt sie die $p$-adische $L$-Funktion an den Selmer-Modul und liefert eine $p$-adische Positivitaetszwangsbedingung.
+
+\subsection{Axiom IV: Euler-System-Kompositionskohaerenz}
+
+\begin{axiom}[Euler-System-Kompositionskohaerenz]
+\label{ax:euler}
+Es existiert ein Euler-System $\{c_m\}_{m \in \mathcal{M}}$ -- eine kohaerente Familie von Kohomologieklassen, indiziert durch Moduli $m$ -- das Norm-Kompatibilitaetsrelationen erfuellt:
+\begin{equation}
+\mathrm{cores}_{m\ell/m}(c_{m\ell}) = P_\ell(\mathrm{Frob}_\ell^{-1})\, c_m\,,
+\label{eq:euler_norm}
+\end{equation}
+wobei $P_\ell$ der Euler-Faktor bei $\ell$ und $\mathrm{cores}$ die Korestriktion ist. Das Euler-System liefert obere Schranken fuer Selmer-Gruppen durch die Kolyvagin-Ableitungsmaschinerie:
+\begin{equation}
+|\Sel(E/\mathbb{Q})| \leq C \cdot |\text{(Bild des Euler-Systems)}|\,,
+\end{equation}
+fuer eine berechenbare Konstante $C$.
+\end{axiom}
+
+\textit{Status.} Euler-Systeme existieren fuer viele elliptische Kurven:
+\begin{itemize}
+\item \textbf{Heegner-Punkte} (fuer Rang 1): das klassische Euler-System \cite{Kolyvagin1990}.
+\item \textbf{Katos Euler-System}: aus der $K$-Theorie modularer Kurven \cite{Kato2004}.
+\item \textbf{Beilinson-Flach-Elemente}: fuer Rankin-Selberg-Faltungen \cite{LLZ2014}.
+\end{itemize}
+
+\textit{Rolle im No-Go-Argument.} Das Euler-System ist die ,,Ausschlussmaschine'': es beschraenkt die Selmer-Gruppe von oben und schliesst die Moeglichkeit verborgenen Rangs in $\Sha$ oder in unerwarteten Selmer-Klassen aus. Kombiniert mit Positivitaet (Axiom~II) erzwingt es die Uebereinstimmung von analytischem und algebraischem Rang.
+
+\begin{remark}[Unabhaengigkeit der Axiome]
+\label{rem:axiom-independence}
+Fuer Rang $\leq 1$ sind die Axiome~I--IV unabhaengig etablierte Theoreme (Kolyvagin, N\'eron-Tate, Kato/Skinner-Urban, Heegner-Punkte). Fuer Rang $\geq 2$ sind die Axiome~I und~IV \textit{nicht} unabhaengig von BSD: Endlichkeit von $\Sha$ (Axiom~I) ist selbst eine Konsequenz der vollen BSD-Vermutung, und die Existenz eines vollstaendigen Kolyvagin-Systems hinreichender Tiefe (Axiom~IV) ist nicht etabliert. Das bedingte Theorem (Theorem~\ref{thm:bsd_normal}) sollte daher als \textit{strukturelle Charakterisierung} gelesen werden: es identifiziert die BSD-Formel als die einzige Normalform, die mit den Axiomen kompatibel ist, anstatt einen unabhaengigen Beweis von BSD zu liefern.
+\end{remark}
+
+\subsection{Heuristische Parallelen}
+\label{sec:heuristic}
+
+Die vier Axiome weisen strukturelle Parallelen zum Variationsframework von~\cite{GeigerFST2026} auf. Diese Parallelen sind \textit{heuristisch} -- sie motivieren die Axiomstruktur, stellen aber keine rigorosen mathematischen Verbindungen dar.
+
+\begin{itemize}
+\item \textbf{Axiom~I $\leftrightarrow$ Endliche geometrische Kapazitaet (Axiom~A).} Die Endlichkeit von $\Sha$ ist das arithmetische Analogon endlicher Kapazitaet: die ,,verborgene Masse'' ist beschraenkt, was verhindert, dass unendliche Diskrepanzen in der rechten Seite der BSD-Formel absorbiert werden.
+
+\item \textbf{Axiom~II $\leftrightarrow$ Kooperative Verstaerkung (Axiom~B).} Jeder unabhaengige rationale Punkt kostet positive Energie (Hoehe). Die quadratische Skalierung $\hat{h}(nP) = n^2 \hat{h}(P)$ spiegelt das kooperative Wachstum in der Saettigungs-ODE wider.
+
+\item \textbf{Axiom~III $\leftrightarrow$ Monotone Kontrolle (Axiom~C).} Beim Aufsteigen im $\mathbb{Z}_p$-Turm waechst die arithmetische Komplexitaet monoton und vorhersagbar -- keine Oszillationen oder Spruenge im Selmer-Rang treten auf.
+
+\item \textbf{Axiom~IV $\leftrightarrow$ Kompositionsgesetz (Axiom~D).} Norm-kompatible Schritte im Euler-System komponieren kohaerrent, analog zur Komposition von Renormierungsgruppen-Schritten. Die Norm-Kompatibilitaet~\eqref{eq:euler_norm} entspricht der $\tanh$-Additionsformel im CRM-Framework.
+\end{itemize}
+
+
+% ===================================================================
+% 4. DIE NORMALFORM-CHARAKTERISIERUNG
+% ===================================================================
+\section{Die Normalform-Charakterisierung}
+\label{sec:normal_form}
+
+\subsection{Aussage}
+
+\begin{theorem}[BSD-Normalform-Charakterisierung -- Bedingt]
+\label{thm:bsd_normal}
+Sei $E/\mathbb{Q}$ eine elliptische Kurve, die Axiome~I--IV erfuellt. Dann gilt:
+\begin{enumerate}
+\item Der analytische Rang gleicht dem algebraischen Rang:
+\begin{equation}
+\ord_{s=1} L(E,s) = \rank E(\mathbb{Q})\,.
+\end{equation}
+\item Der Fuehrungsterm hat die Normalform:
+\begin{equation}
+\frac{L^{(r)}(E,1)}{r!} = \Omega_E \cdot R_E \cdot \prod_p c_p \cdot \frac{|\Sha(E/\mathbb{Q})|}{|E(\mathbb{Q})_{\mathrm{tors}}|^2}\,,
+\end{equation}
+wobei alle Faktoren auf der rechten Seite durch die Arithmetik von $E$ bestimmt sind.
+\item Kein alternatives Fuehrungstermprofil ist mit Axiomen~I--IV kompatibel.
+\end{enumerate}
+\end{theorem}
+
+\subsection{Beweisstruktur}
+
+Die Beweisstrategie hat drei Komponenten, die das Saettigungstheorem spiegeln:
+
+\textbf{Schritt 1: Positivitaet erzwingt das Vorzeichen.} Durch Axiom~II gilt $R_E > 0$ wann immer $r \geq 1$. Durch Axiom~I gilt $|\Sha| < \infty$, sodass die rechte Seite der BSD-Formel eine positive reelle Zahl ist (fuer $r \geq 1$) oder gleich $L(E,1)/\Omega_E$ mal arithmetische Faktoren (fuer $r = 0$). Die analytische Seite muss mit diesem Vorzeichen uebereinstimmen.
+
+\textbf{Schritt 2: Komposition erzwingt die Ordnung.} Durch Axiom~IV beschraenkt das Euler-System $\Sel(E/\mathbb{Q})$ von oben und etabliert $\rank E(\mathbb{Q}) \leq \ord_{s=1} L(E,s)$ (die Richtung, die von Kolyvagin fuer Rang $\leq 1$ bewiesen wurde). Die umgekehrte Ungleichung $\ord_{s=1} L(E,s) \leq \rank E(\mathbb{Q})$ erfordert die Hoehenkopplung (H1): wenn $L^{(r)}(E,1)$ proportional zu $R_E > 0$ ist (Axiom~II), dann kann $L$ nicht zu hoeherer Ordnung als $r = \rank E(\mathbb{Q})$ verschwinden, ohne die Positivitaet des Regulators zu verletzen.
+
+\textbf{Schritt 3: Eindeutigkeit der Normalform.} Bei gegebener Ranggleichheit ist die BSD-Formel der einzige Ausdruck, der kompatibel ist mit:
+\begin{itemize}
+\item der Funktionalgleichung von $L(E,s)$ (bestimmt $\Omega_E$),
+\item dem Birch-Lemma und seinen Verallgemeinerungen (bestimmt die lokalen Faktoren $c_p$),
+\item dem Regulator $R_E$ (bestimmt durch die Hoehenpaarung),
+\item Endlichkeit von $\Sha$ (Axiom~I).
+\end{itemize}
+
+\subsection{Eindeutigkeit des Leitterm-Profils}
+
+\begin{theorem}[Eindeutigkeit der Leitterm-Formel]
+\label{thm:uniqueness}
+Sei $E/\mathbb{Q}$ eine elliptische Kurve mit $\rank E(\mathbb{Q}) = r$, die die Axiome~I--IV und die Hoehenkopplungshypothese~(H1) erfuellt. Dann ist die BSD-Leitterm-Formel~\eqref{eq:bsd_formula} der \textit{einzige} Ausdruck
+\[
+  \frac{L^{(r)}(E,1)}{r!} = \Phi(E)
+\]
+der die folgenden fuenf Bedingungen gleichzeitig erfuellt:
+\begin{enumerate}
+  \item[\textbf{(U1)}] \textbf{Analytisch-algebraische Ranggleichheit:} $\ord_{s=1} L(E,s) = \rank E(\mathbb{Q})$.
+  \item[\textbf{(U2)}] \textbf{Positivitaet des Leitkoeffizienten:} $\Phi(E) > 0$ wann immer $r \geq 1$ (erzwungen durch Axiom~II, da jede Kopplung an $R_E > 0$ das Vorzeichen erhalten muss).
+  \item[\textbf{(U3)}] \textbf{Ganzzahligkeit des $\Sha$-Beitrags:} das Verhaeltnis $\Phi(E)/(\Omega_E \cdot R_E \cdot \prod_p c_p)$ hat die Form $|\Sha|/|E(\mathbb{Q})_{\mathrm{tors}}|^2$ mit $|\Sha| \in \mathbb{Z}_{>0}$ (erzwungen durch Axiom~I).
+  \item[\textbf{(U4)}] \textbf{Kompatibilitaet mit Funktionalgleichung:} $\Phi(E)$ ist kompatibel mit der $p$-adischen Interpolationsformel $L_p(E,0) \sim L(E,1)/\Omega_E^+$ und ihren hoeheren Ableitungen (erzwungen durch Axiom~III, die Spezialisierung der Iwasawa-Hauptvermutung).
+  \item[\textbf{(U5)}] \textbf{Galois-Aequivarianz:} $\Phi(E)$ ist invariant unter der natuerlichen Wirkung von $\Gal(\overline{\mathbb{Q}}/\mathbb{Q})$ auf die arithmetischen Invarianten von $E$ -- d.h., es haengt nur von der Isogenieklasse ab, nicht von der Wahl des Modells oder der Basis von $E(\mathbb{Q})$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Beweisskizze]
+(U3) erzwingt, dass $\Phi(E)$ den Regulator $R_E$ als einzige kanonische positiv-definite quadratische Invariante von $E(\mathbb{Q})/E(\mathbb{Q})_{\mathrm{tors}}$ enthaelt -- keine andere Galois-invariante, positiv-definite, homogene Funktion vom Grad~2 auf dem Mordell-Weil-Gitter existiert (die N\'eron-Tate-Hoehe ist kanonisch). (U4) bestimmt den archimedischen Faktor $\Omega_E$ und die lokalen Faktoren $c_p$ durch die Funktionalgleichung und das Birch-Lemma. (U3) schraenkt den verbleibenden Faktor auf $|\Sha|/|E_{\mathrm{tors}}|^2$ mit ganzzahligem $|\Sha|$ ein. (U2) und (U5) schliessen jede alternative Anordnung dieser Faktoren aus. Zusammen bestimmen die fuenf Bedingungen die BSD-Formel eindeutig.
+\end{proof}
+
+\subsection{Ausschluss von Alternativen}
+
+Wir zeigen, dass ,,alternative Profile'' -- hypothetische Szenarien, in denen die BSD-Formel versagt -- die Axiome verletzen:
+
+\begin{proposition}[Ausschluss von Rangdiskrepanz]
+\label{prop:exclusion}
+Die folgenden Szenarien werden durch die Axiome ausgeschlossen:
+
+\begin{enumerate}
+\item[\textbf{(E1)}] \textbf{Analytische Nullstelle ohne geometrische Richtung:} $\ord_{s=1} L(E,s) = r > \rank E(\mathbb{Q})$. Ausgeschlossen durch Axiom~IV: Euler-System-Schranken (Kolyvagin fuer Rang $\leq 1$, konjektural fuer hoeheren Rang) etablieren $\rank E(\mathbb{Q}) \leq \ord_{s=1} L(E,s)$. Kombiniert mit Axiom~I ($|\Sha| < \infty$) verhindert dies, dass der analytische Rang den algebraischen Rang ohne geometrische Rechtfertigung uebersteigt. \textit{Anmerkung:} Fuer Rang $\geq 2$ ist dieser Ausschluss bedingt durch die Existenz eines vollstaendigen Kolyvagin-Systems (H2).
+
+\item[\textbf{(E2)}] \textbf{Geometrischer Rang ohne analytische Ableitung:} $\rank E(\mathbb{Q}) = r > \ord_{s=1} L(E,s)$. Bedingt ausgeschlossen: wenn eine Kopplung der Form $L^{(r)}(E,1) = C \cdot R_E \cdot (\text{arithmetische Faktoren})$ existiert (wie fuer Rang $\leq 1$ durch Gross-Zagier etabliert), dann wuerde $\rank > \ord$ erzwingen, dass $L^{(\ord)}(E,1) \cdot (\text{positive Faktoren})$ einer von Null verschiedenen Groesse ($R_E > 0$ nach Axiom~II) gleicht, im Widerspruch zum Verschwinden von $L^{(s)}(E,1)$ fuer $s < r$. \textit{Anmerkung:} Dieses Argument ist bedingt durch die Existenz der Kopplung (H1, die hoehere Gross-Zagier-Formel). Ohne H1 ergibt sich kein Widerspruch.
+
+\item[\textbf{(E3)}] \textbf{Unendliches $\Sha$ absorbiert Diskrepanz:} $\ord_{s=1} L(E,s) = r$ aber $|\Sha| = \infty$, was eine andere rechte Seite erlaubt. Ausgeschlossen durch Axiom~I.
+
+\item[\textbf{(E4)}] \textbf{Oszillierender Rang in $\mathbb{Z}_p$-Tuermen:} Rang springt nichtmonoton durch zyklotomische Schichten. Ausgeschlossen durch Axiom~III.
+\end{enumerate}
+\end{proposition}
+
+
+% ===================================================================
+% 5. RANG 0 UND 1: DIE BEWIESENEN FAELLE
+% ===================================================================
+\section{Rang $\leq 1$: Positivitaet in Aktion}
+\label{sec:rank01}
+
+\subsection{Rang 0: Kolyvagines Ausschluss}
+
+Wenn $L(E,1) \neq 0$:
+
+\textit{Axiom II angewandt:} Wenn $\rank E(\mathbb{Q}) \geq 1$, existiert $P$ mit $\hat{h}(P) > 0$. Die Gross-Zagier-Formel wuerde $L'(E,1) \neq 0$ ergeben (fuer geeignete imaginaer-quadratische Koerper), im Widerspruch zu $\ord_{s=1} L(E,s) = 0$.
+
+\textit{Axiom IV angewandt:} Kolyvagines Euler-System von Heegner-Punkten liefert eine explizite obere Schranke:
+\begin{equation}
+|\Sel_{p^\infty}(E/\mathbb{Q})| \leq |E(\mathbb{Q})_{\mathrm{tors}}|^2 \cdot p^{2 v_p(I_K)}\,,
+\end{equation}
+wobei $I_K$ der Index des Heegner-Punktes in $E(K)$ ist. Da $L(E,1) \neq 0$ (ueber Gross-Zagier) impliziert, dass $I_K$ endlich ist, beschraenkt dies $\Sel$ und damit sowohl $\rank E(\mathbb{Q})$ als auch $|\Sha|$.
+
+Der Rang-0-Fall ist im Positivitaets-Framework vollstaendig ,,gesaettigt'': alle vier Axiome sind verifiziert, und das No-Go-Argument schliesst $\rank \geq 1$ aus.
+
+\subsection{Rang 1: Gross-Zagier als Positivitaetsidentitaet}
+
+Das Gross-Zagier-Theorem \cite{GrossZagier1986} besagt: fuer einen geeigneten imaginaer-quadratischen Koerper $K$ mit Heegner-Hypothese gilt
+\begin{equation}
+L'(E,1) = \frac{8\pi^2 \|f\|^2}{\sqrt{|D_K|}} \cdot \hat{h}(P_K)\,,
+\label{eq:gross_zagier}
+\end{equation}
+wobei $f$ die Neuform ist, die $E$ zugeordnet ist, $D_K$ die Diskriminante und $P_K \in E(K)$ der Heegner-Punkt.
+
+\begin{proposition}[Gross-Zagier als Positivitaetsidentitaet]
+\label{prop:gz_positivity}
+Die Gross-Zagier-Formel~\eqref{eq:gross_zagier} ist eine Positivitaetsidentitaet:
+\begin{itemize}
+\item Die linke Seite $L'(E,1)$ hat keine a priori Vorzeicheneinschraenkung.
+\item Die rechte Seite ist ein Produkt aus $\hat{h}(P_K) \geq 0$ (nach Axiom~II) und positiven Konstanten.
+\item Nicht-Verschwinden: $L'(E,1) \neq 0 \iff \hat{h}(P_K) > 0 \iff P_K$ ist Nicht-Torsion.
+\end{itemize}
+\end{proposition}
+
+Dies ist das BSD-Analogon der Hodge-Riemann-Bilinearrelation: das analytische Objekt gleicht einer geometrisch positiven Groesse, und die Positivitaet erzwingt den korrekten Rang.
+
+Kolyvagines Euler-System vervollstaendigt dann das Argument: es zeigt $\rank E(\mathbb{Q}) = 1$ (der Heegner-Punkt erzeugt eine endlichindizierte Untergruppe) und $|\Sha| < \infty$.
+
+\begin{remark}
+Der Rang-1-Beweis folgt exakt dem Muster eines No-Go-Theorems:
+\begin{enumerate}
+\item Nehme an, $\ord_{s=1} L(E,s) = 1$.
+\item Gross-Zagier konvertiert das analytische Datum in ein positives geometrisches Datum ($\hat{h}(P_K) > 0$).
+\item Kolyvagin schliesst alternative Erklaerungen aus ($\rank > 1$ oder $|\Sha| = \infty$).
+\item Schlussfolgerung: $\rank E(\mathbb{Q}) = 1$, und die BSD-Formel gilt.
+\end{enumerate}
+Keine explizite Konstruktion rationaler Punkte wird benoetigt jenseits des Heegner-Punktes (der als ,,Keim'' fuer das Euler-System dient, nicht als konstruktiver Beweis des Rangs).
+\end{remark}
+
+\subsection{Numerische Illustration}
+
+\begin{example}[Kurve 11a -- Rang 0]
+\label{ex:11a}
+Die elliptische Kurve $E: y^2 + y = x^3 - x^2 - 10x - 20$ (Cremona-Label 11a1, Fuehrer $N = 11$) ist die Kurve mit dem kleinsten Fuehrer. Sie hat $\rank E(\mathbb{Q}) = 0$, $E(\mathbb{Q})_{\mathrm{tors}} \cong \mathbb{Z}/5\mathbb{Z}$ und $|\Sha| = 1$ (bewiesen). Mit $R_E = 1$ (per Konvention fuer Rang~0), $\Omega_E = 1{,}2692\ldots$, $c_{11} = 5$ (Kodaira-Typ $I_5$, split multiplikative Reduktion) und $|E(\mathbb{Q})_{\mathrm{tors}}| = 5$:
+\[
+  L(E,1) = \Omega_E \cdot R_E \cdot c_{11} \cdot \frac{|\Sha|}{|E_{\mathrm{tors}}|^2}
+  = 1{,}2692 \cdot 1 \cdot 5 \cdot \frac{1}{25} = 0{,}2538\ldots
+\]
+Dies stimmt mit dem numerischen Wert $L(E,1) = 0{,}2538\ldots$ auf alle verfuegbaren Stellen ueberein. Alle vier Axiome sind verifiziert: $|\Sha| = 1$ (I), Hoehenpositivitaet vakuumartig erfuellt fuer $r = 0$ (II), Iwasawa-Hauptvermutung bewiesen bei allen Primzahlen $p \neq 11$ (III), Katos Euler-System liefert die Selmer-Schranke (IV).
+
+Die Positivitaetsinterpretation: Rang~0 ist der ,,Vakuumzustand'' des Positivitaets-Frameworks -- keine Hoehenrichtung existiert, $R_E = 1$ per Konvention, und die BSD-Formel reduziert sich auf ein Verhaeltnis archimedischer und lokaler Daten. Die Positivitaetsstruktur ist trivial gesaettigt.
+\end{example}
+
+\begin{example}[Kurve 37a -- Rang 1]
+\label{ex:37a}
+Die elliptische Kurve $E: y^2 + y = x^3 - x$ (Cremona-Label 37a1, Fuehrer $N = 37$) hat $\rank E(\mathbb{Q}) = 1$, erzeugt von $P = (0,0)$ mit $\hat{h}(P) = 0{,}0511\ldots$ Die BSD-Daten: $\Omega_E = 5{,}9869\ldots$, $R_E = 0{,}0511\ldots$, $c_{37} = 1$, $|E(\mathbb{Q})_{\mathrm{tors}}| = 1$, $|\Sha| = 1$ (bewiesen). Die BSD-Formel sagt vorher $L'(E,1) = \Omega_E \cdot R_E \cdot 1 \cdot 1/1 = 0{,}3059\ldots$, was mit der numerischen Berechnung $L'(E,1) = 0{,}3059\ldots$ auf alle verfuegbaren Stellen uebereinstimmt. Alle vier Axiome sind verifiziert: $|\Sha| = 1 < \infty$ (I), $\hat{h}(P) > 0$ (II), Iwasawa-Hauptvermutung bewiesen fuer $p \neq 37$ (III), Heegner-Punkt-Euler-System (IV).
+\end{example}
+
+\begin{example}[Kurve 389a -- Rang 2]
+\label{ex:389a}
+Die elliptische Kurve $E: y^2 + y = x^3 + x^2 - 2x$ (Cremona-Label 389a1) hat $\rank E(\mathbb{Q}) = 2$, erzeugt von $P_1 = (-1,1)$ und $P_2 = (0,0)$. Die Hoehenmatrix ist:
+\[
+\left(\langle P_i, P_j \rangle\right) = \begin{pmatrix} 0{,}6868 & 0{,}2685 \\ 0{,}2685 & 0{,}3270 \end{pmatrix}, \quad R_E = \det = 0{,}1525\ldots
+\]
+Die BSD-Formel sagt vorher $L''(E,1)/2 = \Omega_E \cdot R_E \cdot \prod c_p \cdot |\Sha|/|E_{\mathrm{tors}}|^2$. Mit $\Omega_E = 4{,}9804\ldots$, $c_{389} = 1$, $|E_{\mathrm{tors}}| = 1$ und $|\Sha| = 1$ (numerisch verifiziert) ergibt sich $L''(E,1)/2 = 0{,}7593\ldots$, uebereinstimmend mit der numerischen Berechnung. Dies ist ein Rang-2-Fall, in dem die Axiome~I und~IV nicht rigoros bewiesen, aber numerisch konsistent sind.
+\end{example}
+
+
+% ===================================================================
+% 6. HOEHERER RANG
+% ===================================================================
+\section{Hoeherer Rang: Die offene Grenze}
+\label{sec:higher_rank}
+
+\subsection{Die Hoehensaettigungsvermutung}
+
+Fuer allgemeinen Rang $r$ formulieren wir:
+
+\begin{conjecture}[Hoehensaettigung]
+\label{conj:height_saturation}
+Sei $E/\mathbb{Q}$ mit $\rank E(\mathbb{Q}) = r$. Seien $P_1, \ldots, P_r$ eine Basis von $E(\mathbb{Q})/E(\mathbb{Q})_{\mathrm{tors}}$. Dann gilt:
+\begin{equation}
+L^{(r)}(E,1) \sim R_E = \det\!\left(\langle P_i, P_j \rangle\right) > 0\,,
+\label{eq:height_saturation}
+\end{equation}
+in dem Sinne, dass das Verhaeltnis $L^{(r)}(E,1)/(r! \cdot \Omega_E \cdot R_E \cdot \prod c_p)$ gleich $|\Sha|/|E_{\mathrm{tors}}|^2$ ist.
+\end{conjecture}
+
+Dies ist das ,,hoehere Gross-Zagier'' in seiner optimistischsten Form: die $r$-te Ableitung von $L$ ist proportional zum $r \times r$-Regulator -- der Determinante einer positiv-definiten Matrix.
+
+\subsection{Was wuerde ein Beweis erfordern?}
+
+Ein Beweis der Vermutung~\ref{conj:height_saturation} ueber das Positivitaets-Framework erfordert drei Zutaten:
+
+\textbf{(H1) Hoehere Gross-Zagier-Formel.} Eine explizite Identitaet:
+\begin{equation}
+L^{(r)}(E,1) = C_r \cdot \det\!\left(\langle P_i, P_j \rangle\right)\,,
+\label{eq:higher_gz}
+\end{equation}
+wobei $P_1, \ldots, P_r$ kanonische arithmetische Punkte (,,hoehere Heegner-Punkte'') und $C_r > 0$ eine explizite Konstante sind.
+
+\textit{Status:} Fuer $r = 1$ ist dies Gross-Zagier. Fuer $r = 2$ existieren Teilresultate ueber Diagonalrestriktion $p$-adischer Familien \cite{DarmonRotger2017}. Fuer allgemeines $r$ ist dies ein grosses offenes Problem. Juengere Arbeiten zu Euler-Systemen fuer hoeherrangige Motive \cite{LSZ2020} liefern Fortschritt, aber keine vollstaendige Formel.
+
+\textbf{(H2) Hoeheres Kolyvagin-System.} Eine Euler-System-Maschinerie, die $\Sel(E/\mathbb{Q})$ unter Verwendung von $r$ Klassen gleichzeitig beschraenkt und etabliert:
+\begin{equation}
+\rank E(\mathbb{Q}) \leq \ord_{s=1} L(E,s)\,.
+\end{equation}
+
+\textit{Status:} Fuer $r = 1$ ist dies Kolyvagines Methode. Fuer allgemeines $r$ haben Mazur-Rubin \cite{MazurRubin2004} die Theorie der Kolyvagin-Systeme abstrakt entwickelt, aber die \textit{Existenz} eines Kolyvagin-Systems hinreichender Tiefe fuer beliebigen Rang ist nicht etabliert.
+
+\textbf{(H3) $\Sha$-Endlichkeit fuer allgemeinen Rang.} Axiom~I muss unbedingt gelten:
+\begin{equation}
+|\Sha(E/\mathbb{Q})| < \infty \quad \forall\, E/\mathbb{Q}\,.
+\end{equation}
+
+\textit{Status:} Offen fuer $\rank \geq 2$. Dies wird allgemein erwartet, aber es existiert kein allgemeiner Beweis.
+
+\subsection{Die Positivitaetsluecke}
+
+Die Situation kann zusammengefasst werden:
+
+\begin{center}
+\begin{tabular}{lccc}
+\hline
+Axiom & Rang 0 & Rang 1 & Rang $\geq 2$ \\
+\hline
+I (Endl.\ $\Sha$) & $\checkmark$ & $\checkmark$ & Offen \\
+II (Hoehen-Pos.) & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+III (Iwasawa) & $\checkmark$ & $\checkmark$ & Teilweise \\
+IV (Euler-Sys.) & $\checkmark$ & $\checkmark$ & Offen \\
+\hline
+\end{tabular}
+\end{center}
+
+Die ,,Positivitaet'' (Axiom~II) ist immer verfuegbar -- sie ist ein Theorem. Die Obstruktion liegt in der ,,Komposition'' (Axiome~I, III, IV): die Euler-System-/Kolyvagin-/Iwasawa-Maschinerie ist fuer hoeheren Rang noch nicht vollstaendig entwickelt.
+
+In der Sprache des CRM-Saettigungstheorems: die Positivitaet ist etabliert, aber das Kompositionsgesetz ist unvollstaendig. Die $\tanh$-Form ist erzwungen, sobald die Komposition verifiziert ist; analog ist die BSD-Formel erzwungen, sobald die Euler-System-Komposition fuer beliebigen Rang etabliert ist.
+
+
+% ===================================================================
+% 7. IWASAWA-THEORIE UND KOMPOSITION
+% ===================================================================
+\section{Iwasawa-Theorie als Kompositionskohaerenz}
+\label{sec:iwasawa}
+
+\subsection{Die $p$-adische Perspektive}
+
+Die Iwasawa-Theorie liefert die klarste Realisierung von Axiom~IV. Die Hauptvermutung fuer elliptische Kurven \cite{Kato2004,SkinnerUrban2014} behauptet:
+\begin{equation}
+\mathrm{char}_{\Lambda}\!\left(\Sel_{p^\infty}(E/\mathbb{Q}_\infty)^\vee\right) = (L_p(E))\,,
+\label{eq:iwasawa_mc}
+\end{equation}
+wobei $\Lambda = \mathbb{Z}_p[[T]]$ die Iwasawa-Algebra, $\Sel_{p^\infty}(E/\mathbb{Q}_\infty)^\vee$ der Pontryagin-Dual der Selmer-Gruppe ueber der zyklotomischen $\mathbb{Z}_p$-Erweiterung und $L_p(E)$ die $p$-adische $L$-Funktion ist.
+
+\begin{proposition}[Iwasawa-Hauptvermutung als Kompositionsgesetz]
+\label{prop:iwasawa_composition}
+Die Iwasawa-Hauptvermutung liefert die Kompositionsstruktur im folgenden praezisen Sinne: sei $\mathrm{char}_\Lambda(M)$ das charakteristische Ideal eines endlich erzeugten Torsions-$\Lambda$-Moduls $M$. Die Hauptvermutung identifiziert $\mathrm{char}_\Lambda(\Sel_{p^\infty}(E/\mathbb{Q}_\infty)^\vee) = (L_p(E))$. Die ,,Komposition'' ist das Kontrolltheorem (Mazur): bei Spezialisierung auf Schicht $n$ des $\mathbb{Z}_p$-Turms ist die Selmer-Gruppe auf Stufe $n$ mit der Selmer-Gruppe auf Stufe $n-1$ durch eine exakte Sequenz verbunden, deren Kern und Kokern durch den Euler-Faktor bei $p$ kontrolliert werden. Diese schichtweise Kompatibilitaet ist das arithmetische Analogon der Norm-Kompatibilitaet in Euler-Systemen.
+\end{proposition}
+
+Die algebraische Struktur ist: $\Lambda = \mathbb{Z}_p[[T]]$ ist ein Potenzreihenring, und das charakteristische Ideal wird von einem einzigen Element $f_E(T)$ erzeugt. Die Spezialisierungsabbildungen $\chi_n: \Lambda \to \mathbb{Z}_p[\Gal(\mathbb{Q}_n/\mathbb{Q})]$, die durch Auswertung bei $T = \zeta_{p^n} - 1$ erhalten werden, bilden ein projektives System:
+\begin{equation}
+\chi_m = \chi_n \circ \mathrm{pr}_{m,n} \quad \text{fuer } m \geq n\,,
+\end{equation}
+wobei $\mathrm{pr}_{m,n}$ die natuerliche Projektion ist. Das Kontrolltheorem stellt sicher, dass $\Sel_{p^\infty}(E/\mathbb{Q}_n)$ durch $\Sel_{p^\infty}(E/\mathbb{Q}_\infty)$ via Restriktion mit beschraenktem Kern und Kokern bestimmt wird. Dieses monotone kompatible System ist das $p$-adische Kompositionsgesetz, das die Arithmetik von $E$ ueber den Turm hinweg einschraenkt.
+
+\subsection{Die $\mu = 0$-Vermutung}
+
+Die Iwasawa-$\mu$-Invariante misst die ,,$p$-adische Masse'' von $\Sha$ im Turm. Die Vermutung $\mu = 0$ (bewiesen von Ferrero-Washington fuer abelsche Koerper, allgemein erwartet) stellt sicher, dass kein unendlicher $p$-Potenzbeitrag in $\Sha$ verborgen ist. Dies ist praezise Axiom~I eingeschraenkt auf den $p$-adischen Turm.
+
+\subsection{Spezialisierung auf $s = 1$}
+
+Die Schluesselverbindung zwischen Iwasawa-Theorie und BSD ist die \textit{Spezialisierung}: die Auswertung der $p$-adischen $L$-Funktion bei $T = 0$ (oder ihrer Ableitungen) gewinnt die komplexen $L$-Funktionswerte zurueck:
+\begin{equation}
+L_p(E, 0) \sim L(E, 1)/\Omega_E^+ \quad (\text{bis auf Perioden und Euler-Faktoren})\,.
+\end{equation}
+
+Fuer Rang $r$ betrifft die relevante Spezialisierung die $r$-te Ableitung von $L_p(E, T)$ bei $T = 0$. Die Iwasawa-Hauptvermutung bezieht diese dann auf das charakteristische Ideal des Selmer-Moduls und liefert eine $p$-adische Version der BSD-Formel.
+
+\subsection{Die $p$-adische zu archimedische Bruecke}
+\label{sec:p-adic-bridge}
+
+Die Iwasawa-Hauptvermutung und die Euler-System-Maschinerie (Axiome~III--IV) leben natuerlich in der $p$-adischen Welt, waehrend die BSD-Vermutung die \textit{komplexe} $L$-Funktion $L(E,s)$ an der archimedischen Stelle $s = 1$ betrifft. Der Uebergang zwischen diesen beiden Domaenen wird durch Fontaines Vergleichsisomorphismus $H^1_{\mathrm{dR}}(E/\mathbb{Q}_p) \cong H^1_{\mathrm{\acute{e}t}}(E, \mathbb{Q}_p) \otimes B_{\mathrm{dR}}$ aus der $p$-adischen Hodge-Theorie kontrolliert, der ein Woerterbuch liefert zwischen $p$-adischen Perioden und komplexen Perioden ($\Omega_E$), zwischen $p$-adischen Hoehen ($\hat{h}_p$) und archimedischen Hoehen ($\hat{h}$), sowie zwischen $p$-adischen $L$-Werten ($L_p(E,0)$) und komplexen $L$-Werten ($L(E,1)$).
+
+Fuer Rang~0 ist die Bruecke gut verstanden: die Mazur-Tate-Teitelbaum-Formel ergibt $L_p(E,0) = (1 - a_p^{-1})^2 \cdot L(E,1)/\Omega_E^+$ bis auf eine $p$-adische Einheit. Fuer Rang~1 liefern die Gross-Zagier- und Perrin-Riou-Formeln kompatible archimedische und $p$-adische Hoehenkopplungen und schliessen die Bruecke auf der Ebene der ersten Ableitungen.
+
+Fuer Rang $\geq 2$ ist die Bruecke die tiefste Obstruktion im Positivitaets-Framework. Selbst wenn eine $p$-adische Hoehenkopplung $L_p^{(r)}(E,0) \sim \det(\hat{h}_p(P_i, P_j))$ ueber diagonale Zykel \cite{DarmonRotger2017} etabliert wuerde, erfordert die Uebersetzung zur archimedischen Formel $L^{(r)}(E,1) \sim R_E$ zwei zusaetzliche Zutaten: (i) einen Vergleich zwischen $p$-adischen und archimedischen Regulatoren, $R_{E,p} \sim R_E$, der bis auf eine $p$-adische Einheit fuer CM-Kurven bekannt, aber im Allgemeinen offen ist; und (ii) eine Interpolationsformel fuer die $r$-te Ableitung, die Mazur-Tate-Teitelbaum ueber Rang~0 hinaus verallgemeinert.
+
+Diese Bruecke kristallisiert die strukturelle Spannung in unserem Framework: die \textit{Positivitaet} (Axiom~II) ist ein archimedisches Phaenomen -- $\hat{h}$ ist eine reellwertige positiv-definite Form -- waehrend die \textit{Komposition} (Axiome~III--IV) ein $p$-adisches Phaenomen ist -- Euler-Systeme und Iwasawa-Moduln leben ueber $\mathbb{Z}_p$. Die Vereinigung dieser beiden ,,Positivitaetsdomaenen'' ueber den Vergleichsisomorphismus ist die zentrale technische Herausforderung fuer die Erweiterung des BSD-Positivitaetsprogramms jenseits von Rang~1.
+
+
+% ===================================================================
+% 8. DIE PRAEZISE OBSTRUKTION
+% ===================================================================
+\section{Die praezise Obstruktion}
+\label{sec:obstruction}
+
+\subsection{Was einen vollstaendigen Beweis blockiert}
+
+Das Positivitaets-Framework identifiziert einen praezisen Engpass: das \textit{Fehlen einer universellen hoeheren Gross-Zagier-Formel}. Genauer:
+
+\begin{enumerate}
+\item \textbf{Fuer Rang 1:} Der Heegner-Punkt $P_K$ liefert eine kanonische ,,geometrische Richtung'', deren Hoehe an $L'(E,1)$ koppelt. Das Kompositionsgesetz (Kolyvagines Euler-System) schliesst dann Alternativen aus.
+
+\item \textbf{Fuer Rang $r$:} Man benoetigt $r$ unabhaengige kanonische Punkte $P_1, \ldots, P_r$, deren Hoehen\textit{matrix} an $L^{(r)}(E,1)$ koppelt. Die Kandidaten sind:
+\begin{itemize}
+\item Hoehere Heegner-Punkte auf Shimura-Varietaeten der Dimension $> 1$.
+\item Verallgemeinerte Heegner-Zykel (Bertolini-Darmon-Prasanna \cite{BDP2013}).
+\item Diagonalrestriktion $p$-adischer Familien (Darmon-Rotger \cite{DarmonRotger2017}).
+\end{itemize}
+Keine liefert derzeit eine vollstaendige ,,hoehere Gross-Zagier-Formel'' der Form~\eqref{eq:higher_gz}.
+\end{enumerate}
+
+\subsection{Die Obstruktion in Positivitaetssprache}
+
+Die Obstruktion kann praezise formuliert werden:
+
+\begin{quote}
+\textit{Die Positivitaet von $R_E = \det(\langle P_i, P_j \rangle) > 0$ ist ein Theorem (aus der Positiv-Definitheit von $\hat{h}$). Das fehlende Stueck ist eine Formel, die $L^{(r)}(E,1)$ gleich $R_E$ mal berechenbare Konstanten setzt -- d.h., die explizite Kopplung der analytischen und geometrischen positiven Strukturen.}
+\end{quote}
+
+Sobald eine solche Kopplung etabliert ist, schliesst sich das No-Go-Argument:
+\begin{enumerate}
+\item $L^{(r)}(E,1) = C_r \cdot R_E > 0$ (Positivitaet der Hoehen).
+\item $L^{(j)}(E,1) = 0$ fuer $j < r$ (weil die Hoehenmatrix Rang $r$ hat, nicht weniger).
+\item $\ord_{s=1} L(E,s) = r = \rank E(\mathbb{Q})$.
+\end{enumerate}
+
+Das gesamte Argument beruht auf der Kopplung zweier positiver Strukturen -- einer analytischen ($L$-Ableitungen), einer geometrischen (Hoehenpaarung) -- und dem Nachweis, dass sie bei derselben Ordnung ,,saettigen'' muessen.
+
+
+% ===================================================================
+% 9. VERBINDUNG ZUM BREITEREN PROGRAMM
+% ===================================================================
+\section{Verbindung zum breiteren Programm}
+\label{sec:connection}
+
+\subsection{Das Positivitaetsmuster ueber die Mathematik}
+
+Das BSD-Framework fuegt sich in dasselbe Positivitaetsmuster ein, das beobachtet wird in:
+
+\begin{center}
+\begin{tabular}{llll}
+\hline
+Problem & Positive Form & Komposition & Status \\
+\hline
+Weil-Verm. & Frobenius-EW & \'Etale Koh. & Bewiesen \\
+Hodge-Verm. & HR-Bilinear & Galois-HR & Offen \\
+RH \cite{GeigerRH2026} & Spektr.\ Op. & Resolvente & Offen \\
+CRM/QG \cite{GeigerFST2026} & Kapazitaet & RG-Fluss & $\tanh$-Thm \\
+\textbf{BSD} & \textbf{N\'eron-Tate} & \textbf{Euler-Sys.} & \textbf{Rang $\leq 1$} \\
+\hline
+\end{tabular}
+\end{center}
+
+In jedem Fall:
+\begin{itemize}
+\item Die \textit{Positivitaet} ist der ,,leichte'' Teil (ein Theorem oder eine gut motivierte Bedingung).
+\item Die \textit{Komposition/Kohaerenz} ist der ,,schwere'' Teil (erfordert tiefe strukturelle Arbeit).
+\item Die \textit{Konjunktion} von Positivitaet und Komposition erzwingt das gewuenschte Resultat.
+\end{itemize}
+
+\subsection{Verbindung zum Hodge-Ansatz}
+
+Die N\'eron-Tate-Hoehe $\hat{h}$ auf $E(\mathbb{Q})$ und die Hodge-Riemann-Form $Q_L$ auf $H^{p,p}(X)$ spielen strukturell identische Rollen:
+\begin{itemize}
+\item Beide sind kanonische positiv-definite Bilinearformen.
+\item Beide detektieren ,,arithmetische Richtungen'' (rationale Punkte / algebraische Zykel).
+\item Beide erfordern ein ,,Kompositionsgesetz'' (Euler-Systeme / Galois-HR-Stabilitaet), um die gewuenschte Schlussfolgerung zu erzwingen.
+\end{itemize}
+
+Das Hodge-Analogon der Gross-Zagier-Formel waere: eine explizite Identitaet, die die ,,analytische'' Hodge-Riemann-Form an die ,,geometrische'' Zykusklassenabbildung koppelt und zeigt, dass Positivitaet der einen Algebraizitaet der anderen erzwingt.
+
+
+% ===================================================================
+% 10. DISKUSSION
+% ===================================================================
+\section{Diskussion}
+\label{sec:discussion}
+
+\subsection{Was wurde erreicht}
+
+\begin{enumerate}
+\item \textbf{Axiomatisierung.} Vier Axiome -- endliche Kapazitaet, Hoehenpositivitaet, Iwasawa-Monotonie, Euler-System-Komposition -- die gemeinsam die BSD-Formel als einzige Normalform erzwingen.
+
+\item \textbf{Rang $\leq 1$ als abgeschlossene Instanz.} Das Gross-Zagier + Kolyvagin-Argument ist natuerlich ein Positivitaets-No-Go-Beweis: es koppelt eine analytische Ableitung an eine nichtnegative Hoehe und verwendet Komposition (Euler-Systeme) zum Ausschluss von Alternativen.
+
+\item \textbf{Hoeherer Rang identifiziert.} Die Obstruktion fuer hoeheren Rang ist praezise das Fehlen von (H1) einer universellen hoeheren Gross-Zagier-Formel und (H2) eines vollstaendigen Kolyvagin-Systems -- d.h., das Kompositionsgesetz ist unvollstaendig.
+
+\item \textbf{Ausschluss von Alternativen.} Kein alternatives Fuehrungstermprofil ist mit allen vier Axiomen kompatibel, \textit{sofern} eine Kopplung zwischen $L^{(r)}(E,1)$ und der Hoehenpaarung existiert.
+\end{enumerate}
+
+\subsection{Einschraenkungen}
+
+\begin{enumerate}
+\item \textbf{Die Arbeit beweist BSD nicht.} Sie formuliert es als Positivitaets-Normalform-Aussage um und identifiziert die fehlende Zutat.
+
+\item \textbf{Axiom~I ($\Sha$-Endlichkeit) ist fuer Rang $\geq 2$ konjektural.} Dies ist selbst ein grosses offenes Problem, obwohl allgemein erwartet.
+
+\item \textbf{Das ,,hoehere Gross-Zagier'' ist spekulativ.} Keine vollstaendige Formel der Form~\eqref{eq:higher_gz} existiert fuer $r \geq 2$. Juengerer Fortschritt (Darmon-Rotger, Loeffler-Skinner-Zerbes) ist vielversprechend, aber unvollstaendig.
+
+\item \textbf{Das axiomatische Framework ist deskriptiv, nicht konstruktiv.} Die Axiome identifizieren, was wahr sein muss, nicht wie man es beweist.
+\end{enumerate}
+
+\subsection{Ausblick}
+
+\begin{enumerate}
+\item \textbf{$p$-adische BSD ueber Iwasawa-Theorie.} Der staerkste kurzfristige Fortschritt kommt wahrscheinlich aus der Erweiterung der Iwasawa-Hauptvermutung auf hoeherrangige Situationen unter Verwendung der Euler-Systeme von Loeffler-Skinner-Zerbes \cite{LSZ2020}.
+
+\item \textbf{Hoeheres Gross-Zagier.} Darmons Programm der ,,Stark-Heegner-Punkte'' und Diagonalzykel liefert Kandidatenformeln fuer Rang 2. Deren rigorose Etablierung wuerde die Positivitaetsschleife fuer $r = 2$ schliessen.
+
+\item \textbf{Numerische Verifikation.} Die BSD-Formel wurde numerisch fuer Tausende von Kurven des Rangs $\leq 3$ verifiziert. Die Erweiterung dieser Berechnungen auf hoehere Praezision und hoeheren Rang testet die Vorhersagen des Frameworks.
+\end{enumerate}
+
+
+% ===================================================================
+% 11. SCHLUSSFOLGERUNG
+% ===================================================================
+\section{Schlussfolgerung}
+\label{sec:conclusion}
+
+Die Birch-und-Swinnerton-Dyer-Vermutung ist, wie die Hodge-Vermutung und die Weil-Vermutungen, fundamental eine Aussage ueber die Unmoeglichkeit von Diskrepanz zwischen analytischen und geometrischen Strukturen. Die N\'eron-Tate-Hoehe liefert die kanonische Positivitaetsstruktur: sie ist eine positiv-definite Form auf rationalen Punkten, die arithmetische Richtungen ueber ihre Energiekosten detektiert.
+
+Die BSD-Formel ist die einzige ,,Normalform'', die mit vier axiomatischen Zwangsbedingungen kompatibel ist: endliche arithmetische Kapazitaet ($\Sha$-Endlichkeit), kooperative Hoehenpositivitaet (N\'eron-Tate), monotone Iwasawa-Kontrolle (kontrolliertes Wachstum in $\mathbb{Z}_p$-Tuermen) und Euler-System-Kompositionskohaerenz (Norm-Kompatibilitaet).
+
+Der Rang-$\leq 1$-Beweis ist bereits ein Positivitaets-No-Go-Argument: Gross-Zagier koppelt eine analytische Ableitung an eine nichtnegative Hoehe, und Kolyvagines Euler-System schliesst Alternativen aus. Fuer hoeheren Rang identifiziert das Framework die praezise fehlende Zutat: eine universelle ,,hoehere Gross-Zagier''-Formel, die $L^{(r)}(E,1)$ an die positiv-definite $r \times r$-Regulatormatrix koppelt.
+
+\begin{quote}
+\textit{,,BSD verlangt nicht von uns, rationale Punkte zu finden. Es verlangt von uns zu zeigen, dass die $L$-Funktion keinen Raum fuer Nullstellen ohne sie hat.''}
+\end{quote}
+
+
+% ===================================================================
+% DANKSAGUNGEN
+% ===================================================================
+\begin{acknowledgments}
+Diese Arbeit wurde als unabhaengige Forschung ohne institutionelle Foerderung durchgefuehrt.
+
+\textit{KI-Werkzeuge.} KI-basierte Werkzeuge (Claude, Anthropic) wurden fuer mathematische Formalisierung und Texterstellung verwendet. Alle mathematischen Inhalte, Vermutungen und die Verantwortung fuer die Korrektheit liegen ausschliesslich beim Autor.
+
+\textit{Foerderinformation.} Diese Forschung erhielt keine externe Foerderung.
+\end{acknowledgments}
+
+
+% ===================================================================
+% BIBLIOGRAPHIE
+% ===================================================================
+\begin{thebibliography}{30}
+
+\bibitem{BSD1965}
+B.~J.~Birch \& H.~P.~F.~Swinnerton-Dyer (1965).
+Notes on elliptic curves. II.
+\textit{Journal f\"ur die reine und angewandte Mathematik}, 218, 79--108.
+DOI: 10.1515/crll.1965.218.79.
+
+\bibitem{GrossZagier1986}
+B.~Gross \& D.~Zagier (1986).
+Heegner points and derivatives of $L$-series.
+\textit{Inventiones Mathematicae}, 84, 225--320.
+DOI: 10.1007/BF01388809.
+
+\bibitem{Kolyvagin1990}
+V.~A.~Kolyvagin (1990).
+Euler systems.
+In \textit{The Grothendieck Festschrift}, Vol.~II, pp.\ 435--483. Birkh\"auser.
+DOI: 10.1007/978-0-8176-4575-5\_11.
+
+\bibitem{Kato2004}
+K.~Kato (2004).
+$p$-adic Hodge theory and values of zeta functions of modular forms.
+\textit{Ast\'erisque}, 295, 117--290.
+
+\bibitem{SkinnerUrban2014}
+C.~Skinner \& E.~Urban (2014).
+The Iwasawa main conjectures for $\mathrm{GL}_2$.
+\textit{Inventiones Mathematicae}, 195(1), 1--277.
+DOI: 10.1007/s00222-013-0448-1.
+
+\bibitem{MazurRubin2004}
+B.~Mazur \& K.~Rubin (2004).
+\textit{Kolyvagin Systems}.
+Memoirs of the AMS, 168(799).
+DOI: 10.1090/memo/0799.
+
+\bibitem{DarmonRotger2017}
+H.~Darmon \& V.~Rotger (2017).
+Diagonal cycles and Euler systems II: The Birch and Swinnerton-Dyer conjecture for Hasse-Weil-Artin $L$-functions.
+\textit{Journal of the AMS}, 30(3), 601--672.
+DOI: 10.1090/jams/861.
+
+\bibitem{BDP2013}
+M.~Bertolini, H.~Darmon, \& K.~Prasanna (2013).
+Generalized Heegner cycles and $p$-adic Rankin $L$-series.
+\textit{Duke Mathematical Journal}, 162(6), 1033--1148.
+DOI: 10.1215/00127094-2142056.
+
+\bibitem{LLZ2014}
+A.~Lei, D.~Loeffler, \& S.~L.~Zerbes (2014).
+Euler systems for Rankin-Selberg convolutions of modular forms.
+\textit{Annals of Mathematics}, 180(2), 653--771.
+DOI: 10.4007/annals.2014.180.2.6.
+
+\bibitem{LSZ2020}
+D.~Loeffler, C.~Skinner, \& S.~L.~Zerbes (2020).
+Euler systems for $\mathrm{GSp}(4)$.
+\textit{Journal of the European Mathematical Society}.
+DOI: 10.4171/JEMS/1256.
+
+\bibitem{Silverman2009}
+J.~H.~Silverman (2009).
+\textit{The Arithmetic of Elliptic Curves}, 2nd ed.
+Graduate Texts in Mathematics 106, Springer.
+DOI: 10.1007/978-0-387-09494-6.
+
+\bibitem{Wiles1995}
+A.~Wiles (1995).
+Modular elliptic curves and Fermat's Last Theorem.
+\textit{Annals of Mathematics}, 141(3), 443--551.
+DOI: 10.2307/2118559.
+
+\bibitem{Geiger2026e}
+L.~Geiger (2026).
+The Saturation Theorem: Axiomatic Constraints on Quantum Gravity from Cosmological Relaxation.
+Companion paper (CRM Paper~V).
+\href{https://doi.org/10.5281/zenodo.19036189}{doi:10.5281/zenodo.19036189}.
+
+\bibitem{GeigerFST2026}
+L.~Geiger (2026).
+The Renormalized Free Energy Framework.
+Zenodo preprint.
+\href{https://doi.org/10.5281/zenodo.19036191}{doi:10.5281/zenodo.19036191}.
+
+\bibitem{GeigerRH2026}
+L.~Geiger (2026).
+The Riemann Hypothesis I--III.
+Zenodo preprint.
+\href{https://doi.org/10.5281/zenodo.19035845}{doi:10.5281/zenodo.19035845}.
+
+\end{thebibliography}
+
+\end{document}

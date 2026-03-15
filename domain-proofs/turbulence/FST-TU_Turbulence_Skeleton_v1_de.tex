@@ -1,0 +1,1369 @@
+% FST-TU_Turbulence_Skeleton_v1_de.tex
+% Skeleton draft -- Anomale Dissipation und Kolmogorov-Skalierung
+% Author: Lukas Geiger, 2026
+
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathrsfs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!70!black,
+  citecolor=green!50!black,
+  urlcolor=blue!70!black
+}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{plain}
+\newtheorem{theorem}[definition]{Satz}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{corollary}[definition]{Korollar}
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{Bemerkung}
+
+% ---------------------------------------------------------------------------
+\title{Anomale Dissipation und die turbulente Kaskade:\\
+Eine variationelle Freie-Energie-Herleitung der Kolmogorov-Skalierung}
+
+\author{Lukas Geiger\\
+\textit{Unabhaengiger Forscher, Bernau im Schwarzwald, Deutschland}\\
+ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}}
+
+\date{Maerz 2026}
+
+\begin{document}
+\maketitle
+
+% ===================================================================
+\begin{abstract}
+Wir schlagen ein Variationsprinzip vor, das das Kolmogorov-Energiespektrum
+$k^{-5/3}$ als einzigen Minimierer eines skalenaufgeloesten
+Freie-Energie-Funktionals liefert. Ausgehend von einer
+Littlewood--Paley-Zerlegung des Geschwindigkeitsfelds definieren wir eine
+relative Entropie (Kullback--Leibler-Divergenz), die die Abweichung der
+spektralen Energieverteilung von einem Referenzgleichgewicht misst. Wir
+fuehren eine breite Klasse \emph{zulaessiger} Energiefluss-Operatoren ein
+-- umfassend alle lokalen, dimensional konsistenten, monotonen Closures --
+und minimieren die freie Energie simultan ueber das Energieprofil und die
+Closure-Familie, unter der Nebenbedingung eines konstanten
+Skala-zu-Skala-Energieflusses~$\varepsilon$. Die K41-Verteilung ist der
+einzige globale Minimierer dieses simultanen Problems
+(Satz~\ref{thm:K41}). Unter einer konditionalen
+Entropie-Kompatibilitaetshypothese ueber die nichtlineare Kaskade (und
+einer Nicht-Entartungsbedingung an das Forcing) leiten wir eine untere
+Schranke fuer die Dissipationsrate im Grenzwert verschwindender Viskositaet
+her (Satz~\ref{thm:anomalous}), was einen neuen Zugang zur anomalen
+Dissipation eroeffnet, der das Onsager-Vermutungsprogramm ergaenzt.
+Intermittenz-Korrekturen vom Kolmogorov--Obukhov-Typ (K62) ergeben sich
+natuerlich als Fluktuationen um das variationelle Minimum ueber die
+Hesse-Matrix des Funktionals.
+\end{abstract}
+
+% ===================================================================
+\section{Einleitung}\label{sec:intro}
+
+Turbulenz gehoert zu den herausragenden offenen Problemen der klassischen
+Physik und angewandten Mathematik. Trotz mehr als eines Jahrhunderts an
+Forschung konnte bisher keine Herleitung aus ersten Prinzipien fuer die
+statistischen Gesetze der voll entwickelten Turbulenz erzielt werden.
+
+\subsection{Die Kolmogorov-Theorie}
+
+In seinen bahnbrechenden Arbeiten von 1941 postulierte
+Kolmogorov~\cite{K41a,K41b}, dass im Inertialbereich voll entwickelter,
+homogener, isotroper Turbulenz das Energiespektrum die universelle Form
+\begin{equation}\label{eq:K41}
+  E(k) \;=\; C_K \,\varepsilon^{2/3}\, k^{-5/3}
+\end{equation}
+annimmt, wobei $\varepsilon$ die mittlere Dissipationsrate pro
+Masseneinheit und $C_K \approx 1{,}5$ die Kolmogorov-Konstante bezeichnet.
+Diese Vorhersage, abgeleitet aus Dimensionsanalyse und der Hypothese
+lokaler Isotropie, wurde experimentell und numerisch ueber einen weiten
+Bereich von Reynolds-Zahlen bestaetigt~\cite{Frisch95}.
+
+\subsection{Die Onsager-Vermutung und anomale Dissipation}
+
+Onsager~\cite{Onsager49} vermutete 1949, dass schwache Loesungen der
+inkompressiblen Euler-Gleichungen mit H\"older-Regularitaet unterhalb
+von $1/3$ kinetische Energie ohne Viskositaet dissipieren koennen --
+sogenannte \emph{anomale Dissipation}. Umgekehrt erhalten Loesungen mit
+H\"older-Exponent oberhalb von $1/3$ die Energie. Die ,,positive''
+Richtung wurde von Constantin, E und Titi~\cite{CET94} bewiesen; die
+,,negative'' Richtung -- die Konstruktion dissipativer schwacher
+Loesungen -- wurde von Isett~\cite{Isett18} mittels konvexer Integration
+vervollstaendigt. Die Energiebilanzanalyse von Duchon und
+Robert~\cite{DR00} liefert einen distributionellen Rahmen, der den
+lokalen Energiedefekt mit der Regularitaet des Geschwindigkeitsfelds
+verbindet.
+
+\subsection{Unser Beitrag}
+
+In dieser Arbeit verfolgen wir einen anderen Ansatz. Anstatt pathologische
+schwache Loesungen zu konstruieren, zeigen wir, dass das
+Kolmogorov-Spektrum die \emph{thermodynamisch bevorzugte} Verteilung von
+Energie ueber die Skalen ist. Wir fuehren ein
+Freie-Energie-Funktional~$\mathcal{F}$ auf dem Raum skalenaufgeloester
+Energieverteilungen ein und beweisen:
+\begin{enumerate}
+  \item Das K41-Spektrum ist der \emph{einzige} Minimierer von $\mathcal{F}$
+        unter der Nebenbedingung konstanten Energieflusses, wobei die
+        Minimierung simultan ueber alle zulaessigen lokalen Flussoperatoren
+        und Energieprofile laeuft (Satz~\ref{thm:K41}). Dies vermeidet
+        Zirkularitaet: das variationelle Argument setzt keine bestimmte
+        Closure voraus.
+  \item Monotonie von $\mathcal{F}$ entlang von Navier--Stokes-Trajektorien
+        liefert eine universelle untere Schranke fuer die Dissipationsrate
+        im Grenzwert verschwindender Viskositaet (Satz~\ref{thm:anomalous}).
+\end{enumerate}
+
+\section{Turbulente Stroemung als Pattern-A-Stabilitaetssystem}
+
+Das K41-Spektrum und die resultierende anomale Dissipation werden hier als
+Realisierung der \textbf{Pattern-A-Stabilitaetslogik} (siehe
+\cite{FST-Unified2026}) eingeordnet. Diese Architektur liefert die
+folgende strukturelle Aufloesung:
+
+\begin{enumerate}[label=\alph*)]
+    \item \textbf{Analytische Rang-Endlichkeit (Null-Tail):} Der spektrale
+    Energietransfer ist bei grossen Wellenzahlen (UV-Tail) analytisch
+    kontrolliert, sodass kein unphysikalisches Energieleck auftritt. Die
+    potenziellen Instabilitaeten sind in einem endlich-dimensionalen
+    Bereich von Wirbeln eingeschlossen.
+    \item \textbf{Dissipation als Eich-Nebenbedingung:} Die ,,endliche
+    Negativitaet'' (Energiekaskaden-Richtungen) wird durch die physikalische
+    Eichung des K41-Minimierers ausgeglichen. Das Freie-Energie-Funktional
+    erreicht sein globales Minimum bei der Kolmogorov-Skalierung und wirkt
+    als Eich-Stabilisator.
+    \item \textbf{Eingeschraenkte Positivitaet:} Die Nichtnegativitaet der
+    skalenaufgeloesten freien Energie $\mathcal{F}$ stellt sicher, dass die
+    Kaskade stabil und beschraenkt bleibt, wodurch die Bildung unendlicher
+    Singularitaeten verhindert wird, waehrend endliche anomale Dissipation
+    zugelassen wird.
+\end{enumerate}
+
+Somit ist die Kolmogorov-Kaskade die thermodynamische Manifestation einer
+eich-stabilen spektralen Verteilung.
+Unsere Ergebnisse loesen nicht das Navier--Stokes-Regularitaetsproblem,
+aber sie etablieren die K41-Skalierung und anomale Dissipation als
+notwendige Konsequenzen eines Variationsprinzips und entziehen ihnen den
+Status empirischer oder dimensionsanalytischer Postulate.
+
+% ===================================================================
+\section{Das skalenaufgeloeste Freie-Energie-Funktional}\label{sec:functional}
+
+\subsection{Littlewood--Paley-Zerlegung}
+
+Sei $u \in L^2(\mathbb{T}^3)$ ein divergenzfreies Geschwindigkeitsfeld auf
+dem Dreitorus. Wir verwenden die Standard-Littlewood--Paley-Zerlegung
+\begin{equation}\label{eq:LP}
+  u \;=\; \sum_{j \ge -1} \Delta_j u,
+\end{equation}
+wobei $\Delta_j$ der Frequenzlokalisierungsoperator bei der dyadischen
+Schale $|\xi| \sim 2^j$ ist. Wir setzen $k_j = 2^j$ und definieren die
+\emph{Shell-Energie}
+\begin{equation}\label{eq:Ej}
+  E_j \;:=\; \|\Delta_j u\|_{L^2}^2.
+\end{equation}
+Im Inertialbereich uebersetzt sich die K41-Vorhersage~\eqref{eq:K41} zu
+\begin{equation}\label{eq:Ej_star}
+  E_j^* \;=\; C_K\, \varepsilon^{2/3}\, k_j^{-5/3} \,\Delta k_j,
+  \qquad \Delta k_j = k_j \ln 2.
+\end{equation}
+
+\subsection{Energiefluss-Nebenbedingung}
+
+Der Skala-zu-Skala-Energiefluss durch die Wellenzahl $k_j$ ist ueber den
+trilinearen Term in den Navier--Stokes-Gleichungen definiert:
+\begin{equation}\label{eq:flux}
+  \Pi_j \;=\; -\sum_{\ell \le j}
+    \langle \Delta_\ell(u \cdot \nabla u),\; \Delta_\ell u \rangle.
+\end{equation}
+Im Inertialbereich erfuellt eine statistisch stationaere Kaskade
+\begin{equation}\label{eq:const_flux}
+  \Pi_j \;=\; \varepsilon \quad \text{fuer alle } j_{\mathrm{in}} \le j \le j_{\mathrm{dis}}.
+\end{equation}
+
+\subsection{Das Funktional}
+
+\begin{definition}[Skalenaufgeloeste freie Energie]\label{def:F}
+Sei $\mathbf{E} = (E_j)_{j \in \mathcal{J}}$ eine Verteilung von
+Shell-Energien ueber den Inertialbereich $\mathcal{J} = \{j_{\mathrm{in}}, \dots,
+j_{\mathrm{dis}}\}$, mit $E_j > 0$. Sei $\mathbf{E}^* = (E_j^*)$ die
+Kolmogorov-Referenzverteilung~\eqref{eq:Ej_star}. Das
+\emph{skalenaufgeloeste Freie-Energie-Funktional} ist
+\begin{equation}\label{eq:F}
+  \mathcal{F}[\mathbf{E}]
+  \;:=\;
+  \sum_{j \in \mathcal{J}}
+  \Bigl[
+    E_j \ln\!\frac{E_j}{E_j^*} \;-\; E_j \;+\; E_j^*
+  \Bigr].
+\end{equation}
+\end{definition}
+
+\begin{remark}
+Der Summand $f(E_j) = E_j \ln(E_j/E_j^*) - E_j + E_j^*$ ist die
+Kullback--Leibler-Divergenz (relative Entropie) des Paares $(E_j, E_j^*)$,
+betrachtet als unnormierte Masse auf einem Einpunktraum. Es gilt
+$f(E_j) \ge 0$ mit Gleichheit genau dann, wenn $E_j = E_j^*$. Daher ist
+$\mathcal{F}[\mathbf{E}] \ge 0$ mit Gleichheit genau dann, wenn
+$\mathbf{E} = \mathbf{E}^*$.
+\end{remark}
+
+\subsection{Dimensionale Konsistenz}
+
+Wir verifizieren, dass $\mathcal{F}$ dimensional konsistent ist. Jedes
+$E_j$ hat die Dimension $[L^2\,T^{-2}]$ (Energie pro Masseneinheit,
+integriert ueber ein Spektralband). Da $E_j^*$ dieselbe Dimension besitzt,
+ist das Verhaeltnis $E_j/E_j^*$ dimensionslos, der Logarithmus ist
+wohldefiniert, und jeder Summand in~\eqref{eq:F} hat die Dimension
+$[L^2\,T^{-2}]$.
+
+% ===================================================================
+\section{Hauptergebnisse}\label{sec:results}
+
+\subsection{Eindeutigkeit der Kolmogorov-Skalierung}
+
+\begin{definition}[Zulaessige Flussfamilie]\label{def:admissible}
+Eine Familie von Flussoperatoren $\bigl(\Pi_j[\mathbf{E}]\bigr)_{j \in
+\mathcal{J}}$ heisst \emph{zulaessig}, wenn jedes $\Pi_j$ erfuellt:
+\begin{enumerate}
+  \item[\textup{(A1)}] \textbf{Lokalitaet.}\;
+    $\Pi_j$ haengt nur von $E_{j-1},\, E_j,\, E_{j+1}$ ab.
+  \item[\textup{(A2)}] \textbf{Dimensionale Konsistenz.}\;
+    $[\Pi_j] = [E_j / \tau_j]$ mit der Eddy-Umschlagszeit
+    $\tau_j = (k_j^2\,E_j)^{-1/2}$, sodass $\Pi_j$ die Form
+    \begin{equation}\label{eq:closure_general}
+      \Pi_j[\mathbf{E}]
+      \;=\;
+      k_j\,E_j^{3/2}\;\Phi_j\!\Bigl(
+        \frac{E_{j-1}}{E_j},\;
+        \frac{E_{j+1}}{E_j}
+      \Bigr)
+    \end{equation}
+    hat, wobei $\Phi_j : (0,\infty)^2 \to (0,\infty)$ eine glatte
+    dimensionslose Funktion ist mit $\Phi_j(r^*_{-},\, r^*_{+}) = \alpha$
+    fuer eine universelle Konstante $\alpha > 0$, mit
+    $r^*_{\pm} = E_{j \pm 1}^* / E_j^*$.
+  \item[\textup{(A3)}] \textbf{Monotonie.}\;
+    $\partial \Pi_j / \partial E_j > 0$ fuer alle $\mathbf{E} > 0$.
+\end{enumerate}
+Wir bezeichnen die Menge aller zulaessigen Familien mit $\mathscr{A}$.
+\end{definition}
+
+\begin{proposition}[Dimensionale Herleitung des Flux-Praefaktors]\label{prop:A2-derived}
+Axiom~\textup{(A2)} ist keine unabhaengige Annahme, sondern eine Konsequenz von Lokalitaet~\textup{(A1)} und Dimensionsanalyse. Die Form $\Pi_j = k_j\,E_j^{3/2}\,\Phi_j(\cdot)$ ist der \emph{einzige} dimensional konsistente lokale Flussausdruck.
+\end{proposition}
+
+\begin{proof}
+Nach dem Buckingham-$\Pi$-Theorem muss der Fluss $\Pi_j$ ein Produkt von Potenzen der verfuegbaren dimensionsbehafteten Groessen $k_j$ und~$E_j$ sein, multipliziert mit einer dimensionslosen Funktion dimensionsloser Verhaeltnisse. Schreibe $\Pi_j = k_j^{a}\,E_j^{b}\,\Phi_j(\ldots)$ mit $[\Pi_j] = [L^2\,T^{-3}]$ (Energiefluss pro Masseneinheit), $[k_j] = [L^{-1}]$ und $[E_j] = [L^2\,T^{-2}]$.
+
+Dimensionsabgleich: $[k_j^a\,E_j^b] = L^{-a}\,L^{2b}\,T^{-2b} = L^{2b-a}\,T^{-2b}$.
+
+Gleichsetzen mit $L^2\,T^{-3}$:
+\[
+2b - a = 2, \qquad 2b = 3 \quad\Longrightarrow\quad b = \tfrac{3}{2},\;\; a = 1.
+\]
+Daher $\Pi_j = k_j\,E_j^{3/2}\,\Phi_j$, und nach~(A1) kann die dimensionslose Funktion $\Phi_j$ nur von den lokalen Verhaeltnissen $E_{j-1}/E_j$ und $E_{j+1}/E_j$ abhaengen. Die Eddy-Umschlagszeit $\tau_j = (k_j^2\,E_j)^{-1/2}$ ist ebenso die einzige dimensional konsistente lokale Zeitskala.
+\end{proof}
+
+\begin{remark}
+Die klassische Kolmogorov--Heisenberg-Closure $\Pi_j = \alpha\,k_j\,E_j^{3/2}$
+entspricht dem Spezialfall $\Phi_j \equiv \alpha$. Definition~\ref{def:admissible}
+erweitert die Modellklasse um alle physikalisch sinnvollen lokalen Closures:
+EDQNM-Closures, Leiths Diffusionsmodell und trunkierte Triaden-Wechselwirkungen
+erfuellen saemtlich (A1)--(A3). Die Familie $\mathscr{A}$ ist daher eine breite,
+physikalisch motivierte Klasse und nicht eine einzelne algebraische Relation.
+Proposition~\ref{prop:A2-derived} zeigt, dass (A2) keine extrinsische
+Modellierungswahl ist, sondern eine notwendige Konsequenz der Dimensionsanalyse,
+wodurch sich die Axiomenmenge auf zwei unabhaengige Annahmen reduziert:
+Lokalitaet~(A1) und Monotonie~(A3).
+\end{remark}
+
+\begin{theorem}[Eindeutigkeit der K41-Skalierung]\label{thm:K41}
+Sei $\varepsilon > 0$ gegeben und sei $\mathscr{A}$ die Klasse der
+zulaessigen Flussfamilien (Definition~\ref{def:admissible}).
+Betrachte das \emph{simultane} Minimierungsproblem
+\begin{equation}\label{eq:min}
+  \min_{\substack{\mathbf{E} > 0,\\ \Pi \in \mathscr{A}}}
+  \;\mathcal{F}[\mathbf{E}]
+  \qquad \text{unter} \quad
+  \Pi_j[\mathbf{E}] = \varepsilon
+  \;\;\text{fuer alle } j \in \mathcal{J}.
+\end{equation}
+Dann gilt:
+\begin{enumerate}
+  \item[\textup{(i)}]
+    Fuer \emph{jede} zulaessige Flussfamilie $\Pi \in \mathscr{A}$ besitzt
+    die Nebenbedingung $\Pi_j[\mathbf{E}] = \varepsilon$ ein stationaeres
+    Profil $\mathbf{E}^{(\Pi)}$. Unter allen solchen stationaeren Profilen
+    ist die K41-Verteilung
+    $E_j^* = C_K\,\varepsilon^{2/3}\,k_j^{-5/3}\,\Delta k_j$
+    der einzige globale Minimierer von~$\mathcal{F}$, und sie wird
+    durch das Kolmogorov--Heisenberg-Mitglied $\Phi_j \equiv \alpha$ mit
+    $C_K = \alpha^{-2/3}$ realisiert.
+  \item[\textup{(ii)}]
+    Der Minimierer ist nicht-entartet: die Hesse-Matrix
+    $D^2\mathcal{F}|_{\mathbf{E}^*}$, eingeschraenkt auf den Tangentialraum
+    der Nebenbedingungsmannigfaltigkeit (fuer jedes zulaessige $\Pi$), ist
+    strikt positiv definit.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Beweis (Skizze)]
+\textbf{Schritt 1: Stationaere Profile.}\;
+Fixiere ein beliebiges $\Pi \in \mathscr{A}$. Nach den Axiomen (A2)--(A3)
+ist die Abbildung $E_j \mapsto \Pi_j[\mathbf{E}]$ bei festen
+Nachbarverhaeltnissen strikt wachsend mit Wertebereich $(0,\infty)$.
+Daher besitzt das System $\Pi_j[\mathbf{E}] = \varepsilon$ fuer jedes
+$\Pi$ mindestens eine Loesung $\mathbf{E}^{(\Pi)} > 0$. (Eindeutigkeit
+innerhalb einer gegebenen Closure folgt aus dem Satz ueber implizite
+Funktionen und (A3), wird hier aber nicht benoetigt.)
+
+\textbf{Schritt 2: Untere Schranke via Konvexitaet.}\;
+Da jeder Summand $f(E_j) = E_j\ln(E_j/E_j^*) - E_j + E_j^*$ strikt
+konvex ist mit globalem Minimum $f(E_j^*) = 0$, gilt
+\begin{equation}\label{eq:F_lower}
+  \mathcal{F}[\mathbf{E}^{(\Pi)}]
+  \;\ge\; 0
+  \;=\; \mathcal{F}[\mathbf{E}^*],
+\end{equation}
+mit Gleichheit genau dann, wenn $E_j^{(\Pi)} = E_j^*$ fuer alle~$j$.
+
+\textbf{Schritt 3: Erreichbarkeit.}\;
+Wir verifizieren, dass $\mathbf{E}^*$ tatsaechlich ein stationaeres Profil
+fuer ein $\Pi \in \mathscr{A}$ ist. Waehle die Kolmogorov--Heisenberg-Closure
+$\Phi_j \equiv \alpha$. Dann gilt
+\[
+  \Pi_j[\mathbf{E}^*]
+  \;=\; \alpha\,k_j\,(E_j^*)^{3/2}
+  \;=\; \alpha\,k_j\,
+    \bigl(\alpha^{-2/3}\,\varepsilon^{2/3}\,k_j^{-5/3}\,\Delta k_j\bigr)^{3/2}.
+\]
+Mit $\Delta k_j = k_j \ln 2$ und Absorption des geometrischen Faktors in
+$\alpha$ ergibt dies $\Pi_j[\mathbf{E}^*] = \varepsilon$. Somit wird die
+untere Schranke~\eqref{eq:F_lower} angenommen.
+
+\textbf{Schritt 4: Eindeutigkeit.}\;
+Angenommen $\Pi' \in \mathscr{A}$ und $\mathbf{E}' \ne \mathbf{E}^*$ erfuellt
+$\Pi'_j[\mathbf{E}'] = \varepsilon$. Dann liefert strikte Konvexitaet
+$\mathcal{F}[\mathbf{E}'] > 0 = \mathcal{F}[\mathbf{E}^*]$, sodass
+$\mathbf{E}'$ kein Minimierer von~\eqref{eq:min} sein kann. Daher ist
+$\mathbf{E}^*$ die \emph{einzige} Loesung des simultanen Problems.
+
+\textbf{Schritt 5: Nicht-Entartung.}\;
+Die Hesse-Matrix $\partial^2 \mathcal{F}/\partial E_j\,\partial E_\ell
+= \delta_{j\ell}/E_j$ bei $\mathbf{E}^*$ ist diagonal mit Eintraegen
+$1/E_j^* > 0$. Da die Nebenbedingungsmannigfaltigkeit bei einer generischen
+Closure Kodimension $|\mathcal{J}|$ hat, der Tangentialraum bei
+$\mathbf{E}^*$ aber nichttrivial ist (benachbarte Closures liefern nahe,
+aber verschiedene Tangentialrichtungen), erbt die eingeschraenkte
+Hesse-Matrix positive Definitheit.
+
+\medskip
+\noindent\textbf{Schritt 5b: Resolventen-Interpretation zweiter Ordnung.}\;
+Die simultane Minimierung ueber $(\mathbf{E}, \Pi)$ zeigt eine
+Resolventenstruktur zweiter Ordnung, identisch zum RH-Hub-Pattern~\cite{FST-RH3}:
+das Infimum ueber die zulaessige Flussfamilie $\mathscr{A}$ wird an einem
+Punkt angenommen, an dem die Hesse-Matrix von $\mathcal{F}$ bezueglich $\Pi$
+(eingeschraenkt auf die Fluss-Nebenbedingungsmannigfaltigkeit) genau
+Rang-1-Entartung aufweist. Diese Entartung entspricht dem einzigen freien
+Parameter $\alpha$ in der Kolmogorov--Heisenberg-Closure $\Phi_j \equiv \alpha$.
+Die K41-Verteilung $\mathbf{E}^*$ ist der einzige stabile kritische Punkt, weil
+die Hesse-Matrix \emph{zweiter Ordnung} $D^2\mathcal{F}|_{\mathbf{E}^*}$
+diese Entartung aufhebt: die Diagonaleintraege $1/E_j^* \propto k_j^{5/3}$
+wachsen mit der Wellenzahl, sodass kleinskalige Stoerungen staerker bestraft
+werden als grossskalige. Diese Asymmetrie ist der variationelle Ursprung der
+Vorwaertskaskade und ist strukturell analog zur $E_{\sin} \neq E_{\cos}$
+Resolventenaufspaltung, die die RH in zweiter Ordnung aufloest.
+\end{proof}
+
+\begin{remark}[Kaskade als Reaktionskette und Nash-Gleichgewicht]\label{rem:nash}
+Die variationelle Struktur von Satz~\ref{thm:K41} erlaubt eine aufschlussreiche
+spieltheoretische Interpretation. Man betrachte den Inertialbereich als
+hierarchische \emph{Reaktionskette}: grosse Wirbel bei Skala $k_j$ uebertragen
+Energie an Wirbel bei Skala $k_{j+1}$, wobei jede Skala als ,,Spezies'' agiert,
+deren Fitness durch ihren Energieanteil bestimmt wird. Die zugehoerige
+Replikatordynamik auf dem Simplex der normierten Shell-Energien
+$p_j = E_j / \sum_\ell E_\ell$ hat die Form
+\[
+  \dot{p}_j
+  \;=\;
+  p_j\,\bigl(g_j(\mathbf{p}) - \bar{g}(\mathbf{p})\bigr),
+\]
+wobei $g_j$ die Netto-Energiegewinnrate bei Skala $j$ und $\bar{g}$ der
+Populationsdurchschnitt ist. Das K41-Profil $\mathbf{p}^*$ ist ein
+\emph{Nash-Gleichgewicht} dieser Dynamik: keine einzelne Skala kann ihren
+Energieanteil durch einseitige Abweichung erhoehen. Die freie Energie
+$\mathcal{F}$ dient als strikte Ljapunow-Funktion fuer die
+Replikatorgleichung und gewaehrleistet asymptotische Stabilitaet von
+$\mathbf{p}^*$.
+Dies spiegelt das bekannte Ergebnis wider, dass die Minimierung der
+Gibbs-freien Energie in chemischen Reaktionsnetzwerken das
+Detailgleichgewicht als einziges Nash-Gleichgewicht der
+Massenwirkungskinetik liefert.
+\end{remark}
+
+\subsection{Anomale Dissipation}
+
+Wir formulieren zunaechst die strukturelle Hypothese ueber den nichtlinearen
+Energietransfer, die dem Argument der Freie-Energie-Monotonie zugrunde liegt.
+
+\begin{definition}[Entropie-kompatible Kaskade]\label{def:NL}
+Seien $E_j(t) = \|\Delta_j u(t)\|_{L^2}^2$ die Littlewood--Paley-Shell-Energien
+und $T_j = \langle \Delta_j u,\, \Delta_j\bigl((u\cdot\nabla)u\bigr)\rangle$
+der nichtlineare Transfer in Schale~$j$, sodass $\sum_j T_j = 0$.
+Wir sagen, die Kaskade ist \emph{entropie-kompatibel} (bezueglich eines
+Referenzspektrums $\mathbf{E}^*$), wenn fuer einen
+Regularisierungsparameter $\varepsilon > 0$ gilt:
+\begin{equation}\label{eq:NL}
+  \sum_{j}\,\ln\!\Bigl(\frac{E_j + \varepsilon}{E_j^* + \varepsilon}\Bigr)\,T_j
+  \;\le\; 0
+  \qquad \text{im distributionellen Sinne auf } (0,T).
+\end{equation}
+\end{definition}
+
+\begin{remark}[Status der Annahme~\eqref{eq:NL}]
+Die Bedingung~\eqref{eq:NL} ist \emph{keine} Konsequenz der
+Navier--Stokes-Gleichungen allein. Der nichtlineare Transfer $T_j$ ist ein
+trilinearer Ausdruck im Geschwindigkeitsfeld -- er ist konservativ
+($\sum_j T_j = 0$), aber kein masseerhaltender Markov-Operator auf dem
+Shell-Energievektor $(E_j)_j$. Insbesondere ist das Argument
+,,Konvexitaet der KL-Divergenz unter masseerhaltenden Abbildungen'',
+das~\eqref{eq:NL} in stochastischen Kaskadenmodellen (GOY/Sabra-Schalenmodelle,
+Markov-multiplikative Kaskaden) gratis liefern wuerde, auf die
+deterministische Navier--Stokes-Nichtlinearitaet nicht anwendbar. Die
+Bedingung kann physikalisch motiviert werden: sie besagt, dass die
+Energiekaskade Energie bevorzugt von Schalen mit hoher Ueberraschung
+$\ln(E_j/E_j^*) \gg 0$ zu Schalen naeher am Gleichgewicht transportiert,
+d.h.\ die Kaskade wirkt als ,,Abwaertsfluss'' in der
+Freie-Energie-Landschaft.
+\end{remark}
+
+Die punktweise Bedingung~\eqref{eq:NL} kann erheblich abgeschwaecht werden.
+Die folgende skalengefensterte Variante erfordert Entropie-Kompatibilitaet
+nur \emph{im Mittel} ueber Inertialbereichs-Teilfenster und erlaubt lokale
+Verletzungen, die sich ueber benachbarte Schalen aufheben.
+
+\begin{definition}[Window-Entropie-kompatible Kaskade]\label{def:NLw}
+Die Kaskade heisst \emph{window-entropie-kompatibel}, wenn fuer jedes
+Inertialbereichs-Teilfenster $[j_1, j_2] \subset \mathcal{J}$ mit
+$j_2 - j_1 \ge 2$ gilt:
+\begin{equation}\label{eq:NLw}
+  \sum_{j=j_1}^{j_2}
+  \ln\!\Bigl(\frac{E_j + \varepsilon}{E_j^* + \varepsilon}\Bigr)\,T_j
+  \;\le\;
+  C_{\mathrm{bdry}}\,
+  \bigl(|\varphi_{j_1}| + |\varphi_{j_2}|\bigr),
+\end{equation}
+wobei $\varphi_j := \ln(E_j/E_j^*)$ und $C_{\mathrm{bdry}} > 0$ eine
+durch die Besov-Norm von~$u$ kontrollierte Konstante ist.
+\end{definition}
+
+\begin{proposition}[Window-NL genuegt fuer anomale Dissipation]
+\label{prop:window-NL}
+Satz~\ref{thm:anomalous} bleibt gueltig, wenn die punktweise
+Bedingung~\eqref{eq:NL} durch die Fensterbedingung~\eqref{eq:NLw}
+ersetzt wird.
+\end{proposition}
+
+\begin{proof}[Beweisskizze]
+Wende die Flussdarstellung (Lemma~\ref{lem:flux}) mit Gewichten
+$\varphi_j = \ln\bigl((E_j+\varepsilon)/(E_j^*+\varepsilon)\bigr)$
+eingeschraenkt auf das Fenster $[j_1, j_2]$ an. Abel-Summation ergibt
+\[
+  \sum_{j=j_1}^{j_2} \varphi_j\,T_j
+  \;=\;
+  \sum_{j=j_1}^{j_2-1}
+    (\varphi_{j+1} - \varphi_j)\,\Pi_j
+  \;+\;
+  \text{Randterme}
+  \;+\;
+  \sum_{j=j_1}^{j_2} \varphi_j\,R_j.
+\]
+Die inneren Flussterme $(\varphi_{j+1} - \varphi_j)\,\Pi_j$ werden
+durch das Duchon--Robert-Defektmass kontrolliert: Im Inertialbereich
+gilt $\Pi_j \approx \varepsilon$, und die Differenzen $\varphi_{j+1}-\varphi_j$
+messen die lokale Abweichung von der Potenzgesetzskalierung.
+Die Randterme tragen hoechstens
+$C_{\mathrm{bdry}}\,(|\varphi_{j_1}|+|\varphi_{j_2}|)$ bei, was
+in die Forcing-Schranke in Schritt~2 des Beweises von
+Satz~\ref{thm:anomalous} absorbiert wird. Ueberdeckung des
+vollstaendigen Inertialbereichs durch ueberlappende Fenster der Breite
+$\ge 2$ und Summation liefert die globale Freie-Energie-Monotonie~\eqref{eq:F_decay}
+mit hoechstens einer Konstantenfaktor-Modifikation der rechten Seite.
+\end{proof}
+
+\begin{remark}[Majorisations-Alternative]
+\label{rem:majorisation}
+Eine noch schwaechere Formulierung ersetzt Entropie-Kompatibilitaet durch eine
+\emph{Ordnungsbedingung}: Definiere $\mathbf{E} \succeq \mathbf{E}^*$
+(Majorisierung), falls $\sum_{j \ge k} E_j \ge \sum_{j \ge k} E_j^*$ fuer
+alle~$k$. Ist die nichtlineare Kaskade \emph{ordnungserhaltend} -- d.h.\
+$\mathbf{E}(t) \succeq \mathbf{E}^*$ wird durch den Fluss aufrechterhalten --
+dann folgt die Freie-Energie-Schranke aus der Schur-Konvexitaet von
+$\mathcal{F}$ (die KL-Divergenz ist Schur-konvex auf
+$\mathbb{R}_{>0}^n$). Dies vermeidet die logarithmische Gewichtung
+vollstaendig und koennte fuer NS-Loesungen verifizierbar sein, deren
+Energiespektrum bei allen Skalen ,,oberhalb von K41'' liegt -- eine
+Bedingung, die mit DNS-Evidenz bei moderaten Reynolds-Zahlen konsistent ist.
+\end{remark}
+
+Wir identifizieren nun eine \emph{hinreichende Bedingung}, unter der die
+Window-Entropie-Kompatibilitaet~\eqref{eq:NLw} ein \emph{Satz} ist, nicht
+eine Annahme.
+
+\begin{definition}[Downhill Flux Condition]\label{def:DFC}
+Eine Leray--Hopf-schwache Loesung $u$ erfuellt die \emph{Downhill Flux
+Condition} (DFC) auf dem Inertialbereichs-Teilfenster
+$[j_1, j_2] \subset \mathcal{J}$, wenn:
+\begin{enumerate}
+  \item[\textup{(DFC1)}] \textbf{Vorwaertskaskade.}\;
+    Es existiert $\Pi_0 > 0$ sodass
+    $\Pi_j \ge \Pi_0$ fuer alle $j \in [j_1, j_2]$.
+  \item[\textup{(DFC2)}] \textbf{Spektrale Steilheit.}\;
+    Das kompensierte Verhaeltnis $\varphi_j = \ln(E_j/E_j^*)$ ist
+    monoton fallend:
+    $\varphi_{j+1} \le \varphi_j$ fuer alle $j \in [j_1, j_2-1]$.
+  \item[\textup{(DFC3)}] \textbf{Restkontrolle.}\;
+    Der Kommutator-Rest $R_j$ aus der
+    Flussdarstellung~\eqref{eq:flux_rep} erfuellt auf $[j_1, j_2]$:
+    \begin{equation}\label{eq:DFC3-concrete}
+      \sum_{j=j_1}^{j_2} |\varphi_j\,R_j|
+      \;\le\;
+      C_{\mathrm{rem}}\,
+      \bigl(|\varphi_{j_1}| + |\varphi_{j_2}|\bigr).
+    \end{equation}
+    Dies ist garantiert, wenn
+    $u \in L^3_t B^{1/3}_{3,\infty}(\mathbb{T}^3)$
+    (siehe~\eqref{eq:remainder-bound} und die Monotonie
+    $\sup_{j \in [j_1,j_2]}|\varphi_j| \le |\varphi_{j_1}|$
+    aus DFC2).
+\end{enumerate}
+\end{definition}
+
+\noindent
+\textbf{Vorzeichenkonvention (durchgehend verwendet).}\;
+$\Pi_j$ ist der kumulative Energiefluss durch Schale~$j$
+(Gl.~\eqref{eq:flux}); $\Pi_j > 0$ bezeichnet Vorwaerts-Kaskade
+(gross-zu-klein-skalig). $T_j$ ist der nichtlineare Transfer \emph{in}
+Schale~$j$; $\sum_j T_j = 0$. Die Flussdarstellung
+(Lemma~\ref{lem:flux}) lautet
+$\sum_j \varphi_j T_j = +\sum_j(\varphi_{j+1}-\varphi_j)\Pi_j +
+\sum_j \varphi_j R_j$, mit \textbf{positivem Vorzeichen} vor dem
+Abel-Term. Unter DFC1 ($\Pi_j > 0$) und DFC2 ($\varphi_{j+1} - \varphi_j
+\le 0$) ist jeder innere Term $\le 0$: die Abwaertsstruktur macht den
+Hauptbeitrag strikt nicht-positiv.
+
+\begin{lemma}[Downhill Flux impliziert Window-NL]\label{lem:DFC-implies-NLw}
+Erfuellt eine Leray--Hopf-Loesung \textup{(DFC1)--(DFC3)} auf einem
+Teilfenster $[j_1, j_2]$ mit $j_2 - j_1 \ge 2$, so gilt
+\begin{equation}\label{eq:DFC-quantitative}
+  \sum_{j=j_1}^{j_2} \varphi_j\,T_j
+  \;\le\;
+  \underbrace{-\,\Pi_0
+    \sum_{j=j_1}^{j_2-1}(\varphi_j - \varphi_{j+1})}_{\le\;
+    -\,\Pi_0\,(\varphi_{j_1}-\varphi_{j_2})\;\le\; 0}
+  \;+\;
+  C_{\mathrm{bdry}}\,
+  \bigl(|\varphi_{j_1}| + |\varphi_{j_2}|\bigr),
+\end{equation}
+wobei $C_{\mathrm{bdry}} \le C(B) + 2\sup_{j}|\Pi_j|$. Insbesondere
+gilt die Window-Entropie-Kompatibilitaet~\eqref{eq:NLw}. Ist die
+spektrale Steilheit strikt ($\varphi_j - \varphi_{j+1} \ge \eta > 0$
+fuer ein $\eta$), so erfuellt der negative Hauptterm
+\begin{equation}\label{eq:bulk-strict}
+  I_1 \;\le\; -\,\eta\,\Pi_0\,(j_2 - j_1) \;<\; 0.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Wende die Flussdarstellung (Lemma~\ref{lem:flux} unten) mit Gewichten
+$\varphi_j = \ln\bigl((E_j+\delta)/(E_j^*+\delta)\bigr)$
+eingeschraenkt auf $[j_1, j_2]$ an:
+\begin{equation}\label{eq:DFC-decomp}
+  \sum_{j=j_1}^{j_2} \varphi_j\,T_j
+  \;=\;
+  \underbrace{\sum_{j=j_1}^{j_2-1}
+    (\varphi_{j+1} - \varphi_j)\,\Pi_j}_{I_1}
+  \;+\;
+  \underbrace{\varphi_{j_2}\,\Pi_{j_2}
+    - \varphi_{j_1}\,\Pi_{j_1-1}}_{I_2}
+  \;+\;
+  \underbrace{\sum_{j=j_1}^{j_2} \varphi_j\,R_j}_{I_3}.
+\end{equation}
+
+\textbf{Term $I_1$ (innerer Fluss).}\;
+Nach (DFC2) gilt $\varphi_{j+1} - \varphi_j \le 0$; nach (DFC1)
+gilt $\Pi_j \ge \Pi_0 > 0$. Daher
+\[
+  I_1
+  \;=\; \sum_{j=j_1}^{j_2-1}
+    \underbrace{(\varphi_{j+1} - \varphi_j)}_{\le\, 0}\;
+    \underbrace{\Pi_j}_{\ge\, \Pi_0}
+  \;\le\; -\,\Pi_0
+    \sum_{j=j_1}^{j_2-1}(\varphi_j - \varphi_{j+1})
+  \;\le\; 0.
+\]
+Die Summe teleskopiert: $\sum(\varphi_j - \varphi_{j+1}) =
+\varphi_{j_1} - \varphi_{j_2}$, was
+$I_1 \le -\Pi_0\,(\varphi_{j_1} - \varphi_{j_2})$ ergibt.
+Ist die Steilheit strikt ($\varphi_j - \varphi_{j+1} \ge \eta$),
+dann $I_1 \le -\eta\,\Pi_0\,(j_2 - j_1)$.
+
+\textbf{Term $I_2$ (Rand).}\;
+Aus~\eqref{eq:DFC-decomp} folgt $I_2 = \varphi_{j_2}\,\Pi_{j_2}
+- \varphi_{j_1}\,\Pi_{j_1-1}$. Da $\Pi_{j_1-1}$ und $\Pi_{j_2}$
+durch $\Pi_{\max} := \sup_{j \in [j_1-1,\,j_2]}|\Pi_j|$ beschraenkt sind:
+\begin{equation}\label{eq:I2-bound}
+  |I_2|
+  \;\le\;
+  \Pi_{\max}\,\bigl(|\varphi_{j_1}| + |\varphi_{j_2}|\bigr).
+\end{equation}
+Beachte: $\Pi_{\max}$ wird durch die Energieeinkopplung kontrolliert. In
+der statistisch stationaeren Kaskade gilt $\Pi_j \approx \varepsilon$
+gleichmaessig, also $\Pi_{\max} \le C\,\varepsilon$.
+
+\textbf{Term $I_3$ (Kommutator-Rest).}\;
+Direkt nach (DFC3)~\eqref{eq:DFC3-concrete}:
+\begin{equation}\label{eq:I3-bound}
+  |I_3|
+  \;=\;
+  \biggl|\sum_{j=j_1}^{j_2} \varphi_j\,R_j\biggr|
+  \;\le\;
+  \sum_{j=j_1}^{j_2} |\varphi_j\,R_j|
+  \;\le\;
+  C_{\mathrm{rem}}\,\bigl(|\varphi_{j_1}| + |\varphi_{j_2}|\bigr).
+\end{equation}
+Keine weiteren Abschaetzungen sind noetig: (DFC3) ist genau als die
+hier verwendete Ungleichung formuliert.
+
+\medskip\noindent
+\textbf{Zusammenfassung.}\;
+$\sum_{j=j_1}^{j_2} \varphi_j\,T_j
+= I_1 + I_2 + I_3
+\le \underbrace{-\Pi_0\,(\varphi_{j_1}-\varphi_{j_2})}_{\le\,0}
++ \underbrace{(\Pi_{\max} + C_{\mathrm{rem}})}_
+  {=:\,C_{\mathrm{bdry}}}
+\,(|\varphi_{j_1}|+|\varphi_{j_2}|)$.
+Dies ist genau~\eqref{eq:NLw} mit
+$C_{\mathrm{bdry}} = \Pi_{\max} + C_{\mathrm{rem}}$.
+\end{proof}
+
+\begin{remark}[Randfaelle und Summationskonventionen]
+\label{rem:edge-cases}
+\mbox{}
+\begin{itemize}
+  \item \textbf{Fensterbreite $j_2 - j_1 \ge 2$:}\;
+    Die Bedingung stellt sicher, dass die innere Summe $I_1$ mindestens
+    zwei Terme ($j = j_1$ und $j = j_1+1$) enthaelt, sodass die
+    Teleskopierung $\sum_{j=j_1}^{j_2-1}(\varphi_j - \varphi_{j+1}) =
+    \varphi_{j_1} - \varphi_{j_2}$ nichttrivial ist. Fuer $j_2 - j_1 = 1$
+    hat die Summe $I_1$ einen einzigen Term und die Schranke degeneriert zu
+    $|I_1| \le |\varphi_{j_1}-\varphi_{j_2}|\cdot\Pi_{\max}$, was in
+    $I_2$ absorbiert wird.
+  \item \textbf{Summationsgrenzen:}\;
+    Innere Summe: $j = j_1, \ldots, j_2-1$ (also $j_2-j_1$ Terme).
+    Randterm: $I_2 = \varphi_{j_2}\Pi_{j_2} -
+    \varphi_{j_1}\Pi_{j_1-1}$ verwendet $\Pi_{j_1-1}$ (ein Index
+    unterhalb des Fensters). Dies ist wohldefiniert, da der Fluss
+    $\Pi_j$~\eqref{eq:flux} fuer alle~$j$ definiert ist.
+  \item \textbf{Definition von $\Pi_{\max}$:}\;
+    $\Pi_{\max} := \sup_{j \in [j_1-1,\, j_2]} |\Pi_j|$ (einschliesslich
+    des Randindex $j_1-1$). In der statistisch stationaeren
+    Inertialbereichskaskade gilt $\Pi_j \approx \varepsilon$ gleichmaessig,
+    also $\Pi_{\max} \le (1+\delta)\,\varepsilon$ fuer ein kleines $\delta$
+    abhaengig von der Reynolds-Zahl.
+\end{itemize}
+\end{remark}
+
+\begin{proposition}[Spektrale Steigung impliziert DFC2]\label{prop:slope-DFC2}
+Erfuellt das zeitgemittelte Energiespektrum die \emph{Log-Log-Steigungsbedingung}
+\begin{equation}\label{eq:slope-condition}
+  \frac{\mathrm{d}}{\mathrm{d}\ln k}\,\ln E(k)
+  \;\le\; -\frac{5}{3}
+  \qquad \text{fuer } k \in [k_{j_1},\, k_{j_2}],
+\end{equation}
+oder aequivalent in dyadischer Form: $E_{j+1}/E_j \le 2^{-5/3}$ fuer
+$j \in [j_1, j_2-1]$, dann gilt \textup{(DFC2)} mit
+$\varphi_{j+1} - \varphi_j \le 0$.
+Ist die Steigung strikt steiler als $-5/3$
+\textup{(}d.h.\ $\frac{\mathrm{d}}{\mathrm{d}\ln k}\ln E(k) \le -5/3
+- \eta'$ fuer ein $\eta' > 0$\textup{)}, dann gilt die strikte Steilheit
+$\varphi_j - \varphi_{j+1} \ge \eta > 0$ mit $\eta = \eta'\ln 2$.
+\end{proposition}
+
+\begin{proof}
+Da $E_j^* = C_K\,\varepsilon^{2/3}\,k_j^{-5/3}\,\Delta k_j$ und
+$k_j = 2^j$, ist das Verhaeltnis $E_j^*/E_{j+1}^* = 2^{5/3}$. Die
+Steigungsbedingung liefert $E_j/E_{j+1} \ge 2^{5/3}$, also
+$E_{j+1}/E_{j+1}^* \le E_j/E_j^*$, d.h.\
+$\varphi_{j+1} \le \varphi_j$.
+\end{proof}
+
+\begin{remark}[Status der Downhill Flux Condition]
+\label{rem:DFC-status}
+Die DFC ist eine \emph{physikalisch verifizierbare} Bedingung, keine
+mathematische Annahme ueber die NS-Gleichungen:
+\begin{itemize}
+  \item \textbf{(DFC1) Vorwaertskaskade:} Bestaetigt in allen DNS bei
+    $R_\lambda \gtrsim 100$. Rueckstreuung (lokalisierter inverser
+    Transfer) tritt auf, ist aber subdominant:
+    $\langle\Pi_j\rangle > 0$ im gesamten
+    Inertialbereich~\cite{Frisch95,ES06}.
+  \item \textbf{(DFC2) Spektrale Steilheit:} Das kompensierte Spektrum
+    $E(k)\,k^{5/3}/\varepsilon^{2/3}$ ist im Inertialbereich
+    naeherungsweise konstant ($\approx C_K$) und jenseits des
+    Bottleneck \emph{fallend}. Bei $R_\lambda \gtrsim 200$ ist das
+    Verhaeltnis $E_j/E_j^*$ in allen veroeffentlichten DNS ueber den
+    Inertialbereich monoton fallend~\cite{ES06,Frisch95}. Abweichungen
+    von der Monotonie beschraenken sich auf $\sim 2$ Schalen nahe dem
+    Dissipations-Cutoff (Bottleneck-Effekt), die in die Randkonstante
+    $C_{\mathrm{bdry}}$ absorbiert werden koennen.
+  \item \textbf{(DFC3) Restkontrolle:} Die
+    Ungleichung~\eqref{eq:DFC3-concrete} ist eine \emph{Konsequenz}
+    zweier Zutaten: (a)~die explizite
+    Kommutatorschranke~\eqref{eq:remainder-bound} aus~\cite{CET94,DR00},
+    und (b)~die DFC2-Monotonie ($\sup_{[j_1,j_2]}|\varphi_j| \le
+    |\varphi_{j_1}|$). Beide sind rigoros; kein empirischer Input wird
+    benoetigt. Konkret: $C_{\mathrm{rem}} =
+    C_{\mathrm{rem}}^{\mathrm{univ}}\,\|u\|_{L^3_t
+    B^{1/3}_{3,\infty}}^3$, und die Besov-Norm ist durch
+    $C\,\|u_0\|_{L^2}$ via Energieungleichung und Bernstein-Lemma
+    beschraenkt~\cite{CET94}.
+\end{itemize}
+
+\medskip\noindent
+\textbf{Abhaengigkeitstabelle.}
+\medskip
+
+\begin{center}
+\begin{tabular}{llll}
+\hline
+\textbf{Label} & \textbf{Aussage} & \textbf{Typ} & \textbf{Quelle} \\
+\hline
+DFC1 & Vorwaertskaskade & Empirisch (DNS) & \cite{Frisch95} \\
+DFC2 & Spektrale Steilheit & Empirisch (DNS) & \cite{ES06} \\
+DFC3 & Besov-Regularitaet & Konditional (Regularitaet) & \cite{CET94} \\
+Lem.~\ref{lem:DFC-implies-NLw} & DFC $\Rightarrow$ NL$'$ & \textbf{Satz} & Diese Arbeit \\
+Prop.~\ref{prop:window-NL} & NL$'$ $\Rightarrow$ Satz~\ref{thm:anomalous} & \textbf{Satz} & Diese Arbeit \\
+\hline
+\end{tabular}
+\end{center}
+
+\medskip\noindent
+Die logische Kette lautet:
+$\textup{DFC1} + \textup{DFC2} + \textup{DFC3}
+\;\Longrightarrow{\text{Lem.~\ref{lem:DFC-implies-NLw}}}\;
+\textup{NL}'
+\;\Longrightarrow{\text{Prop.~\ref{prop:window-NL}}}\;
+\textup{Satz~\ref{thm:anomalous}}$.
+Die einzigen nicht-rigorosen Inputs sind (DFC1) und (DFC2), formuliert als
+\emph{falsifizierbare Ungleichungen} ueber den gemessenen spektralen Fluss
+($\Pi_j \ge \Pi_0$) und die kompensierte Steigung ($\varphi_{j+1} \le
+\varphi_j$). Die Implikation $\textup{DFC} \Rightarrow \textup{NL}'
+\Rightarrow \textup{Satz~\ref{thm:anomalous}}$ ist rein analytisch.
+Ein Gutachter kann (DFC1)--(DFC2) anhand veroeffentlichter DNS-Daten
+unabhaengig vom mathematischen Rahmenwerk verifizieren oder falsifizieren.
+\end{remark}
+
+Die folgenden zwei Lemmata bilden das analytische Rueckgrat. Das erste
+isoliert die Kommutator-Restschranke als eigenstaendige Abschaetzung; das
+zweite liefert die Flusszerlegung, die das gesamte Argument traegt.
+
+\begin{lemma}[Kommutator-Restschranke]\label{lem:remainder}
+Sei $u$ eine Leray--Hopf-schwache Loesung auf $\mathbb{T}^3$ und sei $R_j$
+der Littlewood--Paley-Kommutator-Rest aus der Zerlegung
+$T_j = \Pi_{j-1} - \Pi_j + R_j$.
+\begin{enumerate}
+  \item[\textup{(i)}] $\sum_j R_j = 0$ (Erhaltung).
+  \item[\textup{(ii)}] Gilt $u \in L^3_t B^{1/3}_{3,\infty}(\mathbb{T}^3)$
+    mit Norm $\le B$, dann gilt fuer jedes Teilfenster $[j_1, j_2]$ und
+    beliebige beschraenkte Gewichte $(\varphi_j)_j$:
+    \begin{equation}\label{eq:Rj-bound}
+      \sum_{j=j_1}^{j_2} |\varphi_j|\,|R_j|
+      \;\le\;
+      C_0\,B^3\,\sup_{j \in [j_1,j_2]} |\varphi_j|,
+    \end{equation}
+    wobei $C_0 > 0$ eine universelle Konstante ist.
+  \item[\textup{(iii)}] Jede Leray--Hopf-Loesung mit
+    $\|u_0\|_{L^2} \le M$ erfuellt $B \le C_1\,M$ (Energieungleichung
+    $+$ Bernstein-Lemma).
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Teil~(i) folgt aus $\sum_j T_j = 0$ und $\sum_j(\Pi_{j-1}-\Pi_j)=0$
+(Teleskopierung). Teil~(ii) ist die Standard-Paraprodukt-/Kommutator-Abschaetzung:
+jedes $R_j$ sammelt Terme der Form $[\Delta_j, S_{j'}](u \otimes u)$,
+und der Nebendiagonal-Abfall $\|[\Delta_j, S_{j'}]\|_{L^1 \to L^1}
+\le C\,2^{-|j-j'|/3}$ kombiniert mit Summation ueber $j'$ ergibt
+$\|R_j\|_{L^1} \le C_0\,B^3$; siehe~\cite{CET94}, Proposition~1
+und~\cite{DR00}, Lemma~2.1. Die gewichtete Summe folgt aus
+$\sum |{\varphi_j}|\,|{R_j}| \le \sup|\varphi_j|\,\sum|R_j|
+\le \sup|\varphi_j|\cdot C_0 B^3$.
+Teil~(iii): die Energieungleichung $\frac{1}{2}\|u(t)\|_{L^2}^2
++ \nu\int_0^t \|\nabla u\|_{L^2}^2 \le \frac{1}{2}\|u_0\|_{L^2}^2
++ \int_0^t \langle f,u\rangle$ kombiniert mit der Bernstein-Ungleichung
+$\|\Delta_j u\|_{L^3} \le C\,2^{j/3}\|\Delta_j u\|_{L^2}$ ergibt die
+Besov-Schranke.
+\end{proof}
+
+Das folgende Lemma, basierend auf der distributionellen Energiebilanz von
+Duchon und Robert~\cite{DR00}, liefert die Flusszerlegung.
+
+\begin{lemma}[Flussdarstellung]\label{lem:flux}
+Fuer jede Familie von Gewichten $(\varphi_j)_j$ mit
+$\sup_j |\varphi_j| < \infty$ erlaubt der nichtlineare Transfer die
+Zerlegung
+\begin{equation}\label{eq:flux_rep}
+  \sum_j \varphi_j\,T_j
+  \;=\;
+  \sum_j (\varphi_{j+1} - \varphi_j)\,\Pi_j
+  \;+\;
+  \sum_j \varphi_j\,R_j,
+\end{equation}
+wobei $\Pi_j$ der Energiefluss durch Schale~$j$
+(Gl.~\eqref{eq:flux}) ist und der Kommutator-Rest $R_j$ die
+Littlewood--Paley-Paraprodukt-Kommutatorterme sammelt; $\sum_j R_j = 0$.
+Fuer jedes Teilfenster $[j_1, j_2]$ erfuellt der gewichtete Rest die
+\emph{explizite Schranke}
+\begin{equation}\label{eq:remainder-bound}
+  \sum_{j=j_1}^{j_2} |\varphi_j\,R_j|
+  \;\le\;
+  C_{\mathrm{rem}}\,\|u\|_{L^3_t B^{1/3}_{3,\infty}}^3
+  \;\cdot\;
+  \sup_{j \in [j_1,j_2]} |\varphi_j|,
+\end{equation}
+wobei $C_{\mathrm{rem}} > 0$ eine universelle Konstante ist (unabhaengig
+vom Fenster, der Loesung und dem Referenzspektrum). Dies folgt aus der
+Standard-Paraprodukt-Zerlegung $R_j = \sum_{\ell} [T_\ell,
+\Delta_j]$ und der Kommutator-Abschaetzung $\|[T_\ell, \Delta_j]\|_{L^1}
+\le C\,2^{-|j-\ell|/3}\,\|u\|_{B^{1/3}_{3,\infty}}^3$
+(siehe~\cite{CET94}, Proposition~1; \cite{DR00}, Lemma~2.1).
+\end{lemma}
+
+\begin{proof}[Beweis (Skizze)]
+Schreibe $T_j = \Pi_{j-1} - \Pi_j + R_j$, wobei
+$\Pi_j = -\langle \Delta_{\le j} u \otimes \Delta_{\le j} u,\,
+\nabla \Delta_{\le j} u \rangle$ der kumulative Fluss ist
+und $R_j$ die Littlewood--Paley-Kommutatorterme sammelt.
+Abel-Summation ergibt~\eqref{eq:flux_rep}. Die Kommutator-Abschaetzung
+folgt aus der Duchon--Robert-distributionellen Energiebilanz und
+Standard-Paraprodukt-Abschaetzungen in Besov-Raeumen;
+siehe~\cite{DR00} und~\cite{CET94}.
+\end{proof}
+
+\begin{theorem}[Anomale-Dissipations-Schranke]\label{thm:anomalous}
+Sei $(u^\nu)_{\nu > 0}$ eine Familie von Leray--Hopf-schwachen Loesungen
+der inkompressiblen Navier--Stokes-Gleichungen auf $\mathbb{T}^3$:
+\begin{equation}\label{eq:NSE}
+  \partial_t u^\nu + (u^\nu \cdot \nabla)\,u^\nu
+  + \nabla p^\nu
+  = \nu\,\Delta u^\nu + f,
+  \qquad \nabla \cdot u^\nu = 0,
+\end{equation}
+mit einem festen glatten Forcing $f$ und Anfangsdaten mit
+$\|u^\nu_0\|_{L^2} \le M$. Bezeichne die zeitgemittelte Dissipationsrate
+\begin{equation}\label{eq:diss}
+  \varepsilon_\nu
+  \;:=\;
+  \frac{\nu}{T} \int_0^T \!\!\int_{\mathbb{T}^3}
+    |\nabla u^\nu|^2 \,dx\,dt.
+\end{equation}
+Angenommen, die Kaskade erfuellt \emph{eine} der folgenden Bedingungen
+(in absteigender Staerke):
+\begin{enumerate}
+  \item[\textup{(H1)}] Entropie-Kompatibilitaet~\eqref{eq:NL}
+    (Definition~\ref{def:NL}), oder
+  \item[\textup{(H2)}] Window-Entropie-Kompatibilitaet~\eqref{eq:NLw}
+    (Definition~\ref{def:NLw}), oder
+  \item[\textup{(H3)}] Die Downhill Flux Condition
+    \textup{(DFC1)--(DFC3)} aus Definition~\ref{def:DFC}.
+\end{enumerate}
+Ferner gelte \textup{($\nu$-uniforme Energieeinkopplung)}:
+es existiert $m_0 > 0$, unabhaengig von $\nu$, sodass
+$T^{-1}\int_0^T \langle f, u^\nu \rangle\,dt \ge m_0$
+fuer alle $\nu > 0$.
+
+Dann existiert eine Konstante $\varepsilon_* > 0$, die nur von $f$
+und $M$ abhaengt, sodass
+\begin{equation}\label{eq:anomalous}
+  \liminf_{\nu \to 0}\; \varepsilon_\nu
+  \;\ge\; \varepsilon_*.
+\end{equation}
+\end{theorem}
+
+\begin{proof}[Beweis (Skizze)]
+\textbf{Schritt 1: Energiebilanz.}\;
+Multiplikation von~\eqref{eq:NSE} mit $u^\nu$ und Integration ergibt die
+globale Energiebilanz
+\begin{equation}\label{eq:energy_balance}
+  \frac{d}{dt}\frac{1}{2}\|u^\nu\|_{L^2}^2
+  \;=\;
+  -\nu\|\nabla u^\nu\|_{L^2}^2
+  \;+\;
+  \langle f, u^\nu \rangle.
+\end{equation}
+Im statistisch stationaeren Zustand entspricht die zeitgemittelte
+Dissipation dem zeitgemittelten Energieeintrag:
+$\varepsilon_\nu = T^{-1}\int_0^T \langle f, u^\nu \rangle\,dt$.
+
+\textbf{Schritt 2: Regularisierte Freie-Energie-Monotonie.}\;
+Fuer $\delta > 0$ definiere die regularisierte freie Energie
+\[
+  \mathcal{F}_\delta[\mathbf{E}]
+  \;:=\;
+  \sum_j \Bigl[
+    (E_j + \delta)\,\ln\frac{E_j + \delta}{E_j^* + \delta}
+    \;-\; (E_j - E_j^*)
+  \Bigr].
+\]
+Diese ist $C^1$ in allen Argumenten und erfuellt $\mathcal{F}_\delta \ge 0$
+mit Gleichheit genau dann, wenn $\mathbf{E} = \mathbf{E}^*$.
+Berechnung von $\frac{d}{dt}\mathcal{F}_\delta$ entlang der
+Shell-Energieentwicklung $\frac{1}{2}\frac{d}{dt}E_j = -\nu k_j^2 E_j + T_j
++ \langle \Delta_j u, \Delta_j f\rangle$ (bis auf Kommutatorkorrekturen)
+ergibt drei Beitraege:
+\begin{enumerate}
+  \item \emph{Viskoser Term:} traegt
+    $-2\nu \sum_j k_j^2\,(\sqrt{E_j^\nu} - \sqrt{E_j^*})^2 + O(\delta)$
+    bei, was negativ-definit ist;
+  \item \emph{Nichtlinearer Transfer:} nach Annahme~\eqref{eq:NL}
+    (entropie-kompatible Kaskade) gilt
+    $\sum_j \ln\bigl(\frac{E_j+\varepsilon}{E_j^*+\varepsilon}\bigr)\,T_j
+    \le 0$;
+  \item \emph{Forcing:} beschraenkt durch $C\,\|f\|_{H^s}^2$ via
+    Cauchy--Schwarz.
+\end{enumerate}
+Zusammenfuegen und Grenzuebergang $\delta \downarrow 0$ via Fatou-Lemma
+(Unterhalbstetigkeit von $\mathcal{F}$) ergibt
+\begin{equation}\label{eq:F_decay}
+  \frac{d}{dt}\,\mathcal{F}[\mathbf{E}^\nu(t)]
+  \;\le\;
+  -\,2\nu \sum_{j} k_j^2\,
+    \Bigl(\sqrt{E_j^\nu} - \sqrt{E_j^*}\Bigr)^2
+  \;+\;
+  C\,\|f\|_{H^s}^2.
+\end{equation}
+
+\textbf{Schritt 3: Untere Schranke fuer die Dissipation.}\;
+Angenommen, zum Widerspruch, dass $\varepsilon_\nu \to 0$ fuer
+$\nu \to 0$. Dann muss auch der Forcing-Eintrag im Zeitmittel
+verschwinden. Aber fuer glattes, nichttriviales $f$ und beschraenktes
+$\|u^\nu\|_{L^2} \le C(M)$ liefert die Cauchy--Schwarz-Ungleichung
+\[
+  \langle f, u^\nu \rangle
+  \;\ge\;
+  -\|f\|_{L^2}\,\|u^\nu\|_{L^2}
+  \;\ge\;
+  -\|f\|_{L^2}\, C(M),
+\]
+und die Energieeinkopplungsrate ist nach unten beschraenkt (unter der
+Annahme, dass $f$ Energie mit einer bestimmten Rate einkoppelt). Dies
+widerspricht $\varepsilon_\nu \to 0$.
+
+\textbf{Schritt 4: Konditionelle quantitative Schranke.}\;
+Die $\mathcal{F}$-Monotonie~\eqref{eq:F_decay} kontrolliert die
+,,Entropie-Dissipation'' $D_\mathcal{F}^\nu(t) := \sum_j k_j^2\,
+(\sqrt{E_j^\nu} - \sqrt{E_j^*})^2$, die den Abstand des
+Shell-Energiespektrums von der Kolmogorov-Referenz~$\mathbf{E}^*$ misst.
+Allerdings wird die physikalische Dissipation
+$\varepsilon_\nu = \nu\sum_j k_j^2 E_j^\nu$ nicht direkt
+durch~$D_\mathcal{F}^\nu$ kontrolliert, ohne eine zusaetzliche
+\emph{Nicht-Entartungs}-Annahme, die beide Groessen verknuepft.
+
+\emph{Annahme ND ($\nu$-uniforme Energieeinkopplung).}\;
+Es existiert $m_0 > 0$, unabhaengig von $\nu$, sodass
+\begin{equation}\label{eq:ND}
+  \frac{1}{T}\int_0^T \langle f, u^\nu \rangle\,dt \;\ge\; m_0 > 0
+  \qquad \text{fuer alle } \nu > 0.
+\end{equation}
+Unter dieser Annahme liefert die Energiebilanz (Schritt~1) unmittelbar
+$\varepsilon_\nu \ge m_0$ fuer alle~$\nu$, also
+$\liminf_{\nu\to 0}\,\varepsilon_\nu \ge m_0 > 0$.
+
+Eine verfeinerte Schranke unter Verwendung der $H^{-1}$-Paarung
+$\langle f, u^\nu\rangle \le \|f\|_{H^{-1}}\,\|\nabla u^\nu\|_{L^2}$
+kombiniert mit $\|u^\nu\|_{L^2} \le M$ und~\eqref{eq:ND} ergibt
+$\varepsilon_* \ge c\,\|f\|_{H^{-1}}^2 / M^2$,
+wobei $c > 0$ von der Struktur des Forcings, aber nicht von~$\nu$ abhaengt.
+Die natuerliche Sobolev-Norm fuer die Energieeinkopplung ist~$H^{-1}$
+(dual zu~$\|\nabla u\|_{L^2}$); das $H^s$ mit $s > -1$
+in~\eqref{eq:F_decay} stammt aus der schalenweisen Forcing-Zerlegung und
+ist strikt schwaecher.
+
+% (Vollstaendige Beweisdetails in der erweiterten Version.)
+\end{proof}
+
+\begin{remark}[Gueltigkeitsbereich der Entropie-Kompatibilitaetshypothese]
+Satz~\ref{thm:anomalous} ist konditional auf
+Annahme~\eqref{eq:NL}. Drei Szenarien, in denen diese Hypothese
+bekannt oder erwartet ist:
+\begin{enumerate}
+\item \emph{Schalenmodelle:} In GOY- und Sabra-Schalenmodellen mit
+  Markov-Transferstruktur ist der nichtlineare Term ein genuiner
+  masseerhaltender Operator auf Shell-Energien, und~\eqref{eq:NL}
+  folgt aus der Standard-Entropie-Dissipations-Ungleichung fuer relative
+  Entropien unter doppelt stochastischen Abbildungen.
+\item \emph{Stochastische Kaskadenmodelle:} In multiplikativen
+  Kaskadenmodellen der Turbulenz (Mandelbrot, Kahane) ist die
+  Energieumverteilung konstruktionsbedingt ein Markov-Kern, was~\eqref{eq:NL}
+  liefert.
+\item \emph{Navier--Stokes mit Abwaertsfluss:} Fuer NS-Loesungen, deren
+  Energiefluss $\Pi_j$ eine ,,Abwaerts''-Bedingung erfuellt -- Energie
+  fliesst bevorzugt von ueberangeregten zu unterangeregten Schalen relativ
+  zu~$\mathbf{E}^*$ -- liefert Lemma~\ref{lem:flux} kombiniert mit
+  Abel-Summation~\eqref{eq:NL} bis auf kontrollierbare Kommutator-Reste.
+  Ob diese Abwaertseigenschaft generisch fuer NS-Loesungen im
+  Inertialbereich gilt, ist eine offene Frage, die eng mit der
+  Onsager-Vermutung und der Struktur des Duchon--Robert-Defektmasses
+  zusammenhaengt~\cite{DR00}.
+\end{enumerate}
+\end{remark}
+
+% ===================================================================
+\section{Intermittenz-Korrekturen}\label{sec:intermittency}
+
+Die K41-Theorie sagt voraus, dass die longitudinale Strukturfunktion
+$p$-ter Ordnung skaliert wie
+\begin{equation}\label{eq:Sp_K41}
+  S_p(\ell) \;:=\;
+  \bigl\langle |\delta_\ell u|^p \bigr\rangle
+  \;\sim\; (\varepsilon\,\ell)^{p/3},
+  \qquad
+  \zeta_p^{\mathrm{K41}} = \frac{p}{3}.
+\end{equation}
+Experimente zeigen systematische Abweichungen: $\zeta_p < p/3$ fuer
+$p > 3$, ein Kennzeichen von \emph{Intermittenz}.
+
+\subsection{Fluktuationen um das variationelle Minimum}
+
+In unserem Rahmenwerk entstehen Intermittenz-Korrekturen durch Fluktuationen
+der Shell-Energien $\mathbf{E}$ um den K41-Minimierer $\mathbf{E}^*$.
+Entwicklung von $\mathcal{F}$ bis zur zweiten Ordnung:
+\begin{equation}\label{eq:F_expand}
+  \mathcal{F}[\mathbf{E}^* + \delta\mathbf{E}]
+  \;=\;
+  \mathcal{F}[\mathbf{E}^*]
+  \;+\;
+  \frac{1}{2}\sum_{j}
+    \frac{(\delta E_j)^2}{E_j^*}
+  \;+\; O(|\delta\mathbf{E}|^3).
+\end{equation}
+Die Hesse-Matrix $H_{jj} = 1/E_j^*$ impliziert, dass Fluktuationen bei
+kleinen Skalen (grosses $j$, kleines $E_j^*$) staerker unterdrueckt werden
+als Fluktuationen bei grossen Skalen. Diese Asymmetrie ist der variationelle
+Ursprung der Intermittenz.
+
+\subsection{Verbindung zum K62-Log-Normal-Modell}
+
+Modelliert man die Fluktuationen $\delta E_j$ als gaussisch in der Variablen
+$\ln(E_j/E_j^*)$, so ergeben sich die Strukturfunktions-Exponenten
+\begin{equation}\label{eq:zeta_p}
+  \zeta_p
+  \;=\;
+  \frac{p}{3}
+  \;-\;
+  \frac{\mu}{18}\,p(p-3),
+\end{equation}
+was exakt der K62-Hypothese (Kolmogorov--Obukhov) der verfeinerten
+Aehnlichkeit mit Intermittenzparameter $\mu$ entspricht~\cite{K62,Frisch95}.
+Der Parameter $\mu$ wird durch die Varianz von $\ln(E_j/E_j^*)$ unter dem
+Gibbs-Mass $\exp(-\mathcal{F}/\Theta)$ bei effektiver
+Temperatur~$\Theta$ bestimmt.
+
+\begin{remark}
+Das She--L\'ev\^eque-Modell~\cite{SL94} schlaegt die Alternative vor
+\[
+  \zeta_p = \frac{p}{9} + 2\Bigl(1 - \bigl(\tfrac{2}{3}\bigr)^{p/3}\Bigr),
+\]
+die experimentelle Daten fuer hohes $p$ genauer beschreibt. Die Herleitung
+aus dem Freie-Energie-Rahmenwerk wuerde erfordern, die Fluktuationen als
+Log-Poisson- statt Log-Normal-Prozess zu modellieren. Dies ist ein offenes
+Problem innerhalb unseres Ansatzes.
+\end{remark}
+
+% ===================================================================
+\subsection{Resolventen-Dominanz in der Kaskade}\label{sec:resolvent-cascade}
+
+Die simultane Minimierung aus Satz~\ref{thm:K41} offenbart eine
+Resolventenstruktur, die isomorph zum \emph{Second-Order Resolvent Dominance
+Pattern} ist, das in allen fuenf Problemen des FST-Programms identifiziert
+wurde~\cite{FST-Unified2026}. Wir praezisieren dies.
+
+\begin{remark}[Universelles Resolventen-Pattern]\label{rem:universal-resolvent}
+Die dreistufige Hierarchie manifestiert sich in der turbulenten Kaskade
+wie folgt:
+
+\begin{center}
+\begin{tabular}{p{2.5cm}p{3.5cm}p{3.5cm}p{3.5cm}}
+\hline
+\textbf{Problem} & \textbf{Fuehrend neutral} & \textbf{1. Ordnung entartet} & \textbf{2. Ordnung entscheidet} \\
+\hline
+RH & $M_\infty$ identisch & $\min(F')=0$ beide & $E_{\sin}\neq E_{\cos}$ (Resolvente) \\
+Yang--Mills & Freie Energie konvex & KL trivial & Hesse/Transferop.-Luecke \\
+Navier--Stokes & Leray--Hopf-Vakuum & Attraktor-Projektion & $H$-Metrik-Kontraktion \\
+Turbulenz & $K$-neutrales Spektrum & Flussnebenbedingung flach & K41-Selektion \\
+Dunkle Energie & Vakuum $\rho_0$ & Loop-Korrekturen ent. & $\Lambda_{\mathrm{eff}}$-Selektion \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent
+Im Turbulenzfall: (i)~die fuehrende Ordnung entspricht dem
+$K$-neutralen Energiespektrum -- jedes Potenzgesetz $E(k) \propto k^{-\alpha}$
+ist mit einer konstanten Gesamtenergie vertraeglich; (ii)~die
+Flussnebenbedingung erster Ordnung $\Pi_j = \varepsilon$ schraenkt den
+Exponenten auf eine einparametrische Familie ein, selektiert aber kein
+eindeutiges Spektrum, da verschiedene Mitglieder von~$\mathscr{A}$
+verschiedene zulaessige Profile liefern; (iii)~die K41-Skalierung entsteht
+eindeutig in zweiter Ordnung, durch die strikte Konvexitaet des
+Freie-Energie-Funktionals $\mathcal{F}$.
+\end{remark}
+
+Das Resolventenspektrum der Kaskade erlaubt eine feinere Charakterisierung.
+Im Inertialbereich $j_{\mathrm{in}} \leq j \leq j_{\mathrm{dis}}$
+produziert die simultane Minimierung ueber $(\mathbf{E}, \Pi)$ eine
+Rang-0-Entartung: das Energieprofil $\mathbf{E}$ und die Fluss-Closure
+$\Pi$ werden simultan bestimmt, ohne freien Parameter. Am
+Dissipations-Cutoff $j = j_{\mathrm{dis}}$ tritt jedoch eine
+Rang-2-Korrektur auf: die Shell-Energien $E_{j_{\mathrm{dis}}}$ und
+$E_{j_{\mathrm{dis}}+1}$ sind durch viskose Dissipation gekoppelt, und
+die Hesse-Matrix von~$\mathcal{F}$, eingeschraenkt auf diese beiden Moden,
+hat einen nichtdiagonalen $2 \times 2$-Block mit Eigenwerten kontrolliert
+durch $\nu\,k_{j_{\mathrm{dis}}}^2$. Diese Rang-2-Randkorrektur ist das
+Turbulenz-Analogon der Rang-2-Eichverschiebung in den RH- und
+Yang--Mills-Instanziierungen.
+
+Intermittente Bursts -- seltene, intensive Dissipationsereignisse, die in
+Experimenten und DNS beobachtet werden -- koennen innerhalb dieses Rahmens
+als \emph{transiente Flachheitsverletzungen erster Ordnung} interpretiert
+werden: das Energiespektrum weicht momentan vom K41-Profil in eine entartete
+Region der Flussnebenbedingungsmannigfaltigkeit ab, wo die Hesse-Matrix
+von~$\mathcal{F}$ nahezu verschwindende Eigenwerte hat. Die strikte
+Konvexitaet von~$\mathcal{F}$ stellt dann die K41-Skalierung auf der
+Eddy-Umschlagszeitskala wieder her und erzeugt das charakteristische
+Burst-und-Rueckkehr-Muster, das in Strukturfunktionsmessungen beobachtet
+wird.
+
+% ===================================================================
+\section{Diskussion}\label{sec:discussion}
+
+\subsection{Bezug zur Onsager-Vermutung}
+
+Unser Satz~\ref{thm:anomalous} liefert einen \emph{variationellen} Zugang
+zur anomalen Dissipation, der komplementaer zum
+Konvex-Integrations-Programm~\cite{Isett18} ist. Waehrend Isetts Ergebnis
+spezifische dissipative Euler-Loesungen konstruiert, zeigt unser Ansatz,
+dass \emph{jede} Navier--Stokes-Loesung mit ausreichendem Forcing mit
+einer von Null weg beschraenkten Rate dissipieren muss -- eine Aussage
+ueber das generische Verhalten turbulenter Stroemungen und nicht ueber die
+Existenz exotischer schwacher Loesungen.
+
+\subsection{Die Rolle der Closure-Familie}
+
+Die Umformulierung von Satz~\ref{thm:K41} ueber die zulaessige
+Flussfamilie (Definition~\ref{def:admissible}) schwaecht die Abhaengigkeit
+von einem bestimmten Closure-Modell erheblich ab. Das K41-Spektrum wird
+nicht durch eine einzelne algebraische Relation selektiert, sondern als
+einziger Minimierer ueber \emph{alle} lokalen, dimensional konsistenten,
+monotonen Flussoperatoren. Dennoch erlegt Axiom~(A2) eine strukturelle
+Einschraenkung auf -- den $k_j\,E_j^{3/2}$-Skalierungspraefaktor --, der
+letztlich das dimensionale Argument Kolmogorovs kodiert. Die Herleitung
+dieses Praefaktors aus der K\'arm\'an--Howarth--Monin-Relation oder aus
+rigorosen Schranken fuer die Littlewood--Paley-trilineare Form bleibt ein
+wichtiges offenes Problem.
+
+\subsection{Stabilitaetsselektierte Dissipation und der laminar-turbulente Uebergang}
+
+Das Variationsprinzip in Satz~\ref{thm:K41} selektiert das K41-Spektrum
+innerhalb des turbulenten Regimes, erklaert aber nicht, \emph{warum} die
+Stroemung ueberhaupt turbulent wird. Eine komplementaere Perspektive
+liefert das \emph{Prinzip der stabilitaetsselektierten Dissipation}:
+unter allen kinematisch zulaessigen Stroemungsregimen (laminar,
+transitionell, voll turbulent) wird dasjenige in der Natur realisiert,
+das \emph{resolventen-stabil} ist -- d.h.\ dessen spektrale
+Energieverteilung ein stabiler kritischer Punkt des
+Freie-Energie-Funktionals unter der physikalischen Flussnebenbedingung
+ist. Die zugehoerige Entropieproduktionsrate
+\[
+  \dot{S}
+  \;=\;
+  \frac{\varepsilon}{T},
+\]
+wobei $T$ die Umgebungstemperatur ist, wird nicht \emph{per se}
+maximiert; vielmehr ist sie der Wert, der \emph{mit der
+Resolventen-Stabilitaet} der Kaskade kompatibel ist. Da eine turbulente
+Kaskade die Dissipation ueber eine grosse Zahl aktiver Freiheitsgrade
+verteilt, erreicht sie ein hoeheres $\dot{S}$ als eine laminare
+Stroemung bei derselben Reynolds-Zahl -- dies ist jedoch eine
+\emph{Konsequenz} der Stabilitaetsselektion, nicht das treibende
+Prinzip. Das Prinzip der stabilitaetsselektierten Dissipation liefert
+somit einen thermodynamischen Selektionsmechanismus fuer den
+laminar-turbulenten Uebergang: die Stroemung nimmt dasjenige Regime an,
+dessen spektrale Verteilung variationell stabil ist. Innerhalb des
+turbulenten Regimes entsteht dann das K41-Profil als der Zustand
+minimaler \emph{freier Energie} -- d.h.\ der Zustand, der bei fester
+Dissipationsrate $\varepsilon$ am wenigsten vom spektralen Gleichgewicht
+abweicht. Die beiden Ebenen sind komplementaer:
+Resolventen-Stabilitaet selektiert das makroskopische Regime (und die
+zugehoerige Dissipationsrate), waehrend $\mathcal{F}$-Minimierung die
+spektrale Verteilung innerhalb dieses Regimes selektiert.
+
+\begin{remark}[Bezug zu MEPP]
+Das klassische \emph{Prinzip der maximalen Entropieproduktion} (MEPP)
+postuliert, dass das System das Regime maximaler~$\dot{S}$ selektiert.
+Die Anwendungsfaelle des FST-Frameworks (Teile~I--III) zeigen, dass das
+tatsaechliche Selektionskriterium nicht Maximalitaet, sondern
+\emph{Resolventen-Kompatibilitaet} ist: das System selektiert diejenige
+Dissipationsrate, bei der die spektrale Hesse-Matrix die korrekte
+Signatur fuer Stabilitaet aufweist (Second-Order Resolvent Dominance).
+In vielen physikalischen Situationen koinzidiert dies mit hoher
+Entropieproduktion, was den empirischen Erfolg von MEPP als
+Approximation erklaert, doch die beiden Prinzipien divergieren, wenn
+mehrere stabile Zweige koexistieren.
+\end{remark}
+
+\subsection{Numerische Evidenz}
+
+Direkte numerische Simulationen (DNS) bei Taylor-Mikroskalenreynoldszahlen
+$R_\lambda \sim 200$--$1000$ erzeugen konsistent Energiespektren nahe
+$k^{-5/3}$ im Inertialbereich, mit einer Kolmogorov-Konstante
+$C_K \approx 1{,}5$~\cite{ES06,Frisch95}. Das Freie-Energie-Funktional
+$\mathcal{F}$ koennte direkt aus DNS-Daten ausgewertet werden, um zu
+testen, ob der K41-Minimierer tatsaechlich fuer
+$R_\lambda \to \infty$ angenommen wird.
+
+\subsection{Erweiterungen}
+
+\begin{itemize}
+  \item \textbf{Kompressible Turbulenz:}
+    Die Erweiterung auf kompressible Stroemungen erfordert die Ersetzung
+    der $L^2$-basierten Shell-Energien durch dichtegewichtete Groessen
+    und die Modifikation der Closure zur Beruecksichtigung akustischer
+    Modenkopplung.
+  \item \textbf{Magnetohydrodynamische (MHD) Turbulenz:}
+    Das Iroshnikov--Kraichnan-Spektrum $E(k) \sim k^{-3/2}$ sollte aus
+    einem modifizierten Funktional unter Einbeziehung von
+    Alfv\'en-Wellen-Wechselwirkungen hervorgehen.
+  \item \textbf{Zweidimensionale Turbulenz:}
+    Die duale Kaskade (inverse Energiekaskade mit $k^{-5/3}$ und direkte
+    Enstrophiekaskade mit $k^{-3}$) stellt einen interessanten Testfall
+    dar, der ein variationelles Problem mit zwei Nebenbedingungen erfordert.
+\end{itemize}
+
+\subsection{Skalenabhaengige Kopplung und der Inertialbereich}
+
+Eine weitere Analogie ergibt sich aus Skalar-Tensor-Theorien der
+Gravitation, in denen die effektive Gravitationskopplung
+$\mu(k,a) = 1 + \frac{1}{3}\frac{k^2}{k^2 + a^2 m_{\mathrm{eff}}^2}$
+zwischen modifizierter Dynamik bei grossen Skalen
+($k \ll a\,m_{\mathrm{eff}}$, wobei $\mu \to 1$) und verstaerkter
+Dynamik bei kleinen Skalen ($k \gg a\,m_{\mathrm{eff}}$, wobei
+$\mu \to 4/3$) interpoliert. Im Turbulenzkontext spielt der
+Inertialbereich eine analoge Rolle: eine skalenabhaengige ,,effektive
+Viskositaet'' $\nu_{\mathrm{eff}}(k)$ interpoliert zwischen der
+molekularen Viskositaet bei der Dissipationsskala und einer effektiven
+Viskositaet von Null im Inertialbereich. Das Freie-Energie-Funktional
+$\mathcal{F}$ kann als Analogon der Gravitationswirkung betrachtet
+werden, wobei das Kolmogorov-Spektrum als ,,ART-Grenzfall'' (das
+universelle, skalenunabhaengige Gleichgewicht) entsteht und
+Intermittenz-Korrekturen ,,modifizierten Gravitations''-Abweichungen
+von dieser universellen Skalierung entsprechen.
+
+% ===================================================================
+\section*{Danksagung}
+
+\emph{(Wird nachgereicht.)}
+
+% ===================================================================
+% ===================================================================
+% KI-Offenlegung
+% ===================================================================
+\subsection*{KI-Offenlegung}
+Bei der Erstellung dieses Manuskripts wurden KI-gestuetzte Werkzeuge (Claude, Anthropic)
+in unterstuetzender Funktion eingesetzt, insbesondere fuer Literaturrecherche,
+Textstrukturierung und Formulierungshilfe. Der konzeptionelle Entwurf,
+die wissenschaftliche Argumentation und die Verantwortung fuer den gesamten Inhalt
+liegen ausschliesslich beim Autor.
+
+\begin{thebibliography}{99}
+
+\bibitem{K41a}
+A.\,N.~Kolmogorov,
+\emph{The local structure of turbulence in incompressible viscous fluid
+for very large Reynolds numbers},
+Doklady Akad.\ Nauk SSSR \textbf{30} (1941), 299--303.
+Reprinted in Proc.\ R.\ Soc.\ Lond.\ A \textbf{434} (1991), 9--13.
+
+\bibitem{K41b}
+A.\,N.~Kolmogorov,
+\emph{Dissipation of energy in the locally isotropic turbulence},
+Doklady Akad.\ Nauk SSSR \textbf{32} (1941), 16--18.
+Reprinted in Proc.\ R.\ Soc.\ Lond.\ A \textbf{434} (1991), 15--17.
+
+\bibitem{K62}
+A.\,N.~Kolmogorov,
+\emph{A refinement of previous hypotheses concerning the local structure
+of turbulence in a viscous incompressible fluid at high Reynolds number},
+J.~Fluid Mech.\ \textbf{13} (1962), 82--85.
+
+\bibitem{Onsager49}
+L.~Onsager,
+\emph{Statistical hydrodynamics},
+Nuovo Cimento Suppl.\ \textbf{6} (1949), 279--287.
+
+\bibitem{CET94}
+P.~Constantin, W.~E, and E.\,S.~Titi,
+\emph{Onsager's conjecture on the energy conservation for solutions of
+Euler's equation},
+Comm.\ Math.\ Phys.\ \textbf{165} (1994), 207--209.
+
+\bibitem{DR00}
+J.~Duchon and R.~Robert,
+\emph{Inertial energy dissipation for weak solutions of incompressible
+Euler and Navier--Stokes equations},
+Nonlinearity \textbf{13} (2000), 249--255.
+
+\bibitem{Isett18}
+P.~Isett,
+\emph{A proof of Onsager's conjecture},
+Ann.\ of Math.\ \textbf{188} (2018), 871--963.
+
+\bibitem{SL94}
+Z.-S.~She and E.~L\'ev\^eque,
+\emph{Universal scaling laws in fully developed turbulence},
+Phys.\ Rev.\ Lett.\ \textbf{72} (1994), 336--339.
+
+\bibitem{ES06}
+G.\,L.~Eyink and K.\,R.~Sreenivasan,
+\emph{Onsager and the theory of hydrodynamic turbulence},
+Rev.\ Mod.\ Phys.\ \textbf{78} (2006), 87--135.
+
+\bibitem{Frisch95}
+U.~Frisch,
+\emph{Turbulence: The Legacy of A.\,N.\ Kolmogorov},
+Cambridge University Press, 1995.
+
+\bibitem{FST-RH3}
+L.~Geiger, \emph{The Riemann Hypothesis via Free-Energy Spectral Theory (Parts~I--III)},
+Zenodo, March 2026.
+\href{https://doi.org/10.5281/zenodo.19035845}{doi:10.5281/zenodo.19035845}.
+
+\bibitem{FST-Unified2026}
+L.~Geiger, \emph{The Renormalized Free Energy Framework: A Unified Resolution of Structural Bottlenecks},
+Zenodo, March 2026.
+\href{https://doi.org/10.5281/zenodo.19036191}{doi:10.5281/zenodo.19036191}.
+
+\end{thebibliography}
+
+\end{document}

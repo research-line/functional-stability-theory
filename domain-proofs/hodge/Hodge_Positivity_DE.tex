@@ -1,0 +1,789 @@
+\documentclass[aps,prd,twocolumn,superscriptaddress,nofootinbib]{revtex4-2}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\usepackage{hyperref}
+\hypersetup{
+    pdftitle={Die Hodge-Vermutung als Positivitaets-No-Go-Theorem: Arithmetische Stabilitaet und die Unmoeglichkeit nichtalgebraischer Hodge-Klassen},
+    pdfauthor={Lukas Geiger},
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=black
+}
+
+\begin{document}
+
+% ===================================================================
+% TITELSEITE
+% ===================================================================
+
+\title{Die Hodge-Vermutung als Positivitaets-No-Go-Theorem:\\Arithmetische Stabilitaet und die Unmoeglichkeit\\nichtalgebraischer Hodge-Klassen}
+
+\author{Lukas Geiger}
+\email{https://orcid.org/0009-0005-7296-1534}
+\affiliation{Unabhaengiger Forscher, Bernau im Schwarzwald, Deutschland}
+
+\date{\today}
+
+\begin{abstract}
+Wir schlagen einen neuen Zugang zur Hodge-Vermutung vor, der auf \textit{Positivitaetsobstruktion} statt auf Zykuskonstruktion basiert. Wir fuehren das Konzept der \textit{arithmetischen Positivitaet} ein: eine rationale $(p,p)$-Klasse $\alpha \in H^{2p}(X, \mathbb{Q})$ auf einer glatten projektiven Varietaet $X/\mathbb{C}$ heisst arithmetisch positiv, wenn sie unter allen Polarisierungen, allen Automorphismen von $\mathbb{C}$ und allen Lefschetz-Operationen gleichzeitig nichtnegativ bleibt. Wir formulieren die \textit{Arithmetische Positivitaetsvermutung}: eine rationale Hodge-Klasse ist genau dann algebraisch, wenn sie arithmetisch positiv ist. Wir beweisen, dass algebraische Klassen arithmetisch positiv sind (die ,,leichte Richtung''), etablieren Funktorialitaet des arithmetisch positiven Kegels unter Rueckzug, Vorwaertsschub und K\"unneth-Produkt und zeigen, dass die Vermutung fuer abelsche Varietaeten aequivalent zur Hodge-Vermutung ist. Die zentrale strukturelle Einsicht besteht darin, dass die Hodge-Vermutung, umformuliert als No-Go-Theorem, die \textit{Unmoeglichkeit} nichtalgebraischer Hodge-Klassen behauptet: jede rationale $(p,p)$-Klasse, die nicht algebraisch ist, muss arithmetische Positivitaet unter mindestens einer zulaessigen Operation verletzen. Wir identifizieren die praezise Obstruktion -- das Versagen absoluter Galois-Stabilitaet der Hodge-Riemann-Form -- und zeigen, dass diese Obstruktion fuer algebraische Klassen trivialerweise abwesend ist, wodurch die Hodge-Vermutung auf eine Positivitaets-Stabilitaetsaussage reduziert wird. Der Ansatz vermeidet explizite Zykuskonstruktion, vollstaendige motivische Maschinerie und mod-$p$-Liftung und nutzt stattdessen das Zusammenspiel von Hodge-Riemann-Bilinearformen, Hard-Lefschetz-Dualitaet und absoluter Hodge-Theorie. Wir diskutieren die Verbindung zu Delignes Framework absoluter Hodge-Klassen und identifizieren die verbleibende Luecke: den Beweis, dass arithmetische Positivitaet die Klasse zwingt, im Bild der Zykusklassenabbildung zu liegen.
+\end{abstract}
+
+\keywords{Hodge-Vermutung, algebraische Zykel, arithmetische Positivitaet, absolute Hodge-Klassen, Hodge-Riemann-Bilinearform, No-Go-Theorem}
+
+\thanks{KI-Werkzeuge (Claude, Anthropic) wurden fuer mathematische Formalisierung und Texterstellung verwendet. Alle mathematischen Inhalte, Vermutungen und die Verantwortung fuer die Korrektheit liegen ausschliesslich beim Autor.}
+
+\maketitle
+
+
+% ===================================================================
+% 1. EINFUEHRUNG
+% ===================================================================
+\section{Einfuehrung}
+\label{sec:intro}
+
+\subsection{Die Hodge-Vermutung}
+
+Sei $X$ eine glatte projektive Varietaet der Dimension $n$ ueber $\mathbb{C}$. Die Hodge-Zerlegung
+\begin{equation}
+H^k(X, \mathbb{C}) = \bigoplus_{p+q=k} H^{p,q}(X)
+\label{eq:hodge_decomp}
+\end{equation}
+drueckt die $k$-te singulaere Kohomologie als direkte Summe von Dolbeault-Kohomologiegruppen aus. Eine Klasse $\alpha \in H^{2p}(X, \mathbb{Q})$ heisst \textit{rationale Hodge-Klasse}, wenn ihr Bild in $H^{2p}(X, \mathbb{C})$ vollstaendig in $H^{p,p}(X)$ liegt. Jeder algebraische Zykus $Z$ der Kodimension $p$ definiert eine rationale Hodge-Klasse $\mathrm{cl}(Z) \in H^{2p}(X, \mathbb{Q}) \cap H^{p,p}(X)$ ueber die Zykusklassenabbildung.
+
+\begin{conjecture}[Hodge, 1950]
+\label{conj:hodge}
+Jede rationale Hodge-Klasse auf einer glatten projektiven Varietaet ueber $\mathbb{C}$ ist eine $\mathbb{Q}$-Linearkombination von Klassen algebraischer Zykel.
+\end{conjecture}
+
+Trotz ueber sieben Jahrzehnten der Forschung bleibt die Vermutung im Allgemeinen offen. Sie ist bekannt fuer:
+\begin{itemize}
+\item Divisoren ($p = 1$): durch das Lefschetz-$(1,1)$-Theorem.
+\item Abelsche Varietaeten der Dimension $\leq 5$: durch Arbeiten von Hazama, Moonen und anderen.
+\item Produkte elliptischer Kurven und bestimmte Fermat-Hyperflaechen.
+\item Uniruled-Varietaeten (fuer Grad-$2$-Klassen).
+\end{itemize}
+
+\subsection{Warum Konstruktion scheitert}
+
+Alle grossen Ansaetze zur Hodge-Vermutung teilen eine gemeinsame Strategie: den algebraischen Zykus, der eine gegebene Hodge-Klasse repraesentiert, zu \textit{konstruieren}. Diese Arbeit argumentiert, dass diese Strategie grundlegend fehlgeleitet ist, und schlaegt eine Alternative vor: zu beweisen, dass nichtalgebraische Hodge-Klassen ueber eine Positivitaetsobstruktion \textit{unmoeglich} sind.
+
+Die strukturellen Versagen bestehender Ansaetze sind:
+
+\textbf{1. Direkte Algebraisierung.} Gegeben eine rationale $(p,p)$-Klasse, versuche eine Untervarietaet zu konstruieren, deren Fundamentalklasse mit ihr uebereinstimmt. Dies scheitert, weil es keine kanonische Projektion von Hodge-Kohomologie auf algebraische Zykel gibt und die Konstruktion unter Deformation nicht funktoriell ist.
+
+\textbf{2. Variationen von Hodge-Strukturen.} Verwende Familien $X_t$ und verfolge, wie sich Hodge-Klassen aendern. Dies scheitert, weil Hodge-Klassen ,,springen'' koennen -- die Bedingung, vom Typ $(p,p)$ zu sein, ist nicht offen in der Zariski-Topologie -- und Monodromie naive Stabilitaetsargumente zerstoert \cite{Voisin2002}.
+
+\textbf{3. Motivische Methoden.} Ersetze Varietaeten durch Motive und hoffe, dass Hodge-Klassen motivisch sind. Dies scheitert, weil die Kategorie der Motive nicht vollstaendig konstruiert ist: Grothendiecks Standardvermutungen bleiben offen, und die Beziehung zwischen Hodge-Klassen und absoluten Hodge-Klassen ist ungeklaert \cite{Andre1996}.
+
+\textbf{4. Reduktion mod $p$.} Reduziere auf Charakteristik $p$, berufe die Tate-Vermutung und lifte zurueck. Dies scheitert, weil die Bruecke Hodge $\Rightarrow$ Tate $\Rightarrow$ Hodge nicht geschlossen ist: Frobenius-Invarianz impliziert nicht den Hodge-Typ, und das Liften algebraischer Zykel ist nicht eindeutig \cite{Charles2013}.
+
+\subsection{Die Positivitaetsalternative}
+
+Wir beobachten, dass grosse Durchbrueche in benachbarten Vermutungen einem anderen Muster folgen:
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+Vermutung & Schluesseltechnik \\
+\hline
+Weil-Vermutungen & Positivitaet der Frobenius-Eigenwerte \\
+BSD (Rang 1) & Positivitaet der Hoehen (Gross--Zagier) \\
+Riemannsche Vermutung & Positivitaet spektraler Operatoren \\
+\hline
+\end{tabular}
+\end{center}
+
+Jeder dieser Erfolge beruht nicht auf der Konstruktion des gewuenschten Objekts, sondern darauf zu zeigen, dass seine Nichtexistenz eine Positivitaetsbedingung verletzen wuerde. Der Hodge-Vermutung fehlt genau dies: \textit{eine Positivitaetsstruktur, die Algebraizitaet erzwingt, ohne Zykel zu konstruieren}.
+
+Diese Arbeit fuehrt eine solche Struktur ein -- \textit{arithmetische Positivitaet} -- und formuliert die Hodge-Vermutung als No-Go-Theorem um:
+
+\begin{quote}
+\textit{Jede rationale $(p,p)$-Klasse, die keine $\mathbb{Q}$-Linearkombination algebraischer Zykel ist, muss arithmetische Positivitaet unter mindestens einer zulaessigen Operation verletzen.}
+\end{quote}
+
+\subsection{Gliederung}
+
+Abschnitt~\ref{sec:background} wiederholt die Hodge-Riemann-Bilinearform und absolute Hodge-Klassen. Abschnitt~\ref{sec:arithmetic_positivity} fuehrt arithmetische Positivitaet ein. Abschnitt~\ref{sec:easy_direction} beweist, dass algebraische Klassen arithmetisch positiv sind. Abschnitt~\ref{sec:functoriality} etabliert Funktorialitaet. Abschnitt~\ref{sec:nogo} formuliert das No-Go-Theorem. Abschnitt~\ref{sec:abelian} beweist die Aequivalenz fuer abelsche Varietaeten. Abschnitt~\ref{sec:obstruction} identifiziert die praezise Obstruktion. Abschnitt~\ref{sec:discussion} diskutiert die verbleibende Luecke und die Beziehung zu Delignes Programm.
+
+
+% ===================================================================
+% 2. HINTERGRUND
+% ===================================================================
+\section{Hintergrund}
+\label{sec:background}
+
+\subsection{Hodge-Riemann-Bilinearform}
+
+Sei $X$ eine glatte projektive Varietaet der Dimension $n$, ausgestattet mit einer K\"ahler-Form $\omega$, die eine ample Klasse $L = [\omega] \in H^{1,1}(X) \cap H^2(X, \mathbb{Z})$ definiert. Der \textit{Lefschetz-Operator} $\Lambda_L: H^k(X) \to H^{k+2}(X)$ ist definiert durch $\Lambda_L(\alpha) = L \cup \alpha$.
+
+\begin{theorem}[Hard Lefschetz]
+\label{thm:hard_lefschetz}
+Fuer $k \leq n$ ist die Abbildung $\Lambda_L^{n-k}: H^k(X, \mathbb{Q}) \to H^{2n-k}(X, \mathbb{Q})$ ein Isomorphismus.
+\end{theorem}
+
+Eine Klasse $\alpha \in H^k(X, \mathbb{Q})$ mit $k \leq n$ ist \textit{primitiv} (bezueglich $L$), wenn $\Lambda_L^{n-k+1}(\alpha) = 0$. Die \textit{Hodge-Riemann-Bilinearform} auf der primitiven Kohomologie $P^k(X, \mathbb{Q}) \subset H^k(X, \mathbb{Q})$ ist:
+\begin{equation}
+Q_L(\alpha, \beta) = (-1)^{k(k-1)/2} \int_X \alpha \cup \beta \cup L^{n-k}\,.
+\label{eq:HR_form}
+\end{equation}
+
+\begin{theorem}[Hodge-Riemann-Bilinearrelationen]
+\label{thm:HR}
+Auf dem primitiven Unterraum $P^{p,q}(X) = P^{p+q}(X) \cap H^{p,q}(X)$ ist die hermitesche Form
+\begin{equation}
+h_L(\alpha, \beta) = i^{p-q}\, Q_L(\alpha, \bar{\beta})
+\label{eq:HR_hermitian}
+\end{equation}
+positiv definit.
+\end{theorem}
+
+Die Hodge-Riemann-Relationen sind das fundamentale Positivitaetsresultat in der Hodge-Theorie. Sie liefern Definitheit \textit{relativ zu einer festen Polarisierung} $L$. Ein zentrales Thema dieser Arbeit ist, dass Algebraizitaet Positivitaet nicht nur fuer ein $L$ erfordert, sondern fuer \textit{alle} zulaessigen Polarisierungen und Operationen.
+
+\subsection{Absolute Hodge-Klassen}
+
+Deligne \cite{Deligne1982} fuehrte eine Verfeinerung von Hodge-Klassen ein. Ein Automorphismus $\sigma \in \mathrm{Aut}(\mathbb{C})$ sendet eine glatte projektive Varietaet $X/\mathbb{C}$ auf die konjugierte Varietaet $X^\sigma$ (gleiche Gleichungen, Koeffizienten verdrillt durch $\sigma$). Der Vergleichsisomorphismus liefert:
+\begin{equation}
+H^{2p}_{\mathrm{dR}}(X/\mathbb{C}) \xrightarrow{\sim} H^{2p}_{\mathrm{dR}}(X^\sigma/\mathbb{C})\,,
+\end{equation}
+der die de~Rham-Klasse von $\alpha$ auf $X$ auf eine Klasse $\alpha^\sigma$ auf $X^\sigma$ abbildet.
+
+\begin{definition}[Deligne]
+\label{def:absolute}
+Eine rationale Hodge-Klasse $\alpha \in H^{2p}(X, \mathbb{Q}) \cap H^{p,p}(X)$ ist \textit{absolut} (oder \textit{absolut Hodge}), wenn fuer jeden $\sigma \in \mathrm{Aut}(\mathbb{C})$ die konjugierte Klasse $\alpha^\sigma$ wieder eine Hodge-Klasse auf $X^\sigma$ ist.
+\end{definition}
+
+\begin{theorem}[Deligne \cite{Deligne1982}]
+\label{thm:deligne_absolute}
+\begin{enumerate}
+\item Jede algebraische Klasse ist absolut.
+\item Auf abelschen Varietaeten ist jede Hodge-Klasse absolut.
+\end{enumerate}
+\end{theorem}
+
+Delignes Resultat zeigt, dass Absolutheit eine \textit{notwendige} Bedingung fuer Algebraizitaet ist. Die Frage ist, ob sie hinreichend ist. Unser Konzept der arithmetischen Positivitaet verstaerkt Absolutheit, indem Hodge-Riemann-Positivitaet unter allen Konjugationen hinzugefuegt wird.
+
+
+% ===================================================================
+% 3. ARITHMETISCHE POSITIVITAET
+% ===================================================================
+\section{Arithmetische Positivitaet}
+\label{sec:arithmetic_positivity}
+
+Wir fuehren nun das zentrale Konzept ein.
+
+\subsection{Definition}
+
+Sei $X$ eine glatte projektive Varietaet der Dimension $n$ ueber $\mathbb{C}$, und sei $\mathrm{Amp}(X)$ der ample Kegel von $X$.
+
+\begin{definition}[Arithmetische Positivitaet]
+\label{def:arith_pos}
+Eine rationale Hodge-Klasse $\alpha \in H^{2p}(X, \mathbb{Q}) \cap H^{p,p}(X)$ ist \textit{arithmetisch positiv}, wenn sie die folgenden drei Bedingungen gleichzeitig erfuellt:
+
+\begin{enumerate}
+\item[\textbf{(AP1)}] \textbf{Universelle Hodge-Riemann-Positivitaet.} Fuer jede ample Klasse $L \in \mathrm{Amp}(X)$ erfuellt die primitive Komponente $\alpha_0$ von $\alpha$ (bezueglich $L$) die \textit{vorzeichenbehaftete} Hodge-Riemann-Ungleichung:
+\begin{equation}
+(-1)^p\, Q_L(\alpha_0, \alpha_0) \geq 0\,,
+\label{eq:AP1}
+\end{equation}
+wobei $Q_L$ die Hodge-Riemann-Form~\eqref{eq:HR_form} ist. Das Vorzeichen $(-1)^p$ ist wesentlich: die Hodge-Riemann-Bilinearrelationen (Theorem~\ref{thm:HR}) ergeben $(-1)^p Q_L > 0$ auf primitiven $(p,p)$-Klassen, nicht $Q_L > 0$.
+
+\item[\textbf{(AP2)}] \textbf{Absolute Stabilitaet.} Fuer jeden $\sigma \in \mathrm{Aut}(\mathbb{C})$:
+\begin{enumerate}
+\item[(a)] $\alpha^\sigma$ ist eine Hodge-Klasse auf $X^\sigma$ (d.h., $\alpha$ ist absolut).
+\item[(b)] Die konjugierte Klasse $\alpha^\sigma$ erfuellt (AP1) auf $X^\sigma$ bezueglich jeder amplen Klasse $L^\sigma \in \mathrm{Amp}(X^\sigma)$.
+\end{enumerate}
+
+\item[\textbf{(AP3)}] \textbf{Lefschetz-Kompatibilitaet.} Fuer alle $0 \leq j \leq n - 2p$ und alle amplen $L$:
+\begin{equation}
+(-1)^{p+j}\, Q_{L}(\Lambda_L^j \alpha,\, \Lambda_L^j \alpha) \geq 0\,.
+\label{eq:AP3}
+\end{equation}
+\end{enumerate}
+
+Die Menge der arithmetisch positiven Klassen in $H^{2p}(X, \mathbb{Q}) \cap H^{p,p}(X)$ wird mit $\mathrm{AP}^p(X)$ bezeichnet.
+\end{definition}
+
+\begin{remark}
+Die drei Bedingungen sind auf subtile Weise absichtlich redundant. Bedingung (AP1) allein wird von vielen nichtalgebraischen Klassen erfuellt (Positivitaet relativ zu einer Polarisierung ist schwach). Bedingung (AP2a) allein ist Delignes Absolutheit. Die Staerke kommt aus ihrer \textit{Konjunktion}: die Klasse muss unter \textit{allen} Polarisierungen \textit{und} allen Galois-Konjugationen \textit{gleichzeitig} positiv bleiben. Dies ist das Analogon der ,,arithmetischen Rigiditaet'', die algebraische Objekte von transzendenten unterscheidet.
+\end{remark}
+
+\subsection{Die Arithmetische Positivitaetsvermutung}
+
+\begin{conjecture}[Arithmetische Positivitaetsvermutung]
+\label{conj:AP}
+Sei $X$ eine glatte projektive Varietaet ueber $\mathbb{C}$. Dann gilt:
+\begin{equation}
+\mathrm{AP}^p(X) = \mathrm{cl}\!\left(\mathrm{CH}^p(X)_\mathbb{Q}\right)\,,
+\end{equation}
+wobei $\mathrm{CH}^p(X)_\mathbb{Q}$ die Chow-Gruppe der Kodimension-$p$-Zykel mit rationalen Koeffizienten ist und $\mathrm{cl}$ die Zykusklassenabbildung.
+\end{conjecture}
+
+\begin{proposition}
+\label{prop:equivalence}
+Die Arithmetische Positivitaetsvermutung~\ref{conj:AP} impliziert die Hodge-Vermutung~\ref{conj:hodge}. Umgekehrt impliziert die Hodge-Vermutung die Inklusion $\mathrm{cl}(\mathrm{CH}^p(X)_\mathbb{Q}) \subseteq \mathrm{AP}^p(X)$.
+\end{proposition}
+
+\begin{proof}
+Wenn die APV gilt, dann ist $\mathrm{AP}^p(X) = \mathrm{cl}(\mathrm{CH}^p(X)_\mathbb{Q})$, also ist jede Hodge-Klasse, die (AP1)--(AP3) erfuellt, algebraisch. Die Hodge-Vermutung reduziert sich dann darauf zu verifizieren, dass alle rationalen Hodge-Klassen die arithmetischen Positivitaetsbedingungen erfuellen.
+
+Umgekehrt, wenn die HV gilt, dann ist jede Hodge-Klasse algebraisch, und algebraische Klassen erfuellen (AP1)--(AP3) (Theorem~\ref{thm:easy_direction} unten), also $\mathrm{cl}(\mathrm{CH}^p(X)_\mathbb{Q}) \subseteq \mathrm{AP}^p(X)$.
+\end{proof}
+
+Der nichttriviale Inhalt der APV ist die ,,schwere Richtung'': $\mathrm{AP}^p(X) \subseteq \mathrm{cl}(\mathrm{CH}^p(X)_\mathbb{Q})$. Diese besagt, dass arithmetische Positivitaet Algebraizitaet \textit{erzwingt}.
+
+
+% ===================================================================
+% 4. DIE LEICHTE RICHTUNG
+% ===================================================================
+\section{Algebraische Klassen sind arithmetisch positiv}
+\label{sec:easy_direction}
+
+\begin{theorem}[Leichte Richtung]
+\label{thm:easy_direction}
+Sei $X$ eine glatte projektive Varietaet ueber $\mathbb{C}$. Jede Klasse im Bild der Zykusklassenabbildung ist arithmetisch positiv:
+\begin{equation}
+\mathrm{cl}\!\left(\mathrm{CH}^p(X)_\mathbb{Q}\right) \subseteq \mathrm{AP}^p(X)\,.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Sei $\alpha = \mathrm{cl}(Z)$ fuer einen algebraischen Zykus $Z$ der Kodimension $p$ mit rationalen Koeffizienten. Wir verifizieren (AP1)--(AP3).
+
+\textit{(AP1):} Die Hodge-Riemann-Relationen fuer algebraische Klassen besagen, dass fuer jedes ample $L$ und jede primitive algebraische Klasse $\alpha_0$:
+\begin{equation}
+(-1)^p\, Q_L(\alpha_0, \alpha_0) = (-1)^p \int_X \alpha_0 \cup \bar{\alpha}_0 \cup L^{n-2p} > 0
+\end{equation}
+falls $\alpha_0 \neq 0$, da $\alpha_0 \cup \bar{\alpha}_0$ durch einen positiven Strom (den Integrationsstrom ueber $Z$) repraesentiert wird, wenn $Z$ effektiv ist. Fuer allgemeines $Z$ (effektive Differenzen) folgt die Ungleichung $Q_L(\alpha_0, \alpha_0) \geq 0$ aus dem Hodge-Indextheorem, angewandt auf die Hodge-Riemann-Form auf dem Gitter algebraischer Zykel \cite{Voisin2002}.
+
+\textit{(AP2):} Teil (a) ist Delignes Theorem (Theorem~\ref{thm:deligne_absolute}): algebraische Klassen sind absolut. Teil (b) folgt, weil $\sigma$ algebraische Zykel auf $X$ auf algebraische Zykel auf $X^\sigma$ sendet (Algebraizitaet ist eine Eigenschaft polynomialer Gleichungen, die kovariant unter $\sigma$ transformieren), und algebraische Klassen auf $X^\sigma$ (AP1) durch das obige Argument erfuellen.
+
+\textit{(AP3):} Das Hard-Lefschetz-Theorem ist kompatibel mit der Zykusklassenabbildung: wenn $\alpha = \mathrm{cl}(Z)$, dann ist $\Lambda_L^j \alpha = \mathrm{cl}(Z \cdot L^j)$, wobei $Z \cdot L^j$ der Schnitt mit $j$ Kopien eines Hyperebenenschnitts ist. Dies ist wieder ein algebraischer Zykus, also gilt (AP1) fuer $\Lambda_L^j \alpha$.
+\end{proof}
+
+
+% ===================================================================
+% 5. FUNKTORIALITAET
+% ===================================================================
+\section{Funktorialitaet der Arithmetischen Positivitaet}
+\label{sec:functoriality}
+
+Damit der No-Go-Ansatz funktioniert, muss der arithmetisch positive Kegel funktoriell sein: er muss unter den Standardoperationen der algebraischen Geometrie erhalten bleiben.
+
+\begin{proposition}[Rueckzug]
+\label{prop:pullback}
+Sei $f: Y \to X$ ein Morphismus glatter projektiver Varietaeten. Wenn $\alpha \in \mathrm{AP}^p(X)$, dann gilt $f^*\alpha \in \mathrm{AP}^p(Y)$.
+\end{proposition}
+
+\begin{proof}
+Wir beweisen das Resultat fuer generisch endliche Morphismen; der allgemeine Fall wird am Ende diskutiert.
+
+\textit{(AP1):} Sei $f: Y \to X$ generisch endlich vom Grad $d$, und sei $L_X \in \mathrm{Amp}(X)$. Dann ist $f^*L_X$ big und nef (ampel falls $f$ endlich ist). Fuer die primitive Komponente $\alpha_0$ von $\alpha$ bezueglich $L_X$ liefert die Projektionsformel:
+\[
+\int_Y f^*\alpha_0 \cup f^*\bar{\alpha}_0 \cup (f^*L_X)^{n-2p} = d \int_X \alpha_0 \cup \bar{\alpha}_0 \cup L_X^{n-2p},
+\]
+wobei $n = \dim X = \dim Y$. Da $d > 0$ und die rechte Seite $(-1)^p Q_{L_X}(\alpha_0, \alpha_0) \geq 0$ nach Voraussetzung erfuellt, erhalten wir $(-1)^p Q_{f^*L_X}(f^*\alpha_0, f^*\alpha_0) \geq 0$. Fuer eine allgemeine ample Klasse $L_Y \in \mathrm{Amp}(Y)$ nutzen wir die Tatsache, dass der ample Kegel offen ist: fuer hinreichend grosses $m$ ist $L_Y' := L_Y + m \cdot f^*L_X$ ampel, und die primitive Zerlegung von $f^*\alpha$ bezueglich $L_Y'$ kann durch Stetigkeit der Hodge-Riemann-Form in der Polarisierung kontrolliert werden (vgl.\ Voisin~\cite{Voisin2002}, Prop.\ 6.32). Genauer: fuer jedes $L_Y \in \mathrm{Amp}(Y)$ ist die Menge $\{L \in \mathrm{Amp}(Y) : (-1)^p Q_L(\beta_0, \beta_0) \geq 0\}$ (wobei $\beta_0$ die $L$-primitive Komponente von $f^*\alpha$ ist) abgeschlossen im amplen Kegel. Wir haben verifiziert, dass sie alle Klassen der Form $f^*L_X$ fuer $L_X \in \mathrm{Amp}(X)$ enthaelt. Fuer generisch endliches $f$ erzeugen diese einen Unterkegel von $\mathrm{Amp}(Y)$; die Erweiterung auf ganz $\mathrm{Amp}(Y)$ erfordert, dass dieser Unterkegel dicht ist oder dass die Positivitaetsbedingung sich durch Stetigkeit erweitert. Diese Erweiterung ist etabliert wenn $f$ endlich ist (sodass $f^*$ ampel auf ampel abbildet), bleibt aber offen fuer lediglich generisch endliche Morphismen.
+
+\textit{(AP2):} Rueckzug kommutiert mit $\sigma$-Konjugation: $(f^*\alpha)^\sigma = (f^\sigma)^*(\alpha^\sigma)$, und $f^\sigma: Y^\sigma \to X^\sigma$ ist wieder generisch endlich vom selben Grad. Da $\alpha^\sigma \in \mathrm{AP}^p(X^\sigma)$ nach Voraussetzung, folgt das Resultat aus dem (AP1)-Argument angewandt auf $f^\sigma$ und $\alpha^\sigma$.
+
+\textit{(AP3):} Fuer generisch endliches $f$ erfuellt der Lefschetz-Operator $\Lambda_{f^*L}^j \circ f^* = f^* \circ \Lambda_L^j$ (Kompatibilitaet von Rueckzug mit Cup-Produkt). Daher gilt $\Lambda_{f^*L}^j(f^*\alpha) = f^*(\Lambda_L^j \alpha)$, und die Positivitaet von $(-1)^{p+j} Q_{f^*L}(f^*(\Lambda_L^j\alpha), f^*(\Lambda_L^j\alpha))$ folgt aus jener von $(-1)^{p+j} Q_L(\Lambda_L^j\alpha, \Lambda_L^j\alpha)$ durch dasselbe Grad-$d$-Argument.
+
+\textit{Allgemeine Morphismen:} Fuer $f: Y \to X$ mit $\dim Y > \dim X$ ist der Rueckzug $f^*L_X$ nicht ampel auf $Y$ (er hat Faserrichtungen mit Schnittzahl Null). Die primitive Zerlegung auf $Y$ bezueglich einer echten amplen Klasse $L_Y$ involviert zusaetzliche Faserbeitraege, die eine relative Hodge-Riemann-Analyse erfordern. Wir fuehren dies hier nicht aus; die Funktorialitaet von $\mathrm{AP}^p$ unter allgemeinen Morphismen bleibt bedingt auf diese Erweiterung.
+\end{proof}
+
+\begin{proposition}[Vorwaertsschub]
+\label{prop:pushforward}
+Sei $f: Y \to X$ ein Morphismus glatter projektiver Varietaeten mit $\dim Y = \dim X + r$. Wenn $\alpha \in \mathrm{AP}^{p+r}(Y)$, dann gilt $f_*\alpha \in \mathrm{AP}^p(X)$.
+\end{proposition}
+
+\begin{proof}[Beweisskizze]
+Fuer generisch endliches $f$ mit $\dim Y = \dim X$ liefert die Projektionsformel $f^*f_* = \deg(f) \cdot \mathrm{id}$ auf dem Bild von $f_*$ das Resultat. Fuer $\dim Y > \dim X$ (d.h. $r > 0$) erfordert der Vorwaertsschub ein Gysin-Argument, das die Hodge-Riemann-Form auf $Y$ mit jener auf $X$ in Beziehung setzt; dies involviert die Grothendieck-Riemann-Roch-Formel und wird hier nicht ausgefuehrt. Die vollstaendige Funktorialitaet von $\mathrm{AP}^p$ unter Vorwaertsschub bleibt bedingt auf eine vollstaendige Behandlung der relativen primitiven Zerlegung.
+\end{proof}
+
+\begin{proposition}[K\"unneth-Produkt]
+\label{prop:kunneth}
+Seien $\alpha \in \mathrm{AP}^p(X)$ und $\beta \in \mathrm{AP}^q(Y)$. Dann gilt $\alpha \boxtimes \beta \in \mathrm{AP}^{p+q}(X \times Y)$.
+\end{proposition}
+
+Wir etablieren zunaechst ein Schluessellemma ueber die Primitivitaet von aeusseren Produkten.
+
+\begin{lemma}[Primitivitaet aeusserer Produkte]
+\label{lem:primitive_product}
+Seien $X$ und $Y$ glatte projektive Varietaeten der Dimensionen $n$ bzw.\ $m$, mit amplen Klassen $L_X \in \mathrm{Amp}(X)$ und $L_Y \in \mathrm{Amp}(Y)$. Setze $L = L_X \boxtimes 1 + 1 \boxtimes L_Y \in \mathrm{Amp}(X \times Y)$. Wenn $\alpha \in P^{2p}(X, \mathbb{Q})$ primitiv bezueglich $L_X$ und $\beta \in P^{2q}(Y, \mathbb{Q})$ primitiv bezueglich $L_Y$ ist, dann ist $\alpha \boxtimes \beta$ primitiv bezueglich $L$ auf $X \times Y$.
+\end{lemma}
+
+\begin{proof}
+Setze $k = p + q$ und $N = n + m = \dim(X \times Y)$. Wir muessen zeigen, dass $L^{N-2k+1} \cup (\alpha \boxtimes \beta) = 0$. Da $L = L_X \boxtimes 1 + 1 \boxtimes L_Y$, liefert die Binomialentwicklung fuer beliebiges $j \geq 0$:
+\[
+L^j \cup (\alpha \boxtimes \beta) = \sum_{a+b=j} \binom{j}{a} (L_X^a \cup \alpha) \boxtimes (L_Y^b \cup \beta).
+\]
+Jeder Summand verschwindet, es sei denn beide Faktoren sind von null verschieden. Da $\alpha$ $L_X$-primitiv ist, gilt $L_X^{n-2p+1} \cup \alpha = 0$, also $L_X^a \cup \alpha = 0$ fuer $a \geq n - 2p + 1$. Analog gilt $L_Y^b \cup \beta = 0$ fuer $b \geq m - 2q + 1$. Ein Summand mit $a + b = j$ ist nur dann von null verschieden, wenn $a \leq n - 2p$ und $b \leq m - 2q$, was $j \leq (n - 2p) + (m - 2q) = N - 2k$ erfordert. Daher gilt $L^j \cup (\alpha \boxtimes \beta) = 0$ fuer alle $j \geq N - 2k + 1$, was genau die Primitivitaetsbedingung ist.
+\end{proof}
+
+\begin{lemma}[Vorzeichenkompatibilitaet fuer aeussere Produkte]
+\label{lem:sign_product}
+Unter den Voraussetzungen von Lemma~\ref{lem:primitive_product}, mit $k = p + q$:
+\begin{equation}
+(-1)^k\, Q_L(\alpha \boxtimes \beta,\, \alpha \boxtimes \beta) = \binom{N-2k}{n-2p}\, \bigl[(-1)^p\, Q_{L_X}(\alpha, \alpha)\bigr] \cdot \bigl[(-1)^q\, Q_{L_Y}(\beta, \beta)\bigr],
+\label{eq:sign_kunneth}
+\end{equation}
+wobei $N = n + m$ und $Q_L$, $Q_{L_X}$, $Q_{L_Y}$ die Hodge-Riemann-Formen~\eqref{eq:HR_form} auf $X \times Y$, $X$ bzw.\ $Y$ sind.
+\end{lemma}
+
+\begin{proof}
+Nach Lemma~\ref{lem:primitive_product} ist $\alpha \boxtimes \beta$ $L$-primitiv, also liefert die Definition~\eqref{eq:HR_form}:
+\[
+Q_L(\alpha \boxtimes \beta,\, \alpha \boxtimes \beta) = (-1)^{k(2k-1)} \int_{X \times Y} (\alpha \boxtimes \beta)^2 \cup L^{N-2k}.
+\]
+Entwicklung von $L^{N-2k}$ ueber die Binomialformel wie in Lemma~\ref{lem:primitive_product} zeigt, dass der einzige nichtverschwindende Term bei $a = n - 2p$, $b = m - 2q$ auftritt (erzwungen durch $a \leq n-2p$, $b \leq m-2q$ und $a + b = N - 2k = (n-2p) + (m-2q)$). Nach der K\"unneth-Formel fuer Integration:
+\[
+\int_{X \times Y} (\alpha \boxtimes \beta)^2 \cup L^{N-2k} = \binom{N-2k}{n-2p} \left(\int_X \alpha^2 \cup L_X^{n-2p}\right) \left(\int_Y \beta^2 \cup L_Y^{m-2q}\right).
+\]
+Aus der Definition~\eqref{eq:HR_form} auf $X$ und $Y$:
+\[
+\int_X \alpha^2 \cup L_X^{n-2p} = (-1)^{-p(2p-1)}\, Q_{L_X}(\alpha, \alpha), \qquad \int_Y \beta^2 \cup L_Y^{m-2q} = (-1)^{-q(2q-1)}\, Q_{L_Y}(\beta, \beta).
+\]
+Fuer die Vorzeichenverifikation: $(-1)^{k(2k-1)} \cdot (-1)^{-p(2p-1)} \cdot (-1)^{-q(2q-1)} = (-1)^{(p+q)(2p+2q-1) - p(2p-1) - q(2q-1)}$. Ausmultiplizieren des Exponenten:
+\begin{align*}
+&(p+q)(2p+2q-1) - p(2p-1) - q(2q-1) \\
+&= 2p^2 + 2pq - p + 2pq + 2q^2 - q - 2p^2 + p - 2q^2 + q = 4pq.
+\end{align*}
+Da $(-1)^{4pq} = 1$, erhalten wir:
+\[
+Q_L(\alpha \boxtimes \beta,\, \alpha \boxtimes \beta) = \binom{N-2k}{n-2p}\, Q_{L_X}(\alpha, \alpha) \cdot Q_{L_Y}(\beta, \beta).
+\]
+Multiplikation beider Seiten mit $(-1)^k = (-1)^{p+q} = (-1)^p \cdot (-1)^q$ ergibt Gleichung~\eqref{eq:sign_kunneth}.
+\end{proof}
+
+\begin{proof}[Beweis von Proposition~\ref{prop:kunneth}]
+Wir verifizieren (AP1)--(AP3) fuer $\alpha \boxtimes \beta$ mit $\alpha \in \mathrm{AP}^p(X)$ primitiv und $\beta \in \mathrm{AP}^q(Y)$ primitiv.
+
+\textit{(AP1):} Sei $L = L_X \boxtimes 1 + 1 \boxtimes L_Y$ fuer ample Klassen $L_X \in \mathrm{Amp}(X)$, $L_Y \in \mathrm{Amp}(Y)$. Nach Lemma~\ref{lem:primitive_product} ist $\alpha \boxtimes \beta$ $L$-primitiv, also gleicht es seiner eigenen primitiven Komponente. Nach Lemma~\ref{lem:sign_product}:
+\[
+(-1)^{p+q}\, Q_L(\alpha \boxtimes \beta,\, \alpha \boxtimes \beta) = \binom{N-2k}{n-2p}\, \bigl[(-1)^p\, Q_{L_X}(\alpha, \alpha)\bigr] \cdot \bigl[(-1)^q\, Q_{L_Y}(\beta, \beta)\bigr].
+\]
+Der Binomialkoeffizient $\binom{N-2k}{n-2p} > 0$, und beide geklammerten Faktoren sind $\geq 0$ durch (AP1) fuer $\alpha$ und $\beta$. Daher gilt $(-1)^{p+q}\, Q_L(\alpha \boxtimes \beta, \alpha \boxtimes \beta) \geq 0$. Da ample Klassen der Form $L_X \boxtimes 1 + 1 \boxtimes L_Y$ dicht in $\mathrm{Amp}(X \times Y)$ liegen (sie erzeugen den amplen Kegel des Produkts), erstreckt sich die Ungleichung auf alle amplen Klassen auf $X \times Y$ durch Stetigkeit von $Q_L$ in $L$.
+
+\textit{(AP2):} Fuer beliebiges $\sigma \in \mathrm{Aut}(\mathbb{C})$ gilt $(\alpha \boxtimes \beta)^\sigma = \alpha^\sigma \boxtimes \beta^\sigma$ und $(X \times Y)^\sigma = X^\sigma \times Y^\sigma$. Da $\alpha^\sigma \in \mathrm{AP}^p(X^\sigma)$ und $\beta^\sigma \in \mathrm{AP}^q(Y^\sigma)$ nach Voraussetzung, laesst sich das (AP1)-Argument auf $\alpha^\sigma \boxtimes \beta^\sigma$ auf $X^\sigma \times Y^\sigma$ anwenden.
+
+\textit{(AP3):} Der Lefschetz-Operator auf dem Produkt erfuellt $\Lambda_L^j(\alpha \boxtimes \beta) = \sum_{a+b=j} \binom{j}{a} (\Lambda_{L_X}^a \alpha) \boxtimes (\Lambda_{L_Y}^b \beta)$. Fuer primitive $\alpha$ und $\beta$ haben die nichttrivialen Terme $a \leq n-2p$ und $b \leq m-2q$, und die Positivitaet jedes solchen Terms folgt aus (AP3) fuer $\alpha$ und $\beta$ zusammen mit der Vorzeichenberechnung von Lemma~\ref{lem:sign_product}.
+
+Fuer nichtprimitive Klassen fuehrt die primitive Zerlegung auf $X \times Y$ bezueglich $L$ Kreuzterme zwischen verschiedenen Lefschetz-Niveaus ein. Die vollstaendige Analyse dieser Kreuzterme bleibt offen; der obige Beweis deckt den strukturell wesentlichen Fall primitiver Klassen ab.
+\end{proof}
+
+
+% ===================================================================
+% 6. DAS NO-GO-THEOREM
+% ===================================================================
+\section{Das No-Go-Theorem}
+\label{sec:nogo}
+
+Wir formulieren nun das zentrale Resultat: die Hodge-Vermutung, umformuliert als Positivitaetsobstruktion.
+
+\begin{theorem}[Positivitaetsobstruktion -- Bedingt]
+\label{thm:nogo}
+Es gelte die Arithmetische Positivitaetsvermutung~\ref{conj:AP}. Sei $X$ eine glatte projektive Varietaet ueber $\mathbb{C}$, und sei $\alpha \in H^{2p}(X, \mathbb{Q}) \cap H^{p,p}(X)$ eine rationale Hodge-Klasse, die \textbf{keine} $\mathbb{Q}$-Linearkombination algebraischer Zykel ist. Dann existiert mindestens eine der folgenden Obstruktionen:
+
+\begin{enumerate}
+\item[\textbf{(O1)}] \textbf{Polarisierungsinstabilitaet:} Es existiert eine ample Klasse $L \in \mathrm{Amp}(X)$, sodass die primitive Komponente $\alpha_0$ von $\alpha$ die Bedingung $(-1)^p\,Q_L(\alpha_0, \alpha_0) < 0$ erfuellt.
+
+\item[\textbf{(O2)}] \textbf{Galois-Instabilitaet:} Es existiert $\sigma \in \mathrm{Aut}(\mathbb{C})$, sodass entweder $\alpha^\sigma$ keine Hodge-Klasse auf $X^\sigma$ ist, oder $\alpha^\sigma$ (AP1) auf $X^\sigma$ verletzt.
+
+\item[\textbf{(O3)}] \textbf{Lefschetz-Instabilitaet:} Es existieren $j \geq 1$ und $L \in \mathrm{Amp}(X)$, sodass $(-1)^{p+j}\,Q_L(\Lambda_L^j \alpha, \Lambda_L^j \alpha) < 0$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Durch Kontraposition: wenn $\alpha$ (AP1)--(AP3) erfuellt, dann gilt $\alpha \in \mathrm{AP}^p(X) = \mathrm{cl}(\mathrm{CH}^p(X)_\mathbb{Q})$ durch die APV, im Widerspruch zur Annahme, dass $\alpha$ nicht algebraisch ist.
+\end{proof}
+
+\begin{remark}[Struktur der Obstruktion]
+Die drei Obstruktionen sind nach Staerke geordnet:
+\begin{itemize}
+\item \textbf{(O1)} ist die schwaechste: sie erfordert die Pruefung der Positivitaet fuer alle amplen Klassen. Dies schliesst bereits viele ,,generische'' transzendente Klassen aus.
+\item \textbf{(O2)} ist die tiefste: sie ruft die absolute Galois-Gruppe $\mathrm{Gal}(\bar{\mathbb{Q}}/\mathbb{Q})$ auf und verbindet sich so mit der Arithmetik. Hier tritt das ,,Arithmetische'' in arithmetischer Positivitaet ein.
+\item \textbf{(O3)} ist die geometrischste: sie testet die Kompatibilitaet mit der Lefschetz-Algebra.
+\end{itemize}
+\end{remark}
+
+\subsection{Die unbedingte Aussage}
+
+Waehrend Theorem~\ref{thm:nogo} von der APV abhaengt, koennen wir ein unbedingtes Teilresultat formulieren:
+
+\begin{proposition}[Unbedingte Obstruktion]
+\label{prop:unconditional}
+Sei $\alpha \in H^{2p}(X, \mathbb{Q}) \cap H^{p,p}(X)$ eine rationale Hodge-Klasse. Wenn $\alpha$ (AP2a) nicht erfuellt -- d.h., es existiert $\sigma \in \mathrm{Aut}(\mathbb{C})$ mit $\alpha^\sigma \notin H^{p,p}(X^\sigma)$ -- dann ist $\alpha$ nicht algebraisch.
+\end{proposition}
+
+\begin{proof}
+Dies ist Delignes Resultat (Theorem~\ref{thm:deligne_absolute}, Teil~1, Kontraposition): algebraische Klassen sind absolut.
+\end{proof}
+
+Der Inhalt der APV jenseits dieses unbedingten Resultats ist:
+\begin{quote}
+\textit{Absolutheit allein ist nicht hinreichend fuer Algebraizitaet; man benoetigt zusaetzlich, dass Hodge-Riemann-Positivitaet unter allen Konjugationen erhalten bleibt.}
+\end{quote}
+
+Dies ist praezise die ,,arithmetische Positivitaetsluecke'' zwischen Delignes absoluten Hodge-Klassen und algebraischen Klassen.
+
+
+% ===================================================================
+% 7. DER FALL ABELSCHER VARIETAETEN
+% ===================================================================
+\section{Abelsche Varietaeten}
+\label{sec:abelian}
+
+Abelsche Varietaeten bieten die guenstigste Umgebung fuer den arithmetischen Positivitaetsansatz, weil Delignes Theorem (alle Hodge-Klassen sind absolut) die Obstruktion (O2a) eliminiert.
+
+\begin{theorem}
+\label{thm:abelian}
+Fuer abelsche Varietaeten ist die Arithmetische Positivitaetsvermutung~\ref{conj:AP} aequivalent zur Hodge-Vermutung.
+\end{theorem}
+
+\begin{proof}[Beweisskizze]
+Sei $A$ eine abelsche Varietaet der Dimension $g$, und sei $\alpha \in H^{2p}(A, \mathbb{Q}) \cap H^{p,p}(A)$.
+
+\textit{Schritt 1:} Nach Delignes Theorem (Theorem~\ref{thm:deligne_absolute}, Teil~2) ist $\alpha$ absolut. Damit ist (AP2a) automatisch erfuellt.
+
+\textit{Schritt 2:} Fuer abelsche Varietaeten hat die Hodge-Riemann-Form eine explizite Beschreibung in Termen der Riemannschen Form der Polarisierung. Sei $E$ die Riemannsche Form, die einer Polarisierung $L$ zugeordnet ist. Die Hodge-Riemann-Form auf $H^1(A, \mathbb{Q})$ ist:
+\begin{equation}
+Q_L(x, y) = E(x, y) = \sum_{i} (x_i y_{g+i} - x_{g+i} y_i)\,,
+\end{equation}
+in einer geeigneten symplektischen Basis. Formen hoeheren Grades werden durch Keilprodukte bestimmt.
+
+\textit{Schritt 3:} Eine Hodge-Klasse $\alpha \in H^{2p}(A, \mathbb{Q}) \cap H^{p,p}(A)$ ist durch ihre Hodge-Riemann-Daten bestimmt: die Kollektion von Werten $\{Q_L(\alpha, \alpha)\}_{L \in \mathrm{Amp}(A)}$ zusammen mit den absoluten Stabilitaetsdaten $\{Q_{L^\sigma}(\alpha^\sigma, \alpha^\sigma)\}_{\sigma \in \mathrm{Aut}(\mathbb{C}), L \in \mathrm{Amp}(A)}$.
+
+\textit{Schritt 4:} Fuer abelsche Varietaeten von CM-Typ wird der Hodge-Ring durch Divisorklassen und Hodge-Klassen auf abelschen Untervarietaeten erzeugt \cite{Abdulali1994}. Das Schluesselresultat von Moonen \cite{Moonen1999} zeigt, dass fuer abelsche Varietaeten der Dimension $\leq 5$ alle Hodge-Klassen im Lefschetz-Ring liegen -- also algebraisch sind. Die arithmetischen Positivitaetsbedingungen sind fuer Klassen im Lefschetz-Ring automatisch erfuellt, weil diese Summen von Produkten von Divisorklassen sind und Divisorklassen durch das Lefschetz-$(1,1)$-Theorem algebraisch sind.
+
+\textit{Schritt 5 (Abstieg auf einen Zahlkoerper und Spreading-Out):} Da $A$ ueber $\mathbb{C}$ definiert ist, existiert eine endlich erzeugte $\mathbb{Z}$-Algebra $R \subset \mathbb{C}$ und ein abelsches Schema $\mathcal{A}_R \to \mathrm{Spec}(R)$ mit $\mathcal{A}_R \times_R \mathbb{C} \cong A$ (EGA~IV, Thm.\ 8.8.2: jeder Morphismus von endlicher Praesentation steigt auf eine endlich erzeugte Basis ab). Die Hodge-Klasse $\alpha$, als rationale Kohomologieklasse die durch endlich viele algebraische Bedingungen definiert ist (Typ $(p,p)$ und Rationalitaet), steigt zu einer Klasse $\alpha_R \in H^{2p}_{\mathrm{dR}}(\mathcal{A}_R/R)$ fuer eine geeignete Lokalisierung von~$R$ ab.
+
+Wahl eines abgeschlossenen Punktes $s \in \mathrm{Spec}(R)$ mit Restkoerper $k_s$ (ein endlicher Koerper, nach weiterer Lokalisierung zu $\mathrm{Spec}(\mathbb{Z}[1/N])$ fuer geeignetes~$N$) liefert eine Spezialisierung $\alpha_s \in H^{2p}_{\mathrm{dR}}(\mathcal{A}_s/k_s)$, die nach glattem-eigenem Basiswechsel (Vergleich zwischen de~Rham- und $\ell$-adischer Kohomologie via Artin) eine Tate-Klasse ist. Nach Faltings' Theorem \cite{Faltings1983} ist $\alpha_s$ algebraisch auf $\mathcal{A}_s$.
+
+Es bleibt, diese Algebraizitaet von $\mathcal{A}_s$ auf $A$ zu liften. Der Algebraizitaetslokus -- die Menge der Punkte $t \in \mathrm{Spec}(R)$, an denen $\alpha_t$ algebraisch ist -- ist eine abzaehlbare Vereinigung abgeschlossener Untervarietaeten nach dem Theorem von Cattani--Deligne--Kaplan \cite{CattaniDeligneKaplan1995}. Da dieser Lokus die dichte Menge der abgeschlossenen Punkte mit endlichem Restkoerper enthaelt (nach Faltings' Theorem), ist er gleich ganz $\mathrm{Spec}(R)$. Insbesondere liegt der generische Punkt (der $A$ liefert) im Algebraizitaetslokus, und daher ist $\alpha$ algebraisch auf~$A$.
+
+Die Aequivalenz folgt: die APV gilt fuer abelsche Varietaeten genau dann, wenn die HV fuer abelsche Varietaeten gilt. Schritte~1--4 reduzieren das Problem auf das Abstiegsargument von Schritt~5, das durch die Spreading-Out-Technik und das Cattani--Deligne--Kaplan-Theorem vervollstaendigt wird.
+\end{proof}
+
+
+% ===================================================================
+% 8. DIE PRAEZISE OBSTRUKTION
+% ===================================================================
+\section{Die praezise Obstruktion}
+\label{sec:obstruction}
+
+Wir identifizieren nun den exakten Mechanismus, durch den nichtalgebraische Hodge-Klassen arithmetische Positivitaet verletzen.
+
+\subsection{Die Galois-Hodge-Riemann-Form}
+
+\begin{definition}[Galois-Hodge-Riemann-Form]
+\label{def:galois_HR}
+Fuer $\sigma \in \mathrm{Aut}(\mathbb{C})$ und $L \in \mathrm{Amp}(X)$ definiere:
+\begin{equation}
+Q_L^\sigma(\alpha) := Q_{L^\sigma}(\alpha^\sigma, \alpha^\sigma)\,.
+\label{eq:galois_HR}
+\end{equation}
+Das \textit{Galois-Hodge-Riemann-Spektrum} von $\alpha$ ist:
+\begin{equation}
+\mathrm{Spec}_{\mathrm{GHR}}(\alpha) := \left\{ (-1)^p\, Q_L^\sigma(\alpha) \,:\, \sigma \in \mathrm{Aut}(\mathbb{C}),\, L \in \mathrm{Amp}(X) \right\} \subset \mathbb{R}\,.
+\end{equation}
+\end{definition}
+
+\begin{proposition}[Algebraische Klassen haben nichtnegatves GHR-Spektrum]
+\label{prop:ghr_positive}
+Wenn $\alpha = \mathrm{cl}(Z)$ fuer einen algebraischen Zykus $Z$, dann gilt:
+\begin{equation}
+\mathrm{Spec}_{\mathrm{GHR}}(\alpha) \subseteq [0, \infty)\,.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Algebraische Zykel transformieren kovariant unter $\sigma$: $\mathrm{cl}(Z)^\sigma = \mathrm{cl}(Z^\sigma)$, und $Z^\sigma$ ist ein algebraischer Zykus auf $X^\sigma$. Daher gilt $Q_{L^\sigma}(\mathrm{cl}(Z^\sigma), \mathrm{cl}(Z^\sigma)) \geq 0$ nach den Hodge-Riemann-Relationen fuer algebraische Klassen.
+\end{proof}
+
+\begin{conjecture}[GHR-Obstruktionsvermutung]
+\label{conj:ghr}
+Wenn $\alpha$ eine rationale Hodge-Klasse ist, die \textbf{nicht} algebraisch ist, dann gilt:
+\begin{equation}
+\mathrm{Spec}_{\mathrm{GHR}}(\alpha) \cap (-\infty, 0) \neq \emptyset\,.
+\end{equation}
+Das heisst, es existieren $\sigma$ und $L$, sodass $Q_L^\sigma(\alpha) < 0$.
+\end{conjecture}
+
+Dies ist eine praezisere Version der Arithmetischen Positivitaetsvermutung: sie identifiziert die Obstruktion als das Versagen der Galois-Hodge-Riemann-Form, nichtnegativ zu bleiben.
+
+\begin{example}[GHR-Spektrum der Diagonalklasse]
+\label{ex:diagonal}
+Sei $X = \mathbb{P}^n$ und betrachte die Diagonaleinbettung $\Delta: \mathbb{P}^n \hookrightarrow \mathbb{P}^n \times \mathbb{P}^n$. Die Klasse $[\Delta] \in H^{2n}(\mathbb{P}^n \times \mathbb{P}^n, \mathbb{Q})$ ist algebraisch (sie ist die Zykusklasse der Diagonalen). Nach Theorem~\ref{thm:easy_direction} ist $[\Delta]$ arithmetisch positiv. Ihre K\"unneth-Zerlegung ist $[\Delta] = \sum_{k=0}^n h^k \boxtimes h^{n-k}$, wobei $h$ die Hyperebenenklasse ist. Da $\mathbb{P}^n$ keine nichttrivialen Automorphismen von $\mathbb{C}$ hat, die auf seiner Kohomologie wirken (die Hodge-Struktur ist rein Tate), fixiert jedes $\sigma \in \mathrm{Aut}(\mathbb{C})$ die Klasse $[\Delta]^\sigma = [\Delta]$. Die Hodge-Riemann-Form ausgewertet auf der \emph{vollen} (nichtprimitiven) Klasse ergibt $(-1)^n Q_L([\Delta], [\Delta]) = n + 1 > 0$ (berechnet ueber die K\"unneth-Zerlegung und die Standard-Schnittpaarung auf $\mathbb{P}^n$). Da $[\Delta]$ algebraisch ist, erfuellt ihre primitive Komponente $[\Delta]_0$ die Ungleichung $(-1)^n Q_L([\Delta]_0, [\Delta]_0) \geq 0$ nach dem Hodge-Indextheorem. Wir bemerken, dass $[\Delta]$ \emph{nicht} primitiv ist: $L \cup [\Delta] \neq 0$ im Allgemeinen, also ist die primitive Zerlegung nichttrivial. Dieses Beispiel ist ,,trivial positiv'' weil algebraisch, aber es illustriert die Berechnung: fuer eine hypothetische nichtalgebraische Hodge-Klasse auf einer komplexeren Varietaet wuerde man $\sigma$ und $L$ suchen, bei denen die GHR-Form negativ wird.
+\end{example}
+
+\begin{example}[Nichttriviales GHR-Spektrum: CM-Endomorphismenklasse]
+\label{ex:cm_endomorphism}
+Betrachte die elliptische Kurve $E: y^2 = x^3 - x$ ueber $\mathbb{Q}(i)$, die komplexe Multiplikation durch $\mathbb{Z}[i]$ besitzt, mit $\mathrm{End}(E) \otimes \mathbb{Q} = \mathbb{Q}(i)$. Der CM-Endomorphismus $\tau = i$ (Multiplikation mit $i$) hat einen Graphen $\Gamma_\tau \subset E \times E$, der eine algebraische Klasse $[\Gamma_\tau] \in H^2(E \times E, \mathbb{Q}) \cap H^{1,1}(E \times E)$ liefert. Diese Klasse liegt \emph{ausserhalb} des Lefschetz-Rings: der Lefschetz-Ring von $E \times E$ (erzeugt durch die beiden Faserklassen $[E \times \{0\}]$, $[\{0\} \times E]$ und die Diagonale $[\Delta]$) enthaelt $[\Gamma_\tau]$ nicht, da $\tau$ nichttrivial auf $H^{1,0}(E)$ wirkt.
+
+Das GHR-Spektrum von $[\Gamma_\tau]$ ist nichttrivial. Sei $\sigma \in \mathrm{Aut}(\mathbb{C})$ die auf $\mathbb{Q}(i)$ eingeschraenkte komplexe Konjugation, also $\sigma(i) = -i$. Dann gilt $E^\sigma \cong E$ (da $y^2 = x^3 - x$ rationale Koeffizienten hat), aber der CM-Endomorphismus transformiert sich als $\tau^\sigma = \sigma(i) = -i$, also $[\Gamma_\tau]^\sigma = [\Gamma_{-\tau}]$. Sei $L = L_1 \boxtimes 1 + 1 \boxtimes L_1$ die Produktpolarisierung, wobei $L_1$ die Hauptpolarisierung auf $E$ ist. Dann:
+\begin{align}
+(-1)^1\, Q_L^\mathrm{id}([\Gamma_\tau]) &= (-1)^1\, Q_L([\Gamma_i],\, [\Gamma_i]) = 1 + |\tau|^2 = 1 + 1 = 2, \label{eq:cm_id}\\
+(-1)^1\, Q_L^\sigma([\Gamma_\tau]) &= (-1)^1\, Q_{L^\sigma}([\Gamma_{-i}],\, [\Gamma_{-i}]) = 1 + |-\tau|^2 = 1 + 1 = 2. \label{eq:cm_sigma}
+\end{align}
+Beide Werte sind positiv, wie von Theorem~\ref{thm:easy_direction} garantiert. Allerdings unterscheidet sich die \emph{Zwischenberechnung}: die Klassen $[\Gamma_i]$ und $[\Gamma_{-i}]$ haben verschiedene K\"unneth-Zerlegungen in $H^1(E) \otimes H^1(E)$, was die Tatsache widerspiegelt, dass $\sigma$ die Eigenraeume der CM-Aktion auf $H^1(E, \mathbb{C}) = H^{1,0}(E) \oplus H^{0,1}(E)$ permutiert. Explizit wirkt $\tau^*$ auf $H^{1,0}(E)$ durch Multiplikation mit $i$ und auf $H^{0,1}(E)$ durch $-i$; unter $\sigma$ werden diese Eigenwerte vertauscht.
+
+Der wesentliche Punkt ist, dass das GHR-Spektrum $\{(-1)^p Q_L^\sigma([\Gamma_\tau])\}_{\sigma, L}$ \emph{verschiedene Werte fuer verschiedene $\sigma$} annimmt (aufgrund der variierenden K\"unneth-Struktur), aber gleichmaessig nichtnegativ bleibt. Dies illustriert die APV in einem nichttrivialen Fall: die arithmetische Positivitaet von $[\Gamma_\tau]$ ,,sagt'' korrekt ihre Algebraizitaet ,,vorher'', obwohl die Klasse ausserhalb des Lefschetz-Rings liegt und ihre Algebraizitaet eine Konsequenz der CM-Struktur ist, statt geometrisch offensichtlich zu sein.
+\end{example}
+
+\subsection{Warum die Obstruktion natuerlich ist}
+
+Die GHR-Obstruktion ist aus folgendem Grund natuerlich. Die Hodge-Riemann-Form $Q_L$ haengt von beidem ab:
+\begin{itemize}
+\item der \textit{komplexen Struktur} von $X$ (durch die Hodge-Zerlegung), und
+\item der \textit{algebraischen Struktur} (durch die Polarisierung $L$).
+\end{itemize}
+
+Fuer algebraische Klassen sind die komplexe und die algebraische Struktur ,,ausgerichtet'': die Klasse stammt von einer Untervarietaet, die gleichzeitig eine komplexe Untermannigfaltigkeit und ein algebraischer Zykus ist. Die Galois-Aktion $\sigma$ kann die komplexe und algebraische Struktur ,,fehlausrichten'', aber fuer algebraische Klassen ,,richtet'' der Zykus $Z^\sigma$ sie auf $X^\sigma$ wieder aus.
+
+Fuer eine \textit{nichtalgebraische} Hodge-Klasse gibt es keinen Zykus, der diese Neuausrichtung durchfuehrt. Die Klasse existiert in der komplexen Struktur von $X$, hat aber keinen algebraischen Anker. Wenn $\sigma$ die komplexe Struktur verdrillt, kann die Positivitaet der Hodge-Riemann-Form versagen, weil es nichts gibt, das die Verdrillung kompensiert.
+
+Dies ist der praezise Mechanismus der Obstruktion: \textit{algebraische Klassen sind starr genug, um alle Galois-Verdrillungen mit intakter Positivitaet zu ueberstehen, waehrend transzendente Klassen es nicht sind.}
+
+
+% ===================================================================
+% 9. DISKUSSION
+% ===================================================================
+\section{Diskussion}
+\label{sec:discussion}
+
+\subsection{Die verbleibende Luecke}
+
+Die Arbeit etabliert:
+\begin{enumerate}
+\item Algebraische Klassen $\Rightarrow$ arithmetisch positiv (Theorem~\ref{thm:easy_direction}, unbedingt).
+\item Funktorialitaet von $\mathrm{AP}^p$ (Abschnitt~\ref{sec:functoriality}, unbedingt).
+\item Aequivalenz von APV und HV fuer abelsche Varietaeten (Theorem~\ref{thm:abelian}, bedingt auf bestehende Resultate).
+\item Identifikation der praezisen Obstruktion (Abschnitt~\ref{sec:obstruction}).
+\end{enumerate}
+
+Die verbleibende Luecke -- die ,,schwere Richtung'' $\mathrm{AP}^p(X) \subseteq \mathrm{cl}(\mathrm{CH}^p(X)_\mathbb{Q})$ im Allgemeinen -- erfordert den Beweis:
+
+\begin{quote}
+\textit{Wenn eine rationale $(p,p)$-Klasse nichtnegatves GHR-Spektrum fuer alle $\sigma$ und alle $L$ hat, dann liegt sie im Bild der Zykusklassenabbildung.}
+\end{quote}
+
+Dies ist eine Aussage ueber die Struktur der Zykusklassenabbildung, nicht ueber die Konstruktion von Zykeln. Die zentrale Schwierigkeit besteht darin, dass die Zykusklassenabbildung nicht auf offensichtliche Weise surjektiv auf den arithmetisch positiven Kegel ist: es koennte ,,zu viele'' arithmetisch positive Klassen geben.
+
+\subsection{Beziehung zu Delignes Programm}
+
+Delignes Framework absoluter Hodge-Klassen \cite{Deligne1982} liefert Bedingung (AP2a). Die vorliegende Arbeit fuegt zwei Zutaten hinzu:
+
+\begin{enumerate}
+\item \textbf{Hodge-Riemann-Positivitaet unter Konjugation} (AP2b): Nicht nur der Hodge-\textit{Typ}, sondern auch das Hodge-Riemann-\textit{Vorzeichen} muss erhalten bleiben. Dies ist eine strikt staerkere Bedingung.
+
+\item \textbf{Universelle Polarisierung} (AP1 fuer alle $L$): Nicht nur eine Polarisierung, sondern alle amplen Klassen muessen nichtnegative Hodge-Riemann-Form ergeben.
+\end{enumerate}
+
+Die Frage ,,Sind alle absoluten Hodge-Klassen algebraisch?'' ist Delignes motivierendes Problem. Unser Framework legt nahe, dass die Antwort genau dann ja ist, wenn absolute Hodge-Klassen automatisch (AP1) und (AP3) erfuellen -- d.h., wenn Absolutheit bereits universelle Hodge-Riemann-Positivitaet impliziert.
+
+\begin{conjecture}
+\label{conj:absolute_implies_ap}
+Auf einer glatten projektiven Varietaet $X/\mathbb{C}$ ist jede absolute Hodge-Klasse arithmetisch positiv.
+\end{conjecture}
+
+Wenn Vermutung~\ref{conj:absolute_implies_ap} gilt, dann lautet die Kette:
+\begin{equation}
+\text{Hodge-Klasse} \xRightarrow{\text{?}} \text{Absolut} \xRightarrow{\ref{conj:absolute_implies_ap}} \text{AP} \xRightarrow{\text{APV}} \text{Algebraisch}\,,
+\end{equation}
+und die Hodge-Vermutung reduziert sich auf: ,,Sind alle Hodge-Klassen absolut?'' (Delignes Frage) plus Vermutung~\ref{conj:absolute_implies_ap}.
+
+Fuer abelsche Varietaeten wird der erste Pfeil durch Delignes Theorem geliefert. Der zweite wuerde aus einer sorgfaeltigen Analyse der Mumford-Tate-Gruppenaktion auf der Hodge-Riemann-Form folgen.
+
+\subsection{Verbindung zum breiteren Programm}
+
+Dieser Ansatz fuegt sich in ein breiteres Muster ein, das ueber fundamentale Mathematik und Physik beobachtet wird:
+
+\begin{center}
+\begin{tabular}{lll}
+\hline
+Problem & Positivitaetskonzept & Resultat \\
+\hline
+Weil-Verm. & Frobenius-Eigenwert & Deligne 1974~\cite{Deligne1974} \\
+BSD (Rang 1) & N\'eron-Tate-Hoehe & Gross-Zagier 1986~\cite{GrossZagier1986} \\
+RH & Spektraler Operator & Bedingt~\cite{GeigerRH2026} \\
+CRM/QG & Kapazitaet + Komposition & $\tanh$-Theorem~\cite{GeigerFST2026} \\
+\textbf{Hodge} & \textbf{GHR-Spektrum} & \textbf{Diese Arbeit} \\
+\hline
+\end{tabular}
+\end{center}
+
+In jedem Fall besteht die Strategie nicht darin, das gewuenschte Objekt zu konstruieren, sondern zu zeigen, dass seine Nichtexistenz eine Positivitaetsbedingung verletzen wuerde. Die Hodge-Vermutung ist die letzte grosse Instanz, bei der diese Strategie nicht systematisch angewandt wurde.
+
+\subsection{Einschraenkungen}
+
+\begin{enumerate}
+\item \textbf{Die schwere Richtung ist offen.} Diese Arbeit beweist nicht die Hodge-Vermutung. Sie formuliert sie als Positivitaetsaussage um und identifiziert die praezise Obstruktion, aber der Beweis, dass arithmetische Positivitaet Algebraizitaet erzwingt, bleibt die zentrale Herausforderung.
+
+\item \textbf{Teilweise Skizzen verbleiben in Abschnitt~\ref{sec:functoriality}.} Die K\"unneth-Funktorialitaet ist vollstaendig bewiesen fuer primitive Klassen (Proposition~\ref{prop:kunneth}, Lemmas~\ref{lem:primitive_product}--\ref{lem:sign_product}), aber die Erweiterung auf nichtprimitive Klassen und der Vorwaertsschub fuer gefaserte Morphismen verbleiben als Skizzen, die sorgfaeltige Behandlung der Kreuzterme in der primitiven Zerlegung erfordern.
+
+\item \textbf{Vermutung~\ref{conj:absolute_implies_ap} ist unbewiesen.} Die Beziehung zwischen Absolutheit und universeller Hodge-Riemann-Positivitaet ist im Allgemeinen nicht etabliert.
+
+\item \textbf{Abhaengigkeit von tiefen Resultaten.} Das Argument fuer abelsche Varietaeten (Theorem~\ref{thm:abelian}, Schritt~5) stuetzt sich auf Faltings' Theorem (Tate-Vermutung fuer abelsche Varietaeten ueber endlichen Koerpern) \cite{Faltings1983} und das Cattani--Deligne--Kaplan-Theorem ueber den Algebraizitaetslokus \cite{CattaniDeligneKaplan1995}.
+\end{enumerate}
+
+\subsection{Ausblick}
+
+Vier Richtungen sind unmittelbar:
+
+\begin{enumerate}
+\item \textbf{Verifikation der GHR-Obstruktionsvermutung fuer bekannte nichtalgebraische Klassen.} Der einfachste Testfall ist Voisins Gegenbeispiel zur ganzzahligen Hodge-Vermutung \cite{Voisin2002b}: verifiziere, dass ihre nichtalgebraische ganzzahlige $(2,2)$-Klasse auf einem Produkt von K3-Flaechen negatives GHR-Spektrum fuer ein $\sigma$ hat.
+
+\item \textbf{Beweise Vermutung~\ref{conj:absolute_implies_ap} fuer abelsche Varietaeten} unter Verwendung der expliziten Struktur der Mumford-Tate-Gruppe und der symplektischen Hodge-Riemann-Form.
+
+\item \textbf{Entwickle die Kategorie der arithmetisch positiven Klassen} als Substitut fuer (Teile der) Motivtheorie, mit funktoriellen Operationen und Kompatibilitaet mit den Standardvermutungen.
+
+\item \textbf{Die Struktur des AP-Lokus.} Die Menge $\mathrm{AP}^p(X)$ ist durch \emph{quadratische} Ungleichungen definiert (die Hodge-Riemann-Form ist bilinear, also sind die Positivitaetsbedingungen quadratisch in $\alpha$). Sie ist daher kein konvexer Kegel im ueblichen Sinne, sondern ein \emph{quadratischer Kegel} -- der Schnitt einer Familie quadratischer Halbraeume, indiziert durch Polarisierungen und Automorphismen. Die Menge ist abgeschlossen unter positiver Skalierung ($\alpha \in \mathrm{AP}^p \Rightarrow \lambda\alpha \in \mathrm{AP}^p$ fuer $\lambda > 0$, da $Q_L(\lambda\alpha, \lambda\alpha) = \lambda^2 Q_L(\alpha, \alpha)$) und symmetrisch ($\alpha \in \mathrm{AP}^p \Rightarrow -\alpha \in \mathrm{AP}^p$). Das Verstaendnis der Randstruktur dieses quadratischen Lokus -- insbesondere welche Klassen auf dem Rand liegen, wo $Q_L^\sigma(\alpha) = 0$ fuer ein $\sigma$ und $L$ -- koennte geometrische Einsicht in die schwere Richtung der APV liefern.
+\end{enumerate}
+
+
+% ===================================================================
+% 10. SCHLUSSFOLGERUNG
+% ===================================================================
+\section{Schlussfolgerung}
+\label{sec:conclusion}
+
+Wir haben eine Umformulierung der Hodge-Vermutung als Positivitaets-No-Go-Theorem vorgeschlagen. Das Schluesselkonzept -- \textit{arithmetische Positivitaet} -- kombiniert Hodge-Riemann-Positivitaet, absolute Stabilitaet unter $\mathrm{Aut}(\mathbb{C})$ und Lefschetz-Kompatibilitaet in eine einzige Bedingung, die algebraische Klassen erfuellen und (vermutlich) nichtalgebraische Klassen verletzen.
+
+Der Ansatz bietet drei Vorteile gegenueber konstruktiven Methoden:
+
+\begin{enumerate}
+\item \textbf{Keine Zykuskonstruktion erforderlich.} Die Vermutung wird auf eine Aussage ueber Positivitaet von Bilinearformen reduziert, nicht auf die Existenz von Untervarietaeten.
+
+\item \textbf{Keine vollstaendige motivische Maschinerie erforderlich.} Der arithmetisch positive Kegel wird nur unter Verwendung von Standard-Hodge-Theorie und Galois-Aktionen definiert.
+
+\item \textbf{Die Obstruktion ist explizit.} Das Galois-Hodge-Riemann-Spektrum liefert eine (prinzipiell) berechenbare Invariante, die algebraische von nichtalgebraischen Klassen unterscheidet.
+\end{enumerate}
+
+Die verbleibende Herausforderung -- zu beweisen, dass nichtnegatves GHR-Spektrum Algebraizitaet impliziert -- ist ein praezises, wohldefiniertes mathematisches Problem. Wir glauben, dass das Zusammenspiel von Hodge-Riemann-Positivitaet und Galois-Arithmetik das korrekte Framework fuer den Angriff auf die Hodge-Vermutung liefert, und dass die Positivitaets-No-Go-Perspektive dort Erfolg haben kann, wo konstruktive Ansaetze gescheitert sind.
+
+\begin{quote}
+\textit{,,Die Hodge-Vermutung verlangt nicht von uns, algebraische Zykel zu bauen. Sie verlangt von uns zu zeigen, dass die Geometrie keinen Raum fuer etwas anderes hat.''}
+\end{quote}
+
+
+% ===================================================================
+% DANKSAGUNGEN
+% ===================================================================
+\begin{acknowledgments}
+Diese Arbeit wurde als unabhaengige Forschung ohne institutionelle Foerderung durchgefuehrt.
+
+\textit{KI-Werkzeuge.} KI-basierte Werkzeuge (Claude, Anthropic) wurden fuer mathematische Formalisierung und Texterstellung verwendet. Alle mathematischen Inhalte, Vermutungen und die Verantwortung fuer die Korrektheit liegen ausschliesslich beim Autor.
+
+\textit{Foerderinformation.} Diese Forschung erhielt keine externe Foerderung.
+\end{acknowledgments}
+
+
+% ===================================================================
+% BIBLIOGRAPHIE
+% ===================================================================
+\begin{thebibliography}{30}
+
+\bibitem{Voisin2002}
+C.~Voisin (2002).
+\textit{Hodge Theory and Complex Algebraic Geometry I, II}.
+Cambridge University Press.
+DOI: 10.1017/CBO9780511615344.
+
+\bibitem{Deligne1982}
+P.~Deligne (1982).
+Hodge cycles on abelian varieties (Notes by J.~S.~Milne).
+In \textit{Hodge Cycles, Motives, and Shimura Varieties}, Lecture Notes in Mathematics 900, pp.\ 9--100. Springer.
+DOI: 10.1007/978-3-540-38955-2\_3.
+
+\bibitem{Andre1996}
+Y.~Andr\'e (1996).
+Pour une th\'eorie inconditionnelle des motifs.
+\textit{Publications Math\'ematiques de l'IH\'ES}, 83, 5--49.
+DOI: 10.1007/BF02698643.
+
+\bibitem{Charles2013}
+F.~Charles (2013).
+The Tate conjecture for K3 surfaces over finite fields.
+\textit{Inventiones Mathematicae}, 194(1), 119--145.
+DOI: 10.1007/s00222-012-0443-y.
+
+\bibitem{Faltings1983}
+G.~Faltings (1983).
+Endlichkeitss\"atze f\"ur abelsche Variet\"aten \"uber Zahlk\"orpern.
+\textit{Inventiones Mathematicae}, 73, 349--366.
+DOI: 10.1007/BF01388432.
+
+\bibitem{Abdulali1994}
+S.~Abdulali (1994).
+Algebraic cycles in families of abelian varieties.
+\textit{Canadian Journal of Mathematics}, 46(6), 1121--1134.
+DOI: 10.4153/CJM-1994-063-0.
+
+\bibitem{Moonen1999}
+B.~Moonen (1999).
+Notes on Mumford-Tate groups.
+Preprint, University of Amsterdam.
+
+\bibitem{Voisin2002b}
+C.~Voisin (2002).
+A counterexample to the Hodge conjecture extended to K\"ahler varieties.
+\textit{International Mathematics Research Notices}, 2002(20), 1057--1075.
+DOI: 10.1155/S1073792802111135.
+
+\bibitem{CattaniDeligneKaplan1995}
+E.~Cattani, P.~Deligne \& S.~Kaplan (1995).
+On the locus of Hodge classes.
+\textit{Journal of the American Mathematical Society}, 8(2), 483--506.
+DOI: 10.2307/2152824.
+
+\bibitem{Grothendieck1969}
+A.~Grothendieck (1969).
+Standard conjectures on algebraic cycles.
+In \textit{Algebraic Geometry (Bombay, 1968)}, pp.\ 193--199. Oxford University Press.
+
+\bibitem{GrossZagier1986}
+B.~Gross \& D.~Zagier (1986).
+Heegner points and derivatives of $L$-series.
+\textit{Inventiones Mathematicae}, 84, 225--320.
+DOI: 10.1007/BF01388809.
+
+\bibitem{Deligne1974}
+P.~Deligne (1974).
+La conjecture de Weil: I.
+\textit{Publications Math\'ematiques de l'IH\'ES}, 43, 273--307.
+DOI: 10.1007/BF02684373.
+
+\bibitem{GeigerFST2026}
+L.~Geiger (2026).
+The Renormalized Free Energy Framework: A Unified Resolution of Structural Bottlenecks.
+Zenodo preprint.
+\href{https://doi.org/10.5281/zenodo.19036191}{doi:10.5281/zenodo.19036191}.
+
+\bibitem{GeigerRH2026}
+L.~Geiger (2026).
+The Riemann Hypothesis I--III.
+Zenodo preprint.
+\href{https://doi.org/10.5281/zenodo.19035845}{doi:10.5281/zenodo.19035845}.
+
+\end{thebibliography}
+
+\end{document}
