@@ -1,6 +1,6 @@
 # BEWEISNOTIZ -- Kosmologische Konstante via geometrische Saettigung
-# Stand: 2026-03-15
-# Status: FRAMEWORK NOTE -- L1 geschlossen (2x), L2 geschlossen, L3 geschlossen, nur L4/L5 offen
+# Stand: 2026-03-16 (Fuenfter Review-Zyklus)
+# Status: FRAMEWORK NOTE -- L1-L3 geschlossen, L4/L5 offen, L6-L8 korrigiert, L9-L14 korrigiert, L15 korrigiert, L16 verifiziert
 
 ===============================================================================
 ## Problemstellung
@@ -15,26 +15,31 @@ Diskrepanz: ~10^{120}.
 **Coincidence Problem:** Warum ist rho_vac ~ rho_matter gerade JETZT?
 
 **Ansatz (FST-DE):** Thermodynamisches Variationsprinzip. Die beobachtete
-kosmologische Konstante Lambda_eff ist der Minimierer eines Free-Energy-
-Funktionals Phi[rho], definiert ueber Vakuum-Fluktuationen. Lambda_eff ~ H_0^2
+kosmologische Konstante Lambda_eff ist der Minimierer einer Free-Energy-
+Funktion Phi(rho), definiert ueber Vakuum-Fluktuationen. Lambda_eff ~ H_0^2
 folgt natuerlich, ohne Fine-Tuning.
+
+**WICHTIG (Review 2026-03-16):** Entropie-Term korrigiert auf rho*ln(rho/rho_Pl)
+(statt ln(rho/rho_Pl)). Ohne rho-Faktor hat Phi kein Minimum!
 
 
 ===============================================================================
 ## Beweiskette
 ===============================================================================
 
-### Schritt 1: Vakuum-Free-Energy-Funktional Phi[rho]
-**Status: BEWIESEN (Definition 2.1)**
+### Schritt 1: Vakuum-Free-Energy-Funktion Phi(rho)
+**Status: BEWIESEN (Definition 2.1) -- KORRIGIERT 2026-03-16**
 
-  Phi[rho] = int_{Lambda_IR}^{Lambda_UV} [
-    (1/2) omega(k) + T_dS * ln(rho/rho_Pl) + V_grav[rho, k]
+  Phi(rho) = int_{Lambda_IR}^{Lambda_UV} [
+    (1/2) omega(k) + T_dS * rho * ln(rho/rho_Pl) + V_grav(rho, k)
   ] * 4pi k^2 / (2pi)^3 dk
 
 Drei Terme:
 1. **Nullpunktsenergie:** (1/2) omega(k) = (1/2) sqrt(k^2 + m^2)
-2. **Entropie-Strafe:** T_dS * ln(rho/rho_Pl) mit de-Sitter-Temperatur T_dS = H/(2pi)
-3. **Gravitationelle Rueckwirkung:** V_grav[rho, k] = 8pi G rho^2 / k^2
+2. **Entropie-Strafe:** T_dS * rho * ln(rho/rho_Pl) mit de-Sitter-Temperatur T_dS = H/(2pi)
+   KRITISCH: Der Faktor rho ist notwendig (Boltzmann-Entropie s = -rho*ln(rho)).
+   Ohne rho ist dPhi/drho > 0 fuer alle rho > 0 (kein Minimum!).
+3. **Gravitationelle Rueckwirkung:** V_grav(rho, k) = 8pi G rho^2 / k^2
 
 Cutoffs:
 - UV: Lambda_UV = M_Pl ~ 2.4 x 10^18 GeV (Planck-Skala)
@@ -44,8 +49,8 @@ Cutoffs:
 ### Schritt 2: Strikte Konvexitaet
 **Status: BEWIESEN (Theorem 3.1, Step 2)**
 
-Zweite Funktionalableitung:
-  delta^2 Phi / delta rho^2 = int [T_dS/rho^2 + 16pi G/k^2] * (4pi k^2/(2pi)^3) dk > 0
+Zweite Ableitung:
+  d^2 Phi / d rho^2 = int [T_dS/rho + 16pi G/k^2] * (4pi k^2/(2pi)^3) dk > 0
 
 Strikt positiv fuer alle rho > 0. Also Phi strikt konvex, Minimum eindeutig.
 
@@ -80,7 +85,7 @@ Planck 2018: Lambda_obs = (1.11 +/- 0.02) x 10^{-52} m^{-2}
 ### Schritt 5: CRM-Instanziierung (Skalar-Tensor-Gravitation)
 **Status: BEWIESEN (Section 3.5)**
 
-Lagrangian L = R/(16piG) + gamma R^2 + Skalarfeld.
+Lagrangian L = (R + gamma R^2)/(16piG) + Skalarfeld.
 Poeschl-Teller-Potential V(phi) = V_0/cosh^2(phi/phi_0).
 Saettigungs-ODE: dX/da = k(1-X^2) mit X = tanh(...).
 de-Sitter-Stabilitaets-Proposition: phi_0 >= sqrt(8/3) M_Pl.
@@ -92,8 +97,10 @@ de-Sitter-Stabilitaets-Proposition: phi_0 >= sqrt(8/3) M_Pl.
 w_eff(a) abgeleitet. Phantom-Stabilitaet diskutiert.
 Kompatibilitaet mit DESI-Ergebnissen ueberprueft.
 
-**WARNUNG:** w_eff(0) ~ -1.35 (Phantom). Klare Story noetig
-(nicht physikalischer Wert, sondern Grenzwert der Parametrisierung).
+**WARNUNG:** w_eff(0) ~ -1.4 bis -1.5 (Phantom, abhaengig von Parameterfit).
+Klare Story noetig (nicht physikalischer Wert, sondern Effekt der
+wachsenden Omega_Phi-Fraktion). Praeziser Wert erfordert numerischen
+Fit an SN+BAO-Daten (kappa und a_trans auf ~30% genau fixieren).
 
 
 ===============================================================================
@@ -108,13 +115,14 @@ Dimensionskonsistenz, minimale Nichtlinearitaet, IR-Dominanz) erzwingen
 V_grav = c_0 * G * rho^2 / k^2 EINDEUTIG (Dimensionsanalyse).
 
 **(b) CRM-Transfer: f(R) Trace-Gleichung (Proposition 3.X):** Aus dem
-CRM-Lagrangian L = R/(16piG) + gamma*R^2 folgt die Trace-Gleichung
-R + 12*gamma*Box*R = -8*pi*G*T (Sotiriou & Faraoni 2010). Im quasi-statischen
+CRM-Lagrangian L = (R + gamma*R^2)/(16piG) folgt die Trace-Gleichung
+R + 6*gamma*Box*R = -8*pi*G*T (Sotiriou & Faraoni 2010). Im quasi-statischen
 Limes bei Wellenzahl k ergibt die modifizierte Poisson-Gleichung:
-  V_grav^{f(R)} = 8*pi*G*rho^2/k^2 * 1/(1 + a^2*m_s^2/k^2)
-Fuer k >> a*m_s (sub-Compton): exakt V_grav = 8*pi*G*rho^2/k^2.
-Fuer k << a*m_s: unterdrueckt. Der CRM liefert also die KONSTRUKTIVE
-Ableitung aus dem Lagrangian, nicht nur die Eindeutigkeit.
+  V_grav^{f(R)} = 8*pi*G*rho^2/k^2 * [1 + (1/3)*k^2/a^2/(k^2/a^2 + m_s^2)]
+Fuer k << a*m_s (super-Compton): V_grav -> 8*pi*G*rho^2/k^2 (exakt GR).
+Fuer k >> a*m_s (sub-Compton): V_grav -> (4/3)*8*pi*G*rho^2/k^2.
+Der CRM liefert also die KONSTRUKTIVE Ableitung aus dem Lagrangian,
+nicht nur die Eindeutigkeit.
 
 **Ehemals groesste Schwachstelle -> jetzt zweifach geschlossen.**
 
@@ -140,10 +148,113 @@ von Dezeleration zu Akzeleration).
 ### L4: Renormierung der UV-Divergenzen
 Rigorose Kontrolle der Modesumme ueber alle Standard-Model-Spezies
 und Renormierung der UV-Divergenzen steht aus.
+**VERSCHAERFT (2026-03-16):** Die Raw-Modensumme liefert NICHT die
+gewuenschte Skalierung rho_* ~ H_0^2/G. Die Skalierung entsteht nur
+nach RG-Matching (Abschnitt 5.2). Rigorose Herleitung des RG-Matchings
+ist der zentrale offene Punkt.
 
 ### L5: Quantum Corrections
 One-Loop-Robustheit diskutiert (Skalaron-Beitrag delta_rho ~ m_s^4/(64pi^2)),
 aber vollstaendige Loop-Analyse fehlt.
+
+### L6: Solar-System Fifth Force -- NEU (2026-03-16)
+Bei m_s << H_0 (gamma >> 10^60, aus One-Loop-Constraint) ist das Skalaron
+auf Solar-System-Skalen effektiv maselos. Fuenfte-Kraft-Beitrag gamma_PPN = 1/2,
+ausgeschlossen durch Cassini (|gamma_PPN - 1| < 2.3e-5).
+Screening-Mechanismus (Chamealeon oder Vainshtein) noetig, aber nicht vorhanden.
+**Dies ist die groesste offene Spannung des Modells.**
+
+### L7: Sigma = 9/8 statt 1 -- KORRIGIERT (2026-03-16)
+Der Lensing-Parameter war falsch als Sigma = 1 exakt angegeben.
+Korrekt: Sigma(k) = (2+f)/(2+2f/3), mit f = (k^2/a^2)/(k^2/a^2 + m_s^2).
+Sub-Compton: Sigma = 9/8. GR-Limes: Sigma = 1.
+Status: KORRIGIERT in EN und DE Versionen.
+
+### L8: w_eff vs. w_DE -- KORRIGIERT (2026-03-16)
+w_eff(z=0) ~ -1.4 bis -1.5 ist die EFFEKTIVE Zustandsgleichung (einschliesslich
+Zeitvariation von Omega_Phi), nicht die intrinsische w_DE des Skalarfelds.
+Die intrinsische w_DE ist >= -1 (kein Phantom). Direkter DESI-Vergleich
+erfordert (w0, wa)-Mapping, das noch aussteht.
+
+### L9: V_grav^{f(R)} Faktor 4/3 -- KORRIGIERT (2026-03-16, Zweiter Zyklus)
+Die f(R)-Herleitung von V_grav (Proposition 3.X) hatte eine FALSCHE Formel:
+V_grav^{f(R)} = 8pi*G*rho^2/k^2 * 1/(1+a^2*m_s^2/k^2) behauptete exaktes
+Matching mit dem Ansatz im sub-Compton-Limes. Tatsaechlich:
+- Super-Compton (k << am_s): V_grav -> 8pi*G*rho^2/k^2 (exakt GR, RICHTIG)
+- Sub-Compton (k >> am_s): V_grav -> (4/3)*8pi*G*rho^2/k^2 (4/3 Enhancement)
+Die KORREKTE Formel lautet: V_grav^{f(R)} = 8pi*G*rho^2/k^2 * [1 + (1/3)*f(k)]
+mit f(k) = (k^2/a^2)/(k^2/a^2 + m_s^2).
+Der 4/3-Faktor betrifft nur den sub-Compton-Anteil des Modenintegrals und
+aendert rho_* um O(1), nicht die parametrische Skalierung Lambda_eff ~ H_0^2/ln.
+Status: KORRIGIERT in EN und DE. Remark erweitert.
+
+### L11: DE-Beweis der beta-Funktion -- KORRIGIERT (2026-03-16, Dritter Zyklus)
+Der DE-Beweis der Proposition (Thermodynamische beta-Funktion) hatte einen
+fehlerhaften Zwischenschritt: "T_dS/rho_* = 16piG*rho_**V_k" ist KEINE
+korrekte Vereinfachung der Stationaritaetsbedingung
+B*[ln(rho_*/rho_Pl) + 1] + 2C*rho_* = 0. Der DE-Beweis wurde mit der
+EN-Version synchronisiert (impliziter Funktionensatz).
+Zusaetzlich: BEWEISNOTIZ Zeile 53 korrigiert (rho^2 -> rho in zweiter
+Ableitung, konsistent mit Paper).
+Status: KORRIGIERT in DE. EN war bereits korrekt.
+
+### L10: Vorfaktor c_0 Konvention -- PRAEZISIERT (2026-03-16, Zweiter Zyklus)
+Der c_0 = 8pi Vorfaktor im Minimality-Lemma war numerisch nicht korrekt
+hergeleitet (Newtonsches Ergebnis ist ~4pi/5, nicht 8pi). Korrektur:
+c_0 ist O(4pi)--O(8pi), die Konventionswahl wird in Lambda_ren absorbiert.
+Status: PRAEZISIERT (kein Fehler im Hauptresultat, nur im Nebenargument).
+
+### L12: DE beta-Proposition Vorzeichen -- KORRIGIERT (2026-03-16, Vierter Zyklus)
+Die DE-Proposition (Thermodynamische beta-Funktion) behauptete FALSCH
+"was negativ ist (da H in der Materiaera abnimmt)". Korrekt: beta > 0
+(positiv, weil zwei Minuszeichen -- eines aus der Formel, eines aus
+d(ln H)/d(ln a) = -3/2 -- sich aufheben). Der DE-Beweis war korrekt
+(schloss mit beta > 0), aber das Proposition-Statement widersprach dem
+eigenen Beweis. Explizite Materiaera-Gleichung mit +3/2 > 0 eingefuegt.
+Status: KORRIGIERT in DE. EN war korrekt.
+
+### L13: Lagrangian-Konvention f(R) = R + 2 gamma R^2 -- KORRIGIERT (2026-03-16, Vierter Zyklus)
+Der Lagrangian war als L = R/(16piG) + gamma R^2 + ... geschrieben
+(inkonsistente Konvention: [gamma] war als [E]^{-2} deklariert, aber
+gamma R^2 als separater Term erforderte dimensionsloses gamma). Zusaetzlich
+war f(R) = R + 2 gamma R^2 in Prop. Vgrav-from-fR, was m_s^2 = 1/(12 gamma)
+ergibt (nicht 1/(6 gamma) wie behauptet). KORREKTUR:
+(a) Lagrangian auf Standard-Konvention: L = (R + gamma R^2)/(16piG) + ...
+(b) f(R) = R + gamma R^2 (ohne Faktor 2)
+(c) f_R = 1 + 2 gamma R, f_RR = 2 gamma (statt 4 gamma)
+(d) Spurgleichung: 6 gamma (statt 12 gamma)
+(e) m_s^2 = 1/(6 gamma) -- jetzt dimensionell und numerisch korrekt
+Status: KORRIGIERT in EN und DE.
+
+### L14: One-Loop-Formeln -- KORRIGIERT (2026-03-16, Vierter Zyklus)
+(a) m_s^2 war als M_Pl^2/(6 gamma) geschrieben (dimensionell inkonsistent
+    mit [gamma] = [E]^{-2}). Korrigiert auf m_s^2 = 1/(6 gamma).
+(b) delta rho = M_Pl^4/(64 pi^2 (6 gamma)^2) korrigiert auf
+    1/(64 pi^2 (6 gamma)^2).
+(c) gamma-Schranke korrigiert: gamma >> 1/(M_Pl H_0) ~ 10^60 Planck-Einh.
+    (statt gamma >> M_Pl/H_0, was dimensionell falsch war).
+Status: KORRIGIERT in EN und DE.
+
+### L15: w_eff Zahlenwert inkonsistent -- KORRIGIERT (2026-03-16, Fuenfter Zyklus)
+Das Paper gab w_eff(z=0) ~ -1.35 mit "best-fit" Parametern kappa=1.5,
+a_trans=0.50, Phi_0=0.685 an. Sorgfaeltige Berechnung ergibt:
+- kappa=1.5: w_eff ~ -1.47
+- kappa=2.0: w_eff ~ -1.37
+Der Wert -1.35 war mit kappa=1.5 NICHT reproduzierbar.
+Korrektur: Zahlenwert auf "~-1.4 bis -1.5" geaendert, Parameter als
+"illustrativ" (nicht "best-fit") gekennzeichnet, Hinweis auf erforderlichen
+numerischen Fit an SN+BAO-Daten eingefuegt.
+Zusaetzlich: DE Solar-System Remark vervollstaendigt (fehlende Qualifikationen
+bei Resolutions (i) und (ii), fehlender Hinweis auf "future work").
+Status: KORRIGIERT in EN und DE.
+
+### L16: R4-Lagrangian-Konsistenz -- VERIFIZIERT (2026-03-16, Fuenfter Zyklus)
+Alle 10 abhaengigen Gleichungen in BEIDEN Versionen systematisch geprueft:
+Lagrangian, gamma-Dimension, f_R/f_RR, Spurgleichung, m_s^2, BBN,
+One-Loop, gamma-Schranke, Poisson-Gleichungen, V_grav^{f(R)}.
+Ergebnis: ALLE konsistent mit f(R) = R + gamma R^2. Keine Relikte von
+2gamma, 4gamma oder 12gamma gefunden.
+Status: VERIFIZIERT (kein Fehler).
 
 
 ===============================================================================
@@ -160,7 +271,7 @@ aber vollstaendige Loop-Analyse fehlt.
    - Gravitational Slip als praezise Vorhersage
    - Lensing-Signal als falsifizierbarer Test
 
-4. **Phantom w_eff klare Story:** Erklaeren warum w_eff(0) ~ -1.35 keine
+4. **Phantom w_eff klare Story:** Erklaeren warum w_eff(0) ~ -1.4 bis -1.5 keine
    Ghost-Instabilitaet ist, sondern Effekt der Parametrisierung.
 
 5. **Hopfion-Energiebounds:** E >= c |Q|^{3/4} als alternative

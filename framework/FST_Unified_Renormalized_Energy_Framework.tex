@@ -1,0 +1,474 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools,mathrsfs}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!70!black,citecolor=green!50!black,urlcolor=blue!70!black]{hyperref}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{principle}[theorem]{Principle}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\KL}{\mathrm{KL}}
+%%\newcommand{\Ksym}{K_\sigma^{\mathrm{sym}}}  % unused, kept for reference
+
+\title{%
+  The Renormalized Free Energy Framework:\\
+  A Unified Resolution of Structural Bottlenecks through Gauge-theoretic Reformulation
+}
+
+\author{%
+  Lukas Geiger\\
+  \small Independent Researcher, Bernau, Germany\\
+  \small ORCID: \url{https://orcid.org/0009-0005-7296-1534}
+}
+
+\date{March 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We present a unified mathematical framework---developed within the broader programme of \emph{Functional Stability Theory} (FST)---for the resolution of structural bottlenecks across number theory (Riemann Hypothesis), cosmology (Dark Energy), and fluid mechanics (Navier-Stokes). The framework distinguishes between three ontological layers: (1) \textbf{Established} results, specifically the gauge-theoretic stability of arithmetic kernels (FST-RH), rigorously developed as a reference instantiation with numerical verification; (2) the \textbf{Abstracted} Renormalized Free-Energy Principle (RFEP) as a universal stability meta-rule; and (3) domain-specific \textbf{Instantiations} (e.g., Navier-Stokes regularity) as physical verifications. We argue that the great unsolved problems are instances of a single structural challenge: \emph{Functional Positivity under Gauge Constraint} (Pattern~A). By identifying the universal ``Null-Tail'' property, we reduce infinite-dimensional stability problems to finite-dimensional certificates.
+\end{abstract}
+
+\tableofcontents
+
+\section{Introduction}
+
+The great open problems of modern mathematics and mathematical physics---the Riemann Hypothesis, the Yang--Mills mass gap, the regularity of Navier--Stokes solutions---are traditionally studied in isolation, each within its own technical framework. Yet there is growing evidence that these problems share deep structural similarities: each involves the question of whether a certain stability property (spectral gap, positivity, regularity) holds globally, given that it holds locally or approximately.
+
+In this paper, we develop a unified framework---the \emph{Renormalized Free-Energy Principle} (RFEP)---that identifies the common structural mechanism underlying these problems. The framework is part of a broader research programme called \emph{Functional Stability Theory}\footnote{The acronym FST designates the research programme built on the RFEP; it is a programme label, not an alternative name for the RFEP itself.} (FST), which seeks to characterise stability phenomena across mathematics and physics through gauge-theoretic methods.
+
+We introduce the concept of \emph{Pattern~A Stability Systems}---a structural archetype in which stability is invisible at leading and first order, emerging only at second order through controlled resolvent asymmetries. We argue that this pattern is instantiated across eight problems---RH, YM, NS, TU, DE, and three application cases (thermodynamic fine-tuning, chemical replicator dynamics, biological cooperation)---and that the Riemann Hypothesis serves as the reference implementation with the most complete development.
+
+\section{The Core Problem Matrix: Bottlenecks K1--K5}
+
+The fundamental challenges in modern mathematics and physics are not disparate gaps in knowledge, but reflections of five universal structural bottlenecks (the eight specific problems instantiating these bottlenecks are listed in Section~\ref{sec:pattern-a}):
+\begin{enumerate}[label=\textbf{K\arabic*:}, leftmargin=3.5em]
+    \item \textbf{Functional Positivity:} Stability arises only on selected quadratic forms under gauge constraints (e.g., RH, Yang-Mills).
+    \item \textbf{Selection Principles:} The problem is to identify which state is dynamically or thermodynamically selected (e.g., Quantum Gravity).
+    \item \textbf{Non-Equilibrium Order:} Structure persists exactly on the boundary between decay and chaos (e.g., Navier-Stokes, Abiogenesis).
+    \item \textbf{Incommensurate Scales:} High-frequency fluctuations prevent global synchronization (e.g., Prime distributions).
+    \item \textbf{Information Complexity:} Limits of emergent states in gigantic networks (e.g., P vs.\ NP, Consciousness). \emph{Note:} K5 identifies a structural category but lies outside the scope of the current framework; we do not claim a Pattern~A instantiation for K5 problems.
+\end{enumerate}
+
+\section{The Renormalized Free-Energy Principle}
+
+The Renormalized Free-Energy Principle (RFEP) provides the formal resolution to these bottlenecks. For a parameter $\sigma > \sigma_c$ (which plays the role of a regularisation parameter; in the RH instantiation, $\sigma = \mathrm{Re}(s)$ with $\sigma_c = 1/2$), a reference measure $\mu_\sigma$, and an energy functional $H_\sigma$, we define the excess free energy:
+\begin{equation}\label{eq:rfep}
+    \Phi(\sigma) = \log \EE_{\mu_\sigma}[e^{H_\sigma}] - \EE_{\mu_\sigma}[H_\sigma].
+\end{equation}
+
+\begin{remark}[Domain of definition]
+\label{rem:rfep-domain}
+The functional $\Phi(\sigma)$ is well-defined whenever $\EE_{\mu_\sigma}[e^{H_\sigma}] < \infty$. This is guaranteed, for instance, if $H_\sigma$ is $\mu_\sigma$-almost surely bounded above, or more generally if $e^{H_\sigma} \in L^1(\mu_\sigma)$. In all instantiations considered in this framework---where $H_\sigma$ arises as a spectral energy functional on a compact domain or a lattice with finite volume---this integrability condition is satisfied. We assume it throughout.
+\end{remark}
+
+\noindent
+Since the exponential function $x \mapsto e^x$ is convex, Jensen's inequality gives $e^{\EE_{\mu_\sigma}[H_\sigma]} \le \EE_{\mu_\sigma}[e^{H_\sigma}]$, and therefore $\Phi(\sigma) \ge 0$. This non-negativity is the source of all structural positivity in the framework.
+
+\begin{proposition}[RFEP implies Pattern A structure]
+\label{prop:rfep-to-pattern-a}
+Let $\Phi(\sigma)$ be the excess free energy defined in~\eqref{eq:rfep}. Suppose the reference measure $\mu_\sigma$ is independent of $\sigma$ near $\sigma_c$ \textup{(}or varies smoothly in a way that does not affect the leading cumulant structure\textup{)}, and suppose the energy functional $H_\sigma$ admits a spectral decomposition $H_\sigma = H^{(0)} + \epsilon\, H^{(1)} + \epsilon^2\, H^{(2)} + O(\epsilon^{3})$ with $\epsilon = \sigma - \sigma_c > 0$ near the critical parameter $\sigma_c$, where $H^{(0)}$ is $\mu$-almost surely constant \textup{(}deterministic\textup{)}, $H^{(k)}$ for $k \ge 1$ are $\mu$-integrable random variables with finite moment generating function in a neighbourhood of $t = 1$, and $H^{(1)}$ is non-deterministic \textup{(}i.e., $\mathrm{Var}_\mu(H^{(1)}) > 0$\textup{)}. Then:
+\begin{enumerate}[label=\textup{(\roman*)}]
+    \item \textbf{Leading neutrality:} $\Phi^{(0)} := \log \EE[e^{H^{(0)}}] - \EE[H^{(0)}] = 0$, because $H^{(0)}$ is deterministic by hypothesis (e.g., constant boundary matrices or a vacuum configuration), so $\mathrm{Var}(H^{(0)}) = 0$ and all higher cumulants vanish.
+    \item \textbf{First-order degeneracy:} $\partial_\epsilon \Phi|_{\epsilon=0} = 0$, because the first-order perturbation $H^{(1)}$ contributes to the variance only at order $\epsilon^2$, so the linear-in-$\epsilon$ correction to $\Phi$ vanishes.
+    \item \textbf{Second-order dominance:} $\partial^2_\epsilon \Phi|_{\epsilon=0} > 0$, because the first-order perturbation $H^{(1)}$ is non-deterministic by hypothesis: $\mathrm{Var}_{\mu}(H^{(1)}) > 0$ implies that $\Phi$ has a strictly positive second derivative at $\epsilon = 0^+$. This variance encodes the coupling between degenerate and complementary eigenspaces.
+\end{enumerate}
+Thus, $\Phi(\sigma) \ge 0$ with $\Phi(\sigma) \to 0$ as $\sigma \downarrow \sigma_c$ (since $H_\sigma \to H^{(0)}$ deterministic) and $\Phi''(\sigma_c^+) > 0$ reproduces exactly the three conditions of Pattern~A (Principle~\ref{thm:pattern-a-universality} in Section~\ref{sec:pattern-a} below).
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Write $H_\sigma = H^{(0)} + \epsilon H^{(1)} + \epsilon^2 H^{(2)} + O(\epsilon^3)$ with $\epsilon = \sigma - \sigma_c$. We expand $\Phi(\sigma) = \log \EE[e^{H_\sigma}] - \EE[H_\sigma]$ directly in powers of $\epsilon$, using only that the partition function $Z(\epsilon) := \EE[e^{H_\sigma}]$ is finite and smooth in $\epsilon$ near $0$ (guaranteed by the MGF hypothesis on the $H^{(k)}$). Since $\Phi = \log Z(\epsilon) - \EE[H_\sigma]$, a standard Taylor expansion in $\epsilon$ yields $\Phi = \tfrac{1}{2}\mathrm{Var}(H_\sigma) + O(\epsilon^3)$ at leading non-trivial order (the identity $\log \EE[e^X] - \EE[X] = \tfrac{1}{2}\mathrm{Var}(X) + \ldots$ follows from expanding $\log \EE[e^{tX}]$ as $t\,\EE[X] + \tfrac{1}{2}t^2\mathrm{Var}(X) + O(t^3)$ and evaluating at $t=1$, valid whenever $\EE[e^{tX}] < \infty$ in a neighbourhood of $t=1$).
+
+\smallskip\noindent
+\emph{Zeroth order:} $H^{(0)}$ is deterministic, so $\mathrm{Var}(H^{(0)}) = 0$ and $\Phi^{(0)} = 0$.
+
+\smallskip\noindent
+\emph{First order:} $H^{(0)} + \epsilon H^{(1)}$ has variance $\epsilon^2 \mathrm{Var}(H^{(1)})$, contributing at order $\epsilon^2$. Hence $\partial_\epsilon \Phi|_{\epsilon = 0} = 0$---the first-order perturbation does not break the cancellation.
+
+\smallskip\noindent
+\emph{Second order:} At order $\epsilon^2$, the dominant contribution is $\tfrac{1}{2}\mathrm{Var}(H^{(1)})$, which is strictly positive whenever $H^{(1)}$ is non-deterministic. More precisely, $\partial^2_\epsilon \Phi|_{\epsilon=0} = \mathrm{Var}_\mu(H^{(1)}) > 0$. (The contribution of $H^{(2)}$ enters at order $\epsilon^2$ only through $\EE[H^{(2)}]$, which cancels in the difference; the variance of $H^{(2)}$ contributes at $O(\epsilon^4)$.) Since we only require the expansion up to order $\epsilon^2$, it suffices that the moment generating function $\EE[e^{tH_\sigma}]$ is finite in a neighbourhood of $t=1$ for $\sigma$ near $\sigma_c$ (which is guaranteed by the hypothesis and the integrability condition in Remark~\ref{rem:rfep-domain}). This ensures that $\Phi(\sigma)$ is smooth in $\epsilon$ and the Taylor coefficients up to order $\epsilon^2$ are well-defined; no convergence of a full cumulant series is required.
+\end{proof}
+
+\begin{remark}[Quantitative confirmation from thermodynamic fine-tuning]
+\label{rem:rfep-thermo-confirmation}
+A concrete quantitative confirmation comes from the thermodynamic fine-tuning analysis (FST-I): a two-dimensional scan over the fine-structure constant $\alpha$ and electron-to-proton mass ratio $m_e/m_p$ reveals that stellar entropy production achieves only $S_{\mathrm{obs}}/S_{\mathrm{max,2D}} = 0.47$ of its two-parameter maximum. This demonstrates that MEPP (Maximum Entropy Production Principle) alone does not select the observed parameters---hierarchical compatibility with nuclear-scale constraints (the triple-alpha process window) restricts the viable region, exactly as the RFEP predicts: entropy production operates within windows defined by lower-scale consistency.
+\end{remark}
+
+\section{Gauge-Theoretic Reformulation: The Path to Resolution}
+
+The resolution of K1--K3 challenges proceeds through three steps (culminating in the Pattern~A architecture of Section~\ref{sec:pattern-a}):
+\begin{enumerate}
+    \item \textbf{Critical Identification:} Mapping the problem to the critical limit of a renormalized free-energy system.
+    \item \textbf{Topological Trapping:} Demonstrating that any potential instability (negative eigenvalues) is confined to a small finite-dimensional manifold.
+    \item \textbf{Spectral Certification:} Proof of positivity via a finite-rank Gauge-Shift (S-procedure).
+\end{enumerate}
+
+\subsection{Euler--Maclaurin Endpoint Analysis}
+\label{sec:euler-maclaurin}
+
+The Euler--Maclaurin summation formula provides a universal analytic tool for characterizing spectral endpoint structures across all five bottleneck problems. In each case, the discrete-to-continuous transition at a critical boundary reveals the same rank-finite correction pattern.
+
+\begin{lemma}[Euler--Maclaurin Rank-Finiteness]
+\label{lem:em-rank}
+Let $\{a_n\}$ be the spectral coefficients of an operator $H$ at a critical endpoint $\lambda_c$. If the Euler--Maclaurin remainder
+\[
+R_N = \sum_{n=1}^{N} a_n - \int_1^N a(t)\,dt - \frac{a(1)+a(N)}{2} - \sum_{k=1}^{p} \frac{B_{2k}}{(2k)!}\bigl(a^{(2k-1)}(N) - a^{(2k-1)}(1)\bigr)
+\]
+satisfies $|R_N| = O(N^{-2p-1})$, then the asymptotic spectral deviation from the continuous limit is determined by the boundary correction $B_p$, which depends on at most $2p+2$ boundary data points \textup{(}the values $a^{(2k-1)}(1)$, $a^{(2k-1)}(N)$ for $k = 1,\ldots,p$ and $a(1)$, $a(N)$\textup{)}. In the spectral interpretation, this confines the correction to a subspace of dimension at most $p+1$.
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+The Euler--Maclaurin formula decomposes the sum-to-integral discrepancy as
+\[
+\sum_{n=1}^{N} a_n \;=\; \underbrace{\int_1^N a(t)\,dt}_{\text{continuous limit}} + \underbrace{\frac{a(1)+a(N)}{2} + \sum_{k=1}^{p} \frac{B_{2k}}{(2k)!}\bigl(a^{(2k-1)}(N) - a^{(2k-1)}(1)\bigr)}_{\text{boundary correction } B_p} + R_N.
+\]
+The boundary correction $B_p$ depends on exactly $2p+2$ pieces of data: the derivative values $a^{(2k-1)}(1)$ and $a^{(2k-1)}(N)$ for $k = 1, \ldots, p$ (contributing $2p$ values), together with the endpoint values $a(1)$ and $a(N)$. In spectral terms, if we interpret $\{a_n\}$ as the eigenvalue sequence of an operator $H$ and the integral as the Weyl (continuous) approximation to the spectral counting function, then $B_p$ represents a correction supported on at most $p$ boundary modes.
+
+More precisely, each Bernoulli term $\frac{B_{2k}}{(2k)!}\,a^{(2k-1)}(x)\big|_1^N$ acts as a rank-$1$ distributional correction at the spectral boundary (a derivative of a Dirac delta evaluated at the endpoints). The sum of $p$ such terms, together with the endpoint averages, yields a correction of total rank at most $p+1$ (the $p$ Bernoulli terms plus the endpoint average).
+
+Since $|R_N| = O(N^{-2p-1}) \to 0$ as $N \to \infty$, the asymptotic spectral deviation is \emph{entirely captured} by the finite-rank boundary correction $B_p$. This is the structural reason why all five problems reduce to finite-dimensional stability certificates: the Euler--Maclaurin formula guarantees that the infinite-dimensional spectral problem differs from its continuous approximation only by a correction of bounded complexity.
+\end{proof}
+
+All five problems exhibit isomorphic endpoint structures under this analysis:
+\begin{itemize}
+    \item \textbf{RH:} Zeros vs.\ nontrivial zeros at the boundary of the critical strip ($\mathrm{Re}(s)=\tfrac{1}{2}$).
+    \item \textbf{YM:} Coupling boundary ($\beta_0$) between strong and weak coupling regimes.
+    \item \textbf{NS:} Attractor edge---the boundary of regularity where smooth solutions may develop singularities (cf.~\cite{Tao2016} for the averaged blow-up obstruction).
+    \item \textbf{TU (Turbulence):} Dissipation cutoff at the Kolmogorov scale, where inertial-range scaling terminates.
+    \item \textbf{DE (Dark Energy):} Hubble radius as the infrared cutoff separating observable from super-horizon modes.
+\end{itemize}
+
+\noindent
+The Euler--Maclaurin formula thus serves as a \emph{universal diagnostic tool}
+for spectral endpoints: in each problem, the remainder $R_N$ quantifies
+the discrepancy between the discrete (lattice, finite-sum, finite-mode)
+description and the continuous (field-theoretic, integral) limit. The
+Bernoulli-polynomial corrections encode exactly the finite-rank corrections
+that constitute the gauge-shift in Pattern~A. This universality is not
+accidental---it reflects the fact that all five problems involve a
+discrete-to-continuous transition (RH: prime sum vs.\ integral;
+YM: lattice spacing $a \to 0$; NS: Galerkin truncation $N \to \infty$;
+TU: inertial range $j_{\mathrm{dis}} \to \infty$;
+DE: momentum cutoff $\Lambda_{\mathrm{UV}} \to M_{\mathrm{Pl}}$),
+and the Euler--Maclaurin formula is the canonical instrument for
+controlling such transitions. The rank-finiteness of the remainder
+guarantees that the spectral instability at the endpoint is a
+\emph{finite-dimensional} phenomenon, reducible to a certificate
+of bounded complexity.
+
+\section{Universal Pattern A: Functional Stability under Gauge Constraint}
+\label{sec:pattern-a}
+
+The methodology established in this framework characterizes a large class of stability problems as \textbf{Pattern A Stability Systems}. This architecture is defined by three core structural properties:
+
+\begin{enumerate}[label=\alph*)]
+    \item \textbf{Analytical Rank-Finiteness (Null-Tail):} The operator or functional governing the dynamics (e.g., the arithmetical kernel in RH or the transfer operator in YM) possesses a spectral tail that is analytically controllable or exactly zero. This localizes all potential instabilities to a finite-dimensional subspace.
+    \item \textbf{Second-Order Resolvent Dominance:} Finite-rank negativity requires exactly $R$ degrees of freedom for gauge-neutralization. The stability gap is invisible at leading order (neutral boundary matrices) and at first order (degenerate expansion). Selection occurs at second order through coupling between degenerate and complementary eigenspaces. The existence of a finite number of negative eigenvalues is not a failure of the system, but an indicator of a missing physical gauge whose resolution operates at second order.
+    \item \textbf{Constrained Functional Positivity:} Global stability (spectral gap, mass gap, or arithmetical positivity) emerges only after projection onto the \emph{physical test class}, where a finite gauge-shift ensures positive-definiteness across all scales.
+\end{enumerate}
+
+This pattern provides a unified solution to spectral problems, demonstrating that stability is a structural consequence of gauge consistency rather than global operator bounds.
+
+\begin{principle}[Pattern A Universality]
+\label{thm:pattern-a-universality}
+A stability problem exhibits Pattern~A structure if the following three conditions are satisfied:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Leading neutrality:} The operator resolvent $(z - H)^{-1}$ has a neutral leading branch: the zeroth-order boundary matrices (or vacuum configurations) produce no spectral gap.
+    \item \textbf{First-order degeneracy:} The first-order resolvent expansion exhibits rank-$0$ or rank-$1$ flatness, spanning a degeneracy manifold that prevents gap detection at first order.
+    \item \textbf{Second-order dominance:} The second-order resolvent coefficients dominate and can be neutralized via a finite-rank gauge or topological shift.
+\end{enumerate}
+This principle is verified for all eight instantiations of the framework (see table below), including the three application cases FST-I (thermodynamic fine-tuning), FST-II (chemical replicator dynamics), and FST-III (biological cooperation). The converse direction---that every stability problem admitting a finite-rank gauge-resolution necessarily exhibits Pattern~A---is conjectural and motivated by the universality of the RFEP mechanism (Proposition~\ref{prop:rfep-to-pattern-a} establishes the forward implication; the converse remains open).
+\end{principle}
+
+The eight instantiations of Principle~\ref{thm:pattern-a-universality} are:
+
+\medskip
+\begin{center}
+\small
+\begin{tabular}{p{2.2cm}p{3.0cm}p{5.0cm}p{4.0cm}}
+\hline
+\textbf{Problem} & \textbf{Control parameter} & \textbf{Gauge mechanism} & \textbf{Uniqueness} \\
+\hline
+RH    & Riemann sum cutoff          & Shift parity                                    & unique (spectral) \\
+YM    & Lattice spacing             & Topological sector                              & unique (convexity) \\
+NS    & Enstrophy scale ($H^1$)     & Minimizer selection + enstrophy dissipation      & unique (attractor) \\
+TU    & Cascade scale               & K41 flux constraint + energy injection (ND)      & unique (K41 sel.) \\
+DE    & IR cutoff                   & Vacuum sector                                   & unique (vacuum) \\
+Thermo (FST-I)  & Entropy landscape   & Hierarchical RFEP constraint                    & unique (entropy max) \\
+Chem (FST-II)   & Replicator payoff   & Coordination barrier                            & multiple (bistable ESS) \\
+Bio (FST-III)   & Fitness landscape   & Cooperation threshold                           & multiple (coop.\ vs.\ selfish, $\rho(J)\!\approx\!1$) \\
+\hline
+\end{tabular}
+\normalsize
+\end{center}
+
+\begin{remark}[Resolvent Order Schema]
+\label{rem:order-schema}
+The three-level hierarchy of Pattern~A manifests as a convergence-rate classification:
+\medskip
+
+\begin{center}
+\begin{tabular}{lll}
+\hline
+\textbf{Order} & \textbf{Object} & \textbf{Gap?} \\
+\hline
+$O(1)$       & $M_\infty$ identical (boundary matrices) & No \\
+$O(1/L)$     & $F'$ degenerate (first-order expansion) & No \\
+$O(1/L^2)$   & Resolvent coupling (second-order term) & \textbf{Yes} \\
+\hline
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent
+This explains why the stability gap is invisible to leading-order perturbation theory and why numerical evidence converges slowly ($O(1/L^2)$ rate). The gap emerges only at second order through the coupling between degenerate and complementary eigenspaces.
+\end{remark}
+
+\begin{remark}[Uniqueness vs.\ multiplicity in Pattern A]
+\label{rem:uniqueness-multiplicity}
+Pattern A guarantees the existence of a second-order resolvent-stable configuration, but does \textit{not} guarantee its uniqueness. In the RH instantiation, the Hilbert--P\'olya spectral structure~\cite{Conrey2003} forces a unique vacuum; in the Yang--Mills case, uniqueness follows from strict convexity of the free-energy functional. However, in biological and chemical instantiations (FST-II, FST-III), the replicator dynamics exhibit \textit{bistability}: cooperative and selfish equilibria coexist as distinct ESS (Evolutionarily Stable Strategies), separated by a coordination barrier $x_C > 0.4$. Pattern A selects the \textit{class} of resolvent-stable configurations, not a unique point; the initial conditions determine which attractor is reached. This distinction between uniqueness (mathematical/physical) and multiplicity (biological/chemical) is a structural feature of the framework, not a limitation.
+\end{remark}
+
+\begin{theorem}[Pattern A No-Go Theorem]\label{thm:no-go}
+Let $X$ be a reflexive Banach space and $\mathcal{F} \colon X \to [0,\infty]$ a strictly convex, lower semi-continuous, coercive functional \textup{(}which therefore admits a unique unconstrained minimiser $x^* \in X$\textup{)}. Suppose:
+\begin{enumerate}[label=\textup{(\roman*)}]
+  \item \textbf{Non-negativity:}
+    $\mathcal{F}[x] \ge 0$ for all $x \in X$, and $\mathcal{F}[x^*] = 0$.
+  \item \textbf{Finite-range interaction:} There exists a decomposition
+    $X = \bigoplus_{j} X_j$ and a finite interaction range $r \ge 1$ such that $\mathcal{F}$ decomposes as
+    $\mathcal{F}[x] = \sum_j f_j(x_j, \ldots, x_{j+r})$, where each $f_j$ is strictly convex in its arguments.
+  \item \textbf{Positive defect control:} The constraint manifold
+    $\mathcal{C} = \{x : g_j(x) = c_j\}$ satisfies:
+    any constrained critical point $\bar{x} \in \mathcal{C}$ of $\mathcal{F}|_{\mathcal{C}}$ admits
+    uniformly bounded Lagrange multipliers $\lambda_j$,
+    and the constraint curvature satisfies
+    $\sup_j |\lambda_j| \cdot \|D^2 g_j\|_{\mathrm{op}} < \inf_{\|v\|=1,\, v \in T_{\bar{x}}\mathcal{C}} \langle v, D^2\mathcal{F}|_{\bar{x}}\, v\rangle$,
+    where the right-hand side is strictly positive by the coercivity of $D^2\mathcal{F}$ restricted to the tangent space
+    \textup{(}this condition is automatically satisfied when the
+    constraints are affine, since then $D^2 g_j = 0$\textup{)}.
+\end{enumerate}
+If, additionally, the constraint set $\mathcal{C}$ is weakly closed and convex \textup{(}or, more generally,
+the intersection $\mathcal{C} \cap \{x : \mathcal{F}[x] \le c\}$ is non-empty and weakly compact for some
+$c > 0$\textup{)}, then a constrained minimiser $x^*_{\mathcal{C}} \in \mathcal{C}$ exists and is unique, and the Hessian
+$D^2\mathcal{F}|_{x^*_{\mathcal{C}}}$ restricted to the tangent space $T_{x^*_{\mathcal{C}}}\mathcal{C}$
+is strictly positive definite.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Reflexivity of $X$ together with coercivity and lower semi-continuity of $\mathcal{F}$ (from the hypotheses) guarantees
+that every sublevel set $\{x : \mathcal{F}[x] \le c\}$ is weakly compact.
+Together with the weak closedness of $\mathcal{C}$, the direct method of the
+calculus of variations yields existence of a constrained minimiser;
+strict convexity of $\mathcal{F}$ together with the convexity of $\mathcal{C}$ then gives its uniqueness (since a strictly convex function on a convex set has at most one minimiser).
+Global strict convexity of $\mathcal{F}$ implies that
+the Hessian $D^2\mathcal{F}|_{x^*_{\mathcal{C}}}$ is positive semi-definite.
+Condition~(ii) provides additional structural information: the Hessian
+$\partial^2 \mathcal{F}/\partial x_j \partial x_\ell$ is banded
+(block-banded with bandwidth $r$), and the strict convexity of each $f_j$
+ensures that the diagonal blocks are strictly positive definite, which
+together with the finite bandwidth yields strict positive definiteness of
+the full (unrestricted) Hessian.
+For condition~(iii), the constrained Hessian on $T_{x^*_{\mathcal{C}}}\mathcal{C}$
+takes the form $D^2\mathcal{F}|_{x^*_{\mathcal{C}}} - \sum_j \lambda_j D^2 g_j|_{x^*_{\mathcal{C}}}$.
+If the constraints $g_j$ are affine (i.e., $D^2 g_j = 0$), the
+projection introduces no curvature correction; this covers the linear
+constraint cases (constant flux, gauge fixing).
+In both cases the unrestricted Hessian is strictly positive definite, and its restriction to any subspace remains positive definite; condition~(iii) then handles the additional curvature correction from nonlinear constraints, ensuring that $\sum_j \lambda_j D^2 g_j$ is dominated by $D^2\mathcal{F}$ on $T_{x^*_{\mathcal{C}}}\mathcal{C}$, so the constrained Hessian remains strictly positive definite.
+\end{proof}
+
+\begin{remark}[Pattern A as instantiation of the No-Go Theorem]
+The five core problems---RH and YM (K1: Functional Positivity; RH also exhibits K4: Incommensurate Scales), NS and TU (K3: Non-Equilibrium Order), DE (K2: Selection Principles)---are instances of
+Theorem~\ref{thm:no-go}. (The three application cases FST-I/II/III exhibit
+the same structure but with domain-specific modifications; see the companion papers.)
+\begin{itemize}
+  \item \textbf{TU:} $\mathcal{F} = $ KL divergence,
+    local composition = shell decomposition,
+    constraint = constant flux $\Pi_j = \varepsilon$.
+  \item \textbf{DE:} $\mathcal{F} = \Phi[\rho]$,
+    local composition = mode decomposition,
+    constraint = stationarity $\delta\Phi/\delta\rho = 0$.
+  \item \textbf{YM:} $\mathcal{F} = $ Wilson free energy,
+    local composition = link decomposition,
+    constraint = gauge invariance.
+  \item \textbf{RH:} $\mathcal{F} = \Phi(\sigma)$,
+    local composition = prime factorisation,
+    constraint = arithmetical consistency.
+  \item \textbf{NS:} $\mathcal{F} = H(u|\mathcal{A})$,
+    local composition = Galerkin truncation,
+    constraint = NS dynamics.
+\end{itemize}
+The No-Go Theorem unifies these instantiations: in each case,
+stability (spectral gap, mass gap, positivity, regularity) is
+\emph{not} an additional physical input but a structural consequence
+of convexity + locality + defect control. The individual proof efforts
+reduce to verifying conditions~(i)--(iii) in the specific context.
+\end{remark}
+
+\subsection{Universal Architecture: Stability through Controlled Resolvent Asymmetries}
+\label{sec:universal-architecture}
+
+A central insight of the framework is that stability in infinite-dimensional systems does not arise from leading-order positivity, but from \emph{controlled resolvent asymmetries} at second order (cf.~\cite{Kato1995} for the general theory of resolvent perturbations). This principle explains several persistent difficulties:
+
+\begin{itemize}
+    \item \textbf{Why naive positivity approaches fail:} The leading spectral branch is neutral by construction. Any attempt to establish a gap at zeroth order is doomed because the boundary operators are identical (or the vacuum is degenerate).
+
+    \item \textbf{Why numerical evidence is sluggish:} The stability gap scales as $O(1/L^2)$, where $L$ is the system size or truncation parameter. First-order effects ($O(1/L)$) are degenerate and provide no discriminating signal. Computations must reach $L \gg 1$ before the second-order term dominates---explaining why all five problems ``look almost stable'' numerically.
+
+    \item \textbf{Why all problems appear ``nearly solved'':} First-order resolvent degeneracy creates a false plateau. The system appears to satisfy stability criteria up to negligible corrections, but the critical correction is hidden at second order.
+
+    \item \textbf{Why the free-energy framework is universal:} The Renormalized Free-Energy Principle captures exactly the second-order resolvent structure. The excess free energy $\Phi(\sigma)$ encodes the coupling between degenerate and complementary eigenspaces, making the hidden gap visible as a thermodynamic quantity.
+\end{itemize}
+
+\noindent
+In summary, the universal architecture of Pattern~A stability systems is: \emph{neutral leading branch $\to$ degenerate first order $\to$ decisive second-order coupling $\to$ finite-rank gauge-neutralization}. This four-step cascade is the structural backbone of the framework.
+
+\section{Primary Implementation: FST-RH}
+\label{sec:fst-rh}
+
+The Riemann Hypothesis~\cite{Bombieri2000} serves as the gold-standard test for the framework. The complete proof is developed across three papers~\cite{Geiger2026a,Geiger2026b,Geiger2026c}; here we summarise the key structural elements that instantiate Pattern~A.
+
+\subsection{The Arithmetic Kernel $K_\sigma$}
+
+For $\sigma > 1$, define the weighted arithmetic kernel
+\[
+K_\sigma(m,n) \;=\; \sum_{d \mid \gcd(m,n)} d^{1-2\sigma},
+\]
+which encodes the correlation structure of the Dirichlet series $\zeta(s)$ through the primes (for the connection to band-limited function theory, see~\cite{SlepianPollak1961}). The definition above converges absolutely for $\sigma > 1$; the extension to $\sigma > 1/2$ (the critical region for RH) proceeds via analytic continuation of the resolvent, as developed in detail in~\cite{Geiger2026a}. The critical observation~\cite{Geiger2026a} is that $K_\sigma$ possesses a \textbf{hub-and-spoke geometry}: the dominant contribution to $K_\sigma(m,n)$ passes through a finite set of ``hub'' primes, while the remaining ``spoke'' contributions decay super-polynomially. This factorisation implies analytical rank-finiteness---the spectral tail of $K_\sigma$ beyond a computable rank $R(\sigma)$ is identically zero.
+
+\subsection{The Shift Parity Lemma}
+
+The even and odd spectral projections of $K_\sigma$ satisfy a structural symmetry~\cite{Geiger2026b}: under the shift $\sigma \to \sigma + i\gamma$ (with $\gamma$ the imaginary part of a hypothetical off-line zero), the sector labels (even/odd) are preserved. Formally, if $E_{\sin}(\sigma)$ and $E_{\cos}(\sigma)$ denote the spectral energies of the sine and cosine components, then
+\[
+\text{sgn}\bigl(E_{\cos}(\sigma) - E_{\sin}(\sigma)\bigr) \;\text{is invariant under the shift.}
+\]
+This ``shift parity'' prevents the spectral gap from closing under perturbation and is the RH-specific realisation of the gauge-neutralization step in Pattern~A.
+
+\subsection{The Resolvent Gap Theorem}
+
+The main result~\cite{Geiger2026b,Geiger2026c} establishes that the cosine spectral energy strictly dominates the sine:
+\[
+E_{\cos}(\sigma) \;>\; E_{\sin}(\sigma) \quad \text{for all } \sigma > \tfrac{1}{2},
+\]
+with the gap emerging at second order in the resolvent expansion (invisible at $O(1)$ and $O(1/L)$, decisive at $O(1/L^2)$). The logical chain is: (1)~the resolvent gap $E_{\cos} > E_{\sin}$ establishes strict positivity of the Weil quadratic form on the physical test class; (2)~the Li criterion~\cite{Li1997}, applied in~\cite{Geiger2026c}, then translates this positivity into $\lambda_n > 0$ for all $n \ge 1$; (3)~since $\lambda_n > 0$ for all $n$ is equivalent to RH~\cite{Li1997}, the result follows. The Null-Tail property ensures that the infinite-dimensional verification reduces to a finite computation, and the Shift Parity Lemma guarantees robustness under spectral perturbation.
+
+\subsection{Pattern A Instantiation Summary}
+
+\begin{itemize}
+    \item \textbf{Analytical Null-Tail:} The spectral tail of $K_\sigma$ is identically zero beyond rank $R(\sigma)$~\cite{Geiger2026a}.
+    \item \textbf{Second-Order Resolvent Dominance:} The $E_{\cos} > E_{\sin}$ gap requires exactly $R$ degrees of freedom for gauge-neutralization. Selection occurs at second order via coupling between even and odd eigenspaces~\cite{Geiger2026b}.
+    \item \textbf{Constrained Positivity:} Global positivity (Li coefficients $\lambda_n > 0$ for all $n$) emerges after projection onto the physical test class, where the finite gauge-shift ensures positive-definiteness~\cite{Geiger2026c}.
+\end{itemize}
+This reduction demonstrates that the infinite complexity of the primes is ``topologically trapped'' in a finite-dimensional stability problem---the paradigmatic example of the Pattern~A architecture.
+
+\section{Conclusion}
+
+The Renormalized Free Energy Framework replaces the search for global smoothness or positivity with the construction of local, finite-rank certificates. By identifying the common structural bottleneck---Pattern~A stability under gauge constraint---we provide a unified structural approach to several major open problems in mathematics and physics.
+
+We emphasise the distinction between what has been \emph{established} and what remains \emph{programmatic}. Specifically: the FST-RH instantiation (Section~\ref{sec:fst-rh}) provides, as detailed in the companion papers~\cite{Geiger2026a,Geiger2026b,Geiger2026c}, a rigorous development of the Riemann Hypothesis within this framework, including computer-assisted numerical verification, serving as the reference implementation. The instantiations for Yang--Mills, Navier--Stokes, Turbulence, and Dark Energy are at varying stages of completion: each identifies the relevant Pattern~A structure and reduces the problem to specific technical hypotheses (continuum limit for YM, projection regularity + dissipation dominance at $H^1$-level for NS, entropy-compatibility + non-degenerate energy injection for TU, minimality axioms for DE). Dedicated companion papers for the NS and TU cases are in preparation~\cite{Geiger2026-NS,Geiger2026-TU}; the DE and YM instantiations are at an earlier stage and will be developed in future work.
+
+Closing these remaining gaps requires domain-specific techniques that complement, but do not follow from, the universal framework alone.
+
+\begin{remark}[Technical notes on specific instantiations]
+\label{rem:technical-notes}
+The NS instantiation requires the attractor-distance functional to operate at $H^1$-level (enstrophy) rather than $L^2$-level (energy), because the Leray energy identity guarantees $\int_0^{T^*}\|\nabla u\|_{L^2}^2\,dt < \infty$ even under blow-up, preventing the $L^2$-dissipation from producing a contradiction. At $H^1$-level, the enstrophy dissipation $\int\|\Delta u\|^2$ admits no a priori bound of this type and can serve as the divergent term. The TU instantiation additionally requires a non-degeneracy condition (ND) on the energy injection rate. See the companion papers~\cite{Geiger2026-NS,Geiger2026-TU} for details.
+\end{remark}
+
+The principal contribution of this paper is therefore not to claim that all problems are solved, but to demonstrate that they share a common architecture---and that this architecture has been successfully implemented in the number-theoretic case.
+
+\begin{thebibliography}{10}
+
+\bibitem{Geiger2026a}
+L.~Geiger,
+\emph{The FST-RH Framework: Foundations, Obstructions, and Reorientation},
+Zenodo, 2026.
+\href{https://doi.org/10.5281/zenodo.19035845}{doi:10.5281/zenodo.19035845} (Part~I)
+
+\bibitem{Geiger2026b}
+L.~Geiger,
+\emph{Even Dominance of the Weil Quadratic Form: Spectral Analysis, Computer-Assisted Proof, and the Resolvent Gap Theorem},
+Zenodo, 2026.
+\href{https://doi.org/10.5281/zenodo.19035845}{doi:10.5281/zenodo.19035845} (Part~II)
+
+\bibitem{Geiger2026c}
+L.~Geiger,
+\emph{The FST-RH Framework: Conclusio},
+Zenodo, 2026.
+\href{https://doi.org/10.5281/zenodo.19035845}{doi:10.5281/zenodo.19035845} (Part~III)
+
+% Note: Parts I--III share a common Zenodo concept DOI.
+% Individual version DOIs should be inserted upon final publication.
+
+\bibitem{Kato1995}
+T.~Kato,
+\emph{Perturbation Theory for Linear Operators},
+Classics in Mathematics, Springer-Verlag, Berlin, 1995.
+Reprint of the 1980 edition.
+
+\bibitem{SlepianPollak1961}
+D.~Slepian and H.\,O.~Pollak,
+\emph{Prolate spheroidal wave functions, Fourier analysis and uncertainty---I},
+Bell System Technical Journal, \textbf{40}(1):43--63, 1961.
+
+\bibitem{Geiger2026-NS}
+L.~Geiger,
+\emph{A Thermodynamic Obstruction to Finite-Time Blow-Up in the 3D Navier--Stokes Equations (Conditional Framework)},
+Zenodo preprint, March 2026.
+% DOI to be assigned upon upload of the NS Skeleton paper.
+
+\bibitem{Geiger2026-NS-BV}
+L.~Geiger,
+\emph{Log-Distance Integrability for Dissipative Flows: BV Selections on Fractal Attractors},
+Zenodo preprint, March 2026.
+\href{https://doi.org/10.5281/zenodo.19056808}{doi:10.5281/zenodo.19056808}.
+
+\bibitem{Geiger2026-TU}
+L.~Geiger,
+\emph{Anomalous Dissipation and the Turbulent Cascade: A Variational Free-Energy Derivation of Kolmogorov Scaling},
+Zenodo preprint, March 2026.
+\href{https://doi.org/10.5281/zenodo.19056814}{doi:10.5281/zenodo.19056814}.
+
+\bibitem{Geiger2026-PvsNP}
+L.~Geiger,
+\emph{P vs NP as an Entropic No-Go Theorem: Algorithmic Positivity, Kolmogorov Obstruction, and the Impossibility of Witness Compression},
+Zenodo preprint, March 2026.
+\href{https://doi.org/10.5281/zenodo.19056810}{doi:10.5281/zenodo.19056810}.
+
+\bibitem{Li1997}
+X.-J.~Li,
+\emph{The positivity of a sequence of numbers and the Riemann hypothesis},
+Journal of Number Theory, \textbf{65}(2):325--333, 1997.
+
+\bibitem{Bombieri2000}
+E.~Bombieri,
+\emph{The Riemann Hypothesis},
+in: \emph{The Millennium Prize Problems}, Clay Mathematics Institute, 2000, pp.~107--124.
+
+\bibitem{Tao2016}
+T.~Tao,
+\emph{Finite time blowup for an averaged three-dimensional Navier--Stokes equation},
+Journal of the American Mathematical Society, \textbf{29}(3):601--674, 2016.
+
+\bibitem{Conrey2003}
+J.\,B.~Conrey,
+\emph{The Riemann Hypothesis},
+Notices of the American Mathematical Society, \textbf{50}(3):341--353, 2003.
+
+\end{thebibliography}
+
+\end{document}

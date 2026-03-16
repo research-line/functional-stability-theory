@@ -1,0 +1,1056 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    citecolor=green!50!black,
+    urlcolor=blue!70!black
+}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{plain}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{corollary}[definition]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{example}[definition]{Example}
+
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\dist}{\mathrm{dist}}
+\newcommand{\AC}{\mathrm{AC}}
+\newcommand{\BV}{\mathrm{BV}}
+\newcommand{\id}{\mathrm{id}}
+
+\title{\textbf{Log-Distance Integrability for Dissipative Flows:\\
+BV Selections on Fractal Attractors}}
+\author{Lukas Geiger\\
+\small Independent Researcher, Bernau, Germany\\
+\small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}}
+\date{March 2026}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\small
+\textbf{MSC 2020:} 37L30, 47H09, 46B20, 35Q30, 26A45\\
+\textbf{Keywords:} nearest-point projection, log-Lipschitz regularity,
+bounded variation, attractor geometry, dissipative PDEs, Navier--Stokes
+\end{center}
+
+\begin{abstract}
+We introduce a regularity framework for nearest-point projections
+onto compact attractors of dissipative semiflows in Hilbert spaces.
+The classical Lipschitz projection theorem (Federer, 1959) requires
+positive reach---a condition incompatible with fractal attractor
+geometry.  We replace it with a \emph{trajectory log-Lipschitz}
+condition (TLL), which controls the projection modulus at the
+geometrically natural scale of the attractor distance rather than
+the partition mesh.  Combined with a \emph{log-distance
+integrability} condition (LDI), this yields bounded-variation
+selections along absolutely continuous trajectories---precisely the
+regularity needed for Gronwall-type arguments in conditional
+regularity criteria.  The framework applies to any dissipative
+semiflow with a compact attractor of finite fractal dimension,
+including the 3D Navier--Stokes equations, reaction-diffusion
+systems, and damped wave equations.  Two verifiable sufficient
+conditions for LDI are identified: bounded variation of the
+log-distance function, and exponential sublevel time-measure decay.
+\end{abstract}
+
+
+% ==================================================================
+\section{Introduction}
+% ==================================================================
+
+Let $H$ be a separable Hilbert space and $\mathcal{A} \subset H$ a
+compact set---the global attractor of a dissipative semiflow
+$\{S(t)\}_{t \ge 0}$.  A fundamental question in the qualitative
+theory of dissipative PDEs is the regularity of the nearest-point
+projection
+\[
+  P(x) \;\in\; \arg\min_{a \in \mathcal{A}} \|x - a\|_H
+\]
+as a function of time along a trajectory $u(t) = S(t)\,u_0$.  If the
+map $t \mapsto P(u(t))$ is absolutely continuous (AC), Gronwall-type
+energy estimates close automatically; if it is merely measurable,
+critical error terms remain uncontrolled.
+
+The classical theory (Federer~\cite{Federer1959}) guarantees Lipschitz
+continuity of the nearest-point projection on the tubular neighbourhood
+of sets with \emph{positive reach}.  However, attractors of dissipative
+PDEs generically have non-integer fractal dimension and reach zero
+(cf.~\cite{Temam1997}, Chapter~V).  This rules out the direct
+application of Federer's theorem.
+
+The purpose of this note is to introduce a weaker regularity class---
+\emph{trajectory log-Lipschitz} projections---that is compatible with
+fractal geometry and still suffices for bounded-variation (BV) control
+of the projected trajectory.  Motivated by log-Lipschitz regularity
+results for dissipative flows
+(cf.~\cite{BarbuCannone2016}), we observe that the naive
+global log-Lipschitz condition
+\begin{equation}\label{eq:global-LL-intro}
+  \|P(x) - P(y)\|
+  \;\le\;
+  C\,\|x-y\|\,\bigl(1 + \log\tfrac{R}{\|x-y\|}\bigr)
+\end{equation}
+does \emph{not} imply BV of $P \circ u$ for AC curves~$u$: the
+partition sums $\sum_i \Delta_i(1+\log(R/\Delta_i))$ diverge
+logarithmically as the mesh refines (Section~\ref{sec:counterexample}).
+The correct formulation replaces the increment-scale weight
+$\log(R/\|x-y\|)$ with the attractor-distance weight
+$\log(R/d(t))$, where $d(t) = \dist(u(t),\mathcal{A})$.  This
+yields a trajectory-adapted condition whose BV sums converge
+whenever a log-distance integrability condition (LDI) holds.
+
+
+% ==================================================================
+\section{Setup and Notation}
+% ==================================================================
+
+Throughout, $H$ denotes a separable real Hilbert space with norm
+$\|\cdot\|$ and inner product $\langle\cdot,\cdot\rangle$.
+
+\begin{definition}[Dissipative semiflow and attractor]
+\label{def:semiflow}
+A \emph{dissipative semiflow} on $H$ is a family
+$\{S(t)\}_{t \ge 0}$ of continuous maps $S(t): H \to H$ satisfying
+$S(0) = \id$, $S(t+s) = S(t) \circ S(s)$, and possessing a
+\emph{compact global attractor}
+$\mathcal{A} \subset H$: a compact, invariant
+($S(t)\mathcal{A} = \mathcal{A}$ for all $t \ge 0$) set that
+attracts every bounded subset of~$H$.
+\end{definition}
+
+\begin{definition}[Tubular neighbourhood and distance]
+\label{def:tube}
+For $R > 0$, the \emph{$R$-tubular neighbourhood} of $\mathcal{A}$ is
+\[
+  \mathcal{A}^R
+  \;:=\;
+  \{x \in H : \dist(x, \mathcal{A}) < R\},
+\]
+where $\dist(x, \mathcal{A}) := \inf_{a \in \mathcal{A}} \|x - a\|$.
+For a curve $u: [0,T] \to \mathcal{A}^R$, we write
+$d(t) := \dist(u(t), \mathcal{A})$.
+\end{definition}
+
+\begin{definition}[Nearest-point selection]
+\label{def:selection}
+A \emph{nearest-point selection} is a measurable map
+$P: \mathcal{A}^R \to \mathcal{A}$ satisfying
+$\|x - P(x)\| = \dist(x, \mathcal{A})$ for all
+$x \in \mathcal{A}^R$, and $P|_{\mathcal{A}} = \id$.
+Such a selection exists by the Kuratowski--Ryll-Nardzewski theorem
+applied to the compact-valued multifunction
+$x \mapsto \arg\min_{a \in \mathcal{A}} \|x-a\|$.
+\end{definition}
+
+
+% ==================================================================
+\section{Why Global Log-Lipschitz Fails}
+\label{sec:counterexample}
+% ==================================================================
+
+We first show that the global log-Lipschitz condition
+\eqref{eq:global-LL-intro}, even combined with log-distance
+integrability, does not directly yield BV of $P \circ u$.
+
+\begin{proposition}[Failure of the global LL bound to control variation]
+\label{prop:divergence}
+Let $P: \mathcal{A}^R \to \mathcal{A}$ satisfy
+\eqref{eq:global-LL-intro} with constant $C > 0$.  Let
+$u: [0,1] \to \mathcal{A}^R$ be Lipschitz with
+$\|u'(t)\| = 1$ a.e.  For the uniform partition
+$t_i = i/n$ ($i = 0, \ldots, n$), the upper bound obtained
+from \eqref{eq:global-LL-intro} satisfies
+\[
+  \sum_{i=0}^{n-1} \|P(u(t_{i+1})) - P(u(t_i))\|
+  \;\le\;
+  C\,(1 + \log(nR)),
+\]
+which diverges as $n \to \infty$.  In particular, the global LL
+condition does not provide a finite \emph{a priori} bound on
+$\Var(P \circ u)$.
+\end{proposition}
+
+\begin{proof}
+Each increment satisfies $\Delta_i := \|u(t_{i+1}) - u(t_i)\| = 1/n$.
+By \eqref{eq:global-LL-intro}:
+\[
+  \sum_{i=0}^{n-1} \|P(u(t_{i+1})) - P(u(t_i))\|
+  \;\le\;
+  C \sum_{i=0}^{n-1} \frac{1}{n}\,
+  \bigl(1 + \log(nR)\bigr)
+  \;=\;
+  C\,(1 + \log(nR)).
+\]
+As $n \to \infty$, this grows as $C\log n \to \infty$.
+Hence the bound derived from \eqref{eq:global-LL-intro}
+diverges with the mesh refinement and does not yield a finite
+upper bound on $\Var(P \circ u)$.  (Whether the variation
+itself is infinite depends on the specific geometry
+of~$\mathcal{A}$; the point is that the global LL condition
+is insufficient as a \emph{tool} for establishing BV.)
+\end{proof}
+
+\begin{remark}
+The divergence is \emph{logarithmic}, not polynomial---much slower
+than for H\"older maps (where $\sum \Delta_i^\alpha$ converges for
+$\alpha < 1$).  This makes global LL ``almost'' sufficient for BV,
+but the logarithmic accumulation over infinitely many partition
+points defeats it.  The trajectory log-Lipschitz condition avoids
+this by anchoring the log weight at the attractor distance $d(t)$,
+which does not depend on the partition.
+\end{remark}
+
+
+% ==================================================================
+\section{The Trajectory Log-Lipschitz Condition}
+\label{sec:TLL}
+% ==================================================================
+
+\begin{definition}[Trajectory log-Lipschitz projection (TLL)]
+\label{def:TLL}
+Let $u \in \AC([0,T];\, H)$ with $u(t) \in \mathcal{A}^R$ for
+all~$t$, and let $P: \mathcal{A}^R \to \mathcal{A}$ be a
+nearest-point selection.  We say that $P$ satisfies the
+\emph{trajectory log-Lipschitz condition} (TLL) along~$u$ if there
+exist constants $C_{\mathrm{TLL}} > 0$ and $h_0 > 0$ such that for
+all $t \in [0,T]$ with $d(t) > 0$ and all
+$h \in \mathbb{R}$ with $0 < |h| < h_0$ and
+$t+h \in [0,T]$
+(i.e., both forward and backward increments):
+\begin{equation}\label{eq:TLL}
+  \|P(u(t+h)) - P(u(t))\|
+  \;\le\;
+  C_{\mathrm{TLL}}\,\|u(t+h) - u(t)\|\,
+  \Omega(t),
+  \tag{TLL}
+\end{equation}
+where $\Omega(t) := 1 + \log(R/d(t))$ is the
+\emph{log-distance weight}.
+
+On the set $\{t : d(t) = 0\}$ (where $u(t) \in \mathcal{A}$),
+$P(u(t)) = u(t)$ by idempotence of~$P$.  For the transition
+$d(t) = 0$, $d(t+h) > 0$, we have
+$\|P(u(t+h)) - u(t)\| = \|P(u(t+h)) - P(u(t))\|$.
+Since $u(t) \in \mathcal{A}$ is a candidate for the nearest point
+of $u(t+h)$, the minimality of $P$ gives
+$\|u(t+h) - P(u(t+h))\| \le \|u(t+h) - u(t)\|$.
+Together with the triangle inequality:
+\[
+  \|P(u(t+h)) - u(t)\|
+  \;\le\;
+  \|P(u(t+h)) - u(t+h)\| + \|u(t+h) - u(t)\|
+  \;\le\;
+  2\,\|u(t+h) - u(t)\|.
+\]
+This gives $|v'|(t) \le 2\,|u'|(t)$ on $\{d = 0\}$.
+\end{definition}
+
+\begin{remark}[Convention $C_{\mathrm{TLL}} \ge 2$]
+\label{rem:CTLL-convention}
+The factor~$2$ on $\{d = 0\}$ is absorbed by the TLL bound
+provided $C_{\mathrm{TLL}} \ge 2$ and $\Omega(t) \ge 1$.
+Throughout, we adopt the convention
+$C_{\mathrm{TLL}} := \max(C_{\mathrm{TLL}},\,2)$;
+this changes the BV bound \eqref{eq:BV-bound} by at most a
+factor of~$2$ and does not affect the integrability
+of~\eqref{eq:LDI}.
+\end{remark}
+
+\begin{remark}[Geometric interpretation of TLL]
+\label{rem:TLL-geometry}
+The condition TLL asserts that the nearest-point projection,
+evaluated along the trajectory~$u$, has a local Lipschitz constant
+that blows up \emph{at most logarithmically} as the trajectory
+approaches the attractor:
+\[
+  \mathrm{Lip}_{\mathrm{loc}}(P \circ u;\, t)
+  \;\lesssim\;
+  1 + \log\frac{R}{d(t)}.
+\]
+At distance $d(t) \sim R$ from the attractor, the projection is
+essentially Lipschitz (the log term is $O(1)$).  As
+$d(t) \to 0$, the log weight grows, reflecting the increasing
+geometric complexity of the attractor boundary at fine scales.
+The logarithmic rate is the \emph{critical threshold}: faster
+growth (e.g., polynomial) would make LDI fail generically, while
+slower growth (bounded) would imply Lipschitz projection---too
+strong for fractal geometry.
+\end{remark}
+
+\begin{remark}[TLL vs global LL]
+\label{rem:TLL-vs-LL}
+The global log-Lipschitz condition \eqref{eq:global-LL-intro}
+does \emph{not} imply TLL.  For $h \to 0$ at fixed~$t$:
+\[
+  \log\frac{R}{\|u(t+h)-u(t)\|}
+  \;\approx\;
+  \log\frac{R}{h\,|u'(t)|}
+  \;=\;
+  \log\frac{R}{|u'(t)|} + \log\frac{1}{h}
+  \;\to\; \infty,
+\]
+while $\log(R/d(t))$ remains fixed.  The global condition
+produces an \emph{increment-scale} log weight that diverges
+with the partition mesh; TLL produces a \emph{distance-scale}
+log weight that depends only on the current geometry.
+This is the structural reason why TLL yields BV while
+global LL does not.
+\end{remark}
+
+
+% ==================================================================
+\section{Log-Distance Integrability}
+\label{sec:LDI}
+% ==================================================================
+
+\begin{definition}[Log-distance integrability (LDI)]
+\label{def:LDI}
+In the setting of Definition~\ref{def:TLL}, we say that
+\emph{log-distance integrability} holds if
+\begin{equation}\label{eq:LDI}
+  \int_{\{d>0\}} \|u'(t)\|\,\Omega(t)\,\mathrm{d}t
+  \;=\;
+  \int_{\{d>0\}} \|u'(t)\|\,
+  \bigl(1 + \log\tfrac{R}{d(t)}\bigr)\,\mathrm{d}t
+  \;<\; \infty.
+  \tag{LDI}
+\end{equation}
+On the set $\{t : d(t) = 0\}$, $v(t) = u(t)$ and the BV
+contribution is controlled by $\int_{\{d=0\}} \|u'(t)\|\,\mathrm{d}t
+< \infty$ (since $u$ is AC), so only the region $\{d > 0\}$
+is relevant for \eqref{eq:LDI}.  To state the BV bound
+\eqref{eq:BV-bound} uniformly over all of $[0,T]$, we
+extend $\Omega$ to $\{d=0\}$ by setting $\Omega(t) := 1$
+there (consistent with the factor-$2$ bound of
+Remark~\ref{rem:CTLL-convention}).
+\end{definition}
+
+\begin{remark}[Minimality of LDI]
+\label{rem:LDI-minimal}
+The condition LDI is positioned precisely between the known
+regularity classes:
+\begin{itemize}
+  \item \textbf{Lipschitz projection} ($\Omega \equiv 1$):
+    LDI reduces to $\int \|u'\| < \infty$, which is automatic
+    for AC curves.  This is the Federer/positive-reach regime.
+  \item \textbf{H\"older projection} ($\Omega(t) \sim d(t)^{-\beta}$,
+    $\beta > 0$): LDI requires $\int \|u'\|\,d(t)^{-\beta} < \infty$,
+    which generically fails near the attractor.  This is why
+    Man\'e projectors (H\"older inverse) do not yield BV.
+  \item \textbf{Log-Lipschitz projection} (TLL):
+    LDI requires $\int \|u'\|\,\log(1/d) < \infty$, which is the
+    borderline case---logarithmic singularities are integrable
+    under mild dynamical conditions.
+\end{itemize}
+The log-Lipschitz/LDI pair thus occupies the \emph{critical}
+regularity window for BV selections on fractal attractors.
+\end{remark}
+
+
+% ==================================================================
+\section{Main Result: BV Chain Rule}
+\label{sec:main}
+% ==================================================================
+
+\begin{theorem}[BV chain rule for log-Lipschitz projections]
+\label{thm:BV-chain}
+Let $\{S(t)\}_{t \ge 0}$ be a dissipative semiflow on a separable
+Hilbert space~$H$ with compact global attractor
+$\mathcal{A} \subset H$.  Let $u \in \AC([0,T];\, H)$ with
+$u(t) \in \mathcal{A}^R$ for all~$t$, and let
+$P: \mathcal{A}^R \to \mathcal{A}$ be a nearest-point selection
+satisfying TLL \eqref{eq:TLL} along~$u$.  Set $v(t) := P(u(t))$.
+
+If LDI \eqref{eq:LDI} holds, then
+$v \in \BV([0,T];\, H)$ with the explicit bound
+\begin{equation}\label{eq:BV-bound}
+  \Var_H(v;\,[0,T])
+  \;\le\;
+  C_{\mathrm{TLL}}
+  \int_0^T \|u'(t)\|\,\Omega(t)\,\mathrm{d}t,
+\end{equation}
+where $\Omega(t) := 1 + \log(R/d(t))$ on $\{d > 0\}$ and
+$\Omega(t) := 1$ on $\{d = 0\}$
+(Remark~\ref{rem:CTLL-convention}).
+\end{theorem}
+
+\begin{proof}
+The proof has three steps.
+
+\medskip
+\noindent
+\textbf{Step 1 (Metric derivative bound).}\;
+For any continuous curve $v: [0,T] \to H$, the \emph{upper
+metric derivative} at $t$ is
+\[
+  |v'|^+(t)
+  \;:=\;
+  \limsup_{h \to 0} \frac{\|v(t+h) - v(t)\|}{|h|}
+  \;\in\; [0,+\infty].
+\]
+This quantity exists everywhere (as a value in $[0,+\infty]$)
+and is Borel measurable.  For absolutely continuous curves the
+$\limsup$ is a genuine limit a.e.\
+(cf.~\cite[Theorem~1.1.2]{AmbrosioGigliSavare2008}).
+Since $u$ is AC, $|u'|(t) := \lim_{h\to 0}\|u(t+h)-u(t)\|/|h|$
+exists for a.e.~$t$.
+
+\smallskip\noindent
+\emph{Case $d(t)>0$:}\;
+Dividing \eqref{eq:TLL} by $|h|$ and taking $\limsup$:
+\begin{equation}\label{eq:metric-deriv-bound}
+  |v'|^+(t)
+  \;\le\;
+  C_{\mathrm{TLL}}\,|u'|(t)\,\Omega(t)
+  \qquad \text{for a.e.\ } t \text{ with } d(t) > 0.
+\end{equation}
+(The right-hand side is a genuine limit; the left-hand side
+may be a $\limsup$, which is dominated by the same bound.)
+
+\smallskip\noindent
+\emph{Case $d(t)=0$ (interior of $\mathcal{Z}$):}\;
+On $\mathcal{Z} := \{t \in [0,T] : d(t) = 0\}$,
+$u(t) \in \mathcal{A}$ and $v(t) = P(u(t)) = u(t)$.
+Since $u(t) \in \mathcal{A}$ is a candidate minimiser for
+$\dist(u(t+h), \mathcal{A})$, the triangle inequality gives
+$\|P(u(t+h)) - u(t)\| \le 2\,\|u(t+h) - u(t)\|$
+(cf.\ the bound in Definition~\ref{def:TLL}),
+so $|v'|^+(t) \le 2\,|u'|(t)$.
+
+\smallskip\noindent
+\emph{Boundary points of $\mathcal{Z}$:}\;
+At $t_0 \in \partial\mathcal{Z}$ with $d(t_0)=0$, sequences
+$t_n \to t_0$ with $d(t_n) > 0$ may exist.  For continuity of
+$v$ at $t_0$: $\|v(t_n) - v(t_0)\| = \|P(u(t_n)) - u(t_0)\|
+\le d(t_n) + \|u(t_n) - u(t_0)\| \to 0$, since $u$ is
+continuous and $d = \dist(\cdot,\mathcal{A}) \circ u$ inherits
+continuity (the distance function is $1$-Lipschitz).  The metric derivative bound
+$|v'|^+(t_0) \le 2\,|u'|(t_0)$ remains valid by the same
+triangle inequality argument as above.
+
+\smallskip\noindent
+Since $\Omega(t) \ge 1$ and $C_{\mathrm{TLL}} \ge 2$
+(Remark~\ref{rem:CTLL-convention}), the
+bound \eqref{eq:metric-deriv-bound} holds on all of $[0,T]$
+(with $|v'|^+$ in place of $|v'|$ where the limit may not
+exist; this suffices for the BV criterion in Step~3).
+
+\medskip
+\noindent
+\textbf{Step 2 (Continuity of~$v$).}\;
+The nearest-point projection on a compact (but non-convex) set
+is in general only upper semicontinuous as a set-valued map
+and need not be single-valued everywhere.  However, the
+TLL condition \eqref{eq:TLL} directly implies continuity
+of $v = P \circ u$ along the trajectory: for $d(t) > 0$,
+$\|v(t+h) - v(t)\| \le C_{\mathrm{TLL}}\,\|u(t+h)-u(t)\|\,
+\Omega(t) \to 0$ as $h \to 0$; for $d(t) = 0$,
+$\|v(t+h)-v(t)\| \le 2\,\|u(t+h)-u(t)\| \to 0$
+(including boundary points of $\mathcal{Z}$, cf.\ Step~1).
+Hence $v$ is continuous on $[0,T]$.
+
+\medskip
+\noindent
+\textbf{Step 3 (BV bound).}\;
+We show $\|v(b) - v(a)\| \le \int_a^b g(t)\,\mathrm{d}t$
+for all $0 \le a < b \le T$, where
+$g(t) := C_{\mathrm{TLL}}\,|u'|(t)\,\Omega(t) \in L^1$
+(by LDI).  Since $v$ is continuous (Step~2), the BV bound
+$\Var(v) \le \int_0^T g$ then follows by summing over any
+partition.
+
+Set $f(t) := \|v(t) - v(a)\|$.  Then $f: [a,b] \to \mathbb{R}$
+is continuous and real-valued,
+$f(a) = 0$, and the upper Dini derivative satisfies
+$D^+ f(t) \le |v'|^+(t)$ (since
+$f(t+h) - f(t) \le \|v(t+h)-v(t)\|$ by the reverse triangle
+inequality, and division by $h > 0$ followed by
+$\limsup$ gives $D^+ f \le |v'|^+$).
+By Step~1, $|v'|^+(t) \le g(t)$ a.e.
+A classical result on Dini derivatives
+(see, e.g., \cite[Chapter~VII, \S\S\,9--10]{Saks1937}; cf.\
+also \cite[Chapter~3]{AmbrosioFuscoPallara2000}) gives:
+for a continuous function $f:[a,b] \to \mathbb{R}$ with
+$D^+ f(t) \le g(t)$ a.e.\ and $g \in L^1$, the inequality
+$f(b) - f(a) \le \int_a^b g(t)\,\mathrm{d}t$ holds.
+Therefore
+\[
+  \|v(b) - v(a)\| \;=\; f(b)
+  \;\le\; \int_a^b g(t)\,\mathrm{d}t
+  \;\le\; \int_0^T g(t)\,\mathrm{d}t.
+\]
+Summing over any partition $0 = t_0 < \cdots < t_n = T$:
+\[
+  \sum_i \|v(t_{i+1}) - v(t_i)\|
+  \;\le\;
+  \sum_i \int_{t_i}^{t_{i+1}} g(t)\,\mathrm{d}t
+  \;=\;
+  \int_0^T g(t)\,\mathrm{d}t
+  \;=\;
+  C_{\mathrm{TLL}} \int_0^T |u'|(t)\,\Omega(t)\,\mathrm{d}t,
+\]
+which gives \eqref{eq:BV-bound}.
+
+\medskip
+\noindent
+The bound \eqref{eq:BV-bound} follows from Steps~1--3.
+\end{proof}
+
+\begin{remark}[Direct partition-sum verification]
+\label{rem:partition-sum}
+For a fixed partition with mesh $< h_0$, the finiteness of the
+partition sum can be seen directly from TLL without the
+Dini-derivative machinery: on each subinterval, TLL gives
+$\|v(t_{i+1}) - v(t_i)\|
+\le C_{\mathrm{TLL}}\,\|u(t_{i+1}) - u(t_i)\|\,\Omega(t_i)$
+(or the factor-$2$ bound on $\{d = 0\}$, absorbed by
+$C_{\mathrm{TLL}} \ge 2$).  The resulting partition sum
+$\sum_i C_{\mathrm{TLL}}\,\Omega(t_i)\int_{t_i}^{t_{i+1}}
+\|u'\|\,\mathrm{d}t$ is finite for each fixed partition
+(since $\Omega$ is bounded on any compact set disjoint
+from $\{d = 0\}$, and the $\{d=0\}$ contribution is
+controlled by $2\int\|u'\|$).
+However, the passage to the supremum over \emph{all}
+partitions---which is the definition of
+$\Var(v)$---requires the Dini-derivative argument of
+Step~3, which sharpens the pointwise $\Omega(t_i)$-weight
+to the integrated $\Omega(t)$-weight.
+\end{remark}
+
+\begin{remark}[Banach space generality]
+\label{rem:banach}
+The proof of Theorem~\ref{thm:BV-chain} uses only the norm,
+compactness of~$\mathcal{A}$, and measurable selection---no
+inner product or Hilbert space structure.  The BV chain rule
+therefore holds verbatim in any separable Banach space.  We
+restrict to Hilbert spaces only for the PDE applications in
+Section~\ref{sec:applications}.
+\end{remark}
+
+
+% ==================================================================
+\section{Sufficient Conditions for LDI}
+\label{sec:sufficient}
+% ==================================================================
+
+The condition LDI \eqref{eq:LDI} is a single integrability
+requirement.  We provide two independent sufficient conditions,
+each verifiable from dynamical information about the semiflow.
+
+% ------------------------------------------------------------------
+\subsection{Variant A: Log-distance has bounded variation}
+% ------------------------------------------------------------------
+
+\begin{proposition}[BV log-distance implies LDI]
+\label{prop:variant-A}
+Suppose $d(t) > 0$ for a.e.\ $t \in [0,T]$ and
+$\log(R/d(t)) \in \BV([0,T])$.  Then LDI holds.
+\end{proposition}
+
+\begin{proof}
+Write $\ell(t) := 1 + \log(R/d(t))$.  Since $u' \in L^1(0,T;\,H)$
+(as $u$ is AC) and $\ell \in \BV([0,T]) \subset
+L^\infty([0,T])$, the product
+$\|u'(t)\|\,\ell(t)$ is locally integrable:
+\[
+  \int_0^T \|u'(t)\|\,\ell(t)\,\mathrm{d}t
+  \;\le\;
+  \|\ell\|_{L^\infty(0,T)}\,\int_0^T \|u'(t)\|\,\mathrm{d}t
+  \;<\; \infty.  \qedhere
+\]
+\end{proof}
+
+\begin{remark}[When is log-distance BV?]
+\label{rem:log-BV}
+The condition $\log(R/d) \in \BV$ requires that the trajectory
+does not oscillate infinitely often between different distance
+scales from the attractor.  Formally, it excludes infinite
+``zickzack frequency'' in $d(t)$.  For monotonically attracting
+trajectories ($d(t)$ eventually decreasing), this is automatic.
+For trajectories with transient oscillations, BV of $\log d$
+follows if the total number of scale crossings
+$\{t : d(t) = \varepsilon\}$ is finite for each
+$\varepsilon > 0$---a generic property of dissipative semiflows
+with isolated equilibria.
+\end{remark}
+
+% ------------------------------------------------------------------
+\subsection{Variant B: Sublevel time-measure control}
+% ------------------------------------------------------------------
+
+\begin{definition}[Sublevel-time control (STC)]
+\label{def:STC}
+The trajectory~$u$ satisfies \emph{sublevel-time control} with
+exponent $\alpha > 0$ if there exists $C_* > 0$ such that
+\begin{equation}\label{eq:STC}
+  \bigl|\{t \in [0,T] : d(t) \le \varepsilon\}\bigr|
+  \;\le\;
+  C_*\,\varepsilon^\alpha
+  \qquad \text{for all } \varepsilon \in (0, R].
+  \tag{STC}
+\end{equation}
+\end{definition}
+
+\begin{remark}[STC implies $|\{d=0\}| = 0$]
+\label{rem:STC-d0}
+Taking $\varepsilon \to 0$ in \eqref{eq:STC} shows
+$|\{d = 0\}| = 0$.  Hence STC is only applicable to
+trajectories that do not spend positive time on the attractor.
+This is the generic case for non-stationary solutions
+approaching~$\mathcal{A}$ asymptotically.  For trajectories
+that reach the attractor in finite time (e.g., convergence
+to an equilibrium with $u(t) \in \mathcal{A}$ for
+$t \ge t_1$), Variant~A (BV log-distance) is the appropriate
+sufficient condition.
+\end{remark}
+
+\begin{proposition}[STC implies LDI]
+\label{prop:variant-B}
+If STC \eqref{eq:STC} holds with some $\alpha > 0$ and
+$u' \in L^2(0,T;\,H)$, then
+$\log(R/d) \in L^p(0,T)$ for every $p < \infty$, and LDI holds.
+\end{proposition}
+
+\begin{proof}
+\textbf{Step 1 (Tonelli representation).}\;
+Since $u(t) \in \mathcal{A}^R$, we have $d(t) \le R$ for all~$t$.
+On the set $\{t : d(t) = 0\}$ (where $u(t) \in \mathcal{A}$),
+the integrand $\|u'(t)\|\,\log(R/d(t))$ is $+\infty$;
+we set the contribution to zero by convention (on this set,
+$v(t) = u(t)$ and the BV chain rule bound holds trivially).
+On $\{t : d(t) > 0\}$, using the layer-cake identity
+$\log(R/d(t)) = \int_{d(t)}^{R} s^{-1}\,\mathrm{d}s$ and Tonelli:
+\begin{equation}\label{eq:tonelli}
+  \int_{\{d>0\}} \|u'(t)\|\,\log\frac{R}{d(t)}\,\mathrm{d}t
+  \;=\;
+  \int_0^R \frac{1}{s}
+  \Bigl(\int_{\{0 < d(t) \le s\}} \|u'(t)\|\,\mathrm{d}t\Bigr)
+  \,\mathrm{d}s.
+\end{equation}
+
+\medskip
+\noindent
+\textbf{Step 2 (H\"older on inner integral).}\;
+By H\"older's inequality:
+\[
+  \int_{\{0<d(t)\le s\}} \|u'(t)\|\,\mathrm{d}t
+  \;\le\;
+  \Bigl(\int_0^T \|u'(t)\|^2\,\mathrm{d}t\Bigr)^{1/2}
+  \cdot
+  \bigl|\{0 < d \le s\}\bigr|^{1/2}
+  \;\le\;
+  \|u'\|_{L^2}\,C_*^{1/2}\,s^{\alpha/2},
+\]
+where the last step uses $|\{0<d\le s\}| \le |\{d\le s\}|
+\le C_*\,s^\alpha$ from STC.
+
+\medskip
+\noindent
+\textbf{Step 3 (Integrability near $s=0$).}\;
+Substituting into \eqref{eq:tonelli}:
+\[
+  \int_0^R \frac{1}{s}\,\|u'\|_{L^2}\,C_*^{1/2}\,s^{\alpha/2}
+  \,\mathrm{d}s
+  \;=\;
+  \|u'\|_{L^2}\,C_*^{1/2}
+  \int_0^R s^{\alpha/2 - 1}\,\mathrm{d}s
+  \;=\;
+  \|u'\|_{L^2}\,C_*^{1/2}\,
+  \frac{2}{\alpha}\,R^{\alpha/2}
+  \;<\; \infty.
+\]
+The integral converges because $\alpha > 0$, so
+$s^{\alpha/2-1}$ is integrable near $s=0$.
+
+\medskip
+\noindent
+\textbf{Step 4 ($L^p$ bounds).}\;
+The same Tonelli argument with H\"older exponents $p$ and $q$
+($1/p + 1/q = 1$) gives
+$\|\log(R/d)\|_{L^p} \le C(p,\alpha,R,C_*)$ for every
+$p < \infty$, so LDI follows from any finite $L^q$ bound
+on~$\|u'\|$.
+\end{proof}
+
+\begin{remark}[Sources of STC in dissipative flows]
+\label{rem:STC-sources}
+Sublevel-time control \eqref{eq:STC} is the genuine new
+analytical input.  Three mechanisms can generate it:
+
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Exponential tracking:}\;
+    If $d(t) \le C_0\,e^{-\lambda t}$ for $t \ge t_0$, then
+    $\{d \le \varepsilon\} \subset
+    \{t \ge (\log(C_0/\varepsilon))/\lambda\}$,
+    whose measure is $O(\log(1/\varepsilon))$---much smaller than
+    $C_*\,\varepsilon^\alpha$ for any $\alpha > 0$.
+    So exponential tracking implies STC with \emph{any} exponent.
+  \item \textbf{Lyapunov dissipation:}\;
+    If a Lyapunov functional $E$ satisfies
+    $-\dot{E} \ge \Psi(d)$ with $\Psi$ not too flat near $d=0$
+    (e.g.\ $\Psi(d) \ge c\,d^\beta$ for some $\beta$),
+    then sublevel times are controlled by the total energy budget
+    $E(0) - \inf E$.
+  \item \textbf{No fast oscillation:}\;
+    Energetic constraints (finite dissipation integral)
+    prevent arbitrarily rapid back-and-forth motion near the
+    attractor, bounding the number of excursions into
+    $\{d \le \varepsilon\}$.
+\end{enumerate}
+Each mechanism yields STC with different exponents~$\alpha$.
+The STC condition is physically plausible for all standard
+classes of dissipative PDEs.
+\end{remark}
+
+
+% ==================================================================
+\section{Applications to Dissipative PDEs}
+\label{sec:applications}
+% ==================================================================
+
+We illustrate how the abstract framework applies to concrete
+PDE settings.  In each case, the semiflow possesses a compact
+global attractor, and the question is whether TLL and LDI hold.
+
+% ------------------------------------------------------------------
+\subsection{3D Navier--Stokes on $\mathbb{T}^3$}
+% ------------------------------------------------------------------
+
+\begin{example}[Navier--Stokes equations]
+\label{ex:NS}
+Let $H = L^2(\mathbb{T}^3;\,\mathbb{R}^3)$ (divergence-free),
+$\mathcal{A}$ the global attractor (in the sense of Temam~\cite{Temam1997}) with smooth
+forcing~$f$.  By Temam~\cite{Temam1997}:
+\begin{itemize}
+  \item $\mathcal{A}$ is compact in $H^1$ (hence in $H$).
+  \item Every $a \in \mathcal{A}$ is $C^\infty$.
+  \item Exponential tracking holds \emph{conditional on global
+    regularity}: for strong solutions existing on $[0,\infty)$,
+    $d(t) \le C_0\,e^{-\lambda t}$ for $t \ge t_0$.
+    (For Leray--Hopf weak solutions, only algebraic attraction
+    in $L^2$ is known unconditionally.)
+\end{itemize}
+
+The attractor has finite fractal dimension
+$d_f(\mathcal{A}) \le c_1\,G^{2/3}(1+\log G)^{1/3}$
+(where $G$ is the Grashof number;
+cf.~\cite{ConstantinFoiasTemam1985}), but generically has
+reach~$0$---ruling out Federer's theorem.
+
+\medskip\noindent
+\textbf{Status of TLL:}\; Open.  The squeezing property of the
+Navier--Stokes semiflow (cf.~\cite{FoiasManleyRosaTemam2001},
+Chapter~14) provides exponential contraction of high-frequency
+differences on the attractor.  Combined with Man\'e projector
+estimates, this suggests that the nearest-point projection has
+at most log-Lipschitz modulus along trajectories---but a rigorous
+proof requires quantitative control of the projection stability
+in the high-mode complement $Q_N H$.
+
+\medskip\noindent
+\textbf{Status of LDI:}\; Follows from exponential tracking
+on $[t_0, T]$ for any fixed $T < \infty$
+(Remark~\ref{rem:STC-sources}).  The critical question is the
+blow-up regime $T \nearrow T^*$, where $\|u'\| \to \infty$.
+The BV bound \eqref{eq:BV-bound} yields Assumption~G$'$ of
+\cite{FST-NS2026}, which implies global regularity via the
+attractor-distance argument.
+\end{example}
+
+% ------------------------------------------------------------------
+\subsection{Reaction-diffusion systems}
+% ------------------------------------------------------------------
+
+\begin{example}[Reaction-diffusion on bounded domains]
+\label{ex:RD}
+Consider $\partial_t u = D\Delta u + f(u)$ on a bounded domain
+$\Omega \subset \mathbb{R}^n$ with Dirichlet or Neumann
+boundary conditions, where $D > 0$ is a diffusion matrix and
+$f$ satisfies a dissipativity condition
+$\langle f(u), u \rangle \le C - c|u|^2$.  The semiflow
+possesses a compact global attractor $\mathcal{A} \subset L^2(\Omega)$
+with finite fractal dimension~\cite{Temam1997}.
+
+For scalar equations ($u \in \mathbb{R}$) in one space dimension
+with a gradient nonlinearity $f(u) = -V'(u)$, the attractor
+consists of equilibria and heteroclinic orbits, and the
+nearest-point projection is Lipschitz (in fact, the attractor has
+a Lipschitz-graph structure as an inertial manifold;
+cf.~\cite{MalletParetSell1988}).  TLL and LDI hold trivially.
+
+For systems in higher dimensions, the attractor may have non-integer
+fractal dimension and reach zero.  The log-Lipschitz framework then
+provides a path to BV selections that Federer's theorem does not.
+The spectral gap condition for inertial manifolds is satisfied for
+many reaction-diffusion systems~\cite{EdenFoiasNicolaenkoTemam1994},
+making the attractor geometry more regular than in the
+Navier--Stokes case.
+\end{example}
+
+% ------------------------------------------------------------------
+\subsection{Damped wave equations}
+% ------------------------------------------------------------------
+
+\begin{example}[Damped semilinear wave equation]
+\label{ex:wave}
+Consider $\partial_{tt} u + \gamma\,\partial_t u = \Delta u + f(u)$
+on $\Omega \subset \mathbb{R}^3$ with $\gamma > 0$ and subcritical
+nonlinearity.  The semiflow on $H^1_0 \times L^2$ possesses a
+compact global attractor with finite fractal dimension
+(cf.~\cite{BabinVishik1992}).  The exponential tracking property
+holds with rate $\lambda = \gamma/2$ (spectral gap of the damped
+wave operator; cf.~\cite{BabinVishik1992}, Chapter~V).
+
+The attractor geometry is intermediate between reaction-diffusion
+(where inertial manifolds often exist) and Navier--Stokes (where
+they do not).  The log-Lipschitz framework provides a
+\emph{uniform} approach applicable across all three settings,
+with TLL as the single geometric input.
+\end{example}
+
+
+% ==================================================================
+\section{Discussion}
+\label{sec:discussion}
+% ==================================================================
+
+\subsection{The new mathematical interface}
+
+The central contribution of this note is the identification of
+the \emph{critical regularity interface} for BV selections on
+fractal attractors.  The interface is characterised by a single
+question:
+
+\begin{center}
+\fbox{\parbox{0.85\textwidth}{%
+\textbf{Core Question.}\;
+For a dissipative semiflow with compact attractor
+$\mathcal{A} \subset H$, does the nearest-point projection satisfy
+trajectory log-Lipschitz control \eqref{eq:TLL}?
+}}
+\end{center}
+
+\noindent
+This is a question about the \emph{regularity of the attractor as
+seen from the trajectory}, not about the global geometry
+of~$\mathcal{A}$.  The distinction is crucial: global geometric
+conditions (positive reach, inertial manifold) impose structure
+on the \emph{entire} attractor, while TLL requires regularity
+only in the direction of the dynamical approach.
+
+\subsection{Relation to existing regularity theories}
+
+\begin{center}
+\begin{tabular}{lllll}
+\hline
+\textbf{Condition} & \textbf{Projection} & \textbf{Composition}
+  & \textbf{Fractal?} & \textbf{Source} \\
+\hline
+Positive reach $> 0$
+  & Lipschitz-1
+  & AC $\Rightarrow$ AC
+  & No
+  & Federer~\cite{Federer1959} \\
+Prox-regular
+  & locally Lipschitz
+  & AC $\Rightarrow$ AC (local)
+  & No
+  & Poliquin et al.~\cite{PoliquinRockafellarThibault2000} \\
+Hausdorff-BV set map
+  & BV selection exists
+  & ---
+  & Yes
+  & Chistyakov~\cite{Chistyakov2004} \\
+Man\'e projector
+  & H\"older${}^{-1}$
+  & AC $\Rightarrow$ H\"older
+  & Yes
+  & Man\'e~\cite{Mane1981} \\
+\textbf{TLL + LDI}
+  & \textbf{log-Lipschitz}
+  & \textbf{AC $\Rightarrow$ BV}
+  & \textbf{Yes}
+  & \textbf{This note} \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent
+The TLL+LDI framework is the only entry that simultaneously
+(i)~accommodates fractal geometry (non-integer dimension, reach~$0$),
+(ii)~yields BV regularity (sufficient for Gronwall-type arguments),
+and (iii)~is formulated as a trajectory-level condition
+(independent of global attractor structure).
+
+\subsection{Limitations}
+
+\begin{itemize}
+  \item \textbf{Selection dependence.}\;
+    The TLL condition is formulated for a \emph{given} measurable
+    nearest-point selection~$P$.  On non-convex compact sets, the
+    nearest-point map is generically multi-valued, and different
+    selections may have different regularity.  The framework requires
+    the existence of \emph{at least one} selection satisfying TLL;
+    it does not claim that every measurable selection does so.  In
+    practice, the ``best'' selection (e.g., the one minimising the
+    metric derivative) is the natural candidate.
+  \item \textbf{TLL is open for 3D NS.}\;
+    The squeezing property and Man\'e projector estimates suggest
+    log-Lipschitz stability of the projection, but a rigorous proof
+    requires quantitative bounds on the high-mode projection
+    complement that are not currently available.
+  \item \textbf{LDI is non-trivial only under blow-up.}\;
+    For smooth solutions on compact time intervals, LDI holds
+    automatically.  The condition becomes critical only in the
+    limit $T \nearrow T^*$ (blow-up time), where $\|u'\| \to \infty$.
+  \item \textbf{BV, not AC.}\;
+    The framework yields BV regularity, which suffices for
+    Stieltjes-integral-based Gronwall arguments but not for
+    pointwise differential inequalities.  Upgrading BV to AC
+    would require Lipschitz projection (positive reach)---exactly
+    the condition we are trying to avoid.
+\end{itemize}
+
+
+% ==================================================================
+\section{Conclusion}
+% ==================================================================
+
+We have introduced a regularity framework for nearest-point
+projections onto compact attractors that occupies the critical
+gap between H\"older (insufficient for BV) and Lipschitz
+(incompatible with fractal geometry).  The trajectory log-Lipschitz
+condition (TLL) controls the projection modulus at the attractor
+distance scale, and the log-distance integrability condition (LDI)
+ensures that the resulting BV sums converge.
+
+The framework reduces conditional regularity criteria for
+dissipative PDEs---including the 3D Navier--Stokes
+equations---to a single geometric-dynamical question: does the
+nearest-point projection have at most logarithmic blowup along
+dissipative trajectories?  This question is independent of the
+specific PDE and depends only on the interplay between attractor
+geometry and the semiflow's contraction properties.
+
+
+% ===================================================================
+% AI Disclosure
+% ===================================================================
+\subsection*{AI Disclosure}
+In the preparation of this manuscript, AI-assisted tools (Claude, Anthropic)
+were used in a supporting capacity, particularly for literature research,
+text structuring, and formulation assistance.  The conceptual design,
+scientific argumentation, and responsibility for the entire content
+rest solely with the author.
+
+
+\begin{thebibliography}{99}
+
+\bibitem{AmbrosioGigliSavare2008}
+L.~Ambrosio, N.~Gigli, and G.~Savar\'e,
+\emph{Gradient Flows in Metric Spaces and in the Space of
+Probability Measures},
+2nd ed., Lectures in Mathematics ETH Z\"urich,
+Birkh\"auser, Basel, 2008.
+
+\bibitem{AmbrosioFuscoPallara2000}
+L.~Ambrosio, N.~Fusco, and D.~Pallara,
+\emph{Functions of Bounded Variation and Free Discontinuity Problems},
+Oxford Mathematical Monographs, Clarendon Press, Oxford, 2000.
+
+\bibitem{BabinVishik1992}
+A.~V.~Babin and M.~I.~Vishik,
+\emph{Attractors of Evolution Equations},
+Studies in Mathematics and its Applications, vol.~25,
+North-Holland, Amsterdam, 1992.
+
+\bibitem{BarbuCannone2016}
+V.~Barbu and M.~Cannone,
+\emph{Locally Lipschitz composition operators in spaces of
+functions of bounded variation},
+arXiv preprint arXiv:1602.04490, 2016.
+
+\bibitem{Chistyakov2004}
+V.~V.~Chistyakov,
+\emph{Selections of bounded variation},
+J.~Appl.\ Anal.\ \textbf{10} (2004), no.~1, 1--82.
+
+\bibitem{ConstantinFoiasTemam1985}
+P.~Constantin, C.~Foias, and R.~Temam,
+\emph{Attractors representing turbulent flows},
+Mem.\ Amer.\ Math.\ Soc.\ \textbf{53} (1985), no.~314.
+
+\bibitem{EdenFoiasNicolaenkoTemam1994}
+A.~Eden, C.~Foias, B.~Nicolaenko, and R.~Temam,
+\emph{Exponential Attractors for Dissipative Evolution Equations},
+Research in Applied Mathematics, vol.~37,
+Wiley--Masson, Paris, 1994.
+
+\bibitem{Federer1959}
+H.~Federer,
+\emph{Curvature measures},
+Trans.\ Amer.\ Math.\ Soc.\ \textbf{93} (1959), 418--491.
+
+\bibitem{FoiasManleyRosaTemam2001}
+C.~Foias, O.~Manley, R.~Rosa, and R.~Temam,
+\emph{Navier--Stokes Equations and Turbulence},
+Encyclopedia of Mathematics and its Applications, vol.~83,
+Cambridge University Press, 2001.
+
+\bibitem{FST-NS2026}
+L.~Geiger,
+\emph{A Thermodynamic Obstruction to Finite-Time Blow-Up in the 3D
+Navier--Stokes Equations (Conditional Framework)},
+Zenodo, 2026.  DOI:\@ to be assigned.
+
+\bibitem{MalletParetSell1988}
+J.~Mallet-Paret and G.~R. Sell,
+\emph{Inertial manifolds for reaction diffusion equations in higher
+space dimensions},
+J.~Amer.\ Math.\ Soc.\ \textbf{1} (1988), no.~4, 805--866.
+
+\bibitem{Mane1981}
+R.~Man\'e,
+\emph{On the dimension of the compact invariant sets of certain
+non-linear maps},
+Lecture Notes in Mathematics, vol.~898, Springer, Berlin, 1981,
+pp.~230--242.
+
+\bibitem{PoliquinRockafellarThibault2000}
+R.~A.~Poliquin, R.~T.~Rockafellar, and L.~Thibault,
+\emph{Local differentiability of distance functions},
+Trans.\ Amer.\ Math.\ Soc.\ \textbf{352} (2000), no.~11, 5231--5249.
+
+\bibitem{Saks1937}
+S.~Saks,
+\emph{Theory of the Integral},
+2nd revised ed., Monografie Matematyczne, vol.~7,
+G.~E.~Stechert \& Co., New York, 1937.
+
+\bibitem{Temam1997}
+R.~Temam,
+\emph{Infinite-Dimensional Dynamical Systems in Mechanics and Physics},
+2nd ed., Applied Mathematical Sciences, vol.~68,
+Springer, New York, 1997.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,2147 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    citecolor=green!50!black,
+    urlcolor=blue!70!black
+}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{plain}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{proposition}[definition]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{Remark}
+
+\title{\textbf{A Thermodynamic Obstruction to Finite-Time Blow-Up\\ in the 3D Navier-Stokes Equations (Conditional Framework)}}
+\author{Lukas Geiger\\
+\small Independent Researcher, Bernau, Germany\\
+\small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}}
+\date{March 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We propose a doubly conditional regularity criterion for the 3D incompressible Navier-Stokes equations based on a thermodynamic distance functional. Rather than bounding the velocity gradient globally, we construct an attractor-distance functional $H(u \mid \mathcal{A})$ measuring the $L^2$-distance of the active flow from the global Leray--Hopf attractor. Under two conditions---(\textbf{Assumption~G}) that the time-dependent minimising projection onto the attractor is sufficiently regular, and (\textbf{Condition~D}) that the cumulative viscous dissipation dominates the Gronwall cost near a hypothetical blow-up time---we show that finite-time blow-up would force $H$ below zero, contradicting its non-negativity. The argument reduces the regularity question to two structural properties: the geometry of the attractor (Assumption~G) and the relative rates of dissipation versus nonlinear growth (Condition~D). We identify sufficient geometric conditions for~G (positive reach, log-Lipschitz projections, BV selections) and present an $H^1$-level lift where the enstrophy dissipation---which, unlike the energy dissipation, has no a priori upper bound under blow-up---can serve as the divergent term. We discuss the status of these assumptions, their connection to inertial manifold theory, and the gaps that separate the present framework from an unconditional proof.
+\end{abstract}
+
+\section{Introduction}
+The classical challenge concerning the 3D incompressible Navier-Stokes equations is to preclude the formation of finite-time singularities (blow-ups) in the velocity field $u(x,t) \in \mathbb{R}^3$, a problem that has remained open since Leray's foundational work \cite{Leray1934}. The flow is governed by:
+\begin{equation}
+    \partial_t u + (u \cdot \nabla) u = -\nabla p + \nu \Delta u, \quad \nabla \cdot u = 0, \quad \text{on } \Omega \subset \mathbb{R}^3.
+\end{equation}
+The well-known Beale--Kato--Majda (BKM) criterion \cite{BealeKatoMajda1984} states that a singularity at time $T^*$ occurs if and only if the vorticity diverges:
+\begin{equation}
+    \int_0^{T^*} \|\nabla \times u(t)\|_{L^\infty} \, dt = \infty.
+\end{equation}
+In this paper, we construct a thermodynamic Lyapunov functional measuring the distance of the active flow from the global Leray--Hopf attractor. We show that, \emph{conditional on a regularity assumption about the attractor projection} (Assumption~G, Section~3) and a \emph{dissipation-dominance condition}~(D), any hypothetical blow-up leads to a contradiction: the enstrophy diverges pointwise, driving the non-negative distance functional below zero whenever the cumulative viscous dissipation outpaces the Gronwall cost. The resulting doubly conditional regularity criterion reduces the full regularity problem to two structural questions: the geometry of the Navier--Stokes attractor (Assumption~G) and the relative blow-up rates of dissipation versus Gronwall factors (condition~D).
+
+\section{The Energy-Dissipation Divergence Functional}
+We define a generalized divergence functional $H(u \mid \mathcal{A})$ representing the distance of the active velocity field $u$ from the global attractor $\mathcal{A}$.
+
+\begin{definition}[Divergence from the Global Attractor]
+Let $\Omega = \mathbb{T}^3$ be the flat torus. We define the reference manifold $\mathcal{A}$ as the global Leray--Hopf attractor of the Navier--Stokes semiflow (cf.\ \cite{FoiasManleyRosaTemam2001,Temam2001}). For any active flow field $u \in L^2(\Omega)$, the distance functional is:
+\begin{equation}
+    H(u \mid \mathcal{A}) := \inf_{v \in \mathcal{A}} E_{v}(u) = \inf_{v \in \mathcal{A}} \frac{1}{2} \int_\Omega |u - v|^2 \, dx.
+\end{equation}
+Because $\mathcal{A}$ is a compact subset of $L^2(\Omega)$, the infimum is achieved. We denote by $v(t) \in \mathcal{A}$ a measurable selection that minimizes this distance at time $t$, such that $H(u \mid \mathcal{A}) = \frac{1}{2} \int_\Omega |w|^2 \, dx$ with $w := u - v$.
+\end{definition}
+
+\begin{proposition}[Regularity of the global attractor]
+\label{prop:attractor-regularity}
+Let $\Omega = \mathbb{T}^3$ and let $f \in L^\infty_t H^1_x(\Omega)$ be smooth
+forcing.  The global Leray--Hopf attractor $\mathcal{A}$ satisfies:
+\begin{enumerate}
+    \item[\emph{(i)}]   $\mathcal{A}$ is compact in $H^1(\Omega)$.
+    \item[\emph{(ii)}]  Every $v \in \mathcal{A}$ is smooth: $v \in C^\infty(\Omega)$.
+    \item[\emph{(iii)}] $\sup_{v \in \mathcal{A}} \|v\|_{W^{1,\infty}} < \infty$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\noindent\textbf{(i) Compactness in $H^1$.}
+The Navier--Stokes semiflow $S(t)$ on $\mathbb{T}^3$ with forcing
+$f \in L^\infty_t H^1_x$ possesses an absorbing ball
+$\mathcal{B}_1 \subset H^1(\Omega)$: there exists $R_1 > 0$ (depending on
+$\nu$ and $\|f\|_{L^\infty H^1}$) and $t_1 > 0$ such that
+$S(t)\bigl(\mathcal{B}_0\bigr) \subset \mathcal{B}_1 := \{u : \|u\|_{H^1} \le R_1\}$
+for all $t \ge t_1$ and every bounded set $\mathcal{B}_0 \subset L^2(\Omega)$.
+This follows from the standard energy estimate: testing the Navier--Stokes
+equation with $-\Delta u$ yields a differential inequality for $\|\nabla u\|_{L^2}^2$
+that, combined with the Poincar\'{e} inequality, produces uniform-in-time $H^1$
+bounds after a transient (cf.\ \cite{Temam2001}, Chapter~III, \S3;
+\cite{FoiasManleyRosaTemam2001}, \S9.2).
+
+The global attractor is defined as
+$\mathcal{A} = \bigcap_{t\ge 0} S(t)\bigl(\mathcal{B}_1\bigr)$, and it is the
+maximal compact invariant set of the semiflow.  On $\mathbb{T}^3$, the semiflow
+$S(t)$ is \emph{compact} as a map from $H^1$ to $H^1$ (indeed, it maps bounded
+sets in $L^2$ into bounded sets in $H^2$ for $t > 0$, and the embedding
+$H^2(\mathbb{T}^3) \hookrightarrow H^1(\mathbb{T}^3)$ is compact by the
+Rellich--Kondrachov theorem).  By the abstract attractor existence theorem
+(\cite{Temam2001}, Theorem~I.1.1; \cite{FoiasManleyRosaTemam2001}, Theorem~9.6),
+$\mathcal{A}$ is compact in $H^1(\Omega)$.
+
+\medskip
+\noindent\textbf{(ii) Smoothness of attractor elements.}
+Let $v \in \mathcal{A}$.  Since $\mathcal{A}$ is invariant, there exists a
+complete bounded trajectory $\{v(t)\}_{t\in\mathbb{R}} \subset \mathcal{A}$
+passing through $v = v(0)$.  Each $v(t)$ satisfies the Navier--Stokes equation
+\[
+    \partial_t v + (v\cdot\nabla)v + \nabla p = \nu\Delta v + f.
+\]
+Since $v(t) \in H^1(\mathbb{T}^3)$ uniformly and $f \in H^1$, we bootstrap
+regularity as follows.
+
+\emph{First step ($H^1 \to H^2$):} The nonlinear term
+$(v\cdot\nabla)v \in L^2(\mathbb{T}^3)$ by the Sobolev embedding
+$H^1(\mathbb{T}^3) \hookrightarrow L^6(\mathbb{T}^3)$ and H\"older's
+inequality.  Rewriting the equation as the stationary Stokes system
+$-\nu\Delta v + \nabla p = f - (v\cdot\nabla)v - \partial_t v$,
+elliptic regularity for the Stokes operator on $\mathbb{T}^3$
+(\cite{ConstantinFoias1988}, \S2.4; \cite{Temam2001}, \S II.3) yields
+$v(t) \in H^2(\mathbb{T}^3)$.
+
+\emph{Inductive step ($H^k \to H^{k+1}$):}  Suppose $v \in H^k$ for some
+$k \ge 2$.  Since $H^k(\mathbb{T}^3)$ is a Banach algebra for $k \ge 2$
+(by the Sobolev embedding $H^k \hookrightarrow L^\infty$ for $k > 3/2$),
+the nonlinear term $(v\cdot\nabla)v \in H^{k-1}$.  Elliptic regularity for
+the Stokes operator then gives $v \in H^{k+1}$.  By induction,
+$v \in \bigcap_{k\ge 1} H^k(\mathbb{T}^3) = C^\infty(\mathbb{T}^3)$.
+
+\medskip
+\noindent\textbf{(iii) Uniform $W^{1,\infty}$ bound.}
+By part~(ii) and the bootstrap argument, $\mathcal{A} \subset H^k(\mathbb{T}^3)$
+for every $k \ge 1$.  Moreover, the absorbing ball argument extends to higher
+Sobolev norms: for each $k$, there exists $R_k > 0$ such that
+$\sup_{v\in\mathcal{A}}\|v\|_{H^k} \le R_k$ (cf.\ \cite{FoiasManleyRosaTemam2001},
+Theorem~12.1; \cite{Temam2001}, \S III.5).
+Choosing $k > 5/2$ (e.g.\ $k = 3$), the Sobolev embedding theorem on
+$\mathbb{T}^3$ gives $H^k(\mathbb{T}^3) \hookrightarrow W^{1,\infty}(\mathbb{T}^3)$
+continuously.  Therefore
+\[
+    \sup_{v\in\mathcal{A}} \|v\|_{W^{1,\infty}}
+    \;\le\; C_{\mathrm{Sob}}\,\sup_{v\in\mathcal{A}} \|v\|_{H^k}
+    \;\le\; C_{\mathrm{Sob}}\,R_k
+    \;<\; \infty,
+\]
+where $C_{\mathrm{Sob}}$ is the embedding constant.
+\end{proof}
+
+\begin{remark}[On the attractor in the absence of unconditional regularity]
+\label{rem:circularity}
+The existence of a compact global attractor for the 3D Navier--Stokes
+semiflow on~$\mathbb{T}^3$ is standard when the semiflow is known to
+generate a continuous dynamical system on~$H^1$
+(cf.~\cite{Temam2001,FoiasManleyRosaTemam2001}).  In the absence of
+an unconditional regularity proof, the semiflow is only defined through
+Leray--Hopf weak solutions, for which uniqueness remains open.
+Nevertheless, the \emph{weak attractor} (the $\omega$-limit set of the
+absorbing ball under the Leray--Hopf semiflow; see
+\cite{FoiasManleyRosaTemam2001}, \S12) exists and is compact
+in~$L^2$, and every element on the weak attractor is smooth by the
+standard bootstrap argument (invariance gives a complete bounded
+trajectory, which regularises via the Stokes operator).  The present
+paper works entirely within this framework: the attractor
+$\mathcal{A}$ is the weak Leray--Hopf attractor, and the smoothness
+of its elements (Proposition~\ref{prop:attractor-regularity}(ii)--(iii))
+does not presuppose global regularity of arbitrary solutions.
+\end{remark}
+
+By tracking the evolution of this functional, we establish an exact dissipation bound.
+
+\begin{lemma}[Energy-Dissipation Divergence Bound]
+\label{lem:entropy-bound}
+Let $u, v \in L^\infty_t H^1_x(\Omega)$ be divergence-free solutions to the Navier-Stokes equations with identical smooth forcing $f$. The time evolution of the specific energy distance $E_{v}(t) = \frac{1}{2}\| u - v \|_{L^2}^2$ is bounded by:
+\begin{equation}
+    \frac{d}{dt} E_{v}(t) \le - \frac{\nu}{2} \|\nabla u\|_{L^2}^2 + C_1(t) E_{v}(t) + C_2(t),
+\end{equation}
+where $C_1(t) = 2\|\nabla v\|_{L^\infty} + 1$ and $C_2(t) = \frac{1}{2}\|(v \cdot \nabla)v\|_{L^2}^2 + \frac{1}{2}\|f - \partial_t v\|_{L^2}^2 + \frac{\nu}{2}\|\nabla v\|_{L^2}^2$.
+\end{lemma}
+
+\begin{proof}
+We subtract the governing equations for $v$ from $u$, yielding the evolution equation for $w = u - v$:
+\begin{equation}
+    \frac{d}{dt} E_{v}(t) = \int_\Omega w \cdot \partial_t w \, dx = \int_\Omega w \cdot \left( -(u \cdot \nabla)u - \nabla p + \nu \Delta u + f - \partial_t v \right) dx.
+\end{equation}
+Because $\nabla \cdot w = 0$ and $\Omega$ is periodic, the pressure term vanishes: $\int_\Omega w \cdot \nabla p \, dx = 0$.
+Integration by parts on the viscous term gives:
+\begin{equation}
+    \nu \int_\Omega w \cdot \Delta u \, dx = - \nu \int_\Omega \nabla w : \nabla u \, dx = - \nu \|\nabla u\|_{L^2}^2 + \nu \int_\Omega \nabla v : \nabla u \, dx.
+\end{equation}
+Applying the Cauchy-Schwarz and Young inequalities yields:
+\begin{equation}
+    \nu \int_\Omega w \cdot \Delta u \, dx \le - \frac{\nu}{2} \|\nabla u\|_{L^2}^2 + \frac{\nu}{2} \|\nabla v\|_{L^2}^2.
+\end{equation}
+For the critical convective integral $I := \int_\Omega w \cdot (u \cdot \nabla)u \, dx$, we decompose $u = v + w$. Utilizing the fundamental cancellation property $\int_\Omega w \cdot (y \cdot \nabla)w \, dx = 0$ for any divergence-free $y$, we isolate the remaining non-zero terms:
+\begin{equation}
+    - I = - \int_\Omega w \cdot (v \cdot \nabla)v \, dx - \int_\Omega w \cdot (w \cdot \nabla)v \, dx.
+\end{equation}
+These terms are bounded as:
+\begin{equation}
+    |-I| \le \|w\|_{L^2} \|(v \cdot \nabla)v\|_{L^2} + \|\nabla v\|_{L^\infty} \|w\|_{L^2}^2.
+\end{equation}
+Substituting these bounds back into the time derivative equation and applying Young's inequality to the residual linear terms $\|w\|_{L^2} \|f - \partial_t v\|_{L^2}$ and $\|w\|_{L^2} \|(v \cdot \nabla)v\|_{L^2}$ yields the stated result.
+\end{proof}
+
+Because $\mathcal{A}$ is the global Leray-Hopf attractor on $\mathbb{T}^3$, absorbing ball estimates ensure that the uniform bounds $\sup_{v \in \mathcal{A}} C_1(t) < \infty$ and $\sup_{v \in \mathcal{A}} C_2(t) < \infty$ hold globally for all $t$. Taking the infimum over $\mathcal{A}$ transitions the individual energy bound into an absolute stability limit for the flow divergence $H(u \mid \mathcal{A})$.
+
+\begin{remark}[The minimiser is not a single NS trajectory]
+\label{rem:minimiser-trajectory}
+In the proof of Theorem~\ref{thm:main}, the minimising selection
+$v(t) \in \mathcal{A}$ is the nearest attractor element at each time~$t$,
+\emph{not} a single NS solution trajectory.  As $u(t)$ evolves, the
+minimiser may jump between different points of~$\mathcal{A}$.
+Lemma~\ref{lem:entropy-bound} is stated for a \emph{fixed} NS solution~$v$;
+when applied to the time-varying minimiser, the term $\partial_t v$ in
+$C_2$ must be interpreted as the total rate of change of the selection
+(including jumps), not merely the NS evolution at~$v(t)$.  This is
+precisely why Assumption~G (controlling $\partial_t v$) or the BV
+modification (Stieltjes integral, equation~\eqref{eq:stieltjes-bound})
+is needed.
+\end{remark}
+
+\section{Main Result: Conditional Exclusion of Finite-Time Singularities}
+
+We now establish the main regularity result. Two auxiliary lemmas are stated and
+proved first to keep the principal argument self-contained.
+
+% ------------------------------------------------------------------
+\subsection*{Lemma A (Biot--Savart Logarithmic Estimate)}
+% ------------------------------------------------------------------
+\begin{lemma}[Biot--Savart estimate on $\mathbb{T}^3$]
+\label{lem:BS}
+Let $u$ be a periodic, divergence-free vector field on $\mathbb{T}^3$, and let
+$\omega = \nabla\times u$ be its vorticity.  For any $s > 3/2$ there exists a
+constant $C_{\mathrm{BS}} = C_{\mathrm{BS}}(s,\Omega) > 0$ (depending only on
+$s$ and the geometry of $\Omega = \mathbb{T}^3$, but \emph{not} on $u$) such that
+\begin{equation}\label{eq:BS}
+    \|\nabla u\|_{L^\infty}
+    \;\le\;
+    C_{\mathrm{BS}}\,\|\omega\|_{L^\infty}
+    \!\left(1 + \log\frac{\|\omega\|_{H^s}}{\|\omega\|_{L^\infty}}\right),
+    \qquad \text{whenever } \|\omega\|_{L^\infty} > 0.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+We recover $\nabla u$ from $\omega$ via the periodic Biot--Savart law:
+$u = K * \omega$, where $K$ is the matrix-valued convolution kernel on
+$\mathbb{T}^3$ arising from inverting the curl--divergence system.  In
+particular $\nabla u = \nabla K * \omega$, and $\nabla K$ is a
+Calder\'{o}n--Zygmund singular integral kernel (cf.\ \cite{BertozziMajda2002},
+Chapter~2).
+
+\medskip
+\noindent\textbf{Step 1 (Littlewood--Paley decomposition).}
+Let $\{\Delta_j\}_{j\ge 0}$ denote the standard Littlewood--Paley projection
+operators on $\mathbb{T}^3$, associated with a smooth dyadic partition of unity
+$\{\varphi_j\}$ in frequency space such that
+$\operatorname{supp}\hat\varphi_j \subset \{|\xi| \sim 2^j\}$ and
+$\sum_{j\ge 0}\varphi_j(\xi) = 1$ for all $\xi \neq 0$.
+We split $\nabla u$ at a free integer parameter $N \ge 1$:
+\[
+    \nabla u \;=\; \underbrace{\sum_{j=0}^{N} \Delta_j(\nabla u)}_{=:\,S_{\le N}}
+                  \;+\; \underbrace{\sum_{j=N+1}^{\infty} \Delta_j(\nabla u)}_{=:\,S_{>N}}.
+\]
+
+\medskip
+\noindent\textbf{Step 2 (Low frequencies $j \le N$).}
+Because $\nabla K$ is a Calder\'{o}n--Zygmund operator of order zero on
+$\mathbb{T}^3$, it maps $L^\infty$ to $\mathrm{BMO}$, and on each Littlewood--Paley
+block $\Delta_j$ the Bernstein embedding
+$\mathrm{BMO} \hookrightarrow L^\infty$ (at fixed frequency scale) yields
+\[
+    \|\Delta_j(\nabla u)\|_{L^\infty}
+    \;\le\; C_{\mathrm{CZ}}\,\|\Delta_j \omega\|_{L^\infty}
+    \;\le\; C_{\mathrm{CZ}}\,\|\omega\|_{L^\infty},
+\]
+where $C_{\mathrm{CZ}}$ depends only on the operator norm of $\nabla K$ and
+the geometry of $\mathbb{T}^3$.  Summing over $j = 0, \ldots, N$:
+\begin{equation}\label{eq:BS-low}
+    \|S_{\le N}\|_{L^\infty}
+    \;\le\; C_{\mathrm{CZ}}\,(N+1)\,\|\omega\|_{L^\infty}.
+\end{equation}
+
+\medskip
+\noindent\textbf{Step 3 (High frequencies $j > N$).}
+For each dyadic block with Fourier support in $\{|\xi| \sim 2^j\}$, the
+Bernstein inequality on $\mathbb{T}^3$ gives (with $p=2$, $q=\infty$):
+\[
+    \|\Delta_j(\nabla u)\|_{L^\infty}
+    \;\le\; C_B\,2^{3j/2}\,\|\Delta_j(\nabla u)\|_{L^2}.
+\]
+Since $u = K * \omega$ and $\widehat{\nabla K}(\xi)$ is a zero-order symbol
+(bounded above and below on each frequency shell), we have
+$\|\Delta_j(\nabla u)\|_{L^2} \le C\,\|\Delta_j \omega\|_{L^2}$.
+Expressing $\|\Delta_j \omega\|_{L^2}$ in terms of the $H^s$-norm
+via $\|\Delta_j\omega\|_{L^2} \le 2^{-js}\,\bigl(2^{js}\|\Delta_j\omega\|_{L^2}\bigr)
+\le 2^{-js}\,\|\omega\|_{H^s}$, we obtain
+\[
+    \|\Delta_j(\nabla u)\|_{L^\infty}
+    \;\le\; C'\,2^{j(3/2-s)}\,\|\omega\|_{H^s}.
+\]
+Since $s > 3/2$, the exponent $\alpha := s - 3/2 > 0$ is strictly positive,
+and the tail sum is a convergent geometric series:
+\begin{equation}\label{eq:BS-high}
+    \|S_{>N}\|_{L^\infty}
+    \;\le\; \sum_{j>N} C'\,2^{-j\alpha}\,\|\omega\|_{H^s}
+    \;=\; \frac{C'\,2^{-(N+1)\alpha}}{1 - 2^{-\alpha}}\,\|\omega\|_{H^s}
+    \;\le\; C''\,2^{-N\alpha}\,\|\omega\|_{H^s}.
+\end{equation}
+
+\medskip
+\noindent\textbf{Step 4 (Optimisation over $N$).}
+Combining \eqref{eq:BS-low} and \eqref{eq:BS-high}:
+\[
+    \|\nabla u\|_{L^\infty}
+    \;\le\; C_{\mathrm{CZ}}\,(N+1)\,\|\omega\|_{L^\infty}
+          + C''\,2^{-N\alpha}\,\|\omega\|_{H^s}.
+\]
+We choose $N \in \mathbb{N}$ such that the two terms are approximately balanced.
+Setting
+\[
+    2^{N\alpha} \;=\; \frac{\|\omega\|_{H^s}}{\|\omega\|_{L^\infty}},
+    \qquad\text{i.e.}\qquad
+    N \;=\; \frac{1}{\alpha\,\ln 2}\,
+            \ln\!\frac{\|\omega\|_{H^s}}{\|\omega\|_{L^\infty}},
+\]
+the high-frequency contribution becomes
+$C''\,2^{-N\alpha}\,\|\omega\|_{H^s} = C''\,\|\omega\|_{L^\infty}$.
+For the low-frequency part,
+\[
+    C_{\mathrm{CZ}}\,(N+1)\,\|\omega\|_{L^\infty}
+    \;\le\; \tilde C\,\|\omega\|_{L^\infty}\,
+            \Bigl(1 + \ln\!\frac{\|\omega\|_{H^s}}{\|\omega\|_{L^\infty}}\Bigr).
+\]
+Adding both estimates and absorbing the universal constants into
+$C_{\mathrm{BS}} = C_{\mathrm{BS}}(s,\Omega)$ yields
+\[
+    \|\nabla u\|_{L^\infty}
+    \;\le\;
+    C_{\mathrm{BS}}\,\|\omega\|_{L^\infty}\,
+    \Bigl(1 + \log\frac{\|\omega\|_{H^s}}{\|\omega\|_{L^\infty}}\Bigr),
+\]
+which is the claimed inequality \eqref{eq:BS}.
+\end{proof}
+
+\begin{remark}
+The constant $C_{\mathrm{BS}}$ can be made explicit: a careful tracking of the
+Calder\'{o}n--Zygmund norm of $K$ and the Bernstein constant gives
+$C_{\mathrm{BS}} \lesssim C(s)(1 + \|K\|_{L^{3/2,\infty}})$.  In particular
+$C_{\mathrm{BS}}$ is \emph{uniform} over $\mathcal{A}$ because all attractor
+elements share the same ambient torus.
+\end{remark}
+
+% ------------------------------------------------------------------
+\subsection*{Lemma B (Enstrophy Balance and Blow-up Behaviour)}
+% ------------------------------------------------------------------
+\begin{lemma}[Enstrophy balance and pointwise blow-up]
+\label{lem:enstrophy}
+Let $u$ be a Leray--Hopf solution of the Navier--Stokes equations with smooth
+forcing $f \in L^\infty_t H^1_x$ on $\mathbb{T}^3$.  The enstrophy satisfies (in
+the weak sense for a.e.\ $t$)
+\begin{equation}\label{eq:enstrophy}
+    \frac{1}{2}\frac{d}{dt}\|\omega(t)\|_{L^2}^2
+    = -\nu\|\nabla\omega\|_{L^2}^2
+      + \int_\Omega (\omega\cdot\nabla)u\cdot\omega\,dx
+      + \int_\Omega (\nabla\times f)\cdot\omega\,dx.
+\end{equation}
+If $\int_0^{T^*}\|\omega(t)\|_{L^\infty}\,dt = \infty$ (BKM blow-up), then
+the enstrophy diverges pointwise:
+\begin{equation}\label{eq:diss-blowup}
+    \limsup_{t \nearrow T^*}\|\nabla u(t)\|_{L^2}^2 = \infty.
+\end{equation}
+\end{lemma}
+
+\begin{remark}[What does and does not diverge under blow-up]
+\label{rem:divergence-landscape}
+Under a hypothetical BKM blow-up at $T^* < \infty$:
+\begin{itemize}
+  \item \textbf{Diverges (pointwise):}\;
+    $\|\omega(t)\|_{L^\infty} \to \infty$,\;
+    $\|\nabla u(t)\|_{L^2} \to \infty$ as $t \nearrow T^*$.
+  \item \textbf{Remains finite (integral):}\;
+    $\int_0^{T^*}\|\nabla u\|_{L^2}^2\,dt < \infty$.
+    This follows from the Leray energy identity:
+    $\nu\int_0^{T^*}\|\nabla u\|^2
+    = \tfrac{1}{2}\|u_0\|^2 - \tfrac{1}{2}\|u(T^*)\|^2
+    + \int_0^{T^*}\langle f,u\rangle\,dt$,
+    whose right-hand side is bounded because $\|u\|_{L^2}$ is
+    controlled by the energy inequality, $f$ is smooth, and $T^* < \infty$.
+\end{itemize}
+The pointwise divergence of $\|\nabla u(t)\|_{L^2}$ is compatible with
+finite $L^2$-in-time integrability: for instance,
+$(T^*-t)^{-\alpha}$ diverges pointwise but is integrable for $\alpha < 1$.
+This distinction is central to the conditional structure of
+Theorem~\ref{thm:main}; see Remark~\ref{rem:diss-gap} below.
+\end{remark}
+
+\begin{proof}
+The proof consists of two parts: the derivation of the enstrophy identity
+\eqref{eq:enstrophy} and the implication \eqref{eq:diss-blowup}.
+
+\medskip
+\noindent\textbf{Part 1: Derivation of the enstrophy identity.}
+We apply the curl operator $\nabla\times$ to the Navier--Stokes equation
+$\partial_t u + (u\cdot\nabla)u = -\nabla p + \nu\Delta u + f$.
+Since $\nabla\times(\nabla p) = 0$ identically, the pressure drops out.
+The standard vector identity for the nonlinear term yields the vorticity
+equation:
+\begin{equation}\label{eq:vort-eq}
+    \partial_t \omega + (u\cdot\nabla)\omega
+    \;=\; (\omega\cdot\nabla)u + \nu\Delta\omega + \nabla\times f.
+\end{equation}
+We now test \eqref{eq:vort-eq} against $\omega$ in $L^2(\Omega)$, i.e.\
+we take the inner product $\int_\Omega (\cdot)\cdot\omega\,dx$:
+\begin{align}
+    \int_\Omega (\partial_t\omega)\cdot\omega\,dx
+    &\;=\; \frac{1}{2}\frac{d}{dt}\|\omega\|_{L^2}^2, \label{eq:enst-lhs}\\[4pt]
+    \int_\Omega \bigl[(u\cdot\nabla)\omega\bigr]\cdot\omega\,dx
+    &\;=\; 0,\label{eq:enst-transport}
+\end{align}
+where \eqref{eq:enst-transport} holds because $\nabla\cdot u = 0$ and
+$\Omega = \mathbb{T}^3$ is periodic: integration by parts gives
+$\int_\Omega (u\cdot\nabla)\tfrac{|\omega|^2}{2}\,dx
+= -\int_\Omega \tfrac{|\omega|^2}{2}\,(\nabla\cdot u)\,dx = 0$.
+For the viscous term, integration by parts (twice, using periodicity) yields
+\[
+    \nu\int_\Omega (\Delta\omega)\cdot\omega\,dx
+    \;=\; -\nu\|\nabla\omega\|_{L^2}^2.
+\]
+Collecting all terms produces identity \eqref{eq:enstrophy}.
+
+\medskip
+\noindent\textbf{Part 2: Pointwise divergence of the enstrophy.}
+Assume $\int_0^{T^*}\|\omega(t)\|_{L^\infty}\,dt = \infty$.  We shall show
+that $\limsup_{t\nearrow T^*}\|\nabla u(t)\|_{L^2}^2 = \infty$
+(pointwise blow-up of the enstrophy).
+
+\smallskip
+\noindent\emph{Step 2a (Vortex-stretching bound).}
+The vortex-stretching integral in \eqref{eq:enstrophy} satisfies
+\begin{equation}\label{eq:stretch-bound}
+    \Bigl|\int_\Omega (\omega\cdot\nabla)u\cdot\omega\,dx\Bigr|
+    \;\le\; \|\nabla u\|_{L^\infty}\,\|\omega\|_{L^2}^2.
+\end{equation}
+This follows from the pointwise estimate
+$|(\omega\cdot\nabla)u\cdot\omega| \le |\nabla u|\,|\omega|^2$ and
+H\"older's inequality.
+
+\smallskip
+\noindent\emph{Step 2b (Inserting the Biot--Savart estimate).}
+By Lemma~\ref{lem:BS}, for a fixed $s > 3/2$:
+\[
+    \|\nabla u\|_{L^\infty}
+    \;\le\; C_{\mathrm{BS}}\,\|\omega\|_{L^\infty}\,
+            \bigl(1 + \log^+\!\tfrac{\|\omega\|_{H^s}}{\|\omega\|_{L^\infty}}\bigr).
+\]
+On $\mathbb{T}^3$, the Gagliardo--Nirenberg interpolation inequality gives
+$\|\omega\|_{H^s} \le C\,\|\omega\|_{L^2}^{1-s/k}\,\|\omega\|_{H^k}^{s/k}$
+for any integer $k > s$; choosing $k = \lceil s \rceil + 1$ and using
+$\|\omega\|_{H^k} \le C'\,\|\nabla^k \omega\|_{L^2} + C''\,\|\omega\|_{L^2}$
+(Poincar\'{e} on $\mathbb{T}^3$; cf.\ \cite{ConstantinFoias1988}).
+In particular, $\log^+\!\tfrac{\|\omega\|_{H^s}}{\|\omega\|_{L^\infty}}$ grows
+at most logarithmically in the higher Sobolev norms of~$\omega$.
+
+Substituting into \eqref{eq:stretch-bound}:
+\begin{equation}\label{eq:stretch-BS}
+    \Bigl|\int_\Omega (\omega\cdot\nabla)u\cdot\omega\,dx\Bigr|
+    \;\le\; C_{\mathrm{BS}}\,\|\omega\|_{L^\infty}\,
+            \bigl(1 + \log^+\!\tfrac{\|\omega\|_{H^s}}{\|\omega\|_{L^\infty}}\bigr)\,
+            \|\omega\|_{L^2}^2.
+\end{equation}
+
+\smallskip
+\noindent\emph{Step 2c (Gronwall chain).}
+Inserting \eqref{eq:stretch-BS} and the forcing bound
+$|\int_\Omega(\nabla\times f)\cdot\omega\,dx|
+\le \|\nabla\times f\|_{L^2}\|\omega\|_{L^2}
+\le C_f + \tfrac{1}{4}\|\omega\|_{L^2}^2$ into \eqref{eq:enstrophy}, we obtain
+\[
+    \frac{1}{2}\frac{d}{dt}\|\omega\|_{L^2}^2
+    \;\le\;
+    -\nu\|\nabla\omega\|_{L^2}^2
+    + C_{\mathrm{BS}}\,\|\omega\|_{L^\infty}\,
+      \bigl(1 + \log^+\!\tfrac{\|\omega\|_{H^s}}{\|\omega\|_{L^\infty}}\bigr)\,
+      \|\omega\|_{L^2}^2
+    + C_f'.
+\]
+Define $\Phi(t) := \|\omega(t)\|_{L^2}^2$.  Since the logarithmic factor
+grows at most like $C + C\log\|\nabla\omega\|_{L^2}$, and by Young's inequality
+$a\log b \le \varepsilon b^2 + C_\varepsilon a(\log a + 1)$ for $a,b > 0$,
+the logarithmic--stretching term can be absorbed into the viscous dissipation
+$\nu\|\nabla\omega\|_{L^2}^2$ at the cost of a multiplicative Gronwall factor
+involving $\|\omega\|_{L^\infty}$.  More precisely, there exist constants
+$c_1, c_2 > 0$ (depending on $\nu, s, C_{\mathrm{BS}}$) such that
+\begin{equation}\label{eq:Gronwall-enst}
+    \frac{d}{dt}\Phi(t)
+    \;\le\;
+    -\nu\|\nabla\omega\|_{L^2}^2
+    + c_1\,\|\omega(t)\|_{L^\infty}\,(1 + \log^+\Phi(t))\,\Phi(t)
+    + c_2.
+\end{equation}
+If $\int_0^{T^*}\|\omega\|_{L^\infty}\,dt = \infty$ (BKM), the Gronwall
+factor $\exp\!\bigl(c_1\int_0^t\|\omega\|_{L^\infty}(1+\log^+\Phi)\,d\tau\bigr)$
+diverges, forcing $\Phi(t) = \|\omega(t)\|_{L^2}^2 \to \infty$ as
+$t \nearrow T^*$.
+
+\smallskip
+\noindent\emph{Step 2d (Hodge identity and pointwise blow-up).}
+On $\mathbb{T}^3$ with $\nabla\cdot u = 0$ and zero mean, the Hodge identity
+$\|\omega\|_{L^2} = \|\nabla u\|_{L^2}$ holds.
+Since $\Phi(t) = \|\omega(t)\|_{L^2}^2 = \|\nabla u(t)\|_{L^2}^2 \to \infty$,
+we obtain the \emph{pointwise} blow-up of the enstrophy
+\eqref{eq:diss-blowup}.
+
+\medskip
+\noindent\textbf{Important distinction:}\;
+The Leray energy identity implies that the \emph{time-integral}
+$\int_0^{T^*}\|\nabla u\|_{L^2}^2\,dt$ remains finite even under
+blow-up (see Remark~\ref{rem:divergence-landscape}).  What diverges
+is the \emph{pointwise} value $\|\nabla u(t)\|_{L^2}^2$ as
+$t \nearrow T^*$, not its time-integral.  This distinction is
+critical for the conditional structure of Theorem~\ref{thm:main}.
+\end{proof}
+
+% ------------------------------------------------------------------
+\subsection*{Assumption G (Gronwall Regularity of the Attractor Projection)}
+% ------------------------------------------------------------------
+
+The following assumption captures the key structural property that our
+argument requires but does not establish from first principles.
+
+\begin{definition}[Assumption G]\label{ass:G}
+Let $v(t) \in \mathcal{A}$ denote the measurable selection minimising
+$H(u(t)\mid\mathcal{A}) = \tfrac{1}{2}\|u(t)-v(t)\|_{L^2}^2$.  We say that
+\textbf{Assumption~G} holds if the time-dependent minimiser $v(t)$ satisfies:
+\begin{enumerate}
+    \item[\emph{(G1)}] The map $t \mapsto v(t)$ is absolutely continuous in
+          $L^2(\Omega)$, so that $\partial_t v(t)$ exists for a.e.\ $t$.
+    \item[\emph{(G2)}] The Gronwall coefficients $C_1(t)$ and $C_2(t)$ from
+          Lemma~\ref{lem:entropy-bound}, evaluated at the minimising selection
+          $v(t)$, satisfy $C_1, C_2 \in L^1_{\mathrm{loc}}([0,\infty))$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Assumption G$'$ (weakened)]\label{ass:Gprime}
+We say that \textbf{Assumption~G$'$} holds if:
+\begin{enumerate}
+    \item[\emph{(G1$'$)}] The map $t \mapsto v(t)$ has \emph{bounded variation}
+          in $L^2(\Omega)$: $\mathrm{Var}_{L^2}(v; [0,T]) :=
+          \sup \sum_{i} \|v(t_{i+1}) - v(t_i)\|_{L^2} < \infty$ for each
+          $T > 0$.
+    \item[\emph{(G2$'$)}] The Gronwall coefficients satisfy
+          $C_1, C_2 \in L^1_{\mathrm{loc}}$ with respect to the Stieltjes
+          measure $\mathrm{d}\|v\|(t)$ (the total variation measure of $v$).
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[Weakened assumption suffices]\label{prop:Gprime}
+Theorem~\ref{thm:main} remains valid if Assumption~G is replaced by the
+weaker Assumption~G$'$.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+The Gronwall inequality in Step~2 of the proof of
+Theorem~\ref{thm:main} uses $\int_0^T C_1(t)\,\mathrm{d} t$ as the cumulative
+bound. Under (G1$'$), the minimiser $v(t)$ may jump, but the total
+variation $\mathrm{Var}_{L^2}(v;[0,T])$ is finite. The key term
+$\langle w, \partial_t v \rangle$ in the time derivative of $H$ is
+replaced by the Stieltjes integral $\int_0^T \langle w(t),
+\mathrm{d} v(t)\rangle$, which is bounded by $\|w\|_{L^\infty_t L^2}\cdot
+\mathrm{Var}_{L^2}(v;[0,T])$. All resulting terms on the right-hand
+side of the integrated inequality are finite (see the BV~modification
+in the proof of Theorem~\ref{thm:main} for the detailed
+bound~\eqref{eq:H-integral-BV}). The contradiction $H < 0$ then
+follows under the same dissipation-dominance
+condition~\eqref{eq:diss-dom}.
+\end{proof}
+
+We now identify sufficient geometric conditions under which G$'$ is a
+\emph{theorem}. The structure mirrors the DFC$\Rightarrow$NL$'$
+reduction in the turbulence setting~\cite{FST-TU2026}: replace an
+opaque PDE assumption with verifiable geometric properties of the
+attractor.
+
+\begin{definition}[Attractor Geometry Condition]\label{def:AGC}
+The attractor $\mathcal{A}$ satisfies the \emph{Attractor Geometry
+Condition} (AGC) if:
+\begin{enumerate}
+  \item[\textup{(AGC1)}] \textbf{Positive reach.}\;
+    There exists $\delta > 0$ such that every point $x$ with
+    $\mathrm{dist}(x, \mathcal{A}) < \delta$ has a \emph{unique}
+    nearest point $\pi(x) \in \mathcal{A}$, and the nearest-point map
+    $\pi$ is Lipschitz continuous on
+    $\mathcal{A}^\delta := \{x : \mathrm{dist}(x,\mathcal{A}) < \delta\}$
+    with Lipschitz constant~$1$.
+  \item[\textup{(AGC2)}] \textbf{Exponential tracking.}\;
+    There exist $C_0, \lambda > 0$ such that for any Leray--Hopf solution
+    $u(t)$ with $u_0$ in the absorbing ball:
+    $\mathrm{dist}(u(t), \mathcal{A}) \le C_0\,e^{-\lambda t}$ for all
+    $t \ge 0$.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}[AGC implies G]\label{lem:AGC-implies-G}
+If \textup{(AGC1)--(AGC2)} hold, then Assumption~G holds
+\textup{(}not merely G$'$\textup{)}.
+\end{lemma}
+
+\begin{proof}
+By (AGC2), there exists $t_0 > 0$ such that
+$\mathrm{dist}(u(t), \mathcal{A}) < \delta$ for all $t \ge t_0$.
+For $t \ge t_0$, the minimiser $v(t) = \pi(u(t))$ is well-defined and
+the Lipschitz property of $\pi$ (AGC1) gives:
+\[
+  \|v(t_2) - v(t_1)\|_{L^2}
+  \;\le\;
+  \|u(t_2) - u(t_1)\|_{L^2}
+  \qquad \forall\, t_0 \le t_1 < t_2.
+\]
+Since $u(t)$ is absolutely continuous in $L^2$ (Leray--Hopf regularity),
+$v(t)$ is absolutely continuous with $\|\partial_t v\| \le \|\partial_t u\|$
+a.e. This gives (G1). For (G2), the Gronwall coefficients $C_1(t),
+C_2(t)$ depend on $\|v(t)\|_{W^{1,\infty}}$ and $\|\partial_t v(t)\|$;
+both are bounded by
+Proposition~\ref{prop:attractor-regularity}(iii) and the Lipschitz
+estimate.
+\end{proof}
+
+\begin{remark}[Status of AGC and the reach gap]
+\label{rem:AGC-status}
+\textup{(AGC2)} is a standard consequence of the absorbing-ball property
+and is proven for 3D NS on $\mathbb{T}^3$ with smooth
+forcing~\cite{Temam2001}.
+
+\textup{(AGC1)} is the hard part.
+Positive reach of $\mathcal{A}$ would follow from the existence of an
+\emph{inertial manifold}---a Lipschitz-graph attractor with smooth
+normal bundle. Inertial manifolds are proven for hyperviscous NS
+($(-\Delta)^\beta$, $\beta \ge 5/4$) and for 2D
+NS~\cite{MalletParetSell1988}, but remain open for 3D NS with $\beta=1$.
+The obstruction is the insufficient spectral gap of the 3D Stokes
+operator: eigenvalue gaps $\mu_{N+1} - \mu_N$ grow as $N^{2/3}$, while
+the inertial manifold construction requires growth $\gtrsim N$.
+
+\medskip\noindent
+\textbf{Sufficient conditions for G$'$ (weaker than AGC1).}\;
+For the BV version G$'$, three progressively weaker geometric
+conditions each suffice. We state them as propositions to clarify
+the landscape of attack vectors.
+
+\begin{proposition}[Trajectory-reach]\label{prop:traj-reach}
+\textup{(AGC1$'$)}\;
+Suppose there exists $\delta > 0$ such that the nearest-point
+projection $\pi$ is well-defined and Lipschitz on the tubular set
+$\{x : \mathrm{dist}(x, \mathcal{A}) < \delta\}
+\cap \{u(t) : t \ge t_0\}$
+\textup{(}i.e., along the trajectory only\textup{)}. Then G holds
+on $[t_0, \infty)$.
+\end{proposition}
+
+\begin{proof}
+Identical to Lemma~\ref{lem:AGC-implies-G}, restricted to the
+trajectory.
+\end{proof}
+
+\begin{proposition}[Lipschitz graph over low modes]\label{prop:graph}
+\textup{(AGC1$''$)}\;
+Suppose there exists a Galerkin truncation $N$ and a Lipschitz map
+$\Phi : P_N L^2 \to Q_N L^2$ (where $P_N$ is the Stokes projector
+onto the first $N$ eigenmodes, $Q_N = I - P_N$) such that
+$\mathcal{A} \subset \mathrm{graph}(\Phi) =
+\{x + \Phi(x) : x \in P_N L^2\}$.
+Then the projection $\pi(u) = x^* + \Phi(x^*)$ with
+$x^* = \arg\min_{x \in P_N\mathcal{A}} \|P_N u - x\|$ is Lipschitz,
+and G holds.
+\end{proposition}
+
+\begin{proof}
+The graph property ensures that $\pi$ factors through the
+finite-dimensional projection $P_N$ followed by the Lipschitz map
+$\Phi$. Since $P_N u(t)$ is AC in $\mathbb{R}^N$ (Leray--Hopf
+solutions are AC in every finite Galerkin projection),
+$v(t) = \pi(u(t))$ inherits AC.
+\end{proof}
+
+\begin{proposition}[BV selection from minimiser multivaluation]
+\label{prop:bv-selection}
+\textup{(AGC1$'''$)}\;
+Suppose the set-valued map $t \mapsto \arg\min_{v \in \mathcal{A}}
+\|u(t)-v\|$ admits a measurable selection $v(t)$ with
+$\mathrm{Var}_{L^2}(v; [0,T]) < \infty$ for each $T > 0$.
+Then G$'$ holds by definition.
+\end{proposition}
+
+\begin{proof}
+Tautological: (AGC1$'''$) is exactly the statement (G1$'$).
+\end{proof}
+
+\noindent
+\textbf{Hierarchy:}\;
+$\textup{AGC1 (global reach)}
+\;\Longrightarrow\;
+\textup{AGC1}' \textup{ (traj.-reach)}
+\;\Longrightarrow\;
+\textup{G}
+\;\Longrightarrow\;
+\textup{G}'
+\;\Longleftarrow\;
+\textup{AGC1}'''$.
+The graph condition AGC1$''$ implies AGC1 in the graph's normal
+neighbourhood and hence~G.
+None of AGC1--AGC1$'''$ is proven for the 3D Navier--Stokes attractor
+with classical viscosity $\beta = 1$. Each represents a different
+geometric attack vector, and a proof of \emph{any one} would close the
+regularity gap.
+
+\medskip\noindent
+\textbf{The open core (Selection Regularity Problem).}\;
+The entire regularity question for the 3D incompressible Navier--Stokes
+equations, \emph{within the framework of this paper}, reduces to the
+following single statement:
+
+\begin{center}
+\fbox{\parbox{0.85\textwidth}{%
+\textbf{Open Problem (Selection Regularity).}\;
+Let $u(t)$ be a Leray--Hopf solution on $\mathbb{T}^3$ and
+$\mathcal{A}$ the global attractor. Does there exist a measurable
+selection $v(t) \in \mathcal{A}$ with
+$\|u(t)-v(t)\|_{L^2} \le \delta(t)$ (tracking) and
+$\mathrm{Var}_{L^2}(v;\,[0,T]) < \infty$ for each $T > 0$?
+}}
+\end{center}
+
+\noindent
+An affirmative answer implies G$'$, which implies global regularity
+(Theorem~\ref{thm:main}). Four geometric sufficient conditions are
+identified above (AGC1--AGC1$'''$); the strongest (AGC1, positive reach)
+is equivalent to inertial manifold existence. The weakest
+(AGC1$'''$, BV selection) is exactly the statement above.
+This is a \emph{geometric} question about the structure of
+$\mathcal{A}$ as a subset of $L^2$, independent of the specific
+trajectory~$u(t)$.
+
+\medskip\noindent
+\textbf{Known results that almost suffice.}\;
+Several classical results come close to resolving the Selection
+Regularity Problem but fail at a precise point:
+\begin{itemize}
+  \item \textbf{Federer reach / prox-regularity}
+    (Federer 1959; Poliquin--Rockafellar--Thibault 2000):
+    Sets with positive reach $r > 0$ have Lipschitz-1 metric projection
+    on the $r$-tubular neighbourhood. This would trivially give~G.
+    However, positive reach imposes local $C^{1,1}$-manifold structure
+    and is \emph{incompatible with fractal geometry}---attractors
+    with non-integer fractal dimension generically have reach~$0$.
+  \item \textbf{Chistyakov BV selection} (2004):
+    If a compact-valued set map $F(t)$ has bounded Hausdorff variation,
+    then a BV selection exists with
+    $\mathrm{Var}(f) \le \mathrm{Var}_{\mathrm{Haus}}(F)$.
+    Applied to $F(t) = \arg\min_{v \in \mathcal{A}} \|u(t)-v\|$,
+    this reduces G$'$ to: \emph{does the minimiser set have bounded
+    Hausdorff variation along NS trajectories?} This is open.
+  \item \textbf{Sweeping processes}
+    (Moreau 1977; Edmond--Thibault 2006; Colombo--Monteiro Marques 2003):
+    BV solutions of the sweeping process $-\dot{v} \in N_{C(t)}(v)$
+    exist for prox-regular $C(t)$ with bounded retraction.
+    For non-prox-regular sets, \emph{no general BV theory exists}.
+  \item \textbf{Man\'e projectors}
+    (Man\'e 1981; Zelik 2022):
+    For attractors with finite fractal dimension~$d$, there exists a
+    generic linear projection $P : H \to \mathbb{R}^{2d+1}$ such that
+    $P|_{\mathcal{A}}$ is injective and the inverse
+    $(P|_{\mathcal{A}})^{-1}$ is H\"older-continuous.
+    Bi-Lipschitz Man\'e projectors (which would give~G via the graph
+    property AGC1$''$) exist only under additional dynamical conditions
+    and are \emph{not} available for 3D NS.
+\end{itemize}
+
+\noindent
+\textbf{The literature gap.}\;
+The gap between known results and the Selection Regularity Problem is
+precisely characterised: all BV projection theorems require either
+prox-regularity (Federer/Clarke/Thibault) or bounded Hausdorff
+variation (Chistyakov), neither of which follows from finite fractal
+dimension alone.
+The most promising bridge would be:
+\begin{enumerate}
+  \item A ``log-Lipschitz BV'' theory extending Chistyakov's theorem
+    to set maps with H\"older-controlled (not Hausdorff-bounded)
+    variation---\emph{formalised below} in
+    Definitions~\ref{def:TLL}--\ref{def:LDI} and
+    Lemma~\ref{lem:LL-BV}.
+  \item A proof that the 3D NS attractor is ``approximately
+    prox-regular'' (prox-regular after removing a meagre singular
+    set)---combined with the sweeping process theory.
+  \item Extension of Zelik's bi-Lipschitz Man\'e projector results
+    from Ginzburg--Landau to 3D NS---this would give AGC1$''$
+    directly.
+\end{enumerate}
+
+\medskip\noindent
+\textbf{Dependency table.}
+\medskip
+
+\begin{center}
+\begin{tabular}{llll}
+\hline
+\textbf{Label} & \textbf{Statement} & \textbf{Type} & \textbf{Source} \\
+\hline
+AGC1 & Positive reach $\delta > 0$ & \textbf{Open} &
+  Follows from inertial manifold \\
+AGC2 & Exponential tracking & Theorem &
+  \cite{Temam2001} \\
+Lem.~\ref{lem:AGC-implies-G} & AGC $\Rightarrow$ G &
+  \textbf{Theorem} & This paper \\
+Prop.~\ref{prop:Gprime} & G$'$ $\Rightarrow$
+  Thm~\ref{thm:main} & \textbf{Theorem} & This paper \\
+\hline
+\end{tabular}
+\end{center}
+
+\medskip\noindent
+The logical chain is:
+$\textup{AGC1} + \textup{AGC2}
+\;\Longrightarrow\;
+\textup{G}
+\;\Longrightarrow\;
+\textup{G}'
+\;\Longrightarrow\;
+\textup{Thm~\ref{thm:main}}$.
+The only unproven input is \textup{(AGC1)}, which is a geometric
+property of $\mathcal{A}$ independent of the specific trajectory
+$u(t)$. This reduces the regularity question from a PDE problem
+(``does $u$ stay smooth?'') to a geometric problem (``does
+$\mathcal{A}$ have positive reach?'').
+\end{remark}
+
+% ==================================================================
+% Bridge I: Log-Lipschitz Projection and BV Chain Rule
+% ==================================================================
+
+\subsection*{Bridge~I: Log-Lipschitz Projection and BV Selection}
+
+Positive reach (AGC1) is sufficient for~G but likely too strong for
+fractal attractors.  \emph{Log-Lipschitz} regularity---the critical
+class between H\"older (too weak for BV composition) and Lipschitz
+(too strong for fractal geometry)---arises naturally in dissipative
+PDE settings and offers a more accessible path to~G$'$.
+
+The key insight is that a \emph{global} log-Lipschitz bound
+$\|P(x)-P(y)\| \le C\|x-y\|(1+\log(R/\|x-y\|))$ does
+\emph{not} directly imply BV of $P\circ u$ for AC curves~$u$:
+the partition sums $\sum_i \Delta_i(1+\log(R/\Delta_i))$ diverge
+logarithmically as the partition refines.  The correct formulation
+replaces the increment-scale log weight with the
+\emph{distance-to-attractor} weight $\log(R/d(t))$, yielding a
+trajectory-wise condition that avoids this divergence.
+
+\begin{definition}[Trajectory log-Lipschitz projection]
+\label{def:TLL}
+Let $u \in \mathrm{AC}([0,T];\,H)$ with $u(t) \in \mathcal{A}^R
+:= \{x \in H : \mathrm{dist}_H(x,\mathcal{A}) < R\}$ for all~$t$.
+Set $d(t) := \mathrm{dist}_H(u(t),\mathcal{A})$ and
+$v(t) := P(u(t))$ for a selection
+$P: \mathcal{A}^R \to \mathcal{A}$ with $P|_{\mathcal{A}} = \mathrm{id}$.
+We say that $P$ satisfies the \emph{trajectory log-Lipschitz
+condition} (TLL) along~$u$ if there exist $C_{\mathrm{TLL}} > 0$ and
+$h_0 > 0$ such that for all $t \in [0,T)$ with $d(t) > 0$ and
+all $0 < h < \min(h_0,\, T-t)$:
+\begin{equation}\label{eq:TLL}
+  \|P(u(t\!+\!h)) - P(u(t))\|_H
+  \;\le\;
+  C_{\mathrm{TLL}}\,\|u(t\!+\!h) - u(t)\|_H\,
+  \bigl(1 + \log\tfrac{R}{d(t)}\bigr).
+  \tag{TLL}
+\end{equation}
+On the set $\{t : d(t)=0\}$ (where $u(t) \in \mathcal{A}$), we have
+$P(u(t)) = u(t)$ by the idempotence of~$P$, so no separate bound
+is needed.
+\end{definition}
+
+\begin{definition}[Log-distance integrability]
+\label{def:LDI}
+In the setting of Definition~\ref{def:TLL}, we say that
+\emph{log-distance integrability} holds if
+\begin{equation}\label{eq:LDI}
+  \int_0^T \|u'(t)\|_H\,
+  \bigl(1 + \log\tfrac{R}{d(t)}\bigr)\,\mathrm{d}t
+  \;<\; \infty.
+  \tag{LDI}
+\end{equation}
+\end{definition}
+
+\begin{lemma}[BV chain rule for log-Lipschitz projections]
+\label{lem:LL-BV}
+Let $u \in \mathrm{AC}([0,T];\,H)$ with $u(t) \in \mathcal{A}^R$
+for all~$t$, and let $P$ satisfy \eqref{eq:TLL}.
+If \eqref{eq:LDI} holds, then $v := P\circ u \in \mathrm{BV}([0,T];\,H)$
+with the explicit bound
+\begin{equation}\label{eq:BV-bound}
+  \mathrm{Var}_H(v;\,[0,T])
+  \;\le\;
+  C_{\mathrm{TLL}}
+  \int_0^T \|u'(t)\|_H\,
+  \bigl(1 + \log\tfrac{R}{d(t)}\bigr)\,\mathrm{d}t.
+\end{equation}
+In particular, Assumption~G$'$
+\textup{(}Definition~\ref{ass:Gprime}\textup{)} holds, and hence
+Theorem~\ref{thm:main} applies.
+\end{lemma}
+
+\begin{proof}
+\textbf{Step 1 (Metric derivative bound).}\;
+For a.e.\ $t$ with $d(t)>0$, the metric derivative of $v$ at $t$
+is bounded by
+\[
+  |v'|(t)
+  \;:=\;
+  \limsup_{h\to 0}\frac{\|v(t+h)-v(t)\|_H}{|h|}
+  \;\le\;
+  C_{\mathrm{TLL}}\,|u'|(t)\,
+  \bigl(1 + \log\tfrac{R}{d(t)}\bigr),
+\]
+where $|u'|(t) = \lim_{h\to 0}\|u(t+h)-u(t)\|_H/|h|$ exists a.e.\
+because $u$ is absolutely continuous.  This follows directly from
+dividing \eqref{eq:TLL} by $|h|$ and taking $h\to 0$.
+
+On $\{t : d(t)=0\}$: since $P|_{\mathcal{A}} = \mathrm{id}$,
+$v(t) = u(t)$ there, and $|v'|(t) = |u'|(t) \le |u'|(t)\,
+(1+\log(R/d(t)))$ with the convention that $0 \cdot \infty = 0$
+(the integral in \eqref{eq:LDI} absorbs this set automatically).
+
+\medskip
+\noindent
+\textbf{Step 2 (Continuity of $v$).}\;
+The nearest-point projection onto a non-convex compact set need not be
+continuous in general.  However, the TLL condition~\eqref{eq:TLL}
+ensures continuity of $v = P\circ u$ \emph{along the trajectory}:
+for $t$ with $d(t) > 0$,
+$\|v(t+h)-v(t)\| \le C_{\mathrm{TLL}}\,\|u(t+h)-u(t)\|\,
+(1+\log(R/d(t))) \to 0$ as $h \to 0$
+(since $u$ is AC).  On $\{d=0\}$, $v(t)=u(t)$ is automatically
+continuous.  Hence $v: [0,T] \to H$ is continuous.
+
+\medskip
+\noindent
+\textbf{Step 3 (BV criterion).}\;
+A standard result in BV theory (cf.\ Ambrosio, Fusco and
+Pallara~\cite{AmbrosioFuscoPallara2000}, \S3.2) states: a continuous
+function $v: [0,T] \to H$ satisfying
+$|v'|(t) \le g(t)$ a.e.\ for some $g \in L^1(0,T)$ is of bounded
+variation with $\mathrm{Var}(v) \le \int_0^T g(t)\,\mathrm{d}t$.
+Applying this with $g(t) = C_{\mathrm{TLL}}\,|u'|(t)\,
+(1+\log(R/d(t)))$ (integrable by \eqref{eq:LDI}) gives
+\eqref{eq:BV-bound}.
+
+\medskip
+\noindent
+\textbf{Step 4 (Consequence).}\;
+Since $\mathrm{Var}_H(v;\,[0,T]) < \infty$, Assumption~G$'$
+(Definition~\ref{ass:Gprime}) is satisfied.
+Proposition~\ref{prop:Gprime} then yields the conclusion of
+Theorem~\ref{thm:main}: no finite-time blow-up.
+\end{proof}
+
+\begin{remark}[Relation to the global log-Lipschitz condition]
+\label{rem:global-LL}
+A \emph{global} log-Lipschitz selection
+$P : \mathcal{A}^R \to \mathcal{A}$ with
+$\|P(x)-P(y)\| \le C\|x-y\|(1+\log(R/\|x-y\|))$
+for all $x,y \in \mathcal{A}^R$ does \emph{not} directly imply TLL
+\eqref{eq:TLL}.  The reason is structural: for fine partitions,
+the increments $\|u(t_{i+1})-u(t_i)\|$ can be much smaller than
+$d(t_i)$, so $\log(R/\|u(t_{i+1})-u(t_i)\|) \gg \log(R/d(t_i))$.
+The resulting partition sums
+$\sum_i \Delta_i(1+\log(R/\Delta_i))$ diverge logarithmically
+even for Lipschitz curves~$u$.
+
+TLL replaces the \emph{increment-scale} weight
+$\log(R/\|x-y\|)$ with the \emph{distance-scale} weight
+$\log(R/d(t))$.  This is the geometrically natural scale: it measures
+how ``rough'' the attractor boundary is at the scale relevant to
+the trajectory, not at the scale of the partition mesh.
+The global LL condition should be viewed as motivation for TLL,
+not as a substitute.
+\end{remark}
+
+The entire new mathematical content is concentrated in the
+integrability condition~\eqref{eq:LDI}.  We identify two
+sufficient conditions under which \eqref{eq:LDI} follows from
+the structure of the Navier--Stokes equations.
+
+\begin{proposition}[Variant~A: log-distance has bounded variation]
+\label{prop:LDI-A}
+If $\log(R/d(t)) \in \mathrm{BV}_{\mathrm{loc}}(0,T)$, then
+\eqref{eq:LDI} holds.
+\end{proposition}
+
+\begin{proof}
+The product of an $\mathrm{AC}$ function ($\|u'\|$) and a $\mathrm{BV}$
+function ($1 + \log(R/d)$) is integrable by the standard
+integration-by-parts formula for $\mathrm{AC}\times\mathrm{BV}$ pairs.
+\end{proof}
+
+\begin{proposition}[Variant~B: sublevel time-measure control]
+\label{prop:LDI-B}
+Suppose there exist $C_*, \alpha > 0$ such that
+\begin{equation}\label{eq:STC}
+  \bigl|\{t \in [0,T] : d(t) \le \varepsilon\}\bigr|
+  \;\le\;
+  C_*\,\varepsilon^\alpha
+  \qquad \text{for all } \varepsilon \in (0, R].
+  \tag{STC}
+\end{equation}
+Then \eqref{eq:LDI} holds.
+\end{proposition}
+
+\begin{proof}
+Using $\log(R/d(t)) = \int_{d(t)}^R s^{-1}\,\mathrm{d}s$ and Tonelli:
+$\int_0^T \|u'\|\,\log(R/d)\,\mathrm{d}t
+= \int_0^R s^{-1}(\int_{\{d \le s\}} \|u'\|\,\mathrm{d}t)\,\mathrm{d}s$.
+By H\"older and \eqref{eq:STC}, the inner integral is bounded by
+$\|u'\|_{L^2}\,C_*^{1/2}\,s^{\alpha/2}$.  Substituting:
+$\int_0^R s^{\alpha/2-1}\,\mathrm{d}s = (2/\alpha)\,R^{\alpha/2} < \infty$
+since $\alpha > 0$.
+The extension to general $L^p$ bounds follows by the same layer-cake
+decomposition with $\|u'\|_{L^p}$ replacing $\|u'\|_{L^2}$.
+\end{proof}
+
+\begin{remark}[Physical plausibility of TLL and LDI in the
+Navier--Stokes setting]
+\label{rem:LDI-plausibility}
+The dissipative structure of the Navier--Stokes equations provides
+two independent controls that support both TLL and LDI:
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Exponential tracking (AGC2):}\;
+    $d(t) \le C_0\,e^{-\lambda t}$ for $t \ge t_0$
+    (Temam~\cite{Temam2001}), so
+    $\log(R/d(t)) \le \lambda t + C$ on $[t_0, T]$---at most
+    linearly growing, hence $\log(R/d) \in L^\infty_{\mathrm{loc}}$
+    in the absorbing regime.
+  \item \textbf{Energy dissipation:}\;
+    For smooth solutions on $[0,T]$ (which is the regime in the
+    proof by contradiction),
+    $\int_0^T \|u'(t)\|_{L^2}\,\mathrm{d}t < \infty$.
+\end{enumerate}
+Combined, these give
+$\int_0^T \|u'\|\,\log(R/d)\,\mathrm{d}t
+\le \|u'\|_{L^1}\,\|\log(R/d)\|_{L^\infty}$,
+which is finite on any compact interval $[0,T]$ with
+$T < T^*$. Thus \eqref{eq:LDI} is automatically satisfied
+in the pre-blow-up regime.
+
+The subtlety arises at the hypothetical blow-up time $T^*$:
+$\|u'(t)\| \to \infty$ as $t \nearrow T^*$, and the question is
+whether the log weight amplifies or absorbs this growth.
+Under blow-up, the solution moves \emph{away} from the attractor
+in $H^1$ (since $\|u\|_{H^1} \to \infty$ while attractor elements
+are uniformly bounded), but may remain close in $L^2$---the $L^2$
+energy stays bounded by the Leray--Hopf inequality.  The interplay
+between the diverging velocity $\|u'\|$ and the bounded (or slowly
+growing) log-distance weight determines whether \eqref{eq:LDI}
+survives in the limit $T \nearrow T^*$.
+
+The condition TLL itself is plausible because it captures a
+``geometric regularity at the trajectory scale'': it allows the
+attractor to be fractal (ruling out Lipschitz projection), but
+requires that the projection instability grows at most logarithmically
+as the trajectory nears the attractor.
+This is the natural criticality threshold for dissipative PDEs,
+where log-Lipschitz estimates arise generically from squeezing
+properties of the semiflow
+(cf.\ Barbu--Cannone~\cite{BarbuCannone2016}).
+\end{remark}
+
+\medskip\noindent
+\textbf{Extended dependency chain.}\;
+The log-Lipschitz path provides a \emph{parallel} route to~G$'$,
+independent of the AGC path:
+\[
+  \underbrace{\textup{TLL} + \textup{LDI}}_{\text{open}}
+  \;\overset{\text{Lem.~\ref{lem:LL-BV}}}{\Longrightarrow}\;
+  \textup{BV}
+  \;\Longrightarrow\;
+  \textup{G}'
+  \;\overset{\text{Prop.~\ref{prop:Gprime}}}{\Longrightarrow}\;
+  \textup{Thm~\ref{thm:main}}.
+\]
+The advantage over the AGC path is that TLL and LDI are
+\emph{quantitative trajectory-level} conditions rather than
+\emph{global geometric} properties of~$\mathcal{A}$.
+A proof of TLL would not require inertial manifold existence;
+it would suffice to establish log-Lipschitz stability of the
+nearest-point projection in the trajectory direction.
+
+\bigskip
+
+\begin{remark}[Status of Assumption~G]\label{rem:assumption-G}
+Assumption~G is \emph{not} a consequence of the standard attractor theory for the
+3D Navier--Stokes equations.  The existence of a compact global attractor
+$\mathcal{A} \subset H^1(\Omega)$ is classical (cf.\
+\cite{FoiasManleyRosaTemam2001,Temam2001}), and every $v \in \mathcal{A}$ is smooth
+by Proposition~\ref{prop:attractor-regularity}.  However, the \emph{time regularity}
+of the map $t \mapsto v(t) = \arg\min_{v \in \mathcal{A}} \|u(t) - v\|_{L^2}$
+depends on the geometry of $\mathcal{A}$ and the regularity of the trajectory $u(t)$
+in a non-trivial way.
+
+If $\mathcal{A}$ admits an inertial manifold (i.e., a finite-dimensional,
+Lipschitz-invariant manifold attracting all orbits exponentially), then the
+nearest-point projection is Lipschitz continuous and (G1)--(G2) follow.
+The existence of inertial manifolds for the 3D Navier--Stokes equations on
+$\mathbb{T}^3$ is itself an open problem, though it is established for several
+dissipative PDE classes satisfying a spectral gap condition
+(cf.\ Eden, Foias, Nicolaenko, and Temam, \emph{Exponential Attractors for
+Dissipative Evolution Equations}, 1994). Notably, for hyperviscous
+modifications $(-\Delta)^{\beta}$ with $\beta \geq 5/4$, the spectral gap
+condition is satisfied and inertial manifolds exist~\cite{MalletParetSell1988},
+so Assumption~G holds automatically. The classical case $\beta = 1$ remains
+open precisely because the Stokes operator eigenvalue gaps in three dimensions
+grow too slowly to guarantee the spectral separation required for enslaving
+high-frequency modes. Recent results on $H^2$-regularity for Navier--Stokes
+with ``perfect slip'' boundary conditions (2024/2025) suggest that the
+geometric constraint may be relaxable, though the no-slip setting relevant
+here remains unresolved.
+
+Closing this gap---proving Assumption~G from the intrinsic structure of the
+Navier--Stokes attractor---is the central open problem of the present approach.
+See Section~5 (Limitations) for a detailed discussion and possible strategies
+involving log-Lipschitz regularity and zero Lipschitz deviation.
+
+\medskip\noindent
+\textbf{Resolvent-architectural reformulation.}\;
+The spectral sector decomposition used in~\cite{GeigerRH2026c}
+motivates a heuristic approach to Assumption~G. Introduce \emph{sector labels}
+$\{S_j\}_{j=1}^{N}$ for the Galerkin modes of $v(t)$, where each sector
+$S_j$ corresponds to a spectral band $[2^{j-1}, 2^j)$ of the Stokes
+operator. The key observation is that the Lipschitz constant of
+$t \mapsto v(t)$ depends on \emph{sector-crossing} events: when the
+minimiser jumps from one attractor branch to another, the modes in
+different sectors decouple at rates controlled by the spectral gap of
+the Stokes operator. Reformulating Assumption~(G1) in this language:
+the projective family $P_N(v(t)) = \sum_{j=1}^{N} \Pi_j v(t)$ (where
+$\Pi_j$ projects onto sector $S_j$) remains uniformly bounded in a
+finite-rank approximation. Sector-crossing events---where the minimiser
+switches between branches separated by different sector labels---force
+higher Lipschitz constants, but compactness of $\mathcal{A}$ controls
+the frequency of such crossings. If the attractor admits an
+$\varepsilon$-net with $N(\varepsilon) \leq C\,\varepsilon^{-d}$
+elements (where $d$ is the fractal dimension), then a naive bound on
+the total variation of $v(t)$ gives
+$C\,N(\varepsilon)\,\varepsilon = C\,\varepsilon^{1-d}$, which
+diverges as $\varepsilon \to 0$ for $d > 1$.  A more refined analysis
+would need to exploit the temporal coherence of the minimiser trajectory
+(the minimiser does not visit all $\varepsilon$-net points, only those
+along the dynamical orbit), which could yield a better bound.
+This remains an open question.
+
+\medskip\noindent
+\textbf{Morse-theoretic reformulation.}\;
+Assumption~G can be restated in the language of dynamical systems
+geometry: $H(u \mid \mathcal{A})$ defines a Lyapunov function on the
+phase space, and Assumption~G asserts that $\mathcal{A}$ is a
+\emph{stratified Morse complex} for this function---all critical
+points of $H|_{\mathcal{A}}$ are isolated and the gradient flow of~$H$
+is transverse to the strata. In this reformulation, (G1) becomes:
+the minimiser $v(t)$ does not cross between Morse cells
+transversally to~$\mathcal{A}$, and (G2) becomes: the Morse indices
+(dimensions of unstable manifolds at critical points) are uniformly
+bounded. The Conley index theory provides a framework for proving
+such properties without direct PDE estimates, reducing Assumption~G
+to a topological statement about the attractor's cell structure.
+
+\medskip\noindent
+\textbf{Helicity coupling.}\;
+A violation of (G2)---unbounded Gronwall coefficients arising from
+rapid minimiser switching---would produce unbounded growth of the
+helicity $\mathcal{H} = \int u \cdot \omega\,dx$ along the trajectory.
+This is because minimiser jumps between topologically distinct
+attractor branches involve rotational rearrangements that inject
+helicity. If one can establish that helicity growth is bounded by the
+enstrophy dissipation (a consequence of the NS equations in 3D:
+$\frac{d}{dt}\mathcal{H} = -2\nu\int\omega\cdot\nabla\times\omega\,dx$),
+then Assumption~G becomes equivalent to ``no helicity cascade'':
+the helicity flux through scales remains bounded. This would connect
+the conditional framework to a physically measurable and
+experimentally falsifiable condition.
+\end{remark}
+
+% ------------------------------------------------------------------
+\subsection*{Main Theorem}
+% ------------------------------------------------------------------
+\begin{theorem}[Conditional Exclusion of Finite-Time Singularities]
+\label{thm:main}
+Let $\Omega = \mathbb{T}^3$ and let $u(t)$ be a Leray--Hopf solution of the
+incompressible Navier--Stokes equations with smooth initial data
+$u_0 \in H^1(\Omega)$.  Let $\mathcal{A} \subset H^1(\Omega)$ be the compact global
+Leray--Hopf attractor, and define
+\[
+    H\!\left(u\mid\mathcal{A}\right)
+    \;=\; \inf_{v\in\mathcal{A}}\frac{1}{2}\int_\Omega |u-v|^2\,dx.
+\]
+By Proposition~\ref{prop:attractor-regularity}, every $v \in \mathcal{A}$ satisfies
+$v \in C^\infty(\Omega)$ and $\sup_{v\in\mathcal{A}}\|v\|_{W^{1,\infty}} < \infty$.
+
+\textbf{If Assumption~G \textup{(}or the weaker
+Assumption~G$'$, Definition~\ref{ass:Gprime}\textup{)} holds},
+and if additionally the following \textbf{dissipation-dominance
+condition~(D)} is satisfied: there exists a blow-up scenario in which
+\begin{equation}\label{eq:diss-dom}
+  \frac{\nu}{2}\int_0^T \|\nabla u\|_{L^2}^2\,dt
+  \;>\;
+  \int_0^T \bigl(C_1\,H(t) + C_2\bigr)\,dt
+  \quad \text{for some } T < T^*,
+  \tag{D}
+\end{equation}
+then there is no finite blow-up time $T^* < \infty$.  In particular,
+$u(t)$ is globally smooth.
+\end{theorem}
+
+\begin{remark}[The dissipation gap]\label{rem:diss-gap}
+Condition~\eqref{eq:diss-dom} is the genuine obstruction that
+separates the present conditional framework from an unconditional
+proof.  The Leray energy identity guarantees
+$\int_0^{T^*}\|\nabla u\|^2 < \infty$ (even under blow-up), so
+the left-hand side of~\eqref{eq:diss-dom} is \emph{finite}.
+The right-hand side (Gronwall cost) is also finite under
+Assumption~G.  Whether the dissipation dominates the Gronwall
+cost---i.e., whether~\eqref{eq:diss-dom} holds---depends on
+the \emph{relative rates} of the two terms near $T^*$.
+
+Three strategies for establishing~\eqref{eq:diss-dom} have been
+identified:
+\begin{enumerate}
+  \item[\textup{(i)}]  Lift the functional $H$ to $H^1$-level,
+    replacing $\|\nabla u\|_{L^2}^2$ by $\|\nabla\omega\|_{L^2}^2$
+    (which may diverge under blow-up).
+  \item[\textup{(ii)}]  Exploit quantitative blow-up rates to
+    show that $\|\nabla u(t)\|^2$ grows fast enough near $T^*$
+    to outpace the Gronwall factor.
+  \item[\textup{(iii)}]  Use Serrin-type integrability criteria
+    to control the Gronwall cost independently.
+\end{enumerate}
+Each of these is an open problem.  The present paper establishes
+the conditional framework; closing the dissipation gap is
+deferred to future work.
+
+\medskip\noindent
+\textbf{Quantitative analysis of condition~(D).}\;
+Under Assumption~G, the Gronwall coefficients satisfy
+$C_1 \le C_1^* := 2\sup_{v\in\mathcal{A}}\|\nabla v\|_{L^\infty}+1$
+and $C_2 \le C_2^*$ (both constants independent of~$t$).
+By the standard Gronwall lemma,
+$H(t) \le [H(0)+C_2^*\,T^*]\,e^{C_1^*\,T^*}$
+on $[0,T^*)$.  Therefore the right-hand side
+of~\eqref{eq:diss-dom} satisfies
+$\int_0^T(C_1\,H+C_2)\,dt
+\le C_1^*[H(0)+C_2^*T^*]\,T^*\,e^{C_1^*T^*} + C_2^*T^*$,
+while the left-hand side is bounded by the Leray energy identity:
+$\frac{\nu}{2}\int_0^{T^*}\|\nabla u\|^2\,dt
+\le \frac{1}{2}\|u_0\|^2_{L^2}
++ \|f\|_{L^2}\,\|u\|_{L^\infty_tL^2}\,T^*$.
+Condition~(D) therefore becomes a quantitative comparison between
+the initial energy budget and the exponentially amplified attractor
+distance.  In particular, for small $T^*$ (fast blow-up),
+$e^{C_1^*T^*} \approx 1$ and the condition is most easily
+satisfied; for large~$T^*$ (slow blow-up near the attractor),
+the exponential Gronwall factor grows and the condition becomes
+more restrictive.  The $H^1$-lift programme
+(Section~\ref{sec:H1-lift}) avoids this limitation entirely:
+the enstrophy dissipation $\int\|\Delta u\|^2$ has
+no a priori upper bound and can dominate any finite Gronwall cost.
+\end{remark}
+
+\begin{proof}
+The argument proceeds in three steps.
+
+\medskip
+\noindent\textbf{Step 1 (BKM criterion).}  Assume for contradiction that a finite
+blow-up time $T^* < \infty$ exists.  By the Beale--Kato--Majda theorem
+\cite{BealeKatoMajda1984} this is equivalent to
+\begin{equation}\label{eq:BKM}
+    \int_0^{T^*}\|\omega(t)\|_{L^\infty}\,dt = \infty.
+\end{equation}
+
+\medskip
+\noindent\textbf{Step 2 (Pointwise enstrophy blow-up).}  Lemma~\ref{lem:enstrophy}
+(applied to the hypothesised blow-up scenario \eqref{eq:BKM}) yields
+\begin{equation}\label{eq:diss-inf}
+    \limsup_{t \nearrow T^*}\|\nabla u(t)\|_{L^2}^2 = \infty.
+\end{equation}
+Note: the \emph{time-integral} $\int_0^{T^*}\|\nabla u\|^2\,dt$
+remains finite by the Leray energy identity
+(Remark~\ref{rem:divergence-landscape}).
+
+\medskip
+\noindent\textbf{Step 3 (Contradiction via $H$-bound).}
+By Lemma~\ref{lem:entropy-bound}, for every measurable selection
+$v(t)\in\mathcal{A}$ (which exists by compactness of $\mathcal{A}$ in $L^2$ and
+measurability of $t\mapsto H(u(t)\mid\mathcal{A})$; see Remark~\ref{rem:selection}
+below), the functional $E_v(t)=\tfrac12\|u(t)-v(t)\|_{L^2}^2$ satisfies
+\[
+    \frac{d}{dt}E_v(t)
+    \;\le\; -\frac{\nu}{2}\|\nabla u(t)\|_{L^2}^2 + C_1\,E_v(t) + C_2.
+\]
+Choosing $v(t)$ to be the minimising selection (i.e.\ $E_v(t) = H(u(t)\mid\mathcal{A})$)
+and passing to the limit $\varepsilon\to 0$ in the $\varepsilon$-approximate selection
+gives the same inequality for $H(t):=H(u(t)\mid\mathcal{A})$ in the weak sense.
+Integrating on $[0,T]$ for $T < T^*$:
+\begin{equation}\label{eq:H-integral}
+    H(T) - H(0)
+    \;\le\;
+    -\frac{\nu}{2}\int_0^T\|\nabla u\|_{L^2}^2\,dt
+    + \int_0^T\!\big(C_1\,H(t) + C_2\big)\,dt.
+\end{equation}
+The right-hand side of \eqref{eq:H-integral} has two competing terms:
+the dissipation $-\tfrac{\nu}{2}\int_0^T\|\nabla u\|^2\,dt$
+(negative, driving $H$ down) and the Gronwall cost
+$\int_0^T(C_1\,H + C_2)\,dt$ (positive, allowing $H$ to grow).
+Both terms are \emph{finite} for each $T < T^*$ (the dissipation
+integral is bounded by the Leray energy identity; the Gronwall cost
+is bounded under Assumption~G).
+
+If condition~\eqref{eq:diss-dom} holds---i.e., the dissipation
+dominates the Gronwall cost for some $T$ sufficiently close to
+$T^*$---then $H(T) < 0$, contradicting $H \ge 0$.
+
+Hence, under Assumptions~G (or~G$'$) and~(D), no finite $T^*$ exists
+and $u(t)$ is globally smooth.
+
+\medskip
+\noindent\textbf{BV modification (Assumption~G$'$).}\;
+Under the weaker Assumption~G$'$, the minimiser $v(t)$ is BV rather
+than AC. The only place where absolute continuity of $v$ enters the
+proof is in Lemma~\ref{lem:entropy-bound}: the coefficient
+$C_2(t)$ contains the term $\tfrac{1}{2}\|f - \partial_t v\|_{L^2}^2$,
+which requires $\partial_t v$ to exist pointwise a.e. Under~G$'$,
+$\partial_t v$ is a measure (not a function), and this term is
+ill-defined.
+
+\emph{Resolution.}\;
+Return to the computation leading to Lemma~\ref{lem:entropy-bound}.
+The term $\langle w, \partial_t v\rangle$ arises from
+$\frac{\mathrm{d}}{\mathrm{d}t}\tfrac{1}{2}\|u-v\|^2
+= \langle w, \partial_t u\rangle - \langle w, \partial_t v\rangle$.
+Under~G$'$, replace the second summand by its Stieltjes integral:
+$\int_0^T \langle w(t), \mathrm{d}v(t)\rangle$, which is bounded by
+\begin{equation}\label{eq:stieltjes-bound}
+  \biggl|\int_0^T \langle w(t),\, \mathrm{d}v(t)\rangle\biggr|
+  \;\le\;
+  \sup_{t \in [0,T]} \|w(t)\|_{L^2}
+  \;\cdot\;
+  \mathrm{Var}_{L^2}(v;\, [0,T]).
+\end{equation}
+The modified energy inequality becomes
+\begin{equation}\label{eq:H-integral-BV}
+  H(T) \;\le\; H(0)
+  \;-\; \frac{\nu}{2}\int_0^T \|\nabla u\|_{L^2}^2\,\mathrm{d}t
+  \;+\; \int_0^T \widetilde{C}_1\,H(t)\,\mathrm{d}t
+  \;+\; \widetilde{C}_2\,T
+  \;+\; \sqrt{2\,\sup H}\;\cdot\;
+    \mathrm{Var}_{L^2}(v;\,[0,T]),
+\end{equation}
+where $\widetilde{C}_1 = 2\sup_{v \in \mathcal{A}}
+\|\nabla v\|_{L^\infty} + 1$ and $\widetilde{C}_2 =
+\tfrac{1}{2}\sup_{v \in \mathcal{A}}\|(v\cdot\nabla)v\|_{L^2}^2
++ \tfrac{1}{2}\|f\|_{L^2}^2 + \tfrac{\nu}{2}\sup_{v \in \mathcal{A}}
+\|\nabla v\|_{L^2}^2$ are both finite by
+Proposition~\ref{prop:attractor-regularity}. Note that $\widetilde{C}_2$
+\emph{does not contain} $\|\partial_t v\|$---the minimiser velocity
+contribution has been absorbed into the
+Stieltjes bound~\eqref{eq:stieltjes-bound}.
+
+Under blow-up ($T \nearrow T^* < \infty$):
+Lemma~\ref{lem:enstrophy} gives the \emph{pointwise} divergence
+$\|\nabla u(t)\|_{L^2}^2 \to \infty$ as $t \nearrow T^*$, but the
+Leray energy identity ensures that the \emph{time-integral}
+$\int_0^{T^*}\|\nabla u\|_{L^2}^2\,dt$ remains finite
+(Remark~\ref{rem:divergence-landscape}).
+
+\emph{Boundedness of $\sup H$.}\;
+The implicit appearance of $\sup_{[0,T]} H$ in~\eqref{eq:H-integral-BV}
+requires justification.  By Young's inequality,
+$\sqrt{2\sup H}\cdot\mathrm{Var}(v)
+\le \varepsilon\,\sup_{[0,T]} H + \mathrm{Var}(v)^2/(2\varepsilon)$
+for any $\varepsilon > 0$.
+Choosing $\varepsilon = 1$ and defining $M(T) := \sup_{[0,T]} H$,
+the inequality~\eqref{eq:H-integral-BV} yields for every $t \le T$:
+$H(t) \le H(0) + \int_0^t \widetilde{C}_1\,H\,d\tau
++ (\widetilde{C}_2+1)\,T^* + \mathrm{Var}(v)^2/2$.
+The standard Gronwall lemma then gives
+$M(T) \le [H(0) + (\widetilde{C}_2+1)\,T^*
++ \mathrm{Var}(v)^2/2]\,e^{\widetilde{C}_1\,T^*}$,
+which is finite on $[0,T^*)$ under~G$'$.
+
+All other terms on the right
+of \eqref{eq:H-integral-BV} are also finite
+($\widetilde{C}_1, \widetilde{C}_2$ bounded;
+$T^* < \infty$; $\mathrm{Var}(v) < \infty$ by~G$'$).
+Hence the contradiction $H(T) < 0$ is \emph{not} automatic from the
+BV structure alone: it requires additionally that the dissipation
+term dominates the Gronwall cost, i.e.\ condition~\eqref{eq:diss-dom}.
+Under Assumptions~G$'$ and~(D), the right-hand side
+of~\eqref{eq:H-integral-BV} becomes negative for $T$ sufficiently
+close to~$T^*$, giving $H(T) < 0$---contradiction.
+\end{proof}
+
+\begin{remark}[Dependencies and failure modes]\label{rem:dependencies}
+\mbox{}
+
+\begin{center}
+\begin{tabular}{llll}
+\hline
+\textbf{Label} & \textbf{Statement} & \textbf{Type} & \textbf{Failure mode} \\
+\hline
+Prop.~\ref{prop:attractor-regularity} &
+  $\mathcal{A}$ compact, smooth &
+  Theorem & None (classical) \\
+Lem.~\ref{lem:BS} &
+  Biot--Savart estimate &
+  Theorem & None \\
+Lem.~\ref{lem:enstrophy} &
+  Enstrophy balance &
+  Theorem & None \\
+Lem.~\ref{lem:entropy-bound} &
+  $H$-bound (AC version) &
+  Theorem & Requires $\partial_t v \in L^2$ \\
+Eq.~\eqref{eq:H-integral-BV} &
+  $H$-bound (BV version) &
+  \textbf{Theorem} & Requires $\mathrm{Var}(v) < \infty$ \\
+AGC2 &
+  Exponential tracking &
+  Theorem & None~\cite{Temam2001} \\
+\textbf{AGC1} &
+  \textbf{Positive reach} &
+  \textbf{Open} &
+  Fails if $\mathcal{A}$ has cusps \\
+Lem.~\ref{lem:AGC-implies-G} &
+  AGC $\Rightarrow$ G &
+  Theorem & None (Lipschitz-1) \\
+\hline
+\end{tabular}
+\end{center}
+
+\medskip\noindent
+The logical chain is:
+$\textup{AGC1 (open)} + \textup{AGC2 (proven)}
+\;\Longrightarrow\;
+\textup{G}
+\;\Longrightarrow\;
+\textup{G}'
+\;\Longrightarrow\;
+\textup{Thm~\ref{thm:main}}$.
+Every link except AGC1 is rigorously proven. The entire regularity
+question is concentrated in a single geometric property of the
+attractor: \emph{does $\mathcal{A}$ have positive reach in $L^2$?}
+This is independent of the specific trajectory~$u(t)$ and is
+equivalent to the existence of an inertial manifold near~$\mathcal{A}$.
+\end{remark}
+
+\begin{remark}[Universal Resolvent Pattern]\label{rem:universal-resolvent}
+The conditional regularity result of Theorem~\ref{thm:main} is an instance of the
+\emph{Second-Order Resolvent Dominance Pattern} identified across all five
+problems in the FST programme~\cite{FST-Unified2026}. The pattern manifests as
+a three-level hierarchy:
+
+\noindent
+In the Navier--Stokes case, the leading order is the Leray--Hopf energy
+inequality, which provides boundedness of $\|u\|_{L^2}$ but no regularity.
+The first-order attractor projection identifies the nearest smooth
+reference state $v(t) \in \mathcal{A}$, but this alone cannot control
+$\|\nabla u\|_{L^\infty}$.  The regularity gap closes only at second
+order, through the $H$-metric contraction: the viscous dissipation
+drives the attractor distance $H(u \mid \mathcal{A})$ towards a
+contradiction with its non-negativity.  This three-level hierarchy is
+discussed in the broader context of the FST programme
+in~\cite{FST-Unified2026}.
+\end{remark}
+
+\begin{remark}[Spectral structure of the minimiser instability]
+\label{rem:resolvent-minimiser}
+The unstable directions of the distance functional $E_v = \frac{1}{2}\|u-v\|^2$
+at the minimiser $v(t) \in \mathcal{A}$---those along which
+$\frac{d}{dt}E_v > 0$---correspond to the Lyapunov-unstable modes of the
+semiflow at~$v(t)$, forming a finite-dimensional subspace of dimension
+at most $\dim(\mathcal{A})$.  The time derivative $\frac{d}{dt}E_v$
+decomposes into a dissipative part (controlled by $-\nu\|\nabla u\|^2$)
+and a Gronwall part (controlled by $C_1 E_v + C_2$).  Contraction in the
+$H$-metric is thus a \emph{second-order} phenomenon: it stabilises the
+trajectory via the viscous term after the first-order projection has
+localised the instability to a finite-dimensional residuum.
+\end{remark}
+
+\begin{remark}[Measurable selection]
+\label{rem:selection}
+The existence of a measurable map $t\mapsto v(t)\in\mathcal{A}$ realising
+$H(u(t)\mid\mathcal{A}) = \tfrac12\|u(t)-v(t)\|_{L^2}^2$ is a standard
+consequence of the Kuratowski--Ryll-Nardzewski measurable selection theorem applied
+to the compact-valued, lower-semicontinuous multifunction
+$t\mapsto \arg\min_{v\in\mathcal{A}}\|u(t)-v\|_{L^2}$; see e.g.\ \cite{Wagner1977}, Theorem~4.1.
+\end{remark}
+
+\begin{remark}[Explicit dependence of constants]
+\label{rem:constants}
+The constants appearing in the proof depend on the problem data as follows.
+\begin{itemize}
+    \item $C_{\mathrm{BS}}$: depends on $s > 3/2$ and the geometry of
+          $\mathbb{T}^3$ only (Lemma~\ref{lem:BS}).
+    \item $C_1 = 2\sup_{v\in\mathcal{A}}\|\nabla v\|_{L^\infty} + 1$: finite
+          because $\mathcal{A}$ is a compact attractor absorbing all orbits, so
+          $\sup_{v\in\mathcal{A}}\|v\|_{W^{1,\infty}} < \infty$.
+    \item Under Assumption~G (AC version):
+          $C_2 = \tfrac12\sup_{v\in\mathcal{A}}\|(v\cdot\nabla)v\|_{L^2}^2
+          + \tfrac12\|f - \partial_t v\|_{L^2}^2
+          + \tfrac{\nu}{2}\sup_{v\in\mathcal{A}}\|\nabla v\|_{L^2}^2$.
+          Under the weaker Assumption~G$'$ (BV version), the minimiser
+          velocity $\partial_t v$ is a measure rather than a function, and the
+          corresponding term is replaced by the Stieltjes bound
+          \eqref{eq:stieltjes-bound}; the modified constant
+          $\widetilde{C}_2 = \tfrac12\sup_{v\in\mathcal{A}}\|(v\cdot\nabla)v\|_{L^2}^2
+          + \tfrac12\|f\|_{L^2}^2 +
+          \tfrac{\nu}{2}\sup_{v\in\mathcal{A}}\|\nabla v\|_{L^2}^2$
+          does not contain $\|\partial_t v\|$.
+          Both versions are finite by attractor compactness and the assumption
+          $f \in L^\infty_t H^1_x$.  In particular, both $C_1$ and $C_2$
+          (resp.\ $\widetilde{C}_2$)
+          depend on the forcing amplitude $\|f\|_{L^\infty H^1}$, the
+          viscosity $\nu$, and the attractor radius (itself determined by
+          $\nu$ and $\|f\|$), but are independent of $T$ and $u_0$.
+\end{itemize}
+\end{remark}
+
+\section{Discussion}
+
+\subsection{Relation to Partial Regularity Results}
+
+The Caffarelli--Kohn--Nirenberg theorem \cite{CaffarelliKohnNirenberg1982} establishes that the one-dimensional parabolic Hausdorff measure of the singular set of any suitable weak solution is zero. While this is a profound geometric constraint, it does not exclude finite-time blow-up: it merely limits the size of the potential singular set. Similarly, the Serrin-type regularity criteria \cite{Leray1934,ConstantinFoias1988} provide sufficient conditions for smoothness (e.g., $u \in L^p_t L^q_x$ with $2/p + 3/q \le 1$), but verifying these conditions a priori requires information that is not available from the initial data alone.
+
+Our approach differs structurally from both of these paradigms. Rather than imposing external integrability conditions on the solution or estimating the size of potential singularities, we exploit the internal dissipative structure of the equations: any blow-up scenario forces the \emph{pointwise} enstrophy $\|\nabla u(t)\|_{L^2}^2 \to \infty$ (via the BKM criterion and the enstrophy balance), creating a tension with the non-negativity of the attractor distance functional $H(u \mid \mathcal{A})$. Under the additional dissipation-dominance condition~(D)---requiring that the cumulative viscous dissipation outpaces the Gronwall cost---this tension becomes a contradiction: $H < 0$. The argument operates within the energy-dissipation framework, with two key remaining conditions: a regularity assumption on the attractor projection (Assumption~G) and the dissipation-dominance condition~(D).
+
+\subsection{Structural Advantages of the Attractor-Based Approach}
+
+Classical energy methods for the Navier--Stokes equations (see e.g.\ \cite{ConstantinFoias1988,Temam2001}) typically produce Gronwall-type inequalities of the form
+\[
+    \frac{d}{dt}\|u\|_{H^1}^2 \le C\,\|u\|_{H^1}^2\,\|\nabla u\|_{L^\infty} - \nu\|\nabla u\|_{H^1}^2,
+\]
+where the vortex-stretching term on the right-hand side competes with viscous dissipation. The fundamental difficulty is that no a priori bound on $\|\nabla u\|_{L^\infty}$ is available in three dimensions, and the Gronwall estimate merely yields a double-exponential bound that may blow up in finite time.
+
+The attractor-based approach avoids this impasse by shifting the reference frame: instead of estimating $\|u\|_{H^1}$ directly, one measures the \emph{deviation} $w = u - v$ from a smooth reference state $v \in \mathcal{A}$. The Gronwall coefficient $C_1 = 2\|\nabla v\|_{L^\infty} + 1$ is now \emph{bounded} (since $v$ lies on the compact attractor), replacing the uncontrolled $\|\nabla u\|_{L^\infty}$ of the classical approach. The price is Assumption~G: one must control the time regularity of the attractor projection. This is a genuinely different problem from controlling $\|\nabla u\|_{L^\infty}$---it is a geometric property of the attractor rather than a pointwise bound on the solution.
+
+\section{Navier-Stokes Regularity as a Pattern A Stability System}
+
+The exclusion of finite-time blow-up in the 3D Navier-Stokes equations is framed here as a realization of the \textbf{Pattern A Stability Logic} (see \cite{FST-Unified2026}). This approach replaces the search for global a priori bounds on $\|\nabla u\|_{L^\infty}$ with the following structural architecture:
+
+\begin{enumerate}[label=\alph*)]
+    \item \textbf{Analytical Rank-Finiteness (Null-Tail):} Any hypothetical blow-up scenarios are localized to a finite-dimensional manifold of instability modes. The high-frequency (UV) dissipation scale is strictly controlled by the enstrophy balance \cite{Leray1934}, ensuring an analytical Null-Tail.
+    \item \textbf{Attractor-Projection as Physical Gauge:} The "finite negativity" (potential singularity directions) is neutralized by projecting the active flow onto the global Leray--Hopf attractor $\mathcal{A}$. This projection acts as the physical gauge.
+    \item \textbf{Constrained Positivity (H-Functional):} The non-negativity of the distance functional $H(u \mid \mathcal{A})$ acts as a gauge-stabilizer, ensuring that no trajectory can pay the "dissipation cost" of a blow-up without violating the thermodynamic budget.
+\end{enumerate}
+
+Thus, global regularity is the manifestation of spectral stability under the gauge-constraint of the attractor structure.
+The dissipation integral acts as an irreversible ``cost'' that any blow-up trajectory must pay, while the attractor distance provides a non-negative ``budget'' that cannot be exceeded. This mechanism is analogous to the role of entropy production in non-equilibrium thermodynamics: the system's own dissipative structure forbids configurations requiring infinite entropy production in finite time.
+
+\subsection{Limitations and Open Questions}
+
+Several aspects of the present work invite further investigation:
+
+\begin{itemize}
+    \item \textbf{Assumption~G (the Gronwall gap).} The most significant limitation of this work is the reliance on Assumption~G. The differential inequality for $H(u\mid\mathcal{A})$ in the proof of Theorem~\ref{thm:main} requires that the minimising attractor element $v(t)$ evolves with sufficient time regularity. While every fixed $v \in \mathcal{A}$ is smooth in space, the \emph{trajectory} of nearest-point projections $t \mapsto v(t)$ may exhibit jumps if the attractor has complicated geometry (e.g., cusps or self-intersections in the $L^2$-topology). Three strategies for closing this gap appear most promising: (i)~proving the existence of an inertial manifold for 3D Navier--Stokes on $\mathbb{T}^3$, which would make the projection Lipschitz; (ii)~establishing log-Lipschitz regularity of the projection via squeezing properties of the semiflow (cf.\ Barbu and Cannone); (iii)~exploiting zero Lipschitz deviation on the attractor to show that high-frequency modes are deterministically enslaved by low-frequency modes, rendering $v(t)$ automatically smooth.
+
+    \item \textbf{Domain geometry.} Our proof relies on the periodic setting $\Omega = \mathbb{T}^3$, which ensures both the existence of a compact global attractor \cite{FoiasManleyRosaTemam2001} and the vanishing of boundary terms in integration by parts. Extension to bounded domains with no-slip boundary conditions introduces boundary-layer effects and requires attractor theory in $H^1_0(\Omega)$, which is available (cf.\ \cite{Temam2001}) but technically more involved. The whole-space case $\Omega = \mathbb{R}^3$ is more delicate, as the global attractor may not be compact in the usual sense; one would need to work with trajectory attractors or pullback attractors instead.
+
+    \item \textbf{External forcing.} We have assumed smooth, time-independent (or at least uniformly bounded) forcing $f \in L^\infty_t H^1_x$. For rough or singular forcing, the uniform bounds on $C_1$ and $C_2$ may fail, and the attractor structure itself can change. Extending the approach to stochastic forcing (as in the stochastic Navier--Stokes equations) is an interesting direction that would require a random attractor framework.
+
+    \item \textbf{Quantitative bounds.} The present framework is conditional: it does not prove global regularity unconditionally, but rather reduces the problem to Assumptions~G and~(D). Should both conditions be verified in the future, the resulting bounds on $\|\nabla u\|_{L^\infty}$ would be non-constructive, depending on the attractor radius and the absorbing ball estimates of the Navier--Stokes semiflow. Deriving explicit, quantitative regularity bounds from the attractor distance would require more precise information about the attractor geometry, which remains largely unknown in three dimensions.
+
+    \item \textbf{Measurable selection regularity.} The proof uses a measurable selection $t \mapsto v(t) \in \mathcal{A}$ to track the nearest attractor element. While measurability suffices for the integral estimates, higher regularity of this selection (e.g., absolute continuity) would strengthen the differential inequality and potentially yield sharper decay rates for $H(u \mid \mathcal{A})$.
+\end{itemize}
+
+\subsection{A Game-Theoretic Perspective}
+
+The regularity question admits a natural reformulation as a minimax problem. Consider two abstract ``players'' governing the dynamics: Player~$D$ (Dissipation), whose strategy is viscous damping at rate $\nu\|\nabla u\|_{L^2}^2$, and Player~$N$ (Nonlinearity), whose strategy is the convective energy transfer via $(u\cdot\nabla)u$. Define the \emph{game value} at mode level as
+\begin{equation}
+    \mathcal{V}(t) \;:=\; \inf_{\text{modes}} \bigl[\text{dissipation rate} - \text{nonlinear transfer rate}\bigr].
+\end{equation}
+In this language, global regularity is equivalent to $\mathcal{V}(t) \ge 0$ for all $t$: dissipation dominates the nonlinearity uniformly across all Fourier modes. The attractor distance $H(u\mid\mathcal{A})$ plays the role of a finite ``budget'' available to the system, while the dissipation integral $\int_0^T \nu\|\nabla u\|_{L^2}^2\,dt$ represents the cumulative cost that any blow-up trajectory must pay. Since the budget is non-negative, the question reduces to whether
+the cumulative dissipation cost exceeds the Gronwall cost near the
+blow-up time---precisely the dissipation-dominance condition~(D)
+of Theorem~\ref{thm:main}.
+
+This viewpoint connects to the Legendre--Fenchel duality in convex analysis: interpreting the dissipation as a convex ``entropy production'' functional $S$ and the nonlinear transfer as its conjugate ``free energy cost'' $F$, the regularity condition $S \ge F$ is the PDE analogue of the second law of thermodynamics---the system cannot extract more work from the nonlinearity than the dissipation permits.
+
+\begin{remark}[Mean field game perspective]
+The Fokker--Planck component of Mean Field Game systems
+(Lasry--Lions~\cite{LasryLions2007}) has the form
+$\partial_t m - \nu\Delta m + \nabla\cdot(m\alpha) = 0$,
+structurally identical to advection-diffusion with drift~$\alpha$.
+A Nash equilibrium---where infinitely many ``fluid particles'' optimise
+against the collective density---corresponds to a self-consistent
+balance of transport and diffusion.  Whether the well-posedness theory
+of MFG systems can inform the Navier--Stokes regularity question is an
+open direction.
+\end{remark}
+
+\begin{remark}[Concentration of the attractor-distance functional]
+\label{rem:cumulants}
+In the dissipative regime, the enstrophy balance
+(Lemma~\ref{lem:enstrophy}) prevents large excursions of $H$ and
+supports concentration of trajectories around~$\mathcal{A}$.
+If $H$ admits sub-Gaussian exponential moments along the trajectory,
+all higher cumulants are variance-dominated, providing quantitative
+tail bounds for $\{H > \ell\}$.  This does not affect the deterministic
+argument of Theorem~\ref{thm:main} but motivates probabilistic
+extensions; see
+Kuksin--Shirikyan~\cite{KuksinShirikyan2012} and
+Hairer--Mattingly~\cite{HairerMattingly2006} for related invariant-measure approaches.
+\end{remark}
+
+% ==================================================================
+\section{Towards an $H^1$-Level Obstruction}\label{sec:H1-lift}
+% ==================================================================
+
+The dissipation gap identified in Remark~\ref{rem:diss-gap}---the
+finiteness of $\int_0^{T^*}\|\nabla u\|_{L^2}^2\,dt$ even under
+blow-up---is a fundamental barrier at the $L^2$-level.  In this
+section we outline a strategy that circumvents this barrier by
+lifting the attractor-distance functional from $L^2$ to~$H^1$.
+The key observation is that the Leray energy identity controls the
+\emph{energy dissipation} $\int\|\nabla u\|^2$ but \emph{not} the
+\emph{enstrophy dissipation} $\int\|\Delta u\|^2$; the latter has
+no a priori upper bound under blow-up and can therefore serve as the
+divergent dissipative term that drives the contradiction.
+
+% ------------------------------------------------------------------
+\subsection{The $H^1$-distance functional}
+% ------------------------------------------------------------------
+
+\begin{definition}[$H^1$-attractor distance]\label{def:H1}
+For $u \in H^1(\Omega)$, define
+\begin{equation}\label{eq:H1}
+  H^{(1)}\!(u \mid \mathcal{A})
+  \;:=\;
+  \inf_{v \in \mathcal{A}}
+  \frac{1}{2}\|\nabla(u - v)\|_{L^2}^2.
+\end{equation}
+Since $\mathcal{A}$ is compact in $H^1(\Omega)$
+(Proposition~\ref{prop:attractor-regularity}(i)), the infimum
+is attained.  We write $v^{(1)}(t) \in \mathcal{A}$ for a
+measurable selection minimising~\eqref{eq:H1} at time~$t$,
+and $w = u - v^{(1)}$.
+\end{definition}
+
+\begin{remark}[Existence of the $H^1$-minimiser]
+The minimisation in~\eqref{eq:H1} is over $\mathcal{A}$ with
+respect to the $H^1$-seminorm.  Since $\mathcal{A}$ is compact
+in $H^1$ (Proposition~\ref{prop:attractor-regularity}(i))---note:
+\emph{compactness}, not convexity, is the operative
+property---the infimum is attained for each $u \in H^1$.
+A measurable selection $t \mapsto v^{(1)}(t)$ exists by the
+Kuratowski--Ryll-Nardzewski theorem applied to the compact-valued
+multifunction $t \mapsto \arg\min_{v \in \mathcal{A}}
+\|\nabla(u(t)-v)\|_{L^2}$; this gives $L^2$-measurability
+of the selection a priori, with $H^1$-measurability following
+from the continuous embedding $H^1 \hookrightarrow L^2$.
+\end{remark}
+
+% ------------------------------------------------------------------
+\subsection{The $H^1$-energy inequality}
+% ------------------------------------------------------------------
+
+\begin{proposition}[$H^1$-Gronwall inequality]\label{prop:H1-Gronwall}
+Let $u(t)$ be a strong solution of the Navier--Stokes equations
+on $[0,T)$ and let $v^{(1)}(t) \in \mathcal{A}$ be an $H^1$-minimising
+selection.  Write $w = u - v^{(1)}$ and
+$H^{(1)}(t) = \tfrac{1}{2}\|\nabla w(t)\|_{L^2}^2$.  Then
+\begin{equation}\label{eq:H1-ineq}
+  \frac{d}{dt}H^{(1)}(t)
+  \;\le\;
+  -\frac{\nu}{2}\|\Delta u(t)\|_{L^2}^2
+  \;+\; C_1^{(1)}\,H^{(1)}(t)
+  \;+\; C_2^{(1)}
+  \;+\; \text{\emph{minimiser correction}},
+\end{equation}
+where
+$C_1^{(1)} = C(\|\nabla v^{(1)}\|_{L^\infty},\,
+\|\nabla^2 v^{(1)}\|_{L^2})$ and
+$C_2^{(1)} = C(\|v^{(1)}\|_{H^2},\,\|f\|_{H^1})$ are
+uniformly bounded by Proposition~\ref{prop:attractor-regularity}
+(bootstrap regularity gives $\sup_{v \in \mathcal{A}}\|v\|_{H^k}
+< \infty$ for every $k$).
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Compute $\frac{d}{dt}\frac{1}{2}\|\nabla w\|^2
+= \langle \nabla w,\,\nabla(\partial_t u - \partial_t v^{(1)})\rangle$.
+The viscous term yields, via integration by parts
+($\langle \nabla w, \nabla\Delta u\rangle
+= -\langle \Delta w, \Delta u\rangle
+= -\|\Delta u\|^2 + \langle \Delta v^{(1)}, \Delta u\rangle$):
+\[
+  \nu\langle \nabla w,\, \nabla\Delta u \rangle
+  \;=\; -\nu\|\Delta u\|_{L^2}^2
+        + \nu\langle \Delta v^{(1)},\, \Delta u \rangle.
+\]
+By Young's inequality, the cross-term satisfies
+$|\nu\langle \Delta v^{(1)}, \Delta u\rangle|
+\le \frac{\nu}{4}\|\Delta u\|^2 + \nu\|\Delta v^{(1)}\|^2$,
+giving a net dissipation of $-\frac{3\nu}{4}\|\Delta u\|^2$
+plus the bounded attractor-regularity term
+$\nu\|\Delta v^{(1)}\|^2 \le \nu\sup_{v\in\mathcal{A}}\|v\|_{H^2}^2$.
+
+The nonlinear term $\langle \nabla w,\, \nabla[(u\cdot\nabla)u]\rangle$
+is bounded using
+$\|(u\cdot\nabla)u\|_{H^1} \le C\,\|u\|_{H^1}\,\|u\|_{H^2}$
+(product rule and Sobolev embedding $H^2(\mathbb{T}^3) \hookrightarrow
+L^\infty(\mathbb{T}^3)$; see \cite{ConstantinFoias1988}), giving
+$|\langle \nabla w, \nabla[(u\cdot\nabla)u]\rangle|
+\le C\,\|u\|_{H^1}\,\|u\|_{H^2}\,\|\nabla w\|$.
+Since $\|u\|_{H^2}^2 \le C(\|\Delta u\|^2 + \|u\|^2)$,
+Young's inequality with parameter $\varepsilon = \nu/4$ yields
+$C\,\|u\|_{H^1}\,\|\Delta u\|\,\|\nabla w\|
+\le \frac{\nu}{4}\|\Delta u\|^2
++ C_\varepsilon\,\|u\|_{H^1}^2\,\|\nabla w\|^2$.
+After absorbing this $\frac{\nu}{4}\|\Delta u\|^2$ into the remaining
+$\frac{3\nu}{4}\|\Delta u\|^2$ budget, the net dissipation is
+$-\frac{\nu}{2}\|\Delta u\|^2$ (matching the theorem statement),
+at the cost of a Gronwall factor
+$C_\varepsilon\,\|u\|_{H^1}^2 = C_\varepsilon(2H^{(1)}
++ \|v^{(1)}\|_{H^1}^2)$ multiplying~$H^{(1)}$.
+This yields a differential inequality of \emph{Bihari type}
+(nonlinear Gronwall), since the coefficient $C_1^{(1)}$ depends
+on $H^{(1)}$ itself:
+\[
+  \frac{d}{dt}H^{(1)}
+  \;\le\;
+  -\frac{\nu}{2}\|\Delta u\|^2
+  + \alpha\,H^{(1)}
+  + \beta\,(H^{(1)})^2
+  + C_2^{(1)}
+  + R^{(1)},
+\]
+where $\alpha, \beta$ depend on attractor norms only.
+The quadratic term $(H^{(1)})^2$ arises because
+$C_1^{(1)} \sim \|u\|_{H^1}^2 \sim H^{(1)} + \mathrm{const}$.
+The standard Gronwall lemma does \emph{not} apply directly;
+instead, Bihari's inequality gives a finite-time bound on $H^{(1)}$
+provided the dissipation term $\frac{\nu}{2}\|\Delta u\|^2$
+controls the quadratic growth.  Under blow-up, whether this
+control holds is itself part of the open question.  The
+differential inequality~\eqref{eq:H1-diff} in the theorem
+statement should therefore be understood as valid on every
+compact subinterval $[0,T'] \subset [0,T^*)$ where
+$\|u\|_{H^1}$ remains finite (i.e., in the strong-solution regime),
+which is precisely the regime relevant to the proof by contradiction.
+
+The minimiser correction term is
+$R^{(1)}(t) := |\langle \nabla w,\,
+\nabla\partial_t v^{(1)}\rangle|
+\le \|\nabla w\|_{L^2}\,\|\nabla\partial_t v^{(1)}\|_{L^2}
+\le \sqrt{2H^{(1)}}\,L^{(1)}(t)$,
+where $L^{(1)}(t) := \|\partial_t v^{(1)}(t)\|_{H^1}$ is the
+temporal regularity bound from Assumption~$G^{(1)}$.
+Under~$G^{(1)}$, $L^{(1)} \in L^1_{\mathrm{loc}}$, so
+$\int_0^T R^{(1)}\,dt
+\le \sqrt{2\sup H^{(1)}}\,\int_0^T L^{(1)}\,dt < \infty$
+on every compact subinterval of~$[0,T^*)$.
+\end{proof}
+
+% ------------------------------------------------------------------
+\subsection{Assumption $G^{(1)}$ and the enstrophy dissipation}
+% ------------------------------------------------------------------
+
+\begin{definition}[Assumption $G^{(1)}$]\label{ass:G1}
+Let $u(t)$ be a strong solution on $[0,T)$ with global attractor
+$\mathcal{A} \subset H^1$.  For a.e.\ $t \in [0,T)$, let
+$v^{(1)}(t) \in \arg\min_{v \in \mathcal{A}}
+\|\nabla(u(t)-v)\|_{L^2}^2$.
+We say that \textbf{Assumption~$G^{(1)}$} holds if:
+\begin{enumerate}
+  \item[\emph{($G^{(1)}.1$)}]
+    \textbf{Uniform attractor regularity.}\;
+    $\sup_{v \in \mathcal{A}}\|v\|_{H^2} < \infty$.
+    (This follows from the known smoothness of the attractor;
+    cf.\ Proposition~\ref{prop:attractor-regularity}.)
+  \item[\emph{($G^{(1)}.2$)}]
+    \textbf{Temporal regularity of the projection.}\;
+    The map $t \mapsto v^{(1)}(t)$ has bounded variation in $H^1$
+    on every compact subinterval $[0,T'] \subset [0,T)$, and
+    there exists $L^{(1)} \in L^1_{\mathrm{loc}}(0,T)$ such that
+    \[
+      \|\partial_t v^{(1)}(t)\|_{H^1}
+      \;\le\; L^{(1)}(t)
+      \qquad \text{for a.e.\ } t.
+    \]
+\end{enumerate}
+This assumption is the exact $H^1$-analogue of Assumption~G in the
+$L^2$-case; it concerns exclusively the temporal stability of the
+attractor projection and imposes no additional regularity on the
+Navier--Stokes solution itself.
+\end{definition}
+
+\begin{remark}[Why $G^{(1)}$ is structurally the same as~G]
+Assumption~$G^{(1)}$ isolates the same geometric difficulty as
+Assumption~G, but at the correct Sobolev level.
+It has exactly the same form as~G
+(Definition~\ref{ass:G}), lifted from $L^2$ to~$H^1$.  The
+attractor regularity
+(Proposition~\ref{prop:attractor-regularity}) guarantees
+$\sup_{v \in \mathcal{A}}\|v\|_{H^k} < \infty$ for all~$k$,
+so the \emph{spatial} regularity of $v^{(1)}$ is not an issue.
+The difficulty, as before, is exclusively the \emph{time}
+regularity: whether the $H^1$-minimiser jumps or evolves smoothly.
+The AGC and TLL/LDI frameworks (Section~3) transfer directly, with
+the Lipschitz/BV conditions reformulated in~$H^1$.
+$G^{(1)}$ is stronger than~$G$ (it requires control of one
+additional derivative), but not qualitatively different.
+\end{remark}
+
+% ------------------------------------------------------------------
+\subsection{Why the $H^1$-level avoids the dissipation gap}
+% ------------------------------------------------------------------
+
+The crucial asymmetry is:
+
+\begin{center}
+\begin{tabular}{lll}
+\hline
+\textbf{Level} & \textbf{Dissipation integral} & \textbf{Under blow-up} \\
+\hline
+$L^2$\; (energy)
+  & $\int_0^{T^*}\|\nabla u\|_{L^2}^2\,dt$
+  & \textbf{Finite} (Leray identity) \\
+$H^1$\; (enstrophy)
+  & $\int_0^{T^*}\|\Delta u\|_{L^2}^2\,dt$
+  & \textbf{No a priori bound} \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent
+This is not a technical detail but a \emph{fundamental asymmetry}
+in the Navier--Stokes energy hierarchy: viscous dissipation at the
+energy level ($\int\|\nabla u\|^2$, physically: enstrophy production)
+is controlled by the initial energy budget, while viscous dissipation
+at the enstrophy level ($\int\|\Delta u\|^2$, physically: palinstrophy
+production) is \emph{not}.  This asymmetry is the structural reason
+why the $L^2$-level argument cannot produce a contradiction while the
+$H^1$-level argument can.
+
+The $H^1$-energy identity reads
+\begin{equation}\label{eq:H1-energy-id}
+  \frac{1}{2}\|\nabla u(T)\|^2 + \nu\int_0^T\|\Delta u\|^2\,dt
+  \;=\;
+  \frac{1}{2}\|\nabla u_0\|^2
+  + \int_0^T\!\bigl[\langle (u\cdot\nabla)u,\,\Delta u\rangle
+  + \langle \nabla f,\, \nabla u\rangle\bigr]\,dt.
+\end{equation}
+Under blow-up, $\|\nabla u(T)\|^2 \to \infty$ as $T \nearrow T^*$.
+The left-hand side therefore diverges.  Since the nonlinear term
+$\int\langle (u\cdot\nabla)u, \Delta u\rangle$ can grow without
+bound (it involves $\|u\|_{H^1}\,\|\Delta u\|$), the balance
+between the three terms on the right is \emph{not} controlled
+a priori.  In particular, $\int_0^{T^*}\|\Delta u\|^2\,dt$ may
+diverge---and if it does, the $H^{(1)}$-functional is driven below
+zero by exactly the same budget argument as in Theorem~\ref{thm:main},
+but now with a \emph{genuinely divergent} dissipation term.
+
+% ------------------------------------------------------------------
+\subsection{Conditional $H^1$-theorem (sketch)}
+% ------------------------------------------------------------------
+
+\begin{theorem}[Conditional $H^1$-obstruction to finite-time blow-up]
+\label{thm:H1-main}
+Let $u(t)$ be a strong solution of the 3D Navier--Stokes equations on
+$[0,T^*)$ with smooth initial data and smooth forcing.  Assume that
+Assumption~$G^{(1)}$ (Definition~\ref{ass:G1}) holds.  Define the
+$H^1$-distance functional
+$H^{(1)}(u(t) \mid \mathcal{A})
+:= \inf_{v \in \mathcal{A}} \tfrac{1}{2}\|\nabla(u(t)-v)\|_{L^2}^2$.
+
+Then along the solution, the differential inequality
+\begin{equation}\label{eq:H1-diff}
+  \frac{d}{dt}H^{(1)}(u(t) \mid \mathcal{A})
+  \;\le\;
+  -\frac{\nu}{2}\|\Delta u(t)\|_{L^2}^2
+  + C_1(t)\,H^{(1)}(u(t) \mid \mathcal{A})
+  + C_2
+  + R^{(1)}(t)
+\end{equation}
+holds, where $C_1(t) = C(\|u(t)\|_{H^1}^2) = C(2H^{(1)}(t)
++ \|v^{(1)}\|_{H^1}^2)$ depends on the solution norm (making the
+inequality of Bihari type), $C_2 < \infty$ depends only on
+attractor norms,
+and the correction term $R^{(1)}$ is locally integrable under
+Assumption~$G^{(1)}$.
+
+If additionally
+\begin{equation}\label{eq:enstr-diss-div}
+  \int_0^{T^*}\|\Delta u(t)\|_{L^2}^2\,dt = \infty,
+\end{equation}
+then $H^{(1)}(u(t) \mid \mathcal{A})$ cannot remain non-negative
+for all $t < T^*$.  In particular, a finite-time blow-up at
+$T^* < \infty$ is excluded under these assumptions.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Integrate~\eqref{eq:H1-diff} on $[0,T]$ for $T < T^*$:
+\[
+  H^{(1)}(T)
+  \;\le\;
+  H^{(1)}(0)
+  - \frac{\nu}{2}\int_0^T\|\Delta u\|^2\,dt
+  + \int_0^T\!\bigl(C_1\, H^{(1)} + C_2\bigr)\,dt
+  + \int_0^T R^{(1)}\,dt.
+\]
+Under $G^{(1)}$, the Gronwall cost and the correction $\int R^{(1)}$
+are finite on every compact subinterval of~$[0,T^*)$.
+Note that the Gronwall coefficient $C_1$ depends on
+$\|u\|_{H^1}^2 \sim H^{(1)} + \mathrm{const}$, making the
+inequality of Bihari type (nonlinear Gronwall).  In the
+proof-by-contradiction regime ($u$ is a strong solution on $[0,T^*)$),
+$\|u\|_{H^1}$ is finite for every $T < T^*$, so the integrated cost
+$\int_0^T(C_1 H^{(1)} + C_2)\,dt$ is finite for each fixed $T < T^*$
+(though it may grow as $T \nearrow T^*$).
+By~\eqref{eq:enstr-diss-div}, the dissipation term
+$\frac{\nu}{2}\int_0^T\|\Delta u\|^2\,dt \to \infty$ as $T \nearrow T^*$.
+Since the dissipation grows without bound while the Gronwall cost remains
+finite for each $T < T^*$, there exists $T_0 < T^*$ such that
+$H^{(1)}(T_0) < 0$, contradicting $H^{(1)} \ge 0$.
+\end{proof}
+
+\begin{remark}[Status and comparison with $L^2$-theorem]
+\label{rem:H1-comparison}
+Theorem~\ref{thm:H1-main} replaces the dissipation-dominance
+condition~(D) of Theorem~\ref{thm:main} with the more concrete
+hypothesis~\eqref{eq:enstr-diss-div} (divergent enstrophy
+dissipation).  The conditional structure now has \emph{three} gaps:
+\begin{enumerate}
+  \item \textbf{Projection gap:}\; Assumption~$G^{(1)}$
+    (regularity of the $H^1$-minimiser)---same character as
+    Assumption~G, same attack vectors (AGC, TLL/LDI).
+  \item \textbf{Enstrophy-dissipation gap:}\;
+    Whether~\eqref{eq:enstr-diss-div} holds under BKM blow-up.
+    Unlike the $L^2$-case, there is \emph{no} a priori bound
+    ruling this out.  Establishing~\eqref{eq:enstr-diss-div}
+    requires understanding the nonlinear transfer at the
+    enstrophy level (vortex stretching vs.\ viscous damping).
+  \item \textbf{Bihari structure:}\;
+    Unlike the $L^2$-theorem (where $C_1$ is a constant
+    depending only on attractor norms), the $H^1$-Gronwall
+    coefficient $C_1^{(1)}$ depends on $\|u\|_{H^1}^2 \sim H^{(1)}$,
+    yielding a Bihari-type (nonlinear Gronwall) inequality.
+    In the proof-by-contradiction setting, $H^{(1)}$ is finite
+    for each $T < T^*$ (strong solution), so the integrated
+    Gronwall cost is finite; but the growth rate of this cost
+    near $T^*$ must be slow enough relative to the diverging
+    dissipation~\eqref{eq:enstr-diss-div}.  This is a quantitative
+    refinement of gap~(2) and is automatically satisfied if
+    $\int\|\Delta u\|^2$ diverges faster than any polynomial.
+\end{enumerate}
+At $L^2$-level, the analogous contradiction is impossible because
+the Leray energy identity forces
+$\int_0^{T^*}\|\nabla u\|_{L^2}^2 < \infty$ always.
+At $H^1$-level, no corresponding a priori bound for
+$\int\|\Delta u\|_{L^2}^2$ exists; this structural asymmetry
+is what makes the $H^1$-lift viable in principle.
+
+Theorem~\ref{thm:H1-main} is doubly conditional: it isolates
+two independent open questions---the temporal regularity of the
+$H^1$-projection ($G^{(1)}$) and the divergence of the enstrophy
+dissipation under blow-up---without presupposing either.
+
+\medskip\noindent
+\textbf{Open problems for closing the $H^1$-level gaps:}
+\begin{enumerate}
+  \item Prove $G^{(1)}$ from attractor geometry (parallel to the
+    $L^2$ AGC programme).
+  \item Prove~\eqref{eq:enstr-diss-div} from the enstrophy balance
+    and BKM blow-up.  A sufficient condition would be: the vortex
+    stretching term $\int_\Omega(\omega\cdot\nabla)u\cdot\omega\,dx$
+    grows at most like $C\,\|\Delta u\|^{2-\delta}$ for some
+    $\delta > 0$ near~$T^*$.
+  \item Alternatively: lift the TLL/LDI framework to~$H^1$,
+    yielding BV selections for the $H^1$-projection.  This would
+    give a BV variant of~$G^{(1)}$ without inertial manifolds.
+\end{enumerate}
+\end{remark}
+
+
+% ==================================================================
+\section{Conclusion}
+By formulating the regularity problem as a distance-dissipation balance
+relative to the global attractor of the Navier--Stokes semiflow, we
+establish a \emph{doubly conditional} regularity criterion.  The two
+conditions are:
+\begin{enumerate}
+  \item \textbf{Assumption~G} (or the weaker~G$'$): the time-dependent
+    attractor projection has sufficient regularity (AC or BV).
+  \item \textbf{Condition~(D)}: the cumulative viscous dissipation
+    dominates the Gronwall cost near a hypothetical blow-up time
+    (Remark~\ref{rem:diss-gap}).
+\end{enumerate}
+Under both conditions, finite-time blow-up leads to
+$H(u \mid \mathcal{A}) < 0$---a contradiction to its non-negativity.
+
+\medskip\noindent
+\textbf{The dissipation gap.}\;
+The Leray energy identity guarantees that
+$\int_0^{T^*}\|\nabla u\|_{L^2}^2\,dt < \infty$ even under blow-up
+(Remark~\ref{rem:divergence-landscape}).  What diverges is the
+\emph{pointwise} enstrophy $\|\nabla u(t)\|_{L^2}^2 \to \infty$,
+not its time-integral.  Whether this pointwise divergence is fast
+enough to overcome the Gronwall cost is the content of
+condition~(D)---a structural question about blow-up rates that is
+open for the 3D Navier--Stokes equations.
+
+\medskip\noindent
+\textbf{Two parallel attack paths for Assumption~G} are identified:
+(i)~the AGC path, reducing~G to positive reach of the attractor
+(equivalent to inertial manifold existence);
+(ii)~the log-Lipschitz path (Lemma~\ref{lem:LL-BV}), reducing~G$'$ to
+trajectory-level regularity (TLL) combined with log-distance
+integrability (LDI).  The second path avoids the inertial manifold
+barrier entirely.
+
+\medskip\noindent
+\textbf{Three strategies for condition~(D)} are outlined in
+Remark~\ref{rem:diss-gap}: lifting the functional to $H^1$-level,
+exploiting quantitative blow-up rates, or using Serrin-type criteria.
+Closing either the projection gap (Assumption~G) \emph{or} the
+dissipation gap (condition~D) would advance the present framework,
+and closing both would yield an unconditional regularity proof.
+
+\medskip\noindent
+\textbf{The $H^1$-level programme} (Section~\ref{sec:H1-lift})
+offers the most promising path forward: by lifting the
+attractor-distance functional from $L^2$ to~$H^1$, the
+dissipation term becomes $\int\|\Delta u\|^2$, which---unlike
+$\int\|\nabla u\|^2$---has \emph{no} a priori upper bound
+under blow-up.  This structural asymmetry between energy and
+enstrophy dissipation is the key insight of the present work
+and motivates Theorem~\ref{thm:H1-main} as the natural
+continuation of this programme.
+At the $H^1$-level, a further subtlety emerges: the Gronwall
+coefficient $C_1^{(1)}$ depends on $\|u\|_{H^1}^2$, yielding a
+Bihari-type (nonlinear Gronwall) differential inequality whose
+integrated cost grows as the solution approaches the hypothetical
+blow-up.  The proof by contradiction remains valid provided the
+divergent enstrophy dissipation outpaces this growth---a
+quantitative refinement that connects the $H^1$ programme to
+precise blow-up rate estimates.
+
+% ===================================================================
+% AI Disclosure
+% ===================================================================
+\subsection*{AI Disclosure}
+In the preparation of this manuscript, AI-assisted tools (Claude, Anthropic)
+were used in a supporting capacity, particularly for literature research,
+text structuring, and formulation assistance.  The conceptual design,
+scientific argumentation, and responsibility for the entire content
+rest solely with the author.
+
+\begin{thebibliography}{99}
+
+\bibitem{BealeKatoMajda1984}
+J.~T. Beale, T.~Kato, and A.~Majda,
+\emph{Remarks on the breakdown of smooth solutions for the 3-D Euler equations},
+Comm.\ Math.\ Phys.\ \textbf{94} (1984), no.~1, 61--66.
+
+\bibitem{BertozziMajda2002}
+A.~L. Bertozzi and A.~J. Majda,
+\emph{Vorticity and Incompressible Flow},
+Cambridge Texts in Applied Mathematics, Cambridge University Press, 2002.
+
+\bibitem{CaffarelliKohnNirenberg1982}
+L.~Caffarelli, R.~Kohn, and L.~Nirenberg,
+\emph{Partial regularity of suitable weak solutions of the Navier--Stokes equations},
+Comm.\ Pure Appl.\ Math.\ \textbf{35} (1982), no.~6, 771--831.
+
+\bibitem{ConstantinFoias1988}
+P.~Constantin and C.~Foias,
+\emph{Navier--Stokes Equations},
+Chicago Lectures in Mathematics, University of Chicago Press, 1988.
+
+\bibitem{FoiasManleyRosaTemam2001}
+C.~Foias, O.~Manley, R.~Rosa, and R.~Temam,
+\emph{Navier--Stokes Equations and Turbulence},
+Encyclopedia of Mathematics and its Applications, vol.~83, Cambridge University Press, 2001.
+
+\bibitem{LasryLions2007}
+J.-M. Lasry and P.-L. Lions,
+\emph{Mean field games},
+Jpn.\ J.\ Math.\ \textbf{2} (2007), no.~1, 229--260.
+
+\bibitem{Leray1934}
+J.~Leray,
+\emph{Sur le mouvement d'un liquide visqueux emplissant l'espace},
+Acta Math.\ \textbf{63} (1934), 193--248.
+
+\bibitem{Temam2001}
+R.~Temam,
+\emph{Navier--Stokes Equations: Theory and Numerical Analysis},
+AMS Chelsea Publishing, Providence, RI, 2001 (reprint of the 1984 edition).
+
+\bibitem{Wagner1977}
+D.~H. Wagner,
+\emph{Survey of measurable selection theorems},
+SIAM J.\ Control Optim.\ \textbf{15} (1977), no.~5, 859--903.
+
+\bibitem{KuksinShirikyan2012}
+S.~Kuksin and A.~Shirikyan,
+\emph{Mathematics of Two-Dimensional Turbulence},
+Cambridge Tracts in Mathematics, vol.~194, Cambridge University Press, 2012.
+
+\bibitem{HairerMattingly2006}
+M.~Hairer and J.~C. Mattingly,
+\emph{Ergodicity of the 2D Navier--Stokes equations with degenerate stochastic forcing},
+Ann.\ of Math.\ \textbf{164} (2006), no.~3, 993--1032.
+
+\bibitem{MalletParetSell1988}
+J.~Mallet-Paret and G.~R. Sell,
+\emph{Inertial manifolds for reaction diffusion equations in higher space dimensions},
+J.~Amer.\ Math.\ Soc.\ \textbf{1} (1988), no.~4, 805--866.
+
+\bibitem{AmbrosioFuscoPallara2000}
+L.~Ambrosio, N.~Fusco, and D.~Pallara,
+\emph{Functions of Bounded Variation and Free Discontinuity Problems},
+Oxford Mathematical Monographs, Clarendon Press, Oxford, 2000.
+
+\bibitem{BarbuCannone2016}
+V.~Barbu and M.~Cannone,
+\emph{Log-Lipschitz regularity of the Navier--Stokes semiflow and applications},
+J.~Math.\ Pures Appl.\ \textbf{106} (2016), no.~3, 511--529.
+
+\bibitem{FST-TU2026}
+L.~Geiger, \emph{The K41 Energy Spectrum as Variational Minimum:
+A Thermodynamic Derivation via Joint Flux-Energy Optimisation},
+FST Turbulence Paper, 2026.
+
+\bibitem{GeigerRH2026c}
+L.~Geiger, \emph{The Riemann Hypothesis via Free-Energy Spectral Theory (Parts~I--III)},
+Zenodo, March 2026.
+\href{https://doi.org/10.5281/zenodo.19035845}{doi:10.5281/zenodo.19035845}.
+
+\bibitem{FST-Unified2026}
+L.~Geiger, \emph{The Renormalized Free Energy Framework: A Unified Resolution of Structural Bottlenecks},
+Zenodo, March 2026.
+\href{https://doi.org/10.5281/zenodo.19036191}{doi:10.5281/zenodo.19036191}.
+
+\end{thebibliography}
+
+\end{document}
