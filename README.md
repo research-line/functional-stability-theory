@@ -31,9 +31,6 @@ The central object is a **renormalized free-energy functional** whose critical-p
 | Hodge Conjecture (Arithmetic Positivity) | Algebraic Geometry | [10.5281/zenodo.19087439](https://doi.org/10.5281/zenodo.19087439) | v1.0 |
 | BSD Conjecture (Normal Form) | Number Theory | [10.5281/zenodo.19087443](https://doi.org/10.5281/zenodo.19087443) | v1.0 |
 | P vs NP (Entropic No-Go) | Complexity Theory | [10.5281/zenodo.19056809](https://doi.org/10.5281/zenodo.19056809) | v1.1 |
--------------------Related--------------------------------------------------------------------------------------------------
-| FST-RH Trilogy | Riemann Hypothesis | [10.5281/zenodo.19035845](https://doi.org/10.5281/zenodo.19035845) | v1.3 |
-| CRM I-IV | Cosmology | [10.5281/zenodo.18728936](https://doi.org/10.5281/zenodo.18728936) | 7.0 |
 
 ## Numerical Validation Scripts
 
