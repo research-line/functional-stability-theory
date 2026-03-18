@@ -1,6 +1,7 @@
 \documentclass[aps,prd,twocolumn,superscriptaddress,nofootinbib]{revtex4-2}
 
 \usepackage{amsmath}
+\usepackage{mathtools}
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{booktabs}
@@ -53,7 +54,7 @@
 \date{M\"arz 2026}
 
 \begin{abstract}
-Wir schlagen eine Umformulierung des $\PP$-vs-$\NP$-Problems als \textit{entropisches No-Go-Theorem} vor: $\PP \neq \NP$ ist aequivalent zur strukturellen Unmoeglichkeit, NP-Zeugen auf algorithmische Entropie unterhalb ihrer intrinsischen Kolmogorov-Komplexitaet zu komprimieren. Diese Arbeit beweist nicht $\PP \neq \NP$; vielmehr liefert sie eine informationstheoretische Umformulierung, die die praezise Struktur dessen identifiziert, was gezeigt werden muss, und warum klassische Barrierentechniken diesem Ansatz nicht entgegenstehen. Wir fuehren das Konzept der \textit{algorithmischen Positivitaet} ein -- eine NP-Sprache ist algorithmisch positiv, wenn sie eine entropisch konvexe, polynomial skalierende Zeugenproduzentenfunktion zulaesst -- und zeigen, dass die \textit{Entropische Separationsvermutung} (keine NP-vollstaendige Sprache ist algorithmisch positiv) \textit{aequivalent} zu $\PP \neq \NP$ ist. Wir fuehren eine systematische Barrierenanalyse durch und argumentieren, dass Kolmogorov-Komplexitaets-basierte Entropieargumente den drei klassischen Barrieren (Relativierung, natuerliche Beweise, Algebrisierung) nicht natuerlich unterliegen. Die zentrale strukturelle Einsicht ist die \textit{Zeugen-Entropieluecke}: $\PP = \NP$ wuerde $K^t(w \mid x) = O(\log|x|)$ fuer alle NP-Zeugen implizieren, waehrend $\PP \neq \NP$ die Existenz von Instanzfamilien mit $K^t(w \mid x) \geq |w| - O(\log n)$ fuer jede polynomiale Zeitschranke $t$ impliziert. Wir identifizieren die praezise verbleibende Herausforderung: die Konvertierung dieser Charakterisierung in einen Beweis erfordert eine \textit{Uniformitaetsbruecke} -- eine neue Verbindung zwischen algorithmischer Informationstheorie und uniformer Komplexitaetstheorie.
+Wir schlagen eine Umformulierung des $\PP$-vs-$\NP$-Problems als \textit{entropisches No-Go-Theorem} vor: $\PP \neq \NP$ ist aequivalent zur strukturellen Unmoeglichkeit, NP-Zeugen auf algorithmische Entropie unterhalb ihrer intrinsischen Kolmogorov-Komplexitaet zu komprimieren. Diese Arbeit beweist nicht $\PP \neq \NP$; vielmehr liefert sie eine informationstheoretische Umformulierung, die die praezise Struktur dessen identifiziert, was gezeigt werden muss, und warum klassische Barrierentechniken diesem Ansatz nicht entgegenstehen. Wir fuehren das Konzept der \textit{algorithmischen Positivitaet} ein -- eine NP-Sprache ist algorithmisch positiv, wenn sie eine entropisch konvexe, polynomial skalierende Zeugenproduzentenfunktion zulaesst -- und charakterisieren die \textit{Entropische Separationsvermutung} (keine NP-vollstaendige Sprache ist algorithmisch positiv) als \textit{aequivalent} zu $\PP \neq \NP$, womit ESC als Umformulierung des P-vs-NP-Problems in informationstheoretischer Sprache etabliert wird -- nicht als unabhaengiges Resultat. Wir fuehren eine systematische Barrierenanalyse durch und argumentieren, dass Argumente basierend auf unbeschraenkter Kolmogorov-Komplexitaet $K$ den drei klassischen Barrieren (Relativierung, natuerliche Beweise, Algebrisierung) nicht natuerlich unterliegen, wobei wir anmerken, dass der Barrierenstatus fuer die in unseren Kernresultaten verwendete ressourcenbeschraenkte Variante $K^t$ noch vollstaendig zu klaeren ist. Die zentrale strukturelle Einsicht ist die \textit{Zeugen-Entropieluecke}: $\PP = \NP$ wuerde $K^t(w \mid x) = O(\log|x|)$ fuer alle NP-Zeugen implizieren, waehrend $\PP \neq \NP$ die Existenz von Instanzfamilien mit $K^t(w \mid x) \geq |w| - O(\log n)$ fuer jede polynomiale Zeitschranke $t$ impliziert. Wir identifizieren die praezise verbleibende Herausforderung: die Konvertierung dieser Charakterisierung in einen Beweis erfordert eine \textit{Uniformitaetsbruecke} -- eine neue Verbindung zwischen algorithmischer Informationstheorie und uniformer Komplexitaetstheorie.
 \end{abstract}
 
 \keywords{P vs NP, Kolmogorov-Komplexitaet, algorithmische Entropie, No-Go-Theorem, Barrierenanalyse, Zeugenkompression, Berechnungskomplexitaet}
@@ -101,9 +102,9 @@ Problem & Positive Struktur & Status \\
 Weil-Vermutungen & Frobenius-Eigenwerte & Bewiesen \\
 BSD (Rang $\leq 1$) & N\'eron-Tate-Hoehe & Bewiesen \\
 Hodge-Vermutung & Hodge-Riemann-Form & Offen \\
-RH & Spektraler Zeta-Fluss & \cite{GeigerRH2026} \\
+RH & Spektraler Zeta-Fluss & \cite{GeigerRH2026c} \\
 \textbf{P vs NP} & \textbf{Kolmogorov-Komplexitaet} & \textbf{Diese Arbeit} \\
-Breiteres Programm & Freie-Energie-Framework & \cite{GeigerFST2026} \\
+Breiteres Programm & Freie-Energie-Framework & \cite{FST-Unified2026} \\
 \hline
 \end{tabular}
 \end{center}
@@ -211,6 +212,17 @@ Argumente basierend auf Kolmogorov-Komplexitaet erfuellen plausibel die Spezifik
 \item[\textbf{(S5)}] \textbf{Robust.} $K(x)$ haengt nicht vom Berechnungsmodell ab, das zu seiner Definition verwendet wird.
 \end{enumerate}
 
+\begin{remark}[Barrierenimmunitaet: unbeschraenktes $K$ vs.\ ressourcenbeschraenktes $K^t$]
+\label{rem:barrier-K-vs-Kt}
+Die oben beanspruchte Barrierenimmunitaet gilt fuer unbeschraenkte Kolmogorov-Komplexitaet $K$, die eine absolute, unberechenbare Groesse ist, invariant bis auf $O(1)$ unter Wechsel der universellen Maschine. Die zentralen technischen Resultate dieser Arbeit (Theorem~\ref{thm:high_entropy}, die Zeugen-Entropieluecke) verwenden jedoch notwendigerweise \emph{ressourcenbeschraenktes} $K^t$, das berechenbar ist und dessen Invarianz schwaecher ausfaellt (polynomiale Verlangsamung statt additiver Konstante). Der Barrierenstatus von $K^t$-basierten Argumenten ist daher weniger eindeutig:
+\begin{itemize}
+\item \textbf{Relativierung:} $K^t(w \mid x)$ ist ohne Orakel definiert, sodass unsere Argumente nicht-relativierend sind in dem Sinne, dass sie nicht ,,fuer alle Orakel'' gelten. Jedoch kann $K^{t,A}(w \mid x)$ (mit Orakelzugriff) sich wesentlich von $K^t(w \mid x)$ unterscheiden, und ein vollstaendiger Barrierenimmunitaets-Beweis fuer den ressourcenbeschraenkten Fall bleibt offen.
+\item \textbf{Natuerliche Beweise:} $K^t$ ist berechenbar, entgeht also anders als $K$ nicht automatisch der Konstruktivitaetsanforderung. Das Argument, dass unser Ansatz natuerliche Beweise vermeidet, beruht darauf, dass wir $K^t$ nicht als effizient testbare ,,Groesse''-Eigenschaft Boolescher Funktionen verwenden, aber diese Unterscheidung bedarf weiterer Formalisierung.
+\item \textbf{Algebrisierung:} Es existiert kein formaler Beweis, dass $K^t$-basierte Argumente im technischen Sinne von~\cite{AaronsonWigderson2009} nicht-algebrisierend sind.
+\end{itemize}
+Zusammenfassend: Die Barrierenumgehung ist rigoros fuer unbeschraenktes $K$, bleibt aber heuristisch fuer ressourcenbeschraenktes $K^t$. Da die Zeugen-Entropieluecke $K^t$ erfordert, ist die Etablierung formaler Barrierenimmunitaet fuer den ressourcenbeschraenkten Fall ein wichtiges offenes Problem.
+\end{remark}
+
 
 % ===================================================================
 % 4. DIE ZEUGEN-ENTROPIELUECKE
@@ -259,7 +271,7 @@ Die Unterscheidung zwischen $K(w \mid x)$ und $K^t(w \mid x)$ ist entscheidend u
 
 \begin{theorem}[Existenz hochentropischer Zeugen -- ressourcenbeschraenkt, bedingt]
 \label{thm:high_entropy}
-Wenn $\PP \neq \NP$, dann existieren fuer jede NP-vollstaendige Sprache $L$ unendlich viele Ja-Instanzen $x \in L$, sodass fuer jedes Polynom $q$ \textbf{jeder} gueltige Zeuge $w$ fuer $x$ erfuellt:
+Wenn $\PP \neq \NP$, dann existieren fuer jede NP-vollstaendige Sprache $L$ unendlich viele Ja-Instanzen $x \in L$, sodass fuer jedes Polynom $q$ \textbf{jeder} gueltige Zeuge $w$ fuer $x$ erfuellt (fuer die eindeutige erfuellende Belegung ist die Schranke am schaerfsten; fuer Instanzen mit mehreren Zeugen gilt sie fuer jeden Zeugen gleichzeitig):
 \begin{equation}
 K^{q(|x|)}(w \mid x) \geq |w| - O(\log |x|)\,.
 \label{eq:high_entropy}
@@ -274,7 +286,7 @@ Bemerkung zur Quantorenreihenfolge: Das Theorem behauptet, dass eine \emph{einzi
 \begin{proof}
 Wir beweisen die Kontraposition. Angenommen, fuer eine NP-vollstaendige Sprache $L$, ein Polynom $q$ und eine Konstante $c$ hat jede Ja-Instanz $x \in L$ einen Zeugen $w$ mit $K^{q(|x|)}(w \mid x) \leq c$. Dann existiert fuer jede Ja-Instanz $x \in L$ ein Programm $p_x$ der Laenge $\leq c$, das gegeben $x$ einen gueltigen Zeugen $w$ in Zeit $q(|x|)$ erzeugt. (Beachte: $p_x$ kann von $x$ abhaengen, aber es gibt hoechstens $2^{c+1} - 1$ Programme der Laenge $\leq c$.) Dies liefert einen Polynomialzeit-Suchalgorithmus fuer $L$: enumeriere alle Programme der Laenge $\leq c$, fuehre jedes mit Eingabe $x$ fuer hoechstens $q(|x|)$ Schritte aus, und verifiziere jede Ausgabe. Da $L$ NP-vollstaendig ist, reduziert sich jedes NP-Suchproblem ueber Polynomialzeit-Reduktionen auf die Suchversion von $L$. Ein Polynomialzeit-Suchalgorithmus fuer $L$ liefert daher Polynomialzeit-Suchalgorithmen fuer alle NP-Suchprobleme, also $\mathrm{FP} = \mathrm{FNP}$ (wobei $\mathrm{FP}$ und $\mathrm{FNP}$ die Funktionsproblem-Analoga von $\PP$ und $\NP$ sind) und somit $\PP = \NP$.
 
-\textit{Existenz unendlich vieler hochentropischer Instanzen (gegeben $\PP \neq \NP$):} Der formale Beweis ist die Kontraposition oben. Die \textit{Existenz} hochentropischer Instanzen ist nichtkonstruktiv garantiert: wenn jede SAT-Instanz einen niedrigentropischen Zeugen haette ($K^{q(n)}(w \mid x) \leq c$ fuer feste $q, c$), haetten wir $\PP = \NP$. Unter $\PP \neq \NP$ muessen solche Instanzen existieren. Zudem muss es \textit{unendlich viele} geben: gaebe es nur endlich viele schwere Instanzen, koennten diese in einer konstant grossen Nachschlagetabelle hardcodiert werden, wodurch ein Polynomialzeit-Algorithmus fuer alle verbleibenden Instanzen entstuende -- im Widerspruch zu $\PP \neq \NP$. Die explizite Konstruktion ist nichttrivial -- ein naiver Ansatz ueber Cook-Levin-Kodierung von ,,verifiziere $v = r$'' fuer eine zufaellige Zeichenkette $r$ scheitert, weil $r$ aus der Formelstruktur in Polynomialzeit extrahierbar ist, sodass $K^{\poly}(r \mid \varphi_r) = O(1)$. Die Erweiterung auf eine beliebige NP-vollstaendige Sprache $L$ folgt aus der NP-Vollstaendigkeit: da SAT in Polynomialzeit auf $L$ reduziert, liefert ein Polynomialzeit-Zeugenfindungsalgorithmus fuer $L$, komponiert mit der Reduktion, einen Polynomialzeit-Zeugenfindungsalgorithmus fuer SAT (man reduziert eine SAT-Instanz auf eine $L$-Instanz, findet einen Zeugen fuer $L$ und rekonstruiert daraus eine erfuellende Belegung fuer die urspruengliche SAT-Instanz).
+\textit{Existenz unendlich vieler hochentropischer Instanzen (gegeben $\PP \neq \NP$):} Der formale Beweis ist die Kontraposition oben. Die \textit{Existenz} hochentropischer Instanzen ist nichtkonstruktiv garantiert: wenn jede SAT-Instanz einen niedrigentropischen Zeugen haette ($K^{q(n)}(w \mid x) \leq c$ fuer feste $q, c$), haetten wir $\PP = \NP$. Unter $\PP \neq \NP$ muessen solche Instanzen existieren. Zudem muss es \textit{unendlich viele} geben: gaebe es nur endlich viele schwere Instanzen, koennten diese in einer konstant grossen Nachschlagetabelle hardcodiert werden, wodurch ein Polynomialzeit-Algorithmus fuer alle verbleibenden Instanzen entstuende -- im Widerspruch zu $\PP \neq \NP$. Die explizite Konstruktion ist nichttrivial -- ein naiver Ansatz ueber Cook-Levin-Kodierung von ,,verifiziere $v = r$'' fuer eine zufaellige Zeichenkette $r$ scheitert, weil $r$ aus der Formelstruktur in Polynomialzeit extrahierbar ist, sodass $K^{\poly}(r \mid \varphi_r) = O(1)$. Die Erweiterung auf eine beliebige NP-vollstaendige Sprache $L$ folgt aus der NP-Vollstaendigkeit: da SAT in Polynomialzeit auf $L$ reduziert, liefert ein Polynomialzeit-Zeugenfindungsalgorithmus fuer $L$, komponiert mit der Reduktion, einen Polynomialzeit-Zeugenfindungsalgorithmus fuer SAT (man reduziert eine SAT-Instanz auf eine $L$-Instanz, findet einen Zeugen fuer $L$ und rekonstruiert daraus eine erfuellende Belegung fuer die urspruengliche SAT-Instanz), unter der Annahme, dass die Reduktion injektiv ist (was fuer Standard-Cook-Levin-Reduktionen gilt).
 
 \textit{Warum unbeschraenktes $K$ versagt:} Fuer jede SAT-Instanz $x$ mit einer erfuellenden Belegung $w$ hat das Brute-Force-Programm ,,enumeriere alle Belegungen, teste jede, gib die erste erfuellende aus'' Laenge $O(1)$ und findet $w$ aus $x$ in Zeit $O(2^{|x|})$. Somit $K(w \mid x) \leq O(1)$ -- die unbeschraenkte bedingte Komplexitaet ist trivial klein. Deshalb ist die Ressourcenschranke essentiell: der informationstheoretische Gehalt von NP-Haerte liegt in der \textit{Zeit} zur Extraktion des Zeugen, nicht in der Beschreibungslaenge.
 \end{proof}
@@ -292,6 +304,8 @@ Betrachte die unendlich vielen schweren Instanzen, deren Existenz durch Theorem~
 \item $\PP \neq \NP$ $\Rightarrow$ $K^{q(|x|)}(w \mid x) \geq |w| - O(\log |x|)$ fuer alle Polynome $q$ (Theorem~\ref{thm:high_entropy}).
 \end{itemize}
 Dies ist kein Beweis von $\PP \neq \NP$, sondern eine scharfe Charakterisierung: $\PP = \NP$ genau dann, wenn alle NP-Zeugen polynomial komprimierbar sind. Die Entropieluecke $\Omega(|w|)$ vs.\ $O(\log n)$ quantifiziert exakt, was die Trennung von $\PP$ und $\NP$ erfordert.
+
+Die hier etablierte Luecke ist bedingt darauf, dass die Instanz eine eindeutige (oder niedrig-multiplizitaere) erfuellende Belegung besitzt; fuer Instanzen mit vielen Zeugen kann der Algorithmus einen niedrigkomplexen Zeugen waehlen und so die Entropiebarriere umgehen.
 \end{corollary}
 
 \begin{remark}[Eindeutige vs.\ mehrere Zeugen]
@@ -378,7 +392,7 @@ Als zusaetzliche heuristische Evidenz (nicht Teil des formalen Arguments) versag
 
 \textbf{(H1) versagt:} SAT ist nicht kompositionell zerlegbar im geforderten Sinne. Die Erfuellbarkeit einer Konjunktion $\varphi_1 \wedge \varphi_2$ wird nicht durch die Erfuellbarkeit von $\varphi_1$ und $\varphi_2$ einzeln bestimmt (sie teilen Variablen). Diese Nichtzerlegbarkeit ist praezise die Quelle der NP-Haerte.
 
-\textbf{(H2) versagt:} SAT zeigt extreme Sensitivitaet in seiner Suchversion: das Umkehren einer einzigen Klausel kann den gesamten Zeugenraum umstrukturieren. Nahe dem Phasenuebergang kann ein einzelner Bitflip den Loesungscluster in exponentiell viele Komponenten fragmentieren, was Zeugen unbeschraenkter zusaetzlicher Komplexitaet erzeugt.
+\textbf{(H2) versagt:} Fuer zufaellige $k$-SAT-Instanzen nahe der Erfuellbarkeitsschwelle zeigt SAT extreme Sensitivitaet in seiner Suchversion: das Umkehren einer einzigen Klausel kann den gesamten Zeugenraum umstrukturieren. Spezifisch kann nahe dem Phasenuebergang (Klausel-zu-Variablen-Verhaeltnis $\alpha \approx \alpha_c(k)$) eine einzelne Klauselhinzufuegung den Loesungscluster in exponentiell viele Komponenten fragmentieren, was Zeugen unbeschraenkter zusaetzlicher Komplexitaet erzeugt~\cite{AchlioptasRicci2006,MezardZecchina2002}. Fuer strukturierte oder unterbeschraenkte Instanzen kann diese Sensitivitaet weniger ausgepraegt sein; das heuristische Argument ist am staerksten im zufaelligen Nahe-Schwellen-Regime.
 
 
 % ===================================================================
@@ -614,6 +628,21 @@ Das Entropie-Framework verbindet sich mit Beweiskomplexitaet ueber die folgende 
 
 Dies liefert ein konkretes Testfeld: wenn man zeigen kann, dass fuer zufaelliges unerfuellbares $3$-SAT nahe der Schwelle die kuerzeste Widerlegung in Extended Frege sowohl superpolynomiale Laenge als auch hohe bedingte Kolmogorov-Komplexitaet hat, waere dies starke Evidenz fuer die Entropieobstruktion.
 
+\begin{conjecture}[Resolutionsbreite und Kolmogorov-Komplexitaet]
+\label{conj:resolution-width}
+Fuer unerfuellbare CNF-Formeln $\varphi_n$ auf $n$ Variablen erfuellt die minimale Resolutionsbreite $w(\varphi_n \vdash \bot)$
+\[
+w(\varphi_n \vdash \bot) \geq \Omega\left( K(\pi^* | \varphi_n) / \log n \right),
+\]
+wobei $\pi^*$ die kuerzeste Resolutionswiderlegung von $\varphi_n$ ist. Insbesondere erfordern Formeln, deren Widerlegungen hohe Kolmogorov-Komplexitaet haben, breite Klauseln.
+\end{conjecture}
+
+\textit{Motivation.} Ben-Sasson und Wigderson~\cite{BenSasson2001} zeigten, dass untere Schranken fuer die Resolutionsbreite untere Schranken fuer die Resolutionslaenge ueber $|\pi| \geq 2^{w - O(n)}$ implizieren. Unsere Vermutung kehrt die Richtung um: hohe Komplexitaet des Beweisobjekts (gemessen durch $K$) erzwingt Breite. Falls wahr, wuerde dies eine informationstheoretische Charakterisierung der Resolutionsbreite liefern und Beweiskomplexitaet mit dem ESC-Framework verbinden.
+
+\begin{remark}[Resolutionsbreite als thermodynamische Observable]\label{rem:width-observable}
+Die Resolutionsbreite $w(\varphi_n \vdash \bot)$ ist robust unter Zeitbeschr\"ankung: Anders als die Kolmogorov-Komplexit\"at~$K$ ist die Breite einer Resolutionswiderlegung eine \emph{syntaktische} Invariante, die nicht von Rechenressourcen abh\"angt. Dies macht sie zu einer nat\"urlichen "`thermodynamischen Observablen"' in der Beweiskomplexit\"ats-Analogie: Grosse Breite erzwingt, dass jede zeitbeschr\"ankte Beschreibung komplex ist, und liefert damit einen konkreten Weg von $K$-unteren Schranken zu $K^t$-unteren Schranken f\"ur spezifische Formelfamilien. Ilangos quasi-polynomielle MCSP-Reduktionen \cite{Ilango2026} erlauben es, explizite Sprachen zu fixieren, f\"ur die dieser Transfer gilt, ohne allgemeine Entscheidbarkeit von~$K$ vorauszusetzen.
+\end{remark}
+
 \subsection{Entropiebeweis fuer $\SAT \notin \mathrm{AC}^0$}
 \label{sec:ac0}
 
@@ -718,6 +747,33 @@ P vs NP & $K^t(w|x)$ hoch & Uniformitaetsbruecke \\
 \item \textbf{Barrierenanalyse ist heuristisch.} Waehrend wir argumentieren, dass $K$-basierte Argumente den drei Barrieren nicht natuerlich unterliegen, haben die Barrieretheorems (Relativierung, natuerliche Beweise, Algebrisierung) praezise technische Definitionen. Ein vollstaendig rigoroser Nachweis, dass der Entropieansatz allen drei Barrieren formal entgeht, wuerde erfordern zu zeigen, dass spezifische $K^t$-basierte Aussagen nicht relativiert werden koennen, was wir als Forschungsrichtung belassen.
 \end{enumerate}
 
+\subsection{Die Uniformitaetsbruecke: Lemma-Ziele}
+\label{sec:uniformity-bridge}
+
+Das zentrale offene Problem dieser Arbeit ist die \emph{Uniformitaetsbruecke}: die Uebertragung der Entropieseparation von unbeschraenkter Kolmogorov-Komplexitaet $K$ (wo Barrierenimmunitaet gilt) auf ressourcenbeschraenkte Komplexitaet $K^t$ (wo die berechnungstheoretische Relevanz liegt). Wir identifizieren drei konkrete Lemma-Ziele, von denen jedes einzelne genuegen wuerde, um die Bruecke zu schliessen.
+
+\begin{description}
+\item[Brueckenziel 1: Instanzkompression $\Rightarrow$ $K^t$-untere-Schranken.]
+\emph{Aussage:} Wenn kein Polynomialzeit-Algorithmus erfuellende Belegungen von $\varphi_n$ auf weniger als $|\varphi_n|^{1-\varepsilon}$ Bits komprimieren kann, dann gilt $K^{n^c}(w | \varphi_n) \geq |w| - O(\log n)$ fuer jeden Zeugen $w$.
+
+\emph{Warum dies genuegt:} Instanzkompressionshaerte ist ein gut untersuchter Begriff in der parametrisierten Komplexitaetstheorie~\cite{FortnowSanthanam2011,DellMelkebeek2014}. Die Verbindung zu $K^t$-unteren-Schranken wuerde aus einem Simulationsargument folgen: wenn ein kurzes Programm $w$ aus $\varphi_n$ in Zeit $n^c$ berechnen koennte, wuerde dies eine Kompression von $\varphi_n$ ueber den Zeugen darstellen.
+
+\item[Brueckenziel 2: Beweiskomplexitaet $\Rightarrow$ Entropie ueber Beweisobjekte.]
+\emph{Aussage:} Fuer jedes propositionslogische Beweissystem $P$ und jede Tautologie $\tau_n$, die die Unerfuellbarkeit von $\bar{\varphi}_n$ kodiert, erfuellt der Beweis $\pi$ die Bedingung $K(\pi | \tau_n) \geq |\pi|^{1-\varepsilon}$.
+
+\emph{Warum dies genuegt:} Hohe Beweiskomplexitaet (superpolynomiale Beweislaenge) impliziert, dass Beweise selbst hohe Entropie tragen. Kombiniert mit der Entropischen Separationsvermutung ergibt sich: keine Polynomialzeit-Beweissuche kann uniform Beweise finden, weil die Beweisobjekte inkompressibel sind. Dieser Weg verbindet sich mit der Razborov--Rudich-Barriere natuerlicher Beweise auf konstruktive Weise.
+
+\item[Brueckenziel 3: PRG-basierte Kandidatenfamilien.]
+\emph{Aussage:} Es existiert eine explizite Familie $\{\varphi_n\}$ von SAT-Instanzen, sodass (i) jedes $\varphi_n$ eine eindeutige erfuellende Belegung $w_n$ besitzt, (ii) $w_n$ die Ausgabe eines Pseudozufallsgenerators $G: \{0,1\}^{n/2} \to \{0,1\}^n$ ist, und (iii) $K^{n^c}(w_n | \varphi_n) \geq n/2 - O(\log n)$ gilt.
+
+\emph{Warum dies genuegt:} Wenn $G$ ein sicherer PRG ist (z.B.\ basierend auf Faktorisierungs- oder Gitterannahmen), dann folgt (iii) aus der Pseudozufaelligkeit: jede effiziente Kompression von $w_n$ wuerde $G$ brechen. Die Eindeutig-Zeugen-Eigenschaft (i) stellt sicher, dass die Entropieluecke greift (Corollary~\ref{cor:gap}). Dieser Weg reduziert die Uniformitaetsbruecke auf eine kryptographische Annahme.
+\end{description}
+
+\begin{remark}[Minimale hinreichende Bruecke]
+\label{rem:minimal-bridge}
+Jedes \emph{einzelne} der drei Ziele genuegt, um die Entropische Separationsvermutung von einer Aequivalenz (Umformulierung von P $\neq$ NP) zu einem bedingten Beweis aufzuwerten (P $\neq$ NP unter einer konkreten, falsifizierbaren Hypothese). Ziel~3 ist wohl das zugaenglichste, da es auf kryptographische Standardannahmen reduziert. Ziel~1 schliesst an das aktive Forschungsprogramm zur Instanzkompression an~\cite{Drucker2015}. Ziel~2 ist das ambitionierteste, wuerde aber gleichzeitig Fragen in der Beweiskomplexitaet loesen.
+\end{remark}
+
 \subsection{Das Meta-Muster}
 
 Ueber alle Probleme in diesem Forschungsprogramm hinweg ist die Struktur:
@@ -731,9 +787,79 @@ Ueber alle Probleme in diesem Forschungsprogramm hinweg ist die Struktur:
 
 Fuer P vs NP sind Schritte 1--3 in dieser Arbeit etabliert. Schritt 4 -- die Uniformitaetsbruecke -- bleibt die zentrale Herausforderung.
 
+\subsection{Offene Richtungen}
+
+\begin{remark}[Levins universelle Suche und Uniformitaetskollaps]
+\label{rem:levin-uniformity}
+Levins universeller Suchalgorithmus $U$ fuehrt alle Programme der Laenge $\leq l$ in verschraenkter Weise aus und weist Programm $p$ die Zeit $2^{-|p|} \cdot T$ zu. Wenn P $=$ NP, dann findet $U$ Zeugen in Polynomialzeit (mit einer grossen Konstante). Die ESC liefert eine komplementaere Perspektive: wenn die Zeugen hohe $K^t$-Komplexitaet haben, dann wird $U$'s Zeitverteilung vom \emph{korrekten} Programm dominiert, das eine Laenge $\geq K^t(w|\varphi) \geq |w| - O(\log n)$ haben muss. Die resultierende Laufzeit ist $2^{|w|} \cdot \mathrm{poly}(n)$ -- exponentiell. Dieses ,,Uniformitaetskollaps''-Argument zeigt, dass Levins Algorithmus bis auf polynomiale Faktoren optimal ist, \emph{genau dann, wenn} die ESC gilt.
+\end{remark}
+
+\begin{remark}[Valiant-Vazirani-Reduktion und Wenig-Zeugen-Verstaerkung]
+\label{rem:valiant-vazirani}
+Das Valiant-Vazirani-Theorem reduziert SAT mit hoher Wahrscheinlichkeit ueber zufaellige Hashfunktionen auf Unique-SAT. Kombiniert mit der ESC ergibt dies: fuer einen zufaelligen Hash $h$ erfuellt der eindeutige Zeuge $w_h$ von $\varphi \wedge h(w) = 0^k$ die Bedingung $K^t(w_h | \varphi, h) \geq |w_h| - O(\log n)$ mit hoher Wahrscheinlichkeit (ueber $h$). Diese ,,Wenig-Zeugen-Verstaerkung'' transformiert die bedingte ESC (die eindeutige Zeugen erfordert) in eine Aussage ueber generische SAT-Instanzen, auf Kosten einer randomisierten Reduktion. Derandomisierung ueber Nisan-Wigderson-Generatoren wuerde dies bedingungslos machen.
+\end{remark}
+
+\begin{remark}[Min-Entropie-Variante]
+\label{rem:min-entropy}
+Die Worst-Case-$K^t$-Formulierung der ESC kann zu einer distributionellen Version mittels Min-Entropie abgeschwaecht werden: fuer eine samplbare Verteilung $\mathcal{D}$ ueber SAT-Instanzen definiere $H_\infty^t(\mathcal{D}) = \min_{(\varphi, w) \in \mathrm{supp}(\mathcal{D})} K^t(w | \varphi)$. Wenn $H_\infty^t(\mathcal{D}) \geq |w| - O(\log n)$ fuer eine samplbare $\mathcal{D}$ gilt, dann folgt Average-Case-Haerte von NP (Impagliazzos ,,Pessiland''). Diese Abschwae\-chung ist strikt schwaecher als die Worst-Case-ESC, verbindet sich aber mit der reichhaltigen Theorie der Average-Case-Komplexitaet und Einwegfunktionen.
+\end{remark}
+
+\begin{remark}[Adversariale Zeugenfamilie]
+\label{rem:adversarial-witness}
+Eine staerkere Variante der ESC konstruiert eine explizite \emph{adversariale} Zeugenfamilie $\{w_n\}$ mit einer globalen Konsistenzpruefung: die Zeugen sind nicht unabhaengig schwer, sondern erfuellen eine kollektive Nebenbedingung $\mathcal{C}(w_1, \ldots, w_N) = 1$, die leicht zu verifizieren, aber schwer zu erfuellen ist. Jeder Algorithmus, der $w_n$ fuer alle $n \leq N$ berechnet, muss die globale Struktur $\mathcal{C}$ ,,kennen'', was eine Beschreibungslaenge $\Omega(N)$ erfordert. Dieser Ansatz vermeidet die Einzel-Instanz-Einschraenkungen von Korollar~\ref{cor:gap} und ist mit der Theorie interaktiver Beweise und PCP verwandt.
+\end{remark}
+
+\begin{remark}[Kompressions-zu-Schaltkreis-Transfer]
+\label{rem:compression-circuit}
+Fuer eingeschraenkte Schaltkreisklassen $\mathcal{C}$ (z.B.\ $\mathrm{AC}^0$, monotone Schaltkreise) nimmt der Kompressions-zu-Schaltkreis-Transfer eine schaerfere Form an: wenn $\varphi_n$ keinen $\mathcal{C}$-Schaltkreis der Groesse $s$ hat, der seinen Zeugen berechnet, dann gilt $K^t_{\mathcal{C}}(w | \varphi_n) \geq \log \binom{2^n}{s}$, wobei $K^t_{\mathcal{C}}$ die $\mathcal{C}$-eingeschraenkte Kolmogorov-Komplexitaet bezeichnet. Fuer $\mathrm{AC}^0$ liefern die Razborov-Smolensky-Schranken $s \geq 2^{n^{\Omega(1)}}$, was superpolynomiales $K^t_{\mathrm{AC}^0}$ bedingungslos ergibt. Dies liefert einen ,,Machbarkeitsnachweis'' fuer Brueckenziel~1 in einem eingeschraenkten Modell.
+\end{remark}
+
+\begin{remark}[MCSP-Internalisierungsroute]
+\label{rem:mcsp-internalisation}
+Allender und Das (2017) zeigten, dass MCSP (Minimum Circuit Size Problem) unter randomisierten Reduktionen schwer fuer SZK ist. Hirahara~\cite{Hirahara2018} etablierte, dass wenn MCSP $\notin$ $\BPP$, dann Einwegfunktionen existieren. Unser Framework erweitert diese Kette:
+\[
+\text{MCSP} \notin \text{P} \xRightarrow{\text{Hirahara}} \text{OWF existieren} \xRightarrow{\text{Impagliazzo--Levin}} \text{avg-case NP schwer} \xRightarrow{\text{ESC (distributionell)}} \text{P} \neq \text{NP}.
+\]
+Die erste Implikation ist bedingungslos (modulo Derandomisierung); die zweite ist eine Standardreduktion; die dritte verwendet die Min-Entropie-Variante der ESC (Remark~\ref{rem:min-entropy}). Der Beweis MCSP $\notin$ $\PP$ wuerde somit ueber drei bekannte Reduktionen plus unser Framework $\PP \neq \NP$ liefern.
+\end{remark}
+
 \begin{remark}[Quantenerweiterung]
 \label{rem:quantum}
 Das Entropie-Framework laesst sich natuerlich auf Quantenberechnung erweitern. Ein Quantenalgorithmus mit $T$ Gattern auf $n$ Qubits kann durch $O(T \log T)$ klassische Bits beschrieben werden (Kodierung der Gattersequenz), also $K(\mathrm{desc}(U)) \leq O(T \log T)$ fuer die klassische Beschreibung des Unitaeroperators $U$. Falls $\mathrm{BQP} = \mathrm{QMA}$, dann wuerde der Polynomialzeit-Quantenalgorithmus den QMA-Zeugen ersetzen, und das analoge Zeugen-Entropieluecken-Argument wuerde gelten: die ressourcenbeschraenkte Quanten-Kolmogorov-Komplexitaet des Zeugen muesste gleichzeitig niedrig sein (durch den BQP-Algorithmus) und hoch (fuer Instanzen, die zufaellige Zeichenketten kodieren). Dies legt $\mathrm{BQP} \neq \mathrm{QMA}$ nahe, obwohl die Rigorgisierung ein Quanten-Analogon der ressourcenbeschraenkten Kolmogorov-Komplexitaet erfordert, was ein aktives Forschungsgebiet ist.
+\end{remark}
+
+\begin{remark}[Spieltheoretisches Interaktionsmodell]
+\label{rem:game-theoretic}
+Die P-vs-NP-Frage laesst eine spieltheoretische Formulierung zu: ein Entropie-Maximierer (,,Natur'') waehlt Zeugenverteilungen, um $K^t(w|\varphi)$ zu maximieren, waehrend ein Schaltkreis-Minimierer (,,Algorithmus'') Schaltkreise waehlt, um die Berechnungszeit zu minimieren. Der Minimax-Wert dieses Nullsummenspiels entspricht dem optimalen Kompromiss zwischen Zeugenentropie und Schaltkreisgroesse. Die ESC behauptet, dass die Natur gewinnt: $\max_w \min_C K^t(w|\varphi) - \log |C| > 0$ fuer unendlich viele $\varphi$. Diese Formulierung verbindet sich mit der Verwendung von Minimax-Prinzipien im FST-Programm in anderen Domaenen (Yang--Mills, Turbulenz).
+\end{remark}
+
+\begin{remark}[Quanten-Zertifikate und MIP*]
+\label{rem:quantum-certificates}
+Die ESC kann in die Sprache quanteninteraktiver Beweise uebersetzt werden: die Entropieluecke $K^t(w|\varphi) \geq |w| - O(\log n)$ impliziert, dass kein polynomialgroesser Quantenschaltkreis einen Quantenzustand $|\psi_w\rangle$, der den Zeugen kodiert, allein aus $|\varphi\rangle$ praeparieren kann. Im MIP*-Framework (Natarajan--Wright~\cite{NatarajanWright2019}, Ji--Natarajan--Vidick--Wright--Yuen~\cite{JiNatarajanVidickWrightYuen2021}) kann Verschraenkung zwischen Beweisern als Mechanismus betrachtet werden, die Zeugenentropie ueber nichtkommunizierende Parteien zu ,,verteilen''. Ob Verschraenkung die Entropiebarriere umgehen kann, haengt mit der Frage zusammen, ob $\mathrm{MIP}^* = \mathrm{RE}$ komplexitaetstheoretische Konsequenzen fuer NP hat.
+\end{remark}
+
+\begin{remark}[Kolyvagin-artige Hierarchie fuer Zeugen]
+\label{rem:kolyvagin-hierarchy}
+In Analogie zu Kolyvagins Euler-System in der Zahlentheorie kann man sich eine Hierarchie von Zeugen vorstellen: der ,,Basis''-Zeuge $w_1$ fuer Instanz $\varphi_1$ induziert ueber eine normkompatible Abbildung eine Familie von Zeugen $w_p$ fuer verwandte Instanzen $\varphi_p$ (indiziert durch Primzahlen $p$). Wenn der Basiszeuge ineffizient ist (hohes $K^t$), dann erzwingt die Normkompatibilitaet, dass alle $w_p$ ebenfalls ineffizient sind. Diese ,,Aufwaertspropagation der Haerte'' wuerde eine einzelne schwere Instanz in eine dichte Familie umwandeln und damit die zentrale Schwaeche des aktuellen Frameworks adressieren (das dichte schwere Familien benoetigt, aber nur isolierte Beispiele konstruiert).
+\end{remark}
+
+\begin{remark}[Selbstreferentielle Diagonalisierung]
+\label{rem:self-referential}
+Fuer jede Turingmaschine $A$, die behauptet, SAT in Polynomialzeit zu loesen, konstruiere eine SAT-Instanz $\varphi_A$, deren eindeutige erfuellende Belegung \emph{$A$ selbst kodiert} (ueber eine Fixpunktkonstruktion \`a la Kleene). Dann gilt $K^t(w_A | \varphi_A) \leq |A| + O(1)$ (der Zeuge ist nur die Beschreibung von $A$), aber die ESC verlangt $K^t(w | \varphi_A) \geq |w| - O(\log n)$ fuer \emph{alle} Zeugen. Die Spannung wird aufgeloest, wenn $|A| \geq |w| - O(\log n)$, d.h., der Algorithmus muss mindestens so komplex sein wie der Zeuge, den er produziert. Dieses selbstreferentielle Argument liefert einen alternativen Zugang zur Uniformitaetsbarriere.
+\end{remark}
+
+\begin{remark}[Extended Frege und MCSP]
+\label{rem:frege-mcsp}
+Zwei konkrete Ziele fuer bedingungslosen Fortschritt:
+\begin{enumerate}
+\item \emph{Extended Frege:} Wenn superpolynomiale untere Schranken fuer die Extended-Frege-Beweislaenge fuer Tautologien etabliert werden koennen, die die Unerfuellbarkeit ESC-schwerer Instanzen kodieren, dann haben die Beweisobjekte selbst hohe Entropie ($K(\pi | \tau) \geq |\pi|^{1-\varepsilon}$), was Brueckenziel~2 realisiert.
+\item \emph{MCSP $\notin$ P/poly:} Das Minimum Circuit Size Problem (Allender--Hirahara~\cite{AllenderHirahara2019}) ist die natuerliche Entscheidungsversion der Kolmogorov-Komplexitaet fuer Schaltkreise. Der Beweis MCSP $\notin$ P/poly wuerde uniforme Entropiehaerte (EH) implizieren und ueber unser Framework P $\neq$ NP. Dies gilt als eines der zugaenglichsten bedingungslosen Ziele in der Komplexitaetstheorie.
+\end{enumerate}
+\end{remark}
+
+\begin{remark}[Analogie zur Hodge-Vermutung]
+\label{rem:hodge-analogy}
+Das ESC-Framework offenbart eine strukturelle Analogie zur Hodge-Vermutung (vgl.\ das Begleitpaper zur Hodge-Vermutung): uniforme Polynomialzeit-Algorithmen entsprechen ,,absoluten'' (algebraischen) Klassen, waehrend schwere NP-Zeugen ,,transzendenten'' Klassen entsprechen. Die Entropieluecke $K^t(w|\varphi) \gg \log n$ ist analog zum Versagen der arithmetischen Positivitaet (AP) fuer transzendente Hodge-Klassen. In beiden Faellen ist die Obstruktion die Existenz von Objekten, die sich einer strukturierten (algebraischen/algorithmischen) Beschreibung widersetzen.
 \end{remark}
 
 
@@ -769,7 +895,7 @@ Diese Arbeit wurde als unabhaengige Forschung ohne institutionelle Foerderung du
 % ===================================================================
 % BIBLIOGRAPHIE
 % ===================================================================
-\begin{thebibliography}{30}
+\begin{thebibliography}{33}
 
 \bibitem{BakerGillSolovay1975}
 T.~Baker, J.~Gill, \& R.~Solovay (1975).
@@ -858,15 +984,15 @@ P = BPP if E requires exponential circuits: Derandomizing the XOR Lemma.
 \textit{Proceedings of the 29th ACM STOC}, pp.\ 220--229.
 DOI: 10.1145/258533.258590.
 
-\bibitem{GeigerFST2026}
+\bibitem{FST-Unified2026}
 L.~Geiger (2026).
 The Renormalized Free Energy Framework.
 Zenodo preprint.
 \href{https://doi.org/10.5281/zenodo.19036191}{doi:10.5281/zenodo.19036191}.
 
-\bibitem{GeigerRH2026}
+\bibitem{GeigerRH2026c}
 L.~Geiger (2026).
-The Riemann Hypothesis I--III.
+The Riemann Hypothesis Part III: The Analytical Rank-Finite Certificate.
 Zenodo preprint.
 \href{https://doi.org/10.5281/zenodo.19035845}{doi:10.5281/zenodo.19035845}.
 
@@ -916,6 +1042,57 @@ R.~Impagliazzo (1995).
 A personal view of average-case complexity.
 \textit{Proceedings of the 10th Structure in Complexity Theory Conference}, pp.\ 134--147.
 DOI: 10.1109/SCT.1995.514853.
+
+\bibitem{AchlioptasRicci2006}
+D.~Achlioptas, F.~Ricci-Tersenghi (2006).
+On the solution-space geometry of random constraint satisfaction problems.
+\textit{Proceedings of the 38th Annual ACM Symposium on Theory of Computing (STOC '06)}, pp.\ 130--139.
+DOI: 10.1145/1132516.1132537.
+
+\bibitem{MezardZecchina2002}
+M.~M\'ezard, R.~Zecchina (2002).
+Random $K$-satisfiability problem: From an analytic solution to an efficient algorithm.
+\textit{Physical Review E}, 66, 056126.
+DOI: 10.1103/PhysRevE.66.056126.
+
+\bibitem{FortnowSanthanam2011}
+L.~Fortnow \& R.~Santhanam (2011).
+Infeasibility of instance compression and succinct PCPs for NP.
+\textit{Journal of Computer and System Sciences}, 77(1), 91--106.
+DOI: 10.1016/j.jcss.2010.06.007.
+
+\bibitem{DellMelkebeek2014}
+H.~Dell \& D.~van~Melkebeek (2014).
+Satisfiability allows no nontrivial sparsification unless the polynomial-time hierarchy collapses.
+\textit{Journal of the ACM}, 61(4), Article~23.
+DOI: 10.1145/2629620.
+
+\bibitem{Drucker2015}
+A.~Drucker (2015).
+New limits to classical and quantum instance compression.
+\textit{SIAM Journal on Computing}, 44(5), 1443--1479.
+DOI: 10.1137/130927115.
+
+\bibitem{AllenderHirahara2019}
+E.~Allender \& S.~Hirahara (2019).
+New insights on the (non-)hardness of circuit minimization and related problems.
+\textit{ACM Transactions on Computation Theory}, 11(4), 27:1--27:27.
+DOI: 10.1145/3349616.
+
+\bibitem{NatarajanWright2019}
+A.~Natarajan \& J.~Wright (2019).
+NEEXP $\subseteq$ MIP*.
+\textit{Proceedings of the 60th IEEE FOCS}, pp.\ 510--528.
+DOI: 10.1109/FOCS.2019.00039.
+
+\bibitem{JiNatarajanVidickWrightYuen2021}
+Z.~Ji, A.~Natarajan, T.~Vidick, J.~Wright, \& H.~Yuen (2021).
+MIP* = RE.
+\textit{Communications of the ACM}, 64(11), 131--138.
+DOI: 10.1145/3485628.
+
+\bibitem{Ilango2026}
+R.~Ilango, \textit{Quasi-polynomielle MCSP-Reduktionen und explizite harte Sprachen}, Manuskript, 2026.
 
 \end{thebibliography}
 

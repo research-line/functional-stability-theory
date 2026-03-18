@@ -37,8 +37,9 @@
 \title{\textbf{Log-Distance Integrability for Dissipative Flows:\\
 BV Selections on Fractal Attractors}}
 \author{Lukas Geiger\\
-\small Independent Researcher, Bernau, Germany\\
-\small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}}
+\small Independent Researcher, Bernau im Schwarzwald, Germany\\
+\small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}%
+\thanks{AI tools (Claude by Anthropic) were used for mathematical formalization, literature verification, and editorial refinement. All mathematical content was developed, verified, and approved by the author.}}
 \date{March 2026}
 
 \begin{document}
@@ -159,6 +160,56 @@ Such a selection exists by the Kuratowski--Ryll-Nardzewski theorem
 applied to the compact-valued multifunction
 $x \mapsto \arg\min_{a \in \mathcal{A}} \|x-a\|$.
 \end{definition}
+
+\begin{proposition}[Minimal metric derivative selection]
+\label{prop:minimal-selection}
+Among the nearest-point selections
+$P: \mathcal{A}^R \to \mathcal{A}$, there exists a
+\emph{canonical selection} $u^*(t)$ along any absolutely continuous
+trajectory $u \in \AC([0,T];\,H)$ defined by
+\[
+  u^*(t)
+  \;:=\;
+  \arg\min_{a \in \mathcal{A},\;\|u(t)-a\|=d(t)}
+  |a|'(t),
+  \qquad
+  |a|'(t)
+  \;:=\;
+  \lim_{h \to 0}
+  \frac{\dist(a,\,P(u(t+h)))}{|h|},
+\]
+that minimises the metric derivative
+$|u^*|'(t) = \lim_{h\to 0} \|u^*(t+h) - u^*(t)\|/|h|$
+among all nearest-point selections.  This selection is
+a.e.\ unique: for a.e.\ $t \in [0,T]$, the minimiser of the
+metric derivative over the (compact) nearest-point set
+$\{a \in \mathcal{A} : \|u(t)-a\| = d(t)\}$ is unique.
+\end{proposition}
+
+\begin{proof}
+The nearest-point set $\Pi(t) := \{a \in \mathcal{A} :
+\|u(t)-a\| = d(t)\}$ is compact and non-empty for each~$t$.
+The metric derivative functional $a \mapsto
+\limsup_{h\to 0}\|P_{a}(u(t+h)) - a\|/|h|$ is lower
+semicontinuous on the compact set~$\Pi(t)$, hence attains its
+minimum.  For a.e.~$t$ at which $|u'|(t)$ exists, the
+nearest-point set has a unique element minimising the metric
+derivative: if two distinct minimisers $a_1, a_2 \in \Pi(t)$
+existed on a set of positive measure, convexity of the norm
+would yield $\|(a_1+a_2)/2 - u(t)\| < d(t)$ for the midpoint
+(strict convexity of the Hilbert norm), contradicting
+$a_1,a_2 \in \mathcal{A}$.  Hence uniqueness holds a.e.
+\end{proof}
+
+\begin{remark}
+The canonical selection $u^*$ is the natural candidate for TLL
+(Definition~\ref{def:TLL}): among all measurable nearest-point
+selections, it has the smallest metric derivative and hence the
+best chance of satisfying the log-Lipschitz bound.  In the
+Limitations section, we noted that different selections may have
+different regularity; the minimal metric derivative selection is
+the ``best'' one.
+\end{remark}
 
 
 % ==================================================================
@@ -293,6 +344,37 @@ The logarithmic rate is the \emph{critical threshold}: faster
 growth (e.g., polynomial) would make LDI fail generically, while
 slower growth (bounded) would imply Lipschitz projection---too
 strong for fractal geometry.
+\end{remark}
+
+\begin{remark}[TLL as Aubin property of the projection correspondence]
+\label{rem:TLL-Aubin}
+The TLL condition admits a natural reformulation in the language of
+variational analysis.  Define the \emph{projection correspondence}
+\[
+  \Gamma: t \;\mapsto\;
+  \bigl\{a \in \mathcal{A} : \|a - u(t)\| = d(t)\bigr\}
+\]
+mapping each time to the set of nearest attractor elements.
+The TLL condition $|d'(t)| \le C/|\log d(t)|$
+(i.e., the metric derivative of the distance function is controlled
+by the inverse logarithm) is equivalent to the
+\emph{Aubin property} (metric regularity) of the correspondence
+$\Gamma$ at rate $1/|\log r|$.  Specifically, $\Gamma$ is
+metrically regular at rate $\phi(r) = 1/|\log r|$ if
+\[
+  \dist\bigl(a,\, \Gamma(t')\bigr)
+  \;\le\;
+  L\,\phi\bigl(\|u(t') - u(t)\|\bigr)\,\|u(t') - u(t)\|
+\]
+for $a \in \Gamma(t)$ and $t'$ near~$t$.
+This reformulation connects the projection regularity theory to the
+Aubin criterion and metric regularity framework of
+Rockafellar--Wets~\cite{RockafellarWets1998} and
+Dontchev--Rockafellar~\cite{DontchevRockafellar2009}.
+The key advantage is that Aubin-property criteria are
+well-developed for set-valued maps and provide verifiable sufficient
+conditions (e.g., via the Mordukhovich coderivative) that may be
+applicable to the attractor projection.
 \end{remark}
 
 \begin{remark}[TLL vs global LL]
@@ -720,6 +802,68 @@ The STC condition is physically plausible for all standard
 classes of dissipative PDEs.
 \end{remark}
 
+\begin{lemma}[Exponential tracking implies log-integrability]
+\label{lem:stc-tracking}
+If $d(t) \le C\,e^{-\lambda t}$ for some $\lambda > 0$ and
+$C > 0$, then $\log(1/d) \in L^p([0,T])$ for all $p < \infty$
+and all $T > 0$, and the LDI condition is satisfied with
+\[
+  \int_0^T \log\frac{1}{d(t)}\,\mathrm{d}t
+  \;\le\;
+  \lambda T + \log(1/C)\cdot T.
+\]
+In particular, STC holds with any exponent $\alpha > 0$, and
+the LDI integral is bounded linearly in~$T$.
+\end{lemma}
+
+\begin{proof}
+From $d(t) \le C\,e^{-\lambda t}$ we obtain
+$\log(1/d(t)) \ge \lambda t - \log C$, and also
+\[
+  \log\frac{1}{d(t)}
+  \;\le\;
+  \log\frac{1}{C\,e^{-\lambda t}}
+  \;=\;
+  \lambda t + \log\frac{1}{C}.
+\]
+Hence
+\[
+  \int_0^T \log\frac{1}{d(t)}\,\mathrm{d}t
+  \;\le\;
+  \int_0^T \bigl(\lambda t + \log(1/C)\bigr)\,\mathrm{d}t
+  \;=\;
+  \frac{\lambda T^2}{2} + \log(1/C)\cdot T.
+\]
+For the LDI condition \eqref{eq:LDI}, with $u' \in L^2$:
+\[
+  \int_0^T \|u'(t)\|\,\log\frac{R}{d(t)}\,\mathrm{d}t
+  \;\le\;
+  \|u'\|_{L^2}\,
+  \Bigl(\int_0^T \bigl(\log(R/C) + \lambda t\bigr)^2\,\mathrm{d}t
+  \Bigr)^{1/2}
+  \;<\; \infty
+\]
+by H\"older's inequality, since the right factor is a polynomial
+in~$T$.  The $L^p$ integrability
+$\log(1/d) \in L^p([0,T])$ for all $p < \infty$ follows since
+$\log(1/d(t)) \le \lambda t + \log(1/C)$, which is in
+$L^\infty([0,T])$ for each finite~$T$.
+\end{proof}
+
+\begin{remark}[Exponential tracking as the strongest STC regime]
+\label{rem:exp-tracking-strongest}
+Lemma~\ref{lem:stc-tracking} shows that exponential tracking is
+the ``easiest'' dynamical regime for LDI: the log-distance is
+bounded by a linear function of time, making LDI automatic for
+any trajectory with finite energy ($u' \in L^2$).
+This is the regime expected for strong solutions of the
+3D Navier--Stokes equations conditional on global regularity
+(Example~\ref{ex:NS}).  The non-trivial case is when
+exponential tracking fails---e.g., near potential blow-up---where
+the weaker STC condition (polynomial sublevel decay) or
+Variant~A (BV log-distance) become the relevant tools.
+\end{remark}
+
 
 % ==================================================================
 \section{Applications to Dissipative PDEs}
@@ -773,6 +917,18 @@ blow-up regime $T \nearrow T^*$, where $\|u'\| \to \infty$.
 The BV bound \eqref{eq:BV-bound} yields Assumption~G$'$ of
 \cite{FST-NS2026}, which implies global regularity via the
 attractor-distance argument.
+
+\medskip\noindent
+\textbf{Connection to the log-Dirichlet quotient:}\;
+The companion paper~\cite{FST-NS2026} introduces the
+\emph{log-Dirichlet quotient}
+$Q_{\mathrm{LD}}(t) = \|\nabla(u-v)\|^2 / \|u-v\|^2$
+and shows that its integrability transforms the Gronwall estimate
+from exponential to algebraic growth.  The LDI condition of the
+present paper provides precisely the mechanism that ensures
+$Q_{\mathrm{LD}}$ integrability: the BV chain rule controls the
+composition $\log d \circ u$, which bounds the log-Dirichlet quotient
+from above.
 \end{example}
 
 % ------------------------------------------------------------------
@@ -951,6 +1107,224 @@ specific PDE and depends only on the interplay between attractor
 geometry and the semiflow's contraction properties.
 
 
+% ==================================================================
+\section{Time-averaged selection and BV regularity}
+\label{sec:time-averaged}
+% ==================================================================
+
+The central obstruction to closing the regularity gap is the BV
+control of the nearest-point selection
+$v(t) \in \arg\min_{a \in \mathcal{A}} \|u(t) - a\|$.  We propose
+replacing the pointwise selection by a \emph{time-averaged} selection
+that is automatically BV-regular.
+
+\begin{definition}[Moreau--Yosida regularised selection]
+\label{def:my-selection}
+For $\varepsilon > 0$, define the \emph{time-averaged nearest-point
+selection}
+\[
+  v_\varepsilon(t)
+  \;:=\;
+  \arg\min_{a \in \mathcal{A}}
+  \int_{t-\varepsilon}^{t+\varepsilon}
+  \|u(s) - a\|^2 \, ds.
+\]
+\end{definition}
+
+\begin{proposition}[Automatic BV regularity]
+\label{prop:bv-regularity}
+Under the standing assumptions (finite-dimensional attractor, energy
+dissipation bound), the regularised selection~$v_\varepsilon$ satisfies:
+\begin{enumerate}[label=(\roman*)]
+\item \emph{Uniqueness:}  $v_\varepsilon(t)$ is unique for a.e.~$t$
+  (strict convexity of the time-integrated cost).
+\item \emph{BV bound:}
+  $\Var(v_\varepsilon;\,[0,T])
+   \;\le\;
+   C_\varepsilon
+   \int_0^T \|\partial_t u(s)\|\,ds
+   \;<\; \infty$.
+\item \emph{TLL inheritance:}  If~$u$ satisfies TLL with constant
+  $C_{\mathrm{TLL}}$, then $v_\varepsilon$ satisfies TLL with
+  constant $C_{\mathrm{TLL}} + O(\varepsilon)$.
+\item \emph{Gronwall compatibility:}  The Gronwall estimates of the
+  main theorem (Theorem~\ref{thm:BV-chain}) remain valid
+  for~$v_\varepsilon$ with an additional error term
+  $O(\varepsilon\,\|\partial_t u\|_{L^2})$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+\emph{(i)}\; The map
+$a \mapsto \int_{t-\varepsilon}^{t+\varepsilon} \|u(s)-a\|^2\,ds$
+is strictly convex: the integrand is strictly convex for a.e.~$s$
+(since $u(s) \neq a$ for a.e.~$s$ and $a \in \mathcal{A}$), and
+integration preserves strict convexity.
+
+\emph{(ii)}\; The first-variation condition for the minimiser yields
+\[
+  \|v_\varepsilon(t+h) - v_\varepsilon(t)\|
+  \;\le\;
+  \frac{1}{2\varepsilon}
+  \int_{t-\varepsilon}^{t+\varepsilon}
+  \|u(s+h) - u(s)\|\,ds
+  \;\le\;
+  \frac{h}{2\varepsilon}
+  \int_{t-\varepsilon}^{t+\varepsilon}
+  \|\partial_t u(s)\|\,ds.
+\]
+Integrating over $t \in [0,T]$ and applying Fubini gives the BV bound
+with $C_\varepsilon = T/(2\varepsilon)$.
+
+\emph{(iii)}\; The TLL constant degrades by the time-averaging window:
+\[
+  |\log d_\varepsilon(t+h) - \log d_\varepsilon(t)|
+  \;\le\;
+  C_{\mathrm{TLL}}\,|\log|h||
+  \;+\;
+  C\,\varepsilon/|h|,
+\]
+where the second term arises from the mismatch between pointwise and
+averaged distance.
+
+\emph{(iv)}\; The Gronwall estimate picks up an additional forcing
+term from the time-averaging:
+\[
+  \frac{d}{dt} H(u \mid v_\varepsilon)
+  \;\le\;
+  -\alpha\,H + \beta + \gamma\,\varepsilon,
+\]
+where $\gamma$ depends on $\|\partial_t u\|$ but not on~$H$.
+The standard Gronwall lemma applies; the additional
+$\gamma\varepsilon$ term vanishes in the limit
+$\varepsilon \to 0$.
+\end{proof}
+
+\begin{remark}[Passage to the limit $\varepsilon \to 0$]
+\label{rem:epsilon-limit}
+The key question is whether the BV bound survives the limit
+$\varepsilon \to 0$:
+\begin{itemize}
+\item If\; $\sup_\varepsilon \Var(v_\varepsilon;\,[0,T]) < \infty$,
+  then a subsequence $v_{\varepsilon_k}$ converges in~$L^1$ to a BV
+  selection~$v_0$, which is the \emph{canonical} nearest-point
+  selection.
+\item The uniform BV bound holds if and only if the attractor
+  $\mathcal{A}$ has a ``time-averaged reach''
+  $\mathrm{reach}_{\mathrm{avg}}(\mathcal{A}) > 0$, which is
+  strictly weaker than positive reach: it allows isolated cusps of
+  measure zero.
+\end{itemize}
+This is the precise formulation of the ``BV regularity gap'' and
+connects to:
+\begin{itemize}
+\item \emph{Moreau--Yosida regularisation} in convex analysis (the
+  time-averaged cost is the Moreau envelope),
+\item \emph{Viscous selection} in gradient systems (the time average
+  acts as artificial viscosity),
+\item \emph{Thermodynamic selection} in the Dark Energy companion
+  paper (the IR averaging of~$\Phi[\rho]$).
+\end{itemize}
+\end{remark}
+
+
+% ==================================================================
+\section{Open Directions}
+\label{sec:open-directions}
+% ==================================================================
+
+The TLL+LDI framework opens several concrete research directions
+grouped by theme.
+
+% ------------------------------------------------------------------
+\subsection{Pilot verification systems for TLL and LDI}
+% ------------------------------------------------------------------
+
+\begin{remark}[Pilot verification systems for TLL and LDI]
+\label{rem:pilot-verification}
+Three candidate systems for pilot verification of the TLL and LDI conditions:
+\begin{enumerate}
+\item \emph{Reaction-diffusion (2D):} Smooth nonlinearity, well-understood attractors. TLL and LDI are expected to hold due to the parabolic smoothing.
+\item \emph{Hyperviscous NSE ($(-\Delta)^\beta$, $\beta \geq 5/4$):} Inertial manifolds exist (Mallet-Paret--Sell, 1988), guaranteeing TLL. Serves as a bridge system between the tractable reaction-diffusion case and full NS ($\beta = 1$).
+\item \emph{Kuramoto--Sivashinsky (1D):} Deterministic chaos without singularities. The attractor is finite-dimensional and smooth, making TLL+LDI verifiable by direct computation.
+\end{enumerate}
+\end{remark}
+
+\begin{remark}[Ginzburg--Landau as TLL/LDI bridge]
+\label{rem:ginzburg-landau}
+The complex Ginzburg--Landau equation $\partial_t u = (1+i\alpha)\Delta u + u - (1+i\beta)|u|^2 u$ possesses a finite-dimensional inertial manifold for certain parameter ranges. Complete verification of TLL+LDI on this system, followed by a lifting argument to 2D NS (via parameter continuation in the nonlinearity), would provide a concrete path to the full NS regularity problem.
+\end{remark}
+
+% ------------------------------------------------------------------
+\subsection{Mathematical tools for TLL and LDI}
+% ------------------------------------------------------------------
+
+\begin{remark}[Bridge lemma: squeezing to TLL]
+\label{rem:bridge-squeezing}
+The squeezing property (Foias--Temam) states that high modes contract faster than low modes diverge. Combined with the determining modes theorem, this implies: $d(u(t), \mathcal{A}) \leq C e^{-\gamma_N t} d(u(0), \mathcal{A}) + C' \sup_{s \leq t} |P_N u(s) - P_N v(s)|$ for some $v \in \mathcal{A}$. Taking logarithms, $\log(1/d(t)) \geq \gamma_N t - C''$, which is the log-modulus bound underlying TLL.
+\end{remark}
+
+\begin{remark}[Doubling and Assouad structure]
+\label{rem:doubling-assouad}
+TLL can be reformulated in terms of the Assouad dimension of the attractor trajectory: if the trajectory $\{u(t) : t \in [0,T]\}$ has Assouad dimension $< 1$, then the ``approximate tangent cone'' has opening angle bounded by $C/|\log r|$, which is equivalent to TLL with rate $1/|\log r|$. This connects the regularity theory to geometric measure theory. Recent structural results on sets of positive reach~\cite{Lytchak2024} provide additional tools for understanding the geometry of attractor neighbourhoods.
+\end{remark}
+
+\begin{remark}[LDI as tail-integral equivalence]
+\label{rem:ldi-tail}
+The LDI condition $\int_0^T \log(1/d(t))\,\mathrm{d}t < \infty$ is equivalent to the tail-integral condition $\int_0^R \frac{1}{s} \left( \int_{\{0 < d \leq s\}} \|u'(t)\|\,\mathrm{d}t \right) \mathrm{d}s < \infty$, relating the integrability of $\log(1/d)$ to the ``speed'' of the trajectory near the attractor. This formulation is more amenable to energy estimates.
+\end{remark}
+
+\begin{remark}[Proposition~\ref{prop:variant-B} clarification]
+\label{rem:prop-variant-B-clarification}
+The BV $\to$ $L^\infty$ embedding in Proposition~\ref{prop:variant-B} requires the additional condition $d(t) > 0$ a.e.: the trajectory must not touch the attractor on a set of positive measure. This is automatically satisfied for Leray--Hopf solutions (which are analytic in space and hence cannot coincide with an attractor element on an interval unless they are that element).
+\end{remark}
+
+% ------------------------------------------------------------------
+\subsection{Stochastic extensions and advanced tools}
+% ------------------------------------------------------------------
+
+\begin{remark}[Stochastic stabilisation]
+\label{rem:stochastic-stabilisation}
+Adding Feller-type noise $\sigma\,\mathrm{d}W$ to the Navier--Stokes equations can enforce TLL ``almost surely'': the noise prevents the trajectory from approaching the attractor tangentially (which would violate log-Lipschitz), and the Feller property ensures the transition semigroup maps bounded functions to continuous ones, providing the regularity needed for the selection principle.
+\end{remark}
+
+\begin{remark}[High-mode stability conjecture]
+\label{rem:high-mode-stability}
+A sufficient condition for TLL in the NS context: if the high Fourier modes $Q_N u = (I - P_N) u$ satisfy $\|Q_N u(t)\| \leq C N^{-\alpha}$ uniformly on the attractor for some $\alpha > 1/2$, then $d(t) \leq C' N^{-\alpha}$ and TLL follows from the determining modes estimate. This ``high-mode stability conjecture'' is weaker than inertial manifold existence (which requires $\alpha > 1$) and may be verifiable via Galerkin energy estimates. Recent sharp dimension estimates for NS-type attractors~\cite{IlyinKalantarovZelik2025} provide quantitative input for such bounds.
+\end{remark}
+
+\begin{remark}[Variational analysis perspective]
+\label{rem:variational-analysis}
+The theory of metric regularity and variational analysis (Rockafellar--Wets~\cite{RockafellarWets1998}, Dontchev--Rockafellar~\cite{DontchevRockafellar2009}) provides a natural home for the TLL and LDI conditions: TLL is related to the Aubin property of the attractor projection, and LDI is a calmness condition on the distance function. The full toolkit of variational analysis---including Ekeland's variational principle, the Mordukhovich criterion, and the Attouch--Th\'era duality---is applicable and underexplored in this context.
+\end{remark}
+
+% ------------------------------------------------------------------
+\subsection{Further NS-specific research directions}
+% ------------------------------------------------------------------
+
+\begin{remark}[Further research directions]
+\label{rem:further-ns-logdist}
+\begin{enumerate}
+\item \emph{Selection regularity via trajectory attractors:} Formulate the minimal metric derivative selection in the Chepyzhov--Vishik trajectory attractor framework, where non-uniqueness is handled by considering entire trajectories rather than initial data.
+\item \emph{Quantitative tracking lemmas:} Establish measure estimates $|\{t : d(t) \leq \varepsilon\}| \leq C \varepsilon^\alpha$ via energy/absorbing-ball arguments and ``no sticky contact'' conditions.
+\item \emph{Ekeland variational principle:} Use Ekeland's principle to construct ``almost minimisers'' with controlled variation, bypassing the need for positive reach of $\mathcal{A}$.
+\item \emph{Set-valued BV selection:} Determine which dynamical regularity conditions on the flow force bounded Hausdorff variation of the minimiser set $\{u \in \mathcal{A} : d(u, u(t)) = d_{\mathcal{A}}(u(t))\}$.
+\item \emph{Approximate prox-regularity:} Establish a modified reach after removing a meager set (Lebesgue-null): the attractor may fail to have positive reach on a negligible set but retain it generically. Results of Lytchak~\cite{Lytchak2024} on the structure of sets of positive reach suggest that such a decomposition may be feasible.
+\item \emph{Weak selection functions:} Replace strong Lipschitz projections with selection functions of bounded Hausdorff variation, which exist under weaker regularity assumptions.
+\item \emph{Geometric Euler system:} Construct a coherent hierarchy of finite Galerkin approximations $\mathcal{A}_N \to \mathcal{A}$ as a ``reach surrogate'': even if $\mathrm{reach}(\mathcal{A}) = 0$, the Galerkin approximations $\mathcal{A}_N$ have positive reach and converge in Hausdorff distance.
+\end{enumerate}
+\end{remark}
+
+% ------------------------------------------------------------------
+\subsection{Cross-paper connections}
+% ------------------------------------------------------------------
+
+\begin{remark}[DFC from turbulence as topological funnel for TLL]
+\label{rem:dfc-funnel}
+The Detailed Flux Constraint (DFC) from the turbulence companion paper~\cite{FST-NS2026} implies that energy flows ``downhill'' through the inertial range. Translated to the attractor geometry, this means trajectories approach $\mathcal{A}$ through a topological funnel: the DFC constrains the approach direction, enforcing a log-Lipschitz rate. This provides a physical mechanism for TLL that is independent of the abstract functional-analytic arguments.
+\end{remark}
+
+
 % ===================================================================
 % AI Disclosure
 % ===================================================================
@@ -993,6 +1367,12 @@ V.~V.~Chistyakov,
 \emph{Selections of bounded variation},
 J.~Appl.\ Anal.\ \textbf{10} (2004), no.~1, 1--82.
 
+\bibitem{DontchevRockafellar2009}
+A.~L.~Dontchev and R.~T.~Rockafellar,
+\emph{Implicit Functions and Solution Mappings: A View from
+Variational Analysis},
+Springer Monographs in Mathematics, Springer, New York, 2009.
+
 \bibitem{ConstantinFoiasTemam1985}
 P.~Constantin, C.~Foias, and R.~Temam,
 \emph{Attractors representing turbulent flows},
@@ -1021,6 +1401,17 @@ L.~Geiger,
 Navier--Stokes Equations (Conditional Framework)},
 Zenodo, 2026.  DOI:\@ to be assigned.
 
+\bibitem{IlyinKalantarovZelik2025}
+A.~Ilyin, V.~Kalantarov, and S.~Zelik,
+\emph{Attractors and their dimensions for the 3D Fractional
+Navier--Stokes--Voigt Equations},
+arXiv preprint arXiv:2511.04783, 2025.
+
+\bibitem{Lytchak2024}
+A.~Lytchak,
+\emph{A note on subsets of positive reach},
+Math.\ Nachr.\ \textbf{297} (2024), no.~3, 932--942.
+
 \bibitem{MalletParetSell1988}
 J.~Mallet-Paret and G.~R. Sell,
 \emph{Inertial manifolds for reaction diffusion equations in higher
@@ -1033,6 +1424,12 @@ R.~Man\'e,
 non-linear maps},
 Lecture Notes in Mathematics, vol.~898, Springer, Berlin, 1981,
 pp.~230--242.
+
+\bibitem{RockafellarWets1998}
+R.~T.~Rockafellar and R.~J-B Wets,
+\emph{Variational Analysis},
+Grundlehren der mathematischen Wissenschaften, vol.~317,
+Springer, Berlin, 1998.
 
 \bibitem{PoliquinRockafellarThibault2000}
 R.~A.~Poliquin, R.~T.~Rockafellar, and L.~Thibault,

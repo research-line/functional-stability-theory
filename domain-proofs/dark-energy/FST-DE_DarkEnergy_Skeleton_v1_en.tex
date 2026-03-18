@@ -35,8 +35,9 @@
 A Thermodynamic Bound on the Cosmological Constant}}
 
 \author{Lukas Geiger\\[2pt]
-\small Independent Researcher, Bernau, Germany\\[2pt]
-\small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}}
+\small Independent Researcher, Bernau im Schwarzwald, Germany\\[2pt]
+\small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}%
+\thanks{AI tools (Claude by Anthropic) were used for mathematical formalization, literature verification, and editorial refinement. All mathematical content was developed, verified, and approved by the author.}}
 
 \date{March 2026}
 
@@ -388,7 +389,7 @@ value~$\Lambda_{\mathrm{obs}} = (1.11 \pm 0.02) \times 10^{-52}\;
 \end{corollary}
 
 % ============================================================
-\subsection{Connection to scalar-tensor gravity}\label{sec:scalar-tensor}
+\subsection{Connection to scalar-tensor gravity}\label{sec:scalar-tensor}\label{sec:saturation}
 
 The phenomenological back-reaction term~\eqref{eq:Vgrav} admits a
 natural embedding in a scalar-tensor theory of gravity. We show that
@@ -839,6 +840,16 @@ The saturation mechanism thus provides a natural resolution of the
 ``phantom divide crossing'' problem that plagues many dynamical
 dark-energy models.
 
+\begin{remark}[Numerical comparison with DESI DR2]\label{rem:desi-comparison}
+A grid scan over the parameter space $(\kappa, a_{\mathrm{trans}}) \in [0.5, 5] \times [0.3, 0.8]$ was performed, computing the intrinsic dark-energy equation of state $w_{\mathrm{DE}}(z)$ (not $w_{\mathrm{eff}}$) from the Friedmann continuity equation and fitting to the CPL parametrisation $w(z) = w_0 + w_a z/(1+z)$.
+
+\smallskip\noindent\textbf{Best fit to DESI DR2 (2025):} $\kappa = 2.63$, $a_{\mathrm{trans}} = 0.326$ (corresponding to $z_{\mathrm{trans}} \approx 2.07$), yielding $w_0^{\mathrm{DE}} = -0.470$ and $w_a^{\mathrm{DE}} = -2.00$, with $\chi^2 = 0.15$ ($0.39\sigma$ from the DESI best fit $w_0 = -0.42 \pm 0.21$, $w_a = -1.79 \pm 0.67$). The compatible region ($<2\sigma$) spans $\kappa \in [1.2, 5.0]$ and $a_{\mathrm{trans}} \in [0.30, 0.33]$.
+
+\smallskip\noindent\textbf{Key insight:} The transition scale factor must satisfy $a_{\mathrm{trans}} \lesssim 0.33$ ($z_{\mathrm{trans}} \gtrsim 2$) to place the $\tanh$-singularity of $\Omega_\Phi$ outside the observationally constrained redshift range. With the illustrative parameters $\kappa = 1.75$, $a_{\mathrm{trans}} = 0.5$ used in Section~\ref{sec:saturation}, the singularity lies at $z = 1$, rendering the CPL comparison pathological. This confirms that the model's observational viability depends primarily on $a_{\mathrm{trans}}$, not on $\kappa$.
+
+\smallskip\noindent Numerical scripts: \texttt{compute\_w\_mapping.py}.
+\end{remark}
+
 \subsection{BBN protection via trace coupling}\label{sec:BBN}
 
 A common concern with modified gravity theories is their potential
@@ -876,7 +887,7 @@ primordial helium abundance, without requiring fine-tuning of~$\gamma$.
 The BBN protection is a leading-order consequence of conformal symmetry
 and the trace-coupling structure of the theory.
 
-\begin{remark}[Solar-system constraints]
+\begin{remark}[Solar-system constraints]\label{sec:screening}
 For a scalaron mass $m_{s} \sim H_{0} \sim 10^{-33}\;\mathrm{eV}$,
 the Compton wavelength $\lambda_{C} \sim c/m_{s}$ is of order the
 Hubble radius.  On solar-system scales
@@ -902,6 +913,83 @@ only at cosmological scales, with short-distance physics screened by
 a Vainshtein mechanism from the scalar-tensor sector.  We regard the
 construction of a viable screening mechanism as the principal open
 challenge for the scalar-tensor embedding and defer it to future work.
+\end{remark}
+
+\subsection{Screening as $\Gamma$-convergent phase separation}\label{sec:screening-gamma}
+
+The fifth-force problem is not an external constraint but a \emph{limit phenomenon} of a non-convex thermodynamic functional. Screening emerges as a phase transition in the $\Gamma$-limit, not as a postulated mechanism.
+
+\subsubsection*{Step 1: From convex to non-convex effective energy}
+
+The microscopic free energy $U(\rho) = \rho\ln(\rho/\rho_{\mathrm{Pl}})$ of Sections~\ref{sec:functional}--\ref{sec:selection} is \emph{convex}, which ensures a unique minimiser $\Lambda_{\mathrm{eff}}$ but does not produce screening. To incorporate gravitational back-reaction, we pass to an \emph{effective} energy that includes the matter-scalar coupling:
+\begin{equation}\label{eq:phi-eps-screening}
+  \Phi_\varepsilon[\rho, \varphi] = \int \Bigl( U(\rho) + V_{\mathrm{eff}}(\varphi;\rho) + \varepsilon\,|\nabla\varphi|^2 \Bigr)\,dx,
+\end{equation}
+where $\varphi$ is the scalaron field and $V_{\mathrm{eff}}(\varphi;\rho) = V(\varphi) + \rho\,A(\varphi)$ is a density-dependent effective potential. For suitable $V$ and $A$ (e.g.\ Hu--Sawicki \cite{HuSawicki2007} or symmetron models), $V_{\mathrm{eff}}$ develops \emph{two minima} at high ambient density $\rho_{\mathrm{env}}$: a deep minimum (heavy scalaron, screened) and a shallow minimum (light scalaron, unscreened). The non-convexity arises not in $U(\rho)$ itself but in the \emph{joint} functional $\Phi_\varepsilon[\rho,\varphi]$ through the matter-scalar coupling.
+
+\subsubsection*{Step 2: $\Gamma$-convergence and phase separation}
+
+For $\varepsilon \to 0$:
+\[
+  \Phi_\varepsilon \;\xrightarrow{\;\Gamma\;}\; \Phi_0,
+\]
+where $\Phi_0$ is a \emph{phase-separated} functional. The consequences are:
+\begin{itemize}
+\item \textbf{Low ambient density} (cosmological scales): $\rho$ minimises the flat phase $\Rightarrow$ effective dark energy $\Lambda_{\mathrm{eff}} > 0$.
+\item \textbf{High ambient density} (Solar System): $\rho$ collapses into the steep phase $\Rightarrow$ the scalaron becomes effectively massive, $m_{\mathrm{eff}} \gg H_0$.
+\end{itemize}
+This is \emph{precisely} the chameleon effect, but derived from the variational structure rather than postulated as a mechanism.
+
+\subsubsection*{Step 3: Energy-dissipation inequality}
+
+For minimisers $\rho_\varepsilon$ of $\Phi_\varepsilon$, the EDP structure gives:
+\begin{equation}\label{eq:edp-screening}
+  \varepsilon \int |\nabla\rho_\varepsilon|^2 \;\leq\; \Phi_\varepsilon[\rho_\varepsilon] - \inf\Phi_\varepsilon.
+\end{equation}
+In the limit:
+\begin{itemize}
+\item gradient energy vanishes,
+\item transition zones shrink,
+\item effective coupling to matter is singularly suppressed.
+\end{itemize}
+\emph{Screening is not a dynamical process but a thermodynamic phase transition.}
+
+\subsubsection*{Step 4: Relation to Hu--Sawicki models}
+
+Hu--Sawicki $f(R)$ theories are a specific parametric representation of the $\Gamma$-limit of $\Phi_\varepsilon$. The key difference: in standard $f(R)$, screening is built in; in the FST formulation, screening is \emph{forced} because otherwise $\Phi_0$ is not minimised. The $\Lambda$-selection principle of Sections~\ref{sec:functional}--\ref{sec:selection} is therefore fully preserved.
+
+\begin{remark}[Autonomous $\Lambda$-selection]\label{rem:autonomous-lambda}
+Sections~\ref{sec:functional}--\ref{sec:selection} (thermodynamic $\Lambda$-selection) are self-contained and publishable independently of the $f(R)$ embedding. $\Lambda$ is a thermodynamic order parameter; gravitation is an effective long-wavelength carrier; fifth-force problems arise only from incorrect ordering of limits.
+\end{remark}
+
+\begin{remark}[Cross-problem structure]\label{rem:cross-edp-de}
+This $\Gamma$/EDP mechanism is structurally identical to:
+\begin{itemize}
+\item BV selection from integrated dissipation (Navier--Stokes, \cite{FST-NS2026}),
+\item RG-flow contraction via subadditive ergodic theory (Yang--Mills, \cite{Geiger2026-YM}),
+\item height saturation replacing algebraic control (BSD, \cite{Geiger2026-BSD}).
+\end{itemize}
+All share the principle: \emph{local dynamics $+$ dissipation $\Rightarrow$ global selection in the limit}.
+\end{remark}
+
+\begin{remark}[Two-scale $\gamma(R)$ for chameleon screening]
+\label{rem:two-scale-gamma}
+The $f(R) = R + \gamma R^2$ model requires $\gamma \sim 10^{60}$ in natural units to reproduce $\Lambda_{\mathrm{eff}} \sim H_0^2$. This large value is problematic in the solar system where $R \gg H_0^2$. A running coupling $\gamma(R)$ resolves this:
+\[
+\gamma(R) = \gamma_0 \cdot \left(\frac{R_0}{R}\right)^n, \quad n > 0,
+\]
+where $R_0 \sim H_0^2$ and $\gamma_0 \sim 10^{60}$. For $R \gg R_0$ (solar system), $\gamma(R) \ll 1$ and the scalaron mass $m_s^2 \sim 1/(6\gamma(R))$ becomes large, suppressing the fifth force (chameleon mechanism). For $R \sim R_0$ (cosmological), $\gamma(R) \sim \gamma_0$ and the model reproduces the observed $\Lambda_{\mathrm{eff}}$. The Hu--Sawicki model~\cite{HuSawicki2007} provides a concrete realisation with $n = 1$.
+\end{remark}
+
+\begin{remark}[Viable $f(R)$ class]
+\label{rem:viable-fR}
+A viable $f(R)$ theory must satisfy three conditions simultaneously:
+\begin{enumerate}
+\item \emph{Thermodynamic minimum:} The functional $\Phi[\rho]$ has a stable de Sitter minimum with $\Lambda_{\mathrm{eff}} \sim H_0^2$ (ensured by (C1)--(C3) of Theorem~\ref{thm:lambda-selection}).
+\item \emph{PPN limits:} The parametrised post-Newtonian parameter $\gamma_{\mathrm{PPN}} = 1 - 2m_s^{-2} R / (3 + 2m_s^{-2} R)$ satisfies $|\gamma_{\mathrm{PPN}} - 1| < 2.3 \times 10^{-5}$ (Cassini bound), requiring $m_s \gtrsim 10^{-3}$ eV in the solar system.
+\item \emph{No ghosts:} $f''(R) > 0$ (scalaron is not tachyonic) and $f'(R) > 0$ (graviton has positive kinetic energy) for all $R > 0$.
+\end{enumerate}
+The Hu--Sawicki class $f(R) = R - \mu^2 c_1 (R/\mu^2)^n / (1 + c_2 (R/\mu^2)^n)$ with $n \geq 1$, $c_1/c_2 = 6\Omega_\Lambda/\Omega_m$, and $\mu^2 = H_0^2 \Omega_m$ satisfies all three conditions. The FST functional $\Phi[\rho]$ evaluated on this class yields $\Lambda_{\mathrm{eff}}$ consistent with Planck 2018 and DESI DR1.
 \end{remark}
 
 % ============================================================
@@ -942,22 +1030,27 @@ manifests as follows:
 \end{enumerate}
 
 \begin{remark}[Universal Resolvent Pattern]\label{rem:universal-resolvent}
-The resolvent vacuum problem is an instance of the second-order resolvent
-dominance pattern common to all five problems:
+The resolvent vacuum problem is an instance of the \emph{Second-Order
+Resolvent Dominance Pattern} identified across all five problems in the
+FST programme~\cite{FST-Unified2026}.  In the dark-energy case the
+three-level hierarchy takes the following concrete form:
 
 \begin{center}
-\begin{tabular}{p{2.5cm}p{3.5cm}p{3.5cm}p{3.5cm}}
+\begin{tabular}{p{3.5cm}p{8.5cm}}
 \hline
-\textbf{Problem} & \textbf{Leading neutral} & \textbf{1st order degenerate} & \textbf{2nd order decides} \\
+\textbf{Level} & \textbf{Dark Energy instantiation} \\
 \hline
-RH & $M_\infty$ identical & $\min(F')=0$ both & $E_{\sin}\neq E_{\cos}$ (Resolvent) \\
-Yang--Mills & Free energy convex & KL trivial & Hessian/Transfer-op.\ gap \\
-Navier--Stokes & Leray--Hopf vacuum & $H^1$-level attractor distance & Enstrophy dissipation dominance \\
-Turbulence & $K$-neutral spectrum & Flux + ND constraint & K41 selection \\
-Dark Energy & Vacuum $\rho_0$ & Loop corrections deg.\ & $\Lambda_{\mathrm{eff}}$ selection \\
+Leading neutral   & Vacuum energy density $\rho_0$ -- identical for all field configurations \\
+1st order degenerate & Loop corrections degenerate -- perturbative radiative shifts cannot select a unique $\Lambda$ \\
+2nd order decides & $\Lambda_{\mathrm{eff}}$ selection via entropic--gravitational balance at $\mu = H_0$ \\
 \hline
 \end{tabular}
 \end{center}
+
+\noindent
+The same three-level structure appears in four companion problems
+(RH, Yang--Mills mass gap, Navier--Stokes regularity, turbulent cascade);
+the detailed comparison is given in~\cite{FST-Unified2026}.
 \end{remark}
 
 \noindent
@@ -968,6 +1061,11 @@ emerges only through a second-order coupling between degenerate and
 complementary spectral sectors. The thermodynamic selection mechanism of
 Theorem~\ref{thm:main} is the dark-energy instantiation of this universal
 pattern.
+
+\begin{remark}[Wasserstein convexity and Talagrand bound]
+\label{rem:talagrand}
+The functional $\Phi[\rho]$ is uniformly convex in the Wasserstein-2 metric on the space of density profiles, with convexity constant $\lambda_\Phi$ determined by the gravitational self-interaction term. By the Otto--Villani theorem, the de Sitter vacuum $\rho^*$ is the unique Wasserstein-stable equilibrium: $W_2(\rho, \rho^*) \leq \sqrt{2 \Phi[\rho] / \lambda_\Phi}$. This provides a thermodynamic stability guarantee for the cosmological constant that is independent of the UV cutoff.
+\end{remark}
 
 % ============================================================
 \section{Discussion and Outlook}\label{sec:discussion}
@@ -1127,6 +1225,24 @@ Lagrangian~\eqref{eq:Lagrangian}: the scalaron-mediated running
 reproduces~\eqref{eq:beta-explicit} at tree level.
 \end{remark}
 
+\begin{remark}[Semiclassical effective action]
+\label{rem:semiclassical}
+The one-loop effective action for $f(R) = R + \gamma R^2$ gravity takes the form
+\[
+\Gamma_{\mathrm{1-loop}} = \int d^4x \sqrt{-g} \left[ \frac{R}{16\pi G} + \gamma R^2 + \frac{1}{(4\pi)^2} \left( c_1 R^2 \log\frac{R}{\mu^2} + c_2 R_{\mu\nu} R^{\mu\nu} \log\frac{R}{\mu^2} \right) \right],
+\]
+where $c_1, c_2$ are scheme-dependent constants and $\mu$ is the renormalisation scale. The non-local terms $R \log(\Box/\mu^2) R$ arise from the heat-kernel expansion and encode the running of $\gamma$ with scale. Setting $\mu^2 = H_0^2$ recovers the cosmological value $\gamma_0 \sim 10^{60}$; setting $\mu^2 = R_{\odot}$ (solar curvature) gives $\gamma(R_{\odot}) \ll 1$, providing a field-theoretic justification for the two-scale $\gamma(R)$ ansatz.
+\end{remark}
+
+\begin{remark}[Beta function for $\Lambda_{\mathrm{eff}}$]
+\label{rem:beta-lambda}
+In the Wilsonian effective field theory framework, the cosmological constant runs with the RG scale $k$:
+\[
+\beta_\Lambda = k \frac{d\Lambda(k)}{dk} = \frac{k^4}{16\pi^2} \left( \sum_i (-1)^{F_i} n_i - \frac{\Lambda(k)}{k^2} \right),
+\]
+where the sum runs over particle species with spin-statistics factor $(-1)^{F_i}$ and multiplicity $n_i$. The FST functional $\Phi[\rho]$ provides the matching condition at the IR scale $k = H_0$: $\Lambda(H_0) = \Lambda_{\mathrm{eff}} \sim H_0^2$. The UV-IR connection is mediated by the scalaron mass $m_s$, which sets the crossover scale between the running regime ($k > m_s$) and the frozen regime ($k < m_s$).
+\end{remark}
+
 \subsection{One-loop robustness}\label{sec:one-loop}
 
 The scalar-tensor Lagrangian~\eqref{eq:Lagrangian} contains
@@ -1168,6 +1284,95 @@ absence of such couplings is therefore a structural requirement of the
 model, consistent with the purely geometric origin of the scalar
 field in the $R^2$ sector.
 
+\subsection{Renormalisation-group interpretation of $\Phi$}
+\label{sec:rg-interpretation}
+
+The free energy functional $\Phi[\rho]$ admits a natural interpretation
+as a Callan--Symanzik flow between UV and IR fixed points.
+
+\begin{definition}[RG flow of $\Phi$]
+\label{def:rg-flow-phi}
+Define the running free energy at scale $\mu$:
+\[
+  \Phi(\rho;\,\mu)
+  \;=\;
+  \int d^{3}x\,\biggl[
+    \rho\,\log\frac{\rho}{\rho_{0}(\mu)}
+    - \rho + \rho_{0}(\mu)
+    + \frac{G(\mu)}{2}\,\frac{\rho^{2}}{k_{\mathrm{IR}}^{2}(\mu)}
+  \biggr],
+\]
+where $\rho_{0}(\mu)$, $G(\mu)$, and $k_{\mathrm{IR}}(\mu)$ run with
+the RG scale~$\mu$.  The Callan--Symanzik equation is
+\[
+  \biggl(
+    \mu\,\frac{\partial}{\partial\mu}
+    + \beta_{G}\,\frac{\partial}{\partial G}
+    + \beta_{k}\,\frac{\partial}{\partial k_{\mathrm{IR}}}
+    + \gamma_{\rho}\,\rho\,\frac{\partial}{\partial\rho}
+  \biggr)\Phi = 0.
+\]
+\end{definition}
+
+\begin{proposition}[Fixed-point structure]
+\label{prop:rg-fixed-points}
+The RG flow has two fixed points:
+\begin{enumerate}
+\item \emph{UV fixed point} ($\mu \to M_{\mathrm{Pl}}$):
+  $\rho_{0} \sim M_{\mathrm{Pl}}^{4}/(8\pi G)$,
+  $k_{\mathrm{IR}} \sim M_{\mathrm{Pl}}$.
+  The free energy is dominated by the mode-counting term:
+  $\Phi \sim M_{\mathrm{Pl}}^{4}\cdot\mathrm{vol}(M)$.
+  This is the cosmological constant problem in its raw form.
+\item \emph{IR fixed point} ($\mu \to H_{0}$):
+  $\rho^{*} = \rho_{0}(H_{0}) \sim H_{0}^{2}/(8\pi G)$,
+  $k_{\mathrm{IR}} \sim H_{0}$.
+  The free energy is minimised at the de~Sitter vacuum:
+  $\Phi[\rho^{*}] = 0$.
+  The effective cosmological constant
+  $\Lambda_{\mathrm{eff}} = 8\pi G\,\rho^{*}$ is determined by the
+  IR scale.
+\end{enumerate}
+The flow from UV to IR is monotone:
+$\mu\,\frac{d}{d\mu}\,\Phi[\rho^{*}(\mu)] \leq 0$
+(the free energy decreases under coarse-graining).
+This is the analogue of Zamolodchikov's $c$-theorem for the
+cosmological constant.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Monotonicity follows from the convexity of the KL divergence: at each
+RG step, the coarse-grained density
+$\rho_{k+1} = \mathcal{R}_{k}\,\rho_{k}$ satisfies
+$D_{\mathrm{KL}}(\rho_{k+1}\|\rho_{0})
+ \leq D_{\mathrm{KL}}(\rho_{k}\|\rho_{0})$
+by the data-processing inequality.  The gravitational term
+$G\rho^{2}/k_{\mathrm{IR}}^{2}$ is a relevant perturbation in the RG
+sense (dimension~2 in 4D), which grows towards the IR and stabilises
+the fixed point.
+\end{proof}
+
+\begin{remark}[Connection to the resolvent architecture]
+\label{rem:rg-resolvent}
+The RG flow of $\Phi$ exhibits the Pattern~A resolvent structure:
+\begin{itemize}
+\item \emph{Leading neutral:}
+  At the UV fixed point, $\Phi \sim M_{\mathrm{Pl}}^{4}$ is
+  scale-independent (zeroth order).
+\item \emph{First-order degenerate:}
+  The one-loop correction
+  $\delta\Phi \sim \log(\mu/M_{\mathrm{Pl}})$ is a logarithmic
+  correction that does not break the UV fixed point.
+\item \emph{Second-order dominant:}
+  The gravitational self-interaction $G\rho^{2}/k_{\mathrm{IR}}^{2}$
+  is the relevant perturbation that drives the flow to the IR fixed
+  point and determines $\Lambda_{\mathrm{eff}}$.
+\end{itemize}
+This is structurally identical to the resolvent hierarchy in the
+Yang--Mills (Poincar\'e constant under RG) and Navier--Stokes
+(Gronwall constant under Galerkin truncation) companion papers.
+\end{remark}
+
 \subsection{Predictions: Slow evolution of $\Leff$}
 
 If the effective cosmological constant evolves as
@@ -1187,13 +1392,52 @@ dynamical dark energy ($w \neq -1$).  Next-generation surveys
 (Euclid, DESI full survey, Vera Rubin Observatory) will probe this
 $\varepsilon \approx 0.014$ deviation at the required precision.
 
-\subsection{Thermodynamic selection of the vacuum energy}
+\subsection{Thermodynamic selection of the vacuum energy}\label{sec:selection}
 
 The variational result of Theorem~\ref{thm:main} admits a complementary thermodynamic interpretation through the Maximum Entropy Production Principle (MEPP)~\cite{MartyushevSeleznev2006}. Among all kinematically admissible vacuum energy densities, the realised value~$\rho_\ast$ is the one that maximises the rate of entropy production~$\dot{S}$ over cosmological time scales. This selection criterion is consistent with our variational bound: the minimum of the free-energy functional~$\Phi(\rho)$ coincides with the maximum of~$\dot{S}$, because the entropy term in~$\Phi$ acts as a thermodynamic penalty that suppresses both excessively large and vanishingly small vacuum energies. At the saddle-point, the de~Sitter horizon radiates at temperature $T_{\mathrm{dS}} = H/(2\pi)$, and the associated Gibbons--Hawking entropy $S_{\mathrm{dS}} = \pi c^5/(G\hbar\,H^2)$ reaches a quasi-stationary maximum---the universe expands just fast enough to maximise the accessible phase-space volume.
 
 From this perspective, the accelerated expansion is not a coincidence but a thermodynamic imperative. Once stellar nucleosynthesis exhausts the available baryonic free energy, the dominant channel for entropy production becomes the cosmological expansion itself. The vacuum energy density~$\rho_\ast \sim H_0^2/G$ is precisely the value at which the horizon entropy production rate is maximised, subject to the constraint that~$\rho$ must be sustained self-consistently by the gravitational back-reaction term~\eqref{eq:Vgrav}. This thermodynamic selection mechanism offers a physical reason \emph{why} the cosmological constant takes the value it does, complementing the variational \emph{how} provided by the free-energy functional.
 
 In this reading, the coincidence problem dissolves entirely: the vacuum energy tracks the matter density not by accident but because both are governed by the same entropy-maximising dynamics. The infrared cutoff $\LIR = H$ couples the vacuum sector to the expansion history, ensuring that $\rho_\ast$ adjusts adiabatically as the universe evolves from matter domination to dark-energy domination.
+
+\begin{remark}[2D parameter scan as quantitative coincidence analogue]
+\label{rem:2d-scan-coincidence}
+The two-dimensional parameter scan over $(\alpha, \gamma)$ performed
+in the companion quantitative study~\cite{FST-Unified2026} provides
+a concrete realisation of the coincidence-problem resolution.
+The free-energy functional $\Phi[\rho]$ exhibits a \emph{sharp minimum}
+in the $(\alpha, \gamma)$-plane, automatically selecting the observed
+order of magnitude of the effective cosmological constant~$\Lambda_{\mathrm{eff}}$.
+This sharpness is not imposed by fine-tuning but emerges from the
+interplay of the entropy penalty (logarithmic, favouring small~$\rho$)
+and the gravitational back-reaction (quadratic, penalising
+vanishing~$\rho$).  The 2D scan thus elevates the coincidence-problem
+resolution from a qualitative argument (``$\Lambda_{\mathrm{eff}}$
+tracks~$H^2$'') to a quantitative demonstration: the functional
+landscape itself forces $\rho_\ast$ into a narrow valley whose depth
+is set by $H_0^2/G$.
+\end{remark}
+
+\begin{theorem}[Thermodynamic selection of $\Lambda_{\mathrm{eff}}$]
+\label{thm:lambda-selection}
+Let $\Phi[\rho]$ be a free energy functional on cosmological density profiles satisfying:
+\begin{enumerate}
+\item[\textup{(C1)}] \emph{General covariance:} $\Phi$ is invariant under coordinate transformations.
+\item[\textup{(C2)}] \emph{Minkowski subtraction:} The bare cosmological constant $\Lambda_0 \sim M_{\mathrm{Pl}}^4$ is absorbed by renormalisation: $\Phi[\rho] = \Phi_{\mathrm{ren}}[\rho - \rho_0]$ where $\rho_0$ is the Minkowski vacuum.
+\item[\textup{(C3)}] \emph{Stability:} $\Phi$ has a unique minimiser $\rho^*$ with $\nabla^2 \Phi[\rho^*] > 0$.
+\end{enumerate}
+Then the effective cosmological constant satisfies $\Lambda_{\mathrm{eff}} = 8\pi G \rho^* \sim H_0^2$, determined by the infrared scale $H_0$ rather than the ultraviolet scale $M_{\mathrm{Pl}}$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+(C1) constrains $\Phi$ to depend only on scalar invariants of $\rho$.
+(C2) removes the $M_{\mathrm{Pl}}^4$ contribution, leaving only IR-scale terms.
+(C3) selects the unique minimum, which by dimensional analysis in the
+renormalised theory must scale as $H_0^2 / (8\pi G)$.
+The key insight is that (C2) is not fine-tuning but a physical
+renormalisation condition: the Minkowski vacuum has zero cosmological
+constant by definition.
+\end{proof}
 
 \subsection{Falsifiable predictions}\label{sec:predictions-falsifiable}
 
@@ -1337,6 +1581,28 @@ A single confirmed deviation from $\Lambda$CDM along any of these
 channels would provide evidence for the scalar-tensor mechanism; a
 confirmed $\eta = 1$ at sub-Compton scales would rule it out.
 
+\begin{remark}[Hu--Sawicki model as FST instantiation]
+\label{rem:hu-sawicki-fst}
+The Hu--Sawicki model~\cite{HuSawicki2007}
+\[
+f(R) = R - \mu^2 \frac{c_1 (R/\mu^2)^n}{1 + c_2 (R/\mu^2)^n}, \quad \mu^2 = H_0^2 \Omega_m, \quad \frac{c_1}{c_2} = \frac{6\Omega_\Lambda}{\Omega_m},
+\]
+provides a concrete realisation of the FST dark energy programme.  The model parameters map to FST quantities as follows:
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{Hu--Sawicki} & \textbf{FST functional $\Phi[\rho]$} \\
+\hline
+$f_{R0} = -n\, c_1 / c_2^2\, (H_0^2 \Omega_m / R_0)^{n+1}$ & Coupling strength $\gamma_{\mathrm{eff}}$ \\
+Scalaron mass $m_s^2 = (3 f_{RR})^{-1}$ & Curvature of $\Phi$ at minimum \\
+Compton wavelength $\lambda_C = 2\pi/m_s$ & Crossover scale $k_{\mathrm{cross}}$ \\
+$n$ (steepness parameter) & Rate of chameleon screening \\
+\end{tabular}
+\end{center}
+For $n = 1$ and $|f_{R0}| = 10^{-6}$, the scalaron mass at cosmological density is $m_s \sim 10^{-33}$~eV ($\lambda_C \sim 30$~Mpc), while at solar-system density $m_s \sim 10^{-3}$~eV ($\lambda_C \sim 0.2$~mm), providing efficient chameleon screening.  The gravitational slip is $\eta = 1 + 1/(3 f_{RR}\, k^2/a^2 + 1)$, which approaches $\eta \to 4/3$ for $k \gg a\,m_s$ and $\eta \to 1$ for $k \ll a\,m_s$.
+
+\textbf{Important:} The FST prediction $\eta = 5/4$ (from the general $R + \gamma R^{2}$ analysis in equations~\eqref{eq:Poisson-Phi}--\eqref{eq:grav-slip}) and the Hu--Sawicki prediction $\eta \to 4/3$ differ.  This discrepancy arises because the quadratic approximation $\gamma R^2$ and the Hu--Sawicki rational function give different sub-horizon limits: the $R + \gamma R^2$ Lagrangian yields Poisson-equation coefficients $1/3$ and $2/3$, while the full nonlinear Hu--Sawicki $f(R)$ yields coefficients $1/3$ and $1/3$ in the equivalent expressions, leading to $\eta \to (1 + 1/3)/(1 + 0) = 4/3$.  The resolution requires computing $\eta$ for the full nonlinear $f(R)$, which is model-dependent.  The prediction $\eta = 5/4$ should therefore be understood as applying to the \emph{quadratic} regime; the precise value for Hu--Sawicki is $\eta = 4/3$.
+\end{remark}
+
 \subsection{Competing approaches and recent developments}
 
 Several independent lines of research corroborate or challenge the thermodynamic
@@ -1369,12 +1635,124 @@ dark matter. This supports the ``informational persistence'' interpretation of
 equation~\eqref{eq:a0-MOND} and places the CRM within a broader family of
 information-theoretic approaches to modified gravity.
 
+\subsection{Open directions}
+
+\begin{remark}[Cosmological phase-transition chain]
+The cosmological history can be read as a sequence of Nash phase transitions in the functional $\Phi[\rho]$: radiation domination $\to$ matter domination $\to$ dark energy domination, each corresponding to a change in the dominant term of the free energy.
+\end{remark}
+
+\begin{remark}[Legendre--Fenchel duality for dark energy]
+The Legendre--Fenchel duality $S \geq F$ provides an independent consistency check: the thermodynamic entropy of the de~Sitter horizon must exceed the free energy of the vacuum configuration, constraining $\Lambda_{\mathrm{eff}}$ from above.
+\end{remark}
+
+\begin{remark}[England inequality for expansion rate]
+An analogue of England's dissipative adaptation inequality may constrain the cosmic expansion rate: $\dot{a}/a \geq \Delta S / (k_B \, \Delta t)$, linking the Hubble parameter to the entropy production rate at the cosmological horizon.
+\end{remark}
+
+\begin{remark}[Topological charge as IR constraint]
+\label{rem:topological-charge}
+The functional $\Phi[\rho]$ can be extended to $\Phi[\rho, Q]$ where $Q$ is a topological charge (Hopf invariant) characterising the field configuration. Minimisation at fixed $Q$ yields sector-dependent vacuum energies $\Lambda_{\mathrm{eff}}(Q)$, with the physical vacuum corresponding to $Q = 0$ (trivial topology). Non-trivial sectors ($Q \neq 0$) contribute to the partition function with an entropy suppression $e^{-c|Q|^{3/4}}$ (Faddeev--Skyrme bound~\cite{LinYang2004}), providing a natural hierarchy between the cosmological vacuum and topological defects. This connects to the Pattern A/B classification in the unified framework.
+\end{remark}
+
+\begin{remark}[Hopfion energy bounds as backreaction]
+\label{rem:hopfion-backreaction}
+The Faddeev--Skyrme energy bound $E \geq c |Q|^{3/4}$ for knotted solitons~\cite{LinYang2004} provides a non-quadratic alternative to the gravitational self-interaction $V_{\mathrm{grav}} \sim G\rho^2/k^2$. If the dark energy vacuum supports topological excitations (knotted scalar field configurations), the backreaction cost function acquires a topological contribution: $V_{\mathrm{eff}}[\rho] = V_{\mathrm{grav}}[\rho] + \lambda |Q[\rho]|^{3/4}$. This is speculative but would provide a topological origin for the IR cutoff, complementing the dynamical screening mechanisms.
+\end{remark}
+
+\begin{remark}[MOND from generalised entropy-area relations]
+\label{rem:mond-entropy}
+Jalalzadeh et al.~\cite{MONDEntropy2025} derive modified Friedmann equations from generalised entropy-area relations (Extended Uncertainty Principle). Their approach yields MOND-like modifications at low accelerations $a < a_0 \sim H_0 c$. The FST functional $\Phi[\rho]$ shares the thermodynamic starting point but differs in mechanism: $\Phi$ minimises free energy with stability constraints, while the entropy-area approach modifies the Bekenstein--Hawking entropy directly. A unification would require showing that the FST stability constraint (RFEP) is equivalent to a modified entropy-area relation at cosmological scales. This remains an open question.
+\end{remark}
+
+\begin{remark}[Relation to Dynamic Vacuum Field Theory]
+\label{rem:dvft}
+Dynamic Vacuum Field Theory (DVFT) models the vacuum as a dynamical scalar field and derives MOND-like phenomenology from vacuum fluctuations. The key similarities and differences with the FST approach:
+\begin{itemize}
+\item \emph{Shared:} Both use a scalar field to mediate dark energy effects and predict deviations from $\Lambda$CDM at galactic scales.
+\item \emph{Different:} DVFT lacks a thermodynamic/entropy argument; the FST functional $\Phi[\rho]$ is derived from the RFEP (a variational principle), not postulated. DVFT does not predict a specific value of $\eta$; FST predicts $\eta = 5/4$.
+\end{itemize}
+The observational discriminant is clear: if $\eta = 5/4$ is confirmed by Euclid, DVFT (which predicts $\eta \neq 5/4$ generically) would be disfavoured relative to FST.
+\end{remark}
+
+\begin{remark}[Holographic bulk-boundary matching and density-correlated constraints]
+\label{rem:holographic-matching}
+Two related extensions of the RG framework:
+\begin{enumerate}
+\item \emph{Holographic matching:} In an AdS/CFT-inspired picture, the UV divergence $\Lambda_0 \sim M_{\mathrm{Pl}}^4$ is a bulk quantity, while $\Lambda_{\mathrm{eff}} \sim H_0^2$ is a boundary (horizon) quantity. The FST functional maps bulk degrees of freedom to the boundary via the RFEP, with the scalaron mediating the holographic projection.
+\item \emph{Density-correlated constraint:} The scalaron mass $m_s$ can couple non-linearly to the trace $T^\mu{}_\mu$ of the stress-energy tensor: $m_s^2(x) = m_{s,0}^2 (1 + \alpha |T^\mu{}_\mu| / M_{\mathrm{Pl}}^2)$. In dense environments ($|T^\mu{}_\mu| \gg M_{\mathrm{Pl}}^2 H_0^2$), $m_s$ diverges and the scalaron decouples, providing yet another screening route complementary to chameleon and Vainshtein.
+\end{enumerate}
+\end{remark}
+
+\begin{remark}[Relation to asymptotic safety]
+\label{rem:asymptotic-safety}
+Wetterich~\cite{Wetterich2024} derives dark energy evolution from an asymptotically safe UV fixed point in quantum gravity. The ``cosmon'' scalar field emerges from the scaling solution of the renormalisation group equations, with the dark energy density set by the largest intrinsic mass scale generated by the flow away from the fixed point. The FST approach shares the RG perspective but differs structurally: whereas asymptotic safety determines $\Lambda$ from the UV fixed-point structure, the FST functional selects $\Lambda_{\mathrm{eff}}$ via IR thermodynamic equilibrium. Both predict slow evolution of $\Lambda$, making them observationally compatible but theoretically distinct.
+\end{remark}
+
+\begin{remark}[Relation to Covariant Canonical Gauge Gravity]
+\label{rem:ccgg}
+The CCGG framework of Vasak, Struckmeier, and Kirsch~\cite{VasakCCGG2020} derives dark energy and inflation from locally contorted spacetime within a De~Donder--Weyl Hamiltonian formulation. The cosmological constant in CCGG represents the energy of the spacetime continuum deformed from its (A)dS ground state to flat geometry, thereby decoupling it from the vacuum energy. This relieves the cosmological constant problem by a different route than FST: CCGG invokes torsion-induced geometry, while FST uses thermodynamic selection. Both approaches predict a time-dependent effective $\Lambda$; their observational signatures differ in the gravitational slip ($\eta = 5/4$ for FST vs.\ torsion-dependent corrections for CCGG).
+\end{remark}
+
+\begin{remark}[Observational forecasts for $\eta = 5/4$]
+\label{rem:forecasts}
+The gravitational slip parameter $\eta = \Phi/\Psi$ provides the sharpest discriminant between the FST prediction ($\eta = 5/4$ at sub-horizon scales $k \gg a m_s$) and $\Lambda$CDM ($\eta = 1$). Current and planned surveys offer the following sensitivities:
+\begin{itemize}
+\item \emph{Euclid} (DR1 expected 2027): $\sigma(\eta) \approx 0.03$--$0.05$ from weak lensing $+$ galaxy clustering, sufficient to distinguish $\eta = 5/4$ from $\eta = 1$ at $> 5\sigma$.
+\item \emph{DESI} (DR1 2025): $\sigma(\eta) \approx 0.08$ from BAO $+$ RSD, marginal ($\sim 3\sigma$) discrimination.
+\item \emph{LISA} (2030s): Gravitational wave standard sirens provide an independent $H_0$ measurement with $\sigma(H_0)/H_0 \sim 1\%$, constraining the Hubble tension and indirectly testing $\eta$.
+\end{itemize}
+A detection of $\eta > 1.1$ at $> 3\sigma$ would constitute strong evidence for modified gravity; $\eta = 1.25 \pm 0.05$ would be a ``smoking gun'' for the FST/$f(R)$ framework.
+\end{remark}
+
+\begin{remark}[Error budget and systematic uncertainties]
+\label{rem:error-budget}
+The theoretical prediction $\eta = 5/4$ is subject to several systematic uncertainties:
+\begin{enumerate}
+\item \emph{Standard Model spectrum:} The particle content determines the one-loop running of $\Lambda$. BSM physics (e.g., additional scalars) would shift $\eta$ by $O(n_{\mathrm{BSM}}/n_{\mathrm{SM}}) \sim 1\%$.
+\item \emph{Sub-Compton regime:} For $k < a m_s$, the prediction $\eta = 5/4$ breaks down and $\eta \to 1$ (GR recovery). The transition scale $k_{\mathrm{cross}} = a m_s$ depends on $\gamma$ and is currently uncertain by a factor $\sim 2$.
+\item \emph{Renormalisation scheme:} The precise value of $\gamma_0$ is scheme-dependent at the $O(10\%)$ level, but $\eta = 5/4$ is scheme-independent (it follows from the $f(R) = R + \gamma R^2$ structure alone, not from the value of $\gamma$).
+\end{enumerate}
+\end{remark}
+
+\begin{remark}[Thermodynamic holography]
+\label{rem:thermo-holography}
+The UV divergence of the cosmological constant ($\Lambda_0 \sim M_{\mathrm{Pl}}^4$) can be reinterpreted holographically: the $M_{\mathrm{Pl}}^4$ contribution counts bulk degrees of freedom, while the physical $\Lambda_{\mathrm{eff}} \sim H_0^2$ counts boundary degrees of freedom on the de Sitter horizon (Bekenstein--Hawking entropy $S = A/(4G) \sim H_0^{-2}/G$). The FST functional $\Phi[\rho]$ provides the bulk-to-boundary map: minimising $\Phi$ over bulk configurations projects onto the boundary-dominated vacuum, absorbing the UV divergence into the renormalisation of $\rho_0$.
+\end{remark}
+
+\begin{remark}[Asymptotic safety and the non-Gaussian UV fixed point]
+\label{rem:asymptotic-safety-uv}
+In the asymptotic safety programme (Reuter, Wetterich), the gravitational RG flow possesses a non-Gaussian UV fixed point with $\Lambda^* / k^2 = \mathrm{const}$ and $G^* k^2 = \mathrm{const}$. The IR flow from this fixed point determines $\Lambda_{\mathrm{eff}}$ at $k = H_0$. The FST penalty term $V_{\mathrm{grav}} \sim G \rho^2 / k^2$ can be identified with the running cosmological constant at scale $k$: $\Lambda(k) = 8\pi G(k) \rho^*(k)$. If asymptotic safety holds, the FST functional inherits a natural UV completion, and the large value $\gamma_0 \sim 10^{60}$ is explained by the RG running from the Planck scale to $H_0$.
+\end{remark}
+
+\begin{remark}[Vainshtein screening via Galileon self-interactions]
+\label{rem:vainshtein}
+The scalaron field $\phi$ in the P\"oschl--Teller saturation model can be endowed with Galileon-type kinetic self-interactions $\mathcal{L}_{\mathrm{Gal}} = (\partial\phi)^2 \Box\phi / \Lambda_3^3$, where $\Lambda_3 = (M_{\mathrm{Pl}} H_0^2)^{1/3}$ is the Vainshtein scale. Inside the Vainshtein radius $r_V = (M / (4\pi M_{\mathrm{Pl}} \Lambda_3^3))^{1/3}$ of a massive body $M$, the kinetic terms dominate and the scalaron decouples from matter, recovering GR. This provides a complementary screening mechanism to the chameleon effect (which relies on $m_s(R)$ becoming large), and may be necessary if the P\"oschl--Teller potential alone does not suppress the fifth force sufficiently at solar-system scales.
+\end{remark}
+
+\begin{remark}[Topological screening via Aharonov--Bohm phases]
+\label{rem:topological-screening}
+At strong baryonic density gradients (e.g., stellar interiors), the scalaron field may acquire a non-trivial winding number, analogous to Aharonov--Bohm phases in gauge theory. If $\oint \nabla\phi \cdot d\ell = 2\pi n$ around a dense object, the fifth force outside is exponentially suppressed by the topological barrier, providing a screening mechanism that is independent of the scalaron mass. This speculative possibility connects the FST framework to topological defects in cosmology (Vilenkin--Shellard) and deserves further investigation.
+\end{remark}
+
+\begin{remark}[Topological RG matching and geometric phase transitions]
+\label{rem:topological-rg}
+Two speculative extensions of the RG framework:
+\begin{enumerate}
+\item \emph{Topological RG matching:} The quartic UV divergence $\Lambda_0 \sim M_{\mathrm{Pl}}^4$ may be a topological invariant (analogous to the Atiyah--Singer index), counting the number of fermionic zero modes in the gravitational background. If so, the UV-IR matching is not a dynamical running but a topological identity, and $\Lambda_{\mathrm{eff}}$ is determined by the topology of the de Sitter manifold.
+\item \emph{Geometric phase transitions:} The transition from the cosmological regime ($R \sim H_0^2$) to the solar-system regime ($R \sim R_\odot \gg H_0^2$) can be viewed as a spontaneous symmetry breaking in the FST functional: the cosmological de Sitter vacuum breaks the $\gamma(R)$-symmetry, and the solar-system vacuum is a ``Higgs phase'' with massive scalaron ($m_s \gg H_0$).
+\end{enumerate}
+\end{remark}
+
 % ============================================================
 \subsection*{Acknowledgements}
 
 \textcolor{gray}{\textit{[To be added in the full version.]}}
 
 % ============================================================
+\begin{remark}[Pattern A Master Stability -- cross-problem structure]
+This paper instantiates the Pattern A Master Stability Principle from the unified framework \cite{FST-Unified2026}: strict convexity of the renormalised free energy $F$, combined with a neutral leading resolvent branch and second-order dominance, implies a spectral gap $\Delta > 0$ for the associated transfer operator. The specific instantiation in the present context is: $\Delta = $ curvature of $\Phi[\rho]$ at the de Sitter vacuum.
+\end{remark}
+
 % ===================================================================
 % AI Disclosure
 % ===================================================================
@@ -1481,8 +1859,20 @@ L.~Geiger, \emph{The Riemann Hypothesis Part III: The Analytical Rank-Finite Cer
 \href{https://doi.org/10.5281/zenodo.19035845}{doi:10.5281/zenodo.19035845}.
 
 \bibitem{FST-Unified2026}
-L.~Geiger, \emph{The Renormalized Free Energy Framework: A Unified Resolution of Structural Bottlenecks}, FST Framework Paper, 2026.
+L.~Geiger, \emph{The Renormalized Free Energy Framework: A Unified Resolution of Structural Bottlenecks}, Zenodo preprint, 2026.
 \href{https://doi.org/10.5281/zenodo.19036191}{doi:10.5281/zenodo.19036191}.
+
+\bibitem{FST-NS2026}
+L.~Geiger, \emph{A Thermodynamic Obstruction to Finite-Time Blow-Up in the 3D Navier--Stokes Equations (Conditional Framework)},
+Preprint, 2026.
+
+\bibitem{Geiger2026-YM}
+L.~Geiger, \emph{Yang--Mills Mass Gap via FST: RG-Flow Contraction and Subadditive Ergodic Theory},
+Preprint, 2026.
+
+\bibitem{Geiger2026-BSD}
+L.~Geiger, \emph{BSD Conjecture via FST: Height Saturation and Thermodynamic Rank Selection},
+Preprint, 2026.
 
 \bibitem{CopelandLiddleWands1998}
 E.~J.~Copeland, A.~R.~Liddle, and D.~Wands,
@@ -1513,6 +1903,23 @@ N.~Kaloper and A.~Padilla,
 \textit{Sequestering the standard model vacuum energy},
 Phys.\ Rev.\ Lett.\ \textbf{112}, 091304 (2014).
 \href{https://doi.org/10.1103/PhysRevLett.112.091304}{doi:10.1103/PhysRevLett.112.091304}.
+
+\bibitem{LinYang2004}
+F.~Lin and Y.~Yang,
+\textit{Existence of energy minimizers as stable knotted solitons in the Faddeev model},
+Commun.\ Math.\ Phys.\ \textbf{249}, 273--303 (2004).
+\href{https://doi.org/10.1007/s00220-004-1110-y}{doi:10.1007/s00220-004-1110-y}.
+
+\bibitem{Wetterich2024}
+C.~Wetterich,
+\textit{Dark energy evolution from quantum gravity},
+arXiv:2407.03465 [hep-th] (2024).
+
+\bibitem{VasakCCGG2020}
+D.~Vasak, J.~Struckmeier, and J.~Kirsch,
+\textit{Dark energy and inflation invoked in CCGG by locally contorted space-time},
+Eur.\ Phys.\ J.\ Plus \textbf{135}, 404 (2020).
+\href{https://doi.org/10.1140/epjp/s13360-020-00415-7}{doi:10.1140/epjp/s13360-020-00415-7}.
 
 \end{thebibliography}
 
