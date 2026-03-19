@@ -161,8 +161,8 @@
   Vergleich: Anthropic Principle, Cosmological Natural Selection (Smolin),
   Free Energy Principle (Friston). -> Was unterscheidet FST-I?
 
-- [ ] **I-W7: CFM einfuehren und zitieren**
-  CFM (Cosmological Fractal Model, DOI: 10.5281/zenodo.18728936) wird erwaehnt
+- [ ] **I-W7: CRM einfuehren und zitieren**
+  CRM (Curvature Relaxation Model, DOI: 10.5281/zenodo.18728936) wird erwaehnt
   aber nirgends als formale Referenz eingefuehrt.
 
 ### P2 -- Wuenschenswert

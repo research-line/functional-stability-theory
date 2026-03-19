@@ -2,7 +2,7 @@
 
 ## Ziel
 Uebersichtsartikel, der das gesamte Programm in einem Paper zusammenfasst.
-Referenziert CFM I-IV (DOI: 10.5281/zenodo.18728936) als Beweis der kosmologischen Skala.
+Referenziert CRM I-IV (DOI: 10.5281/zenodo.18728936) als Beweis der kosmologischen Skala.
 Zentrales formales Werkzeug: Renormierungsgruppe (RG) als Bruecke zwischen
 Spieltheorie und Skalenuebergaengen.
 
@@ -18,7 +18,7 @@ Spieltheorie und Skalenuebergaengen.
 - These: Ein einzelnes Optimierungsprinzip (MEPP + Nash-GG) erklaert
   Strukturbildung auf allen Skalen -- und die Renormierungsgruppe liefert
   den mathematischen Beweis der Skaleninvarianz
-- Ueberblick ueber das Programm (CFM I-IV + FST I-III)
+- Ueberblick ueber das Programm (CRM I-IV + FST I-III)
 
 ### 2. The Universal Game: Axioms and Framework
 - Axiom 1: Anfangsbedingung (maximaler Gradient, minimale Struktur)
@@ -87,7 +87,7 @@ Spieltheorie und Skalenuebergaengen.
   - Hypothese: Teilchen, Chemie, Biologie, Kosmologie gehoeren zur
     SELBEN Universalitaetsklasse im Sinne der RG-Spieltheorie
   - Die "kritischen Exponenten" sind die universellen Strukturkonstanten
-    (z.B. das Verhaeltnis 4/3 in CFM = kritischer Exponent?)
+    (z.B. das Verhaeltnis 4/3 in CRM = kritischer Exponent?)
 
 ### 4. Level 0: Spacetime Substrate
 - Raumzeit-Bits als Spieler (LQG-Spin-Netzwerke, Kausalmengen)
@@ -138,15 +138,15 @@ Spieltheorie und Skalenuebergaengen.
   der naechsten Ebene. Die Spiellogik (Kooperation vs. Defektion)
   bleibt invariant.
 
-### 8. Level 2: Cosmology (CFM Results)
-- Zusammenfassung CFM I-IV (mit DOI-Referenzen)
+### 8. Level 2: Cosmology (CRM Results)
+- Zusammenfassung CRM I-IV (mit DOI-Referenzen)
 - Paper I: Delta_chi2 = -12.2 (Pantheon+)
 - Paper II: Baryonisches Universum, MOND, Joint-Fit
 - Paper III: R + gamma*R^2, hi_class, Delta_chi2 = -3.7
 - Paper IV: Vektorsektor, a_0 = cH_0/(2pi), SPARC
 - Die kosmologische Skala als empirisch validierter Ankerpunkt
 - **RG-Interpretation:** alpha_M(a) ist die laufende Kopplungskonstante
-  der Gravitation im CFM. Sie beschreibt wie stark die geometrische
+  der Gravitation im CRM. Sie beschreibt wie stark die geometrische
   Rueckkopplung von der Skala abhaengt:
   - Kosmologisch (Hubble-Skala): alpha_M ~ 0.001 (schwache Modifikation)
   - Galaktisch (kpc-Skala): Vektorsektor dominiert -> MOND-Regime
@@ -182,7 +182,7 @@ Spieltheorie und Skalenuebergaengen.
   3. Teilchen + Thermodynamik (Kooperationsspiel) -> Molekuele
   4. Molekuele + MEPP (Autokatalysespiel) -> Leben
   5. Leben + Selektion (ESS-Spiel) -> Biodiversitaet
-  6. Materie + Geometrie (Feedback-Spiel) -> Kosmologie (CFM)
+  6. Materie + Geometrie (Feedback-Spiel) -> Kosmologie (CRM)
   Jeder Pfeil = ein Kadanoff-Blockschritt der RG
 
 ### 9b. The FST Test Protocol
@@ -201,7 +201,7 @@ Spieltheorie und Skalenuebergaengen.
   | Hypercycle | Molekuelspezies | Replikator | Parasiten-Invasion | S_dot(Reaktionsfluss) |
   | GRN | TF + Bindestellen | Boolean/ODE | Attraktorbecken | Energie/Info-Proxy |
   | Oekosystem | Arten | Lotka-Volterra | Nash + Resilienz | Dissipationsrate |
-  | Kosmologie | Geometrie+Materie | Friedmann+CFM | alpha_M Lauf | S_dot(Sterne) |
+  | Kosmologie | Geometrie+Materie | Friedmann+CRM | alpha_M Lauf | S_dot(Sterne) |
 
 ### 10. Testable Predictions
 - Pro Skala mindestens eine falsifizierbare Vorhersage:
@@ -211,8 +211,8 @@ Spieltheorie und Skalenuebergaengen.
   | Teilchen | S_dot(SM) > S_dot(SM') fuer jede 10%-Variation | Numerische Berechnung |
   | Chemie | Autokatalytische Zyklen mit hoeherem S_dot sind stabiler | In-vitro-Experiment |
   | Biologie | Metabolische Rate korreliert mit Reproduktionserfolg | Empirische Daten |
-  | Kosmologie | alpha_M laeuft mit Skala (bereits getestet: CFM) | hi_class + Planck |
-  | Uebergreifend | Das Verhaeltnis 4/3 (mu -> 4/3 in CFM) tritt als kritischer Exponent auch auf anderen Skalen auf | Literaturvergleich |
+  | Kosmologie | alpha_M laeuft mit Skala (bereits getestet: CRM) | hi_class + Planck |
+  | Uebergreifend | Das Verhaeltnis 4/3 (mu -> 4/3 in CRM) tritt als kritischer Exponent auch auf anderen Skalen auf | Literaturvergleich |
 
 - **Zusaetzlich (spekulative Erweiterung):**
   | Zahlentheorie | Riemann-Nullstellen als Eigenfrequenzen eines MEPP-selektierten Operators | Spektraldeterminante = Xi-Funktion (offen) |
@@ -251,7 +251,7 @@ Spieltheorie und Skalenuebergaengen.
 - Ein Prinzip (MEPP/Nash), ein Formalismus (RG), alle Skalen
 - Die Natur spielt kein "neues Spiel" auf jeder Ebene -- sie spielt
   dasselbe Spiel, renormiert auf die jeweilige Beobachtungsskala
-- CFM I-IV liefern den empirischen Beweis auf kosmologischer Skala
+- CRM I-IV liefern den empirischen Beweis auf kosmologischer Skala
 - FST I-III werden die anderen Skalen adressieren
 - Forschungsprogramm: 5+ Jahre, interdisziplinaer
 
@@ -291,6 +291,6 @@ Spieltheorie und Skalenuebergaengen.
 - Kauffman, S.A. (1993). The Origins of Order. Oxford UP.
 - Nowak, M.A. (2006). Evolutionary Dynamics. Harvard UP.
 
-### CFM (eigene Arbeiten)
-- Geiger, L. (2026). CFM Papers I-IV. DOI: 10.5281/zenodo.18728936.
+### CRM (eigene Arbeiten)
+- Geiger, L. (2026). CRM Papers I-IV. DOI: 10.5281/zenodo.18728936.
   GitHub: github.com/lukisch/cfm-cosmology

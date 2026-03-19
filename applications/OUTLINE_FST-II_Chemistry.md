@@ -39,7 +39,7 @@ verstanden werden kann. Bruecke zwischen Teilchenphysik und Biologie.
 - Parasitenproblem: Wie schuetzt sich der Zyklus gegen Trittbrettfahrer?
 - ESS-Analyse: Stabile Hyperzyklen als parasitresistent
 - Kompartimentierung (Protozellen) als raeumliche Spielstrategie
-- Verbindung zu CFM: Chameleon-Screening = kosmologische Kompartimentierung
+- Verbindung zu CRM: Chameleon-Screening = kosmologische Kompartimentierung
 
 ### 5. Chirality Breaking as Symmetry Breaking in the Game
 - Homochiralitaet (nur L-Aminosaeuren, nur D-Zucker) als Raetsel
@@ -48,7 +48,7 @@ verstanden werden kann. Bruecke zwischen Teilchenphysik und Biologie.
   - Spontane Symmetriebrechung durch Fluktuation
   - Positive Rueckkopplung stabilisiert die Wahl
 - Analogie: Elektroschwache Symmetriebrechung (FST-I) und
-  kosmologische Saettigung (CFM Paper I) -- gleiche Mathematik
+  kosmologische Saettigung (CRM Paper I) -- gleiche Mathematik
 
 ### 6. Thermodynamic Selection: MEPP in Chemistry
 - England (2013): Dissipation-driven organization
@@ -56,7 +56,7 @@ verstanden werden kann. Bruecke zwischen Teilchenphysik und Biologie.
   - Molekuele die mehr Entropie produzieren, werden haeufiger repliziert
   - Thermodynamische "Selektion" VOR biologischer Selektion
 - Quantitative Vorhersage: Welche Reaktionsnetzwerke maximieren S_dot?
-- Verbindung zu CFM Paper II: MEPP = Gradientenabbau = Nash-Payoff
+- Verbindung zu CRM Paper II: MEPP = Gradientenabbau = Nash-Payoff
 
 ### 7. From Chemistry to Biology: The Transition
 - Protozelle als Uebergangsobjekt:
@@ -90,4 +90,4 @@ verstanden werden kann. Bruecke zwischen Teilchenphysik und Biologie.
 - Pross, A. (2012). What is Life?
 - Szathmary, E. & Maynard Smith, J. (1995). Major Transitions in Evolution.
 - Nowak, M.A. (2006). Evolutionary Dynamics. Harvard UP.
-- CFM Papers I-IV (DOI: 10.5281/zenodo.18728936)
+- CRM Papers I-IV (DOI: 10.5281/zenodo.18728936)

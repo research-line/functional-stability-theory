@@ -50,7 +50,7 @@ Optimierungsspiels ableiten. Fine-Tuning als Entropie-Maximierung.
 ### 6. Symmetry Breaking as Phase Transition in the Game
 - Elektroschwache Symmetriebrechung als Spielphasenuebergang
 - Higgs-VEV als Attraktor (Fixpunkt des Level-1-Spiels)
-- Verbindung zu CFM: tanh-Saettigung (Level 0) -> Higgs-Potential (Level 1)
+- Verbindung zu CRM: tanh-Saettigung (Level 0) -> Higgs-Potential (Level 1)
 - Kosmologische Phasenuebergaenge als sukzessive Nash-Gleichgewichte
 
 ### 7. Connections to Existing Approaches
@@ -58,7 +58,7 @@ Optimierungsspiels ableiten. Fine-Tuning als Entropie-Maximierung.
 - 't Hooft: Zellulaere Automaten und deterministische QM
 - Friston (2010): Free-Energy-Prinzip (Brains als Spezialfall)
 - Padmanabhan (2010): Thermodynamische Gravitation
-- CFM Papers I-IV: Kosmologische Validierung (DOI)
+- CRM Papers I-IV: Kosmologische Validierung (DOI)
 
 ### 8. Testable Predictions and Falsifiability
 - P1: Entropieproduktionsrate S_dot(SM) > S_dot(SM') fuer jede
@@ -79,5 +79,5 @@ Optimierungsspiels ableiten. Fine-Tuning als Entropie-Maximierung.
 - Verlinde (2011), 't Hooft (2016), Zurek (2003)
 - Tegmark et al. (2006): Dimensionless constants
 - Adams (2019): The degree of fine-tuning
-- CFM Papers I-IV (DOI: 10.5281/zenodo.18728936)
+- CRM Papers I-IV (DOI: 10.5281/zenodo.18728936)
 - Quellmaterial: FractalGameTheory_EN.tex (Sec. 5.2, 5.3)

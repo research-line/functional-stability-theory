@@ -16,7 +16,7 @@ MEPP als universelles Selektionsprinzip.
 - Was fehlt: Verbindung nach UNTEN (Chemie/Physik) und nach OBEN (Kosmologie)
 - These: ESS auf Verhaltensebene und Nash-GG auf Molekuelebene sind
   Manifestationen desselben Variationsprinzips (MEPP)
-- Verbindung zu CFM: Galaxien und Organismen "spielen dasselbe Spiel"
+- Verbindung zu CRM: Galaxien und Organismen "spielen dasselbe Spiel"
 
 ### 2. Molecular Level: Games Inside the Cell
 - 2.1 Protein Folding as Optimization Game
@@ -73,7 +73,7 @@ MEPP als universelles Selektionsprinzip.
 - Oekologische Nischen als Nash-Gleichgewichte
 - Biodiversitaet als Entropie des Oekosystems
 - Massenaussterben als Phasenuebergaenge (Verlust von Nash-GG)
-- Verbindung: Kosmologische Phasenuebergaenge (CFM) = Massenaussterben
+- Verbindung: Kosmologische Phasenuebergaenge (CRM) = Massenaussterben
 
 ### 6. The Scale Hierarchy: From Molecule to Ecosystem
 - Tabelle: Spieler, Strategie, Payoff auf jeder Ebene
@@ -121,4 +121,4 @@ MEPP als universelles Selektionsprinzip.
 - Hamilton, W.D. (1964). The genetical evolution of social behaviour.
 - Axelrod, R. (1984). The Evolution of Cooperation.
 - Aktipis, C.A. et al. (2015). Cancer across the tree of life. Phil Trans B.
-- CFM Papers I-IV (DOI: 10.5281/zenodo.18728936)
+- CRM Papers I-IV (DOI: 10.5281/zenodo.18728936)
