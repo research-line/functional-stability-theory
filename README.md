@@ -74,9 +74,9 @@ The `scripts/` directory contains computational validation scripts:
 
 ## Related Repositories
 
-- [rfep-framework](https://github.com/research-line/rfep-framework) -- Renormalized Free-Energy Principle (the mathematical bridge)
 - [rh-even-dominance](https://github.com/research-line/rh-even-dominance) -- Riemann Hypothesis: Even-dominance proof (foundation)
-- [crm-cosmology](https://github.com/research-line/crm-cosmology) -- Cosmic Recursion Model (foundation)
+- [crm-cosmology](https://github.com/research-line/crm-cosmology) -- Curvature Relaxation Model (foundation)
+- [rfep-framework](https://github.com/research-line/rfep-framework) -- archived, now integrated here under `framework/`
 
 ## Author
 
