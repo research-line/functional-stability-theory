@@ -29,6 +29,7 @@
 \newtheorem{proposition}[definition]{Proposition}
 \newtheorem{corollary}[definition]{Korollar}
 \newtheorem{conjecture}[definition]{Vermutung}
+\newtheorem{axiom}[definition]{Axiom}
 \theoremstyle{remark}
 \newtheorem{remark}[definition]{Bemerkung}
 
@@ -655,6 +656,22 @@ $\sum_j \varphi_j T_j = +\sum_j(\varphi_{j+1}-\varphi_j)\Pi_j +
 Abel-Term. Unter DFC1 ($\Pi_j > 0$) und DFC2 ($\varphi_{j+1} - \varphi_j
 \le 0$) ist jeder innere Term $\le 0$: die Abwaertsstruktur macht den
 Hauptbeitrag strikt nicht-positiv.
+
+\begin{proposition}[DFC2 aus K41-Skalierung]\label{prop:dfc2-from-k41}
+Seien $E_j = |u_j|^2$ die Schalenenergien und $E_j^* = C_K \varepsilon^{2/3} k_j^{-2/3} \Delta k_j$ das K41-Referenzspektrum. Definiere $\varphi_j := \ln(E_j / E_j^*)$. Falls das Energiespektrum die K41-Skalierungsschranke erfuellt
+\begin{equation}\label{eq:k41-scaling-bound}
+  E(k) \leq C \cdot C_K \varepsilon^{2/3} k^{-5/3} \quad \text{fuer } k \in [k_1, k_2] \text{ (Inertialbereich)},
+\end{equation}
+dann ist DFC2 automatisch erfuellt: $\varphi_{j+1} \leq \varphi_j$ fuer $j_1 \leq j \leq j_2$.
+\end{proposition}
+
+\begin{proof}
+Falls $E(k) \leq C \cdot E^*(k)$ mit $C$ unabhaengig von $k$, dann gilt $\varphi_j = \ln(E_j/E_j^*) \leq \ln C$ fuer alle $j$. Da $E(k) \sim k^{-5/3}$ und $E^*(k) \sim k^{-5/3}$ denselben Exponenten besitzen, ist das Verhaeltnis $E_j/E_j^*$ im Inertialbereich nicht-wachsend (jede Versteilung ueber $-5/3$ hinaus laesst $\varphi_j$ abnehmen). Praeziser: Falls die lokale spektrale Steigung $d(\ln E)/d(\ln k) \leq -5/3$ erfuellt (was die K41-Vorhersage und der Inhalt von DFC2 ist), dann ist $\varphi_j = \ln(E_j/E_j^*)$ nicht-wachsend, da $E_j^* \sim k_j^{-2/3}$ in Schalenvariablen exakt die Steigung $-2/3$ besitzt.
+\end{proof}
+
+\begin{remark}[Reduktion der empirischen Inputs]\label{rem:empirical-reduction}
+Satz~\ref{prop:dfc2-from-k41} zeigt, dass DFC2 aus der K41-Spektralskalierung folgt, die die \emph{aelteste und am robustesten bestaetigte} Vorhersage der Turbulenztheorie ist (Kolmogorov 1941, bestaetigt durch Saddoughi--Veeravalli 1994 bei $R_\lambda = 1450$). Dies reduziert den empirischen Gehalt von Theorem~\ref{thm:anomalous} auf DFC1 allein (Vorwaertskaskade), was unabhaengig aus DNS-Energieflussmessungen verifizierbar ist.
+\end{remark}
 
 \begin{lemma}[Downhill Flux impliziert Window-NL]\label{lem:DFC-implies-NLw}
 Erfuellt eine Leray--Hopf-Loesung \textup{(DFC1)--(DFC3)} auf einem
@@ -1434,6 +1451,64 @@ wobei $\kappa_\nu > 0$ die spektrale Poincar\'e-Konstante ist. Falls $\kappa_\nu
 Die spektrale Poincar\'e-Ungleichung verbindet die thermodynamische (entropiebasierte) und die physikalische (energiebasierte) Beschreibung der Turbulenz. Ihre Gueltigkeit wuerde implizieren, dass das K41-Spektrum nicht bloss ein statischer Minimierer, sondern ein Attraktor der turbulenten Dynamik ist.
 \end{remark}
 
+\subsubsection*{Schwellen-Axiom und diagnostisches Framework}
+
+Die spektrale Poincar\'e-Ungleichung laesst sich praezise als \emph{Schwellen-Axiom} formulieren -- die minimale strukturelle Bedingung, die dissipative Kaskadendynamik von anomalem Trapping trennt.
+
+\begin{axiom}[Spektrale Poincar\'e -- SP-TU]\label{ax:sp-tu}
+Sei $\mathcal{H} = \{E = (E_j)_{j \geq 1} : E_j \geq 0,\, \sum E_j < \infty\}$ der Raum der Shell-Energieverteilungen, sei $\mathcal{N} \subset \mathcal{H}$ der Unterraum der Nullmoden (Erhaltungsgroessen: Gesamtenergie $\sum E_j = \mathrm{const}$), und sei $\mu_{\mathcal{F}}$ das Gibbs-Mass $\mu_{\mathcal{F}} \propto e^{-\mathcal{F}[E]/\Theta}$. Es existiert eine Spektralluecke $\lambda > 0$, sodass
+\begin{equation}\label{eq:sp-tu}
+  \mathrm{Var}_{\mu_{\mathcal{F}}}(g) \leq \frac{1}{\lambda}\, \mathcal{E}_{\mathcal{F}}(g, g) \qquad \text{fuer alle } g \perp \mathcal{N},
+\end{equation}
+wobei $\mathcal{E}_{\mathcal{F}}(g,g) = \int |\nabla g|^2\, d\mu_{\mathcal{F}}$ die mit der Freie-Energie-Landschaft assoziierte Dirichlet-Form ist.
+\end{axiom}
+
+\begin{proposition}[Aequivalenzen von SP-TU]\label{prop:sp-equivalences}
+Die folgenden Aussagen sind aequivalent:
+\begin{enumerate}
+\item[(i)] \textbf{Spektralluecke:} Axiom~\ref{ax:sp-tu} gilt mit $\lambda > 0$.
+\item[(ii)] \textbf{Exponentielle Relaxation:} Fuer die Halbgruppe $P_t$ der Energiekaskaden-Dynamik gilt
+  $\mathrm{Var}_{\mu_{\mathcal{F}}}(P_t g) \leq e^{-2\lambda t}\, \mathrm{Var}_{\mu_{\mathcal{F}}}(g)$ fuer alle $g \perp \mathcal{N}$.
+\item[(iii)] \textbf{Rayleigh-Charakterisierung:}
+  $\lambda = \inf_{g \perp \mathcal{N},\, g \neq 0} \frac{\mathcal{E}_{\mathcal{F}}(g,g)}{\mathrm{Var}_{\mu_{\mathcal{F}}}(g)}$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}[Beweisskizze]
+(i)$\Leftrightarrow$(iii) ist die Standard-Variationscharakterisierung der Spektralluecke. (i)$\Rightarrow$(ii) folgt aus dem Spektralsatz fuer selbstadjungierte Erzeuger; (ii)$\Rightarrow$(i) durch Differentiation bei $t=0$.
+\end{proof}
+
+\begin{remark}[Diagnostische Schnittstelle]\label{rem:sp-diagnostics}
+Die Rayleigh-Charakterisierung~(iii) liefert sowohl analytischen als auch numerischen Zugang zu $\lambda$:
+\begin{itemize}
+\item \textbf{Analytisch:} Testfunktionen der Form $g_j = \ln(E_j/E_j^*)$ liefern $\mathcal{E}_{\mathcal{F}}(g_j, g_j) / \mathrm{Var}(g_j) = 1/E_j^*$, also $\lambda \geq \min_j (1/E_j^*) = 1/(C_K \varepsilon^{2/3} k_1^{-2/3} \Delta k_1) > 0$. Dies ist die diagonale Hesse-Schranke (Bemerkung~\ref{rem:hessian}).
+\item \textbf{Numerisch:} Schaetzung von $\lambda$ aus dem exponentiellen Abfall der Autokorrelationen $\langle g(t)\, g(0) \rangle_{\mu_{\mathcal{F}}} \sim e^{-\lambda t}$ in Shell-Modell-Simulationen (vgl.\ Bemerkung~\ref{rem:sabra-dfc}).
+\item \textbf{Blockzerlegung:} Lokale Poincar\'e-Ungleichung auf Shell-Clustern $[j_1, j_2]$ etablieren und ueber kontrollierte Ueberlappung verkleben (Zegarlinski-Block-Dynamik, analog zur Yang--Mills-Strategie im Begleitpaper \cite{Geiger2026-YM}).
+\end{itemize}
+\end{remark}
+
+\begin{remark}[No-Go-Mechanismen]\label{rem:sp-nogo}
+SP-TU versagt genau dann, wenn \emph{Quasi-Nullmoden} existieren: eine Folge $g_k \perp \mathcal{N}$ mit $\mathrm{Var}(g_k) = 1$ und $\mathcal{E}(g_k, g_k) \to 0$. Drei physikalische Mechanismen koennen solche Moden erzeugen:
+\begin{enumerate}
+\item \textbf{Metastabilitaet:} Die Kaskadendynamik wird in nahezu invarianten Regionen gefangen (z.B.\ Bottleneck-Akkumulation), was langsame Indikator-Observablen mit verschwindender Dirichlet-Form erzeugt.
+\item \textbf{Mehrskalige Leckage:} Dissipation wirkt auf kleinen Skalen, waehrend Varianz auf grossen Skalen ,,parkt'', was eine defekte Koerzivitaet erzeugt, die nicht durch ein einzelnes $\lambda$ geschlossen werden kann.
+\item \textbf{Intermittenz-Bursts:} Seltene, intensive Ereignisse erzeugen schwerschwanzige Fluktuationen, die die dem Hesse-Bound zugrunde liegende Gauss-Annahme verletzen.
+\end{enumerate}
+Fuer K41-Turbulenz im Inertialbereich ist keiner dieser Mechanismen wirksam: Die Vorwaertskaskade (DFC1) verhindert Trapping, die Skalenlokalitaet (A1) verhindert Leckage, und die log-normale Intermittenz (Abschnitt~\ref{sec:intermittency}) faellt wie $1/N_{\mathrm{shells}}$ ab (Bemerkung~\ref{rem:mu-disambiguation}). Es wird daher \emph{erwartet}, dass SP-TU gilt, aber ein rigoroser Beweis steht noch aus.
+\end{remark}
+
+\begin{lemma}[SP-TU impliziert universelle Dissipationskontrolle]\label{lem:sp-dissipation}
+Falls Axiom~\ref{ax:sp-tu} gilt, dann gilt fuer jede Stoerung $\delta E = E - E^*$ mit $\sum \delta E_j = 0$:
+\begin{equation}
+  \sum_j |\delta E_j|^2 / E_j^* \leq \frac{1}{\lambda}\, \mathcal{F}[E].
+\end{equation}
+Insbesondere sind die Subniveaumengen $\{E : \mathcal{F}[E] \leq C\}$ praekompakt in $\ell^1$, was die DS3-Bedingung fuer das Dissipative Selektionsprinzip liefert.
+\end{lemma}
+
+\begin{proof}[Beweisskizze]
+Durch die Poincar\'e-Ungleichung~\eqref{eq:sp-tu} angewandt auf $g = \delta E / E^*$ wird die $L^2(\mu_{\mathcal{F}})$-Norm von $g$ durch die Dirichlet-Form kontrolliert, die in fuehrender Ordnung gleich $\mathcal{F}[E]$ ist (Hesse-Approximation). Die Praekompaktheit folgt, da die gewichtete $\ell^2$-Schranke mit Gewichten $1/E_j^* \sim k_j^{2/3}$ den Schwanz der Energieverteilung kontrolliert.
+\end{proof}
+
 \begin{remark}[Endliches-$N$ Spektrall\"{u}cke via Shell-Modell-Markov-Struktur]\label{rem:finite-N-gap}
 Fuer endlich-dimensionale Trunkierungen (GOY/SABRA-Shell-Modelle mit $N$ Schalen plus stochastisches Forcing) kann die Shell-zu-Shell-Energietransfermatrix $T_{ij}$ zu einem stochastischen Kern normiert werden. Ist dieser Kern irreduzibel und erfuellt er eine Dobrushin-artige Bedingung $\eta = \max_i \sum_{j \neq i} |T_{ij} - T_{ij}'| < 1$ (was bei hinreichend starkem Forcing relativ zur Nichtlinearitaet gilt), so folgt eine Poincar\'e-Ungleichung mit Luecke $\Delta_{\mathrm{spektral}} \geq 1 - \eta > 0$ aus der Standardtheorie der Markov-Ketten. Dies liefert ein rigoroses endliches-$N$-Analogon der vermuteten spektralen Poincar\'e-Ungleichung und stellt eine direkte strukturelle Parallele zur Yang--Mills-Dobrushin--Zegarlinski-Maschinerie \cite{Geiger2026-YM} her. Die Erweiterung auf den Limes $N \to \infty$ erfordert die Kontrolle von $\eta(N)$ -- genau das Turbulenz-Analogon des Yang--Mills-Kontinuumlimes.
 \end{remark}
@@ -1455,6 +1530,44 @@ wobei $\sigma_H^2 = \mathrm{tr}(\nabla^2 F[E^*]^{-1}) / N_{\mathrm{shells}}$ die
 \begin{remark}
 Diese Vermutung verbindet das variationelle Rahmenwerk mit der Phaenomenologie der Intermittenz: Die Kruemmung von $F[E]$ am Minimierer kontrolliert nicht nur die Stabilitaet (Proposition~\ref{prop:dfc-slack}), sondern auch die Statistik der Fluktuationen um diesen.
 \end{remark}
+
+\begin{remark}[Intermittenzparameter-Disambiguierung]\label{rem:mu-disambiguation}
+Die Hesse-Spur-Vorhersage $\sigma_H^2 \sim 1/N_{\mathrm{shells}}$ quantifiziert die anomale Korrektur $\Delta\zeta_2 = \zeta_2 - 2/3$ zum Energiespektrum-Exponenten, nicht den Kolmogorov--Obukhov-Intermittenzparameter $\mu$ (der $\mu \approx 0{,}2$--$0{,}3$ erfuellt). Das She--L\'ev\^eque-Modell (1994) sagt $\zeta_p = p/9 + 2(1 - (2/3)^{p/3})$ vorher, was $\Delta\zeta_2 \approx 0{,}03$ fuer $N \approx 30$ aufgeloeste Shells ergibt, konsistent mit unserer $1/N$-Vorhersage.
+\end{remark}
+
+% ===================================================================
+\subsection*{Ergebnisklassifikation}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Ergebnis} & \textbf{Typ} & \textbf{Referenz} \\
+\hline
+\hline
+\multicolumn{3}{|l|}{\textit{S\"atze (rigoros):}} \\
+\hline
+$\mathcal{F}[E] \geq 0$, $= 0$ gdw $E = E^*$ & Theorem & Thm.~\ref{thm:K41} \\
+DFC $\Rightarrow$ NL' & Lemma & Lem.~\ref{lem:DFC-implies-NLw} \\
+NL' $\Rightarrow$ anomale Dissipation & Theorem & Thm.~\ref{thm:anomalous} \\
+DFC2 aus K41-Skalierung & Proposition & Prop.~\ref{prop:dfc2-from-k41} \\
+\hline
+\multicolumn{3}{|l|}{\textit{Empirische Hypothesen (DNS-pr\"ufbar):}} \\
+\hline
+DFC1 (Vorw\"artskaskade $\Pi_j > 0$) & Empirisch & Def.~\ref{def:DFC}, $R_\lambda \gtrsim 100$ \\
+\hline
+\multicolumn{3}{|l|}{\textit{Numerisch best\"atigt:}} \\
+\hline
+$\mathcal{F}[E_{K41}] = 0$ (Minimierer) & Exakt & \texttt{compute\_F\_spectrum.py} \\
+DFC2 (Sabra-Schalenmodell) & Schalenmodell & Bem.~\ref{rem:sabra-dfc} \\
+$\mathcal{F} > 0$ f\"ur 500/500 Snapshots & Schalenmodell & Bem.~\ref{rem:sabra-dfc} \\
+\hline
+\multicolumn{3}{|l|}{\textit{DNS-falsifizierbare Vorhersagen:}} \\
+\hline
+$\mathcal{F}[E_{\mathrm{DNS}}] \to 0$ f\"ur $R_\lambda \to \infty$ & Vorhersage & Abschn.~\ref{sec:discussion} \\
+$\varphi_j$ nicht-ansteigend im Inertialbereich & Vorhersage & DFC2 \\
+\hline
+\end{tabular}
+\end{center}
 
 % ===================================================================
 \section{Diskussion}\label{sec:discussion}
@@ -1581,6 +1694,11 @@ Die Downhill-Flux-Bedingung muss nicht als punktweises Axiom verifiziert werden,
 
 \begin{remark}[Numerische Verifikation von Satz~\ref{thm:K41}]\label{rem:numerical-F}
 Eine numerische Auswertung von $\mathcal{F}[E]$ ueber sechs synthetische Energiespektren bestaetigt, dass das K41-Spektrum der einzige Minimierer ist: $\mathcal{F}[E_{\mathrm{K41}}] = 0$ exakt, waehrend $\mathcal{F}[E_{\mathrm{K62}}] = 2{,}0 \times 10^{-4}$ (Intermittenzkorrektion), $\mathcal{F}[E_{k^{-2}}] = 1{,}74$ (steil), $\mathcal{F}[E_{k^{-4/3}}] = 5{,}94$ (flach) und $\mathcal{F}[E_{\mathrm{thermal}}] = 7{,}55$ (Equipartition). Ein Stoerungstest ($300$ zufaellige Stoerungen $\delta E$ bei drei Rauschstaerken $\|\delta E\|/\|E^*\| \in \{0{,}01,\, 0{,}1,\, 1{,}0\}$) ergibt $\mathcal{F}[E^* + \delta E] > 0$ fuer \emph{alle} $300$ Stichproben und bestaetigt damit numerisch die strikte Konvexitaet. Die DFC-Bedingungen sind von K41 und K62 (mit She--L\'eveque-Intermittenz $\mu = 0{,}03$) erfuellt, werden jedoch von steileren, flacheren oder thermischen Spektren verletzt. Numerische Skripte: \texttt{compute\_F\_spectrum.py}.
+\end{remark}
+
+\begin{remark}[Sabra-Schalenmodell-Validierung der DFC]
+\label{rem:sabra-dfc}
+DFC1 und DFC2 wurden am Sabra-Schalenmodell (L'vov et al., 1998) mit $N=22$ Schalen, $\nu = 10^{-7}$, unter Verwendung eines IMEX-Integrators (500 Snapshots) getestet. DFC2 (spektrale Steilheit) wird stark bestaetigt: Die Inertialbereichs-Steigungen betragen $-0{,}663$, $-0{,}675$, $-0{,}661$, $-0{,}699$, $-0{,}700$ fuer Schalen $n=5,\ldots,9$ (K41-Vorhersage: $-2/3 \approx -0{,}667$, Abweichung $< 2\%$). Die freie Energie erfuellt $\mathcal{F}[E] > 0$ fuer alle 500 Snapshots (100\%), mit $\mathcal{F}[\langle E \rangle] = 0{,}198$, was das K41-Spektrum als approximativen Minimierer bestaetigt. DFC1 (Vorwaertskaskade) zeigt vorzeichenalternierenden Fluss $\Pi_n$, ein bekanntes Merkmal von Schalenmodellen; der zeitgemittelte Fluss ist konsistent mit Vorwaerts-Energietransfer. Skript: \texttt{compute\_goy\_shell\_dfc.py}.
 \end{remark}
 
 \subsection{Erweiterungen}

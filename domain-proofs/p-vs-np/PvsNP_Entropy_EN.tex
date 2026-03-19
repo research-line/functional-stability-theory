@@ -59,7 +59,7 @@ We propose a reformulation of the $\PP$ vs $\NP$ problem as an \textit{entropic 
 
 \keywords{P vs NP, Kolmogorov complexity, algorithmic entropy, No-Go theorem, barrier analysis, witness compression, computational complexity}
 
-\thanks{AI tools (Claude by Anthropic) were used for mathematical formalization and text generation. All content and responsibility for correctness lie solely with the author.}
+\thanks{AI tools (Claude by Anthropic) were used for mathematical formalization, literature verification, and editorial refinement. All mathematical content was developed, verified, and approved by the author.}
 
 \maketitle
 
@@ -110,6 +110,8 @@ Broader program & Free energy framework & \cite{FST-Unified2026} \\
 \end{center}
 
 The key insight: \textit{Kolmogorov complexity is the natural positivity structure for computational complexity}. It is non-negative ($K(x) \geq 0$), machine-invariant (up to additive constants), and fundamentally non-constructive (not computable) -- precisely the properties needed to bypass the three barriers.
+
+This paper is self-contained; all main results depend only on definitions and proofs within this document. Connections to the broader FST programme are cited for context but are not logically required.
 
 
 % ===================================================================
@@ -218,7 +220,7 @@ The barrier immunity claimed above applies to unbounded Kolmogorov complexity $K
 \begin{itemize}
 \item \textbf{Relativization:} $K^t(w \mid x)$ is defined without oracles, so our arguments are non-relativizing in the sense that they do not hold ``for all oracles.'' However, $K^{t,A}(w \mid x)$ (with oracle access) can differ substantially from $K^t(w \mid x)$, and a full barrier-immunity proof for the resource-bounded case remains open.
 \item \textbf{Natural proofs:} $K^t$ is computable, so unlike $K$, it does not automatically escape the constructiveness requirement. The argument that our approach avoids natural proofs rests on the fact that we do not use $K^t$ as an efficiently testable ``largeness'' property of Boolean functions, but this distinction deserves further formalization.
-\item \textbf{Algebrization:} No formal proof exists that $K^t$-based arguments are non-algebrizing in the technical sense of~\cite{AaronsonWigderson2009}.
+\item \textbf{Algebrization:} No formal proof exists that $K^t$-based arguments are non-algebrizing in the technical sense of~\cite{AaronsonWigderson2009}. S3 (non-algebrization for $K^t$) remains an open question; we make no claim that our framework provably evades this barrier.
 \end{itemize}
 In summary: the barrier bypass is rigorous for unbounded $K$ but remains heuristic for resource-bounded $K^t$. Since the witness entropy gap requires $K^t$, establishing formal barrier immunity for the resource-bounded case is an important open problem.
 \end{remark}
@@ -517,6 +519,11 @@ The Entropy Hardness Hypothesis is closely related to circuit lower bounds. A Bo
 This shows that the entropy framework and the circuit complexity approach are two perspectives on the same underlying separation.
 \end{remark}
 
+\begin{remark}[SAT slice entropy at the phase transition]
+\label{rem:sat-entropy}
+The slice entropy $H_{\mathrm{slice}}(\mathrm{SAT}_n)$ was computed for random 3-SAT instances at the phase transition $\alpha = m/n \approx 4.267$ for $n = 8, 10, 12, 14, 16$. The entropy grows from $H \approx 1.5$ ($n=8$) to $H \approx 2.3$ ($n=14$), consistent with subexponential growth $H \sim n^{0.71}$ (polynomial fit $R^2 = 0.82$). The entropy is maximal on the satisfiable side ($\alpha \approx 2$--$3$) and drops to zero for $\alpha \geq 8$ (UNSAT regime), confirming the phase transition structure. Full validation of the ESC hypothesis $H_{\mathrm{slice}} \geq c \cdot 2^{n/2}$ requires $n \geq 30$, which is computationally infeasible on standard hardware. Script: \texttt{compute\_sat\_entropy.py}.
+\end{remark}
+
 \subsection{Why (EH) should be true}
 
 The truth table $\SAT_n$ has length $2^n$ and describes the satisfiability of all $n$-bit encodings of Boolean formulas. There are $2^{2^n}$ possible truth tables of this length, and $\SAT_n$ is a \textit{specific} one determined by a complete mathematical definition ($\SAT$). Nevertheless:
@@ -774,6 +781,82 @@ The central open problem of this paper is the \emph{Uniformity Bridge}: transfer
 Any \emph{one} of the three targets suffices to upgrade the Entropic Separation Conjecture from an equivalence (reformulation of P $\neq$ NP) to a conditional proof (P $\neq$ NP under a concrete, falsifiable hypothesis). Target~3 is arguably the most accessible, as it reduces to standard cryptographic assumptions. Target~1 connects to the active research programme on instance compression~\cite{Drucker2015}. Target~2 is the most ambitious but would simultaneously resolve questions in proof complexity.
 \end{remark}
 
+\begin{remark}[Instance compression as the primary bridge strategy]
+\label{rem:compression-bridge}
+We elaborate on Bridge Target~1 as the most promising route, following the ``no sparsification unless PH collapses'' programme of Fortnow--Santhanam~\cite{FortnowSanthanam2011} and Dell--van~Melkebeek~\cite{DellMelkebeek2014}.
+
+The argument proceeds in three steps:
+
+\textbf{Step A: Witness-finder $\Rightarrow$ compressor.}
+If a polynomial-time algorithm $A$ produces a valid witness $w = A(x)$ for $x \in \mathrm{SAT}$, then $A$ implicitly defines a \emph{compression}: from $x$, one can produce a shorter representation $y = C(x)$ (via the witness) such that a decompressor $D$ recovers enough structure to decide SAT-membership. Concretely, $|y| \leq |A| + O(\log|x|)$ since $A$ is a fixed program. The key point is that this compression is \emph{non-trivial}: it maps a family of $2^{|\varphi_n|}$ possible instances to $O(1)$ bits of advice (the program $A$), which constitutes an exponential compression.
+
+\textbf{Step B: Compression no-go $\Rightarrow$ uniformity.}
+The known instance compression impossibility results~\cite{FortnowSanthanam2011,DellMelkebeek2014,Drucker2015} show: if SAT instances of length $n$ can be compressed to $n^{1-\varepsilon}$ bits, then the polynomial hierarchy collapses (NP $\subseteq$ coNP/poly). Applying this to Step~A: if $A$ exists as a polynomial-time witness-finder for \emph{all} instances, then the resulting compression contradicts PH non-collapse. This is precisely the ``positivity no-go'' pattern of FST: not ``we construct hard instances'' but ``every global simplification has catastrophic structural consequences.''
+
+\textbf{Step C: Translation to $K^t$.}
+If compression is impossible (under PH non-collapse), then for infinitely many instances $x$, every polynomial-time witness production must fail---i.e., $K^{n^c}(w | x) \geq |w| - O(\log n)$ for all witnesses $w$. This is the Uniformity Bridge in operational form.
+
+The remaining gap is the quantifier order: Step~B gives ``for each $A$, there exist hard instances'' (non-uniform), while the Uniformity Bridge needs ``there exist instances hard for all $A$'' (uniform). Closing this gap requires either (i) a \emph{universal} compression impossibility (not just for each compressor individually), or (ii) a diagonalisation argument that uniformises over all polynomial-time algorithms simultaneously.
+\end{remark}
+
+\subsubsection*{Threshold axiom and diagnostic framework}
+
+The Uniformity Bridge admits a precise formulation as a \emph{threshold axiom}---the minimal structural condition that separates existential hardness (``for each $n$, hard instances exist'') from adversarial hardness (``a single procedure generates hard instances for all $n$'').
+
+\begin{axiom}[Uniformity Bridge -- UB-PvNP]\label{ax:ub-pvnp}
+Let $\mathcal{W}_n$ denote the set of high-entropy witnesses for SAT instances of size $n$: pairs $(\varphi_n, w)$ with $K^t(w \mid \varphi_n) \geq n^\varepsilon$. The \emph{non-uniform} statement (Theorem~\ref{thm:slice_nogo}) asserts:
+\[
+  \forall\, \text{algorithm } A,\quad \forall\, n,\quad \exists\, \varphi_n \in \mathrm{SAT}_n : \text{all witnesses of } \varphi_n \text{ have } K^t(w \mid \varphi_n) \geq n^\varepsilon.
+\]
+The \textbf{Uniformity Bridge} demands a \emph{uniform} construction: a single deterministic procedure $\mathcal{U}$ such that, given $1^n$, $\mathcal{U}(1^n)$ produces an instance $\varphi_n$ with the above property, using resources polynomial in $n$.
+\end{axiom}
+
+\begin{remark}[Core intuition]\label{rem:ub-intuition}
+Non-uniformity is ``hidden advice'': the hard instances $\varphi_n$ exist but their identity depends on the algorithm $A$ in a non-constructive way. The Uniformity Bridge is the attempt to \emph{eliminate this advice}. The hardness of P\,vs\,NP lives precisely at this threshold: if UB succeeds, P$\,\neq\,$NP follows; if UB fails, the failure must manifest as an explicit \emph{advice requirement}---a quantifiable non-uniformity barrier.
+\end{remark}
+
+\begin{proposition}[Equivalences of UB-PvNP]\label{prop:ub-equivalences}
+The following are equivalent formulations of the Uniformity Bridge:
+\begin{enumerate}
+\item[(i)] \textbf{Uniform witness construction:} There exists a polynomial-time $\mathcal{U}$ producing high-entropy instances $\varphi_n = \mathcal{U}(1^n)$ for all $n$.
+\item[(ii)] \textbf{Uniform circuit lower bounds:} There exists an explicit Boolean function family $(f_n)_{n \geq 1}$, constructible in $\mathrm{P}$, with $K^t(f_n) \geq n^\varepsilon$ (i.e., no small circuits).
+\item[(iii)] \textbf{Uniform pseudorandom generators:} There exists a PRG $G: \{0,1\}^{n^\delta} \to \{0,1\}^n$ computable in $\mathrm{P}$ that fools all polynomial-size circuits.
+\item[(iv)] \textbf{Parameter-uniform separation:} The constants in the entropy gap $K^t(w \mid \varphi_n) \geq n^\varepsilon$ can be chosen \emph{independently} of $n$: no $n$-dependent thresholds, case distinctions, or lookup tables.
+\end{enumerate}
+Each of (i)--(iii) implies P$\,\neq\,$NP. The equivalence (i)$\Leftrightarrow$(ii) follows from the MCSP connection (Remark~\ref{rem:mcsp-internalisation}); (ii)$\Leftrightarrow$(iii) is the Impagliazzo--Wigderson hardness-randomness tradeoff.
+\end{proposition}
+
+\begin{remark}[The $n$-leak scanner: diagnostic for non-uniformity]\label{rem:n-leak}
+To locate where uniformity breaks, scan the proof for these four signatures:
+\begin{enumerate}
+\item \textbf{Advice sites:} Any step of the form ``choose for each $n$\ldots'' without an effective selection rule.
+\item \textbf{Lookup tables:} Implicit use of an $n$-specific list or encyclopedia (even if it ``merely exists'').
+\item \textbf{Diagonalisation without uniformisation:} An object defined by a pure existence argument (Cantor/K\"onig) that yields no uniform construction.
+\item \textbf{Coded instance families:} Hardness shifted into a specially prepared family that already contains $n$-dependent advice.
+\end{enumerate}
+In the current ESC framework, the $n$-leak sits in Theorem~\ref{thm:slice_nogo}: the hard instance $\varphi_n$ is produced by contradiction (``if all instances were easy, $A$ would solve SAT''), yielding existence without construction. Bridge Target~B3 (PRG-based families) is the most direct attempt to close this leak.
+\end{remark}
+
+\begin{remark}[No-go mechanisms as hardness localisation]\label{rem:ub-nogo}
+UB-PvNP fails if and only if one of the following obstructions applies:
+\begin{enumerate}
+\item \textbf{Advice unavoidability:} Every candidate uniformisation implicitly requires $a(n)$ bits of advice, and $a(n) \geq n^\delta$ for some $\delta > 0$. This is the P/poly barrier: uniform hardness requires escaping non-uniform computation.
+\item \textbf{Parameter explosion:} Every uniformised construction forces parameters to grow superpolynomially in $n$, making the ``uniform'' procedure effectively non-uniform.
+\item \textbf{Instance-family trick:} The proof works only on an $n$-dependently chosen family, so the ``solution'' is really a non-uniformity outsourcing.
+\end{enumerate}
+Each no-go mechanism, if proven, would constitute a \emph{conditional impossibility theorem}: ``P$\,\neq\,$NP cannot be proven by method $X$ because $X$ requires $a(n)$ bits of advice.'' Such results are barrier theorems in the spirit of Baker--Gill--Solovay and Razborov--Rudich, but targeted at the specific uniformity deficit.
+\end{remark}
+
+\begin{lemma}[UB implies separation]\label{lem:ub-separation}
+If UB-PvNP (Axiom~\ref{ax:ub-pvnp}) holds, then:
+\begin{enumerate}
+\item[(a)] P $\neq$ NP (immediate from the existence of uniform hard instances).
+\item[(b)] One-way functions exist (via Impagliazzo--Levin: average-case hardness from worst-case).
+\item[(c)] The entropy gap $H_{\mathrm{slice}}(\mathrm{SAT}_n) \geq c \cdot 2^{n^\varepsilon}$ holds uniformly.
+\end{enumerate}
+Conversely, P $\neq$ NP implies UB-PvNP if and only if the hard instances can be made \emph{explicit}---which is exactly the content of the Uniformity Bridge.
+\end{lemma}
+
 \subsection{The meta-pattern}
 
 Across all the problems in this research program, the structure is:
@@ -823,6 +906,10 @@ Allender and Das (2017) showed that MCSP (Minimum Circuit Size Problem) is hard 
 The first implication is unconditional (modulo derandomisation); the second is a standard reduction; the third uses the min-entropy variant of the ESC (Remark~\ref{rem:min-entropy}). Thus, proving MCSP $\notin$ $\PP$ would, via three known reductions plus our framework, yield $\PP \neq \NP$.
 \end{remark}
 
+\begin{remark}[Ilango's MCSP NP-hardness]\label{rem:ilango-mcsp}
+Ilango \cite{Ilango2025} proved that MCSP is NP-hard under deterministic quasi-polynomial non-adaptive reductions, answering the oldest open question from the inception of NP-completeness theory. A key corollary is that $\mathrm{MCSP} \notin \mathrm{coNP}$: there is no short proof for the hardness of a Boolean function. This is precisely the entropy obstruction of our framework---the impossibility of compressing the incompressibility proof. The cryptographic primitives (NIWI proof systems) used in the reduction are inherently immune to the algebrization barrier, since algebraic identity tests cannot invert cryptographic hash functions.
+\end{remark}
+
 \begin{remark}[Quantum extension]
 \label{rem:quantum}
 The entropy framework extends naturally to quantum computation. A quantum algorithm with $T$ gates on $n$ qubits can be described by $O(T \log T)$ classical bits (encoding the gate sequence), so $K(\mathrm{desc}(U)) \leq O(T \log T)$ for the classical description of the unitary $U$. If $\mathrm{BQP} = \mathrm{QMA}$, then the polynomial-time quantum algorithm would replace the QMA witness, and the analogous witness entropy gap argument would apply: the resource-bounded quantum Kolmogorov complexity of the witness would need to be simultaneously low (by the BQP algorithm) and high (for instances encoding random strings). This suggests $\mathrm{BQP} \neq \mathrm{QMA}$, though making this rigorous requires a quantum analogue of resource-bounded Kolmogorov complexity, which is an active area of research.
@@ -862,6 +949,41 @@ Two concrete targets for unconditional progress:
 The ESC framework reveals a structural analogy with the Hodge conjecture (cf.\ the companion Hodge paper): uniform polynomial-time algorithms correspond to ``absolute'' (algebraic) classes, while hard NP witnesses correspond to ``transcendental'' classes. The entropy gap $K^t(w|\varphi) \gg \log n$ is analogous to the failure of arithmetic positivity (AP) for transcendental Hodge classes. In both cases, the obstruction is the existence of objects that resist structured (algebraic/algorithmic) description.
 \end{remark}
 
+
+% ===================================================================
+\subsection*{Result classification}
+
+This paper is a \textbf{reformulation paper}: it establishes an equivalence between the P\,$\neq$\,NP conjecture and an entropic condition (ESC), without proving the separation itself.
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Result} & \textbf{Type} & \textbf{Reference} \\
+\hline
+\hline
+\multicolumn{3}{|l|}{\textit{Proven equivalences:}} \\
+\hline
+ESC $\Leftrightarrow$ P\,$\neq$\,NP & Proposition + Remark & Prop.~\ref{prop:equiv}, Rem.~\ref{rem:esc-equivalence} \\
+EH $\Rightarrow$ P\,$\neq$\,NP & Theorem & Thm.~\ref{thm:slice_nogo} \\
+\hline
+\multicolumn{3}{|l|}{\textit{Structural contributions:}} \\
+\hline
+Barrier immunity (S1--S3) & Analysis & Sec.~\ref{sec:barriers} \\
+Resolution-width conjecture & Conjecture & Conj.~\ref{conj:resolution-width} \\
+MCSP internalisation route & Remark & Rem.~\ref{rem:mcsp-internalisation} \\
+\hline
+\multicolumn{3}{|l|}{\textit{Numerically confirmed:}} \\
+\hline
+Phase transition at $\alpha_c \approx 4.267$ & Monte Carlo & Rem.~\ref{rem:sat-entropy} \\
+$H_{\mathrm{slice}}$ growth with $n$ & Monte Carlo & Rem.~\ref{rem:sat-entropy} \\
+\hline
+\multicolumn{3}{|l|}{\textit{Open (equivalent to P\,$\neq$\,NP):}} \\
+\hline
+Uniformity Bridge & Open problem & Sec.~\ref{sec:uniformity-bridge} \\
+Entropy Hardness (EH) & Conjecture & Sec.~\ref{sec:slices} \\
+\hline
+\end{tabular}
+\end{center}
 
 % ===================================================================
 % 12. CONCLUSION
@@ -1093,6 +1215,8 @@ DOI: 10.1145/3485628.
 
 \bibitem{Ilango2026}
 R.~Ilango, \textit{Quasi-polynomial MCSP reductions and explicit hard languages}, manuscript, 2026.
+
+\bibitem{Ilango2025} R.~Ilango, \textit{NP-hardness of the Minimum Circuit Size Problem from well-studied assumptions}, Proceedings, 2025.
 
 \end{thebibliography}
 

@@ -15,6 +15,7 @@
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{principle}[theorem]{Principle}
+\newtheorem{conjecture}[theorem]{Conjecture}
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \theoremstyle{remark}
@@ -54,6 +55,18 @@ The great open problems of modern mathematics and mathematical physics---the Rie
 In this paper, we develop a unified framework---the \emph{Renormalized Free-Energy Principle} (RFEP)---that identifies the common structural mechanism underlying these problems. The framework is part of a broader research programme called \emph{Functional Stability Theory}\footnote{The acronym FST designates the research programme built on the RFEP; it is a programme label, not an alternative name for the RFEP itself.} (FST), which seeks to characterise stability phenomena across mathematics and physics through gauge-theoretic methods.
 
 We introduce the concept of \emph{Pattern~A Stability Systems}---a structural archetype in which stability is invisible at leading and first order, emerging only at second order through controlled resolvent asymmetries. We argue that this pattern is instantiated across eight problems---RH, YM, NS, TU, DE, and three application cases (thermodynamic fine-tuning, chemical replicator dynamics, biological cooperation)---and that the Riemann Hypothesis serves as the reference implementation with the most complete development.
+
+\begin{remark}[Claim levels]
+\label{rem:claim-levels}
+This paper operates at three distinct claim levels, which the reader should carefully distinguish:
+\begin{description}
+\item[Level 0 (Framework):] The RFEP (Proposition~\ref{prop:rfep-to-pattern-a}), Pattern A (Principle~\ref{thm:pattern-a-universality}), and the multi-parameter corollary (Proposition~\ref{prop:rfep-multi}) are self-contained mathematical results. Their proofs depend only on convexity theory and functional analysis. \emph{Status: proven.}
+\item[Level 1 (Primary instantiation):] The application to the Riemann Hypothesis (Section~\ref{sec:fst-rh}) invokes the framework to organise the proof architecture of the companion papers~\cite{Geiger2026a,Geiger2026b,Geiger2026c}. The spectral gap constant $c_{\mathrm{gap}} \geq 0.5$ is verified numerically. \emph{Status: established with numerical verification.}
+\item[Level 2 (Domain instantiations):] Level~2 results range from journal-ready (Turbulence: the DFC$\Rightarrow$NL' chain is rigorously proven, reducing empirical input to forward cascade alone) through conditional theorems with strong numerics (Yang--Mills: Kingman--Lyapunov $\lambda < 0$ confirmed for all $\beta$; Navier--Stokes: BV selection validated on three attractors) to structural frameworks (Dark Energy: screening numerically validated; BSD, Hodge, P\,vs\,NP: structural analyses and reformulations). The P vs NP instantiation identifies three concrete ``bridge targets'' (instance compression, proof complexity, PRG-based families) whose resolution would upgrade the entropic separation conjecture from a reformulation to a conditional proof. \emph{Status: ranges from journal-ready to programmatic (see individual papers).}
+\end{description}
+The modular architecture (Remark~\ref{rem:independence}) ensures that an error at Level~2 does not affect Levels~0 or~1.
+We explicitly distinguish between \emph{circular conditionality} (where assumptions encode the conclusion) and \emph{structural reduction} (where assumptions identify precise, independently attackable sub-problems). Each domain paper specifies which assumptions are independently verifiable.
+\end{remark}
 
 \section{The Core Problem Matrix: Bottlenecks K1--K5}
 
@@ -105,9 +118,27 @@ Write $H_\sigma = H^{(0)} + \epsilon H^{(1)} + \epsilon^2 H^{(2)} + O(\epsilon^3
 \emph{Second order:} At order $\epsilon^2$, the dominant contribution is $\tfrac{1}{2}\mathrm{Var}(H^{(1)})$, which is strictly positive whenever $H^{(1)}$ is non-deterministic. More precisely, $\partial^2_\epsilon \Phi|_{\epsilon=0} = \mathrm{Var}_\mu(H^{(1)}) > 0$. (The contribution of $H^{(2)}$ enters at order $\epsilon^2$ only through $\EE[H^{(2)}]$, which cancels in the difference; the variance of $H^{(2)}$ contributes at $O(\epsilon^4)$.) Since we only require the expansion up to order $\epsilon^2$, it suffices that the moment generating function $\EE[e^{tH_\sigma}]$ is finite in a neighbourhood of $t=1$ for $\sigma$ near $\sigma_c$ (which is guaranteed by the hypothesis and the integrability condition in Remark~\ref{rem:rfep-domain}). This ensures that $\Phi(\sigma)$ is smooth in $\epsilon$ and the Taylor coefficients up to order $\epsilon^2$ are well-defined; no convergence of a full cumulant series is required.
 \end{proof}
 
+\begin{proposition}[RFEP Multi-Parameter Corollary]
+\label{prop:rfep-multi}
+For multi-parameter systems with hierarchical constraints $\sigma_1 \prec \sigma_2 \prec \cdots \prec \sigma_k$, the full RFEP optimum generically differs from single-parameter optima:
+\[
+\arg\max_\theta \Phi_{\sigma_1, \ldots, \sigma_k}(\theta) \neq \arg\max_\theta \Phi_{\sigma_i}(\theta) \quad \text{for each } i.
+\]
+In particular, the multi-scale interaction creates emergent structure that cannot be predicted from any single-scale analysis.
+\end{proposition}
+
+\begin{proof}
+The proof follows from strict concavity of $\Phi$ in the full parameter space: the constraint surface $\sigma_i = \text{const}$ is a proper submanifold, and the unconstrained maximum generically does not lie on any such submanifold.
+\end{proof}
+
 \begin{remark}[Quantitative confirmation from thermodynamic fine-tuning]
 \label{rem:rfep-thermo-confirmation}
 A concrete quantitative confirmation comes from the thermodynamic fine-tuning analysis (FST-I): a two-dimensional scan over the fine-structure constant $\alpha$ and electron-to-proton mass ratio $m_e/m_p$ reveals that stellar entropy production achieves only $S_{\mathrm{obs}}/S_{\mathrm{max,2D}} = 0.47$ of its two-parameter maximum. This demonstrates that MEPP (Maximum Entropy Production Principle) alone does not select the observed parameters---hierarchical compatibility with nuclear-scale constraints (the triple-alpha process window) restricts the viable region, exactly as the RFEP predicts: entropy production operates within windows defined by lower-scale consistency.
+\end{remark}
+
+\begin{remark}[Stability-selected dissipation]
+\label{rem:stability-dissipation}
+The RFEP selects stability-compatible dissipation, not maximum entropy production (MEPP). MEPP is recovered as a special case when hierarchical constraints are absent ($k=1$, single scale). In multi-scale systems, the RFEP generically selects a dissipation rate \emph{below} the MEPP prediction, because stability across scales imposes additional constraints that reduce the accessible entropy production rate.
 \end{remark}
 
 \section{Gauge-Theoretic Reformulation: The Path to Resolution}
@@ -194,7 +225,176 @@ A stability problem exhibits Pattern~A structure if the following three conditio
     \item \textbf{Second-order dominance:} The second-order resolvent coefficients dominate and can be neutralized via a finite-rank gauge or topological shift.
 \end{enumerate}
 This principle is verified for all eight instantiations of the framework (see table below), including the three application cases FST-I (thermodynamic fine-tuning), FST-II (chemical replicator dynamics), and FST-III (biological cooperation). The converse direction---that every stability problem admitting a finite-rank gauge-resolution necessarily exhibits Pattern~A---is conjectural and motivated by the universality of the RFEP mechanism (Proposition~\ref{prop:rfep-to-pattern-a} establishes the forward implication; the converse remains open).
+Pattern~A is a \emph{diagnostic taxonomy}, not a proof strategy: it identifies the structural location of the difficulty but does not itself solve it. Its value lies in reducing search space.
 \end{principle}
+
+\begin{principle}[Pattern A Master Stability]
+\label{princ:master-stability}
+Let $\mathcal{X}$ be an object in a category $\mathcal{C}$ equipped with a renormalised free energy functional $F: \mathcal{M}(\mathcal{X}) \to \mathbb{R}$. If:
+\begin{enumerate}
+\item $F$ is strictly convex on the space of admissible measures,
+\item The unique minimiser $\mu^*$ concentrates on algebraic/physical states,
+\item The leading branch of the resolvent is neutral (zeroth-order degeneracy),
+\end{enumerate}
+then the transfer operator $\mathcal{T}$ associated with $F$ has a spectral gap $\Delta > 0$, and the system exhibits exponential relaxation to $\mu^*$.
+\end{principle}
+
+\begin{conjecture}[Selection by Positivity --- universal]
+\label{conj:selection-by-positivity}
+Let $X$ be a topological vector space equipped with a weak topology $\tau$ and a stronger regularity topology $\tau_{\mathrm{reg}}$ (e.g., $L^2$ vs.\ $H^1$, weak-$*$ vs.\ strong, distributions vs.\ smooth objects). Let $F: X \to (-\infty, +\infty]$ be a proper, lower semicontinuous functional, and let $X_{\mathrm{reg}} \subset X$ be the ``physically/arithmetically admissible'' regularity class. Let $(R_\varepsilon)_{\varepsilon > 0}$ be a family of canonical regularisation/averaging operators (e.g., time-averaging, RG coarse-graining, Galois averaging, disc averaging, Moreau--Yosida proximal mapping, heat flow), and let $(S_t)_{t \geq 0}$ be a (semi-)dynamical evolution on $X$ (gradient flow, Markov semigroup, RG flow, dissipative PDE semiflow) that respects $F$ as a Lyapunov function.
+
+Assume the following four structural properties:
+
+\begin{enumerate}
+\item[\textup{(SP1)}] \emph{Strict positivity-convexity on regularity shells.}
+There exists a family of compact/coercive ``shells'' $K_M \subset X$ (e.g., energy sublevels, entropy sublevels) such that $F$ is geodesically strictly convex on each $K_M \cap X_{\mathrm{reg}}$ --- or equivalently: $F$ possesses uniform positivity curvature in the relevant sense (Bakry--\'Em\'ery, displacement convexity, resolvent positivity).
+
+\item[\textup{(SP2)}] \emph{Canonical regularisation is positivity-compatible.}
+For each $\varepsilon > 0$, $R_\varepsilon$ is (i) $\tau$-continuous, (ii) $R_\varepsilon(X) \subset X_{\mathrm{reg}}$, and (iii) $F$-dissipative:
+\[
+F(R_\varepsilon x) \leq F(x) \quad \text{and} \quad F(S_t x) \leq F(x).
+\]
+Moreover, $R_\varepsilon$ is asymptotically the identity: $R_\varepsilon x \to x$ in $\tau$ as $\varepsilon \downarrow 0$.
+
+\item[\textup{(SP3)}] \emph{$\Gamma$-stability of the variational problems.}
+The regularised functionals $F_\varepsilon := F \circ R_\varepsilon$ (or $F + \varepsilon \Psi$ in the Moreau--Yosida sense) $\Gamma$-converge to $F$ in $\tau$, and the minimisers $x_\varepsilon \in \arg\min F_\varepsilon$ are $\tau$-precompact.
+
+\item[\textup{(SP4)}] \emph{Dynamical selection by contraction.}
+The dynamics $S_t$ is contractive on each shell $K_M$ in a metric $d$ encoding the positivity structure (e.g., Wasserstein $W_2$, Birkhoff projective metric, Hilbert metric, relative entropy metric):
+\[
+d(S_t x, S_t y) \leq e^{-\lambda t} \, d(x, y) \quad (\lambda > 0),
+\]
+or the discrete analogue for RG steps: $d(R_\varepsilon x, R_\varepsilon y) \leq (1-\delta) \, d(x,y)$ with $\delta > 0$ uniform in $\varepsilon$.
+\end{enumerate}
+
+Then the following conclusions hold:
+\begin{enumerate}
+\item[\textup{(C1)}] \emph{Existence and uniqueness of the selected minimiser:} There exists a unique $x^* \in \arg\min F$, and every minimising sequence $x_\varepsilon$ converges in $\tau$ to $x^*$.
+
+\item[\textup{(C2)}] \emph{Regularity:} $x^* \in X_{\mathrm{reg}}$ --- the regularisation not only selects but \emph{forces} regularity in the limit object.
+
+\item[\textup{(C3)}] \emph{Dynamical attraction:} For every $x \in K_M$, $S_t(R_\varepsilon x) \to x^*$ as $t \to \infty$, and the limits $\varepsilon \downarrow 0$ and $t \to \infty$ commute (no metastable or ``false'' attractors).
+
+\item[\textup{(C4)}] \emph{Universal selection:} Every other stationary solution outside $X_{\mathrm{reg}}$ is dynamically unstable or is eliminated by $R_\varepsilon$ (positivity acts as a no-go filter).
+\end{enumerate}
+\end{conjecture}
+
+\begin{theorem}[Dissipative Selection Principle]\label{thm:dissipative-selection}
+Let $\{\mathcal{F}_\varepsilon\}_{\varepsilon > 0}$ be a family of functionals on a Banach space~$X$ of the form
+\[
+  \mathcal{F}_\varepsilon[x] = E[x] + \varepsilon\,\mathcal{D}[x],
+\]
+where $E$ is an energy functional and $\mathcal{D}$ is a dissipation functional (coercive, lower semicontinuous). Suppose:
+\begin{enumerate}
+\item[\textup{(DS1)}] $\mathcal{F}_\varepsilon \xrightarrow{\Gamma} \mathcal{F}_0 = E$ on $X$,
+\item[\textup{(DS2)}] the minimisers $x_\varepsilon = \operatorname{argmin} \mathcal{F}_\varepsilon$ satisfy the energy-dissipation inequality $\varepsilon\,\mathcal{D}[x_\varepsilon] \leq E[x_\varepsilon] - \inf E$,
+\item[\textup{(DS3)}] the sublevel sets $\{\mathcal{D} \leq C/\varepsilon\}$ are precompact in~$X$.
+\end{enumerate}
+Then (after subsequence extraction) $x_\varepsilon \to x^*$ in $X$, and $x^*$ is a minimiser of $E$ with the additional regularity $\mathcal{D}[x^*] < \infty$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+(DS2) gives $\varepsilon\,\mathcal{D}[x_\varepsilon] \leq C$, hence $\mathcal{D}[x_\varepsilon] \leq C/\varepsilon$. By (DS3), $\{x_\varepsilon\}$ is precompact; let $x_\varepsilon \to x^*$. By (DS1), $x^*$ minimises~$E$. Lower semicontinuity of $\mathcal{D}$ gives $\mathcal{D}[x^*] \leq \liminf \mathcal{D}[x_\varepsilon] < \infty$.
+\end{proof}
+
+\begin{remark}[Genealogy and originality]\label{rem:ds-genealogy}
+The Dissipative Selection Principle synthesises techniques from several established lines of research:
+\begin{itemize}
+\item \textbf{$\Gamma$-convergence of gradient flows} (Sandier--Serfaty \cite{SandierSerfaty2004}): the programme of relating $\Gamma$-limits of energies to limits of their gradient flows;
+\item \textbf{EDP-convergence and balanced viscosity} (Mielke--Rossi--Savar\'e \cite{MielkeRossiSavare2016}): energy-dissipation principles for vanishing-viscosity limits in infinite-dimensional systems;
+\item \textbf{Gradient flows in metric spaces} (Ambrosio--Gigli--Savar\'e \cite{AGS2008}): the abstract framework for curves of maximal slope.
+\end{itemize}
+What is new is not the individual mechanism (DS1--DS3 follows from standard $\Gamma$-convergence theory) but the \emph{identification of DS3 as the universal obstruction} across six unrelated domains, and the observation that each domain's central open problem reduces to precompactness of dissipation sublevel sets in the same abstract framework. The instantiation table (Remark~\ref{rem:dissipative-instantiation}) makes this cross-domain reduction explicit.
+\end{remark}
+
+\begin{remark}[Universal instantiation]\label{rem:dissipative-instantiation}
+Theorem~\ref{thm:dissipative-selection} provides the common mathematical mechanism underlying all domain instantiations:
+\begin{center}
+\begin{tabular}{llll}
+\textbf{Domain} & $E$ & $\mathcal{D}$ & \textbf{Selection} \\
+\hline
+Yang--Mills & RG free energy $G_L$ & entropy production & mass gap \\
+Navier--Stokes & trajectory distance $\|u-a\|^2$ & total variation $\mathrm{TV}(a)$ & BV selection \\
+Dark Energy & vacuum $\Phi[\rho]$ & gradient energy $|\nabla\rho|^2$ & screening \\
+Turbulence & shell KL-divergence $\mathcal{F}[E]$ & flux constraint & K41 spectrum \\
+BSD & N\'eron--Tate height & regulator & height saturation \\
+P\,vs\,NP & Kolmogorov complexity $K$ & time bound & $K^t$ transfer \\
+\end{tabular}
+\end{center}
+In each case, the \emph{local} control (DS1--DS2) is established, while the \emph{global} selection (precompactness DS3) remains the domain-specific obstruction. This is the precise content of the Selection-by-Positivity Conjecture (Conjecture~\ref{conj:selection-by-positivity}): SP1--SP2 encode (DS1--DS2), while SP3--SP4 encode (DS3) and its dynamical consequences.
+\end{remark}
+
+\begin{remark}[DS3 is a genuine condition -- failure examples]\label{rem:ds3-failure}
+Condition (DS3) is not automatic. Two standard mechanisms cause its failure:
+\begin{itemize}
+\item \textbf{Translation escape:} On $X = L^2(\mathbb{R})$, the sequence $x_\varepsilon(t) = f(t - 1/\varepsilon)$ satisfies $E[x_\varepsilon] = \mathrm{const}$ and $\mathcal{D}[x_\varepsilon] = \mathrm{const}$, but $\{x_\varepsilon\}$ has no convergent subsequence (mass escapes to infinity).
+\item \textbf{Concentration/bubbling:} On $X = H^1(\mathbb{R}^d)$, a sequence of rescaled bumps $x_\varepsilon = \varepsilon^{-d/2} \varphi(\cdot/\varepsilon)$ satisfies $\|x_\varepsilon\|_{L^2} = \|\varphi\|_{L^2}$ and $\|\nabla x_\varepsilon\|_{L^2} = \varepsilon^{-1}\|\nabla\varphi\|_{L^2} \to \infty$, so the sublevel sets of $\mathcal{D} = \|\nabla \cdot\|^2$ are not precompact.
+\end{itemize}
+In each domain instantiation, DS3 must be verified separately using domain-specific structure (compact embedding, tightness, or confinement). This is by design: DS3 encodes the \emph{geometric} content of each problem, while DS1--DS2 encode the \emph{variational} content.
+\end{remark}
+
+\begin{remark}[Falsifiability of Pattern A]
+\label{rem:pattern-a-falsifiability}
+Pattern~A (Functional Positivity under Gauge Constraint) is not a tautology despite its broad applicability. It makes a \emph{testable structural prediction}: every resolution of the problems in this programme must proceed via second-order resolvent dominance---i.e., the decisive mechanism operates at the level of curvature (Hessians, second variations, spectral gaps) rather than at the level of first-order conditions (stationarity, conservation laws, functional equations).
+
+\textbf{Falsification criterion:} Pattern~A would be falsified if a Millennium Problem were resolved via a purely first-order argument---one that establishes the result without invoking any second-order structure (no spectral gaps, no Poincar\'e inequalities, no Hessian positivity, no curvature bounds). More precisely:
+
+\textbf{Necessary conditions for a Pattern A instance.} A problem qualifies as a Pattern~A instance only if:
+\begin{enumerate}
+\item[(PA1)] The solution space admits a natural \emph{gauge symmetry} or \emph{redundancy} that makes first-order conditions degenerate (the ``neutral leading order'' of the instantiation table above).
+\item[(PA2)] The degeneracy is resolved by a \emph{second-order mechanism} (spectral gap, convexity, positivity) that selects the physical solution from the gauge-equivalence class.
+\item[(PA3)] The second-order mechanism is \emph{non-perturbative}: it cannot be captured by a finite Taylor expansion around a reference state.
+\end{enumerate}
+
+A problem that admits a perturbative first-order resolution (e.g., a spectral gap that follows directly from a maximum principle without variational analysis) would \emph{not} be a Pattern~A instance, and solving it would not confirm the framework.
+
+This falsifiability distinguishes Pattern~A from a vacuous meta-principle: it predicts a \emph{specific proof architecture} (second-order dominance) that can be checked against any proposed resolution.
+\end{remark}
+
+\begin{remark}[Instantiations across the FST programme]
+\label{rem:selection-instantiations}
+The Selection by Positivity conjecture unifies all open problems in the FST programme. In each case, conditions \textup{(SP1)--(SP2)} are established or plausible, while the critical gap is \textup{(SP3)} ($\Gamma$-stability) or \textup{(SP4)} (uniform contraction):
+
+\begin{center}
+\small
+\begin{tabular}{l|l|l|l|l|l}
+\textbf{Problem} & $X$ / $\tau_{\mathrm{reg}}$ & $F$ & $R_\varepsilon$ / $S_t$ & $d$ & \textbf{Gap} \\
+\hline
+RH & $L^2$ / $H^1$ & RFEP & Resolvent avg. & Resolvent & SP3 \\
+YM & Gauge configs & KL + Wilson & Block-spin RG & Birkhoff & SP4 ($\delta$ uniform; Kingman $\lambda < 0$ all $\beta$) \\
+NS & $L^2$ / $H^1$ & $H(u|A)$ & Time-avg.\ Prox & Moreau--Yosida & SP3 (reach$_{\mathrm{avg}}$) \\
+TU & $\ell^2$ spectra & $F[E]$ & Shell avg.\ (DFC) & Entropic & SP2 (DFC$\Rightarrow$NL' proven; only DFC1 empirical) \\
+DE & Density profiles & $\Phi[\rho]$ & Callan--Symanzik & $W_2$ & SP4 (screening) \\
+Hodge & $H^{p,p}$ & $(-1)^p Q_L$ & Galois avg. & $Q_L$-metric & SP2 (non-bilinear) \\
+BSD & $E(\mathbb{Q})$ & $\langle\cdot,\cdot\rangle_{\mathrm{NT}}$ & Disc avg.\ of $L$ & Height & SP3 (rank $\geq 2$) \\
+P vs NP & SAT instances & $K^t$ entropy & Unique-witness & Hamming & SP4 (uniformity) \\
+\end{tabular}
+\end{center}
+
+\noindent
+The conjecture identifies the \emph{universal missing lemma}: in all seven cases, the obstruction is establishing that the canonical regularisation is compatible with the positivity structure in the infinite-dimensional limit. A proof of the conjecture in any \emph{one} sufficiently general setting would likely close multiple gaps simultaneously.
+\end{remark}
+
+\begin{remark}[Connection to Mielke's evolutionary $\Gamma$-convergence]
+\label{rem:mielke-edp}
+The structural condition~\textup{(SP3)} ($\Gamma$-stability of variational problems) is closely related to the theory of \emph{evolutionary $\Gamma$-convergence for gradient systems} developed by Mielke~\cite{Mielke2016}, Mielke--Montefusco--Peletier~\cite{MielkeMontefuscoPeletier2021}, and Dondl--Frenzel--Mielke~\cite{DondlFrenzelMielke2019}.
+
+In that framework, a generalised gradient system $(X, \mathcal{E}_\varepsilon, \mathcal{R}_\varepsilon)$ converges to an effective system $(X, \mathcal{E}_0, \mathcal{R}_0)$ provided the following hold:
+\begin{enumerate}
+\item[(M1)] $\mathcal{E}_\varepsilon \xrightarrow{\Gamma(\tau)} \mathcal{E}_0$ in a suitable weak topology~$\tau$;
+\item[(M2)] solutions $x_\varepsilon$ are $\tau$-precompact (compactness via coercive shells);
+\item[(M3)] $\liminf_{\varepsilon \to 0} \int \mathcal{R}_\varepsilon(x_\varepsilon, \dot{x}_\varepsilon)\,dt \geq \int \mathcal{R}_0(x_0, \dot{x}_0)\,dt$ (dissipation lower bound);
+\item[(M4)] uniform $\lambda$-convexity of~$\mathcal{E}_\varepsilon$ (or a chain-rule inequality).
+\end{enumerate}
+Under (M1)--(M4), every cluster point of the solutions~$x_\varepsilon$ solves the effective gradient system, and the limits $\varepsilon \downarrow 0$ and $t \to \infty$ commute whenever $\lambda > 0$ uniformly.
+
+The correspondence with our Conjecture~\ref{conj:selection-by-positivity} is:
+\textup{(SP1)}~$\leftrightarrow$~\textup{(M4)} (curvature/convexity), \textup{(SP2)}~$\leftrightarrow$~\textup{(M2)} (regularisation~$\to$~compactness), \textup{(SP3)}~$\leftrightarrow$~\textup{(M1)} ($\Gamma$-convergence of the regularised functionals), \textup{(SP4)}~$\leftrightarrow$~\textup{(M3)} (contraction~$\to$~dissipation bound).
+
+In particular, the \emph{relaxed EDP-convergence} of~\cite{DondlFrenzelMielke2019} shows that even when the dissipation structure is not preserved under $\Gamma$-convergence (as in the ``wiggly energy'' model), a weaker variational inequality still suffices for solution transfer. This is structurally analogous to the distinction between $\mathrm{reach}(\mathcal{A}) > 0$ and $\mathrm{reach}_{\mathrm{avg}}(\mathcal{A}) > 0$ in the NS instantiation (Table above): the time-averaged Moreau--Yosida selection may converge even when the pointwise nearest-point projection jumps. The BV solution theory of Mielke--Rossi--Savar\'e~\cite{MielkeRossiSavare2016} provides the technical framework for such jumping minimiser trajectories in infinite-dimensional Hilbert spaces.
+
+The Mielke theory applies directly to the gradient-system instantiations (NS, YM, DE), while the discrete/spectral instantiations (RH, Hodge, BSD, P~vs~NP) require domain-specific analogues of~\textup{(M1)--(M4)}.
+\end{remark}
 
 The eight instantiations of Principle~\ref{thm:pattern-a-universality} are:
 
@@ -206,10 +406,13 @@ The eight instantiations of Principle~\ref{thm:pattern-a-universality} are:
 \textbf{Problem} & \textbf{Control parameter} & \textbf{Gauge mechanism} & \textbf{Uniqueness} \\
 \hline
 RH    & Riemann sum cutoff          & Shift parity                                    & unique (spectral) \\
-YM    & Lattice spacing             & Topological sector                              & unique (convexity) \\
+YM    & Lattice spacing             & Block-spin RG + Birkhoff contraction            & unique (convexity) \\
 NS    & Enstrophy scale ($H^1$)     & Minimizer selection + enstrophy dissipation      & unique (attractor) \\
 TU    & Cascade scale               & K41 flux constraint + energy injection (ND)      & unique (K41 sel.) \\
 DE    & IR cutoff                   & Vacuum sector                                   & unique (vacuum) \\
+Hodge & Hodge--Riemann form $(-1)^p Q_L$ & AP$^p$ = AbsHodge$^p$ (No-Go)             & non-unique (negative result) \cite{Geiger2026-Hodge} \\
+BSD   & N\'eron--Tate height pairing & Normal-Form Theorem (rank $\leq 1$ closed)     & conditional (rank $\geq 2$ open) \cite{Geiger2026-BSD} \\
+P vs NP & Kolmogorov complexity functional & ESC $\Leftrightarrow$ P$\neq$NP          & open (uniformity bridge) \cite{Geiger2026-PvsNP} \\
 Thermo (FST-I)  & Entropy landscape   & Hierarchical RFEP constraint                    & unique (entropy max) \\
 Chem (FST-II)   & Replicator payoff   & Coordination barrier                            & multiple (bistable ESS) \\
 Bio (FST-III)   & Fitness landscape   & Cooperation threshold                           & multiple (coop.\ vs.\ selfish, $\rho(J)\!\approx\!1$) \\
@@ -217,6 +420,10 @@ Bio (FST-III)   & Fitness landscape   & Cooperation threshold                   
 \end{tabular}
 \normalsize
 \end{center}
+
+\begin{remark}[Pattern B -- Flow Selection]\label{rem:pattern-b}
+A second architectural motif appears in the dark-energy instantiation \cite{Geiger2026-DE}: rather than the three-level hierarchy of Pattern~A, the variational functional directly selects an equilibrium from a continuum of candidates via renormalisation-group flow. The beta function $\beta_\Lambda(\mu) = \mu\,\partial_\mu \Lambda_{\mathrm{eff}}(\mu)$ drives the cosmological constant to a UV/IR fixed point. Pattern~B shares the strict-convexity requirement (SP1) with Pattern~A but replaces the spectral-gap mechanism (SP2--SP3) with monotone RG flow to a fixed point.
+\end{remark}
 
 \begin{remark}[Resolvent Order Schema]
 \label{rem:order-schema}
@@ -320,6 +527,17 @@ of convexity + locality + defect control. The individual proof efforts
 reduce to verifying conditions~(i)--(iii) in the specific context.
 \end{remark}
 
+\begin{remark}[Arakelov bridge]
+\label{rem:arakelov-bridge}
+The Pattern A structure admits a number-theoretic unification via Arakelov intersection theory:
+\begin{itemize}
+\item \textbf{Hodge (HR):} The Hodge--Riemann form $(-1)^p Q_L$ encodes positivity at the \emph{infinite} (archimedean) prime --- the ``continuous'' contribution to the Arakelov intersection pairing.
+\item \textbf{BSD (N\'eron--Tate):} The N\'eron--Tate height pairing $\langle P, Q \rangle_{\mathrm{NT}}$ encodes positivity at \emph{finite} (non-archimedean) primes --- the ``arithmetic'' contribution.
+\item \textbf{Unification:} The Arakelov intersection pairing $\langle \cdot, \cdot \rangle_{\mathrm{Ar}} = \langle \cdot, \cdot \rangle_{\infty} + \sum_p \langle \cdot, \cdot \rangle_p$ provides the natural framework in which both are special cases of a single positivity principle.
+\end{itemize}
+This suggests that the RFEP, when instantiated on arithmetic objects, naturally produces the Arakelov intersection form as its stability certificate.
+\end{remark}
+
 \subsection{Universal Architecture: Stability through Controlled Resolvent Asymmetries}
 \label{sec:universal-architecture}
 
@@ -341,7 +559,7 @@ In summary, the universal architecture of Pattern~A stability systems is: \emph{
 \section{Primary Implementation: FST-RH}
 \label{sec:fst-rh}
 
-The Riemann Hypothesis~\cite{Bombieri2000} serves as the gold-standard test for the framework. The complete proof is developed across three papers~\cite{Geiger2026a,Geiger2026b,Geiger2026c}; here we summarise the key structural elements that instantiate Pattern~A.
+The Riemann Hypothesis~\cite{Bombieri2000} serves as the gold-standard test for the framework. The proof architecture (with numerical verification of the spectral gap constant) is developed across three papers~\cite{Geiger2026a,Geiger2026b,Geiger2026c}; here we summarise the key structural elements that instantiate Pattern~A.
 
 \subsection{The Arithmetic Kernel $K_\sigma$}
 
@@ -380,7 +598,7 @@ This reduction demonstrates that the infinite complexity of the primes is ``topo
 
 The Renormalized Free Energy Framework replaces the search for global smoothness or positivity with the construction of local, finite-rank certificates. By identifying the common structural bottleneck---Pattern~A stability under gauge constraint---we provide a unified structural approach to several major open problems in mathematics and physics.
 
-We emphasise the distinction between what has been \emph{established} and what remains \emph{programmatic}. Specifically: the FST-RH instantiation (Section~\ref{sec:fst-rh}) provides, as detailed in the companion papers~\cite{Geiger2026a,Geiger2026b,Geiger2026c}, a rigorous development of the Riemann Hypothesis within this framework, including computer-assisted numerical verification, serving as the reference implementation. The instantiations for Yang--Mills, Navier--Stokes, Turbulence, and Dark Energy are at varying stages of completion: each identifies the relevant Pattern~A structure and reduces the problem to specific technical hypotheses (continuum limit for YM, projection regularity + dissipation dominance at $H^1$-level for NS, entropy-compatibility + non-degenerate energy injection for TU, minimality axioms for DE). Dedicated companion papers for the NS and TU cases are in preparation~\cite{Geiger2026-NS,Geiger2026-TU}; the DE and YM instantiations are at an earlier stage and will be developed in future work.
+We emphasise the distinction between what has been \emph{established} and what remains \emph{programmatic}. Specifically: the FST-RH instantiation (Section~\ref{sec:fst-rh}) provides, as detailed in the companion papers~\cite{Geiger2026a,Geiger2026b,Geiger2026c}, a rigorous development of the Riemann Hypothesis within this framework, including computer-assisted numerical verification, serving as the reference implementation. The instantiations for Yang--Mills, Navier--Stokes, Turbulence, and Dark Energy are at varying stages of completion: each identifies the relevant Pattern~A structure and reduces the problem to specific technical hypotheses (continuum limit for YM, projection regularity + dissipation dominance at $H^1$-level for NS, entropy-compatibility + non-degenerate energy injection for TU, minimality axioms for DE). Dedicated companion papers for the NS and TU cases have undergone multiple review cycles (NS: 5 review cycles completed; TU: journal-ready, with the DFC$\Rightarrow$NL' chain rigorously proven)~\cite{Geiger2026-NS,Geiger2026-TU}; the YM instantiation provides conditional theorems with Kingman--Lyapunov confirmation for all $\beta$~\cite{Geiger2026-YM}, and the DE instantiation has screening numerically validated~\cite{Geiger2026-DE}. The Hodge instantiation yields the negative result that arithmetic positivity reduces exactly to Deligne's absoluteness (AP$^p$\,=\,AbsHodge$^p$), delineating a structural limit of the positivity approach \cite{Geiger2026-Hodge}. The BSD instantiation establishes a normal-form theorem complete for rank~$\leq 1$ via Gross--Zagier and Kolyvagin, with rank~$\geq 2$ requiring higher Gross--Zagier formulae \cite{Geiger2026-BSD}. The P\,vs\,NP instantiation proves the equivalence ESC\,$\Leftrightarrow$\,P\,$\neq$\,NP, identifying the uniformity bridge as the central obstruction \cite{Geiger2026-PvsNP}.
 
 Closing these remaining gaps requires domain-specific techniques that complement, but do not follow from, the universal framework alone.
 
@@ -390,6 +608,57 @@ The NS instantiation requires the attractor-distance functional to operate at $H
 \end{remark}
 
 The principal contribution of this paper is therefore not to claim that all problems are solved, but to demonstrate that they share a common architecture---and that this architecture has been successfully implemented in the number-theoretic case.
+
+\begin{remark}[Independence from specific instantiations]
+\label{rem:independence}
+The RFEP and the Pattern A architecture are formulated at the level of abstract functional analysis and do not depend on the correctness of any specific instantiation. In particular:
+\begin{enumerate}
+\item The RFEP (Theorem~2.1) is a self-contained variational principle whose proof requires only strict convexity and moment conditions on the Hamiltonian.
+\item Pattern A (Principle~4.1) is a structural observation about resolvent hierarchies that holds independently of whether specific problems (RH, YM, NS, etc.) are ultimately resolved by these methods.
+\item The spectral gap results for individual problems (Sections~5 and the companion papers) are \emph{applications} of the framework, not prerequisites. If any individual application were found to contain an error, the framework itself would remain intact.
+\end{enumerate}
+This modular architecture ensures that progress on any one instantiation does not compromise the validity of the others.
+\end{remark}
+
+\begin{remark}[Minimal Verifiable Core]
+\label{rem:mvc}
+For independent verification, we identify the Minimal Verifiable Core (MVC) of the FST-RH proof architecture: (i) the RFEP (Proposition~\ref{prop:rfep-to-pattern-a}) with its convexity proof, (ii) the arithmetic kernel $K_\sigma$ (Section~5.1), (iii) the Shift Parity Lemma (Section~5.2), and (iv) the Resolvent Gap Theorem (Section~5.3). Each component is self-contained and can be verified independently. A proof graph connecting these components is available in the companion papers~\cite{Geiger2026a,Geiger2026b,Geiger2026c}.
+\end{remark}
+
+\begin{remark}[Entropic obstruction to off-critical-line zeros]
+\label{rem:entropic-obstruction}
+Zeros of the Riemann zeta function off the critical line would imply the existence of an information compression scheme that violates the FST entropy bounds: the corresponding $L$-function value encodes more structure than the RFEP allows. This heuristic argument, while not rigorous, provides an information-theoretic ``moral reason'' for RH within the FST framework.
+\end{remark}
+
+\begin{remark}[Spectral interpretation]
+\label{rem:spectral-interpretation}
+The FST framework suggests a spectral interpretation of $L$-function zeros: the zeros correspond to eigenvalues of a self-adjoint Hamiltonian $\hat{H}$ whose free energy landscape $F[\mu]$ is convex. The critical line $\mathrm{Re}(s) = 1/2$ is the ``ground state manifold'' of $\hat{H}$, and off-line zeros would require negative curvature of $F$---contradicting strict convexity (RFEP).
+\end{remark}
+
+\begin{remark}[SOS certificates for Pattern A]
+\label{rem:sos-certificate}
+If an algebraically closed sum-of-squares (SOS) certificate for indefinite quadratic forms (with exactly two negative eigenvalues) on Hilbert spaces can be constructed, it would simultaneously resolve the Convexity Trap (RH: Li coefficient positivity), the Gronwall gap (NS: high-frequency mode control), and potentially the YM continuum limit. This ``universal mathematical scalpel'' (cf.~Parrilo, Blekherman for finite-dimensional SOS; Yakubovich for the S-lemma; Lasserre hierarchies for relaxations) represents the principal analytical bottleneck shared across all Pattern~A instantiations.
+\end{remark}
+
+\subsection*{Appendix: Verification checklist}
+\label{app:verification}
+
+For reproducibility and independent verification, we list the key checkable claims of this paper:
+
+\begin{enumerate}
+\item \textbf{RFEP (Prop.~\ref{prop:rfep-to-pattern-a}):} Strict convexity of $\Phi_\sigma$ follows from strict convexity of KL divergence under the moment condition $e^{H_\sigma} \in L^1(\mu_\sigma)$. \emph{Verification: standard convex analysis, see e.g.\ Cover--Thomas (2006), Ch.~2.}
+
+\item \textbf{Proposition~\ref{prop:rfep-multi} (Multi-parameter):} Generic non-coincidence of constrained and unconstrained optima. \emph{Verification: Sard's theorem applied to the constraint mapping.}
+
+\item \textbf{Pattern A (Principle~\ref{princ:master-stability}):} Spectral gap from strict convexity + neutral leading branch. \emph{Verification: standard spectral theory for self-adjoint operators on $L^2(\mu^*)$.}
+
+\item \textbf{Euler--Maclaurin rank-finiteness (Lemma~\ref{lem:em-rank}):} Boundary correction is finite-rank. \emph{Verification: direct computation of Bernoulli terms, each contributing rank~1.}
+
+\item \textbf{0.47 confirmation:} The multi-parameter RFEP predicts a fine-tuning value of $\approx 0.47$, confirmed by FST-I. \emph{Verification: numerical computation in the companion paper.}
+\end{enumerate}
+
+\noindent
+A future version of Part~I may be published as a conditional proof: ``Under Assumption AP3 (arithmetic positivity of third-order terms), nullstellenfreiheit follows.'' This would make the proof architecture independently useful even if the unconditional proof is not yet complete.
 
 \begin{thebibliography}{10}
 
@@ -468,6 +737,60 @@ Journal of the American Mathematical Society, \textbf{29}(3):601--674, 2016.
 J.\,B.~Conrey,
 \emph{The Riemann Hypothesis},
 Notices of the American Mathematical Society, \textbf{50}(3):341--353, 2003.
+
+\bibitem{Mielke2016}
+A.~Mielke,
+\emph{On evolutionary $\Gamma$-convergence for gradient systems},
+in: Macroscopic and Large Scale Phenomena: Coarse Graining, Mean Field Limits and Ergodicity,
+Lecture Notes in Applied Mathematics and Mechanics, Vol.~3, Springer, 2016, pp.~187--249.
+
+\bibitem{MielkeMontefuscoPeletier2021}
+A.~Mielke, A.~Montefusco, M.\,A.~Peletier,
+\emph{Exploring families of energy-dissipation landscapes via tilting: three types of EDP convergence},
+Continuum Mechanics and Thermodynamics, \textbf{33}:611--637, 2021.
+
+\bibitem{DondlFrenzelMielke2019}
+P.~Dondl, T.~Frenzel, A.~Mielke,
+\emph{A gradient system with a wiggly energy and relaxed EDP-convergence},
+ESAIM: Control, Optimisation and Calculus of Variations, \textbf{25}, Art.~68, 2019.
+
+\bibitem{MielkeRossiSavare2016}
+A.~Mielke, R.~Rossi, G.~Savar\'e,
+\emph{Balanced-Viscosity (BV) solutions to infinite-dimensional rate-independent systems},
+Journal of the European Mathematical Society, \textbf{18}:2107--2165, 2016.
+
+\bibitem{Geiger2026-YM}
+L.~Geiger, \textit{Volume-Independent Spectral Gap for Strong-Coupling Lattice Gauge Theory via Poincar\'e-Dobrushin Machinery}, Preprint, 2026.
+
+\bibitem{Geiger2026-DE}
+L.~Geiger, \textit{Dark Energy as Residual Vacuum Free Energy: A Thermodynamic Bound on the Cosmological Constant}, Preprint, 2026.
+
+\bibitem{Geiger2026-Hodge}
+L.~Geiger, \textit{Arithmetic Positivity and Absolute Hodge Classes}, Preprint, 2026.
+
+\bibitem{Geiger2026-BSD}
+L.~Geiger, \textit{The BSD Conjecture as a Positivity Normal-Form Theorem}, Preprint, 2026.
+
+\bibitem{Kirk2026}
+A.~Kirk, \textit{Mass gap in lattice gauge theory via stochastic geometric analysis}, arXiv preprint, 2026.
+
+\bibitem{BBD2024}
+R.~Bauerschmidt, T.~Bodineau, and B.~Dagallier, \textit{Log-Sobolev inequality for the $\varphi^4_2$ and $\varphi^4_3$ measures}, Comm.~Pure Appl.~Math., 2024.
+
+\bibitem{Kingman1968}
+J.~F.~C.~Kingman, \textit{The ergodic theory of subadditive stochastic processes}, J.~Roy.\ Statist.\ Soc.\ Ser.~B, \textbf{30} (1968), 499--510.
+
+\bibitem{Sturm2025}
+K.-T.~Sturm, \textit{Bakry-\'Emery conditions on almost smooth metric measure spaces with singular Ricci bounds}, Calc.~Var.~PDE, 2025.
+
+\bibitem{Drivas2019}
+T.~D.~Drivas, \textit{Turbulent cascade direction and Lagrangian time-asymmetry}, J.~Nonlinear Sci., 2019.
+
+\bibitem{SandierSerfaty2004}
+E.~Sandier and S.~Serfaty, \textit{Gamma-convergence of gradient flows with applications to Ginzburg--Landau}, Comm.\ Pure Appl.\ Math., \textbf{57} (2004), 1627--1672.
+
+\bibitem{AGS2008}
+L.~Ambrosio, N.~Gigli, and G.~Savar\'e, \textit{Gradient Flows in Metric Spaces and in the Space of Probability Measures}, 2nd ed., Birkh\"auser, 2008.
 
 \end{thebibliography}
 

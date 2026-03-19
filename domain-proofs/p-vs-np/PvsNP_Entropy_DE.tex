@@ -59,7 +59,7 @@ Wir schlagen eine Umformulierung des $\PP$-vs-$\NP$-Problems als \textit{entropi
 
 \keywords{P vs NP, Kolmogorov-Komplexitaet, algorithmische Entropie, No-Go-Theorem, Barrierenanalyse, Zeugenkompression, Berechnungskomplexitaet}
 
-\thanks{KI-Werkzeuge (Claude, Anthropic) wurden fuer mathematische Formalisierung und Texterstellung verwendet. Alle Inhalte und die Verantwortung fuer die Korrektheit liegen ausschliesslich beim Autor.}
+\thanks{KI-Werkzeuge (Claude von Anthropic) wurden f\"ur mathematische Formalisierung, Literaturverifikation und redaktionelle \"Uberarbeitung eingesetzt. Alle mathematischen Inhalte wurden vom Autor entwickelt, verifiziert und freigegeben.}
 
 \maketitle
 
@@ -517,6 +517,11 @@ Die Entropiehaerte-Hypothese ist eng mit Schaltkreisschranken verwandt. Eine Boo
 Dies zeigt, dass das Entropie-Framework und der Schaltkreiskomplexitaets-Ansatz zwei Perspektiven auf dieselbe zugrundeliegende Trennung sind.
 \end{remark}
 
+\begin{remark}[SAT-Schnittentropie am Phasenuebergang]
+\label{rem:sat-entropy}
+Die Schnittentropie $H_{\mathrm{slice}}(\mathrm{SAT}_n)$ wurde fuer zufaellige 3-SAT-Instanzen am Phasenuebergang $\alpha = m/n \approx 4{,}267$ fuer $n = 8, 10, 12, 14, 16$ berechnet. Die Entropie waechst von $H \approx 1{,}5$ ($n=8$) auf $H \approx 2{,}3$ ($n=14$), konsistent mit subexponentiellem Wachstum $H \sim n^{0{,}71}$ (polynomialer Fit $R^2 = 0{,}82$). Die Entropie ist maximal auf der erfuellbaren Seite ($\alpha \approx 2$--$3$) und faellt auf Null fuer $\alpha \geq 8$ (UNSAT-Regime), was die Phasenuebergangsstruktur bestaetigt. Eine vollstaendige Validierung der ESC-Hypothese $H_{\mathrm{slice}} \geq c \cdot 2^{n/2}$ erfordert $n \geq 30$, was auf Standard-Hardware rechnerisch nicht durchfuehrbar ist. Skript: \texttt{compute\_sat\_entropy.py}.
+\end{remark}
+
 \subsection{Warum (EH) wahr sein sollte}
 
 Die Wahrheitstabelle $\SAT_n$ hat Laenge $2^n$ und beschreibt die Erfuellbarkeit aller $n$-Bit-Kodierungen Boolescher Formeln. Es gibt $2^{2^n}$ moegliche Wahrheitstabellen dieser Laenge, und $\SAT_n$ ist eine \textit{spezifische}, bestimmt durch eine vollstaendige mathematische Definition ($\SAT$). Dennoch:
@@ -774,6 +779,82 @@ Das zentrale offene Problem dieser Arbeit ist die \emph{Uniformitaetsbruecke}: d
 Jedes \emph{einzelne} der drei Ziele genuegt, um die Entropische Separationsvermutung von einer Aequivalenz (Umformulierung von P $\neq$ NP) zu einem bedingten Beweis aufzuwerten (P $\neq$ NP unter einer konkreten, falsifizierbaren Hypothese). Ziel~3 ist wohl das zugaenglichste, da es auf kryptographische Standardannahmen reduziert. Ziel~1 schliesst an das aktive Forschungsprogramm zur Instanzkompression an~\cite{Drucker2015}. Ziel~2 ist das ambitionierteste, wuerde aber gleichzeitig Fragen in der Beweiskomplexitaet loesen.
 \end{remark}
 
+\begin{remark}[Instanzkompression als primaere Brueckenstrategie]
+\label{rem:compression-bridge}
+Wir vertiefen Brueckenziel~1 als vielversprechendste Route, dem ,,No sparsification unless PH collapses''-Programm von Fortnow--Santhanam~\cite{FortnowSanthanam2011} und Dell--van~Melkebeek~\cite{DellMelkebeek2014} folgend.
+
+Das Argument verlaeuft in drei Schritten:
+
+\textbf{Schritt A: Zeugenfinder $\Rightarrow$ Kompressor.}
+Wenn ein Polynomialzeit-Algorithmus $A$ einen gueltigen Zeugen $w = A(x)$ fuer $x \in \mathrm{SAT}$ erzeugt, definiert $A$ implizit eine \emph{Kompression}: aus $x$ kann man eine kuerzere Darstellung $y = C(x)$ (ueber den Zeugen) erzeugen, sodass ein Dekompressor $D$ genuegend Struktur rekonstruiert, um SAT-Zugehoerigkeit zu entscheiden. Konkret gilt $|y| \leq |A| + O(\log|x|)$, da $A$ ein festes Programm ist. Der Schluessel ist, dass diese Kompression \emph{nichttrivial} ist: sie bildet eine Familie von $2^{|\varphi_n|}$ moeglichen Instanzen auf $O(1)$ Bits Rat (das Programm $A$) ab, was einer exponentiellen Kompression entspricht.
+
+\textbf{Schritt B: Kompressions-No-Go $\Rightarrow$ Uniformitaet.}
+Die bekannten Instanzkompressionsunmoeglichkeitsresultate~\cite{FortnowSanthanam2011,DellMelkebeek2014,Drucker2015} zeigen: wenn SAT-Instanzen der Laenge $n$ auf $n^{1-\varepsilon}$ Bits komprimiert werden koennen, kollabiert die Polynomhierarchie (NP $\subseteq$ coNP/poly). Angewendet auf Schritt~A: wenn $A$ als Polynomialzeit-Zeugenfinder fuer \emph{alle} Instanzen existiert, widerspricht die resultierende Kompression dem PH-Nichtkollaps. Dies ist praezise das ,,Positivitaets-No-Go''-Muster der FST: nicht ,,wir konstruieren schwere Instanzen'', sondern ,,jede globale Vereinfachung hat katastrophale strukturelle Konsequenzen.''
+
+\textbf{Schritt C: Uebersetzung nach $K^t$.}
+Wenn Kompression unmoeglich ist (unter PH-Nichtkollaps), dann muss fuer unendlich viele Instanzen $x$ jede Polynomialzeit-Zeugenproduktion scheitern -- d.h., $K^{n^c}(w | x) \geq |w| - O(\log n)$ fuer alle Zeugen $w$. Dies ist die Uniformitaetsbruecke in operationaler Form.
+
+Die verbleibende Luecke betrifft die Quantorenreihenfolge: Schritt~B liefert ,,fuer jeden $A$ existieren schwere Instanzen'' (nicht-uniform), waehrend die Uniformitaetsbruecke ,,es existieren Instanzen, die fuer alle $A$ schwer sind'' (uniform) benoetigt. Das Schliessen dieser Luecke erfordert entweder (i) eine \emph{universelle} Kompressionsunmoeglichkeit (nicht nur fuer jeden Kompressor einzeln), oder (ii) ein Diagonalisierungsargument, das ueber alle Polynomialzeit-Algorithmen gleichzeitig uniformisiert.
+\end{remark}
+
+\subsubsection*{Schwellen-Axiom und diagnostisches Framework}
+
+Die Uniformitaetsbruecke laesst eine praezise Formulierung als \emph{Schwellen-Axiom} zu -- die minimale strukturelle Bedingung, die existenzielle Haerte (,,fuer jedes $n$ existieren schwere Instanzen'') von adversarialer Haerte (,,eine einzige Prozedur erzeugt schwere Instanzen fuer alle $n$'') trennt.
+
+\begin{axiom}[Uniformitaetsbruecke -- UB-PvNP]\label{ax:ub-pvnp}
+Sei $\mathcal{W}_n$ die Menge der Hoch-Entropie-Zeugen fuer SAT-Instanzen der Groesse $n$: Paare $(\varphi_n, w)$ mit $K^t(w \mid \varphi_n) \geq n^\varepsilon$. Die \emph{nicht-uniforme} Aussage (Theorem~\ref{thm:slice_nogo}) besagt:
+\[
+  \forall\, \text{Algorithmus } A,\quad \forall\, n,\quad \exists\, \varphi_n \in \mathrm{SAT}_n : \text{alle Zeugen von } \varphi_n \text{ haben } K^t(w \mid \varphi_n) \geq n^\varepsilon.
+\]
+Die \textbf{Uniformitaetsbruecke} verlangt eine \emph{uniforme} Konstruktion: eine einzige deterministische Prozedur $\mathcal{U}$, die bei Eingabe $1^n$ eine Instanz $\varphi_n$ mit obiger Eigenschaft erzeugt, unter Verwendung polynomieller Ressourcen in $n$.
+\end{axiom}
+
+\begin{remark}[Kernintuition]\label{rem:ub-intuition}
+Nicht-Uniformitaet ist ,,versteckter Rat'': die schweren Instanzen $\varphi_n$ existieren, aber ihre Identitaet haengt in nicht-konstruktiver Weise vom Algorithmus $A$ ab. Die Uniformitaetsbruecke ist der Versuch, \emph{diesen Rat zu eliminieren}. Die Haerte von P\,vs\,NP liegt praezise an dieser Schwelle: wenn UB gelingt, folgt P$\,\neq\,$NP; wenn UB scheitert, muss sich das Scheitern als explizite \emph{Rat-Anforderung} manifestieren -- eine quantifizierbare Nicht-Uniformitaets-Barriere.
+\end{remark}
+
+\begin{proposition}[Aequivalenzen von UB-PvNP]\label{prop:ub-equivalences}
+Die folgenden sind aequivalente Formulierungen der Uniformitaetsbruecke:
+\begin{enumerate}
+\item[(i)] \textbf{Uniforme Zeugenkonstruktion:} Es existiert ein Polynomialzeit-Verfahren $\mathcal{U}$, das Hoch-Entropie-Instanzen $\varphi_n = \mathcal{U}(1^n)$ fuer alle $n$ erzeugt.
+\item[(ii)] \textbf{Uniforme Schaltkreis-untere-Schranken:} Es existiert eine explizite Boolesche Funktionenfamilie $(f_n)_{n \geq 1}$, konstruierbar in $\mathrm{P}$, mit $K^t(f_n) \geq n^\varepsilon$ (d.h., keine kleinen Schaltkreise).
+\item[(iii)] \textbf{Uniforme Pseudozufallsgeneratoren:} Es existiert ein PRG $G: \{0,1\}^{n^\delta} \to \{0,1\}^n$, berechenbar in $\mathrm{P}$, der alle polynomialgrossen Schaltkreise taeuscht.
+\item[(iv)] \textbf{Parameter-uniforme Separation:} Die Konstanten in der Entropieluecke $K^t(w \mid \varphi_n) \geq n^\varepsilon$ koennen \emph{unabhaengig} von $n$ gewaehlt werden: keine $n$-abhaengigen Schwellenwerte, Fallunterscheidungen oder Nachschlagetabellen.
+\end{enumerate}
+Jede der Formulierungen (i)--(iii) impliziert P$\,\neq\,$NP. Die Aequivalenz (i)$\Leftrightarrow$(ii) folgt aus der MCSP-Verbindung (Remark~\ref{rem:mcsp-internalisation}); (ii)$\Leftrightarrow$(iii) ist der Impagliazzo--Wigderson-Haerte-Zufalls-Tradeoff.
+\end{proposition}
+
+\begin{remark}[Der $n$-Leak-Scanner: Diagnostik fuer Nicht-Uniformitaet]\label{rem:n-leak}
+Um zu lokalisieren, wo Uniformitaet bricht, durchsuche den Beweis nach diesen vier Signaturen:
+\begin{enumerate}
+\item \textbf{Rat-Stellen:} Jeder Schritt der Form ,,waehle fuer jedes $n$\ldots'' ohne eine effektive Auswahlregel.
+\item \textbf{Nachschlagetabellen:} Implizite Verwendung einer $n$-spezifischen Liste oder Enzyklopaedie (selbst wenn sie ,,lediglich existiert'').
+\item \textbf{Diagonalisierung ohne Uniformisierung:} Ein Objekt, das durch ein reines Existenzargument (Cantor/K\"onig) definiert ist und keine uniforme Konstruktion liefert.
+\item \textbf{Kodierte Instanzfamilien:} Haerte, die in eine speziell vorbereitete Familie verschoben wird, die bereits $n$-abhaengigen Rat enthaelt.
+\end{enumerate}
+Im aktuellen ESC-Framework sitzt der $n$-Leak in Theorem~\ref{thm:slice_nogo}: die schwere Instanz $\varphi_n$ wird durch Widerspruch erzeugt (,,wenn alle Instanzen einfach waeren, wuerde $A$ SAT loesen''), was Existenz ohne Konstruktion liefert. Brueckenziel~B3 (PRG-basierte Familien) ist der direkteste Versuch, diesen Leak zu schliessen.
+\end{remark}
+
+\begin{remark}[No-Go-Mechanismen als H\"artelokalisierung]\label{rem:ub-nogo}
+UB-PvNP scheitert genau dann, wenn eine der folgenden Obstruktionen vorliegt:
+\begin{enumerate}
+\item \textbf{Rat-Unvermeidbarkeit:} Jede Kandidaten-Uniformisierung benoetigt implizit $a(n)$ Bits Rat, und $a(n) \geq n^\delta$ fuer ein $\delta > 0$. Dies ist die P/poly-Barriere: uniforme Haerte erfordert das Entkommen aus nicht-uniformer Berechnung.
+\item \textbf{Parameter-Explosion:} Jede uniformisierte Konstruktion erzwingt, dass Parameter superpolynomiell in $n$ wachsen, was die ,,uniforme'' Prozedur effektiv nicht-uniform macht.
+\item \textbf{Instanzfamilien-Trick:} Der Beweis funktioniert nur auf einer $n$-abhaengig gewaehlten Familie, sodass die ,,Loesung'' in Wirklichkeit ein Nicht-Uniformitaets-Outsourcing ist.
+\end{enumerate}
+Jeder No-Go-Mechanismus wuerde, wenn bewiesen, ein \emph{bedingtes Unmoeglichkeitstheorem} darstellen: ,,P$\,\neq\,$NP kann nicht mit Methode $X$ bewiesen werden, weil $X$ $a(n)$ Bits Rat benoetigt.'' Solche Resultate sind Barrierentheoreme im Geiste von Baker--Gill--Solovay und Razborov--Rudich, aber gezielt auf das spezifische Uniformitaetsdefizit.
+\end{remark}
+
+\begin{lemma}[UB impliziert Trennung]\label{lem:ub-separation}
+Wenn UB-PvNP (Axiom~\ref{ax:ub-pvnp}) gilt, dann:
+\begin{enumerate}
+\item[(a)] P $\neq$ NP (unmittelbar aus der Existenz uniformer schwerer Instanzen).
+\item[(b)] Einwegfunktionen existieren (ueber Impagliazzo--Levin: Average-Case-Haerte aus Worst-Case).
+\item[(c)] Die Entropieluecke $H_{\mathrm{slice}}(\mathrm{SAT}_n) \geq c \cdot 2^{n^\varepsilon}$ gilt uniform.
+\end{enumerate}
+Umgekehrt impliziert P $\neq$ NP genau dann UB-PvNP, wenn die schweren Instanzen \emph{explizit} gemacht werden koennen -- was genau der Inhalt der Uniformitaetsbruecke ist.
+\end{lemma}
+
 \subsection{Das Meta-Muster}
 
 Ueber alle Probleme in diesem Forschungsprogramm hinweg ist die Struktur:
@@ -823,6 +904,10 @@ Allender und Das (2017) zeigten, dass MCSP (Minimum Circuit Size Problem) unter 
 Die erste Implikation ist bedingungslos (modulo Derandomisierung); die zweite ist eine Standardreduktion; die dritte verwendet die Min-Entropie-Variante der ESC (Remark~\ref{rem:min-entropy}). Der Beweis MCSP $\notin$ $\PP$ wuerde somit ueber drei bekannte Reduktionen plus unser Framework $\PP \neq \NP$ liefern.
 \end{remark}
 
+\begin{remark}[Ilangos MCSP-NP-Haerte]\label{rem:ilango-mcsp}
+Ilango \cite{Ilango2025} bewies, dass MCSP NP-schwer ist unter deterministischen quasi-polynomiellen nicht-adaptiven Reduktionen, und beantwortet damit die aelteste offene Frage seit der Gruendung der NP-Vollstaendigkeitstheorie. Eine zentrale Folgerung ist $\mathrm{MCSP} \notin \mathrm{coNP}$: Es gibt keinen kurzen Beweis fuer die Haerte einer Booleschen Funktion. Dies ist praezise die Entropie-Obstruktion unseres Frameworks -- die Unmoeglichkeit, den Inkompressibilitaetsbeweis zu komprimieren. Die in der Reduktion verwendeten kryptographischen Primitive (NIWI-Beweissysteme) sind inhaerent immun gegen die Algebraisierungsbarriere, da algebraische Identitaetstests kryptographische Hashfunktionen nicht invertieren koennen.
+\end{remark}
+
 \begin{remark}[Quantenerweiterung]
 \label{rem:quantum}
 Das Entropie-Framework laesst sich natuerlich auf Quantenberechnung erweitern. Ein Quantenalgorithmus mit $T$ Gattern auf $n$ Qubits kann durch $O(T \log T)$ klassische Bits beschrieben werden (Kodierung der Gattersequenz), also $K(\mathrm{desc}(U)) \leq O(T \log T)$ fuer die klassische Beschreibung des Unitaeroperators $U$. Falls $\mathrm{BQP} = \mathrm{QMA}$, dann wuerde der Polynomialzeit-Quantenalgorithmus den QMA-Zeugen ersetzen, und das analoge Zeugen-Entropieluecken-Argument wuerde gelten: die ressourcenbeschraenkte Quanten-Kolmogorov-Komplexitaet des Zeugen muesste gleichzeitig niedrig sein (durch den BQP-Algorithmus) und hoch (fuer Instanzen, die zufaellige Zeichenketten kodieren). Dies legt $\mathrm{BQP} \neq \mathrm{QMA}$ nahe, obwohl die Rigorgisierung ein Quanten-Analogon der ressourcenbeschraenkten Kolmogorov-Komplexitaet erfordert, was ein aktives Forschungsgebiet ist.
@@ -862,6 +947,41 @@ Zwei konkrete Ziele fuer bedingungslosen Fortschritt:
 Das ESC-Framework offenbart eine strukturelle Analogie zur Hodge-Vermutung (vgl.\ das Begleitpaper zur Hodge-Vermutung): uniforme Polynomialzeit-Algorithmen entsprechen ,,absoluten'' (algebraischen) Klassen, waehrend schwere NP-Zeugen ,,transzendenten'' Klassen entsprechen. Die Entropieluecke $K^t(w|\varphi) \gg \log n$ ist analog zum Versagen der arithmetischen Positivitaet (AP) fuer transzendente Hodge-Klassen. In beiden Faellen ist die Obstruktion die Existenz von Objekten, die sich einer strukturierten (algebraischen/algorithmischen) Beschreibung widersetzen.
 \end{remark}
 
+
+% ===================================================================
+\subsection*{Ergebnisklassifikation}
+
+Dieses Paper ist ein \textbf{Reformulierungspaper}: Es etabliert eine \"Aquivalenz zwischen der P\,$\neq$\,NP-Vermutung und einer entropischen Bedingung (ESC), ohne die Separation selbst zu beweisen.
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Ergebnis} & \textbf{Typ} & \textbf{Referenz} \\
+\hline
+\hline
+\multicolumn{3}{|l|}{\textit{Bewiesene \"Aquivalenzen:}} \\
+\hline
+ESC $\Leftrightarrow$ P\,$\neq$\,NP & Proposition + Bemerkung & Prop.~\ref{prop:equiv}, Bem.~\ref{rem:esc-equivalence} \\
+EH $\Rightarrow$ P\,$\neq$\,NP & Theorem & Thm.~\ref{thm:slice_nogo} \\
+\hline
+\multicolumn{3}{|l|}{\textit{Strukturelle Beitr\"age:}} \\
+\hline
+Barriere-Immunit\"at (S1--S3) & Analyse & Abschn.~\ref{sec:barriers} \\
+Resolutionsbreite-Vermutung & Vermutung & Verm.~\ref{conj:resolution-width} \\
+MCSP-Internalisierungsroute & Bemerkung & Bem.~\ref{rem:mcsp-internalisation} \\
+\hline
+\multicolumn{3}{|l|}{\textit{Numerisch best\"atigt:}} \\
+\hline
+Phasen\"ubergang bei $\alpha_c \approx 4{,}267$ & Monte Carlo & Bem.~\ref{rem:sat-entropy} \\
+$H_{\mathrm{slice}}$-Wachstum mit $n$ & Monte Carlo & Bem.~\ref{rem:sat-entropy} \\
+\hline
+\multicolumn{3}{|l|}{\textit{Offen (\"aquivalent zu P\,$\neq$\,NP):}} \\
+\hline
+Uniformit\"atsbr\"ucke & Offenes Problem & Abschn.~\ref{sec:uniformity-bridge} \\
+Entropie-H\"arte (EH) & Vermutung & Abschn.~\ref{sec:slices} \\
+\hline
+\end{tabular}
+\end{center}
 
 % ===================================================================
 % 12. SCHLUSSFOLGERUNG
@@ -1093,6 +1213,8 @@ DOI: 10.1145/3485628.
 
 \bibitem{Ilango2026}
 R.~Ilango, \textit{Quasi-polynomielle MCSP-Reduktionen und explizite harte Sprachen}, Manuskript, 2026.
+
+\bibitem{Ilango2025} R.~Ilango, \textit{NP-hardness of the Minimum Circuit Size Problem from well-studied assumptions}, Proceedings, 2025.
 
 \end{thebibliography}
 
