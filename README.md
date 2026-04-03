@@ -1,10 +1,6 @@
 # Functional Stability Theory (FST)
 
-[![DOI Framework](https://zenodo.org/badge/DOI/10.5281/zenodo.19036190.svg)](https://doi.org/10.5281/zenodo.19036190)
-[![DOI Dark Energy](https://zenodo.org/badge/DOI/10.5281/zenodo.19036235.svg)](https://doi.org/10.5281/zenodo.19036235)
-[![DOI Yang-Mills](https://zenodo.org/badge/DOI/10.5281/zenodo.19087433.svg)](https://doi.org/10.5281/zenodo.19087433)
-[![DOI Hodge](https://zenodo.org/badge/DOI/10.5281/zenodo.19087439.svg)](https://doi.org/10.5281/zenodo.19087439)
-[![DOI BSD](https://zenodo.org/badge/DOI/10.5281/zenodo.19087443.svg)](https://doi.org/10.5281/zenodo.19087443)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19036190.svg)](https://doi.org/10.5281/zenodo.19036190)
 
 **Functional Stability Theory** is a unified mathematical framework that connects thermodynamic stability, game-theoretic equilibrium selection, and renormalized energy functionals to derive rigorous results across multiple domains of mathematical physics and complexity theory.
 
@@ -20,17 +16,17 @@ The central object is a **renormalized free-energy functional** whose critical-p
 
 ## Domain Proof Papers -- Current Status
 
-| Paper | Version | Status | Open Problem | Next Step |
-|-------|---------|--------|--------------|-----------|
-| [**Turbulence**](https://doi.org/10.5281/zenodo.19056813) | v1.3 | Journal-ready | DFC1 empirical (only input) | Figures + falsification protocol |
-| [**Dark Energy**](https://doi.org/10.5281/zenodo.19036235) | v1.6 | Framework Note | Hu-Sawicki parameters quantitatively open | MCMC fit against DESI+Planck+Cassini |
-| [**Yang-Mills**](https://doi.org/10.5281/zenodo.19087433) | v2.1 | Conditional | Analytical proof of lambda < 0 | Doeblin minorisation programme |
-| [**Navier-Stokes**](https://doi.org/10.5281/zenodo.19087449) | v2.1 | Conditional | Assumption G2 (projection regularity) | Independent geometric verification |
-| [**NS Log-Distance**](https://doi.org/10.5281/zenodo.19056807) | v1.3 | Proof of Life verified | TLL for 3D NS analytically open | Kuramoto-Sivashinsky / reaction-diffusion |
-| [**BSD**](https://doi.org/10.5281/zenodo.19087443) | v1.1 | Reformulation | Higher Gross-Zagier (rank >= 2) | Rank 2-4 numerics, conditional labelling |
-| [**Hodge**](https://doi.org/10.5281/zenodo.19087439) | v1.1 | No-Go Theorem | = Deligne's question (1982) | Prismatic cohomology / AP4 |
-| [**P vs NP**](https://doi.org/10.5281/zenodo.19056809) | v1.2 | Reformulation | Uniformity Bridge | Instance compression formalisation |
-| [**Framework (RFEP)**](https://doi.org/10.5281/zenodo.19036190) | v1.6 | Meta-Theorem | Pattern A falsifiability clarified | -- |
+| Paper | Version | Status | Open Problem | DOI |
+|-------|---------|--------|--------------|-----|
+| [**Turbulence**](https://doi.org/10.5281/zenodo.19056813) | v1.3 | Journal-ready | DFC1 empirical (only input) | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
+| [**Dark Energy**](https://doi.org/10.5281/zenodo.19036235) | v1.6 | Framework Note | Hu–Sawicki parameters quantitatively open | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
+| [**Yang–Mills**](https://doi.org/10.5281/zenodo.19087433) | v2.1 | Conditional | Analytical proof of λ < 0 | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
+| [**Navier–Stokes**](https://doi.org/10.5281/zenodo.19087449) | v2.1 | Conditional | Assumption G2 (projection regularity) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
+| [**NS Log-Distance**](https://doi.org/10.5281/zenodo.19056807) | v1.3 | Proof of Life ✓ | TLL for 3D NS analytically open | [10.5281/zenodo.19056807](https://doi.org/10.5281/zenodo.19056807) |
+| [**BSD**](https://doi.org/10.5281/zenodo.19087443) | v1.1 | Reformulation | Higher Gross–Zagier (rank ≥ 2) | [10.5281/zenodo.19087443](https://doi.org/10.5281/zenodo.19087443) |
+| [**Hodge**](https://doi.org/10.5281/zenodo.19087439) | v1.1 | No-Go Theorem | = Deligne's question (1982) | [10.5281/zenodo.19087439](https://doi.org/10.5281/zenodo.19087439) |
+| [**P vs NP**](https://doi.org/10.5281/zenodo.19056809) | v1.2 | Reformulation | Uniformity Bridge | [10.5281/zenodo.19056809](https://doi.org/10.5281/zenodo.19056809) |
+| [**Framework (RFEP)**](https://doi.org/10.5281/zenodo.19036190) | v1.6 | Meta-Theorem | Pattern A falsifiability clarified | [10.5281/zenodo.19036190](https://doi.org/10.5281/zenodo.19036190) |
 
 ## Proof Architecture
 
@@ -71,6 +67,82 @@ The `scripts/` directory contains computational validation scripts:
 | `compute_w_mapping.py` | Dark Energy | Correct w_eff -> w_DE mapping + DESI grid scan |
 | `compute_height_saturation.py` | BSD | Height saturation test for quadratic twists |
 | `compute_ghr_spectrum.py` | Hodge | GHR spectrum numerical verification |
+
+## Genesis and Architecture
+
+### Chronological Development
+
+```
+2025-2026   RH Trilogy             CRM I-IV
+            (self-contained)       (self-contained)
+                  |                     |
+                  v                     v
+            +-----------+         +-----------+
+            | Riemann   |         | Cosmic    |
+            | Hypothesis|         | Recursion |
+            | Part I-III|         | Model I-V |
+            +-----------+         +-----------+
+                  |                     |
+                  +----------+----------+
+                             |
+                    Abstraction / Generalisation
+                             |
+                             v
+                  +---------------------+
+                  | RFEP Framework      |
+                  | (Renormalized Free- |
+                  | Energy Principle)   |
+                  | = Connecting Link   |
+                  +---------------------+
+                             |
+                    Instantiation / Application
+                             |
+                  +----------+----------+
+                  |                     |
+                  v                     v
+       +------------------+   +------------------+
+       | Domain Proofs    |   | Applications     |
+       +------------------+   +------------------+
+       | NS, YM, TU, DE  |   | FST-I  Thermo    |
+       | Hodge, BSD, PNP  |   | FST-II Chemical  |
+       +------------------+   | FST-III Biology  |
+                              +------------------+
+                                      |
+                              under the umbrella name
+                                      |
+                                      v
+                        +---------------------------+
+                        | FST = Functional          |
+                        | Stability Theory          |
+                        | (programme name, came LAST)|
+                        +---------------------------+
+```
+
+### Dependency Chain (Proof Direction)
+
+```
+RH  ──────────> RFEP Framework ──────────> FST Domain Proofs
+(proven)        (abstracted from RH)       (instantiate RFEP)
+                       |
+CRM ──────────> RFEP Framework ──────────> FST Applications
+(model)         (confirmed by CRM)         (validate RFEP empirically)
+```
+
+Arrows indicate **logical** dependency, not chronological order:
+- RH stands on its own without RFEP/FST
+- RFEP references RH as its "Reference Instantiation"
+- FST references RFEP as its theoretical foundation
+- Applications **confirm** RFEP predictions (not the other way around)
+
+### Naming Conventions
+
+| Level | Name | Acronym | Meaning | DOI |
+|-------|------|---------|---------|-----|
+| Principle | Renormalized Free-Energy Principle | RFEP | The core mathematical principle | [10.5281/zenodo.19036190](https://doi.org/10.5281/zenodo.19036190) |
+| Pattern | Pattern A: Second-Order Resolvent Dominance | Pattern A | The universal stability pattern | [10.5281/zenodo.19036190](https://doi.org/10.5281/zenodo.19036190) |
+| Programme | Functional Stability Theory | FST | The programme name (umbrella over all) | -- |
+| Foundation | Riemann Hypothesis Proof | RH | Self-contained proof, reference instantiation | [10.5281/zenodo.19035640](https://doi.org/10.5281/zenodo.19035640) |
+| Foundation | Cosmic Recursion Model | CRM | Self-contained model | [10.5281/zenodo.18728935](https://doi.org/10.5281/zenodo.18728935) |
 
 ## Related Repositories
 
