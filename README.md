@@ -60,13 +60,14 @@ The `scripts/` directory contains computational validation scripts:
 
 | Script | Paper | Description |
 |--------|-------|-------------|
-| `compute_F_spectrum.py` | Turbulence | Verifies K41 as unique minimiser of F[E]; strict convexity test |
-| `compute_ds3_lorenz.py` | Navier-Stokes | DS3 stress test on Lorenz attractor; TV saturation |
-| `compute_tll_ldi_lorenz.py` | NS-LDI | **Proof of Life**: TLL+LDI on Lorenz attractor (5/5 tests passed) |
-| `compute_w_vs_desi.py` | Dark Energy | w_eff(z) comparison with DESI constraints |
-| `compute_w_mapping.py` | Dark Energy | Correct w_eff -> w_DE mapping + DESI grid scan |
-| `compute_height_saturation.py` | BSD | Height saturation test for quadratic twists |
-| `compute_ghr_spectrum.py` | Hodge | GHR spectrum numerical verification |
+| `scripts/turbulence/compute_F_spectrum.py` | Turbulence | Verifies K41 as unique minimiser of F[E]; strict convexity test |
+| `scripts/navier-stokes/compute_ds3_lorenz.py` | Navier-Stokes | DS3 stress test on Lorenz attractor; TV saturation |
+| `scripts/navier-stokes/compute_tll_ldi_lorenz.py` | NS-LDI | **Proof of Life**: TLL+LDI on Lorenz attractor (5/5 tests passed) |
+| `scripts/dark-energy/compute_w_vs_desi.py` | Dark Energy | w_eff(z) comparison with DESI constraints |
+| `scripts/dark-energy/compute_w_mapping.py` | Dark Energy | Correct w_eff -> w_DE mapping + DESI grid scan |
+| `scripts/dark-energy/compute_husawicki_mcmc.py` | Dark Energy | Hu-Sawicki f(R) MCMC fit against DESI+Planck+Cassini |
+| `scripts/bsd/compute_height_saturation.py` | BSD | Height saturation test for quadratic twists |
+| `scripts/hodge/compute_ghr_spectrum.py` | Hodge | GHR spectrum numerical verification |
 
 ## Genesis and Architecture
 
