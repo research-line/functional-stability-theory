@@ -1,0 +1,2119 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathtools}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{booktabs}
+
+% --- Theorem environments ---
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{blueprint}[theorem]{Conditional Blueprint}
+\newtheorem{milestone}[theorem]{Milestone}
+\newtheorem{hypothesis}[theorem]{Hypothesis}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+% --- Operators ---
+\DeclareMathOperator{\spec}{spec}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\Dom}{Dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\Rep}{Rep}
+
+% --- Shortcuts ---
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\HH}{\mathcal{H}}
+\newcommand{\V}{\mathcal{V}}
+\renewcommand{\S}{\mathcal{S}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\K}{\mathcal{K}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\chifn}{\chi}
+\newcommand{\gap}{\operatorname{gap}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% --- Metadata ---
+\title{Functional Stability Theory as a Comparative Framework for\\
+the Spectrum-Zero Identification:\\
+Classification, Three-Route Map, and Reduction Blueprints\\
+\vspace{0.3em}
+{\large [Extended Draft v0.8 --- Three-Lemma Endgame for Route~B]}}
+\author{Lukas Geiger\\
+\small Independent Researcher, Bernau}
+\date{April 20, 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This paper presents the Functional Stability Theory (FST) axiom
+package for the spectrum-zero identification underlying the Riemann
+Hypothesis (RH) and its Dirichlet generalisation, together with
+a \emph{conditional endgame} for Route~B (CCM-prolate) that closes
+all previously open spectral estimates.
+
+We propose baseline axioms (Pattern~A, SGE, DS1--DS3, RFEP) together
+with a single completeness axiom (FST-7), compatible with Meyer's
+2005 idele-class construction.  We isolate (FST-7) as the
+arithmetic-depth input and show that it admits three formulations ---
+Pontryagin self-duality~(A), Nyquist-Shannon optimality~(B), and
+unique ergodicity with thermodynamic phase transition~(C) --- that are
+equivalent as structural conditions but have very different technical
+entry points.  Crucially, (FST-7) is \emph{not} derivable from the
+baseline axioms alone.
+
+\smallskip
+\noindent\textbf{Three routes.}
+Three programmes attempt to realise (FST-7):
+\begin{itemize}[leftmargin=*]
+  \item \emph{Route A (Meyer-Tate):} adelic self-duality; realises
+    (FST-7)(A) classically.  Three technical obstacles (distribution
+    class, operator-algebraic Fourier bridge, convergence through the
+    Mangoldt pole) structure the outstanding work.
+  \item \emph{Route B (CCM-prolate):} the Connes-Consani-Moscovici
+    (2022--2025) programme around the prolate operator and the
+    scaling triple.  This is the most mathematically developed route.
+    \textbf{New in v0.8:} we present a \emph{Three-Lemma Endgame}
+    (Section~\ref{sec:three-lemma-endgame}) that conditionally resolves
+    the CCM missing step (MS2) via a mass-based spectral cluster
+    analysis.  Three independent lemmas (Scalar Secular Cancellation,
+    Projected Poisson Quasimode, Coercive Complement) combine via
+    a standard quasimode-to-projector inequality to yield
+    $\|(I - P_{V_\lambda}) k_\lambda\| \leq r_\lambda / g_* \to 0$
+    as the Galerkin dimension $N \to \infty$.  The condition is that
+    the finite-dimensional Galerkin model $A^{(N)}$ faithfully
+    represents the spectral structure of the CCM operator --- a
+    property that is numerically verified to high precision but not
+    yet proved in the $\lambda \to \infty$ limit.
+  \item \emph{Route C (Bost-Connes emergence):} blocked by the
+    additive-multiplicative coupling problem; demoted to a diagnostic
+    side investigation.
+\end{itemize}
+
+\smallskip
+\noindent\textbf{Non-abelian sketch.}
+A Tannakian extension is sketched; it is compatible with Selberg's
+proof of RH for $Z_\Gamma$ as a consistency check.
+
+\smallskip
+\noindent\textbf{What this paper is, and what it is not.}
+FST remains an \emph{organisational and comparison frame} for
+existing approaches to RH.  The Three-Lemma Endgame does \emph{not}
+constitute a proof of RH; it is a \emph{conditional closure} of
+Route~B's approximation step (MS2) whose validity depends on a
+Galerkin-faithfulness hypothesis (Hypothesis~\ref{hyp:galerkin}).
+The concrete new items beyond v0.7 are: the Three-Lemma Endgame
+(Section~\ref{sec:three-lemma-endgame}); the mass-based effective
+gap $g_{\mathrm{eff}}(\varepsilon)$ replacing fixed-tolerance cluster
+definitions; and the identification that the four-lemma structure
+collapses to three independent lemmas plus one corollary.
+\end{abstract}
+
+\tableofcontents
+
+% =====================================================
+\section{Introduction and Problem Statement}
+\label{sec:intro}
+% =====================================================
+
+\subsection{The spectrum-zero identification}
+
+Hilbert and P\'olya proposed that RH would follow from the
+existence of a self-adjoint operator $H$ on some Hilbert space
+$\HH$ whose spectrum is the set of imaginary parts of the
+non-trivial zeros of the Riemann zeta function:
+\begin{equation}
+  \spec(H) = \{\gamma_\rho \in \R : \zeta(1/2 + i\gamma_\rho) = 0\}.
+\end{equation}
+For Dirichlet: find $H_\chifn$ with $\spec(H_\chifn) =
+\{\gamma_\chifn^{(k)} : L(1/2 + i\gamma_\chifn^{(k)}, \chifn) = 0\}$.
+
+This \emph{spectrum-zero identification} is the open step in the
+Connes programme
+\cite{Connes1999,Connes2026,ConnesConsaniMoscovici2025}.
+
+\subsection{Two obstacles on the direct Hilbert side}
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Eigenvector analyticity barrier.}  For the Dirichlet
+    Weil operator on $L^2([-L,L])$, Paley-Wiener extension is bounded
+    by $\sigma = 1/2$ (archimedean pole, prime-Dirichlet convergence)
+    \cite{AnalyticKernelV2,C2LayerStatus}.  The L-zeros do not
+    enter at this level.
+  \item \textbf{NE-B group-structure obstruction.}  The prime-shift
+    algebra on $L^2([-L,L])$ has centraliser dimension~$1$
+    \cite{Geiger2026RHII} \S5.  The Semigroup-Group-Equivalence
+    conjecture (SGE; \cite{MathMaster} \S9) predicts that direct
+    Hilbert-P\'olya fails without a group structure.
+\end{enumerate}
+
+The combination motivates a non-Hilbert, non-direct-Galerkin
+realisation.  Meyer 2005 achieves this via an idele-class
+representation on a Fr\'echet distribution space.  FST is a proposal
+for an axiomatic vocabulary in which Meyer's construction is the
+natural abelian instantiation and in which alternative routes (CCM
+prolate, Bost-Connes thermodynamic) can be compared.
+
+\subsection{Contribution}
+
+This paper (1) places Meyer's construction in an axiomatic FST
+framework via an \emph{FST fixed-point theorem} (conditional on
+(FST-7));
+(2)~identifies the arithmetic-depth input as an isolated completeness
+axiom (FST-7) with three structurally equivalent formulations;
+(3)~organises three parallel routes under the FST umbrella and
+presents a concrete reduction blueprint for Route~B;
+(4)~catalogues three concrete technical obstacles on Route~A and
+declines to claim their reducibility to standard techniques;
+(5)~provides a Selberg compatibility check for a non-abelian
+Tannakian extension of the axioms.
+
+No new theorem about RH is proven.  The main contribution is
+conceptual: FST provides structural clarity, isolates the one
+axiomatic input that cannot be derived from baseline principles, and
+offers an explicit milestone agenda for the best-developed of the
+three routes.
+
+\subsection{Relation to prior versions}
+
+This is the v0.7 honest-rewrite revision.  Relative to v0.6:
+claims about Theorem 8.4 (MS1 $\Leftrightarrow$ MS2), Conjecture 8.6
+(Weyl law for $QW_\lambda$), Proposition 8.2 (CCM instantiates
+(FST-7)(B)), the trace-class claim for $G_\beta^{\mathrm{ren}}$, and
+the residual-gap rhetoric in the Emergence section have all been
+downgraded to match the technical rigour actually present in the
+supporting notes.  An external audit (April 2026) identified
+systematic overstatements in v0.6; the present version brings
+paper-level statements into line with the honest note-level
+diagnoses.
+
+% =====================================================
+\section{FST Self-Duality Without Hilbert Space}
+\label{sec:fst-duality}
+% =====================================================
+
+\subsection{What replaces self-adjointness?}
+
+Self-adjointness on a Hilbert space enforces real-valued spectrum
+and complete eigenvector families simultaneously.  On a non-Hilbert
+space, these must be enforced separately.
+
+\begin{definition}[FST self-duality]
+\label{def:fst-duality}
+A triple $(\V, B, G)$ is an \emph{FST self-dual system} if:
+\begin{enumerate}[leftmargin=*]
+  \item $\V$ is a locally convex topological vector space (typically
+    Fr\'echet or reflexive Banach).
+  \item $B: \V \times \V \to \C$ is a continuous non-degenerate
+    sesquilinear form (the \emph{self-duality pairing}).
+  \item $G$ is a locally compact group acting continuously on $\V$
+    and preserving $B$.
+\end{enumerate}
+\end{definition}
+
+When $\V$ is Hilbert and $B$ the inner product, this is a unitary
+$G$-representation.
+
+\begin{proposition}[Real spectrum via $B$-symmetry]
+\label{prop:real-spectrum}
+Let $(\V, B, G)$ be FST self-dual.  If $H$ is the infinitesimal
+generator of a one-parameter subgroup acting $B$-symmetrically
+($B(Hv, w) = B(v, Hw)$ on a dense domain), then the joint eigenvalues
+of $H$ with respect to $B$ are real.
+\end{proposition}
+
+The argument is standard for $B$-symmetric operators on reflexive
+spaces \cite{Meyer2005}.
+
+\subsection{Why FST motivates non-Hilbert}
+
+FST stability (RFEP; \cite{MathMaster} \S6.5,
+\cite{RFEPFramework}): a system is stable iff its RG-flow
+converges to a self-similar fixed point.
+
+For an operator family $\{A_\lambda\}_{\lambda > 0}$, stability
+under RG rescaling is not generally compatible with a Hilbert
+structure.  A Fr\'echet or locally convex space admitting the
+rescaling as an automorphism is natural.  The idele class group is
+the prototypical example.
+
+% =====================================================
+\section{FST Axioms Formalised}
+\label{sec:axioms}
+% =====================================================
+
+\subsection{Ground data}
+
+An \emph{FST structure} consists of:
+
+\begin{description}[style=nextline]
+\item[(G)] A locally compact abelian topological group $G$ with
+  Haar measure.
+\item[(R)] A closed subgroup $R \leq G$, isomorphic to $\R$ or
+  $\R_+^\times$ (the \emph{renormalisation axis}).
+\item[(N)] A complementary closed subgroup $N \leq G$ with $G
+  \cong R \times N$, $N$ compact-profinite (the \emph{arithmetic
+  nucleus}).
+\item[($\chifn$)] A unitary character $\chifn : G \to \C^\times$.
+\item[(S)] A $G$-equivariant Bruhat-Schwartz class $\S(G)$, with
+  rapid decay along $R$, locally constant regularity along $N$,
+  and a Fourier transform $\mathcal F : \S(G) \to \S(\hat G)$
+  with Pontryagin duality $\hat G \cong G^\ast$.
+\end{description}
+
+\subsection{Pattern-A axioms}
+
+\begin{description}[style=nextline]
+\item[(P1)] $G = R \times N$ topologically.
+\item[(P2)] $\S(G) = \S(R) \otimes \S(N)$ topologically.
+\item[(P3)] $\mathcal F = \mathcal F_R \otimes \mathcal F_N$.
+\end{description}
+
+\subsection{The SGE axiom}
+
+\begin{description}[style=nextline]
+\item[(SGE)] $G$ is a group (not a semigroup).  Translations $T_g:
+  \S(G) \to \S(G)$ are invertible.
+\end{description}
+
+This is the $G$-analogue of what fails on $L^2([-L, L])$ under
+prime shifts (cf.~NE-B, \cite{Geiger2026RHII} \S5).
+
+\subsection{The DS1--DS3 axioms}
+
+\begin{description}[style=nextline]
+\item[(DS1) \textit{Dissipation.}]  The $R$-action
+  $\{T_r\}$ is $\S$-preserving, contractive in a weighted
+  seminorm.
+\item[(DS2) \textit{Selection.}]  $P_\chifn : \S(G) \to
+  \S(G)^\chifn$ is continuous, idempotent.
+\item[(DS3) \textit{Reproduction.}]  For $N = \prod_\ell' N_\ell$,
+  $\S(G)^\chifn = \S(R) \otimes \bigotimes_\ell
+  \S(N_\ell)^{\chifn_\ell}$.
+\end{description}
+
+\subsection{The RFEP axiom}
+
+\begin{description}[style=nextline]
+\item[(RFEP)]  There exists a free-energy functional
+  $\mathcal F_\chifn : \S(G)^\chifn \to \R$, convex and coercive
+  under the $R$-action, whose critical points are the
+  $R$-generator eigendistributions.
+\end{description}
+
+These six axioms constitute the \emph{FST baseline}.
+
+\begin{remark}[Status of the axiom package]
+\label{rem:axioms-status}
+As a classification language the axiom package is useful: it
+cleanly separates a baseline framework from the completeness
+principle (FST-7) and from later stronger selectors (FST-Free,
+FST-Min) introduced only in Section~\ref{sec:emergence}.  As a
+minimal axiomatics, however, it is \emph{not yet} convincing:
+minimality and independence are claimed but not proved.  Some items
+(e.g.\ Pattern~A) overlap substantially with the ground data; RFEP
+is treated as a central principle but its force relative to the
+other axioms is not sharply isolated; and the later extensions
+(FST-Free, FST-Min) function as \emph{selection principles encoding
+arithmetic content} rather than as consequences.  The appropriate
+reading is therefore: the axioms are a useful map of where
+content lives, not yet a foundational axiom system with proved
+independence.
+\end{remark}
+
+\subsection{Canonical L-function}
+
+For $f \in \S(G)^\chifn$,
+\[
+  \tilde f(s) := \int_R f(r, e_N) \, r^s \, \frac{dr}{r},
+\]
+\[
+  \Lambda_{G,\chifn}(s) := Z_\infty(s) \cdot \prod_\ell
+    L_\ell(s, \chifn_\ell).
+\]
+This is Tate's thesis \cite{Tate1950} axiomatised.
+
+% =====================================================
+\section{The FST Fixed-Point Theorem}
+\label{sec:fixed-point}
+% =====================================================
+
+\subsection{The construction}
+
+\begin{description}[style=nextline]
+\item[$\V_\chifn$] Quotient of $\S(G)^\chifn$ by coinvariants $\K$
+  (functions with vanishing Tate integrals on the critical line).
+\item[$B_\chifn$] The Tate pairing $B_\chifn(v, w) = \int_G v(g)
+  \mathcal F[w](g) \chifn(g) dg$.
+\item[$H_\chifn$] Generator of $R$-action.
+\end{description}
+
+\subsection{The theorem}
+
+\begin{theorem}[FST fixed-point theorem, conditional on (FST-7)]
+\label{thm:fst-fixed-point}
+Let $(G, R, N, \chifn, \S)$ be an FST structure satisfying the
+baseline axioms and the completeness axiom (FST-7) of
+Section~\ref{sec:fst7}.  Then:
+
+\noindent(a) $\V_\chifn$ is a non-trivial Fr\'echet space.
+
+\noindent(b) $B_\chifn$ is non-degenerate, $R$-equivariant.
+
+\noindent(c) $H_\chifn$ is $B_\chifn$-symmetric.
+
+\noindent(d) $\spec_\mathrm{pt}(H_\chifn) = \{\gamma \in \R :
+  \Lambda_{G,\chifn}(1/2 + i\gamma) = 0\}$.
+
+\noindent(e) $v_\gamma \in \V_\chifn^\ast$ satisfies
+  $B_\chifn(v, v_\gamma) = \tilde v(1/2 + i\gamma)$.
+\end{theorem}
+
+\begin{corollary}[abstract RH, conditional]
+\label{cor:abstract-rh}
+Under the hypotheses \emph{including (FST-7)}, the non-trivial zeros
+of $\Lambda_{G,\chifn}$ lie on $\Re(s) = 1/2$.
+\end{corollary}
+
+Parts (a)--(c), (e) follow from Tate's thesis in the adelic case.
+Part (d) --- the spectral identification --- requires (FST-7), and
+this is precisely the input that is not derivable from the baseline
+axioms.  The statement is therefore a \emph{reformulation} of the
+classical Meyer/Tate content in FST language, not a new theorem.
+
+% =====================================================
+\section{Minimal Example: Riemann Zeta}
+\label{sec:minimal-example}
+% =====================================================
+
+The minimal non-trivial instantiation: $G = \A_\Q^\times/\Q^\times$,
+$\chifn = \chifn_0$, $R = \R_+^\times$, $N = \hat\Z^\times$.
+All axioms trivially hold.
+
+\subsection{Tate integrals}
+
+With $f = f_\infty \otimes \prod_p f_p$, $f_\infty(x) = e^{-\pi x^2}$,
+$f_p = \mathbf{1}_{\Z_p}$:
+\[
+  Z_\infty(s) = \pi^{-s/2} \Gamma(s/2), \qquad
+  Z_p(s) = (1 - p^{-s})^{-1},
+\]
+\[
+  Z(f, s) = \pi^{-s/2} \Gamma(s/2) \, \zeta(s) = \Lambda(s).
+\]
+Adelic self-duality $\hat f = f$ gives
+$\Lambda(s) = \Lambda(1-s)$ directly.
+
+\subsection{The operator}
+
+$H_{\chifn_0} = -x_\infty \partial_{x_\infty}$, multiplication by
+$-s$ on the Mellin side.  Mellin evaluations $v_\gamma: f \mapsto
+Z(f, 1/2+i\gamma)$ sit in $\V_{\chifn_0}^\ast$.  Non-triviality at
+zeros is (FST-7).
+
+% =====================================================
+\section{The Completeness Axiom (FST-7): Three Views}
+\label{sec:fst7}
+% =====================================================
+
+\subsection{(FST-7) algebraic: Pontryagin self-duality}
+
+\begin{definition}[abstract Meyer condition]
+\label{def:fst7-a}
+(FST-7A): there exists a discrete subgroup $\Xi \leq G$ with:
+\textit{(i)} $\Xi^\perp = \Xi$ under Pontryagin pairing;
+\textit{(ii)} $G / (R \cdot \Xi)$ compact (product formula);
+\textit{(iii)} $B_\chifn$ is $\Xi$-invariant.
+\end{definition}
+
+In the adelic case, $\Xi = \Q^\times$ satisfies (i)--(iii) with
+$\prod_v |x|_v = 1$ as product formula.
+
+\subsection{(FST-7) informational: Nyquist-Shannon}
+
+\begin{definition}[information-theoretic self-duality]
+\label{def:fst7-b}
+(FST-7B): for all $f \in \S(G)$ with $\hat f \in \S(\hat G)$,
+\[
+  \sum_{\xi \in \Xi} |f(\xi)|^2 = \sum_{\eta \in \hat\Xi}
+    |\hat f(\eta)|^2.
+\]
+\end{definition}
+
+\begin{proposition}
+\label{prop:B-iff-A}
+(FST-7B) $\Leftrightarrow$ (FST-7A)(i) under standard Pontryagin
+conditions on $(G, \Xi)$.
+\end{proposition}
+
+Interpretation: $\Xi$ is the Nyquist-optimal sampling of $G$.
+
+\begin{remark}[Slepian-Pollak prolates as a natural realisation]
+\label{rem:b-view-prolate}
+The axiom (FST-7B) is compatible with dynamical realisations via
+prolate spheroidal wave functions $h_{n,\lambda}$ of Slepian-Pollak
+\cite{SlepianPollack1961}: these simultaneously minimise
+out-of-interval and out-of-band energy on $\R$ and are therefore a
+Nyquist-Shannon-optimal basis; for $n \equiv 0 \pmod 4$ they are
+eigenfunctions of the Fourier transform, so they carry a concrete
+time-frequency self-duality.  This is the conceptual entry point
+for the CCM programme (cf.\ Section~\ref{sec:ccm-prolate}).  The
+\emph{relation} between the prolate setup and (FST-7)(B) is a
+mathematically meaningful analogy rather than a proved instantiation;
+see Remark~\ref{rem:ccm-closest-model}.
+\end{remark}
+
+\subsection{(FST-7) dynamical: arithmetic ergodicity}
+
+\begin{definition}[arithmetic ergodicity]
+\label{def:fst7-c}
+(FST-7C): $\Xi$-action on the norm-$1$ kernel $G^{(1)}$ is uniquely
+ergodic (Haar measure).
+\end{definition}
+
+\begin{proposition}
+\label{prop:C-implies-A}
+(FST-7C) with Pontryagin-Fourier-invariant Haar implies
+Poisson summation for $\Xi$, hence (FST-7A).
+\end{proposition}
+
+In the adelic case, $\Q^\times$ acts uniquely ergodically on
+$\A^{(1)}$ by Strong Approximation \cite{CasselsFrohlich}.
+
+\subsection{Equivalence as structural conditions}
+
+\begin{theorem}[equivalence of (FST-7) views]
+\label{thm:fst7-equiv}
+(FST-7A), (FST-7B), (FST-7C) are equivalent as structural
+conditions for the same $\Xi \leq G$ under standard Pontryagin
+and Haar conditions.
+\end{theorem}
+
+\begin{remark}[Scope of Theorem~\ref{thm:fst7-equiv}]
+The equivalence is at the level of structural input conditions, not
+at the level of technical entry points.  In concrete cases the three
+views open very different technical doors: (A) opens Tate/Meyer
+adelic analysis; (B) opens Slepian-Pollack / prolate-operator
+analysis; (C) opens BC-thermodynamics / Cornelissen-Marcolli
+rigidity.  The three entry points are \emph{not} interchangeable as
+proof strategies.
+\end{remark}
+
+\subsection{(FST-7) is not derivable from baseline axioms}
+
+\textbf{Structural observation.}  (FST-7) in any of its three
+forms is not derivable from (P1--P3), (SGE), (DS1--DS3), (RFEP)
+alone.  It is an arithmetic property that must be supplied
+externally: from Tate's thesis in the adelic case, by analogous
+input in other cases.  This is the core honest limitation of the
+axiom package.
+
+% =====================================================
+\section{The Bost-Connes/Meyer Bridge}
+\label{sec:bc-meyer}
+% =====================================================
+
+\subsection{The BC95 system}
+
+The Hecke $C^\ast$-algebra $\HH_\Q = C^\ast(\N^\times \rtimes
+\hat\Z^\times)$ with time evolution $\alpha_t(\mu_n) = n^{it}\mu_n$
+has:
+\begin{itemize}
+\item $\spec(H_{BC}) = \{\log n : n \in \N^\times\}$.
+\item $Z_{BC}(\beta) = \zeta(\beta)$ for $\beta > 1$.
+\item KMS states: unique for $\beta \leq 1$, $\hat\Z^\times \cong
+  \Gal(\Q^\mathrm{ab}/\Q)$-parametrised for $\beta > 1$.
+\item Phase transition at $\beta = 1$.
+\end{itemize}
+
+\subsection{Four bridge approaches, one recommended}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Approach} & \textbf{Plausibility} & \textbf{Short-term} & \textbf{Long-term} \\
+\midrule
+1. GNS + low-temperature limit & medium & medium & high \\
+2. \textbf{Laplace-Mellin duality} & \textbf{high} & \textbf{high} & medium \\
+3. Arithmetic Site intermediary & high & low & very high \\
+4. Tropicalisation & low & low & medium \\
+\bottomrule
+\end{tabular}
+\caption{Bridge approaches.  Approach~2 is the recommended short-term target; it does \emph{not} imply a proof of RH but provides a structural identification between the thermodynamic and distributional sides.}
+\label{tab:bridge-approaches}
+\end{table}
+
+\subsection{Laplace-Mellin duality: the identification}
+
+\begin{equation}
+\label{eq:log-z-deriv}
+  L(\beta) := -\frac{d}{d\beta} \log Z_{BC}(\beta)
+    = -\frac{\zeta'(\beta)}{\zeta(\beta)}.
+\end{equation}
+Via the explicit formula, $L$ is meromorphic with:
+\begin{itemize}
+  \item Simple pole at $\beta = 1$ (Mangoldt pole), residue $+1$.
+  \item Poles at $\beta = \rho$ (non-trivial zeros), residues $-m_\rho$.
+  \item Poles at trivial zeros $\beta = -2k$.
+\end{itemize}
+
+\begin{conjecture}[Meyer eigendistributions as BC residues]
+\label{conj:meyer-bc}
+For Riemann zeta ($\chifn = \chifn_0$),
+\[
+  v_{\gamma_\rho}(f) = \Res_{\beta = 1/2 + i\gamma_\rho}
+    L(\beta) \cdot \mathcal M[f](\beta).
+\]
+\end{conjecture}
+
+This is a conjectural identification, not a proved equivalence.
+Making it rigorous is exactly the content of the Wick-Mellin
+obstacles (Section~\ref{sec:wick-mellin-obstacles}); see there.
+
+% =====================================================
+\section{The CCM-Prolate Model: Closest Known Realisation of (FST-7)(B)}
+\label{sec:ccm-prolate}
+% =====================================================
+
+The Connes-Consani-Moscovici (CCM) programme
+\cite{ConnesConsani2023,ConnesMoscovici2022,ConnesConsaniMoscovici2025}
+realises a rank-one perturbation of a scaling operator whose spectrum
+numerically converges to the non-trivial zeros of $\zeta$.  We
+summarise the construction and discuss its relation to (FST-7)(B);
+we then present a \emph{conditional reduction blueprint} for the two
+CCM missing steps (MS1, MS2) and an associated milestone agenda.
+
+We emphasise at the outset: nothing in this section is a proof;
+everything is a blueprint and/or an analogy.
+
+\subsection{The construction}
+\label{sec:ccm-construction}
+
+Fix $\lambda > 1$ and set $L = 2 \log\lambda$.
+
+\begin{description}[leftmargin=*,style=nextline]
+\item[\textbf{Scaling triple.}] On $L^2([\lambda^{-1}, \lambda],
+  d^\ast u)$ with $d^\ast u = du/u$, the scaling operator
+  $D^{(\lambda)}_{\log} = -i\,d/d(\log u)$ with periodic boundary
+  conditions has eigenfunctions $V_n(u) = L^{-1/2}\exp(2\pi i n
+  \log(\lambda u)/L)$, $n \in \Z$.
+\item[\textbf{Weil quadratic form.}] From Weil's explicit formula
+  the sesquilinear form $QW(f,g) = \Psi(f^\ast * g)$ with $\Psi =
+  W_{0,2} - W_\R - \sum_p W_p$ is constructed.  Restricted to
+  $L^2([\lambda^{-1}, \lambda], d^\ast u)$, only primes $p \leq
+  \lambda^2$ contribute.
+\item[\textbf{Test subspace $E_N$.}] Span of $V_n$ with $|n|
+  \leq N$; dimension $2N+1$.
+\item[\textbf{Rank-one perturbation.}] Let $\epsilon_N$ be the
+  smallest eigenvalue of the restriction $QW_\lambda^N$, and $\xi$
+  the corresponding eigenvector (assumed simple and even under $u
+  \mapsto u^{-1}$).  Let $\delta_N \in E_N$ represent the Dirichlet
+  kernel evaluation at the boundary, normalised by $\delta_N(\xi) =
+  1$.  Define
+  \[
+     D^{(\lambda,N)}_{\log} := D^{(\lambda)}_{\log}
+       - |D^{(\lambda)}_{\log}\xi\rangle\langle\delta_N|.
+  \]
+\end{description}
+
+\begin{theorem}[CCM 2025, Theorem 1.1]\label{thm:ccm-mainthm}
+(i) $D^{(\lambda,N)}_{\log}$ is self-adjoint on $E'_N \oplus
+E_N^\perp$ with $E'_N = E_N/\C\xi$.
+(ii) $\det_{\mathrm{reg}}(D^{(\lambda,N)}_{\log} - z) = -i
+\lambda^{-iz}\widehat{\widehat\xi}(z)$.
+(iii) $\widehat{\widehat\xi}(z)$ is entire, all zeros are on the
+real axis, and coincide with $\mathrm{spec}(D^{(\lambda,N)}_{\log})$.
+\end{theorem}
+
+\begin{remark}[Numerical evidence]\label{rem:ccm-numerics}
+For $\lambda = \sqrt{14}$, $N = 120$, using only primes
+$p \leq 13$, the first fifty non-trivial zeros of $\zeta(1/2+is)$
+are recovered with errors ranging from $10^{-60}$ to $10^{-6}$
+(cf.~\cite[Table~1]{ConnesConsaniMoscovici2025}).  The statistical
+improbability of such coincidence is estimated by CCM at
+$10^{-1235}$.  Numerics of this strength are \emph{compelling
+evidence}; they are not a theorem reducing RH.
+\end{remark}
+
+\subsection{The $QW$-$PW$ duality}
+\label{sec:ccm-duality}
+
+CCM identify a structural duality between the Weil quadratic form
+$QW_\lambda$ and the prolate wave operator
+\[
+  PW_\lambda := -\partial_x\big((\lambda^2-x^2)\partial_x\big) +
+    (2\pi\lambda x)^2,
+\]
+whose eigenfunctions $h_{n,\lambda}$ are the prolate spheroidal
+wave functions of Slepian-Pollak
+\cite{SlepianPollack1961}.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+& \textbf{Weil $QW_\lambda$} & \textbf{Prolate $PW_\lambda$} \\
+\midrule
+Origin        & Number theory (Weil) & Information theory (Shannon) \\
+Regime        & Infrared (low eigenvalues) & Ultraviolet (high eigenvalues)\\
+Zeta imprint  & Low zeros of $\zeta$ & UV behaviour of zeros\\
+Optimality    & Explicit-formula positivity & Time-frequency optimal \\
+Reference     & \cite{ConnesConsaniMoscovici2025} & \cite{ConnesMoscovici2022} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{CCM as the closest known model for (FST-7)(B)}
+\label{sec:ccm-as-fst7b}
+
+Recall (FST-7)(B) from Section~\ref{sec:fst7}: there exists a
+\emph{Nyquist-Shannon-optimal} discrete subset $\Xi \le G$ on which
+a Plancherel-type identity holds.  The prolate spheroidal wave
+functions of Slepian-Pollak \emph{are} the canonical
+Nyquist-Shannon-optimal basis in the time-frequency plane.
+
+\begin{remark}[CCM as the closest known model for
+(FST-7)(B)]\label{rem:ccm-closest-model}
+The CCM construction $(D^{(\lambda,N)}_{\log}, QW_\lambda,
+PW_\lambda)$ is the \emph{closest known concrete model} of
+(FST-7)(B) in the sense that (a) it is built around the canonical
+Slepian-Pollak Nyquist-Shannon-optimal basis in the time-frequency
+plane, and (b) the scaling action of $\R_+^\ast$ on
+$L^2([\lambda^{-1},\lambda], d^\ast u)$ provides the locally compact
+abelian setting required by the (FST-7)(B) formulation.  This
+relation is a mathematically meaningful analogy that aligns the
+abstract optimality statement with a concrete operator-theoretic
+setting; it is \emph{not} a proved theorem-level equivalence.  A
+rigorous statement would require constructing an explicit $\Xi$
+from prolate data, proving a Plancherel-type identity in the sense
+of Definition~\ref{def:fst7-b}, and relating this to the rank-one
+perturbation condition on $\delta_N$.  None of these are
+established here.
+\end{remark}
+
+\begin{conjecture}[$QW\!\leftrightarrow\! PW$ as
+(FST-7)(A)$\leftrightarrow$(FST-7)(B) equivalence operator,
+structural form]\label{conj:qw-pw-fst7}
+The CCM duality $QW_\lambda \leftrightarrow PW_\lambda$ between
+infrared and ultraviolet regimes is conjectured to be a dynamical
+representation of the abstract equivalence $(\text{FST-7})(A)
+\Leftrightarrow (\text{FST-7})(B)$ from
+Theorem~\ref{thm:fst7-equiv}.  Concretely: there should exist a
+transformation sending $QW_\lambda$-eigenfunctions to
+$PW_\lambda$-eigenfunctions in the $\lambda \to \infty$ limit that
+realises the Pontryagin self-duality of $\Xi = \Q$ inside $\A_\Q$ at
+the level of spectral measures.  The present paper provides a
+candidate for this transformation (Section~\ref{sec:fst-transfer})
+but does not prove the intertwining property.
+\end{conjecture}
+
+\subsection{The CCM missing steps}
+\label{sec:ccm-missing-steps}
+
+Two residual technical gaps were identified in the CCM programme:
+\begin{description}[leftmargin=*,style=nextline]
+\item[(MS1)] \textbf{Simple-even} at the smallest eigenvalue of
+  $QW_\lambda$.  Known classically for the prolate operator
+  $PW_\lambda$ \cite{SlepianPollack1961}; numerically confirmed for
+  $QW_\lambda$; not yet proved.  Remains open.
+\item[(MS2)] \textbf{Approximation quality.} The Poisson quasimode
+  $k_\lambda$ must approximate the true $QW_\lambda$-eigenfunction
+  $\xi_\lambda$ well enough to transfer spectral convergence.
+  \textbf{Conditionally resolved in v0.8} via the Three-Lemma Endgame
+  (Section~\ref{sec:three-lemma-endgame}): under
+  Hypothesis~\ref{hyp:galerkin} (Galerkin faithfulness), the mass
+  concentration bound $\|(I-P_{V_\lambda})k_\lambda\| \leq
+  r_\lambda/g_* \to 0$ closes (MS2) by showing that $k_\lambda$
+  lives in the resonant eigenspace to arbitrary precision.
+\end{description}
+
+(MS1) remains an open problem.  (MS2) is conditionally resolved:
+it reduces to a Galerkin-faithfulness hypothesis that is numerically
+verified to $12$~digits of precision for $\lambda = 3, \ldots, 100$
+(Section~\ref{sec:three-lemma-endgame}) but whose rigorous proof in
+the $\lambda \to \infty$ limit requires a Galerkin convergence
+theorem for the rank-one CCM operator (the subject of ongoing work).
+
+\subsection{FST-transfer: a conditional reduction blueprint}
+\label{sec:fst-transfer}
+
+We now make Conjecture~\ref{conj:qw-pw-fst7} concrete enough to
+state a \emph{conditional reduction blueprint} for the two CCM gaps.
+This subsection is \emph{not} a theorem and does \emph{not} prove a
+reduction; it is a scheme in which each step is open and clearly
+identified.
+
+\subsubsection{Two candidate isometries}
+
+Let $H_{PW} = L^2([-\lambda, \lambda], dx)$ with reflection
+$\rho(g)(x) = g(-x)$ and $H_{QW} = L^2([\lambda^{-1}, \lambda],
+d^\ast u)$ with inversion $\iota(f)(u) = f(u^{-1})$.  The
+logarithm-plus-rescaling map
+\[
+  \Phi_\lambda := \log^\ast \circ \, \sigma_\lambda :
+    L^2([-\lambda, \lambda], dx) \xrightarrow{\sigma_\lambda}
+    L^2([-\log\lambda, \log\lambda], dx)
+    \xrightarrow{\log^\ast}
+    L^2([\lambda^{-1}, \lambda], d^\ast u)
+\]
+is a \emph{kinematic} isometry intertwining $\rho$ and $\iota$ --- a
+direct computation.
+
+Building on the explicit CCM construction we \emph{propose} as
+candidate dynamical map
+\[
+  \Psi_\lambda : H_{PW} \longrightarrow H_{QW}, \qquad
+    g \mapsto \big(\mathcal E(g)\big)\big|_{[\lambda^{-1},\lambda]},
+  \qquad \mathcal E(g)(u) := u^{1/2} \sum_{n \ge 1} g(nu),
+\]
+i.e.\ restriction to $[\lambda^{-1},\lambda]$ of the Epstein-Mellin
+convolution.  Whether $\Psi_\lambda$ is bounded as an operator from
+$H_{PW}$ to $H_{QW}$, whether it has dense range, and what its
+precise adjoint and intertwiner properties are is itself a
+non-trivial question.  We collect these as the first open item:
+
+\begin{milestone}[Domain and form theory for $\Psi_\lambda$]
+\label{ms:psi-domain}
+Establish that $\Psi_\lambda$ is a well-defined, densely defined
+operator $H_{PW} \to H_{QW}$ and determine its form domain,
+boundedness class, and intertwiner structure with respect to the
+involutions $(\rho, \iota)$.  Prove or refute that
+$\Psi_\lambda^\ast \Psi_\lambda$ has compact resolvent.
+\end{milestone}
+
+\subsubsection{Conditional reduction blueprint}
+
+\begin{blueprint}[MS1 $\Leftarrow$ (MS2 $\wedge$ bounded intertwining)]
+\label{bp:fst-transfer}
+Suppose that Milestone~\ref{ms:psi-domain} has been resolved such
+that $\Psi_\lambda$ is a bounded intertwiner on appropriate form
+domains.  Suppose further there exist constants $\mu_\lambda > 0$
+and $\varepsilon_\lambda \to 0$ as $\lambda \to \infty$ such that
+\begin{equation}\label{eq:dynamic-isometry}
+  \big\| QW_\lambda \circ \Psi_\lambda
+    - \mu_\lambda \, \Psi_\lambda \circ PW_\lambda \big\|
+  \;\le\; \varepsilon_\lambda
+\end{equation}
+as operators on the appropriate dense domain (cf.~(MS2)).  Then the
+following is a conditional conclusion, not a theorem: by
+Slepian-Pollak \cite{SlepianPollack1961}, the smallest eigenvalue
+$\mu_{0,\lambda}$ of $PW_\lambda$ is simple with even eigenfunction
+$h_{0,\lambda}$; under \eqref{eq:dynamic-isometry} and the
+intertwining hypothesis, a Kato-type perturbation argument
+\cite{Kato} would give a simple $QW_\lambda$-eigenvalue
+$\epsilon_\lambda$ with eigenvector $\xi_\lambda$ satisfying
+$\|\xi_\lambda - c \cdot \Psi_\lambda h_{0,\lambda}\| \le
+C \varepsilon_\lambda$, and the preservation of the $\rho/\iota$
+grading would give the even property.  In that scenario
+(MS1) would follow whenever (MS2) holds.
+\end{blueprint}
+
+\begin{remark}[Status of Blueprint~\ref{bp:fst-transfer}]
+\label{rem:blueprint-caveats}
+The conditional conclusion in Blueprint~\ref{bp:fst-transfer} rests
+on three open items: (1) $\Psi_\lambda$ is actually a bounded
+intertwiner (Milestone~\ref{ms:psi-domain}); (2) the operator-norm
+bound \eqref{eq:dynamic-isometry} holds with the claimed decay; (3)
+the Kato perturbation argument applies uniformly on the relevant
+form domains.  Each item is non-trivial.  In particular the
+standard reading of Kato's theorem requires operator/form
+convergence in a norm or form-resolvent sense that is \emph{not}
+automatic from \eqref{eq:dynamic-isometry}.  The blueprint is best
+read as an articulation of what a proof of MS1 via MS2 would have to
+establish, not as a reduction theorem.
+\end{remark}
+
+\begin{remark}[Role of FST in the blueprint]\label{rem:fst-contribution}
+Even in its conditional form, Blueprint~\ref{bp:fst-transfer}
+illustrates the way FST is intended to contribute: the axiom
+equivalence (FST-7)(A)$\leftrightarrow$(FST-7)(B) structurally
+motivates the search for an intertwiner $\Psi_\lambda$ between the
+two concrete operators on the CCM side; the CCM construction itself
+supplies the candidate explicit form of $\Psi_\lambda$.  What is
+missing is the analytic content (boundedness, operator-norm
+control, application of perturbation theory).
+\end{remark}
+
+\subsection{Milestone agenda for Route~B}
+\label{sec:route-b-milestones}
+
+Replacing the heuristic Conjecture (``Weyl law for $QW_\lambda$'') of
+v0.6 with a structured milestone agenda, Route~B decomposes into
+four concrete, sequential milestones in the sense of the audit
+recommendation:
+
+\begin{milestone}[Domain / form theory for $\Psi_\lambda$]
+\label{ms:1}
+(= Milestone~\ref{ms:psi-domain}.) Establish that $\Psi_\lambda$ is
+a well-defined, boundedly invertible intertwiner on appropriate
+form domains.  First genuine rigorous step of Route~B.
+\end{milestone}
+
+\begin{milestone}[Low-eigenvalue comparison via min-max]
+\label{ms:2}
+Prove a min-max comparison between the first finitely many
+eigenvalues of $QW_\lambda$ and $PW_\lambda$, \emph{without}
+requiring a full Weyl asymptotic.  This is the operator-theoretic
+minimum needed to attack (MS1) uniformly.
+\end{milestone}
+
+\begin{milestone}[Finite-dimensional CCM truncation]
+\label{ms:3}
+Prove a finite-dimensional CCM truncation theorem inside $E_N$:
+control the restriction of $QW_\lambda$ to $E_N$ and its comparison
+to the prolate restriction, using standard finite-dim perturbation
+(Kato's theorem applies cleanly there).  This is where the CCM
+numerics actually live.
+\end{milestone}
+
+\begin{milestone}[Asymptotic regime]
+\label{ms:4}
+Only after Milestones~\ref{ms:1}--\ref{ms:3} are in place:
+investigate the asymptotic behaviour of $N_{QW_\lambda}(\mu)$ as
+$\mu \to \infty$ and $\lambda \to \infty$.  This is the analogue of
+what v0.6 stated speculatively as a ``Weyl law for the Weil form''
+and is here explicitly marked as the \emph{last} milestone in the
+sequence, not the first.
+\end{milestone}
+
+\begin{remark}[Why this ordering]
+\label{rem:milestone-ordering}
+Milestones \ref{ms:1}--\ref{ms:3} are finite-dimensional or
+form-theoretic in character and are genuinely tractable with
+existing operator-theory machinery.  Milestone~\ref{ms:4} involves
+genuine global asymptotics of a non-standard quadratic form and is
+much less well understood.  The v0.6 draft treated Milestone~\ref{ms:4}
+as if it were a near-theorem; the present revision explicitly reorders
+the agenda so that the tractable work comes first and the deep
+asymptotic item last.  See the external audit notes for the
+motivation of this reordering.
+\end{remark}
+
+% =====================================================
+\subsection{The Three-Lemma Endgame for Route~B}
+\label{sec:three-lemma-endgame}
+% =====================================================
+
+We now present a conditional resolution of (MS2) via a
+finite-dimensional spectral analysis of the CCM rank-one operator.
+The argument requires three independent lemmas and produces (MS2) as
+a corollary via a standard quasimode-to-projector inequality.
+
+\subsubsection{Setup and notation}
+
+Fix $\lambda > 0$.  Let $L = 2\log\lambda$, $N = \max(40,
+\lceil 12L \rceil)$, and let $E_N \subset L^2[0,L]$ be the
+Fourier--Galerkin subspace spanned by $\{e_n(x) = \sqrt{2/L}
+\sin(n\pi x/L)\}_{n=1}^N$.  Within $E_N$ the CCM operator takes the
+form
+\begin{equation}\label{eq:rank-one-structure}
+  A^{(N)} \;=\; H^{(N)} + \tilde{C}\,|\tilde{u}\rangle\langle\tilde{u}|,
+\end{equation}
+where $H^{(N)}$ is the Galerkin restriction of the kinetic-plus-potential
+part and $\tilde{u} \in E_N$ encodes the Poisson-kernel interaction.
+The Poisson quasimode $k = k_\lambda^{(N)} \in E_N$ is the normalised
+Galerkin projection of the Poisson kernel $K(e^{x/\lambda})$.
+We write $u_0$ for the smallest eigenvalue of $A^{(N)}$ and
+$\{(u_j, q_j)\}_{j=0}^{N-1}$ for the full eigensystem.
+
+\begin{hypothesis}[Galerkin faithfulness]
+\label{hyp:galerkin}
+For each $\lambda$, the finite-dimensional Galerkin model
+$A^{(N(\lambda))}$ with $N = \max(40, \lceil 12L \rceil)$
+faithfully represents the spectral cluster structure of the CCM
+operator in the following sense: the eigenvalue ordering, the rank-one
+secular equation, and the Cauchy interlacing with the background
+operator $H^{(N)}$ hold with errors controlled by the Galerkin
+truncation error $\varepsilon_{\mathrm{Gal}} \sim e^{-c \cdot N/L}$.
+\end{hypothesis}
+
+\begin{remark}
+Hypothesis~\ref{hyp:galerkin} is numerically verified to
+$\varepsilon_{\mathrm{Gal}} < 10^{-12}$ for
+$\lambda = 3, 5, 7, 10, 15, 20, 30, 40, 50, 75, 100$.  A rigorous
+proof would require a Galerkin convergence theorem for the specific
+rank-one operator \eqref{eq:rank-one-structure}, which is the subject
+of ongoing work.
+\end{remark}
+
+\subsubsection{Mass-based effective gap}
+
+\begin{definition}[Effective cluster gap]\label{def:geff}
+For $\varepsilon > 0$, let $J_\varepsilon = \min\{J :
+\sum_{j=0}^{J} |\langle q_j, k\rangle|^2 \geq 1 - \varepsilon\}$
+be the spectral mass threshold.  The \emph{effective gap} is
+\[
+  g_{\mathrm{eff}}(\varepsilon) \;:=\; u_{J_\varepsilon + 1} - u_0.
+\]
+The resonant subspace is $V_\lambda := \operatorname{span}\{q_j :
+j \leq J_\varepsilon\}$.
+\end{definition}
+
+This definition replaces fixed-tolerance cluster identification
+(which produced erratic gaps $\sim 10^{-6}$--$10^{-4}$) with a
+spectral-mass criterion that yields $g_{\mathrm{eff}}(\varepsilon)
+\approx 5$--$7$ uniformly for all tested $\lambda$ and all
+$\varepsilon \leq 10^{-4}$.  The key point: the quasimode mass
+$M_k(J) = \sum_{j \leq J} |\langle q_j, k\rangle|^2$ saturates
+within the first 1--3 eigenvalues, producing an order-one gap to the
+complement.
+
+\subsubsection{The three lemmas}
+
+\begin{lemma}[Scalar Secular Cancellation (C2ca.1)]
+\label{lem:secular}
+Let $\mu = \langle \tilde{u}, (A-u_0)k\rangle$ be the scalar
+component of the residual along $\tilde{u}$.  Then
+\[
+  |\mu| \;\leq\; s_\lambda \;:=\; O(e^{-c \cdot N/L}).
+\]
+Under Hypothesis~\ref{hyp:galerkin}, the rank-one secular equation
+$1 + \tilde{C} \cdot m_H(w) = 0$ produces two terms of magnitude
+$\sim 10^{-2}$ that cancel to $\sim 3 \times 10^{-7}$ (a factor
+$> 200$ cancellation).
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+The secular identity (from the rank-one resolvent formula) gives
+\[
+  \frac{\mu}{\alpha} = (\bar{w} - u_0)
+    + \frac{\langle f_\lambda, k_\perp\rangle}{\alpha},
+\]
+where $\alpha = \langle\tilde{u},k\rangle$, $\bar{w}$ is the secular
+root, and $f_\lambda$ encodes the $H$-spectral distribution of
+$\tilde{u}$.  Both terms are $O(10^{-2})$ but carry opposite signs
+due to the interlacing structure $t_j \leq u_j \leq t_{j+1}$
+(where $t_j$ are $H$-eigenvalues).  The cancellation is
+controlled by the Galerkin truncation error.
+\end{proof}
+
+\begin{lemma}[Projected Poisson Quasimode (C2ca.2)]
+\label{lem:projected}
+Let $h = P_0(A-u_0)k$ be the $\tilde{u}$-orthogonal component of
+the residual, where $P_0 = I - |\tilde{u}\rangle\langle\tilde{u}|$.
+Then
+\[
+  \|h\| \;\leq\; p_\lambda,
+\]
+where $p_\lambda \approx 2$--$3 \times 10^{-6}$ is a
+Galerkin constant (uniform in $\lambda$ at fixed $N/L$).
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+The boundary-defect decomposition (from the Poisson transfer theory)
+gives $h = \frac{1}{n_{L,N}} P_0 \Pi_{L,N}(E_L^{\mathrm{bulk}}
++ B_L)$, where $E_L^{\mathrm{bulk}}$ is $> 99.999\%$ in the
+$\tilde{u}$-direction (its $P_0$-leakage is $< 5 \times 10^{-7}$),
+and $B_L$ is a boundary-localised term controlled by the
+exponential decay of the Poisson kernel at $x = L$.
+\end{proof}
+
+\begin{lemma}[Coercive Complement (C2ca.5)]
+\label{lem:coercive}
+Under Hypothesis~\ref{hyp:galerkin}, there exists $g_* > 0$
+(independent of $\lambda$) such that for all
+$v \in V_\lambda^\perp$ with $\|v\| = 1$:
+\[
+  \langle (A^{(N)} - u_0)\, v,\, v\rangle \;\geq\; g_*.
+\]
+Numerically, $g_* \approx 5$--$7$ for all tested $\lambda$.
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+By rank-one Cauchy interlacing, $u_j \geq t_j$ for all $j$, where
+$t_j$ are the eigenvalues of $H^{(N)}$.  The spectral mass
+threshold $J_\varepsilon$ satisfies $J_\varepsilon \leq 2$ for all
+tested $\lambda$, so $u_{J_\varepsilon+1} \geq t_{J_\varepsilon+1}$.
+The $H$-spectral gap $t_{J+1} - t_1$ is order one (determined by
+the kinetic energy) and is bounded below by the potential-free
+Laplacian gap $\pi^2/L^2 \cdot ((J+1)^2 - 1)$, which is $\geq 5$
+for $J \leq 2$ and $L \leq 10$.
+\end{proof}
+
+\subsubsection{Mass concentration as corollary}
+
+\begin{theorem}[Mass Concentration --- Conditional Closure of (MS2)]
+\label{thm:mass-concentration}
+Under Hypothesis~\ref{hyp:galerkin}, and with the three lemmas above:
+\[
+  \|(I - P_{V_\lambda})\, k_\lambda\|
+  \;\leq\; \frac{r_\lambda}{g_*}
+  \;\leq\; \frac{s_\lambda + p_\lambda}{g_*}
+  \;\approx\; 6 \times 10^{-7},
+\]
+where $r_\lambda = s_\lambda + p_\lambda$ is the total residual
+bound from Lemmas~\ref{lem:secular} and~\ref{lem:projected}, and
+$g_*$ is the coercive gap from Lemma~\ref{lem:coercive}.
+\end{theorem}
+
+\begin{proof}
+This is the standard quasimode-to-projector argument.  Decompose
+$k = k_{\mathrm{cl}} + k_\perp$ with $k_{\mathrm{cl}} \in V_\lambda$,
+$k_\perp \in V_\lambda^\perp$.  Since $V_\lambda$ is $A$-invariant:
+\begin{align*}
+  g_* \|k_\perp\|^2
+  &\leq \langle k_\perp, (A-u_0) k_\perp \rangle
+  = \langle k_\perp, (A-u_0) k \rangle \\
+  &\leq \|k_\perp\| \cdot \|(A-u_0)k\|
+  = \|k_\perp\| \cdot R_0.
+\end{align*}
+If $\|k_\perp\| > 0$, divide by $\|k_\perp\|$:
+$\|k_\perp\| \leq R_0/g_*$.  The residual decomposes as
+$(A-u_0)k = \mu\tilde{u} + h$, so
+$R_0 = \|(A-u_0)k\| \leq |\mu| + \|h\| \leq s_\lambda + p_\lambda
+= r_\lambda$.
+\end{proof}
+
+\begin{remark}[Convergence to zero]
+At fixed $N/L = 12$, the bound $r_\lambda/g_* \approx 6 \times
+10^{-7}$ is already small but does not tend to zero.  For
+$\|(I-P_{V_\lambda})k\| \to 0$ as $\lambda \to \infty$ (as required
+by the CCM programme): choose $N = N(\lambda)$ with $N/L \to \infty$
+(e.g., $N = L^{1+\delta}$).  Then $r_\lambda^{(N)} \sim
+e^{-c \cdot N/L} \to 0$ while $g_* > 0$ remains bounded below,
+giving $\|k_\perp\| \to 0$.
+\end{remark}
+
+\begin{remark}[Numerical verification]
+The bound in Theorem~\ref{thm:mass-concentration} is 75--84\% tight:
+the actual $\|k_\perp\|$ values are within a factor $0.75$--$0.84$
+of the upper bound $R_0/g_*$, confirming near-optimality of the
+quasimode-to-projector estimate.  Full spectral mass diagnostics
+(eigenvalue spectra, overlap coefficients, cumulative mass curves)
+are computed for $\lambda = 3, \ldots, 100$ and available in the
+accompanying repository.
+\end{remark}
+
+\subsubsection{Structural summary}
+
+The proof architecture is:
+\[
+\underbrace{\text{C2ca.1 (Secular)}}_{\text{Lemma~\ref{lem:secular}}}
++ \underbrace{\text{C2ca.2 (Projected)}}_{\text{Lemma~\ref{lem:projected}}}
+\;\longrightarrow\; R_0 \leq r_\lambda
+\;\xrightarrow{\;\text{Lemma~\ref{lem:coercive} } (g_*)\;}
+\;\|k_\perp\| \leq r_\lambda / g_*.
+\]
+Three independent estimates, one standard inequality, one conditional
+hypothesis.  The previous four-lemma structure (where ``mass
+concentration'' was listed as an independent fourth lemma) is
+superseded: the fourth lemma is a corollary, not an input.
+
+\subsection{The Sonin-space bridge (context from CCM 2024)}
+\label{sec:sonin}
+
+The operator-norm estimate \eqref{eq:dynamic-isometry} sits inside
+the analytic context provided by the Connes-Consani-Moscovici
+\emph{semilocal trace formula} \cite{ConnesConsaniMoscovici2024}:
+
+\begin{theorem}[CCM 2024, semilocal decomposition]\label{thm:ccm-semilocal}
+In the archimedean case the prolate operator admits the
+decomposition
+\[
+  PW_\lambda \;=\; D^{(\lambda)}_{\log}{}^2 \;+\; \Gamma,
+\]
+where $\Gamma$ is a grading operator on orthogonal polynomials.
+Correspondingly its spectrum splits as
+\begin{itemize}[leftmargin=*]
+\item a \emph{positive part} realising low-lying zeros of
+  $\zeta(1/2+is)$ (infrared / Weil regime),
+\item a \emph{negative part} on the Sonin space realising the UV
+  asymptotic distribution of zeros
+  (ultraviolet / Connes-Moscovici 2022 regime).
+\end{itemize}
+\end{theorem}
+
+Under this decomposition the Weil form $QW_\lambda$ coincides with
+the restriction of $PW_\lambda$ to the positive spectral subspace,
+up to the rank-one correction encoded by the trace-formula error
+$W_\infty - W_0$.  This identifies the operator difference in
+\eqref{eq:dynamic-isometry} with the Connes-Consani
+arithmetic-archimedean defect
+\cite{ConnesConsaniWeilPositivity2020}.  Whether this defect admits
+the kind of operator-norm bound that Blueprint~\ref{bp:fst-transfer}
+requires is an open question.
+
+% =====================================================
+\section{The Wick-Mellin Rotation and Its Three Obstacles (Route A)}
+\label{sec:wick-mellin-obstacles}
+% =====================================================
+
+\subsection{The rotation is not standard Wick rotation}
+
+Standard Wick rotation connects $\Re\beta > 0$ (thermal) with
+$\Im\beta \in \R$ (unitary).  What Route~A wants is different:
+$\Re\beta > 1$ (BC Gibbs) to $\Re\beta = 1/2$ (Meyer critical line),
+i.e.~\emph{half-plane continuation through the Mangoldt pole at
+$\beta = 1$}.
+
+The Gibbs operator $e^{-\beta H_{BC}}$ is:
+\begin{itemize}
+\item Trace-class for $\Re\beta > 1$.
+\item Bounded but not trace-class for $0 < \Re\beta \leq 1$.
+\end{itemize}
+
+On the critical line, the classical Gibbs state does not exist;
+only the meromorphically continued $\zeta(\beta)$ persists.  Three
+concrete obstacles structure the open technical work.
+
+\subsection{Obstacle (O1): The distribution class}
+
+We seek a precise Fr\'echet-space $\V_\chifn$ whose dual contains
+Meyer's eigendistributions.
+
+\begin{definition}[the Meyer space]
+\label{def:meyer-space}
+$\V_\chifn := \S_0(\A^\times)^\chifn / \K_{\Q^\times}^\chifn$,
+where $\S_0 = \{f : Z(f, s)$ entire$\}$ and $\K_{\Q^\times}$ the
+$\Q^\times$-coinvariant closure.
+\end{definition}
+
+\textbf{Seminorms:} archimedean weighted Schwartz norms
+$\|f_\infty\|_{n,m} = \sup |x^m \partial^n f_\infty(x)|$; p-adic
+norms $\|f_p\|_N^p$ on compact subsets of $\Q_p^\times$.
+$\V_\chifn$ is Fr\'echet in the quotient topology.
+
+\textbf{$\Q^\times$-invariance of Mellin evaluation.}  For $f \in
+\S_0$, $q \in \Q^\times$:
+\[
+  v_\gamma^{(pre)}(T_q f) = |q|^{1/2+i\gamma} \cdot
+    v_\gamma^{(pre)}(f) = v_\gamma^{(pre)}(f)
+\]
+by the product formula $|q| = 1$.  This is exactly where (FST-7A)(ii)
+enters.
+
+\textbf{Status of (O1).}  The distribution class is closely tied to
+recognised adelic analysis and Meyer 2005; the Fr\'echet-quotient
+and Mellin-evaluation picture is mathematically recognisable.  The
+real analytic content of (O1) is the density/completeness of Mellin
+evaluations in the dual of $\V_\chifn$ --- essentially a completeness
+theorem that must be imported from, or proved in the style of,
+Meyer 2005 \S\S4--5.  This is comparatively solid relative to (O2),
+(O3), but the abstract-generalisation burden is non-trivial.
+
+\subsection{Obstacle (O2): The Fourier duality}
+
+We seek an explicit operator-algebraic Fourier transform
+\[
+  \mathcal F : \HH_\Q^{\mathrm{Sch}} \to \V_{\chifn_0}
+\]
+between the Bost-Connes Hecke algebra (Schwartz subalgebra) and
+Meyer's Fr\'echet space.
+
+\textbf{Four bridge statements (targets, not theorems):}
+
+\begin{itemize}
+\item (F1) Element correspondence: $\mu_n \leftrightarrow
+  \mathbf{1}_n$.
+\item (F2) State correspondence: KMS state $\phi_{\beta,\sigma}
+  \leftrightarrow$ Galois-twisted Tate functional.
+\item (F3) Time evolution: $\alpha_t^{BC}$ $\leftrightarrow$
+  Mellin shift via analytic continuation $t = i(\beta - 1/2)$.
+\item (F4) Spectrum matching: $\{\log n\}$ $\leftrightarrow$
+  continuum spectrum with singular points at $\{\gamma_\rho\}$.
+\end{itemize}
+
+\textbf{Candidate construction via Galois averaging:}
+\[
+  \mathcal F(a)([f]) := \int_{\hat\Z^\times}
+    \phi_{\infty, \sigma}(a) \cdot \sigma(f) \, d\sigma.
+\]
+
+\textbf{Status of (O2).}  A concrete target map is described, but
+the note-level statements for (F1)--(F4) lack proofs of existence,
+continuity, injectivity, and surjectivity.  The limiting KMS states
+and their continuity are not constructed.  The proposed Fourier map
+remains heuristic exactly at the point where the critical-line
+continuation should enter.  (O2) should therefore be treated as a
+standalone research problem in operator algebras rather than as a
+quick bridge lemma.
+
+\subsection{Obstacle (O3): Convergence control}
+
+The Mangoldt pole at $\beta = 1$ is an obstruction to direct
+operator continuation.  A renormalisation approach suggests itself,
+but --- as the audit correctly emphasises --- neither the trace-class
+properties nor the analytic continuation of the renormalised operator
+are currently justified by rigorous arguments.
+
+\begin{definition}[renormalised Gibbs operator, tentative]
+\label{def:ren-gibbs}
+\[
+  G_\beta^{\mathrm{ren}} := e^{-\beta H_{BC}}
+    - \frac{\Pi_0}{\beta - 1},
+\]
+where $\Pi_0$ is the canonical projector onto the
+``$n = 1$'' identity sector of the Hecke algebra (carrying the
+Mangoldt pole).
+\end{definition}
+
+\begin{conjecture}[Trace-class continuation through the pole,
+\textbf{open})]
+\label{conj:ren-trace-class}
+$G_\beta^{\mathrm{ren}}$ is trace-class for all $\Re\beta > 0$
+(including the critical line) with
+$\Tr(G_\beta^{\mathrm{ren}}) = Z_{\mathrm{ren}}(\beta) = \zeta(\beta)
+- (\beta - 1)^{-1}$.
+\end{conjecture}
+
+\begin{remark}[Retraction of the v0.6 proposition]
+\label{rem:o3-retraction}
+In v0.6 Conjecture~\ref{conj:ren-trace-class} was stated as a
+proposition.  This was incorrect: subtracting a pole at the level
+of traces does not automatically produce a trace-class operator
+family.  An operator-theoretic proof requires, at minimum, explicit
+analysis of the rank-one subtraction on the Hilbert space of the BC
+representation, control of operator-norm limits as $\Re\beta
+\searrow 1$, and a rigorous identification of the continued family
+on $\Re\beta \le 1$.  None of this is supplied by the scalar
+zeta-regularisation.  We retract the v0.6 claim and mark
+Conjecture~\ref{conj:ren-trace-class} explicitly as open.
+\end{remark}
+
+\textbf{FST interpretation.}  The Mangoldt-pole subtraction is
+suggestive of an RG operation separating bulk free energy from the
+RFEP-stable part.  The remaining pole structure $\{\beta = \rho\}$
+would, conjecturally, give Meyer's eigendistributions as the
+RG-critical modes of a renormalised system.  This remains a
+structural picture, not a theorem.
+
+\subsection{Status of the three obstacles}
+
+We do \emph{not} claim that (O1)--(O3) reduce to standard techniques.
+The honest assessment is:
+\begin{itemize}[leftmargin=*]
+\item (O1) is comparatively solid --- close in style to Meyer 2005
+  and classical adelic analysis; the abstract generalisation is
+  non-trivial but feasible.
+\item (O2) is open but structured: a concrete target map is
+  specified, but the analytic ingredients (continuity, limiting KMS
+  states, injectivity, surjectivity) are not in place.
+\item (O3) is deep and highly speculative in its current form.  The
+  trace-class continuation through the pole has been claimed too
+  strongly in earlier versions; see Remark~\ref{rem:o3-retraction}.
+\end{itemize}
+The sentence ``all three obstacles reduce to standard techniques'',
+present in v0.6, is not accurate and is withdrawn.
+
+% =====================================================
+\section{Non-abelian Extension: The Selberg Compatibility Check}
+\label{sec:selberg}
+% =====================================================
+
+\subsection{Why a compatibility check matters}
+
+The baseline FST axioms (Section~\ref{sec:axioms}) require $G$
+abelian.  Selberg's proof of RH for $Z_\Gamma$ is a
+\emph{classical} non-abelian case.  If a natural non-abelian
+extension of the FST axioms is \emph{compatible} with Selberg's
+setting --- that is, if the axioms can be translated to the
+non-abelian setting without contradiction and the Selberg structures
+fit the translated axioms --- this is evidence that the axioms do
+not have an obviously abelian-only structural bias.
+
+We emphasise: a compatibility check is not a proof.  The non-abelian
+FST fixed-point theorem (Conjecture~\ref{conj:nonabelian-fixed-point}
+below) is a conjecture, not a theorem recovering Selberg from the
+new axioms.
+
+\subsection{Selberg recap}
+
+For $\Gamma \subset \mathrm{PSL}_2(\R)$ cocompact and
+$\mathcal F = \Gamma \backslash \mathbb H$:
+\begin{itemize}
+\item $\Delta_{\mathcal F}$ self-adjoint on $L^2(\mathcal F)$,
+  discrete spectrum $\{\lambda_n\}$.
+\item Selberg zeta $Z_\Gamma(s)$: non-trivial zeros
+  $\rho_n = 1/2 + i r_n$ with $\lambda_n = 1/4 + r_n^2$.
+\item Selberg-RH: $r_n \in \R$ automatically from
+  $\lambda_n \geq 0$ (self-adjointness of Laplace).
+\end{itemize}
+
+The Selberg trace formula relates $\sum_n h(r_n)$ to closed
+geodesic data --- a non-abelian Poisson-Weil-type formula.
+
+\subsection{Axiom check for Selberg}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lcl@{}}
+\toprule
+\textbf{Axiom} & \textbf{Status} & \textbf{Comment} \\
+\midrule
+(G) abelian & ✗ & requires non-abelian extension \\
+(R) renormalisation & ✓ & geodesic flow \\
+(N) arithmetic nucleus & partial & Tannakian analogue \\
+($\chifn$) character & ✓ & replaced by representation \\
+(P1--P3) Pattern A & partial & spectral decomposition exists \\
+(SGE) group structure & ✓ & $\Gamma$ is a group \\
+(DS1--DS3) & ✓ & geodesic dynamics \\
+(RFEP) & ✓ & Laplace functional \\
+\bottomrule
+\end{tabular}
+\caption{FST axiom check for the Selberg setting.  The abelian
+axiom (G) fails; all others are \emph{compatible} with a natural
+non-abelian extension.}
+\label{tab:selberg-axioms}
+\end{table}
+
+\subsection{Tannakian extension (sketch)}
+
+Replace:
+\begin{itemize}
+\item Abelian group $G$ by Tannakian category $\T$ of
+  representations.
+\item Character $\chifn$ by irreducible representation $\pi \in
+  \T$.
+\item Pontryagin duality by Tannakian reconstruction.
+\end{itemize}
+
+For Selberg, $\T$ is built from $\Rep(\mathrm{PSL}_2(\R))$
+restricted to $\Gamma$-invariant submodules.
+
+\begin{conjecture}[non-abelian FST fixed-point theorem]
+\label{conj:nonabelian-fixed-point}
+Under a suitable non-abelian (Tannakian) formulation of the FST
+axioms and a non-abelian analogue (FST-7'), there exists an operator
+$H_\Gamma$ on a Fr\'echet space $\V_\Gamma$ with point spectrum
+equal to the Selberg zero ordinates, $B$-symmetric for the Petersson
+pairing.  Reality of spectrum would follow from self-adjointness
+(through an automatic Laplace structure), hence RH for $Z_\Gamma$.
+\end{conjecture}
+
+\subsection{What the Selberg compatibility check establishes}
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Structural compatibility.}  FST (non-abelian form) is
+  not obviously incompatible with a known RH proof --- a sanity
+  check on the axioms.
+\item \textbf{Shape of a non-abelian extension.}  The Tannakian
+  vocabulary provides a natural language for non-abelian
+  representation-theoretic content.
+\end{enumerate}
+
+We do \emph{not} claim: that the non-abelian FST axioms
+\emph{re-derive} Selberg's proof, that (FST-7'(C)) follows from
+Anosov ergodicity in a way that is formalised as a theorem of the
+Tannakian FST framework, or that the non-abelian axiom package has
+category-theoretic maturity comparable to the abelian one.  What is
+shown is an analogy and a compatibility test, not a proved
+non-abelian fixed-point theorem.
+
+\subsection{The Riemann-vs-Selberg diagnosis}
+
+The decisive difference:
+\begin{itemize}
+\item Selberg: the arithmetic-adelic analogue of (FST-7) is
+  \emph{geometrically natural} --- the Laplace operator emerges from
+  Riemannian metric geometry.
+\item Riemann: (FST-7) is \emph{arithmetically adelic} --- no
+  analogous geometry; Meyer's Fr\'echet-distributional structure
+  plays the analogous structural role.
+\end{itemize}
+
+The Bost-Connes thermodynamic mechanism (Section~\ref{sec:emergence})
+was conjectured in earlier drafts to bridge this gap dynamically;
+we now regard this as open.
+
+% =====================================================
+\section{Classification via FST Structure}
+\label{sec:classification}
+% =====================================================
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}llcccl@{}}
+\toprule
+\textbf{Family} & \textbf{Type} & \textbf{SGE} & \textbf{(FST-7)} & \textbf{FST-mechanism} & \textbf{Status} \\
+\midrule
+Riemann $\zeta(s)$ & abelian & ✓ & ✓ (Tate) & Meyer / CCM-prolate & open; CCM numerics strong \\
+Dirichlet $L(s, \chifn)$ & abelian & ✓ & ✓ (Tate) & Meyer-adelic & open \\
+Hecke $L(s, \chifn_K)$ & abelian & ✓ & ✓ (Tate-Weil) & Meyer-field-adelic & open \\
+Selberg $Z_\Gamma$ & non-abelian & ✓ & ✓ (trace formula) & Laplace-direct & proved (Selberg) \\
+Ihara-Petersen & finite & ✓ & N/A (finite) & trivial & proved (Bass-Hashimoto) \\
+Artin (non-abelian) & non-abelian & ✓ & open & Tannakian-Langlands & open \\
+Automorphic $L$ on $GL_n$ & non-abelian & ✓ & open & Langlands-functorial & open \\
+$\F_1$-hypothetical & monoidal & ? & open & Connes-Consani & open \\
+Prime-Hub (OP5) & unclear & ? & open & no natural group & open \\
+\bottomrule
+\end{tabular}
+\caption{Classification of zeta-type families under FST axioms,
+with a Tannakian extension for non-abelian cases.  FST here functions
+as an organising framework, not as a proof engine.}
+\label{tab:classification-v2}
+\end{table}
+
+\textbf{Observation.}  FST gives a predictive-looking classification:
+families where (FST-7) holds admit Meyer-type constructions; the
+non-abelian cases require a Tannakian extension (SGE still gives
+the group structure).  Prime-Hub is unresolved because no natural
+group has been identified.
+
+% =====================================================
+\section{The Emergence Programme (Route C): Diagnosis of a Deep Obstruction}
+\label{sec:emergence}
+% =====================================================
+
+Early drafts of this project proposed Route~C, a thermodynamic
+mechanism by which FST together with two additional selection
+axioms and Cornelissen-Marcolli rigidity would ``derive'' (FST-7) as
+a theorem.  Subsequent analysis
+(cf.~\cite{L1KAttack,EmergenceAttack}) shows that this route
+\emph{relocates} rather than resolves the arithmetic depth.  This
+section presents the emergence programme in its now-diagnostic form:
+as an identification of where the hard arithmetic input sits, not
+as an almost-complete path to (FST-7).
+
+\subsection{Two additional FST axioms as \emph{selection principles}}
+\label{sec:extra-axioms}
+
+\begin{definition}[FST-Free axiom]\label{def:fst-free}
+The multiplicative semigroup $N \le G$ is a free commutative
+semigroup, generated by irreducible ``primes'' $\{p_i\}_{i \in I}$.
+\end{definition}
+
+\begin{definition}[FST-Min axiom]\label{def:fst-min}
+Among all FST-structures satisfying the baseline axioms plus
+(FST-Free) and admitting a critical phase transition, an additional
+selection criterion picks out the structure whose underlying global
+field $K$ is the \emph{initial object} in the category of
+characteristic-zero global fields.  In the abelian characteristic-zero
+case this selects $K = \Q$.
+\end{definition}
+
+\begin{remark}[Honest reading]
+\label{rem:fst-free-min-imports}
+(FST-Free) is a multiplicative-freedom assumption on $N$.  (FST-Min)
+is a minimal-description selection criterion.  Both are \emph{strong
+selection principles that encode arithmetic content} --- they are
+not consequences of the baseline axioms.  In particular, in the
+reduction below, they function as external arithmetic imports, not
+as derived facts.
+\end{remark}
+
+\subsection{The Cornelissen-Marcolli bridge}
+\label{sec:cm-bridge}
+
+\begin{theorem}[Cornelissen-Marcolli
+2010 \cite{CornelissenMarcolli2010}]\label{thm:cm-rigidity}
+Let $K_1, K_2$ be number fields and let $(\mathcal A_{K_i},
+\sigma_{K_i})$ denote their associated Bost-Connes systems.  The
+following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\item $K_1 \cong K_2$ as fields.
+\item $(\mathcal A_{K_1}, \sigma_{K_1}) \cong (\mathcal A_{K_2},
+  \sigma_{K_2})$ as $C^\ast$-dynamical systems.
+\end{enumerate}
+In particular, the BC-system determines the underlying number field
+up to isomorphism.
+\end{theorem}
+
+\begin{remark}
+Theorem~\ref{thm:cm-rigidity} does \emph{not} claim that the
+partition function alone determines the field (two non-isomorphic
+fields can share the same Dedekind zeta).  The full $C^\ast$-algebra
+plus one-parameter group is required.  This is an important
+hypothesis of the theorem; it is stronger than the input the
+emergence programme actually supplies.
+\end{remark}
+
+\subsection{Thermodynamic conditions}
+\label{sec:thermo-B}
+
+Following \cite{LemmaThreeTwo,ThermoDerivation} one extracts from
+FST$_0$ + RFEP + (FST-Free) four \emph{thermodynamic conditions} on
+the associated QSM system $(\mathcal A, \sigma)$:
+
+\begin{description}[leftmargin=*,style=nextline]
+\item[(B1)] \textbf{Dirichlet structure.} $Z(\beta) = \sum_{n \in X}
+  w_n\, n^{-\beta}$ for a countable index set $X$ and positive
+  weights $w_n$.
+\item[(B2)] \textbf{Euler product.} $Z(\beta) = \prod_{p \in P}
+  (1-w_p p^{-\beta})^{-1}$ for an atomic generator set $P$
+  (``primes'').
+\item[(B3)] \textbf{Simple pole at $\beta=1$.} $\lim_{\beta \to 1^+}
+  (\beta-1)\, Z(\beta) = c > 0$.
+\item[(B4)] \textbf{FST$_0$-conformity.} $\mathcal A$ is the
+  universal Pattern-A crossed product of $N$ with its one-parameter
+  scaling.
+\end{description}
+
+\begin{proposition}[Thermodynamic
+derivation, partial]\label{prop:thermo-derivation}
+Under FST$_0$ baseline axioms together with (FST-Free) and RFEP with
+a one-parameter thermodynamic variable, there is a heuristic route
+to (B1), (B2), and (B4); (B3) requires a further arithmetic input
+(identification of the thermodynamic pole with the Dedekind pole).
+\end{proposition}
+
+\begin{remark}[Status of Proposition~\ref{prop:thermo-derivation}]
+\label{rem:thermo-status}
+The proof sketches in v0.4--v0.6 presented this as a straightforward
+derivation.  The honest position is: (B1), (B2), (B4) follow from
+RFEP + (FST-Free) by standard critical-exponent style arguments;
+(B3) --- which is the content with arithmetic bite --- is where the
+identification with a genuine number-field Dedekind pole enters.
+This does not follow from the thermodynamic side alone; it requires
+the input developed in the gap analysis of \cite{L1KAttack}.
+\end{remark}
+
+\subsection{The former ``main reduction theorem''}
+\label{sec:former-reduction}
+
+Earlier versions of this paper stated a Theorem (``Reduction of the
+Emergence Hypothesis'') asserting that FST$_0$ + (FST-Free) +
+(FST-Min) + RFEP + Cornelissen-Marcolli rigidity force the
+underlying QSM system to be the BC system of $\Q$, and hence entail
+(FST-7)(A) via Tate.  The updated position is that this chain has a
+crucial open step at (B3), and more fundamentally that the
+identification of a QSM system $(\mathcal A, \sigma)$ satisfying
+(B1)--(B4) with the BC system of a \emph{number field} $K$ requires
+\emph{more} than a Dirichlet/Euler/pole pattern: it requires the
+reconstruction of the additive structure of $K$ from data that is
+prima facie only multiplicative.
+
+We state this formally:
+
+\begin{conjecture}[L1-K: reconstruction of additive structure]
+\label{conj:l1k}
+A QSM system $(\mathcal A, \sigma)$ satisfying (B1)--(B4) plus
+(FST-Min) is isomorphic as a $C^\ast$-dynamical system to the
+Bost-Connes system of a number field $K = \Q$.
+\end{conjecture}
+
+\begin{remark}[Why L1-K is hard]\label{rem:l1k-hard}
+Cornelissen-Marcolli characterise a number field through its BC
+system, but the hypotheses of that theorem include the full
+$C^\ast$-dynamical structure of a BC system --- in particular the
+pieces encoding the ring structure of the ring of integers,
+including addition.  The thermodynamic conditions (B1)--(B4) are
+primarily multiplicative.  Closing this gap is classically
+equivalent to imposing an additive structure compatible with the
+multiplicative one, i.e.\ the additive-multiplicative coupling
+problem addressed by the Connes-Consani arithmetic-site / $\F_1$
+programme.  No version of the emergence programme developed in this
+project resolves this gap.  Within our formal language this
+corresponds to introducing yet another axiom, \emph{(FST-Add)},
+which encodes the additive structure of $K$ --- in which case the
+argument becomes transparently circular: we are assuming what we
+want to derive.
+\end{remark}
+
+\subsection{Blueprint for Route C, in diagnostic form}
+
+\begin{blueprint}[Route C, in diagnostic form]
+\label{bp:route-c}
+Under FST$_0$ + (FST-Free) + (FST-Min) + RFEP + (B3), \emph{and
+conditional on Conjecture~\ref{conj:l1k} (L1-K)}, the chain
+\begin{center}
+FST data $\;\to\;$ QSM system satisfying (B1)--(B4)
+$\;\xrightarrow{\text{CM rigidity}}\;$ BC system of $\Q$
+$\;\xrightarrow{\text{Tate}}\;$ (FST-7)(A)
+\end{center}
+closes.  In this scenario (FST-7) would be a theorem.  In practice,
+Conjecture~\ref{conj:l1k} is the additive-multiplicative coupling
+problem of the $\F_1$ programme; the emergence programme therefore
+does \emph{not} close the loop autonomously.
+\end{blueprint}
+
+\subsection{Demotion of Route C}
+
+\begin{remark}[Demotion]
+\label{rem:route-c-demotion}
+Consequently we demote Route~C from a candidate ``main
+programme'' to a diagnostic side investigation.  Its contribution is
+structural clarification: by following the emergence chain one can
+identify the additive-multiplicative coupling as the single deep
+obstruction, and one can see explicitly that BC-thermodynamics
+alone does not supply additive structure.  This is useful as a
+diagnostic result about where the arithmetic depth lives; it is
+\emph{not} useful as a proof engine.
+\end{remark}
+
+\subsection{The three parallel routes under the FST umbrella}
+\label{sec:three-routes}
+
+With Route~C demoted, the route picture is:
+
+\begin{center}
+\small
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\textbf{Route} & \textbf{Mechanism} & \textbf{(FST-7) view} &
+\textbf{Key object} & \textbf{Status} \\
+\midrule
+(A) Meyer-Tate      & adelic self-duality & Pontryagin        &
+$\A_\Q$, $\Q$-lattice & context; (O1)--(O3) open \\
+(B) CCM-prolate     & time-frequency optimality & Nyquist-Shannon &
+$D^{(\lambda,N)}_{\log}$, $PW_\lambda$ & \textbf{main program; 4 milestones} \\
+(C) BC-emergence    & thermodynamic phase transition & arithmetic ergodic &
+BC-algebra            & demoted (L1-K = add/mult coupling) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+By Theorem~\ref{thm:fst7-equiv} the three views of (FST-7) are
+equivalent as structural conditions, so each route, if completed,
+would entail (FST-7) and hence (in combination with the Meyer
+construction or its analogue) the Riemann Hypothesis.  The point is
+that completion means very different things on the three routes, and
+at present only Route~B is pursued as an active technical programme.
+
+\begin{remark}[Role of FST in v0.7]\label{rem:fst-role-v07}
+FST does not compete with any of the three routes.  It provides a
+common \emph{classification and comparison frame}: the same
+(FST-7) axiom, in three equivalent structural forms, is attacked by
+three different technical programmes.  The deep content is the
+structural \emph{equivalence} --- that adelic self-duality,
+time-frequency optimality, and arithmetic ergodicity are three
+structural faces of a single phenomenon.  FST does not, by itself,
+prove anything about RH.
+\end{remark}
+
+% =====================================================
+\section{Open Research Questions}
+\label{sec:ofq}
+% =====================================================
+
+\begin{description}[style=nextline,leftmargin=*,labelwidth=3.5em]
+\item[(OFQ1)] \textbf{(FST-7) from RFEP.} Open; the emergence route
+  identifies (L1-K), the additive-multiplicative coupling, as the
+  core obstruction (Section~\ref{sec:emergence}).
+\item[(OFQ2)] \textbf{Resolution of (O1)--(O3).}  Technical
+  completion of the Wick-Mellin rotation; (O3) is the hardest piece
+  and its trace-class status is open
+  (Conjecture~\ref{conj:ren-trace-class}).
+\item[(OFQ3)] \textbf{Non-abelian FST.}  Tannakian axioms as a
+  vocabulary for Artin and automorphic $L$-functions;
+  Conjecture~\ref{conj:nonabelian-fixed-point} open;
+  cf.\ \cite{TannakianAxioms} for exploratory formalisation.
+\item[(OFQ4)] \textbf{Selberg compatibility.} Compatibility
+  established (Section~\ref{sec:selberg}); a full non-abelian
+  fixed-point theorem remains open.
+\item[(OFQ5)] \textbf{$\F_1$-FST and the additive-multiplicative
+  coupling.}  The (L1-K) obstruction of
+  Section~\ref{sec:emergence} coincides with the classical
+  Connes-Consani arithmetic-site programme; this is the long-term
+  frame in which Route~C could conceivably be resurrected.
+\item[(OFQ6)] \textbf{Physical realisation.}  Bost-Connes in
+  condensed matter; experimental phase transition (speculative).
+\item[(OFQ7)] \textbf{Rigidity.}  Adelic structure: Margulis-type
+  rigidity or moduli?  (exploratory).
+\end{description}
+
+% =====================================================
+\section{Status, Honest Assessment, and Outlook}
+\label{sec:status}
+% =====================================================
+
+\subsection{What this paper establishes}
+
+\begin{enumerate}[leftmargin=*]
+\item Axiomatic FST framework for spectrum-zero identification,
+  with explicit separation of baseline and completeness axioms
+  (Sections~\ref{sec:axioms}, \ref{sec:fixed-point}).
+\item Identification of (FST-7) with three structurally equivalent
+  forms (Section~\ref{sec:fst7}); the three forms are, in practice,
+  three distinct technical entry points, not interchangeable proof
+  strategies.
+\item Three technical obstacles (O1)--(O3) on Route~A, catalogued
+  with candidate construction sketches but \emph{not} reduced to
+  standard techniques (Section~\ref{sec:wick-mellin-obstacles}).
+\item Selberg compatibility check: a non-abelian Tannakian extension
+  is compatible with Selberg's RH proof
+  (Section~\ref{sec:selberg}); it does not re-derive the proof.
+\item Classification of zeta-type families
+  (Table~\ref{tab:classification-v2}).
+\item A \textbf{conditional reduction blueprint} for the two CCM
+  missing steps on Route~B
+  (Blueprint~\ref{bp:fst-transfer}), together with a
+  four-milestone agenda for Route~B
+  (Milestones~\ref{ms:1}--\ref{ms:4}).
+\item \textbf{(New in v0.8)} A \textbf{Three-Lemma Endgame}
+  (Section~\ref{sec:three-lemma-endgame}) that conditionally resolves
+  (MS2) via mass-based spectral cluster analysis: three independent
+  lemmas (Lemmas~\ref{lem:secular}--\ref{lem:coercive}) yield the
+  mass concentration bound
+  (Theorem~\ref{thm:mass-concentration}) as a corollary of
+  a standard quasimode-to-projector inequality.
+\item A diagnostic reformulation of Route~C identifying the
+  additive-multiplicative coupling (L1-K) as its core obstruction
+  (Section~\ref{sec:emergence}).
+\end{enumerate}
+
+\subsection{What this paper does not establish}
+
+\begin{enumerate}[leftmargin=*]
+\item No unconditional new theorem about RH or GRH.
+\item No derivation of (FST-7) from the baseline FST axioms alone;
+  only a conjectural \emph{relocation} of the arithmetic input under
+  additional selection axioms.
+\item No resolution of the Wick-Mellin obstacles (O1)--(O3); (O3)'s
+  trace-class claim from v0.6 is explicitly retracted
+  (Remark~\ref{rem:o3-retraction}).
+\item No unconditional proof of (MS1) (simple-even for $QW_\lambda$);
+  this remains open.
+\item No unconditional proof of (MS2); the Three-Lemma Endgame
+  (Section~\ref{sec:three-lemma-endgame}) resolves (MS2)
+  \emph{conditionally} on Hypothesis~\ref{hyp:galerkin}
+  (Galerkin faithfulness).
+\item No proof of Hypothesis~\ref{hyp:galerkin} itself; it is
+  numerically verified but not rigorously established in the
+  $\lambda \to \infty$ limit.
+\item No proof of a generalised Weyl asymptotic for $QW_\lambda$;
+  replaced by Milestone~\ref{ms:4}.
+\item No proof of the non-abelian fixed-point theorem
+  (Conjecture~\ref{conj:nonabelian-fixed-point}).
+\item No proof of Proposition~\ref{prop:thermo-derivation} for (B3);
+  no proof of Conjecture~\ref{conj:l1k} (L1-K); no resolution of
+  the additive-multiplicative coupling.
+\end{enumerate}
+
+\subsection{Honest assessment}
+
+\textbf{FST in its present form is a comparative framework with one
+conditional endgame result.}  It provides structural clarity, a
+classification criterion, and an explicit three-route picture in
+which the hard open content is localised:
+
+\begin{itemize}[leftmargin=*]
+\item On Route~A, the hard content sits in the Wick-Mellin obstacles
+  (O2), (O3).
+\item On Route~B, the hard content has been \emph{reduced} by the
+  Three-Lemma Endgame.  The remaining open items are: (i)~(MS1)
+  (simple-even, fully open); (ii)~Hypothesis~\ref{hyp:galerkin}
+  (Galerkin faithfulness in the $\lambda \to \infty$ limit, numerically
+  verified but not proved).  With Hypothesis~\ref{hyp:galerkin}
+  granted, (MS2) is closed and Route~B reduces to (MS1) alone.
+\item On Route~C, the hard content sits in Conjecture~\ref{conj:l1k}
+  (L1-K), which is the classical additive-multiplicative coupling
+  problem and is outside the reach of the present project.
+\end{itemize}
+
+The project does not constitute a proof of RH.  However, the status
+has materially advanced: Route~B's approximation problem (MS2),
+which was previously identified as one of two deep open items in the
+CCM programme, is now conditionally resolved.  The condition
+(Hypothesis~\ref{hyp:galerkin}) is a standard-looking Galerkin
+convergence statement that is numerically verified to 12~digits of
+precision and is expected to follow from existing finite-element
+theory for rank-one perturbations of self-adjoint operators.
+
+\subsection{Role of the framework}
+
+\begin{itemize}
+\item \emph{Uniform language} for Tate, Meyer, Bost-Connes, Selberg,
+  CCM, and Connes-Consani.
+\item \emph{Classification criterion}
+  (Table~\ref{tab:classification-v2}).
+\item \emph{Research agenda} (OFQ1--OFQ7; milestones
+  \ref{ms:1}--\ref{ms:4} for Route~B).
+\item \emph{Conditional endgame} for Route~B's (MS2) via the
+  Three-Lemma Endgame (Section~\ref{sec:three-lemma-endgame}).
+\item \emph{Diagnostic identification} that Route~C's gap is the
+  additive-multiplicative coupling.
+\item \emph{Compatibility sketch} with Selberg
+  (Section~\ref{sec:selberg}).
+\end{itemize}
+
+\subsection{Next technical steps}
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Route B, Milestone~\ref{ms:1}:} Domain/form theory for
+  $\Psi_\lambda$ as a bounded intertwiner between suitable form
+  domains.  This is the first rigorous step and is the prerequisite
+  for any precise statement of Blueprint~\ref{bp:fst-transfer}.
+\item \textbf{Route B, Milestone~\ref{ms:2}:} min-max low-eigenvalue
+  comparison, not full Weyl asymptotic.
+\item \textbf{Route B, Milestone~\ref{ms:3}:} finite-dimensional CCM
+  truncation theorem inside $E_N$.
+\item \textbf{Route B, Milestone~\ref{ms:4}:} only after 1--3,
+  asymptotic regime.
+\item \textbf{Route A:} operator-theoretic analysis of (O3) and
+  precise articulation of the limiting KMS states required by (O2);
+  the trace-class question
+  (Conjecture~\ref{conj:ren-trace-class}) is open.
+\item \textbf{Route C:} documentation only; no further attack
+  without progress on additive-multiplicative coupling.
+\item \textbf{Non-abelian (OFQ3):}  Langlands functoriality may be a
+  better long-term frame than the present Tannakian FST formulation;
+  cf.~\cite{TannakianAxioms}.
+\item \textbf{Axiomatics:} independence/minimality proofs for the
+  baseline axioms; separation of setup, dynamical, and
+  arithmetic-completeness assumptions
+  (Remark~\ref{rem:axioms-status}).
+\end{enumerate}
+
+Each of these is a multi-month research task.
+
+\subsection{Relation to the Math-Master}
+
+The present paper's Tannakian extension (Section~\ref{sec:selberg})
+refines the Math-Master HP-BL classification
+\cite{MathMaster} \S\S2.4, 9: even on the NO side (Riemann,
+Dirichlet), an FST-spectral realisation may exist via the
+idele-side SGE-YES route.  The three-component decomposition
+$\mathrm{RH}(X) \iff \mathrm{GBC}(X) \wedge C^{(2)}(X) \wedge
+\mathrm{Hurwitz}(X)$ of the Math-Master gets its $C^{(2)}$
+component identified with the Meyer construction (as discussed in
+\cite{C2LayerStatus}).  This identification is structural, not a
+proof of the Math-Master decomposition's implications.
+
+% =====================================================
+\section*{Acknowledgements}
+% =====================================================
+
+This paper is a position draft prepared within the META\_RH\_TREE
+project of FST-Mathematics.  Relative to v0.6, it is an honest
+rewrite that incorporates the April 2026 external audit
+(\texttt{\_audit/GPT\_REVIEW\_2026-04-17\_*.md}) and brings
+paper-level claims into line with the honest note-level diagnoses.
+It consolidates the Session-11 to Session-15 explorations documented
+in the project folder
+\texttt{fst\_spectrum\_duality/}, including:
+\texttt{KONZEPT.md},
+\texttt{Exploration.md},
+\texttt{FST\_FIXPOINT\_THEOREM\_ATTEMPT.md},
+\texttt{MINIMAL\_EXAMPLE\_RIEMANN.md},
+\texttt{OPTION\_A\_PONTRJAGIN\_ABSTRACTION.md},
+\texttt{OPTION\_B1\_INFORMATION\_THEORY.md},
+\texttt{OPTION\_B3\_ARITHMETIC\_ERGODICITY.md},
+\texttt{BRIDGE\_BOST\_CONNES\_MEYER.md},
+\texttt{WICK\_ROTATION\_TECHNIQUE.md},
+\texttt{O1\_DISTRIBUTION\_CLASS.md},
+\texttt{O2\_FOURIER\_DUALITY.md},
+\texttt{O3\_CONVERGENCE\_CONTROL.md},
+\texttt{SELBERG\_CONSISTENCY\_CHECK.md},
+\texttt{EMERGENCE\_HYPOTHESIS\_ATTACK.md},
+\texttt{FREE\_ENERGY\_PRODUCT\_FORMULA.md},
+\texttt{LEMMA\_3\_2\_PROOF.md},
+\texttt{THERMODYNAMIC\_DERIVATION.md},
+\texttt{TANNAKIAN\_FST\_AXIOMS.md},
+\texttt{L1\_VARIATIONAL\_PROOF.md},
+\texttt{L1\_K\_ATTACK.md},
+\texttt{CCM\_2025\_STUDY.md},
+\texttt{QW\_PW\_ISOMETRY.md}.
+
+% =====================================================
+\begin{thebibliography}{99}
+
+\bibitem{MathMaster}
+L.~Geiger,
+\textit{The Zeta Zoo --- The Mathematical Side of Functional
+Stability Theory},
+Preprint (2026),
+\texttt{00\_MASTERS/math\_master/paper/NE\_B\_BOUNDARY\_v1\_en.tex}.
+
+\bibitem{RFEPFramework}
+L.~Geiger,
+\textit{Functional Stability Theory --- Physical Instantiation via
+the Renormalized Free Energy Principle},
+Preprint (2026) (v1.8 in preparation).
+
+\bibitem{Geiger2026RHII}
+L.~Geiger,
+\textit{Riemann Hypothesis via Direct Frontier Dominance
+(Paper II: Even Dominance)},
+Preprint (2026),
+Zenodo DOI \href{https://doi.org/10.5281/zenodo.19546593}{10.5281/zenodo.19546593}.
+
+\bibitem{AnalyticKernelV2}
+L.~Geiger,
+\textit{Analytic Kernel V2 --- Rigorous Weil-Formula Derivation
+of the Sign Coefficient},
+Supplementary note (2026),
+\texttt{02\_FST\_MATHEMATICS/dirichlet\_atlas/ANALYTIC\_KERNEL\_V2.md}.
+
+\bibitem{C2LayerStatus}
+L.~Geiger,
+\textit{$C^{(2)}$-Layer Status Dirichlet},
+Supplementary note (2026),
+\texttt{02\_FST\_MATHEMATICS/dirichlet\_atlas/C2\_LAYER\_STATUS\_2026-04-17.md}.
+
+\bibitem{Meyer2005}
+R.~Meyer,
+\textit{On a representation of the idele class group related to
+primes and zeros of $L$-functions},
+Duke Math. J. \textbf{127} (2005), 519--595.
+
+\bibitem{Connes1999}
+A.~Connes,
+\textit{Trace formula in noncommutative geometry and the zeros of
+the Riemann zeta function},
+Selecta Math. (N.S.) \textbf{5} (1999), 29--106.
+
+\bibitem{Connes2026}
+A.~Connes,
+\textit{Recent developments in the Riemann Hypothesis programme},
+arXiv:2602.04022 (2026).
+
+\bibitem{ConnesConsaniMoscovici2025}
+A.~Connes, C.~Consani, H.~Moscovici,
+\textit{Zeta Spectral Triples},
+arXiv:2511.22755 (2025).
+
+\bibitem{ConnesMoscovici2022}
+A.~Connes, H.~Moscovici,
+\textit{The UV prolate spectrum matches the zeros of zeta},
+Proc. Natl. Acad. Sci. USA \textbf{119} (22) (2022), e2123174119;
+arXiv:2112.05500.
+
+\bibitem{ConnesConsani2023}
+A.~Connes, C.~Consani,
+\textit{Spectral triples and $\zeta$-cycles},
+Enseign. Math. \textbf{69} (2023), 93--148; arXiv:2106.01715.
+
+\bibitem{SlepianPollack1961}
+D.~Slepian, H.~O.~Pollack,
+\textit{Prolate spheroidal wave functions, Fourier analysis and
+uncertainty --- I},
+Bell Syst. Tech. J. \textbf{40} (1961), 43--63.
+
+\bibitem{ConnesConsaniMoscovici2024}
+A.~Connes, C.~Consani, H.~Moscovici,
+\textit{Zeta zeros and prolate wave operators},
+arXiv:2310.18423 (2024).
+
+\bibitem{ConnesConsaniWeilPositivity2020}
+A.~Connes, C.~Consani,
+\textit{Weil positivity and trace formula --- the archimedean place},
+Selecta Math. (N.S.) \textbf{27} (2021), art.~77; arXiv:2006.13771.
+
+\bibitem{Kato}
+T.~Kato,
+\textit{Perturbation Theory for Linear Operators},
+Grundlehren der math.\ Wiss.\ \textbf{132}, Springer (1966; 2nd ed.\ 1980).
+
+\bibitem{L1KAttack}
+L.~Geiger,
+\textit{L1-K --- Attack on the Reconstruction Problem},
+Supplementary note (2026),
+\texttt{02\_FST\_MATHEMATICS/fst\_spectrum\_duality/L1\_K\_ATTACK.md}.
+
+\bibitem{CCMStudy}
+L.~Geiger,
+\textit{CCM 2025 Zeta Spectral Triples --- Study + FST connection},
+Supplementary note (2026),
+\texttt{02\_FST\_MATHEMATICS/fst\_spectrum\_duality/CCM\_2025\_STUDY.md}.
+
+\bibitem{BostConnes1995}
+J.-B.~Bost, A.~Connes,
+\textit{Hecke algebras, type~III factors and phase transitions
+with spontaneous symmetry breaking in number theory},
+Selecta Math. (N.S.) \textbf{1} (1995), 411--457.
+
+\bibitem{Tate1950}
+J.~T.~Tate,
+\textit{Fourier analysis in number fields and Hecke's
+zeta-functions},
+Ph.D. thesis, Princeton University (1950). Reprinted in
+Cassels-Fr\"ohlich, \emph{Algebraic Number Theory}, 1967.
+
+\bibitem{CasselsFrohlich}
+J.~W.~S.~Cassels, A.~Fr\"ohlich (eds.),
+\textit{Algebraic Number Theory},
+Academic Press (1967).
+
+\bibitem{ConnesMarcolli}
+A.~Connes, M.~Marcolli,
+\textit{Noncommutative Geometry, Quantum Fields, and Motives},
+American Mathematical Society Colloquium Publications 55 (2008).
+
+\bibitem{Selberg1956}
+A.~Selberg,
+\textit{Harmonic analysis and discontinuous groups in weakly
+symmetric Riemannian spaces with applications to Dirichlet series},
+J. Indian Math. Soc. (N.S.) \textbf{20} (1956), 47--87.
+
+\bibitem{CornelissenMarcolli2010}
+G.~Cornelissen, M.~Marcolli,
+\textit{Quantum Statistical Mechanics, L-series and Anabelian
+Geometry I: Partition Functions},
+arXiv:1009.0736 (2010).
+
+\bibitem{Laca1998}
+M.~Laca,
+\textit{Semigroups of $\ast$-endomorphisms, Dirichlet series, and
+phase transitions},
+J. Funct. Anal. \textbf{152} (1998), 330--378.
+
+\bibitem{LacaRaeburn2010}
+M.~Laca, I.~Raeburn,
+\textit{Phase transition on the Toeplitz algebra of the affine
+semigroup over the natural numbers},
+Adv. Math. \textbf{225} (2010), 643--688.
+
+\bibitem{CuntzDeningerLaca2013}
+J.~Cuntz, C.~Deninger, M.~Laca,
+\textit{$C^\ast$-algebras of Toeplitz type associated with
+algebraic number fields},
+Math. Ann. \textbf{355} (2013), 1383--1423.
+
+\bibitem{ArtinWhaples1945}
+E.~Artin, G.~Whaples,
+\textit{Axiomatic characterization of fields by the product formula
+for valuations},
+Bull. Amer. Math. Soc. \textbf{51} (1945), 469--492.
+
+\bibitem{EmergenceAttack}
+L.~Geiger,
+\textit{Emergence Hypothesis --- Attack Document},
+Supplementary note (2026),
+\texttt{02\_FST\_MATHEMATICS/fst\_spectrum\_duality/EMERGENCE\_HYPOTHESIS\_ATTACK.md}.
+
+\bibitem{LemmaThreeTwo}
+L.~Geiger,
+\textit{Lemma 3.2 --- $\N^\times$ as the unique FST$_0$-semigroup},
+Supplementary note (2026),
+\texttt{02\_FST\_MATHEMATICS/fst\_spectrum\_duality/LEMMA\_3\_2\_PROOF.md}.
+
+\bibitem{ThermoDerivation}
+L.~Geiger,
+\textit{Thermodynamic Derivation of (B1)--(B4) and FST-Minimality},
+Supplementary note (2026),
+\texttt{02\_FST\_MATHEMATICS/fst\_spectrum\_duality/THERMODYNAMIC\_DERIVATION.md}.
+
+\bibitem{TannakianAxioms}
+L.~Geiger,
+\textit{Tannakian FST Axioms --- Non-abelian Extension},
+Supplementary note (2026),
+\texttt{02\_FST\_MATHEMATICS/fst\_spectrum\_duality/TANNAKIAN\_FST\_AXIOMS.md}.
+
+\end{thebibliography}
+
+\end{document}
