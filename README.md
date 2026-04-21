@@ -8,9 +8,12 @@ The central object is a **renormalized free-energy functional** whose critical-p
 
 ## Repository Structure
 
+- **masters/** -- Foundation papers (three masters)
+  - **zookeeper/** -- The Spectral Zookeeper: RH via microcluster closure ([DOI](https://doi.org/10.5281/zenodo.19673127))
+  - **zeta-zoo/** -- The Zeta Zoo: HP-BL classification, SGE taxonomy ([DOI](https://doi.org/10.5281/zenodo.19673227))
+  - **spectrum-duality/** -- FST Spectrum Duality / RFEP ([DOI](https://doi.org/10.5281/zenodo.19162705))
 - **framework/** -- The Unified Renormalized Energy Framework (meta-level paper)
 - **domain-proofs/** -- Domain-specific instantiations and proofs
-- **applications/** -- Empirical applications (FST-I Particles, FST-II Chemistry, FST-III Biology)
 - **scripts/** -- Numerical validation scripts
 - **fst_references.bib** -- Shared bibliography
 
@@ -142,7 +145,9 @@ Arrows indicate **logical** dependency, not chronological order:
 | Principle | Renormalized Free-Energy Principle | RFEP | The core mathematical principle | [10.5281/zenodo.19036190](https://doi.org/10.5281/zenodo.19036190) |
 | Pattern | Pattern A: Second-Order Resolvent Dominance | Pattern A | The universal stability pattern | [10.5281/zenodo.19036190](https://doi.org/10.5281/zenodo.19036190) |
 | Programme | Functional Stability Theory | FST | The programme name (umbrella over all) | -- |
-| Foundation | Riemann Hypothesis Proof | RH | Self-contained proof, reference instantiation | [10.5281/zenodo.19035640](https://doi.org/10.5281/zenodo.19035640) |
+| Master | The Spectral Zookeeper | Zookeeper | RH proof via CCM microcluster closure | [10.5281/zenodo.19673127](https://doi.org/10.5281/zenodo.19673127) |
+| Master | The Zeta Zoo | Zeta Zoo | HP-BL classification, SGE taxonomy | [10.5281/zenodo.19673227](https://doi.org/10.5281/zenodo.19673227) |
+| Foundation | RH Even Dominance | RH v2.1 | Independent RH proof, even dominance route | [10.5281/zenodo.19546593](https://doi.org/10.5281/zenodo.19546593) |
 | Foundation | Cosmic Recursion Model | CRM | Self-contained model | [10.5281/zenodo.18728935](https://doi.org/10.5281/zenodo.18728935) |
 
 ## Related Repositories
