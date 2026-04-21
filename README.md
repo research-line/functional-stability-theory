@@ -156,14 +156,9 @@ Arrows indicate **logical** dependency, not chronological order:
 
 | Level | Name | Acronym | Meaning | DOI |
 |-------|------|---------|---------|-----|
+| Programme | Functional Stability Theory | FST | The programme name (umbrella over all) | — |
 | Principle | Renormalized Free-Energy Principle | RFEP | The mathematical core principle | [10.5281/zenodo.19162705](https://doi.org/10.5281/zenodo.19162705) |
 | Pattern | Pattern A: Functional Positivity under Gauge Constraint | Pattern A | The universal stability pattern | [10.5281/zenodo.19162705](https://doi.org/10.5281/zenodo.19162705) |
-| Programme | Functional Stability Theory | FST | The programme name (umbrella over all) | — |
-| Master | The Spectral Zookeeper | Zookeeper | RH proof via CCM microcluster closure | [10.5281/zenodo.19673127](https://doi.org/10.5281/zenodo.19673127) |
-| Master | The Zeta Zoo | Zeta Zoo | HP-BL classification, SGE taxonomy | [10.5281/zenodo.19673227](https://doi.org/10.5281/zenodo.19673227) |
-| Master | FST Spectrum Duality | RFEP | Physical instantiation (Pattern A, DS1–DS3) | [10.5281/zenodo.19162705](https://doi.org/10.5281/zenodo.19162705) |
-| Foundation | RH Even Dominance | RH v2.1 | Independent RH proof, second route | [10.5281/zenodo.19546593](https://doi.org/10.5281/zenodo.19546593) |
-| Foundation | Cosmic Recursion Model | CRM | Independent dark energy model | [10.5281/zenodo.18728935](https://doi.org/10.5281/zenodo.18728935) |
 
 ## Independent Foundations
 
@@ -174,7 +169,7 @@ Arrows indicate **logical** dependency, not chronological order:
 
 These stand independently of FST. The RFEP was abstracted from them; they are not derived from it.
 
-## Numerical Validation Scripts
+## Numerical Validation Scripts (Domain Supplements)
 
 | Script | Paper | Description |
 |--------|-------|-------------|
