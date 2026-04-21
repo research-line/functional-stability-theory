@@ -12,7 +12,6 @@ The central object is a **renormalized free-energy functional** whose critical-p
   - **zookeeper/** -- The Spectral Zookeeper: RH via microcluster closure ([DOI](https://doi.org/10.5281/zenodo.19673127))
   - **zeta-zoo/** -- The Zeta Zoo: HP-BL classification, SGE taxonomy ([DOI](https://doi.org/10.5281/zenodo.19673227))
   - **spectrum-duality/** -- FST Spectrum Duality / RFEP ([DOI](https://doi.org/10.5281/zenodo.19162705))
-- **framework/** -- The Unified Renormalized Energy Framework (meta-level paper)
 - **domain-proofs/** -- Domain-specific instantiations and proofs
 - **scripts/** -- Numerical validation scripts
 - **fst_references.bib** -- Shared bibliography
