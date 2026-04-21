@@ -20,9 +20,9 @@ Classified by the SGE taxonomy from the Zeta Zoo. These instantiate Pattern A on
 
 | Paper | Version | Status | Open Problem | DOI |
 |-------|---------|--------|--------------|-----|
-| [**FST-Math: BSD**](https://doi.org/10.5281/zenodo.19087443) | v1.1 | Reformulation | Higher Gross–Zagier (rank ≥ 2) | [10.5281/zenodo.19087443](https://doi.org/10.5281/zenodo.19087443) |
-| [**FST-Math: Hodge**](https://doi.org/10.5281/zenodo.19087439) | v1.1 | No-Go Theorem | = Deligne's question (1982) | [10.5281/zenodo.19087439](https://doi.org/10.5281/zenodo.19087439) |
-| [**FST-Math: P vs NP**](https://doi.org/10.5281/zenodo.19056809) | v1.2 | Reformulation | Uniformity Bridge | [10.5281/zenodo.19056809](https://doi.org/10.5281/zenodo.19056809) |
+| [**FST-Math: BSD**](fst-mathematics/bsd/) | v1.1 | Reformulation | Higher Gross–Zagier (rank ≥ 2) | [10.5281/zenodo.19087443](https://doi.org/10.5281/zenodo.19087443) |
+| [**FST-Math: Hodge**](fst-mathematics/hodge/) | v1.1 | No-Go Theorem | = Deligne's question (1982) | [10.5281/zenodo.19087439](https://doi.org/10.5281/zenodo.19087439) |
+| [**FST-Math: P vs NP**](fst-mathematics/p-vs-np/) | v1.2 | Reformulation | Uniformity Bridge | [10.5281/zenodo.19056809](https://doi.org/10.5281/zenodo.19056809) |
 
 ### FST-Physics
 
@@ -30,10 +30,10 @@ Derive Pattern A + DS1–DS3 from Spectrum Duality. These instantiate the Dissip
 
 | Paper | Version | Status | Open Problem | DOI |
 |-------|---------|--------|--------------|-----|
-| [**FST-Physics: Turbulence**](https://doi.org/10.5281/zenodo.19056813) | v1.3 | Journal-ready | DFC1 empirical (only input) | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
-| [**FST-Physics: Yang–Mills**](https://doi.org/10.5281/zenodo.19087433) | v2.1 | Conditional | Analytical proof of λ < 0 | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
-| [**FST-Physics: Navier–Stokes**](https://doi.org/10.5281/zenodo.19087449) | v2.1 | Conditional | Assumption G2 (projection regularity) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
-| [**FST-Physics: NS Log-Distance**](https://doi.org/10.5281/zenodo.19056807) | v1.3 | Proof of Life | TLL for 3D NS analytically open | [10.5281/zenodo.19056807](https://doi.org/10.5281/zenodo.19056807) |
+| [**FST-Physics: Turbulence**](fst-physics/turbulence/) | v1.3 | Journal-ready | DFC1 empirical (only input) | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
+| [**FST-Physics: Yang–Mills**](fst-physics/yang-mills/) | v2.1 | Conditional | Analytical proof of λ < 0 | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
+| [**FST-Physics: Navier–Stokes**](fst-physics/navier-stokes/) | v2.1 | Conditional | Assumption G2 (projection regularity) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
+| [**FST-Physics: NS Log-Distance**](fst-physics/navier-stokes/) | v1.3 | Proof of Life | TLL for 3D NS analytically open | [10.5281/zenodo.19056807](https://doi.org/10.5281/zenodo.19056807) |
 
 ### FST-Cosmology
 
@@ -41,15 +41,15 @@ The cosmological branch of FST. The Dark Energy paper instantiates Pattern A on 
 
 | Paper | Version | Status | Open Problem | DOI |
 |-------|---------|--------|--------------|-----|
-| [**FST-Cosmology: Dark Energy**](https://doi.org/10.5281/zenodo.19036235) | v1.6 | Framework Note | Hu–Sawicki parameters quantitatively open | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
+| [**FST-Cosmology: Dark Energy**](fst-cosmology/dark-energy/) | v1.6 | Framework Note | Hu–Sawicki parameters quantitatively open | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
 
 ### FST-Biology
 
-In development. See [`domain-proofs/biology/`](domain-proofs/biology/).
+In development. See [`fst-biology/`](fst-biology/).
 
 ### FST-Chemistry
 
-Planned. See [`domain-proofs/chemistry/`](domain-proofs/chemistry/).
+Planned. See [`fst-chemistry/`](fst-chemistry/).
 
 ## Proof Architecture
 
@@ -195,16 +195,18 @@ functional-stability-theory/
 │   ├── zookeeper/              RH proof (microcluster closure)
 │   ├── zeta-zoo/               Classification (SGE taxonomy)
 │   └── spectrum-duality/       Physical axioms (RFEP, Pattern A)
-├── domain-proofs/              Domain supplements
-│   ├── bsd/                    FST-Math: Rank-1 positivity
-│   ├── hodge/                  FST-Math: No-go + easy direction
-│   ├── p-vs-np/                FST-Math: Witness entropy gap
-│   ├── turbulence/             FST-Physics: K41 spectrum (unconditional)
-│   ├── yang-mills/             FST-Physics: Mass gap (conditional)
-│   ├── navier-stokes/          FST-Physics: Regularity (conditional)
-│   ├── dark-energy/            FST-Cosmology: CRM screening (validated)
-│   ├── biology/                FST-Biology (in development)
-│   └── chemistry/              FST-Chemistry (planned)
+├── fst-mathematics/            Domain supplements — Mathematics
+│   ├── bsd/                    Rank-1 positivity (reformulation)
+│   ├── hodge/                  No-go + easy direction
+│   └── p-vs-np/                Witness entropy gap (reformulation)
+├── fst-physics/                Domain supplements — Physics
+│   ├── turbulence/             K41 spectrum (unconditional)
+│   ├── yang-mills/             Mass gap (conditional)
+│   └── navier-stokes/          Regularity + NS-LDI (conditional)
+├── fst-cosmology/              Domain supplements — Cosmology
+│   └── dark-energy/            CRM screening (validated)
+├── fst-biology/                Domain supplements — Biology (in development)
+├── fst-chemistry/              Domain supplements — Chemistry (planned)
 └── scripts/                    Numerical validation
 ```
 
