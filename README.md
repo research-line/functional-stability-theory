@@ -115,8 +115,8 @@ FST (Functional Stability Theory)
 ## Chronological Development
 
 ```
-2025    CRM I–IV (dark energy)        RH "light" proof (even dominance)
-        developed independently       developed independently
+2025/2026  CRM I–IV (dark energy)     RH "light" proof (even dominance)
+           developed independently    developed independently
                  \                       /
                   \                     /
                    +---------+---------+
@@ -136,7 +136,7 @@ FST (Functional Stability Theory)
                    Not enough — need deeper tools
                              |
                              v
-2026    RH via Connes framework (CCM)
+        RH via Connes framework (CCM)
         microcluster closure → unconditional proof
                              |
                              v
