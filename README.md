@@ -20,9 +20,9 @@ Classified by the SGE taxonomy from the Zeta Zoo. These instantiate Pattern A on
 
 | Paper | Version | Status | Open Problem | DOI |
 |-------|---------|--------|--------------|-----|
-| [**FST-Math: BSD**](fst-mathematics/bsd/) | v1.1 | Reformulation | Higher Gross–Zagier (rank ≥ 2) | [10.5281/zenodo.19087443](https://doi.org/10.5281/zenodo.19087443) |
-| [**FST-Math: Hodge**](fst-mathematics/hodge/) | v1.1 | No-Go Theorem | = Deligne's question (1982) | [10.5281/zenodo.19087439](https://doi.org/10.5281/zenodo.19087439) |
-| [**FST-Math: P vs NP**](fst-mathematics/p-vs-np/) | v1.2 | Reformulation | Uniformity Bridge | [10.5281/zenodo.19056809](https://doi.org/10.5281/zenodo.19056809) |
+| [**BSD**](fst-mathematics/bsd/) | v1.1 | Reformulation | Higher Gross–Zagier (rank ≥ 2) | [10.5281/zenodo.19087443](https://doi.org/10.5281/zenodo.19087443) |
+| [**Hodge**](fst-mathematics/hodge/) | v1.1 | No-Go Theorem | = Deligne's question (1982) | [10.5281/zenodo.19087439](https://doi.org/10.5281/zenodo.19087439) |
+| [**P vs NP**](fst-mathematics/p-vs-np/) | v1.2 | Reformulation | Uniformity Bridge | [10.5281/zenodo.19056809](https://doi.org/10.5281/zenodo.19056809) |
 
 ### FST-Physics
 
@@ -30,10 +30,10 @@ Derive Pattern A + DS1–DS3 from Spectrum Duality. These instantiate the Dissip
 
 | Paper | Version | Status | Open Problem | DOI |
 |-------|---------|--------|--------------|-----|
-| [**FST-Physics: Turbulence**](fst-physics/turbulence/) | v1.3 | Journal-ready | DFC1 empirical (only input) | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
-| [**FST-Physics: Yang–Mills**](fst-physics/yang-mills/) | v2.1 | Conditional | Analytical proof of λ < 0 | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
-| [**FST-Physics: Navier–Stokes**](fst-physics/navier-stokes/) | v2.1 | Conditional | Assumption G2 (projection regularity) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
-| [**FST-Physics: NS Log-Distance**](fst-physics/navier-stokes/) | v1.3 | Proof of Life | TLL for 3D NS analytically open | [10.5281/zenodo.19056807](https://doi.org/10.5281/zenodo.19056807) |
+| [**Turbulence**](fst-physics/turbulence/) | v1.3 | Journal-ready | DFC1 empirical (only input) | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
+| [**Yang–Mills**](fst-physics/yang-mills/) | v2.1 | Conditional | Analytical proof of λ < 0 | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
+| [**Navier–Stokes**](fst-physics/navier-stokes/) | v2.1 | Conditional | Assumption G2 (projection regularity) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
+| [**NS Log-Distance**](fst-physics/navier-stokes/) | v1.3 | Proof of Life | TLL for 3D NS analytically open | [10.5281/zenodo.19056807](https://doi.org/10.5281/zenodo.19056807) |
 
 ### FST-Cosmology
 
@@ -41,7 +41,7 @@ The cosmological branch of FST. The Dark Energy paper instantiates Pattern A on 
 
 | Paper | Version | Status | Open Problem | DOI |
 |-------|---------|--------|--------------|-----|
-| [**FST-Cosmology: Dark Energy**](fst-cosmology/dark-energy/) | v1.6 | Framework Note | Hu–Sawicki parameters quantitatively open | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
+| [**Dark Energy**](fst-cosmology/dark-energy/) | v1.6 | Framework Note | Hu–Sawicki parameters quantitatively open | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
 
 ### FST-Biology
 
@@ -95,62 +95,58 @@ Planned. See [`fst-chemistry/`](fst-chemistry/).
   † = bridge species
 ```
 
-## Genesis and Architecture
-
-### Chronological Development
+## Hierarchy
 
 ```
-2025–2026   RH Trilogy            CRM I–IV
-            (independent)         (independent)
-                  |                     |
-                  v                     v
-            +-----------+         +-----------+
-            | Riemann   |         | Cosmic    |
-            | Hypothesis|         | Recursion |
-            | Parts I–III|        | Model I–V |
-            +-----------+         +-----------+
-                  |                     |
-                  +----------+----------+
+FST (Functional Stability Theory)
+│
+├── Masters
+│   ├── Zookeeper         RH proof (CCM microcluster closure)
+│   ├── Zeta Zoo          Mathematical classification (SGE taxonomy)
+│   └── Spectrum Duality  Physical instantiation (RFEP, Pattern A)
+│
+├── FST-Mathematics       BSD, Hodge, P vs NP
+├── FST-Physics           Turbulence, Yang–Mills, Navier–Stokes, NS-LDI
+├── FST-Cosmology         Dark Energy
+├── FST-Biology           (in development)
+└── FST-Chemistry         (planned)
+```
+
+## Chronological Development
+
+```
+2025    CRM I–IV (dark energy)        RH "light" proof (even dominance)
+        developed independently       developed independently
+                 \                       /
+                  \                     /
+                   +---------+---------+
                              |
-                    Abstraction / Generalization
+                   Recognition: both share the same
+                   structural pattern (Pattern A)
                              |
                              v
-            +-----------------------------------+
-            |       THREE MASTERS (FST)         |
-            |-----------------------------------|
-            | Zookeeper     | RH proof (CCM)    |
-            | Zeta Zoo      | Classification    |
-            | Spectrum Dual.| Physics (RFEP)    |
-            +-----------------------------------+
+                   RFEP formulated (general principle)
                              |
-                    Instantiation / Application
+                   Several dead ends
                              |
-         +--------+----------+----------+--------+
-         |        |          |          |        |
-         v        v          v          v        v
-      FST-Math  FST-Phys  FST-Cosmo  FST-Bio  FST-Chem
-      BSD,Hodge  YM,NS,TU  Dark E.   (dev)    (planned)
-      PvNP       NS-LDI
+                             v
+                   Idea: classify zeta-type families
+                   using techniques from the RH proof
+                             |
+                   Not enough — need deeper tools
+                             |
+                             v
+2026    RH via Connes framework (CCM)
+        microcluster closure → unconditional proof
+                             |
+                             v
+                   Zeta Zoo opens: SGE taxonomy
+                   classifies all zeta families
+                             |
+                             v
+                   Reorganization under FST
+                   (Three Masters + five domain branches)
 ```
-
-### Dependency Chain (Proof Direction)
-
-```
-RH  ──────────> Zookeeper (Master)  ──────> Zeta Zoo (classification)
-(proven)        (CCM proof route)           (SGE taxonomy of all zetas)
-                       │
-CRM ──────────> Spectrum Duality (Master) ──> Domain Supplements
-(model)         (Pattern A, RFEP)             (FST-Math, FST-Phys,
-                                               FST-Cosmo, FST-Bio,
-                                               FST-Chem)
-```
-
-Arrows indicate **logical** dependency, not chronological order:
-- RH and CRM stand on their own (independent foundations)
-- The Zookeeper proves RH via CCM microcluster closure
-- The Zeta Zoo classifies all zeta-type families (including Riemann zeta)
-- Spectrum Duality provides the physical axiom package (Pattern A, DS1–DS3)
-- Domain supplements instantiate Pattern A; CRM is viewed through the FST lens in FST-Cosmology
 
 ### Core Foundations — Principles and Naming
 
@@ -173,14 +169,14 @@ These stand independently of FST. The RFEP was abstracted from them; they are no
 
 | Script | Paper | Description |
 |--------|-------|-------------|
-| `scripts/turbulence/compute_F_spectrum.py` | FST-Physics: Turbulence | Verifies K41 as unique minimiser of F[E]; strict convexity test |
+| `scripts/turbulence/compute_F_spectrum.py` | Turbulence | Verifies K41 as unique minimiser of F[E]; strict convexity test |
 | `scripts/navier-stokes/compute_ds3_lorenz.py` | FST-Physics: Navier-Stokes | DS3 stress test on Lorenz attractor; TV saturation |
-| `scripts/navier-stokes/compute_tll_ldi_lorenz.py` | FST-Physics: NS-LDI | **Proof of Life**: TLL+LDI on Lorenz attractor (5/5 tests passed) |
-| `scripts/dark-energy/compute_w_vs_desi.py` | FST-Cosmology: Dark Energy | w_eff(z) comparison with DESI constraints |
-| `scripts/dark-energy/compute_w_mapping.py` | FST-Cosmology: Dark Energy | Correct w_eff → w_DE mapping + DESI grid scan |
-| `scripts/dark-energy/compute_husawicki_mcmc.py` | FST-Cosmology: Dark Energy | Hu-Sawicki f(R) MCMC fit against DESI+Planck+Cassini |
-| `scripts/bsd/compute_height_saturation.py` | FST-Math: BSD | Height saturation test for quadratic twists |
-| `scripts/hodge/compute_ghr_spectrum.py` | FST-Math: Hodge | GHR spectrum numerical verification |
+| `scripts/navier-stokes/compute_tll_ldi_lorenz.py` | NS-LDI | **Proof of Life**: TLL+LDI on Lorenz attractor (5/5 tests passed) |
+| `scripts/dark-energy/compute_w_vs_desi.py` | Dark Energy | w_eff(z) comparison with DESI constraints |
+| `scripts/dark-energy/compute_w_mapping.py` | Dark Energy | Correct w_eff → w_DE mapping + DESI grid scan |
+| `scripts/dark-energy/compute_husawicki_mcmc.py` | Dark Energy | Hu-Sawicki f(R) MCMC fit against DESI+Planck+Cassini |
+| `scripts/bsd/compute_height_saturation.py` | BSD | Height saturation test for quadratic twists |
+| `scripts/hodge/compute_ghr_spectrum.py` | Hodge | GHR spectrum numerical verification |
 
 ## Repository Structure
 
