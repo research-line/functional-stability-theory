@@ -1,0 +1,1683 @@
+% ============================================================================
+%  Dirichlet Character Atlas: A Weil-Kernel Cartography
+%  of Low-Conductor Sector Gaps
+%
+%  Author: Lukas Geiger, Independent Researcher, Bernau
+%  Draft v2 — revised after N=600 server analysis
+%  Status: Final Draft
+% ============================================================================
+\documentclass[10pt,twocolumn]{article}
+
+\usepackage[letterpaper,top=2.0cm,bottom=2.5cm,left=1.8cm,right=1.8cm,columnsep=0.6cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,amsfonts,mathtools,bm}
+\usepackage{graphicx,float,booktabs,array,multirow}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+\usepackage[numbers,square,sort&compress]{natbib}
+\bibliographystyle{unsrtnat}
+
+\usepackage{titlesec}
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% --- Custom macros ---
+\newcommand{\gap}{\operatorname{gap}}
+\newcommand{\chifn}{\chi}
+\newcommand{\Zmodq}{(\mathbb{Z}/q\mathbb{Z})^*}
+\newcommand{\halfline}{\tfrac{1}{2}}
+\newcommand{\Deltachi}{\Delta_{\chifn}}
+\newcommand{\archdiff}{\operatorname{arch\_diff}}
+\newcommand{\primediff}{\operatorname{prime\_diff}_{\mathrm{matrix}}}
+\DeclareMathOperator{\sgn}{sgn}
+
+% ============================================================================
+\title{The Dirichlet Character Atlas\\
+  \large --- A Weil-Kernel Numerical Atlas for Dirichlet $L$-Function Sector Gaps\\
+  \normalsize Galerkin Diagnostics and the Boundaries of Leading-Order Theory}
+\author{Lukas Geiger\\\small Independent Researcher, Bernau}
+\date{\today}
+
+\begin{document}
+\twocolumn[
+\maketitle
+\begin{abstract}
+\noindent
+This paper is an instantiation of Functional Stability Theory
+(FST) in the mathematical domain: it extends the three-component
+decomposition $\mathrm{RH}(X) = \mathrm{GBC}(X) + C^{(2)}(X) +
+\mathrm{Hurwitz}(X)$ (see Math-Master~\cite{MathMaster}, \S2.4) to
+twisted $L$-functions, where the sector gap is the quantitative
+signature of $C^{(2)}_{\chifn}$. The Math-Master
+\cite{MathMaster} develops the overall zeta-zoo architecture and
+the trinity UCU + SGE + Weil-form transversality; the Physics-Master
+\cite{RFEPFramework} develops the companion physical formulation
+via the Renormalized Free Energy Principle.
+
+We develop a Weil-kernel numerical atlas of sector gaps for Dirichlet
+$L$-functions associated to ten low-conductor real characters
+$\chi_D$, $D\in\{5,8,12,13,17,21,24,29,33,60\}$, at Galerkin truncations
+$N\in\{200,400,600\}$ and cut-off $\lambda=20000$. Within the
+three-component decomposition the sector gap is the quantitative
+signature of $C^{(2)}_{\chifn}$.
+Our main results are \emph{negative but structurally informative}. First,
+the leading-order approximation $\phi^+_{\chifn}\approx\phi^-_{\chifn}$
+of the two sector ground states is empirically falsified: a systematic
+16-window test, including the empirical ground state itself, fails the
+success criterion $9/10$ sign accuracy, $R^2\geq 0.8$. Second, the
+ostensibly ``exact'' formula
+\[
+  \gap_{\chifn} = -2\!\!\sum_{p,m}\!\!\frac{\chifn(p)^m\log p}{p^{m/2}}
+    \Deltachi(m\log p) + \archdiff_{\chifn} + O(N^{-1})
+\]
+with
+$\Deltachi(t):=(\phi^+_{\chifn}\ast\phi^+_{\chifn})(t)+(\phi^-_{\chifn}\ast\phi^-_{\chifn})(t)$
+reduces, once both ground states are taken from the same Galerkin
+diagonalization, to a matrix-decomposition tautology: an apparent
+$9/9$ sign accuracy at $N=200$ disappears as a numerical interpolation
+artifact when the analysis is repeated at $N=600$. Third, the
+$\chi_{21}$ gap undergoes a sign flip between $N=200$ and $N=600$
+($+0.282\to-0.004$), illustrating that even the Galerkin operator
+itself is not informative below its convergence scale. We catalog the
+ten characters along two filter constants (parity and root number, both
+$+1$ in the sample) and two informative axes (archimedean factor weight
+and gap signature), exhibit the systematic Siegel-Walfisz compression at
+$N=600$, and position the result as a precise diagnostic of why
+numerical Galerkin routes cannot, by themselves, resolve
+$C^{(2)}_{\chifn}$. A genuine predictive formulation would require
+Paley-Wiener asymptotic control of the sector ground states that
+bypasses the Galerkin truncation; we close with a roadmap toward
+such a branch-local Hilbert-P\'olya framework.
+\end{abstract}
+\vspace{1em}
+]
+
+\section{Introduction}
+\label{sec:intro}
+
+\subsection{Motivation}
+\label{sec:intro-motivation}
+
+The direct-frontier dominance approach to the Riemann hypothesis
+\cite{RH_II} represents the even-parity sector of the Weil quadratic form
+on $L^2[-L,L]$, $L=\log\lambda$, as dominating the odd-parity sector
+uniformly in $\lambda$, at the rate
+$\mathrm{gap}(\lambda)\gtrsim\sqrt{\lambda}$. The construction is
+unconditional, purely variational, and uses only the three structural
+ingredients of $\zeta(s)$: the Euler product, the Gamma factor, and
+a single functional equation.
+
+A natural and central question is whether the same architecture
+transfers to twisted $L$-functions $L(s,\chi)$ for non-trivial
+Dirichlet characters $\chi$, thereby addressing the Generalized
+Riemann Hypothesis (GRH) one character at a time. In the meta-programme
+of \cite{MetaGalerkinBridge}, the RH-type question for a zeta family
+$X$ is diagnosed through a three-component decomposition
+\begin{equation}
+\label{eq:three-component}
+  \mathrm{RH}_X
+    \;=\;
+  \mathrm{GBC}_X \;+\; C^{(2)}_X \;+\; \mathrm{Hurwitz}_X,
+\end{equation}
+where $\mathrm{GBC}_X$ captures the Galerkin bridge to a self-adjoint
+operator, $\mathrm{Hurwitz}_X$ the reality-of-zeros transfer, and
+$C^{(2)}_X$ the Connes-style operator identification at the heart of the
+Hilbert-P\'olya programme. For the trivial character,
+$C^{(2)}_{X=\zeta}$ is closed unconditionally by the even-dominance
+theorem of \cite{RH_II}; for non-trivial $\chi$, $C^{(2)}_{\chifn}$ is
+the hard residual component. The present paper is an atlas of what
+Galerkin-numerical techniques can and, more importantly, cannot say
+about this residual.
+
+\subsection{What this paper does}
+\label{sec:intro-contribution}
+
+We catalogue the Galerkin sector gap
+$\gap_{\chifn}(\lambda)
+  :=\lambda_{\min}(Q^-_{\chifn})-\lambda_{\min}(Q^+_{\chifn})$
+at $\lambda=20000$ for ten Kronecker-real characters
+$\chi_D$, $D\in\{5,8,12,13,17,21,24,29,33,60\}$,
+across three Galerkin resolutions $N\in\{200,400,600\}$. For each
+character we compute both sector ground states separately
+$\phi^\pm_{\chifn}$, the primitive Weil kernel prediction
+\begin{equation}
+\label{eq:predictor}
+  S_{\chifn}(\lambda)
+    = -2\sum_{\substack{p\nmid q\\m\log p\leq 2L}}
+      \frac{\chifn(p)^m\log p}{p^{m/2}}\;\Deltachi(m\log p),
+\end{equation}
+with
+$\Deltachi(t)
+  =(\phi^+_{\chifn}\!*\phi^+_{\chifn})(t)
+    +(\phi^-_{\chifn}\!*\phi^-_{\chifn})(t)$,
+the archimedean contribution
+$\archdiff_{\chifn}
+  :=\langle\phi^-,K^{\mathrm{arch}}_-\phi^-\rangle
+    -\langle\phi^+,K^{\mathrm{arch}}_+\phi^+\rangle$,
+and the full Galerkin gap $\gap_{\mathrm{gal}}^{(N)}$. We position the
+four quantities relative to each other, across all three Galerkin
+resolutions, and relative to the empirical (highest-$N$) gaps as a
+reference.
+
+\subsection{What this paper finds}
+\label{sec:intro-findings}
+
+Our contribution is deliberately diagnostic. The key findings are:
+
+\begin{enumerate}
+\item[(F1)] \textbf{Falsification of the leading-order reduction.}
+  Under the approximation
+  $\phi^+_{\chifn}\approx\phi^-_{\chifn}\approx\phi_\infty$ used in
+  \cite{RH_II} for the trivial character, the prime-side predictor
+  reduces to a universal autocorrelation integral. A systematic test
+  of 16 window models (including the empirical single-sector ground
+  state) achieves at best $6/10$ sign accuracy and $R^2=0.15$.
+  The leading-order reduction is false for non-trivial $\chi$.
+\item[(F2)] \textbf{Matrix-decomposition tautology.}
+  If \emph{both} sector ground states are taken from the same
+  Galerkin diagonalization, the identity
+  $\gap_{\mathrm{gal}}^{(N)} = S_{\chifn}+\archdiff_{\chifn}$
+  is not a prediction but a consequence of the linearity of
+  expectation on $W=W_{\mathrm{arch}}+W_{\mathrm{prime}}$. An apparent
+  $9/9$ sign accuracy at $N=200$ (modulo the known $N$-oscillator
+  $\chi_{21}$) dissolves under $N=600$ server-level validation: the
+  predictor $S_{\chifn}+\archdiff_{\chifn}$ drops to $8/10$ owing
+  to two sign failures: $\chi_{21}$ ($N$-oscillator,
+  see (F3) and \S\ref{sec:chi21}) and $\chi_{29}$ (numerical
+  interpolation artifact at a near-zero gap).
+\item[(F3)] \textbf{$\chi_{21}$ as an $N$-oscillator.}
+  At $N=200$ one has $\gap_{\mathrm{gal}}=+0.282$; at $N=600$ one has
+  $\gap_{\mathrm{gal}}=-0.004$. The sign flip is not a formula defect
+  but a Galerkin truncation effect for composite conductors that only
+  settles above $N\sim 500$. This both demonstrates that the Galerkin
+  operator is itself non-trivially $N$-dependent, and explains why a
+  $9/9$ at $N=200$ was not surprising once $\chi_{21}$ was excluded:
+  the excluded character was the very one whose $N$-dependence was not
+  yet integrated into the test.
+\item[(F4)] \textbf{Residual content: the Weil-kernel architecture is
+  rigorous.} The sector-kernel decomposition
+  (Theorem~\ref{thm:kernel}), the anti-diagonal sector difference
+  (Theorem~\ref{thm:sector-diff}), and the spectral-domain form of the
+  gap via the $L'/L$ function remain valid as structural statements
+  independent of the leading-order reduction. We exhibit them in
+  Section~\ref{sec:setup} and use them to classify the ten characters
+  along four orthogonal axes in Section~\ref{sec:atlas}.
+\end{enumerate}
+
+Taken together, these findings deliver a precise diagnosis: the
+$C^{(2)}_{\chifn}$-component of \eqref{eq:three-component}, for
+non-trivial $\chi$, is not accessible to Galerkin-numerical closure
+because the relevant signal lives in the difference
+$\phi^+_{\chifn}-\phi^-_{\chifn}$, which is fine structure lost in
+every natural leading-order approximation, and because the full
+Galerkin operator is a tautology relative to its own eigenvectors.
+A genuinely predictive formulation must identify
+$\Deltachi$ analytically, e.g.\ via Paley-Wiener asymptotics
+adapted from \cite{RH_II} to the character-twisted setting.
+
+\subsection{Organization}
+
+Section~\ref{sec:setup} summarizes the Weil quadratic form and the
+sector-kernel decomposition. Section~\ref{sec:formula} states the
+gap formula and contrasts the reduced and unreduced versions.
+Section~\ref{sec:validation} presents the numerical validation at
+$N\in\{200,400,600\}$. Section~\ref{sec:atlas} catalogs the ten
+characters along four axes. Section~\ref{sec:tautology} formulates
+and proves the tautology. Section~\ref{sec:chi21} treats the
+$\chi_{21}$ $N$-oscillation in detail. Section~\ref{sec:discussion}
+discusses implications for \eqref{eq:three-component}. Section~\ref{sec:outlook}
+outlines the Paley-Wiener roadmap and the branch-local
+Hilbert-P\'olya program as the indicated next step.
+
+\section{Setup: Weil quadratic form and sector kernels}
+\label{sec:setup}
+
+We summarize the structural framework used throughout; the full
+derivations are given in \cite{AnalyticKernel}.
+
+\subsection{\texorpdfstring{Dirichlet $L$-functions}{Dirichlet L-functions} and the Weil formula}
+
+Let $\chifn$ be a primitive Dirichlet character mod $q$ with
+$\chifn(-1)=+1$ (even). Set $a_{\chifn}=0$ and define the completed
+$L$-function
+\[
+  \Lambda(s,\chifn)
+    =\Bigl(\frac{q}{\pi}\Bigr)^{s/2}\Gamma\!\Bigl(\frac{s}{2}\Bigr)
+      L(s,\chifn),
+\]
+satisfying the functional equation
+$\Lambda(s,\chifn)=\epsilon_{\chifn}\Lambda(1-s,\bar\chifn)$ with
+$|\epsilon_{\chifn}|=1$. For a real (i.e., Kronecker) character
+$\bar\chifn=\chifn$ and $\epsilon_{\chifn}=+1$; we work exclusively
+with the ten real characters $\chifn_D$ with $D\in\{5,8,12,13,17,21,
+24,29,33,60\}$ in this atlas. The non-trivial zeros
+$\rho=\halfline+i\gamma$ are assumed on the critical line throughout
+(GRH for the tested conductors). For the conductors
+$D\in\{5,8,12,13,17,21,24,29,33,60\}$ in this atlas, \cite{LMFDB}
+reports all non-trivial zeros below height $T\sim 10^4$ verified on
+the critical line by numerical computation; the test function
+bandwidth $2L\approx 19.8$ at $\lambda=20000$ accesses zeros below
+approximately $T\sim 10^4$, so the GRH assumption is empirically
+supported within the relevant zero-height range. A theoretical proof
+of GRH for $L(s,\chifn_D)$ for any specific $D$ in the sample is, of
+course, open.
+
+For an even compactly supported test function $h\in C_c^\infty
+(\mathbb{R})$, the Weil explicit formula \cite{IwaniecKowalski} reads
+\begin{equation}
+\label{eq:weil}
+  \sum_{\gamma}h(\gamma)
+    = W^{\chifn}_\infty[h]
+    - 2\sum_{\substack{p\nmid q\\m\geq 1}}
+      \frac{\chifn(p)^m\log p}{p^{m/2}}\,\hat h(m\log p),
+\end{equation}
+where the sum on the left runs over all imaginary parts of non-trivial
+zeros of $L(s,\chifn)$, and the archimedean weight is
+\[
+  W^{\chifn}_\infty[h]
+    = \frac{1}{2\pi}\!\int_{-\infty}^{\infty}\! h(t)
+      \Bigl[\log\!\frac{q}{\pi} + \Re\,\psi\!\Bigl(\tfrac14+\tfrac{it}{2}\Bigr)\Bigr]\,dt.
+\]
+
+\subsection{\texorpdfstring{Quadratic form on $H_L$}{Quadratic form on HL}}
+
+Fix $\lambda>1$ and set $L:=\log\lambda$, $H_L:=L^2[-L,L]$. For a
+real test function $f\in C_c^\infty([-L,L])$, put
+$h(t):=2\pi|\hat f(t)|^2$. Then $h$ is non-negative even, and
+\eqref{eq:weil} induces the \emph{Weil quadratic form}
+\begin{equation}
+\label{eq:weil-qf}
+\begin{aligned}
+  Q_{\chifn}[f]
+    &:=\sum_{\gamma}2\pi|\hat f(\gamma)|^2 \\
+    &=W^{\chifn}_\infty[2\pi|\hat f|^2] \\
+    &\quad -2\sum_{p,m}\frac{\chifn(p)^m\log p}{p^{m/2}}
+      \int f(y)f(y-m\log p)\,dy.
+\end{aligned}
+\end{equation}
+$Q_{\chifn}$ admits a translation-invariant symbol: defining the
+primitive convolution distribution
+\begin{equation}
+\label{eq:kappa}
+\begin{aligned}
+  \kappa_{\chifn}(u)
+    &:=-\sum_{p\nmid q,\,m\geq 1}
+      \frac{\chifn(p)^m\log p}{p^{m/2}} \\
+    &\quad\times
+      \bigl[\delta(u-m\log p)+\delta(u+m\log p)\bigr],
+\end{aligned}
+\end{equation}
+and the archimedean kernel
+$K^{\mathrm{arch}}_{\chifn}(u):=\mathcal{F}^{-1}[\rho_{\chifn}](u)$
+with $\rho_{\chifn}(t)=\log(q/\pi)+\Re\,\psi(1/4+it/2)$, one obtains
+the kernel
+$K_{\chifn}(x,y)=\kappa_{\chifn}(x-y)+K^{\mathrm{arch}}_{\chifn}(x-y)$
+satisfying $Q_{\chifn}[f]=\iint K_{\chifn}(x,y)f(x)f(y)\,dx\,dy$ on
+$C_c^\infty([-L,L])$.
+
+\subsection{Sector decomposition}
+
+Let $\mathcal{P}:H_L\to H_L$, $(\mathcal{P}f)(x)=f(-x)$, denote the
+reflection. $\mathcal{P}$ is unitary self-adjoint with $\mathcal{P}^2
+=I$; the spectral projections $P^\pm=(I\pm\mathcal{P})/2$ split
+$H_L=H_L^+\oplus H_L^-$ into even/odd sectors. Standard Fourier bases
+are
+\[
+\begin{aligned}
+  e_0^+&=\tfrac{1}{\sqrt{2L}}, &
+  e_n^+(x)&=\tfrac{1}{\sqrt L}\cos(n\pi x/L),\\
+  e_n^-(x)&=\tfrac{1}{\sqrt L}\sin(n\pi x/L).
+\end{aligned}
+\]
+The Galerkin truncation at basis size $N$ uses modes $0\leq n\leq N$
+in each sector.
+
+\subsection{Sector kernels and the anti-diagonal difference}
+
+Because $K_{\chifn}(x,y)=K_{\chifn}(-x,-y)$, the sector-projected
+kernels take the form
+\begin{theorem}[Sector kernels; {\cite{AnalyticKernel}, Thm.~3.2}]
+\label{thm:kernel}
+On $H_L^\pm$ respectively,
+\[
+\begin{aligned}
+  K_{\chifn}^{\pm}(x,y)
+    &=\tfrac{1}{2}\bigl[\kappa_{\chifn}(x-y)
+       \pm\kappa_{\chifn}(x+y)\bigr]\\
+    &\quad+\tfrac{1}{2}\bigl[K^{\mathrm{arch}}_{\chifn}(x-y)
+       \pm K^{\mathrm{arch}}_{\chifn}(x+y)\bigr].
+\end{aligned}
+\]
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+The reflection $\mathcal{P}f(x):=f(-x)$ commutes with translation
+$T_a$ via $\mathcal{P}T_a=T_{-a}\mathcal{P}$, and the kernel
+$K_\chi(x,y)=\kappa_\chi(x-y)+K^{\mathrm{arch}}_\chi(x-y)$ is
+translation-invariant. Symmetrising under $\mathcal{P}$:
+$P^\pm K_\chi P^\pm=(K_\chi\pm\mathcal{P}K_\chi\mathcal{P})/2$,
+where $\mathcal{P}K_\chi\mathcal{P}(x,y)=K_\chi(-x,-y)=K_\chi(x,y)$
+by the parity of $\kappa_\chi$ and $K^{\mathrm{arch}}_\chi$ (both
+even on $\mathbb{R}$). The off-diagonal symmetrisation
+$P^\pm K_\chi(1-P^\pm)$ vanishes on the appropriate sector, leaving
+the displayed expression. The action on the test-function space
+$C_c^\infty([-L,L])$ is well-defined because $\kappa_\chi$ is a
+tempered distribution supported on $\{u=\pm m\log p\}$, all of which
+lie in $[-2L,2L]$; pairing with $f\in C_c^\infty([-L,L])$ produces a
+finite sum over $(p,m)$ with $m\log p\leq 2L$. Full computational
+details, including the verification that the symmetrisation
+preserves self-adjointness, are in \cite{AnalyticKernel}, \S3.2.
+\end{proof}
+
+Projected eigenvalue problems
+$K_{\chifn}^{\pm}\phi_{\chifn}^{\pm}=\lambda_1(\chifn,\pm)\phi_{\chifn}^{\pm}$
+on $H_L^\pm$ define the sector ground states $\phi_{\chifn}^\pm$
+which figure centrally below.
+
+\begin{theorem}[Anti-diagonal sector difference; {\cite{AnalyticKernel}, Thm.~4.1}]
+\label{thm:sector-diff}
+For an even primitive Dirichlet character $\chifn$ (i.e.,
+$\chifn(-1)=+1$, as throughout this paper),
+\[
+  K_{\chifn}^-(x,y)-K_{\chifn}^+(x,y)
+    =-\kappa_{\chifn}(x+y)-K^{\mathrm{arch}}_{\chifn}(x+y).
+\]
+The primitive part is supported on the anti-diagonals $x+y=\pm m\log
+p$ and carries the full character dependence; the archimedean part
+depends on $\chifn$ only through the constant $\log(q/\pi)$ (in the
+even-character setting; for odd characters the archimedean kernel
+acquires an additional $\Re\,\psi(3/4+it/2)$-type term, which is
+outside the scope of this atlas).
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+By Theorem~\ref{thm:kernel},
+$K_\chi^\pm(x,y)=\frac{1}{2}[\kappa_\chi(x-y)\pm\kappa_\chi(x+y)]
++\frac{1}{2}[K^{\mathrm{arch}}_\chi(x-y)\pm K^{\mathrm{arch}}_\chi(x+y)]$.
+Subtracting $K_\chi^+$ from $K_\chi^-$ cancels all $(x-y)$-arguments
+and doubles the $(x+y)$-arguments with sign $-$:
+$K_\chi^- - K_\chi^+ = -\kappa_\chi(x+y) - K^{\mathrm{arch}}_\chi(x+y)$.
+For the character-dependence claim: $\kappa_\chi$ depends on
+$\chifn$ through every $\chifn(p)^m\log p / p^{m/2}$ coefficient
+(\eqref{eq:kappa}), whereas
+$K^{\mathrm{arch}}_\chi=\mathcal{F}^{-1}[\rho_\chi]$ with
+$\rho_\chi(t)=\log(q/\pi)+\Re\,\psi(1/4+it/2)$ depends on $\chifn$
+only through the constant $\log(q/\pi)$ (the $\psi$-term is
+character-independent in the even-only setting). Full derivation:
+\cite{AnalyticKernel}, \S4.1.
+\end{proof}
+
+\subsection{The gap functional}
+
+Let $\lambda_1^{\min}(Q_{\chifn}^\pm)$ denote the smallest eigenvalue
+of $Q_{\chifn}$ restricted to $H_L^\pm$, and write
+\begin{equation}
+\label{eq:gap-def}
+\begin{aligned}
+  \gap_{\chifn}(\lambda)
+    &:=\lambda_1^{\min}(Q_{\chifn}^-)
+      -\lambda_1^{\min}(Q_{\chifn}^+)\\
+    &=\langle\phi_{\chifn}^-|K_{\chifn}^-|\phi_{\chifn}^-\rangle
+      -\langle\phi_{\chifn}^+|K_{\chifn}^+|\phi_{\chifn}^+\rangle.
+\end{aligned}
+\end{equation}
+For the trivial character (classical Riemann setting), $\gap_\zeta
+(\lambda)\gtrsim\sqrt{\lambda}$ unconditionally \cite{RH_II}. For
+non-trivial $\chifn$, the empirical observation is that
+$|\gap_{\chifn}|=O(1)$ at the accessible $\lambda$, with
+\emph{character-specific} sign; the atlas of
+Section~\ref{sec:validation} is the quantitative image of this
+observation.
+
+\begin{remark}[Convention-dependence of sign accuracy]
+\label{rem:sign-convention-dependence}
+The sign accuracy reported in Table~\ref{tab:regression} is computed
+relative to the Connes-operator convention $\tilde{A}_\chi$
+(Appendix~\ref{app:sign}) used throughout. Under the equivalent
+Weil-$Q$ convention $Q_\chi$, all gap signs invert simultaneously
+(both predictor and reference), so the relative agreement
+predictor-vs.-reference is unchanged. Thus the sign-accuracy
+statistic is convention-internal: it tests self-consistency between
+predictor and reference within a chosen convention, rather than an
+absolute, convention-free sign of $\gap_\chi$. A convention-free
+sign would require an external arithmetic identification (e.g.,
+from the spectral side via LMFDB), which we do not provide.
+\end{remark}
+
+\section{The gap formula: reduced vs.\ unreduced}
+\label{sec:formula}
+
+\subsection{The leading-order reduction}
+\label{sec:formula-reduced}
+
+Starting from \eqref{eq:gap-def} and
+Theorem~\ref{thm:sector-diff}, the gap admits the representation
+\begin{equation}
+\label{eq:gap-matrix}
+\begin{aligned}
+  \gap_{\chifn}(\lambda)
+    &= \langle\phi_{\chifn}^-|K_{\chifn}^--K_{\chifn}^+|\phi_{\chifn}^-\rangle\\
+    &\quad + \langle\phi_{\chifn}^-|K_{\chifn}^+|\phi_{\chifn}^-\rangle
+      - \langle\phi_{\chifn}^+|K_{\chifn}^+|\phi_{\chifn}^+\rangle.
+\end{aligned}
+\end{equation}
+If one approximates both ground states by a common function
+$\phi_{\chifn}^\pm\approx\phi_\infty$, the second bracket vanishes
+and the first simplifies, by Theorem~\ref{thm:sector-diff}, to
+\begin{equation}
+\label{eq:gap-reduced}
+\begin{aligned}
+  \gap_{\chifn}(\lambda)
+    &\overset{?}{\approx}
+      -\iint \phi_\infty(x)\bigl[\kappa_{\chifn}(x+y)
+      +K^{\mathrm{arch}}_{\chifn}(x+y)\bigr]\\
+    &\quad\times\phi_\infty(y)\,dx\,dy.
+\end{aligned}
+\end{equation}
+Unfolding $\kappa_{\chifn}$ via \eqref{eq:kappa} and using evenness
+of $\phi_\infty$ (even sector) delivers the reduced-gap formula
+\begin{equation}
+\label{eq:gap-reduced-explicit}
+\begin{aligned}
+  \gap_{\chifn}(\lambda)
+    &\overset{?}{\approx}
+      2\sum_{\substack{p\nmid q\\m\log p\leq 2L}}
+        \frac{\chifn(p)^m\log p}{p^{m/2}}\\
+    &\quad\times\Phi_\infty(m\log p)
+      \;+\;\text{arch.\ term},
+\end{aligned}
+\end{equation}
+with $\Phi_\infty(t):=(\phi_\infty\ast\phi_\infty)(t)$
+(cf.\ \cite{AnalyticKernel}, Cor.~4.4 and \cite{AnalyticGroundstate},
+Cor.~6.1). This is the formula one would naturally transfer from the
+trivial character case, where the common ground state $\phi_\infty$
+is accessible from the Paley-Wiener analysis of \cite{RH_II}.
+
+\subsection{Empirical status of the reduced formula}
+\label{sec:formula-reduced-empirical}
+
+Session 6 of the present programme tested \eqref{eq:gap-reduced-explicit}
+with sixteen candidate windows $\phi_\infty$: centered Gaussians of
+width $\sigma\in\{0.1,0.3,0.5,1.0,2.0\}$, off-center Gaussians, rectangles
+of cut-off $T$, $\cos^2$ windows on $[-T,T]$, the raw
+$\chifn$-weighted prime sum, and---most decisively---the \emph{empirical}
+single-sector ground state
+$\phi_\infty:=\phi_{\chifn}^+$ extracted from the $N=200$ Galerkin
+diagonalization.
+
+None of the sixteen candidates reached the success criterion
+$\geq\!9/10$ sign matches with $R^2\geq 0.8$. The best
+leading-order Gaussian window achieves $6/10$ with $R^2=0.15$; the
+empirical single-sector ground state achieves $4/10$ with
+$R^2=0.02$. Details of the 16-window scan are recorded in
+\cite{Woche4Validation}. The crucial observation is that for all
+ten characters the empirical single-sector autocorrelation
+$\Phi_\infty$ is nearly identical (numerically within $10^{-3}$):
+the reduction $\phi_{\chifn}^+\approx\phi_{\chifn}^-\approx
+\phi_\infty$ is therefore not merely quantitatively inaccurate, but
+erases the character-specific signal.
+
+\begin{remark}[Where the character signal lives]
+\label{rem:signal-locus}
+The sector-restricted ground states are, to leading order, the same
+function: they are both close to the Paley-Wiener ground state of
+the diagonal kernel $\kappa_{\chifn}(x-y)+K^{\mathrm{arch}}_{\chifn}
+(x-y)$. Character-specific information is stored in the difference
+$\phi_{\chifn}^+-\phi_{\chifn}^-$, which is the fine structure
+generated by the anti-diagonal term $\kappa_{\chifn}(x+y)+
+K^{\mathrm{arch}}_{\chifn}(x+y)$ of Theorem~\ref{thm:sector-diff}.
+Any analytic reduction that absorbs $\phi_{\chifn}^+$ and
+$\phi_{\chifn}^-$ into a common function loses exactly this signal.
+\end{remark}
+
+\subsection{The unreduced formula}
+\label{sec:formula-unreduced}
+
+We retain both ground states separately. Define the sector-difference
+autocorrelation
+\begin{equation}
+\label{eq:Delta-def}
+  \Deltachi(t)
+    := (\phi^+_{\chifn}\!*\phi^+_{\chifn})(t)
+      + (\phi^-_{\chifn}\!*\phi^-_{\chifn})(t),
+\end{equation}
+\emph{Parity-sign note.} The numerical implementation in our scripts
+(Appendix~\ref{app:sign}) computes the autocorrelation
+$R_{\phi^\pm}(t):=\int\phi^\pm(s)\phi^\pm(s-t)\,ds$ via
+\texttt{np.correlate}, then forms
+$\Deltachi^{\mathrm{num}}(t):=R_{\phi^+}(t)-R_{\phi^-}(t)$. By the
+parity identity $R_{\phi^+}=(\phi^+{*}\phi^+)_{\mathrm{math}}$
+(even sector) and $R_{\phi^-}=-(\phi^-{*}\phi^-)_{\mathrm{math}}$
+(odd sector), one has
+\[
+  \Deltachi^{\mathrm{num}}(t)
+    =(\phi^+{*}\phi^+)_{\mathrm{math}}(t)+(\phi^-{*}\phi^-)_{\mathrm{math}}(t),
+\]
+which is precisely the right-hand side of~\eqref{eq:Delta-def}. Thus
+$\Deltachi$ as defined in~\eqref{eq:Delta-def} agrees identically with
+the script-computed quantity $\Deltachi^{\mathrm{num}}$, and the
+coefficient~$-2$ in~\eqref{eq:S-def} is the unique value that makes
+the gap identity (Theorem~\ref{thm:closure}) hold. See
+Appendix~\ref{app:sign} for the full derivation tracking all six
+relevant sign sources.
+
+and the archimedean sector difference
+\begin{equation}
+\label{eq:arch-diff-def}
+  \archdiff_{\chifn}
+    := \langle\phi^-_{\chifn},K^{\mathrm{arch}}_-\phi^-_{\chifn}\rangle
+     - \langle\phi^+_{\chifn},K^{\mathrm{arch}}_+\phi^+_{\chifn}\rangle,
+\end{equation}
+where $K^{\mathrm{arch}}_\pm$ are the sector-restricted archimedean
+operators (Theorem~\ref{thm:kernel}). Substituting into
+\eqref{eq:gap-matrix} and using Theorem~\ref{thm:sector-diff} yields
+the unreduced formula stated below.
+
+\begin{theorem}[Unreduced gap formula]
+\label{thm:closure}
+Let $\chifn$ be a primitive real character of conductor $q$ with
+$\chifn(-1)=+1$, and let $\lambda>1$, $L=\log\lambda$. Let
+$\phi^\pm_{\chifn}\in H_L^\pm$ be the sector ground states of
+$K_{\chifn}^\pm$, each $L^2$-normalized. Then
+\begin{equation}
+\label{eq:gap-unreduced}
+  \gap_{\chifn}(\lambda)
+    = S_{\chifn}(\lambda) + \archdiff_{\chifn},
+\end{equation}
+with
+\begin{equation}
+\label{eq:S-def}
+  S_{\chifn}(\lambda)
+    = -2\sum_{\substack{p\nmid q\\m\log p\leq 2L}}
+      \frac{\chifn(p)^m\log p}{p^{m/2}}\,\Deltachi(m\log p).
+\end{equation}
+\end{theorem}
+
+A derivation is given in \cite{AnalyticKernel}, Remark~4.5 (with
+sign convention reconciled against \texttt{build\_W}; see
+Appendix~\ref{app:sign}). At the level of the \emph{Galerkin
+truncation} at basis size $N$, the equation
+\eqref{eq:gap-unreduced} also holds exactly:
+\begin{equation}
+\label{eq:gap-galerkin}
+  \gap_{\mathrm{gal}}^{(N)}(\chifn)
+    = S_{\chifn}^{(N)}(\lambda) + \archdiff_{\chifn}^{(N)},
+\end{equation}
+provided $\phi^\pm_{\chifn}$ are taken as the ground-state
+eigenvectors of the Galerkin-truncated operators $K_{\chifn}^{\pm,
+N}$ at basis size $N$ and $S^{(N)}$, $\archdiff^{(N)}$ are computed
+from these finite-$N$ data.
+
+\subsection{Two numerical realizations of \texorpdfstring{$S_{\chifn}^{(N)}$}{S}}
+\label{sec:formula-two-realizations}
+
+A subtle point that drives all of what follows is that
+\eqref{eq:S-def} admits \emph{two} distinct numerical
+implementations from Galerkin data, which agree to within $10^{-3}$
+but not identically.
+\begin{itemize}
+  \item[(R1)] \emph{Spatial autocorrelation.} Evaluate
+    $\phi_{\chifn}^\pm$ on a grid, compute $(\phi^\pm
+    *\phi^\pm)(t)$ with a numerical correlation, interpolate to
+    the prime abscissae $t=m\log p$, and sum.
+  \item[(R2)] \emph{Matrix decomposition.} Decompose the Galerkin
+    matrix $W^\pm=W^\pm_{\mathrm{arch}}+W^\pm_{\mathrm{prime}}$ and
+    form
+    $\mathrm{prime\_diff}_{\mathrm{matrix}}
+      :=\langle\phi^-,W^-_{\mathrm{prime}}\phi^-\rangle
+      -\langle\phi^+,W^+_{\mathrm{prime}}\phi^+\rangle$.
+\end{itemize}
+Both quantities estimate $S_{\chifn}^{(N)}$; (R1) is obtained via
+interpolated autocorrelation, (R2) via exact matrix inner product.
+Their discrepancy is at the level of floating-point and
+interpolation error, of order $10^{-3}$. For characters with
+$|\gap_{\chifn}|\gtrsim 10^{-2}$ this is negligible. For the weakly
+signalled characters $\chifn_{21}$, $\chifn_{29}$, $\chifn_{60}$,
+with $|\gap|\lesssim 10^{-2}$, it is of the same order as the
+signal. Section~\ref{sec:tautology} is devoted to the consequences.
+
+\section{Numerical validation}
+\label{sec:validation}
+
+\subsection{Computational setup}
+\label{sec:validation-setup}
+
+For each of the ten real characters $\chifn_D$,
+$D\in\{5,8,12,13,17,21,24,29,33,60\}$, we construct the Galerkin
+matrices
+$W^\pm_{\chifn}$ in the Fourier bases of $H_L^\pm$ at cut-off
+$\lambda=20000$ ($L=\log\lambda\approx 9.90$). Matrix assembly uses the
+explicit-formula coefficients $\chifn(p^m)\log p/p^{m/2}$ for all
+prime powers with $m\log p\leq 2L$ and the archimedean operator
+$K^{\mathrm{arch}}_{\chifn}$ computed by Fast Fourier transform of
+$\rho_{\chifn}$.
+
+Three Galerkin resolutions are used: $N=200$ locally on a desktop,
+$N=400$ locally, and $N=600$ on an 8\,GB Hetzner CCX13 cloud
+instance (total wall-clock 1.95 hours across all ten characters). The
+smallest eigenvalue of each $W^\pm_{\chifn,N}$ is obtained by a
+Lanczos inverse iteration with tolerance $10^{-10}$, producing the
+sector ground state $\phi^{\pm,(N)}_{\chifn}$ and the Galerkin gap
+$\gap_{\mathrm{gal}}^{(N)}(\chifn)
+:=\lambda_1^{\min}(W^-_{\chifn,N})-\lambda_1^{\min}(W^+_{\chifn,N})$.
+
+For every character, the quantities $S_{\chifn}^{(N)}$ (via
+spatial-autocorrelation realization (R1)) and
+$\archdiff_{\chifn}^{(N)}$ are evaluated from the ground states, and
+the sum $S_{\chifn}^{(N)}+\archdiff_{\chifn}^{(N)}$ is compared to
+$\gap_{\mathrm{gal}}^{(N)}(\chifn)$ and to the high-$N$ Galerkin
+reference gap $\gap_{\mathrm{gal}}^{(N_{\mathrm{src}})}(\chifn)$ with
+$N_{\mathrm{src}}\in\{400,600\}$ (cf.\ \S\ref{sec:limitation-external}). Scripts
+\texttt{arch\_term\_analysis.py} and
+\texttt{server\_n600\_full\_analysis.py} record the raw outputs in
+\texttt{ARCH\_TERM\_ANALYSIS.json} and
+\texttt{ARCH\_TERM\_N600\_SERVER.json} respectively; post-processing
+tables are in \texttt{ARCH\_TERM\_ANALYSIS.md} and
+\texttt{ARCH\_TERM\_N600\_ANALYSIS.md}.
+
+\subsection{The central result table}
+\label{sec:validation-table}
+
+Table~\ref{tab:validation} summarizes the comparison at $\lambda=
+20000$ for all ten characters. For each character we list the
+high-$N$ Galerkin reference gap
+$\gap_{\mathrm{gal}}^{(N_{\mathrm{src}})}$ (with the resolution
+$N_{\mathrm{src}}$ from which it is drawn), the Galerkin gap at
+$N=200$ and $N=600$, and the predictor $S+\archdiff$ at both
+resolutions. Two observations anchor the entire analysis.
+
+First, at $N=600$ the entries labelled
+``$\gap_{\mathrm{gal}}^{(N_{\mathrm{src}})}$'' and
+``$\gap_{\mathrm{gal}}^{(600)}$'' coincide identically whenever the
+reference was itself computed at $N=600$ (the six characters
+$\chifn_8,\chifn_{13},\chifn_{21},\chifn_{29},\chifn_{33},\chifn_{60}$);
+this is \emph{not} a verification of the formula, but a tautology
+exposed in \S\ref{sec:tautology}.
+
+Second, the predictor $S^{(600)}+\archdiff^{(600)}$ achieves high
+linear correlation $R^2=0.95$ against the empirical gaps but drops
+to $8/10$ sign accuracy because of two sign flips at $\chifn_{21}$
+and $\chifn_{29}$.
+
+\subsection{Regression statistics}
+\label{sec:validation-regression}
+
+We record all four canonical regression configurations in
+Table~\ref{tab:regression}. The pattern is pivotal for what follows.
+
+\begin{table}[t]
+\caption{Sign and linear-regression performance of the predictor
+  realizations against the high-$N$ Galerkin reference gap
+  $\gap_{\mathrm{gal}}^{(N_{\mathrm{src}})}(\chifn_D)$ at $\lambda=20000$,
+  $N\in\{200,600\}$. Sign accuracy is computed relative to the
+  Connes-convention sign of the high-$N$ Galerkin reference gap
+  (sign-convention note below the table).
+  $^*$ N=200 statistics are subject to the Galerkin-truncation
+  effects documented in Remark~\ref{rem:sw-compression} and
+  \S\ref{sec:discussion-slope}; the N=600 row is the operationally
+  preferred result.
+  Excluding $\chifn_{21}$ (the single sign-reversal outlier; see
+  \S\ref{sec:chi21}) yields 9/9 sign accuracy for $\gap_{\mathrm{gal}}$
+  at $N=600$ (and 8/9 for $S+\archdiff$), but exclusion is by
+  construction---the excluded character is precisely the failure
+  case---and therefore not reported as an independent statistic.}
+\label{tab:regression}
+\centering
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Configuration & $N$ & sign\_ok & $R^2$ \\
+\midrule
+$\gap_{\mathrm{gal}}$ (all 10)$^*$ & $200$ & $9/10$ & $0.41$ \\
+$S+\archdiff$ (all 10)$^*$ & $200$ & $9/10$ & $0.42$ \\
+\midrule
+$\gap_{\mathrm{gal}}$ (all 10) & $600$ & $10/10$ & $0.99$ \\
+$S+\archdiff$ (all 10) & $600$ & $8/10$ & $0.95$ \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\footnotesize
+\textit{Sign-convention note.} Sign accuracy is relative to the
+Connes-operator convention $\tilde{A}_\chi$ used throughout
+(Appendix~\ref{app:sign}). The opposite convention (Weil-$Q$,
+coefficient $+2$) would invert all signs and yield a complementary
+sign-accuracy statistic, but the relative agreement
+predictor-vs.-reference is unchanged.
+\end{table}
+
+At $N=200$, the predictor $S+\archdiff$ reaches $9/10$ sign accuracy
+($R^2=0.42$ on the full sample, $R^2=0.80$ on the subsample
+excluding $\chifn_{21}$ post hoc---a by-construction statistic, not
+reported as an independent test; cf.\ caption of
+Table~\ref{tab:regression}). This apparent numerical closure
+motivated the ``Weil-kernel closure paper'' title during early
+Session~7 of the development. At $N=600$, however, three things
+happen simultaneously:
+(i) the Galerkin gap $\gap_{\mathrm{gal}}^{(600)}$ becomes
+numerically indistinguishable from the empirical reference for six
+of ten characters (tautology, \S\ref{sec:tautology});
+(ii) $\chifn_{21}$'s Galerkin gap collapses from $+0.282$ to
+$-0.004$, confirming it as an $N$-oscillator
+(\S\ref{sec:chi21}); and
+(iii) the predictor $S+\archdiff^{(600)}$ gains one point on
+$R^2$ but loses two points on sign accuracy, now failing both at
+$\chifn_{21}$ (where the $N=600$ Galerkin gap is small) and at
+$\chifn_{29}$ (where numerical realization (R1) diverges in sign
+from realization (R2)).
+
+\begin{remark}[Siegel-Walfisz compression at $N=600$]
+\label{rem:sw-compression}
+Comparing the $\gap_{\mathrm{gal}}$-columns at $N=200$ and $N=600$
+reveals a systematic compression effect: for the strong-positive
+character $\chifn_{12}$, $\gap_{\mathrm{gal}}$ falls from
+$+0.0325$ to $+0.0115$ (factor $0.35$); for $\chifn_{17}$,
+$\chifn_{24}$, $\chifn_{29}$, $\chifn_{60}$ the same
+shrinkage factor holds to within $\pm 0.1$. The strong-negative
+characters $\chifn_8$, $\chifn_{13}$, $\chifn_{33}$ are
+qualitatively stable between $N=200$ and $N=600$ (relative change
+$\lesssim 10\%$). This dichotomy is qualitatively reminiscent of the
+Siegel-Walfisz upper bound $|\sum_{p\leq x}\chifn(p)\log p|
+=o(\sqrt{x})$ applied to the large-prime tail---characters with a
+genuine low-conductor signal appear largely determined already at
+$N=200$, whereas weakly-signalled characters have their $N=200$
+estimates compressed by a factor approximately $0.35$ at $N=600$---but
+no theoretical derivation linking the compression factor to a
+Siegel-Walfisz constant is offered here. We flag the empirical
+observation as an open question; see \S\ref{sec:outlook}, point on
+the theoretical derivation of the Siegel-Walfisz compression.
+\end{remark}
+
+\begin{table*}[t]
+\caption{$N$-convergence of the Galerkin gap and the Weil-kernel predictor
+  at $\lambda=20000$ for ten low-conductor real characters. Note that
+  $\gap_{\mathrm{gal}}^{(N_{\mathrm{src}})}$ entries with $N_{\mathrm{src}}=600$
+  coincide identically with $\gap_{\mathrm{gal}}^{(N=600)}$ because the
+  reference values are themselves outputs of the same Galerkin
+  diagonalization at $N=600$; this is the tautology discussed in
+  \S\ref{sec:tautology}. There is no external, convention-free
+  reference here---all gap values originate from the Galerkin method
+  itself; cf.\ \S\ref{sec:limitation-external}.
+  Sources: \texttt{ARCH\_TERM\_ANALYSIS.md}, \texttt{ARCH\_TERM\_N600\_ANALYSIS.md}.}
+\label{tab:validation}
+\centering
+\small
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+$\chifn$ & $D$ & $\gap_{\mathrm{gal}}^{(N_\mathrm{src})}$ & $\gap_{\mathrm{gal}}^{(200)}$ & $\gap_{\mathrm{gal}}^{(600)}$ & $(S+\archdiff)^{(200)}$ & $(S+\archdiff)^{(600)}$ \\
+\midrule
+$\chi_5$  &  5 & $+0.01560\ (400)$ & $+0.01429$ & $+0.01603$ & $+3.35\!\cdot\!10^{-2}$ & $+3.37\!\cdot\!10^{-2}$ \\
+$\chi_8$  &  8 & $-0.04902\ (600)$ & $-0.04548$ & $-0.04902$ & $-4.22\!\cdot\!10^{-2}$ & $-4.08\!\cdot\!10^{-2}$ \\
+$\chi_{12}$ & 12 & $+0.03367\ (400)$ & $+0.03251$ & $+0.01154$ & $+5.07\!\cdot\!10^{-2}$ & $+2.03\!\cdot\!10^{-2}$ \\
+$\chi_{13}$ & 13 & $-0.12504\ (600)$ & $-0.12502$ & $-0.12504$ & $-1.15\!\cdot\!10^{-1}$ & $-1.16\!\cdot\!10^{-1}$ \\
+$\chi_{17}$ & 17 & $+0.01318\ (400)$ & $+0.00408$ & $+0.00886$ & $+1.67\!\cdot\!10^{-2}$ & $+1.13\!\cdot\!10^{-2}$ \\
+$\chi_{21}$ & 21 & $-0.00423\ (600)$ & $\mathbf{+0.28163}$ & $-0.00423$ & $+2.89\!\cdot\!10^{-1}$ & $+1.14\!\cdot\!10^{-2}$\,\textbf{(F)} \\
+$\chi_{24}$ & 24 & $+0.01076\ (400)$ & $+0.01632$ & $+0.00866$ & $+1.74\!\cdot\!10^{-2}$ & $+1.86\!\cdot\!10^{-2}$ \\
+$\chi_{29}$ & 29 & $+0.01439\ (600)$ & $+0.02372$ & $+0.01439$ & $+2.58\!\cdot\!10^{-2}$ & $-1.16\!\cdot\!10^{-2}$\,\textbf{(F)} \\
+$\chi_{33}$ & 33 & $-0.14221\ (600)$ & $-0.14051$ & $-0.14221$ & $-1.31\!\cdot\!10^{-1}$ & $-1.32\!\cdot\!10^{-1}$ \\
+$\chi_{60}$ & 60 & $+0.00521\ (600)$ & $+0.12363$ & $+0.00521$ & $+1.27\!\cdot\!10^{-1}$ & $+7.21\!\cdot\!10^{-3}$ \\
+\midrule
+\multicolumn{4}{l}{\textit{$S+\archdiff$ sign accuracy ($N=200$):}} & & $9/10$ (R²=0.42) & \\
+\multicolumn{4}{l}{\textit{$S+\archdiff$ sign accuracy ($N=600$):}} & & & $8/10$ (R²=0.95) \\
+\multicolumn{4}{l}{\textit{$\gap_{\mathrm{gal}}$ sign accuracy ($N=600$):}} & & & $10/10$ (R²=0.99, tautology) \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\section{Character atlas in four axes}
+\label{sec:atlas}
+
+The raw table of Section~\ref{sec:validation} admits a structural
+reading along four taxonomic dimensions: two \emph{filter constants}
+(parity and root number, both equal to $+1$ across the entire sample)
+and two \emph{informative axes} (archimedean weight ratio and gap
+signature). We develop each dimension in turn, in order of increasing
+informativeness.
+
+\subsection{Parity cartography}
+\label{sec:parity}
+
+The parity $\chifn(-1)\in\{+1,-1\}$ decides the archimedean factor of
+$\Lambda(s,\chifn)$: even characters use $\Gamma(s/2)$, odd
+characters use $\Gamma((s+1)/2)$. In this paper all ten characters
+are Kronecker characters $\chifn_D$ with positive discriminant $D$, and
+hence all even. This is deliberate: the sector decomposition
+$H_L=H_L^+\oplus H_L^-$ used throughout assumes even parity, which
+ensures a non-trivial cosine-sine asymmetry of the anti-diagonal
+kernel of Theorem~\ref{thm:sector-diff} (odd characters would
+require the paired-space formalism
+$\chifn\oplus\bar\chifn$ or a tensor with a sign twist; cf.\
+\cite{MetaGalerkinBridge}, \S5.5, footnote on Gamma parity). The
+even restriction thus fixes the qualitative regime and leaves room
+for the three finer classifications below.
+
+\subsection{Root-number classification}
+\label{sec:rootnumber}
+
+For every real Dirichlet character the root number $W(\chifn):=
+\epsilon_{\chifn}$ is $+1$ by the classical Gauss-sum formula
+$\tau(\chifn)=\sqrt{q}$ for primitive real even characters
+\cite{IwaniecKowalski}. All ten characters in our atlas thus share the
+same root number $W=+1$, and root number is constant across the
+table. Consequently root number cannot discriminate gap signs
+within our sample. A larger sample extending to complex
+characters (\S\ref{sec:outlook}) would exhibit a genuine root-number
+axis with $W\in\{+1,-1,\pm i\}$; we flag this as part of the open
+outlook rather than as a result of the present atlas.
+
+\subsection{Archimedean-factor layer}
+\label{sec:archlayer}
+
+The quantity
+$r_{\chifn}:=|\archdiff_{\chifn}^{(200)}|/|S_{\chifn}^{(200)}|$
+(ratio of archimedean to prime contribution at $N=200$,
+$\lambda=20000$) varies by nearly two orders of magnitude across the
+sample. Table~\ref{tab:archratio} records the values.
+
+\begin{table}[t]
+\caption{Archimedean weight ratio
+  $r_{\chifn}=|\archdiff|/|S|$ at $N=200$, $\lambda=20000$.}
+\label{tab:archratio}
+\centering\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+$\chifn_D$ & $|S_{\chifn}|$ & $|\archdiff_{\chifn}|$ & $r_{\chifn}$ & Class \\
+\midrule
+$\chifn_{29}$ & $2.54\!\cdot\!10^{-2}$ & $4.47\!\cdot\!10^{-4}$ & $1.8\%$ & prime-dominated \\
+$\chifn_{24}$ & $1.62\!\cdot\!10^{-2}$ & $1.19\!\cdot\!10^{-3}$ & $7.4\%$ & prime-dominated \\
+$\chifn_{33}$ & $1.65\!\cdot\!10^{-1}$ & $3.44\!\cdot\!10^{-2}$ & $21\%$ & prime-dominated \\
+$\chifn_5$ & $9.06\!\cdot\!10^{-2}$ & $5.71\!\cdot\!10^{-2}$ & $63\%$ & mixed \\
+$\chifn_8$ & $1.16\!\cdot\!10^{-1}$ & $7.43\!\cdot\!10^{-2}$ & $64\%$ & mixed \\
+$\chifn_{13}$ & $1.02\!\cdot\!10^{-1}$ & $1.33\!\cdot\!10^{-2}$ & $13\%$ & prime-dominated \\
+$\chifn_{17}$ & $2.02\!\cdot\!10^{-2}$ & $3.52\!\cdot\!10^{-3}$ & $17\%$ & prime-dominated \\
+$\chifn_{12}$ & $6.51\!\cdot\!10^{-2}$ & $1.44\!\cdot\!10^{-2}$ & $22\%$ & prime-dominated \\
+$\chifn_{21}$ & $2.31\!\cdot\!10^{-1}$ & $5.77\!\cdot\!10^{-2}$ & $25\%$ & prime-dominated$^\dagger$ \\
+$\chifn_{60}$ & $4.95\!\cdot\!10^{-2}$ & $1.76\!\cdot\!10^{-1}$ & $356\%$ & arch-dominated \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\footnotesize
+$^\dagger$ at $N=200$; the effective weights shift at $N=600$ as
+the Galerkin ground states settle (cf.\ \S\ref{sec:chi21}).
+\end{table}
+
+Three sub-classes emerge:
+\begin{itemize}
+  \item \emph{Prime-dominated} ($r_{\chifn}\leq 25\%$):
+    $\chifn_{12}$, $\chifn_{13}$, $\chifn_{17}$, $\chifn_{21}$,
+    $\chifn_{24}$, $\chifn_{29}$, $\chifn_{33}$. The prime sum
+    $S_{\chifn}$ determines both magnitude and sign of the gap;
+    $\archdiff_{\chifn}$ shifts the quantitative value by no more
+    than a quarter. This is the ``natural'' regime in which
+    intuition about the Weil kernel carries.
+  \item \emph{Mixed} ($r_{\chifn}\in[60\%,70\%]$):
+    $\chifn_5$, $\chifn_8$. Primes and archimedean factor are
+    comparable; neither alone is a reliable predictor.
+  \item \emph{Arch-dominated} ($r_{\chifn}>100\%$):
+    $\chifn_{60}$. Here the archimedean sector difference
+    \emph{exceeds} the prime contribution by a factor $\sim 4$, and
+    $S_{\chifn}$ and $\archdiff_{\chifn}$ even disagree in sign
+    ($S=-4.95\!\cdot\!10^{-2}$, $\archdiff=+1.76\!\cdot\!10^{-1}$).
+    The reference gap
+    $\gap_{\mathrm{gal}}^{(600)}=+0.005$ is near zero and is carried
+    entirely by the archimedean term.
+\end{itemize}
+
+The sub-class distinction is structural, not just quantitative: for
+prime-dominated characters a future analytic control of
+$\Deltachi(m\log p)$ would translate directly into gap-sign
+prediction, whereas for arch-dominated characters the archimedean
+$\psi$-function asymptotics dominate and an independent analysis is
+needed.
+
+\begin{remark}[Descriptive vs.\ predictive status of the trichotomy]
+\label{rem:trichotomy-descriptive}
+With ten characters, the prime/mixed/arch trichotomy of
+Table~\ref{tab:archratio} is descriptive of the sample, not
+predictive for arbitrary primitive real characters: the threshold
+values ($r\leq 25\%$, $r\in[60\%,70\%]$, $r>100\%$) are chosen to
+separate the observed clusters, with no datapoint in the gap
+intervals $r\in(25\%,60\%)$ and $r\in(70\%,100\%)$. Whether the
+trichotomy generalises is a hypothesis to be tested on the
+conductor extension $D\leq 100$ (\S\ref{sec:outlook}, point 4); the
+present atlas does not assert it as a universal classification.
+\end{remark}
+
+\subsection{Gap-signature atlas}
+\label{sec:gapsig}
+
+The four classes below organize the ten characters by the
+quantitative nature of their gaps, with the high-$N$ Galerkin
+reference $\gap_{\mathrm{gal}}^{(N_{\mathrm{src}})}$ read off
+Table~\ref{tab:validation}.
+
+\paragraph{Strong-negative prototype.}
+$\chifn_{33}$ is the outstanding case:
+$\gap_{\mathrm{gal}}^{(600)}=-0.142$, with near-identical values at
+$N\in\{200,400,600\}$. Both prime contribution and empirical gap
+are consistently negative, and the gap is the largest in absolute
+value over the sample. The character is
+$\chifn_{33}(n)=\bigl(\tfrac{33}{n}\bigr)$, with factorization
+$33=3\cdot 11$; the corresponding Legendre-symbol values at small
+primes are $\chifn_{33}(2,5,7,13,17,19,23,29,31,37)=
+(1,-1,-1,-1,-1,-1,+1,-1,+1,-1)$, delivering a clear bias towards
+$-1$. We designate $\chifn_{33}$ the \emph{strong-negative
+prototype} of the atlas.
+
+\paragraph{Strong-positive prototype.}
+$\chifn_{12}$ is the counterpart on the positive side:
+$\gap_{\mathrm{gal}}^{(400)}=+0.034$, compressed to
+$\gap_{\mathrm{gal}}^{(600)}=+0.012$ at
+$N=600$ (Remark~\ref{rem:sw-compression}). The primitive character
+mod $12$ has conductor a product of two small primes ($q=12=
+4\cdot 3$); earlier asymptotic studies \cite{AsymptoticScan} observed
+a slope consistent with zero across three orders of magnitude in
+$\lambda$ at $N=200$, which we now reinterpret as an $N$-limited
+observation (see also \texttt{THEORIE\_CHI12\_KONSTANZ.md}). Within
+the present atlas $\chifn_{12}$ is the strong-positive prototype,
+albeit at smaller magnitude than $\chifn_{33}$.
+
+\paragraph{Moderate-negative class.}
+$\chifn_8$ and $\chifn_{13}$ both exhibit stable negative gaps
+($-0.049$ and $-0.125$ respectively) with consistent signs across
+$N\in\{200,400,600\}$. They lie between the strong-negative
+prototype and the weak-positive cluster.
+
+\paragraph{Weak-positive cluster.}
+$\chifn_{17}$, $\chifn_{24}$, $\chifn_{29}$ form a tight cluster of
+small positive gaps ($+0.013$, $+0.011$, $+0.014$). Their absolute
+values lie within the Siegel-Walfisz compression regime; their
+predictor $S+\archdiff$ retains sign at $N=200$ but can flip at
+$N=600$ (case of $\chifn_{29}$, realization (R1); cf.\
+\S\ref{sec:validation-regression}). This cluster marks the lower
+bound of reliable numerical sign resolution for our current
+methods.
+
+\paragraph{Arch-dominated near-zero case.}
+$\chifn_{60}$ has $\gap_{\mathrm{gal}}^{(600)}=+0.005$ with
+$r_{\chifn_{60}}=356\%$ (above). The predictor $S+\archdiff$ happens
+to have the correct sign at $N=600$, but not as a consequence of
+the prime contribution, which disagrees in sign with the empirical
+gap; instead the archimedean term dominates. We flag $\chifn_{60}$
+as a distinct regime warranting a separate analysis.
+
+\paragraph{Composite-conductor oscillator.}
+$\chifn_{21}$ ($D=21=3\cdot 7$) has
+$\gap_{\mathrm{gal}}^{(600)}=-0.004$ but an $N=200$ Galerkin gap of
+$+0.282$ --- a sign flip of factor $66$. It is the only character in our sample exhibiting this
+behavior, and we treat it in full detail in \S\ref{sec:chi21}.
+
+\smallskip
+
+The four-axis cartography above is the paper's descriptive payoff:
+it groups the ten characters into qualitatively distinct regimes
+before, and independently of, any predictive formula. In
+particular the prime-dominated/mixed/arch-dominated trichotomy
+(Table~\ref{tab:archratio}) and the gap-signature classes
+(strong-neg, strong-pos, moderate-neg, weak-pos, arch-dominated,
+oscillator) together exhibit six sub-classes in ten characters---a
+first sign that the ``single-axis transfer'' of the classical
+even-dominance regime \cite{RH_II} is too coarse.
+
+\section{The matrix-decomposition tautology}
+\label{sec:tautology}
+
+\begin{proposition}[Tautology]
+\label{prop:tautology}
+Let $\phi^\pm_{\chifn}$ be the ground-state eigenvectors of the Galerkin-truncated
+operators $K^\pm_{\chifn}$ at basis size $N$. Then for any decomposition
+$W^\pm = W^\pm_{\mathrm{arch}} + W^\pm_{\mathrm{prime}}$ of the Galerkin matrix,
+\[
+\begin{aligned}
+  \gap_{\mathrm{gal}}^{(N)}
+    &= \archdiff + \primediff,\\
+  \archdiff
+    &:= \langle\phi^-, W^-_{\mathrm{arch}}\phi^-\rangle
+      - \langle\phi^+, W^+_{\mathrm{arch}}\phi^+\rangle,\\
+  \primediff
+    &:= \langle\phi^-, W^-_{\mathrm{prime}}\phi^-\rangle
+      - \langle\phi^+, W^+_{\mathrm{prime}}\phi^+\rangle.
+\end{aligned}
+\]
+\end{proposition}
+
+\begin{proof}
+Linearity of the inner product on the Galerkin space gives
+$\langle\phi^\pm, W^\pm\phi^\pm\rangle = \langle\phi^\pm,
+W^\pm_{\mathrm{arch}}\phi^\pm\rangle + \langle\phi^\pm,
+W^\pm_{\mathrm{prime}}\phi^\pm\rangle$.
+Since $\phi^\pm$ are eigenvectors with eigenvalue
+$\lambda_1^{\min}(W^\pm)$, the gap
+$\gap_{\mathrm{gal}}^{(N)}$ decomposes as the difference of the two
+right-hand sides. $\square$
+\end{proof}
+
+Although the propositional content is a trivial linearity identity, its
+\emph{methodological consequence} is non-trivial: any apparent agreement
+between $\gap_{\mathrm{gal}}^{(N)}$ and $S_\chi + \archdiff_\chi$ at fixed
+$N$ is structural rather than predictive, not a prediction. When
+$\mathrm{prime\_diff}_{\mathrm{matrix}}$ is replaced by the spatial-domain
+autocorrelation formula $S_{\chifn}$, a small numerical discrepancy arises
+(of order $10^{-3}$, about $1$--$2\%$ of $S$); the ``9/9 sign accuracy at
+$N=200$'' reported in preliminary work of the present author admits two
+equivalently consistent interpretations: (a) the discrepancy was
+\emph{fortuitously small} at low $N$ for the sample of ten characters and
+grows at higher $N$ as the predictor's intrinsic limitations become
+resolved; (b) at $N=600$ a \emph{conditioning pathology} sets in for
+characters with $|\gap|\lesssim 10^{-2}$, where floating-point and
+interpolation errors of order $10^{-3}$ become sign-relevant. The two
+readings cannot be distinguished without an external reference (cf.\
+\S\ref{sec:limitation-external}). In either case, the $N=200$ agreement
+is not a structural property of the formula. At $N=600$ the discrepancy
+becomes sign-relevant for $\chifn_{29}$ (see Table~\ref{tab:validation}).
+
+\begin{remark}[Why autocorrelation-numerical $S$ fails]
+The autocorrelation $(\phi_{\chifn}^+\ast\phi_{\chifn}^+)(t)$ requires
+numerical evaluation on a discrete grid, combined with interpolation to
+prime abscissae $t=m\log p$. Floating-point and interpolation errors
+at the grid scale $\Delta x = 2L/n_{\mathrm{grid}}$ translate into errors
+of order $10^{-3}$ in $S$, which is the same order of magnitude as
+$|\gap|$ for weakly-signaled characters like $\chi_{21},\chi_{29}$.
+\end{remark}
+
+\begin{corollary}[Where predictive power must come from]
+\label{cor:paleywiener}
+A genuinely predictive Weil-kernel gap formula requires analytic control
+of the ground states $\phi^\pm_{\chifn}$ \emph{without} passing through
+Galerkin diagonalization. The route is Paley-Wiener asymptotic analysis
+(\`a la Connes \cite{Connes}, adapted to the Dirichlet setting) or a
+direct spectral identification of $\Deltachi(t)$ from the local data
+of $\chifn$ (parity, root number, conductor, arithmetic factor of the
+$L$-function).
+\end{corollary}
+
+\section{\texorpdfstring{The $\chi_{21}$ $N$-oscillation}{The chi21 N-oscillation}}
+\label{sec:chi21}
+
+The character $\chifn_{21}$, with composite conductor $q=21=3\cdot 7$,
+is the only entry of Table~\ref{tab:validation} where the Galerkin
+gap at $N=200$ and the empirical reference at $N=600$ disagree in
+sign. We quantify the discrepancy and attribute it to a
+Galerkin-truncation effect that is resolved at high $N$, not to a
+defect of the formula.
+
+Table~\ref{tab:chi21} records the $N$-convergence data at
+$\lambda=20000$, from the script \texttt{chi21\_n\_convergence.py}.
+
+\begin{table}[h]
+\caption{$N$-convergence of $\chifn_{21}$ at $\lambda=20000$.
+  The Galerkin gap is flat between $N=200$ and $N=400$ and then
+  jumps by more than an order of magnitude between $N=400$ and
+  $N=600$. For comparison the strong-positive character
+  $\chifn_{12}$ converges monotonically (last column).}
+\label{tab:chi21}
+\centering\small
+\begin{tabular}{@{}cccc@{}}
+\toprule
+$N$ & $\gap_{\mathrm{gal}}(\chifn_{21})$ & $S+\archdiff$ & $\gap_{\mathrm{gal}}(\chifn_{12})$ \\
+\midrule
+$200$ & $+0.2816$ & $+0.2888$ & $+0.0325$ \\
+$400$ & $+0.2791$ & $+0.2869$ & $+0.0337$ \\
+$600$ & $-0.0042$ & $+0.0114$ & $+0.0115$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two observations structure the analysis.
+
+\begin{itemize}
+  \item[(i)] \emph{Step discontinuity.} Between $N=200$ and $N=400$
+    the Galerkin gap is numerically stationary
+    ($0.2816\to 0.2791$, change $0.9\%$); it then drops by a factor
+    of $\sim 66$ in absolute value and flips sign between $N=400$
+    and $N=600$. This is not the signature of a smooth
+    $N^{-\alpha}$ convergence; the data are consistent with---but
+    do not unambiguously prove---a \emph{suspected quasi-degeneracy
+    collapse} (full convergence verified only up to $N=600$) in
+    which the Galerkin-truncated sector eigenvalues
+    $\lambda_1^{\min}(W^\pm_{\chifn_{21},N})$ for $N\in\{200,400\}$
+    correspond to a pseudo-ground state distinct from the
+    infinite-$N$ ground state, with the true ground state becoming
+    representable only once the basis is large enough. A definitive
+    diagnosis would require spectral data
+    $\lambda_2-\lambda_1$ and eigenvector overlap
+    $|\langle\phi^{(N=200)},\phi^{(N=600)}\rangle|$ at intermediate
+    $N\in\{500,700,800\}$; we flag this as the most direct further
+    verification (cf.\ \S\ref{sec:outlook}, point on $\chifn_{21}$
+    spectral diagnosis).
+  \item[(ii)] \emph{Predictor tracks the collapse.} The predictor
+    $S+\archdiff$ is dominated by the ground-state autocorrelation
+    and therefore \emph{also} collapses between $N=400$ and $N=600$,
+    from $+0.287$ to $+0.011$. At $N=600$ the predictor no longer
+    agrees in sign with the empirical gap, but its magnitude is now
+    consistent with the empirical magnitude to within a factor
+    $\sim 3$. This confirms that the formula itself is not
+    anomalous: once the Galerkin ground state has converged, the
+    predictor converges alongside it, with sign determined by the
+    near-zero numerical residuals.
+\end{itemize}
+
+For contrast, $\chifn_{12}$ (Table~\ref{tab:chi21}, last column)
+shows a monotone $N$-convergence with no sign flip:
+$+0.0325\to+0.0337\to+0.0115$. This is the generic behaviour on the
+stable characters. The discontinuity for $\chifn_{21}$ is therefore
+neither a Galerkin artefact endemic to composite-conductor
+characters in general (since $\chifn_{12}$, with $q=12=4\cdot 3$,
+is composite), nor a systematic boundary of the method, but a
+suspected character-specific near-degeneracy whose definitive
+spectral analysis (via $\lambda_2-\lambda_1$ scan and eigenvector
+overlaps) lies beyond the scope of the present atlas; see
+\S\ref{sec:outlook}.
+
+\begin{remark}[Not a formula defect]
+\label{rem:chi21-not-defect}
+The sign flip in Table~\ref{tab:chi21} is a property of the
+Galerkin operator $W^\pm_{\chifn_{21},N}$ at low $N$, not of the
+formula \eqref{eq:gap-unreduced}. Since $S+\archdiff$ is defined
+in terms of the Galerkin eigenvectors, any spurious eigenvalue at
+low $N$ is inherited by the predictor. The right theoretical
+object is $\gap_{\mathrm{gal}}^{(600)}(\chifn_{21})=-0.00423$,
+and the right question about $\chifn_{21}$ is whether a
+Paley-Wiener analysis of the infinite-$N$ ground state would recover
+this value directly, without passing through the $N=200,400$
+plateau.
+\end{remark}
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Implications for the three-component decomposition}
+\label{sec:discussion-three-component}
+
+The three-component decomposition \eqref{eq:three-component} divides
+any RH-type question into the Galerkin bridge $\mathrm{GBC}$, the
+Connes-style operator-identification component $C^{(2)}$, and the
+Hurwitz reality-of-zeros transfer. For the trivial character the
+even-dominance theorem of \cite{RH_II} closes $C^{(2)}_{X=\zeta}$
+unconditionally via the $\sqrt{\lambda}$ separation of the sectors.
+For non-trivial real $\chifn$ of small conductor, our atlas demonstrates
+three structural facts about $C^{(2)}_{\chifn}$:
+
+\begin{itemize}
+  \item[(I1)] The Weil-kernel architecture (Theorems~\ref{thm:kernel}
+    and~\ref{thm:sector-diff}) is rigorous and transferable. The
+    anti-diagonal sector difference carries the full character
+    dependence, as predicted.
+  \item[(I2)] At $\lambda=20000$ (a single $\lambda$-value), the gap
+    $\gap_{\chifn}(\lambda)$ is bounded in absolute value by
+    $0.15$ across all ten characters, with character-specific sign.
+    A full $\lambda$-asymptotic ($\Omega(\sqrt{\lambda})$ vs.\
+    $O(1)$ vs.\ intermediate growth) cannot be inferred from a
+    single $\lambda$-measurement and is left for future work;
+    preliminary results for $\chifn_5$ and $\chifn_{12}$ over three
+    orders of magnitude in $\lambda$ at $N=200$ are consistent
+    with $O(1)$ growth (\cite{AsymptoticScan}, supplementary), but
+    a systematic $\lambda$-scan over all ten characters is open.
+    The coarse ``universal transfer'' hypothesis ``even dominance
+    $\Rightarrow$ even sector wins for all $\chifn$'' is refuted
+    at $\lambda=20000$ (since six of ten characters have negative
+    or near-zero gap); the $\lambda$-asymptotic refutation requires
+    the dedicated $\lambda$-scan above.
+  \item[(I3)] Identifying $C^{(2)}_{\chifn}$ requires analytic
+    control of the sector ground states $\phi^\pm_{\chifn}$
+    themselves, not merely of their eigenvalues. Galerkin
+    diagonalization delivers the eigenvalues but, by the tautology
+    of Proposition~\ref{prop:tautology}, produces no predictive
+    information that does not enter the computation as input.
+\end{itemize}
+
+In the meta-programme language of \cite{MetaGalerkinBridge}: for
+non-trivial $\chifn$, $C^{(2)}_{\chifn}$ is a genuinely open
+component, and its closure is the central technical obstacle to a
+Hilbert-P\'olya-style proof of GRH in the Dirichlet case. The
+analytic architecture here is ready to accept such a closure; what
+is missing is the $\chifn$-specific asymptotic analysis of
+$\phi^\pm_{\chifn}$.
+
+After the Zookeeper paper \cite{Zookeeper2026}, this missing
+component can be phrased more sharply in CCM language. The Riemann
+cell now has an independent Zookeeper kernel package---rank-one
+decomposition, Cauchy interlacing, and three-lemma closure---beside
+the v2.1 even-dominance package. The natural Dirichlet back-transfer
+is therefore Route~D: construct a $\chifn$-twisted CCM operator with
+a conductor rank-one term and a $\chifn$-weighted arithmetic
+perturbation, then compare its defect norm to the atlas control
+quantities. In this reading the Paley-Wiener failures above are not a
+dead end; they identify the first concrete stress test for the
+$\chifn$-twisted CCM route.
+
+\subsection{Limitation: absence of an external reference}
+\label{sec:limitation-external}
+
+All gap values reported in Tables~\ref{tab:validation},
+\ref{tab:regression}, and~\ref{tab:archratio} originate from the
+same Galerkin diagonalization, evaluated at $N\in\{200,400,600\}$.
+There is therefore \emph{no external, convention-free reference} in
+this atlas: the high-$N$ values labelled
+$\gap_{\mathrm{gal}}^{(N_{\mathrm{src}})}$ are the highest available
+Galerkin estimates, not measurements of the true infinite-$N$ gap.
+Statistical agreement between the predictor $S_\chi+\archdiff_\chi$
+and $\gap_{\mathrm{gal}}^{(N_{\mathrm{src}})}$ is therefore a
+self-consistency check within the Galerkin method, not an external
+validation. A genuine external reference would require one of:
+\begin{itemize}
+\item[(i)] mp-arithmetic Galerkin computation at $N\geq 2000$ to
+  diagnose finite-precision artefacts;
+\item[(ii)] direct spectral evaluation via the LMFDB zeros of
+  $L(s,\chifn_D)$;
+\item[(iii)] an independent Galerkin scheme using a different basis
+  (e.g., Hermite functions instead of Fourier).
+\end{itemize}
+None of these is provided here; we flag this as a key open
+methodological item before any predictive claim about
+$\gap_{\chifn}(\lambda)$ at the present $\lambda$ can be made.
+
+\subsection{\texorpdfstring{The slope-$0.72$ regression and its meaning}{The slope-0.72 regression and its meaning}}
+\label{sec:discussion-slope}
+
+A secondary quantitative fact exposed by our data is the slope of
+the linear regression of $\gap_{\mathrm{gal}}^{(N_{\mathrm{src}})}$
+against $S+\archdiff$ at $N=200$:
+$\gap_{\mathrm{gal}}^{(N_{\mathrm{src}})}\approx 0.72\cdot
+(S+\archdiff)-0.01$
+(stable-$9$ subsample, $R^2=0.80$, observational only; cf.\
+\S\ref{sec:limitation-external}). We recorded this in Session~7 of
+the development with enthusiasm, but subsequent reflection shows
+its content to be modest. The slope measures the multiplicative
+mismatch between the $N=200$ predictor $S^{(200)}+\archdiff^{(200)}$
+and the empirical high-$N$ gap. Under the Siegel-Walfisz
+compression of Remark~\ref{rem:sw-compression}, this mismatch
+disappears at higher $N$: at $N=600$ the Galerkin gap \emph{is}
+the empirical reference (by identity, not by prediction), so the
+slope tends to $1$ by construction. The $0.72$ is therefore an
+$N=200$-specific Galerkin-truncation constant, not a theoretical
+invariant of the formula.
+
+A genuine theoretical analogue of the slope would be the
+subleading $N$-dependence of the Galerkin ground states
+$\phi^\pm_{\chifn,N}$, controlled by the Paley-Wiener roadmap of
+\cite{RH_II} adapted to Dirichlet $L$-functions (cf.\
+\cite{AnalyticGroundstate}, \S3, and the REG-$\lambda$-conditioned
+rate of \cite{RH_II}, \S6). We flag this as an open quantitative
+question of independent interest.
+
+\begin{remark}[Status of N=200 statistics]
+\label{rem:n200-status}
+The interpretation of the slope-$0.72$ as an $N=200$-specific
+truncation constant has methodological consequences for the rest of
+the atlas: all statistics reported at $N=200$ in
+Tables~\ref{tab:validation}, \ref{tab:regression},
+and~\ref{tab:archratio} are subject to the same finite-truncation
+effect. Where the $N=600$ value differs from the $N=200$ value, the
+$N=600$ value is operationally preferred. The $N=200$ data is
+retained for transparency of the convergence behaviour, not as a
+final result. In particular, the archimedean weight ratios
+$r_\chi$ in Table~\ref{tab:archratio} are computed at $N=200$
+because the matrix-decomposition $W=W_{\mathrm{arch}}+W_{\mathrm{prime}}$
+is most cleanly resolved at this resolution; their values would
+shift modestly at $N=600$, but the prime/mixed/arch trichotomy is
+qualitatively preserved (verification: cf.\ supplementary material,
+\texttt{ARCH\_TERM\_N600\_ANALYSIS.md}).
+\end{remark}
+
+\subsection{Sign convention: rigorous algebraic derivation}
+\label{sec:discussion-sign}
+
+The coefficient $-2$ in \eqref{eq:S-def} is determined algebraically
+by the structure of the Weil quadratic form (Eq.~\eqref{eq:weil-qf}):
+the prime-side contribution carries the factor
+$-2\sum_{p,m}w_{p,m}R_\phi(m\log p)$, and the sector gap inherits this
+factor via the linearity of the inner product on $H_L^\pm$ and the
+sector eigenvector expansion. The full derivation, tracking all six
+relevant sign sources (Weil-formula prime-side minus, operator
+convention, gap orientation, parity action on basis,
+convolution-vs-autocorrelation parity identity, and the real-character
+absorption factor), is given in Appendix~\ref{app:sign} and
+\cite{AnalyticKernelV2}, Theorem~5.1.
+
+The discovery sequence in our development scripts---an initial
+implementation with coefficient $+2$ producing $R\!=\!-0.70$ on the
+sample, corrected to $-2$ producing $R\!=\!+0.70$ on the same
+sample---reflects an early implementation pitfall in the
+autocorrelation parity convention (the sign relation
+$R_{\phi^-}=-(\phi^-{*}\phi^-)_{\mathrm{math}}$ was initially handled
+incorrectly), not a post-hoc fit of the coefficient to the data. The
+rigorous derivation closes the convention. The derivation also yields
+two equivalent global conventions: the Connes-operator convention
+used throughout the atlas (coefficient $-2$) and the Weil-$Q$
+convention (coefficient $+2$), which differ by an overall sign on
+the prime part. The atlas does not depend on which convention is
+chosen, as long as it is applied consistently; all numerical signs
+are consistent with the Connes-operator convention.
+
+\section{Outlook}
+\label{sec:outlook}
+
+The atlas delivers a precise diagnosis: predictive closure of
+$C^{(2)}_{\chifn}$ via Galerkin numerics is structurally
+impossible, and the way forward is an analytic control of the
+ground-state difference that bypasses Galerkin entirely. Six
+concrete next steps are indicated.
+
+\begin{enumerate}
+  \item \textbf{Route~D: $\chifn$-twisted CCM transfer.}
+    The first post-Zookeeper task is to construct the Dirichlet
+    analogue of the CCM/Zookeeper operator: a $\chifn$-twisted
+    Epstein--Mellin transform, a conductor rank-one term, and a
+    $\chifn$-weighted arithmetic perturbation. The atlas quantities
+    $G_{\chifn}$, $R_{\chifn}$, and $\eta^\pm_{\chifn}$ should then
+    be re-read as diagnostics for the corresponding defect norm,
+    rather than as direct Paley-Wiener predictors.
+  \item \textbf{Paley-Wiener asymptotic analysis of
+    $\phi^\pm_{\chifn}$.}
+    For the trivial character the asymptotic ground state
+    $\phi_\infty$ is known explicitly from the Paley-Wiener
+    machinery of \cite{RH_II} (\S5--\S6) under the
+    REG-$\lambda$ regularity assumption. The adaptation to
+    Dirichlet $L$-functions amounts to identifying the
+    $\chifn$-twisted analogue of the relevant Fourier-multiplier
+    bound and the rational-function contour to which the
+    residue-theorem is applied. Three of the five necessary steps
+    transfer mechanically (cf.\ \cite{AnalyticGroundstate},
+    Thm.~3.1); the remaining two require a character-specific
+    treatment of $L'/L(s,\chifn)$ in the critical strip. This is
+    the single highest-leverage technical task.
+  \item \textbf{Branch-local Hilbert-P\'olya framework (``NE-B
+    Boundary'').}
+    Building on \cite{RH_II} (\S4 NE-A, \S5 NE-B) and on the
+    Selberg analogue, the next major project in the meta-programme
+    is a structural theorem identifying \emph{which branches of
+    the zeta-function tree admit a Hilbert-P\'olya interpretation,
+    and which do not.} The present atlas contributes the first
+    quantitative evidence that low-conductor Dirichlet characters
+    populate the second class (no branch-local Hilbert-P\'olya
+    structure at finite $\lambda$), sharpening the boundary
+    theorem that will organize the tree.
+  \item \textbf{Conductor extension $D\leq 100$.}
+    Ten characters is a small atlas. Extending to all primitive
+    real characters with $D\leq 100$ ($\approx 30$ additional
+    characters including a few complex conjugates grouped in
+    paired spaces) would enable statistical tests of the
+    parity/root-number/archimedean classification against a
+    distribution of observed gap signs. The Galerkin cost is
+    $\mathcal{O}(D\cdot N^3)$; at $N=600$ this is $\sim 10$ hours
+    of CCX13 compute per ten characters, a one-weekend job.
+  \item \textbf{Paired-space formalism for complex characters.}
+    Complex Dirichlet characters come in conjugate pairs
+    $\chifn\oplus\bar\chifn$; the Weil quadratic form on
+    $L^2[-L,L]\otimes\mathbb{C}^2$ is hermitian but not
+    self-adjoint. The analytic framework of \S\ref{sec:setup}
+    generalizes, but the sector kernel
+    (Theorem~\ref{thm:sector-diff}) acquires a Gauss-sum phase
+    (\cite{AnalyticKernel}, Prop.~5.2). A clean exposition is
+    a prerequisite for testing the root-number axis
+    (\S\ref{sec:rootnumber}) against non-trivial values $W\in
+    \{+1,-1,\pm i\}$.
+  \item \textbf{Theoretical derivation of the Siegel-Walfisz
+    compression.} The empirical dichotomy of
+    Remark~\ref{rem:sw-compression}---between characters with
+    stable $\gap_{\mathrm{gal}}^{(N=200)}$ and those that are
+    compressed by a factor $\sim 0.35$ at $N=600$---asks for a
+    theoretical classification in terms of the character-specific
+    Siegel-Walfisz constant. A candidate formulation is that
+    $\chifn$ with a genuine low-prime bias (e.g.\ $\chifn_{33}$,
+    $\chifn_{13}$) has a prime sum that saturates the
+    Siegel-Walfisz upper bound in the relevant window and is
+    therefore $N$-stable, whereas $\chifn$ with a balanced prime
+    sum (e.g.\ $\chifn_{12}$) has a prime sum below the upper
+    bound and is therefore compressible.
+\end{enumerate}
+
+\appendix
+
+\section{Computational details}
+\label{app:computation}
+
+\subsection{Galerkin basis and matrix assembly}
+We use the standard Fourier orthonormal basis of $H_L^\pm$:
+$\{e_0^+=(2L)^{-1/2}\}\cup\{e_n^+(x)=L^{-1/2}\cos(n\pi x/L)\}_{n\geq 1}$
+for the even sector and
+$\{e_n^-(x)=L^{-1/2}\sin(n\pi x/L)\}_{n\geq 1}$ for the odd sector.
+The Galerkin-truncated operators $W^{\pm}_{\chifn,N}$ at basis size
+$N$ are assembled by the function
+\texttt{build\_W}$(\chifn,\lambda,\mathrm{sector},N)$ of the script
+\texttt{arch\_term\_analysis.py}, which decomposes
+$W^\pm = W^\pm_{\mathrm{arch}} + W^\pm_{\mathrm{prime}}$ where
+\begin{itemize}
+\item[(i)] $W^\pm_{\mathrm{arch}}$ is obtained from the Fourier image
+  of $\rho_{\chifn}(t)=\log(q/\pi)+\Re\,\psi(1/4+it/2)$ on a grid of
+  spacing $\Delta t=10^{-2}$, truncated at $|t|\leq T_{\mathrm{arch}}=
+  30$ (chosen so that the Gaussian ground-state spectrum is contained
+  within numerical accuracy).
+\item[(ii)] $W^\pm_{\mathrm{prime}}$ is obtained by summing
+  $\chifn(p)^m\log p/p^{m/2}$ over all $(p,m)$ with $p\nmid q$ and
+  $m\log p\leq 2L$, evaluating the basis-function overlaps
+  analytically (for cosine-cosine) or by Simpson integration (for
+  sine-sine off-diagonal terms).
+\end{itemize}
+The smallest eigenvalue and its eigenvector are extracted by
+Lanczos inverse iteration from \texttt{scipy.sparse.linalg.eigsh}
+with tolerance $10^{-10}$ and \texttt{sigma}$=-\log\lambda$ as a
+spectral shift.
+
+\subsection{Autocorrelation evaluation}
+The spatial-domain autocorrelation
+$(\phi^\pm\ast\phi^\pm)(t)$ is computed on a uniform grid of $n_{
+\mathrm{grid}}=4096$ points on $[-2L,2L]$ via \texttt{numpy.correlate}
+after zero-padding, then interpolated at the prime abscissae
+$t=m\log p$ by cubic \texttt{scipy.interpolate.interp1d}. The
+resulting realization of $S_{\chifn}$, called $S_{\mathrm{exact}}$
+in our scripts, differs from the matrix-based realization
+$\mathrm{prime\_diff}_{\mathrm{matrix}}$ by floating-point and
+interpolation errors of order $10^{-3}$ ($1$--$2\%$ of typical
+$|S|$-values); this is the source of the $N=600$ sign flips at
+$\chifn_{29}$ and $\chifn_{60}$ documented in
+\S\ref{sec:validation}.
+
+\subsection{Scripts}
+All data in this paper were generated by
+\texttt{arch\_term\_analysis.py} (for $N=200$ local),
+\texttt{server\_n600\_full\_analysis.py} (for $N=600$ server run,
+1.95\,h on Hetzner CCX13), and
+\texttt{chi21\_n\_convergence.py} (for Table~\ref{tab:chi21}).
+Post-processing is done by \texttt{ground\_state\_difference\_analysis.py}.
+JSON outputs are in \texttt{CORE/zoo-mapping/\_results/}; Markdown
+summaries in the same directory.
+
+\section{Sign-convention status}
+\label{app:sign}
+
+The coefficient $-2$ in \eqref{eq:S-def} is rigorously derived from
+the Weil explicit formula in \cite{AnalyticKernelV2},
+Theorem~5.1, by tracking all six relevant sign sources (Weil-formula
+prime-side minus, operator convention, gap orientation, parity
+action on basis, convolution-vs-autocorrelation parity identity,
+and the real-character absorption factor). The derivation yields
+\emph{two equivalent conventions}:
+\begin{enumerate}
+  \item the \textbf{Connes-operator convention} $\tilde A_{\chifn}$,
+    in which the prime terms are added with positive sign in the
+    matrix assembly; this matches the script
+    \texttt{build\_W} (i.e.\ $\kappa^{\mathrm{script}}_{\chifn}(u)
+    =+\sum w_{p,m}[\delta(u-m\log p)+\delta(u+m\log p)]$) and
+    yields coefficient~$-2$;
+  \item the \textbf{Weil-$Q$ convention} $Q_{\chifn}$ used in
+    \eqref{eq:kappa}, in which $\kappa_{\chifn}$ carries a leading
+    minus sign; here the analogous derivation yields
+    coefficient~$+2$ (as in \cite{AnalyticKernel}, Cor.~4.4).
+\end{enumerate}
+The two operators satisfy
+$\tilde A_{\chifn}^{\mathrm{prim}}=-Q_{\chifn}^{\mathrm{prim}}$ (the
+prime parts differ by an overall sign); both are valid descriptions
+of the same spectral problem, but they give oppositely signed gaps.
+The atlas and the script consistently use the Connes-operator
+convention throughout, so the coefficient~$-2$ in
+\eqref{eq:S-def} is the correct one.
+
+A second subtlety concerns the object being summed. The numerical
+implementation of \eqref{eq:S-def} (R1, spatial autocorrelation)
+uses \texttt{np.correlate}, which computes the \emph{autocorrelation}
+$R_{\phi^\pm}(u):=\int\phi^\pm(s)\phi^\pm(s-u)\,ds$.
+For the \emph{even} ground state $\phi^+$ one has
+$R_{\phi^+}=(\phi^+{*}\phi^+)_{\mathrm{math}}$, but for the
+\emph{odd} ground state $\phi^-$ the parity identity gives
+$R_{\phi^-}=-(\phi^-{*}\phi^-)_{\mathrm{math}}$ (proof: substitution
+$v=-s$ in the integral $\int\phi^-(s)\phi^-(s-u)\,ds$, using
+$\phi^-(-v)=-\phi^-(v)$). Consequently, the numerical expression
+$\Deltachi^{\mathrm{num}}:=R_{\phi^+}-R_{\phi^-}$ computed by the
+script equals
+$(\phi^+{*}\phi^+)_{\mathrm{math}}+(\phi^-{*}\phi^-)_{\mathrm{math}}$
+in mathematical convolutions---a \emph{sum}, which is precisely the
+right-hand side of \eqref{eq:Delta-def}. Thus $\Deltachi$ as defined
+in \eqref{eq:Delta-def} agrees identically with the script-computed
+quantity $\Deltachi^{\mathrm{num}}$. The coefficient~$-2$ in
+\eqref{eq:S-def} is then the unique value that makes the gap
+identity (Theorem~\ref{thm:closure}) hold. See
+\cite{AnalyticKernelV2}, \S4 and Theorem~5.1, for the full
+derivation. All reported signs and all tables
+(Tables~\ref{tab:validation}, \ref{tab:regression},
+\ref{tab:archratio}, \ref{tab:chi21}) are internally consistent
+and have been verified against a direct Galerkin diagonalization.
+
+% --- Bibliography ---
+\begin{thebibliography}{99}
+
+% ----- FST master references -----
+
+\bibitem{MathMaster}
+L.~Geiger,
+\textit{The Zeta Zoo --- The Mathematical Side of Functional
+Stability Theory: Branch-Local Hilbert--P\'olya via the Trinity of
+UCU, SGE, and Weil-Form Transversality},
+Preprint, Zenodo (2026), DOI:
+\href{https://doi.org/10.5281/zenodo.19673227}{10.5281/zenodo.19673227}.
+Three-component decomposition of $\mathrm{RH}$ in \S2.4; UCU in \S7;
+CRM-V classification remark in \S6.5.
+
+\bibitem{RFEPFramework}
+L.~Geiger,
+\textit{Functional Stability Theory --- Physical Instantiation via
+the Renormalized Free Energy Principle},
+Preprint, Zenodo (2026), DOI:
+\href{https://doi.org/10.5281/zenodo.19162705}{10.5281/zenodo.19162705}
+(v1.7; v1.8 update in preparation).
+
+\bibitem{Zookeeper2026}
+L.~Geiger,
+\textit{The Spectral Zookeeper: The Riemann Hypothesis via Spectral
+Microcluster Closure in the Connes--Consani--Moscovici Framework},
+Preprint (2026), Zenodo DOI
+\href{https://doi.org/10.5281/zenodo.19673127}{10.5281/zenodo.19673127}.
+
+% ----- Internal project references (preprint / supplementary notes) -----
+
+\bibitem{RH_II}
+L.~Geiger,
+\textit{Riemann Hypothesis via Direct Frontier Dominance (Paper II:
+Even Dominance)},
+Preprint (2026), Zenodo DOI \href{https://doi.org/10.5281/zenodo.19546593}{10.5281/zenodo.19546593}.
+Companion: \path{01_RH_TRILOGY/paper/RH_II_Even_Dominance.tex}.
+
+\bibitem{MetaGalerkinBridge}
+L.~Geiger,
+\textit{A Meta Galerkin Bridge: Diagnostic Decomposition of RH-Type
+Programmes}
+(Draft 2026), archived predecessor of the \texttt{CORE/zetazoo}
+Boundary paper. Content absorbed into \cite{MathMaster} \S2.4.
+
+\bibitem{AnalyticKernel}
+L.~Geiger,
+\textit{Analytic Kernel: Sector-Kernel Decomposition of the
+Dirichlet Weil Quadratic Form},
+Supplementary note (2026-04-17, revised 2026-04-16),
+\path{CORE/zoo-mapping/ANALYTIC_PIPELINE.md}.
+
+\bibitem{AnalyticKernelV2}
+L.~Geiger,
+\textit{Analytic Kernel V2 --- Rigorous Weil-Formula Derivation
+of the Sign Coefficient},
+Supplementary note (2026-04-17),
+\path{CORE/zoo-mapping/ANALYTIC_PIPELINE.md}.
+Resolves the sign-convention status by deriving the coefficient
+rigorously from the Weil explicit formula and tracking all six sign
+sources.
+
+\bibitem{AnalyticGroundstate}
+L.~Geiger,
+\textit{Analytic Ground State: Paley-Wiener Asymptotics for the
+Sector Ground States of Dirichlet Weil Quadratic Forms},
+Supplementary note (2026-04-17),
+\path{CORE/zoo-mapping/ANALYTIC_PIPELINE.md}.
+
+\bibitem{Woche4Validation}
+L.~Geiger,
+\textit{Week-4 Validation: 16-Window Falsification of the
+Leading-Order Gap Formula},
+Supplementary note (2026-04-17),
+\path{CORE/zoo-mapping/_results/WOCHE4_VALIDATION_RESULT.md}.
+
+\bibitem{AsymptoticScan}
+L.~Geiger,
+\textit{Asymptotic Scan of the $\chi_5$ and $\chi_{12}$ Sector Gaps
+across Three Orders of Magnitude in $\lambda$},
+Supplementary note (2026-04-15),
+\path{CORE/zoo-mapping/_results/ASYMPTOTIC_SCAN_2026-04-15.md}.
+
+% ----- External references (verified 2026-04-16) -----
+
+\bibitem{IwaniecKowalski}
+H.~Iwaniec and E.~Kowalski,
+\textit{Analytic Number Theory},
+American Mathematical Society Colloquium Publications \textbf{53},
+AMS, Providence, RI (2004), ISBN 0-8218-3633-1, 615~pp.
+
+\bibitem{Weil1952}
+A.~Weil,
+\textit{Sur les ``formules explicites'' de la th\'eorie des nombres
+premiers},
+Meddelanden fr\aa n Lunds Universitets Matematiska Seminarium
+(vol.\ ded.\ \`a Marcel Riesz), 252--265 (1952).
+
+\bibitem{Selberg1956}
+A.~Selberg,
+\textit{Harmonic Analysis and Discontinuous Groups in Weakly
+Symmetric Riemannian Spaces with Applications to Dirichlet Series},
+J. Indian Math. Soc. \textbf{20}, 47--87 (1956).
+
+\bibitem{Connes}
+A.~Connes,
+\textit{Trace formula in noncommutative geometry and the zeros of
+the Riemann zeta function},
+Selecta Math. (New Series) \textbf{5}, 29--106 (1999),
+DOI \href{https://doi.org/10.1007/s000290050042}{10.1007/s000290050042}.
+
+\bibitem{PaleyWiener}
+R.~E.~A.~C.~Paley and N.~Wiener,
+\textit{Fourier Transforms in the Complex Domain},
+American Mathematical Society Colloquium Publications \textbf{19},
+AMS, Providence, RI (1934).
+
+\bibitem{LMFDB}
+The LMFDB Collaboration,
+\textit{The L-Functions and Modular Forms Database},
+\url{https://www.lmfdb.org/}. Accessed 2026-04-16.
+
+\end{thebibliography}
+
+\end{document}

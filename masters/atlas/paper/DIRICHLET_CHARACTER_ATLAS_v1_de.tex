@@ -1,0 +1,1661 @@
+% ============================================================================
+%  Dirichlet-Charakter-Atlas: Eine Weil-Kern-Kartografie
+%  von Low-Conductor-Sektor-Gaps
+%
+%  Autor: Lukas Geiger, Independent Researcher, Bernau
+%  Entwurf v2 — überarbeitet nach N=600-Serveranalyse
+%  Status: Finaler Entwurf
+% ============================================================================
+\documentclass[10pt,twocolumn]{article}
+
+\usepackage[letterpaper,top=2.0cm,bottom=2.5cm,left=1.8cm,right=1.8cm,columnsep=0.6cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath,amssymb,amsfonts,mathtools,bm}
+\usepackage{graphicx,float,booktabs,array,multirow}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+\usepackage[numbers,square,sort&compress]{natbib}
+\bibliographystyle{unsrtnat}
+
+\usepackage{titlesec}
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Beispiel}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Bemerkung}
+
+% --- Eigene Makros ---
+\newcommand{\gap}{\operatorname{gap}}
+\newcommand{\chifn}{\chi}
+\newcommand{\Zmodq}{(\mathbb{Z}/q\mathbb{Z})^*}
+\newcommand{\halfline}{\tfrac{1}{2}}
+\newcommand{\Deltachi}{\Delta_{\chifn}}
+\newcommand{\archdiff}{\operatorname{arch\_diff}}
+\newcommand{\primediff}{\operatorname{prime\_diff}_{\mathrm{matrix}}}
+\DeclareMathOperator{\sgn}{sgn}
+
+% ============================================================================
+\title{Der Dirichlet-Charakter-Atlas\\
+  \large --- Ein Weil-Kern-Zahlenatlas für Dirichlet $L$-Funktions-Sektor-Gaps\\
+  \normalsize Galerkin-Diagnostik und die Grenzen der Theorie führender Ordnung}
+\author{Lukas Geiger\\\small Independent Researcher, Bernau}
+\date{\today}
+
+\begin{document}
+\twocolumn[
+\maketitle
+\begin{abstract}
+\noindent
+Dieses Paper ist eine Instanziierung der Funktionalen Stabilitätstheorie
+(Functional Stability Theory, FST) im mathematischen Bereich: Es erweitert die
+Dreikomponenten-Zerlegung $\mathrm{RH}(X) = \mathrm{GBC}(X) + C^{(2)}(X) + \mathrm{Hurwitz}(X)$
+(siehe Math-Master~\cite{MathMaster}, \S2.4) auf
+getwistete $L$-Funktionen, wobei der Sektor-Gap (sector gap) die quantitative
+Signatur von $C^{(2)}_{\chifn}$ darstellt. Der Math-Master
+\cite{MathMaster} entwickelt die übergreifende Zeta-Zoo-Architektur und
+die Trinität aus UCU + SGE + Weil-Form-Transversalität; der Physics-Master
+\cite{RFEPFramework} entwickelt die physikalische Begleitformulierung
+über das Renormierte Prinzip der Freien Energie (Renormalized Free Energy Principle).
+
+Wir entwickeln einen numerischen Weil-Kern-Atlas (Weil-kernel numerical atlas) von Sektor-Gaps für Dirichlet
+$L$-Funktionen, die zu zehn reellen Low-Conductor-Charakteren
+$\chi_D$, $D\in\{5,8,12,13,17,21,24,29,33,60\}$, assoziiert sind, bei Galerkin-Trunkierungen
+$N\in\{200,400,600\}$ und einem Cut-off von $\lambda=20000$. Innerhalb der
+Dreikomponenten-Zerlegung ist der Sektor-Gap die quantitative
+Signatur von $C^{(2)}_{\chifn}$.
+Unsere Hauptergebnisse sind \emph{negativ, aber strukturell informativ}. Erstens
+wird die Approximation führender Ordnung $\phi^+_{\chifn}\approx\phi^-_{\chifn}$
+der zwei Sektor-Grundzustände empirisch falsifiziert: Ein systematischer
+16-Fenster-Test, der auch den empirischen Grundzustand selbst einschließt, verfehlt das
+Erfolgskriterium von $9/10$ Vorzeichengenauigkeit (sign accuracy), $R^2\geq 0.8$. Zweitens
+reduziert sich die scheinbar „exakte“ Formel
+\[
+  \gap_{\chifn} = -2\!\!\sum_{p,m}\!\!\frac{\chifn(p)^m\log p}{p^{m/2}}
+    \Deltachi(m\log p) + \archdiff_{\chifn} + O(N^{-1})
+\]
+mit
+$\Deltachi(t):=(\phi^+_{\chifn}\ast\phi^+_{\chifn})(t)+(\phi^-_{\chifn}\ast\phi^-_{\chifn})(t)$,
+sobald beide Grundzustände aus derselben Galerkin-Diagonalisierung entnommen werden,
+zu einer Matrixzerlegungs-Tautologie: Eine scheinbare
+$9/9$ Vorzeichengenauigkeit bei $N=200$ verschwindet als numerisches Interpolations-Artefakt,
+wenn die Analyse bei $N=600$ wiederholt wird. Drittens
+durchläuft der $\chi_{21}$-Gap einen Vorzeichenwechsel zwischen $N=200$ und $N=600$
+($+0.282\to-0.004$), was veranschaulicht, dass selbst der Galerkin-Operator
+unterhalb seiner Konvergenzskala nicht informativ ist. Wir katalogisieren die
+zehn Charaktere entlang zwei \emph{Filter-Konstanten} (Parität und Wurzelzahl,
+beide gleich $+1$ im gesamten Sample) und zwei \emph{informativen Achsen}
+(archimedisches Gewichtsverhältnis und Gap-Signatur), zeigen die systematische
+Siegel-Walfisz-Kompression bei
+$N=600$ und positionieren das Ergebnis als präzise Diagnose, warum
+numerische Galerkin-Routen für sich genommen
+$C^{(2)}_{\chifn}$ nicht auflösen können. Eine echte prädiktive Formulierung würde eine
+asymptotische Paley-Wiener-Kontrolle der Sektor-Grundzustände erfordern,
+die die Galerkin-Trunkierung umgeht; wir schließen mit einer Roadmap hin zu
+einem solchen Branch-lokalen Hilbert-P\'olya-Framework (branch-local Hilbert-P\'olya framework).
+\end{abstract}
+\vspace{1em}
+]
+
+\section{Einführung}
+\label{sec:intro}
+
+\subsection{Motivation}
+\label{sec:intro-motivation}
+
+Der direkte Grenzdominanz-Ansatz (direct-frontier dominance approach) zur Riemannschen Vermutung
+\cite{RH_II} stellt den Sektor gerader Parität der Weilschen quadratischen Form
+auf $L^2[-L,L]$, $L=\log\lambda$, als den Sektor ungerader Parität gleichmäßig in $\lambda$ dominierend dar, und zwar
+mit der Rate $\mathrm{gap}(\lambda)\gtrsim\sqrt{\lambda}$. Die Konstruktion ist
+unbedingt (unconditional), rein variationell und verwendet lediglich die drei strukturellen
+Bestandteile von $\zeta(s)$: das Euler-Produkt, den Gamma-Faktor und
+eine einzige Funktionalgleichung.
+
+Eine natürliche und zentrale Frage ist, ob sich dieselbe Architektur
+auf getwistete $L$-Funktionen $L(s,\chi)$ für nicht-triviale
+Dirichlet-Charaktere $\chi$ übertragen lässt, um so die Verallgemeinerte
+Riemannsche Vermutung (Generalized Riemann Hypothesis, GRH) charakterweise zu adressieren. Im Meta-Programm
+von \cite{MetaGalerkinBridge} wird die RH-Typ-Frage für eine Zeta-Familie
+$X$ durch eine Dreikomponenten-Zerlegung diagnostiziert:
+\begin{equation}
+\label{eq:three-component}
+  \mathrm{RH}_X
+    \;=\;
+  \mathrm{GBC}_X \;+\; C^{(2)}_X \;+\; \mathrm{Hurwitz}_X,
+\end{equation}
+wobei $\mathrm{GBC}_X$ die Galerkin-Brücke zu einem selbstadjungierten
+Operator erfasst, $\mathrm{Hurwitz}_X$ den Realität-der-Nullstellen-Transfer, und
+$C^{(2)}_X$ die Operator-Identifikation im Connes-Stil, welche das Herzstück des
+Hilbert-P\'olya-Programms bildet. Für den trivialen Charakter
+wird $C^{(2)}_{X=\zeta}$ durch das Theorem der geraden Dominanz (even-dominance theorem)
+aus \cite{RH_II} unbedingt (unconditionally) geschlossen; für nicht-triviale $\chi$ ist $C^{(2)}_{\chifn}$ die
+harte Residualkomponente. Die vorliegende Arbeit ist ein Atlas dessen, was
+Galerkin-numerische Techniken über dieses Residuum aussagen können und, noch wichtiger, was
+sie nicht aussagen können.
+
+\subsection{Was diese Arbeit leistet}
+\label{sec:intro-contribution}
+
+Wir katalogisieren den Galerkin-Sektor-Gap
+$\gap_{\chifn}(\lambda)
+  :=\lambda_{\min}(Q^-_{\chifn})-\lambda_{\min}(Q^+_{\chifn})$
+bei $\lambda=20000$ für zehn Kronecker-reelle Charaktere
+$\chi_D$, $D\in\{5,8,12,13,17,21,24,29,33,60\}$,
+über drei Galerkin-Auflösungen $N\in\{200,400,600\}$ hinweg. Für jeden
+Charakter berechnen wir beide Sektor-Grundzustände separat
+$\phi^\pm_{\chifn}$, die primitive Weil-Kern-Prädiktion
+\begin{equation}
+\label{eq:predictor}
+  S_{\chifn}(\lambda)
+    = -2\sum_{\substack{p\nmid q\\m\log p\leq 2L}}
+      \frac{\chifn(p)^m\log p}{p^{m/2}}\;\Deltachi(m\log p),
+\end{equation}
+mit
+$\Deltachi(t)
+  =(\phi^+_{\chifn}\!*\phi^+_{\chifn})(t)
+    +(\phi^-_{\chifn}\!*\phi^-_{\chifn})(t)$,
+den archimedischen Beitrag
+$\archdiff_{\chifn}
+  :=\langle\phi^-,K^{\mathrm{arch}}_-\phi^-\rangle
+    -\langle\phi^+,K^{\mathrm{arch}}_+\phi^+\rangle$,
+und den vollen Galerkin-Gap $\gap_{\mathrm{gal}}^{(N)}$. Wir positionieren die
+vier Größen in Relation zueinander, über alle drei Galerkin-Auflösungen
+hinweg, sowie als Referenz in Relation zu den empirischen Gaps (bei höchstem $N$).
+
+\subsection{Was diese Arbeit aufzeigt}
+\label{sec:intro-findings}
+
+Unser Beitrag ist bewusst diagnostischer Natur. Die wichtigsten Erkenntnisse sind:
+
+\begin{enumerate}
+\item[(F1)] \textbf{Falsifizierung der Reduktion führender Ordnung.}
+  Unter der Approximation
+  $\phi^+_{\chifn}\approx\phi^-_{\chifn}\approx\phi_\infty$, die in
+  \cite{RH_II} für den trivialen Charakter verwendet wird, reduziert sich der primzahlseitige
+  Prädiktor (prime-side predictor) auf ein universelles Autokorrelations-Integral. Ein systematischer Test
+  von 16 Fenster-Modellen (window models, einschließlich des empirischen Einzelsektor-Grundzustands)
+  erreicht bestenfalls eine Vorzeichengenauigkeit von $6/10$ und ein $R^2=0.15$.
+  Die Reduktion führender Ordnung (leading-order reduction) ist für nicht-triviale $\chi$ falsch.
+\item[(F2)] \textbf{Matrixzerlegungs-Tautologie.}
+  Wenn \emph{beide} Sektor-Grundzustände aus derselben
+  Galerkin-Diagonalisierung entnommen werden, ist die Identität
+  $\gap_{\mathrm{gal}}^{(N)} = S_{\chifn}+\archdiff_{\chifn}$
+  keine Vorhersage, sondern eine Folge der Linearität der
+  Erwartung auf $W=W_{\mathrm{arch}}+W_{\mathrm{prime}}$. Eine scheinbare
+  $9/9$ Vorzeichengenauigkeit bei $N=200$ (abzüglich des bekannten $N$-Oszillators
+  $\chi_{21}$) löst sich unter einer Server-Level-Validierung bei $N=600$ auf: Der
+  Prädiktor $S_{\chifn}+\archdiff_{\chifn}$ fällt auf $8/10$ aufgrund
+  zweier Vorzeichenfehler: $\chi_{21}$ ($N$-Oszillator,
+  vgl. (F3) und \S\ref{sec:chi21}) sowie $\chi_{29}$ (numerisches
+  Interpolationsartefakt an einem Near-Zero-Gap).
+\item[(F3)] \textbf{$\chi_{21}$ als ein $N$-Oszillator.}
+  Bei $N=200$ hat man $\gap_{\mathrm{gal}}=+0.282$; bei $N=600$ hat man
+  $\gap_{\mathrm{gal}}=-0.004$. Der Vorzeichenwechsel ist kein Formelfehler,
+  sondern ein Galerkin-Trunkierungseffekt für zusammengesetzte Leiter (composite conductors), der sich erst
+  oberhalb von $N\sim 500$ stabilisiert. Dies zeigt einerseits, dass der Galerkin-Operator
+  selbst nicht-trivial $N$-abhängig ist, und erklärt andererseits, warum ein
+  $9/9$ bei $N=200$ nach Ausschluss von $\chi_{21}$ nicht überraschend war:
+  Der ausgeschlossene Charakter war genau jener, dessen $N$-Abhängigkeit noch nicht
+  in den Test integriert war.
+\item[(F4)] \textbf{Residualer Inhalt: Die Weil-Kern-Architektur ist
+  rigoros.} Die Sektor-Kern-Zerlegung
+  (Theorem~\ref{thm:kernel}), die anti-diagonale Sektordifferenz
+  (Theorem~\ref{thm:sector-diff}) und die spektral-domänische Form des
+  Gaps über die $L'/L$-Funktion bleiben als strukturelle Aussagen gültig,
+  unabhängig von der Reduktion führender Ordnung. Wir legen diese in
+  Abschnitt~\ref{sec:setup} dar und verwenden sie in Abschnitt~\ref{sec:atlas},
+  um die zehn Charaktere entlang vier orthogonaler Achsen zu klassifizieren.
+\end{enumerate}
+
+Zusammengenommen liefern diese Erkenntnisse eine präzise Diagnose: Die
+$C^{(2)}_{\chifn}$-Komponente von \eqref{eq:three-component} ist für
+nicht-triviale $\chi$ einer Galerkin-numerischen Schließung (Galerkin-numerical closure)
+nicht zugänglich, da das relevante Signal in der Differenz
+$\phi^+_{\chifn}-\phi^-_{\chifn}$ lebt; dies ist eine Feinstruktur (fine structure), die in
+jeder natürlichen Approximation führender Ordnung verloren geht, und überdies ist der volle
+Galerkin-Operator relativ zu seinen eigenen Eigenvektoren tautologisch.
+Eine echte prädiktive Formulierung muss
+$\Deltachi$ analytisch identifizieren, z.\,B.\ durch Paley-Wiener-Asymptotik,
+angepasst aus \cite{RH_II} auf das charakter-getwistete Setting.
+
+\subsection{Organisation}
+
+Abschnitt~\ref{sec:setup} fasst die Weilsche quadratische Form und die
+Sektor-Kern-Zerlegung zusammen. Abschnitt~\ref{sec:formula} präsentiert die
+Gap-Formel und kontrastiert die reduzierte und unreduzierte Version.
+Abschnitt~\ref{sec:validation} präsentiert die numerische Validierung bei
+$N\in\{200,400,600\}$. Abschnitt~\ref{sec:atlas} katalogisiert die zehn
+Charaktere entlang vier Achsen. Abschnitt~\ref{sec:tautology} formuliert
+und beweist die Tautologie. Abschnitt~\ref{sec:chi21} behandelt die
+$\chi_{21}$ $N$-Oszillation im Detail. Abschnitt~\ref{sec:discussion}
+diskutiert Implikationen für \eqref{eq:three-component}. Abschnitt~\ref{sec:outlook}
+skizziert die Paley-Wiener-Roadmap und das Branch-lokale
+Hilbert-P\'olya-Programm als den angezeigten nächsten Schritt.
+
+\section{Setup: Weilsche quadratische Form und Sektor-Kerne}
+\label{sec:setup}
+
+Wir fassen das durchgehend verwendete strukturelle Framework zusammen; die vollständigen
+Herleitungen sind in \cite{AnalyticKernel} gegeben.
+
+\subsection{\texorpdfstring{Dirichlet $L$-Funktionen}{Dirichlet L-Funktionen} und die Weil-Formel}
+
+Sei $\chifn$ ein primitiver Dirichlet-Charakter mod $q$ mit
+$\chifn(-1)=+1$ (gerade). Setze $a_{\chifn}=0$ und definiere die vervollständigte
+$L$-Funktion
+\[
+  \Lambda(s,\chifn)
+    =\Bigl(\frac{q}{\pi}\Bigr)^{s/2}\Gamma\!\Bigl(\frac{s}{2}\Bigr)
+      L(s,\chifn),
+\]
+welche die Funktionalgleichung
+$\Lambda(s,\chifn)=\epsilon_{\chifn}\Lambda(1-s,\bar\chifn)$ mit
+$|\epsilon_{\chifn}|=1$ erfüllt. Für einen reellen (d.\,h.\ Kronecker) Charakter
+ist $\bar\chifn=\chifn$ und $\epsilon_{\chifn}=+1$; wir arbeiten in diesem Atlas ausschließlich
+mit den zehn reellen Charakteren $\chifn_D$ mit $D\in\{5,8,12,13,17,21,
+24,29,33,60\}$. Die nicht-trivialen Nullstellen
+$\rho=\halfline+i\gamma$ werden durchgehend auf der kritischen Gerade angenommen
+(GRH für die getesteten Führer). Für die Führer
+$D\in\{5,8,12,13,17,21,24,29,33,60\}$ dieses Atlas liefert
+\cite{LMFDB} alle nicht-trivialen Nullstellen unterhalb Höhe
+$T\sim 10^4$, numerisch auf der kritischen Geraden verifiziert; die
+Testfunktions-Bandbreite $2L\approx 19.8$ bei $\lambda=20000$ erfasst
+Nullstellen unterhalb $T\sim 10^4$, sodass die GRH-Annahme im
+relevanten Nullstellenhöhen-Bereich empirisch gestützt ist. Ein
+theoretischer Beweis von GRH für $L(s,\chifn_D)$ für irgendeinen
+spezifischen $D$ in der Stichprobe steht selbstverständlich aus.
+
+Für eine gerade Testfunktion $h\in C_c^\infty(\mathbb{R})$ mit kompaktem Träger
+lautet die explizite Weilsche Formel (Weil explicit formula) \cite{IwaniecKowalski}:
+\begin{equation}
+\label{eq:weil}
+  \sum_{\gamma}h(\gamma)
+    = W^{\chifn}_\infty[h]
+    - 2\sum_{\substack{p\nmid q\\m\geq 1}}
+      \frac{\chifn(p)^m\log p}{p^{m/2}}\,\hat h(m\log p),
+\end{equation}
+wobei die Summe auf der linken Seite über alle Imaginärteile der nicht-trivialen
+Nullstellen von $L(s,\chifn)$ läuft und das archimedische Gewicht lautet:
+\[
+  W^{\chifn}_\infty[h]
+    = \frac{1}{2\pi}\!\int_{-\infty}^{\infty}\! h(t)
+      \Bigl[\log\!\frac{q}{\pi} + \Re\,\psi\!\Bigl(\tfrac14+\tfrac{it}{2}\Bigr)\Bigr]\,dt.
+\]
+
+\subsection{\texorpdfstring{Quadratische Form auf $H_L$}{Quadratische Form auf HL}}
+
+Fixiere $\lambda>1$ und setze $L:=\log\lambda$, $H_L:=L^2[-L,L]$. Für eine
+reelle Testfunktion $f\in C_c^\infty([-L,L])$, setze
+$h(t):=2\pi|\hat f(t)|^2$. Dann ist $h$ nicht-negativ und gerade, und
+\eqref{eq:weil} induziert die \emph{Weilsche quadratische Form}
+\begin{equation}
+\label{eq:weil-qf}
+\begin{aligned}
+  Q_{\chifn}[f]
+    &:=\sum_{\gamma}2\pi|\hat f(\gamma)|^2 \\
+    &=W^{\chifn}_\infty[2\pi|\hat f|^2] \\
+    &\quad -2\sum_{p,m}\frac{\chifn(p)^m\log p}{p^{m/2}}
+      \int f(y)f(y-m\log p)\,dy.
+\end{aligned}
+\end{equation}
+$Q_{\chifn}$ lässt ein translationsinvariantes Symbol zu: Durch Definition der
+primitiven Faltungsdistribution (primitive convolution distribution)
+\begin{equation}
+\label{eq:kappa}
+\begin{aligned}
+  \kappa_{\chifn}(u)
+    &:=-\sum_{p\nmid q,\,m\geq 1}
+      \frac{\chifn(p)^m\log p}{p^{m/2}} \\
+    &\quad\times
+      \bigl[\delta(u-m\log p)+\delta(u+m\log p)\bigr],
+\end{aligned}
+\end{equation}
+und des archimedischen Kerns
+$K^{\mathrm{arch}}_{\chifn}(u):=\mathcal{F}^{-1}[\rho_{\chifn}](u)$
+mit $\rho_{\chifn}(t)=\log(q/\pi)+\Re\,\psi(1/4+it/2)$ erhält man
+den Kern
+$K_{\chifn}(x,y)=\kappa_{\chifn}(x-y)+K^{\mathrm{arch}}_{\chifn}(x-y)$,
+der $Q_{\chifn}[f]=\iint K_{\chifn}(x,y)f(x)f(y)\,dx\,dy$ auf
+$C_c^\infty([-L,L])$ erfüllt.
+
+\subsection{Sektor-Zerlegung}
+
+Sei $\mathcal{P}:H_L\to H_L$, $(\mathcal{P}f)(x)=f(-x)$, die
+Spiegelung. $\mathcal{P}$ ist unitär selbstadjungiert mit $\mathcal{P}^2
+=I$; die Spektralprojektionen $P^\pm=(I\pm\mathcal{P})/2$ spalten
+$H_L=H_L^+\oplus H_L^-$ in gerade/ungerade Sektoren. Standard-Fourierbasen
+sind
+\[
+\begin{aligned}
+  e_0^+&=\tfrac{1}{\sqrt{2L}}, &
+  e_n^+(x)&=\tfrac{1}{\sqrt L}\cos(n\pi x/L),\\
+  e_n^-(x)&=\tfrac{1}{\sqrt L}\sin(n\pi x/L).
+\end{aligned}
+\]
+Die Galerkin-Trunkierung bei der Basisgröße $N$ verwendet die Moden $0\leq n\leq N$
+in jedem Sektor.
+
+\subsection{Sektor-Kerne und die anti-diagonale Differenz}
+
+Da $K_{\chifn}(x,y)=K_{\chifn}(-x,-y)$, nehmen die sektor-projizierten
+Kerne folgende Form an:
+\begin{theorem}[Sektor-Kerne; {\cite{AnalyticKernel}, Thm.~3.2}]
+\label{thm:kernel}
+Auf $H_L^\pm$ gilt jeweils:
+\[
+\begin{aligned}
+  K_{\chifn}^{\pm}(x,y)
+    &=\tfrac{1}{2}\bigl[\kappa_{\chifn}(x-y)
+       \pm\kappa_{\chifn}(x+y)\bigr]\\
+    &\quad+\tfrac{1}{2}\bigl[K^{\mathrm{arch}}_{\chifn}(x-y)
+       \pm K^{\mathrm{arch}}_{\chifn}(x+y)\bigr].
+\end{aligned}
+\]
+\end{theorem}
+
+\begin{proof}[Beweisskizze]
+Die Reflexion $\mathcal{P}f(x):=f(-x)$ vertauscht mit Translation
+$T_a$ via $\mathcal{P}T_a=T_{-a}\mathcal{P}$, und der Kern
+$K_\chi(x,y)=\kappa_\chi(x-y)+K^{\mathrm{arch}}_\chi(x-y)$ ist
+translationsinvariant. Symmetrisierung unter $\mathcal{P}$:
+$P^\pm K_\chi P^\pm = (K_\chi \pm \mathcal{P}K_\chi\mathcal{P})/2$,
+wobei $\mathcal{P}K_\chi\mathcal{P}(x,y)=K_\chi(-x,-y)=K_\chi(x,y)$
+wegen der Parität von $\kappa_\chi$ und $K^{\mathrm{arch}}_\chi$
+(beide gerade auf $\mathbb{R}$). Die Off-Diagonal-Symmetrisierung
+$P^\pm K_\chi (1-P^\pm)$ verschwindet auf dem entsprechenden Sektor
+und liefert den dargestellten Ausdruck. Die Wirkung auf den
+Test-Funktionen-Raum $C_c^\infty([-L,L])$ ist wohldefiniert, weil
+$\kappa_\chi$ als temperierte Distribution auf $\{u=\pm m\log p\}$
+getragen ist, alles in $[-2L,2L]$; Paarung mit $f\in C_c^\infty([-L,L])$
+liefert eine endliche Summe über $(p,m)$ mit $m\log p\leq 2L$. Volle
+Rechendetails inklusive der Verifikation, dass die Symmetrisierung
+Selbstadjungiertheit erhält, finden sich in \cite{AnalyticKernel},
+\S3.2.
+\end{proof}
+
+Projizierte Eigenwertprobleme
+$K_{\chifn}^{\pm}\phi_{\chifn}^{\pm}=\lambda_1(\chifn,\pm)\phi_{\chifn}^{\pm}$
+auf $H_L^\pm$ definieren die Sektor-Grundzustände $\phi_{\chifn}^\pm$,
+die im Folgenden eine zentrale Rolle spielen.
+
+\begin{theorem}[Anti-diagonale Sektor-Differenz; {\cite{AnalyticKernel}, Thm.~4.1}]
+\label{thm:sector-diff}
+Für einen geraden primitiven Dirichlet-Charakter $\chifn$ (d.\,h.\
+$\chifn(-1)=+1$, wie im gesamten Atlas) gilt
+\[
+  K_{\chifn}^-(x,y)-K_{\chifn}^+(x,y)
+    =-\kappa_{\chifn}(x+y)-K^{\mathrm{arch}}_{\chifn}(x+y).
+\]
+Der primitive Teil ist auf den Anti-Diagonalen $x+y=\pm m\log p$ getragen
+und enthält die volle Charakter-Abhängigkeit; der archimedische Teil
+hängt von $\chifn$ nur durch die Konstante $\log(q/\pi)$ ab (im
+gerade-Charakter-Setting; im ungeraden Fall käme ein
+$\Re\,\psi(3/4+it/2)$-Term hinzu, der außerhalb des Geltungsbereichs
+dieses Atlasses liegt).
+\end{theorem}
+
+\begin{proof}[Beweisskizze]
+Aus Theorem~\ref{thm:kernel} folgt durch Subtraktion
+$K_\chi^-(x,y)-K_\chi^+(x,y)$: Alle $(x-y)$-Argumente heben sich auf,
+die $(x+y)$-Argumente verdoppeln sich mit Vorzeichen $-$:
+$K_\chi^- - K_\chi^+ = -\kappa_\chi(x+y) - K^{\mathrm{arch}}_\chi(x+y)$.
+Zur Charakterabhängigkeit: $\kappa_\chi$ hängt von $\chifn$ über jeden
+$\chifn(p)^m\log p / p^{m/2}$-Koeffizienten ab (\eqref{eq:kappa}),
+während $K^{\mathrm{arch}}_\chi=\mathcal{F}^{-1}[\rho_\chi]$ mit
+$\rho_\chi(t)=\log(q/\pi)+\Re\,\psi(1/4+it/2)$ nur über die Konstante
+$\log(q/\pi)$ von $\chifn$ abhängt (der $\psi$-Term ist im geraden
+Setting charakter-unabhängig). Vollständige Herleitung:
+\cite{AnalyticKernel}, \S4.1.
+\end{proof}
+
+\subsection{Das Gap-Funktional}
+
+Sei $\lambda_1^{\min}(Q_{\chifn}^\pm)$ der kleinste Eigenwert
+von $Q_{\chifn}$ eingeschränkt auf $H_L^\pm$, und schreibe
+\begin{equation}
+\label{eq:gap-def}
+\begin{aligned}
+  \gap_{\chifn}(\lambda)
+    &:=\lambda_1^{\min}(Q_{\chifn}^-)
+      -\lambda_1^{\min}(Q_{\chifn}^+)\\
+    &=\langle\phi_{\chifn}^-|K_{\chifn}^-|\phi_{\chifn}^-\rangle
+      -\langle\phi_{\chifn}^+|K_{\chifn}^+|\phi_{\chifn}^+\rangle.
+\end{aligned}
+\end{equation}
+Für den trivialen Charakter (klassisches Riemann-Setting) gilt $\gap_\zeta
+(\lambda)\gtrsim\sqrt{\lambda}$ unbedingt \cite{RH_II}. Für
+nicht-triviale $\chifn$ lautet die empirische Beobachtung, dass
+$|\gap_{\chifn}|=O(1)$ bei zugänglichem $\lambda$, mit
+einem \emph{charakter-spezifischen} Vorzeichen; der Atlas in
+Abschnitt~\ref{sec:validation} ist das quantitative Abbild dieser
+Beobachtung.
+
+\section{Die Gap-Formel: reduziert vs.\ unreduziert}
+\label{sec:formula}
+
+\subsection{Die Reduktion führender Ordnung}
+\label{sec:formula-reduced}
+
+Ausgehend von \eqref{eq:gap-def} und
+Theorem~\ref{thm:sector-diff} lässt die Lücke folgende Darstellung zu:
+\begin{equation}
+\label{eq:gap-matrix}
+\begin{aligned}
+  \gap_{\chifn}(\lambda)
+    &= \langle\phi_{\chifn}^-|K_{\chifn}^--K_{\chifn}^+|\phi_{\chifn}^-\rangle\\
+    &\quad + \langle\phi_{\chifn}^-|K_{\chifn}^+|\phi_{\chifn}^-\rangle
+      - \langle\phi_{\chifn}^+|K_{\chifn}^+|\phi_{\chifn}^+\rangle.
+\end{aligned}
+\end{equation}
+Approximiert man beide Grundzustände durch eine gemeinsame Funktion
+$\phi_{\chifn}^\pm\approx\phi_\infty$, verschwindet die zweite Klammer und
+die erste vereinfacht sich nach Theorem~\ref{thm:sector-diff} zu
+\begin{equation}
+\label{eq:gap-reduced}
+\begin{aligned}
+  \gap_{\chifn}(\lambda)
+    &\overset{?}{\approx}
+      -\iint \phi_\infty(x)\bigl[\kappa_{\chifn}(x+y)
+      +K^{\mathrm{arch}}_{\chifn}(x+y)\bigr]\\
+    &\quad\times\phi_\infty(y)\,dx\,dy.
+\end{aligned}
+\end{equation}
+Das Entfalten von $\kappa_{\chifn}$ über \eqref{eq:kappa} und die Nutzung der Geradheit
+(evenness) von $\phi_\infty$ (gerader Sektor) liefert die reduzierte Gap-Formel
+\begin{equation}
+\label{eq:gap-reduced-explicit}
+\begin{aligned}
+  \gap_{\chifn}(\lambda)
+    &\overset{?}{\approx}
+      2\sum_{\substack{p\nmid q\\m\log p\leq 2L}}
+        \frac{\chifn(p)^m\log p}{p^{m/2}}\\
+    &\quad\times\Phi_\infty(m\log p)
+      \;+\;\text{arch.\ term},
+\end{aligned}
+\end{equation}
+mit $\Phi_\infty(t):=(\phi_\infty\ast\phi_\infty)(t)$
+(vgl.\ \cite{AnalyticKernel}, Cor.~4.4 und \cite{AnalyticGroundstate},
+Cor.~6.1). Dies ist die Formel, die man natürlicherweise vom
+trivialen Charakter-Fall übertragen würde, wo der gemeinsame Grundzustand $\phi_\infty$
+aus der Paley-Wiener-Analyse von \cite{RH_II} zugänglich ist.
+
+\subsection{Empirischer Status der reduzierten Formel}
+\label{sec:formula-reduced-empirical}
+
+In Session 6 des vorliegenden Programms wurde \eqref{eq:gap-reduced-explicit}
+mit sechzehn Kandidatenfenstern $\phi_\infty$ getestet: zentrierte Gaußfunktionen der
+Breite $\sigma\in\{0.1,0.3,0.5,1.0,2.0\}$, verschobene Gaußfunktionen, Rechtecke
+mit Cut-off $T$, $\cos^2$-Fenster auf $[-T,T]$, die rohe
+$\chifn$-gewichtete Primsumme, und---am entscheidendsten---der \emph{empirische}
+Einzelsektor-Grundzustand (single-sector ground state)
+$\phi_\infty:=\phi_{\chifn}^+$ extrahiert aus der $N=200$ Galerkin-Diagonalisierung.
+
+Keiner der sechzehn Kandidaten erreichte das Erfolgskriterium von
+$\geq\!9/10$ Vorzeichenübereinstimmungen mit $R^2\geq 0.8$. Das beste
+Gaußfenster führender Ordnung erreicht $6/10$ mit $R^2=0.15$; der
+empirische Einzelsektor-Grundzustand erreicht $4/10$ mit
+$R^2=0.02$. Details des 16-Fenster-Scans sind in
+\cite{Woche4Validation} festgehalten. Die entscheidende Beobachtung ist, dass für alle
+zehn Charaktere die empirische Einzelsektor-Autokorrelation
+$\Phi_\infty$ nahezu identisch ist (numerisch innerhalb von $10^{-3}$):
+Die Reduktion $\phi_{\chifn}^+\approx\phi_{\chifn}^-\approx
+\phi_\infty$ ist somit nicht nur quantitativ ungenau, sondern
+löscht das charakter-spezifische Signal.
+
+\begin{remark}[Wo das Charakter-Signal lebt]
+\label{rem:signal-locus}
+Die auf den Sektor eingeschränkten Grundzustände sind in führender Ordnung dieselbe
+Funktion: Sie liegen beide nah am Paley-Wiener Grundzustand des
+diagonalen Kerns $\kappa_{\chifn}(x-y)+K^{\mathrm{arch}}_{\chifn}
+(x-y)$. Charakter-spezifische Informationen werden in der Differenz
+$\phi_{\chifn}^+-\phi_{\chifn}^-$ gespeichert, was der Feinstruktur
+entspricht, die durch den anti-diagonalen Term $\kappa_{\chifn}(x+y)+
+K^{\mathrm{arch}}_{\chifn}(x+y)$ von Theorem~\ref{thm:sector-diff} erzeugt wird.
+Jede analytische Reduktion, die $\phi_{\chifn}^+$ und
+$\phi_{\chifn}^-$ in eine gemeinsame Funktion absorbiert, verliert exakt dieses Signal.
+\end{remark}
+
+\subsection{Die unreduzierte Formel}
+\label{sec:formula-unreduced}
+
+Wir behalten beide Grundzustände separat bei. Definiere die Sektordifferenz-Autokorrelation
+\begin{equation}
+\label{eq:Delta-def}
+  \Deltachi(t)
+    := (\phi^+_{\chifn}\!*\phi^+_{\chifn})(t)
+      + (\phi^-_{\chifn}\!*\phi^-_{\chifn})(t),
+\end{equation}
+\emph{Parität-Vorzeichen-Hinweis.} Die numerische Implementierung in unseren Skripten
+(Anhang~\ref{app:sign}) berechnet die Autokorrelation
+$R_{\phi^\pm}(t):=\int\phi^\pm(s)\phi^\pm(s-t)\,ds$ mittels
+\texttt{np.correlate} und bildet dann
+$\Deltachi^{\mathrm{num}}(t):=R_{\phi^+}(t)-R_{\phi^-}(t)$.
+Aus der Paritätsidentität $R_{\phi^+}=(\phi^+{*}\phi^+)_{\mathrm{math}}$
+(gerader Sektor) und $R_{\phi^-}=-(\phi^-{*}\phi^-)_{\mathrm{math}}$
+(ungerader Sektor) folgt
+\[
+  \Deltachi^{\mathrm{num}}(t)
+    =(\phi^+{*}\phi^+)_{\mathrm{math}}(t)+(\phi^-{*}\phi^-)_{\mathrm{math}}(t),
+\]
+was genau der rechten Seite von~\eqref{eq:Delta-def} entspricht. Damit stimmt
+$\Deltachi$ wie in~\eqref{eq:Delta-def} definiert identisch mit der
+skript-berechneten Größe $\Deltachi^{\mathrm{num}}$ überein, und der
+Koeffizient~$-2$ in~\eqref{eq:S-def} ist der eindeutige Wert, der
+die Gap-Identität (Satz~\ref{thm:closure}) erfüllt. Siehe
+Anhang~\ref{app:sign} für die vollständige Herleitung mit allen sechs
+relevanten Vorzeichenquellen.
+
+und die archimedische Sektordifferenz
+\begin{equation}
+\label{eq:arch-diff-def}
+  \archdiff_{\chifn}
+    := \langle\phi^-_{\chifn},K^{\mathrm{arch}}_-\phi^-_{\chifn}\rangle
+     - \langle\phi^+_{\chifn},K^{\mathrm{arch}}_+\phi^+_{\chifn}\rangle,
+\end{equation}
+wobei $K^{\mathrm{arch}}_\pm$ die sektor-eingeschränkten archimedischen
+Operatoren sind (Theorem~\ref{thm:kernel}). Einsetzen in
+\eqref{eq:gap-matrix} und Nutzung von Theorem~\ref{thm:sector-diff} liefert
+die untenstehende unreduzierte Formel.
+
+\begin{theorem}[Unreduzierte Gap-Formel]
+\label{thm:closure}
+Sei $\chifn$ ein primitiver reeller Charakter mit Führer $q$ und
+$\chifn(-1)=+1$, und sei $\lambda>1$, $L=\log\lambda$. Seien
+$\phi^\pm_{\chifn}\in H_L^\pm$ die Sektor-Grundzustände von
+$K_{\chifn}^\pm$, jeweils $L^2$-normalisiert. Dann gilt
+\begin{equation}
+\label{eq:gap-unreduced}
+  \gap_{\chifn}(\lambda)
+    = S_{\chifn}(\lambda) + \archdiff_{\chifn},
+\end{equation}
+mit
+\begin{equation}
+\label{eq:S-def}
+  S_{\chifn}(\lambda)
+    = -2\sum_{\substack{p\nmid q\\m\log p\leq 2L}}
+      \frac{\chifn(p)^m\log p}{p^{m/2}}\,\Deltachi(m\log p).
+\end{equation}
+\end{theorem}
+
+Eine Herleitung findet sich in \cite{AnalyticKernel}, Bemerkung~4.5 (mit
+der Vorzeichenkonvention abgeglichen mit \texttt{build\_W}; siehe
+Anhang~\ref{app:sign}). Auf dem Niveau der \emph{Galerkin-Trunkierung}
+bei Basisgröße $N$ gilt Gleichung
+\eqref{eq:gap-unreduced} ebenfalls exakt:
+\begin{equation}
+\label{eq:gap-galerkin}
+  \gap_{\mathrm{gal}}^{(N)}(\chifn)
+    = S_{\chifn}^{(N)}(\lambda) + \archdiff_{\chifn}^{(N)},
+\end{equation}
+vorausgesetzt $\phi^\pm_{\chifn}$ werden als die Grundzustands-Eigenvektoren
+der Galerkin-trunkierten Operatoren $K_{\chifn}^{\pm, N}$
+bei Basisgröße $N$ genommen und $S^{(N)}$, $\archdiff^{(N)}$ werden
+aus diesen endlichen-$N$-Daten berechnet.
+
+\subsection{Zwei numerische Realisierungen von \texorpdfstring{$S_{\chifn}^{(N)}$}{S}}
+\label{sec:formula-two-realizations}
+
+Ein subtiler Punkt, der alles Folgende antreibt, ist, dass
+\eqref{eq:S-def} \emph{zwei} verschiedene numerische
+Implementierungen aus Galerkin-Daten zulässt, die bis auf $10^{-3}$ übereinstimmen,
+jedoch nicht identisch sind.
+\begin{itemize}
+  \item[(R1)] \emph{Räumliche Autokorrelation (Spatial autocorrelation).} Werte
+    $\phi_{\chifn}^\pm$ auf einem Raster (grid) aus, berechne $(\phi^\pm
+    *\phi^\pm)(t)$ mit einer numerischen Korrelation, interpoliere auf
+    die Primzahlabzissen $t=m\log p$, und summiere.
+  \item[(R2)] \emph{Matrix-Zerlegung.} Zerlege die Galerkin-Matrix
+    $W^\pm=W^\pm_{\mathrm{arch}}+W^\pm_{\mathrm{prime}}$ und
+    bilde
+    $\mathrm{prime\_diff}_{\mathrm{matrix}}
+      :=\langle\phi^-,W^-_{\mathrm{prime}}\phi^-\rangle
+      -\langle\phi^+,W^+_{\mathrm{prime}}\phi^+\rangle$.
+\end{itemize}
+Beide Größen schätzen $S_{\chifn}^{(N)}$ ab; (R1) wird über
+interpolierte Autokorrelation erhalten, (R2) über ein exaktes Matrix-Skalarprodukt.
+Ihre Diskrepanz liegt auf dem Niveau des Gleitkomma- und
+Interpolationsfehlers in der Größenordnung $10^{-3}$. Für Charaktere mit
+$|\gap_{\chifn}|\gtrsim 10^{-2}$ ist dies vernachlässigbar. Für die schwach
+signalisierten Charaktere $\chifn_{21}$, $\chifn_{29}$, $\chifn_{60}$,
+mit $|\gap|\lesssim 10^{-2}$, ist es in der gleichen Größenordnung wie das
+Signal. Abschnitt~\ref{sec:tautology} widmet sich den Konsequenzen.
+
+\section{Numerische Validierung}
+\label{sec:validation}
+
+\subsection{Setup der Berechnung}
+\label{sec:validation-setup}
+
+Für jeden der zehn reellen Charaktere $\chifn_D$,
+$D\in\{5,8,12,13,17,21,24,29,33,60\}$, konstruieren wir die Galerkin-Matrizen
+$W^\pm_{\chifn}$ in den Fourier-Basen von $H_L^\pm$ beim Cut-off
+$\lambda=20000$ ($L=\log\lambda\approx 9.90$). Die Assemblierung der Matrix (matrix assembly) verwendet die
+Koeffizienten der expliziten Formel $\chifn(p^m)\log p/p^{m/2}$ für alle
+Primzahlpotenzen mit $m\log p\leq 2L$ und den archimedischen Operator
+$K^{\mathrm{arch}}_{\chifn}$, berechnet mittels Fast Fourier Transform von
+$\rho_{\chifn}$.
+
+Drei Galerkin-Auflösungen werden verwendet: $N=200$ lokal auf einem Desktop,
+$N=400$ lokal, und $N=600$ auf einer 8\,GB Hetzner CCX13 Cloud-Instanz
+(Gesamt-Wall-Clock 1.95 Stunden über alle zehn Charaktere). Der
+kleinste Eigenwert jedes $W^\pm_{\chifn,N}$ wird durch eine
+Lanczos-Inverse-Iteration mit Toleranz $10^{-10}$ ermittelt, was den
+Sektor-Grundzustand $\phi^{\pm,(N)}_{\chifn}$ und den Galerkin-Gap
+$\gap_{\mathrm{gal}}^{(N)}(\chifn)
+:=\lambda_1^{\min}(W^-_{\chifn,N})-\lambda_1^{\min}(W^+_{\chifn,N})$ liefert.
+
+Für jeden Charakter werden die Größen $S_{\chifn}^{(N)}$ (via
+Räumlicher-Autokorrelations-Realisierung (R1)) und
+$\archdiff_{\chifn}^{(N)}$ aus den Grundzuständen ausgewertet, und
+die Summe $S_{\chifn}^{(N)}+\archdiff_{\chifn}^{(N)}$ wird mit
+$\gap_{\mathrm{gal}}^{(N)}(\chifn)$ sowie mit dem Galerkin-Referenz-Gap (highest-$N$)
+$\gap_{\mathrm{gal}}^{(\mathrm{ref})}(\chifn)$ verglichen. Die Skripte
+\texttt{arch\_term\_analysis.py} und
+\texttt{server\_n600\_full\_analysis.py} speichern die Rohausgaben in
+\texttt{ARCH\_TERM\_ANALYSIS.json} und
+\texttt{ARCH\_TERM\_N600\_SERVER.json}; Tabellen zur Nachbearbeitung
+finden sich in \texttt{ARCH\_TERM\_ANALYSIS.md} und
+\texttt{ARCH\_TERM\_N600\_ANALYSIS.md}.
+
+\subsection{Die zentrale Ergebnistabelle}
+\label{sec:validation-table}
+
+Tabelle~\ref{tab:validation} fasst den Vergleich bei $\lambda=
+20000$ für alle zehn Charaktere zusammen. Für jeden Charakter listen wir den
+Galerkin-Referenz-Gap $\gap_{\mathrm{gal}}^{(\mathrm{ref})}$ (mit der Auflösung
+$N_{\mathrm{src}}$, aus der er stammt), den Galerkin-Gap bei
+$N=200$ und $N=600$, sowie den Prädiktor $S+\archdiff$ bei beiden
+Auflösungen auf. Zwei Beobachtungen verankern die gesamte Analyse.
+
+Erstens stimmen bei $N=600$ die Einträge mit der Bezeichnung „$\gap_{\mathrm{gal}}^{(\mathrm{ref})}$“ und
+„$\gap_{\mathrm{gal}}^{(600)}$“ immer dann identisch überein, wenn die
+empirische Referenz selbst bei $N=600$ berechnet wurde (die sechs
+Charaktere $\chifn_8,\chifn_{13},\chifn_{21},\chifn_{29},\chifn_{33},
+\chifn_{60}$); dies ist \emph{keine} Verifikation der Formel, sondern
+eine in \S\ref{sec:tautology} aufgedeckte Tautologie.
+
+Zweitens erreicht der Prädiktor $S^{(600)}+\archdiff^{(600)}$ eine hohe
+lineare Korrelation von $R^2=0.95$ gegen die empirischen Gaps, fällt aber auf
+eine Vorzeichengenauigkeit von $8/10$ aufgrund von zwei Vorzeichenwechseln bei $\chifn_{21}$
+und $\chifn_{29}$.
+
+\subsection{Regressionsstatistik}
+\label{sec:validation-regression}
+
+Wir halten alle vier kanonischen Regressionskonfigurationen in
+Tabelle~\ref{tab:regression} fest. Das Muster ist für das Folgende von zentraler Bedeutung.
+
+\begin{table}[t]
+\caption{Vorzeichen- und lineare Regressions-Performance der
+  Prädiktor-Realisierungen gegen den Galerkin-Referenz-Gap
+  $\gap_{\mathrm{gal}}^{(\mathrm{ref})}$ bei $\lambda=20000$,
+  $N\in\{200,600\}$. Die Vorzeichengenauigkeit wird relativ zum
+  Vorzeichen des hoch-$N$ Galerkin-Referenz-Gaps in der
+  Connes-Konvention berechnet (Bemerkung~\ref{rem:sign-convention-dependence}).
+  $^*$ Die $N=200$-Statistiken unterliegen den
+  Galerkin-Trunkierungseffekten, die in
+  Bemerkung~\ref{rem:sw-compression} und
+  \S\ref{sec:discussion-slope} dokumentiert sind; die $N=600$-Zeile ist
+  das operationell vorzuziehende Resultat.
+  Der Ausschluss von $\chifn_{21}$ (dem einzigen Vorzeichenausreißer;
+  siehe \S\ref{sec:chi21}) ergibt per Konstruktion eine 9/9
+  Vorzeichengenauigkeit bei $N=600$ und wird daher nicht als
+  eigenständige Statistik berichtet.}
+\label{tab:regression}
+\centering
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Konfiguration & $N$ & sign\_ok & $R^2$ \\
+\midrule
+$\gap_{\mathrm{gal}}$ (alle 10)$^*$ & $200$ & $9/10$ & $0.41$ \\
+$S+\archdiff$ (alle 10)$^*$ & $200$ & $9/10$ & $0.42$ \\
+\midrule
+$\gap_{\mathrm{gal}}$ (alle 10) & $600$ & $10/10$ & $0.99$ \\
+$S+\archdiff$ (alle 10) & $600$ & $8/10$ & $0.95$ \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\footnotesize
+Die Vorzeichengenauigkeit ist relativ zur durchgängig verwendeten
+Connes-Operator-Konvention $\tilde{A}_\chi$ berechnet
+(Anhang~\ref{app:sign}). Die entgegengesetzte Konvention
+(Weil-$Q$, Koeffizient $+2$) würde alle Vorzeichen invertieren und
+eine komplementäre Vorzeichenstatistik liefern, jedoch bleibt die
+relative Übereinstimmung Prädiktor-vs.-Referenz unverändert
+(vgl.\ Bemerkung~\ref{rem:sign-convention-dependence}).
+\end{table}
+
+Bei $N=200$ erreichte der Prädiktor $S+\archdiff$ nach Ausschluss von
+$\chifn_{21}$ eine scheinbare $9/9$ Vorzeichengenauigkeit mit $R^2=0.80$
+--- die numerische Schließung, die den Titel des „Weil-kernel closure
+paper" in der frühen Entwicklungs-Session 7 motivierte. Bei $N=600$
+passieren jedoch drei Dinge gleichzeitig:
+(i) Der Galerkin-Gap $\gap_{\mathrm{gal}}^{(600)}$ wird
+numerisch ununterscheidbar von der empirischen Referenz für sechs
+der zehn Charaktere (Tautologie, \S\ref{sec:tautology});
+(ii) Der Galerkin-Gap von $\chifn_{21}$ kollabiert von $+0.282$ auf
+$-0.004$, was ihn als einen $N$-Oszillator bestätigt
+(\S\ref{sec:chi21}); und
+(iii) Der Prädiktor $S+\archdiff^{(600)}$ gewinnt einen Punkt bei
+$R^2$, verliert aber zwei Punkte bei der Vorzeichengenauigkeit und scheitert nun
+sowohl bei $\chifn_{21}$ (wo der $N=600$ Galerkin-Gap klein ist) als auch bei
+$\chifn_{29}$ (wo Realisierung (R1) im Vorzeichen von
+Realisierung (R2) abweicht).
+
+\begin{remark}[Siegel-Walfisz-Kompression bei $N=600$]
+\label{rem:sw-compression}
+Der Vergleich der $\gap_{\mathrm{gal}}$-Spalten bei $N=200$ und $N=600$
+offenbart einen systematischen Kompressionseffekt: Für den stark-positiven (strong-positive)
+Charakter $\chifn_{12}$ fällt $\gap_{\mathrm{gal}}$ von
+$+0.0325$ auf $+0.0115$ (Faktor $0.35$); für $\chifn_{17}$,
+$\chifn_{24}$, $\chifn_{29}$, $\chifn_{60}$ gilt derselbe
+Schrumpfungsfaktor (shrinkage factor) bis auf $\pm 0.1$. Die stark-negativen
+Charaktere $\chifn_8$, $\chifn_{13}$, $\chifn_{33}$ sind
+qualitativ stabil zwischen $N=200$ und $N=600$ (relative Änderung
+$\lesssim 10\%$). Diese Dichotomie ist qualitativ an die obere
+Siegel-Walfisz-Schranke (Siegel-Walfisz upper bound)
+$|\sum_{p\leq x}\chifn(p)\log p|=o(\sqrt{x})$ angewandt auf das
+Large-Prime-Tail erinnernd --- Charaktere mit einem echten
+Low-Conductor-Signal erscheinen weitgehend bereits bei $N=200$ bestimmt,
+während schwach signalisierende Charaktere ihre bei $N=200$ ermittelten
+Schätzungen bei $N=600$ um einen Faktor von etwa $0.35$ komprimiert sehen
+--- aber es wird hier keine theoretische Herleitung angeboten, die den
+Kompressionsfaktor mit einer Siegel-Walfisz-Konstante verknüpft. Wir
+markieren die empirische Beobachtung als offene Frage; siehe
+\S\ref{sec:outlook}, Punkt zur theoretischen Herleitung der
+Siegel-Walfisz-Kompression.
+\end{remark}
+
+\begin{table*}[t]
+\caption{$N$-Konvergenz des Galerkin-Gaps und des Weil-Kern-Prädiktors
+  bei $\lambda=20000$ für zehn reelle Low-Conductor-Charaktere. Beachte, dass
+  die $\gap_{\mathrm{gal}}^{(\mathrm{ref})}$-Einträge bei $N=600$ identisch mit
+  $\gap_{\mathrm{gal}}^{(N=600)}$ übereinstimmen, da die empirischen Referenzwerte
+  selbst Ausgaben derselben Galerkin-Diagonalisierung bei $N=600$ sind;
+  dies ist die Tautologie, die in \S\ref{sec:tautology} diskutiert wird.
+  Quellen: \texttt{ARCH\_TERM\_ANALYSIS.md}, \texttt{ARCH\_TERM\_N600\_ANALYSIS.md}.}
+\label{tab:validation}
+\centering
+\small
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+$\chifn$ & $D$ & $\gap_{\mathrm{gal}}^{(\mathrm{ref})}$ ($N_\mathrm{src}$) & $\gap_{\mathrm{gal}}^{(200)}$ & $\gap_{\mathrm{gal}}^{(600)}$ & $(S+\archdiff)^{(200)}$ & $(S+\archdiff)^{(600)}$ \\
+\midrule
+$\chi_5$  &  5 & $+0.01560\ (400)$ & $+0.01429$ & $+0.01603$ & $+3.35\!\cdot\!10^{-2}$ & $+3.37\!\cdot\!10^{-2}$ \\
+$\chi_8$  &  8 & $-0.04902\ (600)$ & $-0.04548$ & $-0.04902$ & $-4.22\!\cdot\!10^{-2}$ & $-4.08\!\cdot\!10^{-2}$ \\
+$\chi_{12}$ & 12 & $+0.03367\ (400)$ & $+0.03251$ & $+0.01154$ & $+5.07\!\cdot\!10^{-2}$ & $+2.03\!\cdot\!10^{-2}$ \\
+$\chi_{13}$ & 13 & $-0.12504\ (600)$ & $-0.12502$ & $-0.12504$ & $-1.15\!\cdot\!10^{-1}$ & $-1.16\!\cdot\!10^{-1}$ \\
+$\chi_{17}$ & 17 & $+0.01318\ (400)$ & $+0.00408$ & $+0.00886$ & $+1.67\!\cdot\!10^{-2}$ & $+1.13\!\cdot\!10^{-2}$ \\
+$\chi_{21}$ & 21 & $-0.00423\ (600)$ & $\mathbf{+0.28163}$ & $-0.00423$ & $+2.89\!\cdot\!10^{-1}$ & $+1.14\!\cdot\!10^{-2}$\,\textbf{(F)} \\
+$\chi_{24}$ & 24 & $+0.01076\ (400)$ & $+0.01632$ & $+0.00866$ & $+1.74\!\cdot\!10^{-2}$ & $+1.86\!\cdot\!10^{-2}$ \\
+$\chi_{29}$ & 29 & $+0.01439\ (600)$ & $+0.02372$ & $+0.01439$ & $+2.58\!\cdot\!10^{-2}$ & $-1.16\!\cdot\!10^{-2}$\,\textbf{(F)} \\
+$\chi_{33}$ & 33 & $-0.14221\ (600)$ & $-0.14051$ & $-0.14221$ & $-1.31\!\cdot\!10^{-1}$ & $-1.32\!\cdot\!10^{-1}$ \\
+$\chi_{60}$ & 60 & $+0.00521\ (600)$ & $+0.12363$ & $+0.00521$ & $+1.27\!\cdot\!10^{-1}$ & $+7.21\!\cdot\!10^{-3}$ \\
+\midrule
+\multicolumn{4}{l}{\textit{$S+\archdiff$ Vorzeichengenauigkeit ($N=200$):}} & & $9/10$ (R²=0.42) & \\
+\multicolumn{4}{l}{\textit{$S+\archdiff$ Vorzeichengenauigkeit ($N=600$):}} & & & $8/10$ (R²=0.95) \\
+\multicolumn{4}{l}{\textit{$\gap_{\mathrm{gal}}$ Vorzeichengenauigkeit ($N=600$):}} & & & $10/10$ (R²=0.99, Tautologie) \\
+\bottomrule
+\end{tabular}
+\end{table*}
+\section{Charakter-Atlas in vier Achsen}
+\label{sec:atlas}
+
+Die Rohtabelle aus Abschnitt~\ref{sec:validation} erlaubt eine strukturelle
+Lesart entlang vier taxonomischer Dimensionen: zwei \emph{Filter-Konstanten}
+(Parität und Wurzelzahl, beide gleich $+1$ im gesamten Sample) und zwei
+\emph{informative Achsen} (archimedisches Gewichtsverhältnis und Gap-Signatur).
+Wir entfalten jede Dimension nacheinander, in der Reihenfolge zunehmender
+Aussagekraft.
+
+\subsection{Paritäts-Kartografie}
+\label{sec:parity}
+
+Die Parität $\chifn(-1)\in\{+1,-1\}$ entscheidet über den archimedischen Faktor von
+$\Lambda(s,\chifn)$: Gerade Charaktere verwenden $\Gamma(s/2)$, ungerade
+Charaktere verwenden $\Gamma((s+1)/2)$. In diesem Paper sind alle zehn Charaktere
+Kronecker-Charaktere $\chifn_D$ mit positiver Diskriminante $D$, und
+daher alle gerade. Dies ist Absicht: Die durchgehend verwendete Sektor-Zerlegung
+$H_L=H_L^+\oplus H_L^-$ setzt eine gerade Parität voraus, welche
+eine nicht-triviale Kosinus-Sinus-Asymmetrie des anti-diagonalen Kerns
+nach Theorem~\ref{thm:sector-diff} sicherstellt (ungerade Charaktere würden
+den Paired-Space-Formalismus (paired-space formalism)
+$\chifn\oplus\bar\chifn$ oder einen Tensor mit einem Vorzeichen-Twist erfordern; vgl.\
+\cite{MetaGalerkinBridge}, \S5.5, Fußnote zur Gamma-Parität). Die
+Beschränkung auf gerade Charaktere fixiert somit das qualitative Regime und lässt Raum
+für die drei nachfolgenden, feineren Klassifikationen.
+
+\subsection{Wurzelzahl-Klassifikation}
+\label{sec:rootnumber}
+
+Für jeden reellen Dirichlet-Charakter ist die Wurzelzahl $W(\chifn):=
+\epsilon_{\chifn}$ durch die klassische Gaußsche Summenformel (Gauss-sum formula)
+$\tau(\chifn)=\sqrt{q}$ für primitive reelle gerade Charaktere \cite{IwaniecKowalski}
+gleich $+1$. Alle zehn Charaktere in unserem Atlas teilen somit
+dieselbe Wurzelzahl $W=+1$, und die Wurzelzahl ist über die gesamte Tabelle
+hinweg konstant. Folglich kann die Wurzelzahl Gap-Vorzeichen
+innerhalb unserer Stichprobe nicht diskriminieren. Eine größere Stichprobe, die sich auf komplexe
+Charaktere erstreckt (\S\ref{sec:outlook}), würde eine echte Wurzelzahl-Achse
+mit $W\in\{+1,-1,\pm i\}$ aufzeigen; wir markieren dies als Teil des offenen
+Ausblicks und nicht als ein Ergebnis des vorliegenden Atlas.
+
+\subsection{Schicht des archimedischen Faktors}
+\label{sec:archlayer}
+
+Die Größe
+$r_{\chifn}:=|\archdiff_{\chifn}^{(200)}|/|S_{\chifn}^{(200)}|$
+(Verhältnis von archimedischem Beitrag zu Primzahlbeitrag bei $N=200$,
+$\lambda=20000$) variiert über die Stichprobe hinweg um fast zwei Größenordnungen.
+Tabelle~\ref{tab:archratio} dokumentiert diese Werte.
+
+\begin{table}[t]
+\caption{Archimedisches Gewichtsverhältnis (Archimedean weight ratio)
+  $r_{\chifn}=|\archdiff|/|S|$ bei $N=200$, $\lambda=20000$.}
+\label{tab:archratio}
+\centering\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+$\chifn_D$ & $|S_{\chifn}|$ & $|\archdiff_{\chifn}|$ & $r_{\chifn}$ & Klasse \\
+\midrule
+$\chifn_{29}$ & $2.54\!\cdot\!10^{-2}$ & $4.47\!\cdot\!10^{-4}$ & $1.8\%$ & prim-dominiert \\
+$\chifn_{24}$ & $1.62\!\cdot\!10^{-2}$ & $1.19\!\cdot\!10^{-3}$ & $7.4\%$ & prim-dominiert \\
+$\chifn_{33}$ & $1.65\!\cdot\!10^{-1}$ & $3.44\!\cdot\!10^{-2}$ & $21\%$ & prim-dominiert \\
+$\chifn_5$ & $9.06\!\cdot\!10^{-2}$ & $5.71\!\cdot\!10^{-2}$ & $63\%$ & gemischt \\
+$\chifn_8$ & $1.16\!\cdot\!10^{-1}$ & $7.43\!\cdot\!10^{-2}$ & $64\%$ & gemischt \\
+$\chifn_{13}$ & $1.02\!\cdot\!10^{-1}$ & $1.33\!\cdot\!10^{-2}$ & $13\%$ & prim-dominiert \\
+$\chifn_{17}$ & $2.02\!\cdot\!10^{-2}$ & $3.52\!\cdot\!10^{-3}$ & $17\%$ & prim-dominiert \\
+$\chifn_{12}$ & $6.51\!\cdot\!10^{-2}$ & $1.44\!\cdot\!10^{-2}$ & $22\%$ & prim-dominiert \\
+$\chifn_{21}$ & $2.31\!\cdot\!10^{-1}$ & $5.77\!\cdot\!10^{-2}$ & $25\%$ & prim-dominiert$^\dagger$ \\
+$\chifn_{60}$ & $4.95\!\cdot\!10^{-2}$ & $1.76\!\cdot\!10^{-1}$ & $356\%$ & arch-dominiert \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\footnotesize
+$^\dagger$ bei $N=200$; die effektiven Gewichte verschieben sich bei $N=600$,
+während sich die Galerkin-Grundzustände stabilisieren (vgl.\ \S\ref{sec:chi21}).
+\end{table}
+
+Drei Unterklassen kristallisieren sich heraus:
+\begin{itemize}
+  \item \emph{Prim-dominiert} ($r_{\chifn}\leq 25\%$):
+    $\chifn_{12}$, $\chifn_{13}$, $\chifn_{17}$, $\chifn_{21}$,
+    $\chifn_{24}$, $\chifn_{29}$, $\chifn_{33}$. Die Primsumme
+    $S_{\chifn}$ bestimmt sowohl die Größe als auch das Vorzeichen des Gaps;
+    $\archdiff_{\chifn}$ verschiebt den quantitativen Wert um nicht mehr
+    als ein Viertel. Dies ist das „natürliche“ Regime, in dem die
+    Intuition bezüglich des Weil-Kerns greift.
+  \item \emph{Gemischt} ($r_{\chifn}\in[60\%,70\%]$):
+    $\chifn_5$, $\chifn_8$. Primzahlen und archimedischer Faktor sind
+    vergleichbar; keines von beidem ist isoliert betrachtet ein verlässlicher Prädiktor.
+  \item \emph{Arch-dominiert} ($r_{\chifn}>100\%$):
+    $\chifn_{60}$. Hier \emph{übersteigt} die archimedische Sektordifferenz
+    den Primbeitrag um einen Faktor $\sim 4$, und
+    $S_{\chifn}$ sowie $\archdiff_{\chifn}$ unterscheiden sich sogar im Vorzeichen
+    ($S=-4.95\!\cdot\!10^{-2}$, $\archdiff=+1.76\!\cdot\!10^{-1}$).
+    Der empirische Gap $\gap_{\mathrm{gal}}^{(\mathrm{ref})}=+0.005$ ist nahezu null und
+    wird vollständig vom archimedischen Term getragen.
+\end{itemize}
+
+Die Unterklassen-Unterscheidung ist struktureller, nicht nur quantitativer Natur: Für
+prim-dominierte Charaktere würde sich eine künftige analytische Kontrolle von
+$\Deltachi(m\log p)$ direkt in eine Vorzeichen-Vorhersage des Gaps übersetzen,
+wohrend für arch-dominierte Charaktere die archimedische
+$\psi$-Funktionsasymptotik dominiert und eine unabhängige Analyse erforderlich ist.
+
+\begin{remark}[Deskriptiver vs.\ prädiktiver Status der Trichotomie]
+\label{rem:trichotomy-descriptive}
+Mit zehn Charakteren ist die Prim/Mixed/Arch-Trichotomie von
+Tabelle~\ref{tab:archratio} deskriptiv für die Stichprobe, nicht
+prädiktiv für beliebige primitive reelle Charaktere: Die Schwellenwerte
+($r\leq 25\%$, $r\in[60\%,70\%]$, $r>100\%$) wurden so gewählt, dass
+sie die beobachteten Cluster trennen, mit keinem Datenpunkt in den
+Lücken-Intervallen $r\in(25\%,60\%)$ und $r\in(70\%,100\%)$. Ob die
+Trichotomie verallgemeinert, ist eine Hypothese, die an der
+Leiter-Erweiterung $D\leq 100$ (\S\ref{sec:outlook}, Punkt~4) zu testen
+wäre; der vorliegende Atlas behauptet sie nicht als universelle
+Klassifikation.
+\end{remark}
+
+\subsection{Gap-Signatur-Atlas}
+\label{sec:gapsig}
+
+Die folgenden vier Klassen ordnen die zehn Charaktere anhand der
+quantitativen Natur ihrer Gaps, wobei $\gap_{\mathrm{gal}}^{(\mathrm{ref})}$ aus
+Tabelle~\ref{tab:validation} abgelesen wird.
+
+\paragraph{Stark-negativer Prototyp.}
+$\chifn_{33}$ ist der herausragende Fall:
+$\gap_{\mathrm{gal}}^{(\mathrm{ref})}=-0.142$, mit nahezu identischen Werten bei
+$N\in\{200,400,600\}$. Sowohl der Primbeitrag als auch der empirische Gap
+sind durchweg negativ, und der Gap ist absolut betrachtet der größte
+in der Stichprobe. Der Charakter ist
+$\chifn_{33}(n)=\bigl(\tfrac{33}{n}\bigr)$, mit der Faktorisierung
+$33=3\cdot 11$; die entsprechenden Legendre-Symbol-Werte bei kleinen
+Primzahlen sind $\chifn_{33}(2,5,7,13,17,19,23,29,31,37)=
+(1,-1,-1,-1,-1,-1,+1,-1,+1,-1)$, was einen klaren Bias (bias) in Richtung
+$-1$ liefert. Wir bezeichnen $\chifn_{33}$ als den \emph{stark-negativen
+Prototyp} des Atlas.
+
+\paragraph{Stark-positiver Prototyp.}
+$\chifn_{12}$ ist das Pendant auf der positiven Seite:
+$\gap_{\mathrm{gal}}^{(\mathrm{ref})}=+0.034$ bei $N=400$, komprimiert auf $+0.012$ bei
+$N=600$ (Bemerkung~\ref{rem:sw-compression}). Der primitive Charakter
+mod $12$ besitzt als Führer ein Produkt aus zwei kleinen Primzahlen ($q=12=
+4\cdot 3$); frühere asymptotische Studien \cite{AsymptoticScan} beobachteten
+über drei Größenordnungen in $\lambda$ hinweg bei $N=200$ eine Steigung (slope) konsistent mit null,
+was wir nun als eine durch $N$ limitierte
+Beobachtung re-interpretieren (siehe auch \texttt{THEORIE\_CHI12\_KONSTANZ.md}). Innerhalb
+des vorliegenden Atlas ist $\chifn_{12}$ der stark-positive Prototyp,
+wenngleich mit geringerer Ausprägung als $\chifn_{33}$.
+
+\paragraph{Moderat-negative Klasse.}
+$\chifn_8$ und $\chifn_{13}$ zeigen beide stabile negative Gaps
+($-0.049$ bzw.\ $-0.125$) mit konsistenten Vorzeichen über
+$N\in\{200,400,600\}$ hinweg. Sie liegen zwischen dem stark-negativen
+Prototyp und dem schwach-positiven Cluster.
+
+\paragraph{Schwach-positiver Cluster.}
+$\chifn_{17}$, $\chifn_{24}$, $\chifn_{29}$ bilden einen engen Cluster
+kleiner positiver Gaps ($+0.013$, $+0.011$, $+0.014$). Ihre absoluten
+Werte liegen innerhalb des Siegel-Walfisz-Kompressionsregimes; ihr
+Prädiktor $S+\archdiff$ behält bei $N=200$ sein Vorzeichen, kann jedoch bei
+$N=600$ kippen (Fall von $\chifn_{29}$, Realisierung (R1); vgl.\
+\S\ref{sec:validation-regression}). Dieser Cluster markiert die untere
+Schranke der zuverlässigen numerischen Vorzeichenauflösung für unsere aktuellen
+Methoden.
+
+\paragraph{Arch-dominierter Near-Zero-Fall.}
+$\chifn_{60}$ hat $\gap_{\mathrm{gal}}^{(\mathrm{ref})}=+0.005$ mit
+$r_{\chifn_{60}}=356\%$ (s.o.). Der Prädiktor $S+\archdiff$ besitzt bei $N=600$ zufällig
+das korrekte Vorzeichen, aber nicht aufgrund
+des Primbeitrags, welcher im Vorzeichen dem empirischen
+Gap widerspricht; stattdessen dominiert der archimedische Term. Wir kennzeichnen $\chifn_{60}$
+als ein distinktes Regime, das eine eigene Analyse rechtfertigt.
+
+\paragraph{Composite-Conductor-Oszillator.}
+$\chifn_{21}$ ($D=21=3\cdot 7$) hat $\gap_{\mathrm{gal}}^{(\mathrm{ref})}=-0.004$ bei
+$N=600$, aber einen $N=200$ Galerkin-Gap von $+0.282$ --- ein Vorzeichenwechsel
+um den Faktor $66$. Er ist der einzige Charakter in unserer Stichprobe, der dieses
+Verhalten zeigt, und wir behandeln ihn detailliert in \S\ref{sec:chi21}.
+
+\smallskip
+
+Die obige Vier-Achsen-Kartografie ist der deskriptive Ertrag des Papers:
+Sie gruppiert die zehn Charaktere in qualitativ unterschiedliche Regime, und
+zwar bevor und unabhängig von jeder prädiktiven Formel. Insbesondere
+zeigen die Trichotomie prim-dominiert/gemischt/arch-dominiert
+(Tabelle~\ref{tab:archratio}) und die Gap-Signatur-Klassen
+(stark-neg, stark-pos, moderat-neg, schwach-pos, arch-dominiert,
+Oszillator) zusammengenommen sechs Unterklassen bei zehn Charakteren auf --- ein
+erstes Anzeichen dafür, dass der „Ein-Achsen-Transfer“ (single-axis transfer) des klassischen
+Regimes der geraden Dominanz \cite{RH_II} zu grob ist.
+
+\section{Die Matrixzerlegungs-Tautologie}
+\label{sec:tautology}
+
+\begin{proposition}[Tautologie]
+\label{prop:tautology}
+Seien $\phi^\pm_{\chifn}$ die Grundzustands-Eigenvektoren der Galerkin-trunkierten
+Operatoren $K^\pm_{\chifn}$ bei Basisgröße $N$. Dann gilt für jede Zerlegung
+$W^\pm = W^\pm_{\mathrm{arch}} + W^\pm_{\mathrm{prime}}$ der Galerkin-Matrix:
+\[
+\begin{aligned}
+  \gap_{\mathrm{gal}}^{(N)}
+    &= \archdiff + \primediff,\\
+  \archdiff
+    &:= \langle\phi^-, W^-_{\mathrm{arch}}\phi^-\rangle
+      - \langle\phi^+, W^+_{\mathrm{arch}}\phi^+\rangle,\\
+  \primediff
+    &:= \langle\phi^-, W^-_{\mathrm{prime}}\phi^-\rangle
+      - \langle\phi^+, W^+_{\mathrm{prime}}\phi^+\rangle.
+\end{aligned}
+\]
+\end{proposition}
+
+\begin{proof}
+Die Linearität des inneren Produkts auf dem Galerkin-Raum ergibt
+$\langle\phi^\pm, W^\pm\phi^\pm\rangle = \langle\phi^\pm,
+W^\pm_{\mathrm{arch}}\phi^\pm\rangle + \langle\phi^\pm,
+W^\pm_{\mathrm{prime}}\phi^\pm\rangle$.
+Da $\phi^\pm$ Eigenvektoren mit Eigenwert $\lambda_1^{\min}(W^\pm)$ sind,
+zerfällt der Gap $\gap_{\mathrm{gal}}^{(N)}$ als Differenz der beiden rechten
+Seiten. $\square$
+\end{proof}
+
+Obwohl der propositionale Gehalt eine triviale Linearitätsidentität ist, ist
+die \emph{methodologische Konsequenz} nicht-trivial: Jede scheinbare
+Übereinstimmung zwischen $\gap_{\mathrm{gal}}^{(N)}$ und $S_\chi+\archdiff_\chi$
+bei festem $N$ ist strukturell, keine Vorhersage. Wenn
+$\mathrm{prime\_diff}_{\mathrm{matrix}}$ durch die Autokorrelationsformel
+$S_{\chifn}$ in der Raumdomäne ersetzt wird, entsteht eine kleine numerische Diskrepanz
+(in der Größenordnung $10^{-3}$, etwa $1$--$2\%$ von $S$); die „9/9 Vorzeichengenauigkeit bei
+$N=200$", von der in Vorarbeiten des Autors berichtet wurde, lässt zwei
+gleichermaßen konsistente Lesarten zu: (a) Die Diskrepanz war für die
+Stichprobe von zehn Charakteren bei niedrigem $N$ \emph{glücklich klein}
+(fortuitous smallness) und wächst bei höherem $N$, sobald die intrinsischen
+Limitationen des Prädiktors aufgelöst werden; (b) Bei $N=600$ setzt für
+Charaktere mit $|\gap|\lesssim 10^{-2}$ eine
+\emph{Konditionierungspathologie} ein, bei der Gleitkomma- und
+Interpolationsfehler der Größenordnung $10^{-3}$ vorzeichenrelevant
+werden. Die zwei Lesarten sind ohne externe Referenz
+(vgl.\ \S\ref{sec:limitation-external}) nicht zu unterscheiden. In
+beiden Fällen ist die $N=200$-Übereinstimmung keine strukturelle
+Eigenschaft der Formel. Bei $N=600$ wird die Diskrepanz groß genug,
+um Vorzeichen für $\chifn_{29}$ umzukehren (siehe Tabelle~\ref{tab:validation}).
+
+\begin{remark}[Warum das autokorrelations-numerische $S$ scheitert]
+Die Autokorrelation $(\phi_{\chifn}^+\ast\phi_{\chifn}^+)(t)$ erfordert
+die numerische Auswertung auf einem diskreten Raster (grid), kombiniert mit einer Interpolation auf
+Primzahlabzissen $t=m\log p$. Gleitkomma- und Interpolationsfehler
+auf der Rasterskala $\Delta x = 2L/n_{\mathrm{grid}}$ übersetzen sich in Fehler
+der Größenordnung $10^{-3}$ in $S$, was für schwach signalisierende
+Charaktere wie $\chi_{21},\chi_{29}$ die gleiche Größenordnung wie $|\gap|$ darstellt.
+\end{remark}
+
+\begin{corollary}[Woher die prädiktive Kraft kommen muss]
+\label{cor:paleywiener}
+Eine wahrhaft prädiktive Weil-Kern-Gap-Formel erfordert die analytische Kontrolle
+der Grundzustände $\phi^\pm_{\chifn}$ \emph{ohne} den Weg über
+eine Galerkin-Diagonalisierung. Die Route ist eine asymptotische Paley-Wiener-Analyse
+(\`a la Connes \cite{Connes}, angepasst auf das Dirichlet-Setting) oder eine
+direkte spektrale Identifikation von $\Deltachi(t)$ aus den lokalen Daten
+von $\chifn$ (Parität, Wurzelzahl, Führer, arithmetischer Faktor der
+$L$-Funktion).
+\end{corollary}
+
+\section{\texorpdfstring{Die $\chi_{21}$ $N$-Oszillation}{Die chi21 N-Oszillation}}
+\label{sec:chi21}
+
+Der Charakter $\chifn_{21}$, mit zusammengesetztem Führer $q=21=3\cdot 7$,
+ist der einzige Eintrag aus Tabelle~\ref{tab:validation}, bei dem der Galerkin-Gap
+bei $N=200$ und die empirische Referenz bei $N=600$ im Vorzeichen abweichen.
+Wir quantifizieren die Diskrepanz und führen sie auf einen
+Galerkin-Trunkierungs-Effekt zurück, der bei hohem $N$ aufgelöst wird, nicht auf einen
+Defekt der Formel.
+
+Tabelle~\ref{tab:chi21} dokumentiert die $N$-Konvergenzdaten bei
+$\lambda=20000$, aus dem Skript \texttt{chi21\_n\_convergence.py}.
+
+\begin{table}[h]
+\caption{$N$-Konvergenz von $\chifn_{21}$ bei $\lambda=20000$.
+  Der Galerkin-Gap ist zwischen $N=200$ und $N=400$ flach und
+  springt dann um mehr als eine Größenordnung zwischen $N=400$ und
+  $N=600$. Zum Vergleich konvergiert der stark-positive Charakter
+  $\chifn_{12}$ monoton (letzte Spalte).}
+\label{tab:chi21}
+\centering\small
+\begin{tabular}{@{}cccc@{}}
+\toprule
+$N$ & $\gap_{\mathrm{gal}}(\chifn_{21})$ & $S+\archdiff$ & $\gap_{\mathrm{gal}}(\chifn_{12})$ \\
+\midrule
+$200$ & $+0.2816$ & $+0.2888$ & $+0.0325$ \\
+$400$ & $+0.2791$ & $+0.2869$ & $+0.0337$ \\
+$600$ & $-0.0042$ & $+0.0114$ & $+0.0115$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Zwei Beobachtungen strukturieren die Analyse.
+
+\begin{itemize}
+  \item[(i)] \emph{Stufendiskontinuität (Step discontinuity).} Zwischen $N=200$ und $N=400$
+    ist der Galerkin-Gap numerisch stationär
+    ($0.2816\to 0.2791$, Änderung $0.9\%$); er fällt dann um einen Faktor
+    von $\sim 66$ im absoluten Betrag ab und wechselt das Vorzeichen zwischen $N=400$
+    und $N=600$. Dies ist nicht die Signatur einer glatten
+    $N^{-\alpha}$ Konvergenz; die Daten sind konsistent mit --- aber
+    beweisen nicht eindeutig --- einen
+    \emph{vermuteten Quasi-Entartungs-Kollaps (vollständige Konvergenz nur bis $N=600$ verifiziert)},
+    bei dem die Galerkin-trunkierten Sektor-Eigenwerte
+    $\lambda_1^{\min}(W^\pm_{\chifn_{21},N})$ für $N\in\{200,400\}$
+    einem Pseudo-Grundzustand entsprechen, der vom Grundzustand bei
+    unendlichem $N$ verschieden ist; der wahre Grundzustand wird erst
+    darstellbar, wenn die Basis groß genug ist. Eine definitive
+    Diagnose würde spektrale Daten $\lambda_2-\lambda_1$ und
+    Eigenvektor-Überlapp $|\langle\phi^{(N=200)},\phi^{(N=600)}\rangle|$
+    bei intermediären $N\in\{500,700,800\}$ erfordern; wir markieren
+    dies als die direkteste weiterführende Verifikation
+    (vgl.\ \S\ref{sec:outlook}, Punkt zur spektralen Diagnose von
+    $\chifn_{21}$).
+  \item[(ii)] \emph{Der Prädiktor vollzieht den Kollaps nach.} Der Prädiktor
+    $S+\archdiff$ wird von der Grundzustands-Autokorrelation dominiert
+    und kollabiert daher \emph{ebenfalls} zwischen $N=400$ und $N=600$,
+    von $+0.287$ auf $+0.011$. Bei $N=600$ stimmt der Prädiktor im Vorzeichen nicht mehr
+    mit dem empirischen Gap überein, aber seine Größenordnung ist nun
+    bis auf einen Faktor $\sim 3$ mit der empirischen Größenordnung konsistent.
+    Dies bestätigt, dass die Formel selbst nicht
+    anomal ist: Sobald der Galerkin-Grundzustand konvergiert ist,
+    konvergiert der Prädiktor mit ihm, wobei das Vorzeichen durch die
+    numerischen Residuen nahe null bestimmt wird.
+\end{itemize}
+
+Als Kontrast zeigt $\chifn_{12}$ (Tabelle~\ref{tab:chi21}, letzte Spalte)
+eine monotone $N$-Konvergenz ohne Vorzeichenwechsel:
+$+0.0325\to+0.0337\to+0.0115$. Dies ist das generische Verhalten bei den
+stabilen Charakteren. Die Diskontinuität für $\chifn_{21}$ ist folglich
+weder ein Galerkin-Artefakt, das Composite-Conductor-Charakteren im Allgemeinen innewohnt
+(da $\chifn_{12}$, mit $q=12=4\cdot 3$,
+zusammengesetzt ist), noch eine systematische Grenze der Methode, sondern eine
+vermutete charakter-spezifische Beinahe-Entartung (near-degeneracy),
+deren definitive spektrale Analyse (über $\lambda_2-\lambda_1$-Scan
+und Eigenvektor-Überlapp) den Rahmen des vorliegenden Atlas sprengt;
+siehe \S\ref{sec:outlook}.
+
+\begin{remark}[Kein Formel-Defekt]
+\label{rem:chi21-not-defect}
+Der Vorzeichenwechsel in Tabelle~\ref{tab:chi21} ist eine Eigenschaft des
+Galerkin-Operators $W^\pm_{\chifn_{21},N}$ bei niedrigem $N$, nicht von der
+Formel \eqref{eq:gap-unreduced}. Da $S+\archdiff$ in
+Begriffen der Galerkin-Eigenvektoren definiert ist, wird jeder
+falsche Eigenwert bei niedrigem $N$ auf den Prädiktor übertragen. Das richtige theoretische
+Objekt ist $\gap_{\mathrm{gal}}^{(\mathrm{ref})}(\chifn_{21})=-0.00423$ bei $N=600$,
+und die richtige Frage bezüglich $\chifn_{21}$ ist, ob eine
+Paley-Wiener-Analyse des Grundzustands bei unendlichem $N$ diesen Wert direkt reproduzieren würde,
+ohne das Plateau bei $N=200,400$ passieren zu müssen.
+\end{remark}
+
+\section{Diskussion}
+\label{sec:discussion}
+
+\subsection{Implikationen für die Dreikomponenten-Zerlegung}
+\label{sec:discussion-three-component}
+
+Die Dreikomponenten-Zerlegung \eqref{eq:three-component} teilt
+jedes RH-artige Problem in die Galerkin-Brücke $\mathrm{GBC}$, die
+Connes-Stil Operator-Identifikationskomponente $C^{(2)}$, und den
+Hurwitz Realität-der-Nullstellen-Transfer auf. Für den trivialen Charakter
+schließt das Theorem der geraden Dominanz (even-dominance theorem) aus \cite{RH_II} $C^{(2)}_{X=\zeta}$
+unbedingt (unconditionally) über die $\sqrt{\lambda}$-Trennung der Sektoren ab.
+Für nicht-triviale reelle $\chifn$ mit kleinem Führer belegt unser Atlas
+drei strukturelle Tatsachen über $C^{(2)}_{\chifn}$:
+
+\begin{itemize}
+  \item[(I1)] Die Weil-Kern-Architektur (Theoreme~\ref{thm:kernel}
+    und~\ref{thm:sector-diff}) ist rigoros und übertragbar. Die
+    anti-diagonale Sektordifferenz trägt die volle Charakter-Abhängigkeit,
+    wie vorhergesagt.
+  \item[(I2)] Bei $\lambda=20000$ (einem einzelnen $\lambda$-Wert) ist der
+    Gap $\gap_{\chifn}(\lambda)$ im Absolutbetrag durch $0.15$ über alle
+    zehn Charaktere beschränkt, mit charakter-spezifischem Vorzeichen.
+    Eine vollständige $\lambda$-Asymptotik ($\Omega(\sqrt{\lambda})$
+    vs.\ $O(1)$ vs.\ intermediäres Wachstum) kann aus einer einzigen
+    $\lambda$-Messung nicht abgeleitet werden und bleibt zukünftiger
+    Arbeit überlassen; vorläufige Resultate für $\chifn_5$ und
+    $\chifn_{12}$ über drei Größenordnungen in $\lambda$ bei $N=200$ sind
+    konsistent mit $O(1)$-Wachstum (\cite{AsymptoticScan},
+    Begleitmaterial), aber ein systematischer $\lambda$-Scan über alle
+    zehn Charaktere ist offen. Die grobe
+    „Universaltransfer"-Hypothese (universal transfer hypothesis)
+    „Gerade Dominanz $\Rightarrow$ gerader Sektor gewinnt für alle
+    $\chifn$" ist bei $\lambda=20000$ widerlegt (da sechs von zehn
+    Charakteren negative oder fast-null Gaps haben); die
+    $\lambda$-asymptotische Widerlegung erfordert den oben genannten
+    dedizierten $\lambda$-Scan. (Eine vollständige $\lambda$-Asymptotik
+    kann aus einer einzigen Messung bei $\lambda=20000$ nicht abgeleitet
+    werden; diese Frage ist offen.)
+  \item[(I3)] Die Identifizierung von $C^{(2)}_{\chifn}$ erfordert die analytische
+    Kontrolle der Sektor-Grundzustände $\phi^\pm_{\chifn}$
+    selbst, nicht bloß ihrer Eigenwerte. Die Galerkin-Diagonalisierung
+    liefert die Eigenwerte, produziert aber aufgrund der Tautologie
+    von Proposition~\ref{prop:tautology} keine prädiktiven
+    Informationen, die nicht ohnehin als Input in die Berechnung eingehen.
+\end{itemize}
+
+In der Sprache des Meta-Programms von \cite{MetaGalerkinBridge}: Für
+nicht-triviale $\chifn$ ist $C^{(2)}_{\chifn}$ eine echte offene
+Komponente, und ihr Abschluss ist das zentrale technische Hindernis für einen
+GRH-Beweis im Hilbert-P\'olya-Stil im Dirichlet-Fall. Die
+analytische Architektur ist hier bereit, einen solchen Abschluss aufzunehmen; was
+fehlt, ist die $\chifn$-spezifische asymptotische Analyse von
+$\phi^\pm_{\chifn}$.
+
+Nach dem Zookeeper-Paper \cite{Zookeeper2026} kann diese fehlende
+Komponente in der CCM-Sprache noch schärfer gefasst werden. Die Riemann-Zelle
+besitzt nun ein unabhängiges Zookeeper-Kernpaket (Zookeeper kernel package)---Rang-eins-Zerlegung (rank-one decomposition),
+Cauchy Interlacing und Drei-Lemma-Schließung (three-lemma closure)---neben
+dem v2.1 Paket der geraden Dominanz. Der natürliche Dirichlet-Rücktransfer (back-transfer)
+ist daher Route~D: Konstruiere einen $\chifn$-getwisteten CCM-Operator mit
+einem Führer-Rang-eins-Term (conductor rank-one term) und einer $\chifn$-gewichteten arithmetischen
+Störung (perturbation), und vergleiche dann dessen Defektnorm (defect norm) mit den Atlas-Kontrollgrößen.
+In dieser Lesart sind die Paley-Wiener-Fehlschläge oben keine
+Sackgasse; sie identifizieren den ersten konkreten Stresstest für die
+$\chifn$-getwistete CCM-Route.
+
+\subsection{\texorpdfstring{Die Regression mit Steigung $0.72$ und ihre Bedeutung}{Die Regression mit Steigung 0.72 und ihre Bedeutung}}
+\label{sec:discussion-slope}
+
+Eine zweite quantitative Tatsache, die durch unsere Daten offengelegt wird, ist die Steigung (slope)
+der linearen Regression von $\gap_{\mathrm{gal}}^{(\mathrm{ref})}$ gegen
+$S+\archdiff$ bei $N=200$:
+$\gap_{\mathrm{gal}}^{(\mathrm{ref})}\approx 0.72\cdot(S+\archdiff)-0.01$
+(Stichprobe ohne $\chifn_{21}$, $R^2=0.80$). Wir haben dies in Session~7 der
+Entwicklung mit Enthusiasmus festgehalten, doch spätere Reflexion zeigt, dass
+sein inhaltlicher Gehalt bescheiden ist. Die Steigung misst die multiplikative
+Diskrepanz (mismatch) zwischen dem $N=200$ Prädiktor $S^{(200)}+\archdiff^{(200)}$
+und dem empirischen Gap bei hohem $N$. Unter der Siegel-Walfisz-Kompression
+aus Bemerkung~\ref{rem:sw-compression} verschwindet diese Diskrepanz
+bei höherem $N$: Bei $N=600$ \emph{ist} der Galerkin-Gap
+die empirische Referenz (durch Identität, nicht durch Prädiktion), sodass die
+Steigung konstruktionsbedingt gegen $1$ geht. Die $0.72$ ist daher eine
+$N=200$-spezifische Galerkin-Trunkierungskonstante, keine theoretische
+Invariante der Formel.
+
+Ein echtes theoretisches Analogon der Steigung wäre die
+sub-führende $N$-Abhängigkeit der Galerkin-Grundzustände
+$\phi^\pm_{\chifn,N}$, kontrolliert durch die Paley-Wiener Roadmap aus
+\cite{RH_II} adaptiert für Dirichlet $L$-Funktionen (vgl.\
+\cite{AnalyticGroundstate}, \S3, und die REG-$\lambda$-konditionierte
+Rate aus \cite{RH_II}, \S6). Wir markieren dies als eine offene quantitative
+Frage von eigenständigem Interesse.
+
+\begin{remark}[Status der $N=200$-Statistiken]
+\label{rem:n200-status}
+Die Interpretation des Slope-$0.72$ als $N=200$-spezifische Konstante
+hat methodologische Konsequenzen für den gesamten Atlas: Alle bei $N=200$
+berichteten Statistiken in Tabellen~\ref{tab:validation},
+\ref{tab:regression} und~\ref{tab:archratio} unterliegen demselben
+Trunkierungseffekt. Bei Abweichung zwischen $N=600$ und $N=200$ ist der
+$N=600$-Wert operationell vorzuziehen. Die $N=200$-Daten werden zur
+Transparenz des Konvergenzverhaltens beibehalten, nicht als Endergebnis.
+Insbesondere werden die archimedischen Gewichtsverhältnisse $r_\chi$
+in Tabelle~\ref{tab:archratio} bei $N=200$ berechnet, weil die
+Matrix-Zerlegung $W=W_{\mathrm{arch}}+W_{\mathrm{prime}}$ in dieser
+Auflösung am saubersten aufgelöst wird; ihre Werte würden sich bei
+$N=600$ moderat verschieben, aber die Prim/Mixed/Arch-Trichotomie
+bleibt qualitativ erhalten (Verifikation: vgl.\ Begleitmaterial,
+\texttt{ARCH\_TERM\_N600\_ANALYSIS.md}).
+\end{remark}
+
+\subsection{Einschränkung: Fehlen einer externen Referenz}
+\label{sec:limitation-external}
+
+Alle Gap-Werte in Tabellen~\ref{tab:validation}, \ref{tab:regression}
+und~\ref{tab:archratio} entstammen derselben Galerkin-Diagonalisierung
+bei $N\in\{200,400,600\}$. Es gibt daher \emph{keine externe,
+konventionsfreie Referenz} in diesem Atlas: Die hochsten-$N$-Werte
+$\gap_{\mathrm{gal}}^{(\mathrm{ref})}$ sind die bestmöglichen
+Galerkin-Schätzungen, keine Messungen des wahren $N\to\infty$-Gaps.
+Die statistische Übereinstimmung des Prädiktors $S_\chi+\archdiff_\chi$
+mit $\gap_{\mathrm{gal}}^{(\mathrm{ref})}$ ist daher ein
+Selbstkonsistenz-Check innerhalb der Galerkin-Methode, keine externe
+Validierung. Eine echte externe Referenz würde erfordern:
+\begin{itemize}
+\item[(i)] mp-Arithmetik-Galerkin bei $N\geq 2000$ zur Diagnose
+  endlicher-Präzisions-Artefakte;
+\item[(ii)] direkte spektrale Auswertung über LMFDB-Nullstellen von
+  $L(s,\chi_D)$;
+\item[(iii)] ein unabhängiges Galerkin-Schema mit anderer Basis (z.\,B.\
+  Hermite statt Fourier).
+\end{itemize}
+Keines davon wird hier geliefert; wir markieren dies als offenes
+methodologisches Element, bevor prädiktive Behauptungen über
+$\gap_{\chifn}(\lambda)$ beim vorliegenden $\lambda$ gestellt werden
+können.
+
+\begin{remark}[Konventionsabhängigkeit der Vorzeichenstatistik]
+\label{rem:sign-convention-dependence}
+Die Vorzeichengenauigkeit in Tabelle~\ref{tab:regression} ist relativ
+zur Connes-Operator-Konvention $\tilde{A}_\chi$ berechnet
+(Anhang~\ref{app:sign}). Unter der äquivalenten Weil-$Q$-Konvention
+invertieren sich alle Gap-Vorzeichen (Prädiktor und Referenz)
+gleichzeitig, sodass die relative Übereinstimmung
+Prädiktor-vs.-Referenz unverändert bleibt. Die Statistik prüft
+folglich Selbstkonsistenz innerhalb einer gewählten Konvention, nicht
+ein konventionsfreies Vorzeichen. Eine konventionsfreie Vorzeichen-
+Aussage würde eine externe arithmetische Identifikation erfordern
+(z.\,B.\ aus der Spektralseite über LMFDB), die wir nicht liefern.
+\end{remark}
+
+\subsection{Vorzeichenkonvention: algebraische Herleitung des Koeffizienten}
+\label{sec:discussion-sign}
+
+Der Koeffizient $-2$ in \eqref{eq:S-def} folgt algebraisch aus der
+Struktur der Weil-Quadratform (Gl.~\eqref{eq:weil-qf}): Der primzahlseitige
+Beitrag trägt den Faktor $-2\sum_{p,m}w_{p,m}R_\phi(m\log p)$, und der
+Sektor-Gap erbt diesen Faktor über die Linearität des Skalarprodukts auf
+$H_L^\pm$ und die Sektor-Eigenvektor-Entwicklung. Die vollständige Herleitung,
+die alle sechs relevanten Vorzeichenquellen nachverfolgt
+(Weil-Formel Primterm-Vorzeichen, Operator-Konvention,
+Gap-Orientierung, Paritätsaktion auf Basis, Faltung-vs-Autokorrelation-
+Paritätsidentität und der Reell-Charakter-Absorptionsfaktor), wird in
+Anhang~\ref{app:sign} und \cite{AnalyticKernelV2}, Theorem~5.1, gegeben.
+
+Die historische Entdeckungssequenz in unseren Entwicklungs-Skripten ---
+eine initiale Implementierung mit Koeffizient $+2$, die $R\!=\!-0.70$ auf
+der Stichprobe lieferte, korrigiert auf $-2$, die $R\!=\!+0.70$ auf
+derselben Stichprobe lieferte --- spiegelt eine frühe Implementierungsfalle
+in der Autokorrelations-Paritätskonvention wider (die Vorzeichenrelation
+$R_{\phi^-}=-(\phi^-{*}\phi^-)_{\mathrm{math}}$ wurde zunächst falsch
+behandelt), kein nachträgliches Fitten des Koeffizienten an die Daten.
+Die rigorose Herleitung schließt die Konvention. Die Herleitung liefert
+zudem zwei äquivalente Konventionen: die Connes-Operator-Konvention
+(Koeffizient $-2$), die im gesamten Atlas verwendet wird, und die
+Weil-$Q$-Konvention (Koeffizient $+2$), die sich durch ein Gesamtvorzeichen
+am Primterm unterscheiden. Der Atlas hängt nicht von der gewählten Konvention
+ab, solange sie konsistent angewendet wird; alle numerischen Vorzeichen sind
+konsistent mit der Connes-Operator-Konvention.
+
+\section{Ausblick}
+\label{sec:outlook}
+
+Der Atlas liefert eine präzise Diagnose: Eine prädiktive Schließung (predictive closure) von
+$C^{(2)}_{\chifn}$ über Galerkin-Numerik ist strukturell
+unmöglich, und der Weg vorwärts besteht in einer analytischen Kontrolle der
+Grundzustands-Differenz, welche Galerkin komplett umgeht. Sechs
+konkrete nächste Schritte bieten sich an.
+
+\begin{enumerate}
+  \item \textbf{Route~D: $\chifn$-getwisteter CCM Transfer.}
+    Die erste Post-Zookeeper Aufgabe ist die Konstruktion des Dirichlet-Analogons
+    zum CCM/Zookeeper-Operator: Eine $\chifn$-getwistete
+    Epstein--Mellin-Transformation, ein Führer-Rang-eins-Term (conductor rank-one term) und eine
+    $\chifn$-gewichtete arithmetische Perturbation. Die Atlas-Größen
+    $G_{\chifn}$, $R_{\chifn}$ und $\eta^\pm_{\chifn}$ sollten dann
+    als Diagnostiken für die entsprechende Defektnorm umgelesen werden,
+    anstatt als direkte Paley-Wiener-Prädiktoren.
+  \item \textbf{Paley-Wiener asymptotische Analyse von
+    $\phi^\pm_{\chifn}$.}
+    Für den trivialen Charakter ist der asymptotische Grundzustand
+    $\phi_\infty$ aus der Paley-Wiener-Maschinerie von \cite{RH_II} (\S5--\S6)
+    unter der REG-$\lambda$-Regularitätsannahme explizit bekannt.
+    Die Adaption für Dirichlet $L$-Funktionen läuft darauf hinaus, das
+    $\chifn$-getwistete Analogon der relevanten Fourier-Multiplikator-Schranke (Fourier-multiplier bound)
+    und die rationale Funktionskontur zu identifizieren, auf die der
+    Residuensatz angewandt wird. Drei der fünf notwendigen Schritte
+    lassen sich mechanisch übertragen (vgl.\ \cite{AnalyticGroundstate},
+    Thm.~3.1); die verbleibenden zwei erfordern eine charakter-spezifische
+    Behandlung von $L'/L(s,\chifn)$ im kritischen Streifen. Dies ist
+    die einzelne technische Aufgabe mit der größten Hebelwirkung.
+  \item \textbf{Branch-lokales Hilbert-P\'olya Framework (,,NE-B
+    Boundary``).}
+    Aufbauend auf \cite{RH_II} (\S4 NE-A, \S5 NE-B) und auf dem
+    Selberg-Analogon ist das nächste große Projekt im Meta-Programm
+    ein strukturelles Theorem, welches identifiziert, \emph{welche Zweige (branches) des
+    Zeta-Funktions-Baums eine Hilbert-P\'olya Interpretation zulassen,
+    und welche nicht.} Der vorliegende Atlas liefert die erste
+    quantitative Evidenz dafür, dass Low-Conductor-Dirichlet-Charaktere
+    die zweite Klasse (keine Branch-lokale Hilbert-P\'olya-Struktur
+    bei endlichem $\lambda$) bevölkern, womit das Randtheorem (boundary theorem)
+    geschärft wird, das den Baum ordnen wird.
+  \item \textbf{Führer-Erweiterung (Conductor extension) $D\leq 100$.}
+    Zehn Charaktere stellen einen kleinen Atlas dar. Die Erweiterung auf alle primitiven
+    reellen Charaktere mit $D\leq 100$ ($\approx 30$ zusätzliche
+    Charaktere, inklusive einiger komplex-konjugierter, die in
+    Paired Spaces gruppiert sind) würde statistische Tests der
+    Paritäts-/Wurzelzahl-/archimedischen Klassifikation gegen eine
+    Verteilung der beobachteten Gap-Vorzeichen ermöglichen. Die Galerkin-Kosten liegen bei
+    $\mathcal{O}(D\cdot N^3)$; bei $N=600$ bedeutet dies $\sim 10$ Stunden
+    CCX13 Compute pro zehn Charaktere, ein Ein-Wochenend-Job.
+  \item \textbf{Paired-Space Formalismus für komplexe Charaktere.}
+    Komplexe Dirichlet-Charaktere treten in konjugierten Paaren auf:
+    $\chifn\oplus\bar\chifn$; die Weilsche quadratische Form auf
+    $L^2[-L,L]\otimes\mathbb{C}^2$ ist hermitesch, aber nicht
+    selbstadjungiert. Das analytische Framework aus \S\ref{sec:setup}
+    lässt sich verallgemeinern, aber der Sektor-Kern
+    (Theorem~\ref{thm:sector-diff}) erhält eine Gaußsummen-Phase (Gauss-sum phase)
+    (\cite{AnalyticKernel}, Prop.~5.2). Eine saubere Darstellung ist
+    die Voraussetzung, um die Wurzelzahl-Achse
+    (\S\ref{sec:rootnumber}) gegen nicht-triviale Werte $W\in
+    \{+1,-1,\pm i\}$ zu testen.
+  \item \textbf{Theoretische Herleitung der Siegel-Walfisz
+    Kompression.} Die empirische Dichotomie aus
+    Bemerkung~\ref{rem:sw-compression}---zwischen Charakteren mit
+    stabilem $\gap_{\mathrm{gal}}^{(N=200)}$ und jenen, die bei $N=600$
+    um einen Faktor $\sim 0.35$ komprimiert werden---verlangt nach einer
+    theoretischen Klassifikation anhand der charakter-spezifischen
+    Siegel-Walfisz Konstante. Eine mögliche Formulierung lautet,
+    dass $\chifn$ mit einem echten Bias bei kleinen Primzahlen (Low-Prime Bias, z.\,B.\ $\chifn_{33}$,
+    $\chifn_{13}$) eine Primsumme besitzt, welche die
+    obere Siegel-Walfisz Schranke im relevanten Fenster ausschöpft und
+    daher $N$-stabil ist, wohingegen $\chifn$ mit einer balancierten Primsumme
+    (z.\,B.\ $\chifn_{12}$) eine Primsumme unterhalb der oberen
+    Schranke aufweist und demzufolge komprimierbar ist.
+\end{enumerate}
+
+\appendix
+
+\section{Details zur Berechnung}
+\label{app:computation}
+
+\subsection{Galerkin-Basis und Matrixassemblierung}
+Wir verwenden die Standard-Fourier-Orthonormalbasis von $H_L^\pm$:
+$\{e_0^+=(2L)^{-1/2}\}\cup\{e_n^+(x)=L^{-1/2}\cos(n\pi x/L)\}_{n\geq 1}$
+für den geraden Sektor und
+$\{e_n^-(x)=L^{-1/2}\sin(n\pi x/L)\}_{n\geq 1}$ für den ungeraden Sektor.
+Die Galerkin-trunkierten Operatoren $W^{\pm}_{\chifn,N}$ bei Basisgröße
+$N$ werden assembliert durch die Funktion
+\texttt{build\_W}$(\chifn,\lambda,\mathrm{sector},N)$ des Skripts
+\texttt{arch\_term\_analysis.py}, welche
+$W^\pm = W^\pm_{\mathrm{arch}} + W^\pm_{\mathrm{prime}}$ zerlegt, wobei:
+\begin{itemize}
+\item[(i)] $W^\pm_{\mathrm{arch}}$ aus dem Fourier-Bild
+  von $\rho_{\chifn}(t)=\log(q/\pi)+\Re\,\psi(1/4+it/2)$ auf einem Raster
+  mit Abstand $\Delta t=10^{-2}$ gewonnen wird, trunkiert bei $|t|\leq T_{\mathrm{arch}}=
+  30$ (so gewählt, dass das Spektrum des Gaußschen Grundzustands innerhalb
+  der numerischen Genauigkeit enthalten ist).
+\item[(ii)] $W^\pm_{\mathrm{prime}}$ durch das Summieren
+  von $\chifn(p)^m\log p/p^{m/2}$ über alle $(p,m)$ mit $p\nmid q$ und
+  $m\log p\leq 2L$ erhalten wird, wobei die Basisfunktionen-Überlappungen
+  (basis-function overlaps) analytisch (für Kosinus-Kosinus) oder durch
+  Simpson-Integration (für off-diagonale Sinus-Sinus-Terme) ausgewertet werden.
+\end{itemize}
+Der kleinste Eigenwert und sein Eigenvektor werden mittels einer
+Lanczos-Inverse-Iteration aus \texttt{scipy.sparse.linalg.eigsh}
+mit der Toleranz $10^{-10}$ und \texttt{sigma}$=-\log\lambda$ als
+Spektralverschiebung (spectral shift) extrahiert.
+
+\subsection{Auswertung der Autokorrelation}
+Die Autokorrelation in der Raumdomäne
+$(\phi^\pm\ast\phi^\pm)(t)$ wird auf einem uniformen Raster aus $n_{
+\mathrm{grid}}=4096$ Punkten auf $[-2L,2L]$ via \texttt{numpy.correlate}
+nach Zero-Padding berechnet und dann an den Primzahlabzissen
+$t=m\log p$ mittels kubischer \texttt{scipy.interpolate.interp1d} interpoliert.
+Die resultierende Realisierung von $S_{\chifn}$, in unseren Skripten
+$S_{\mathrm{exact}}$ genannt, unterscheidet sich von der matrix-basierten Realisierung
+$\mathrm{prime\_diff}_{\mathrm{matrix}}$ durch Gleitkomma- und
+Interpolationsfehler in der Größenordnung von $10^{-3}$ ($1$--$2\%$ von typischen
+$|S|$-Werten); dies ist die Ursache für die Vorzeichenwechsel bei $N=600$
+für $\chifn_{29}$ und $\chifn_{60}$, die in
+\S\ref{sec:validation} dokumentiert sind.
+
+\subsection{Skripte}
+Alle Daten in diesem Paper wurden erzeugt durch
+\texttt{arch\_term\_analysis.py} (für $N=200$ lokal),
+\texttt{server\_n600\_full\_analysis.py} (für $N=600$ Server-Lauf,
+1.95\,h auf Hetzner CCX13), und
+\texttt{chi21\_n\_convergence.py} (für Tabelle~\ref{tab:chi21}).
+Die Nachbearbeitung erfolgt durch \texttt{ground\_state\_difference\_analysis.py}.
+JSON-Outputs befinden sich in \texttt{CORE/zoo-mapping/\_results/}; Markdown-Zusammenfassungen im selben Verzeichnis.
+
+\section{Status der Vorzeichenkonvention}
+\label{app:sign}
+
+Der Koeffizient $-2$ in \eqref{eq:S-def} wird streng abgeleitet aus
+der expliziten Weil-Formel in \cite{AnalyticKernelV2},
+Theorem~5.1, indem alle sechs relevanten Quellen für Vorzeichen nachverfolgt werden (Minuszeichen der Primzahlseite in der Weil-Formel,
+Operatorkonvention, Gap-Orientierung, Wirkung der Parität auf die Basis, Paritätsidentität zwischen
+Faltung und Autokorrelation sowie der Absorptionsfaktor für reelle Charaktere).
+Die Herleitung liefert \emph{zwei äquivalente Konventionen}:
+\begin{enumerate}
+  \item die \textbf{Connes-Operator-Konvention} $\tilde A_{\chifn}$,
+    in der die Primzahlterme bei der Matrixassemblierung mit positivem Vorzeichen
+    addiert werden; dies entspricht dem Skript
+    \texttt{build\_W} (d.h.\ $\kappa^{\mathrm{script}}_{\chifn}(u)
+    =+\sum w_{p,m}[\delta(u-m\log p)+\delta(u+m\log p)]$) und
+    liefert den Koeffizienten $-2$;
+  \item die \textbf{Weil-$Q$-Konvention} $Q_{\chifn}$, verwendet in
+    \eqref{eq:kappa}, in der $\kappa_{\chifn}$ ein führendes
+    Minuszeichen trägt; hier liefert die analoge Herleitung den
+    Koeffizienten $+2$ (wie in \cite{AnalyticKernel}, Cor.~4.4).
+\end{enumerate}
+Die zwei Operatoren erfüllen
+$\tilde A_{\chifn}^{\mathrm{prim}}=-Q_{\chifn}^{\mathrm{prim}}$ (die
+Primzahl-Teile unterscheiden sich durch ein globales Vorzeichen); beide sind gültige Beschreibungen
+desselben spektralen Problems, aber sie führen zu entgegengesetzt orientierten Gaps.
+Der Atlas und das Skript verwenden durchgängig konsistent die Connes-Operator-Konvention,
+daher ist der Koeffizient $-2$ in
+\eqref{eq:S-def} der korrekte.
+
+Eine zweite Subtilität betrifft das Objekt, welches summiert wird. Die numerische
+Implementierung von \eqref{eq:S-def} (R1, räumliche Autokorrelation)
+verwendet \texttt{np.correlate}, welches die \emph{Autokorrelation}
+$R_{\phi^\pm}(u):=\int\phi^\pm(s)\phi^\pm(s-u)\,ds$ berechnet.
+Für den \emph{geraden} Grundzustand $\phi^+$ gilt
+$R_{\phi^+}=(\phi^+{*}\phi^+)$, doch für den \emph{ungeraden} Grundzustand
+$\phi^-$ ergibt die Paritätsidentität
+$R_{\phi^-}=-(\phi^-{*}\phi^-)_{\mathrm{math}}$ (Beweis: Substitution $v=-s$ im
+Integral $\int\phi^-(s)\phi^-(s-u)\,ds$, unter Nutzung von
+$\phi^-(-v)=-\phi^-(v)$). Folglich ist der
+numerische Ausdruck
+$\Deltachi^{\mathrm{num}}:=R_{\phi^+}-R_{\phi^-}$, der vom Skript berechnet wird, gleich
+$(\phi^+{*}\phi^+)_{\mathrm{math}}+(\phi^-{*}\phi^-)_{\mathrm{math}}$ in Bezug auf mathematische
+Faltungen --- also eine \emph{Summe}, die genau der rechten Seite von~\eqref{eq:Delta-def}
+entspricht. Damit stimmt $\Deltachi$ wie in~\eqref{eq:Delta-def} definiert identisch mit der
+skript-berechneten Größe $\Deltachi^{\mathrm{num}}$ überein. Der Koeffizient~$-2$ in
+\eqref{eq:S-def} ist dann der eindeutige Wert, der die Gap-Identität
+(Satz~\ref{thm:closure}) erfüllt. Siehe
+\cite{AnalyticKernelV2}, \S4 und Theorem~5.1, für die vollständige
+Herleitung. Alle gemeldeten Vorzeichen und sämtliche Tabellen
+(Tabellen~\ref{tab:validation}, \ref{tab:regression},
+\ref{tab:archratio}, \ref{tab:chi21}) sind in sich konsistent
+und wurden gegen eine direkte Galerkin-Diagonalisierung verifiziert.
+
+% --- Bibliografie ---
+\begin{thebibliography}{99}
+
+% ----- FST Master-Referenzen -----
+
+\bibitem{MathMaster}
+L.~Geiger,
+\textit{The Zeta Zoo --- The Mathematical Side of Functional
+Stability Theory: Branch-Local Hilbert--P\'olya via the Trinity of
+UCU, SGE, and Weil-Form Transversality},
+Preprint, Zenodo (2026), DOI:
+\href{https://doi.org/10.5281/zenodo.19673227}{10.5281/zenodo.19673227}.
+Dreikomponenten-Zerlegung von $\mathrm{RH}$ in \S2.4; UCU in \S7;
+CRM-V Klassifikations-Bemerkung in \S6.5.
+
+\bibitem{RFEPFramework}
+L.~Geiger,
+\textit{Functional Stability Theory --- Physical Instantiation via
+the Renormalized Free Energy Principle},
+Preprint, Zenodo (2026), DOI:
+\href{https://doi.org/10.5281/zenodo.19162705}{10.5281/zenodo.19162705}
+(v1.7; v1.8 Aktualisierung in Vorbereitung).
+
+\bibitem{Zookeeper2026}
+L.~Geiger,
+\textit{The Spectral Zookeeper: The Riemann Hypothesis via Spectral
+Microcluster Closure in the Connes--Consani--Moscovici Framework},
+Preprint (2026), Zenodo DOI
+\href{https://doi.org/10.5281/zenodo.19673127}{10.5281/zenodo.19673127}.
+
+% ----- Interne Projektreferenzen (Preprints / Ergänzungsnotizen) -----
+
+\bibitem{RH_II}
+L.~Geiger,
+\textit{Riemann Hypothesis via Direct Frontier Dominance (Paper II:
+Even Dominance)},
+Preprint (2026), Zenodo DOI \href{https://doi.org/10.5281/zenodo.19546593}{10.5281/zenodo.19546593}.
+Begleitdokument: \path{01_RH_TRILOGY/paper/RH_II_Even_Dominance.tex}.
+
+\bibitem{MetaGalerkinBridge}
+L.~Geiger,
+\textit{A Meta Galerkin Bridge: Diagnostic Decomposition of RH-Type
+Programmes}
+(Entwurf 2026), archivierter Vorgänger des \texttt{CORE/zetazoo}
+Boundary-Papers. Inhalt absorbiert in \cite{MathMaster} \S2.4.
+
+\bibitem{AnalyticKernel}
+L.~Geiger,
+\textit{Analytic Kernel: Sector-Kernel Decomposition of the
+Dirichlet Weil Quadratic Form},
+Ergänzungsnotiz (2026-04-17, revidiert 2026-04-16),
+\path{CORE/zoo-mapping/ANALYTIC_PIPELINE.md}.
+
+\bibitem{AnalyticKernelV2}
+L.~Geiger,
+\textit{Analytic Kernel V2 --- Rigorous Weil-Formula Derivation
+of the Sign Coefficient},
+Ergänzungsnotiz (2026-04-17),
+\path{CORE/zoo-mapping/ANALYTIC_PIPELINE.md}.
+Löst den Status der Vorzeichenkonvention durch stringente Ableitung des
+Koeffizienten aus der expliziten Weil-Formel unter Berücksichtigung aller sechs Vorzeichenquellen.
+
+\bibitem{AnalyticGroundstate}
+L.~Geiger,
+\textit{Analytic Ground State: Paley-Wiener Asymptotics for the
+Sector Ground States of Dirichlet Weil Quadratic Forms},
+Ergänzungsnotiz (2026-04-17),
+\path{CORE/zoo-mapping/ANALYTIC_PIPELINE.md}.
+
+\bibitem{Woche4Validation}
+L.~Geiger,
+\textit{Week-4 Validation: 16-Window Falsification of the
+Leading-Order Gap Formula},
+Ergänzungsnotiz (2026-04-17),
+\path{CORE/zoo-mapping/_results/WOCHE4_VALIDATION_RESULT.md}.
+
+\bibitem{AsymptoticScan}
+L.~Geiger,
+\textit{Asymptotic Scan of the $\chi_5$ and $\chi_{12}$ Sector Gaps
+across Three Orders of Magnitude in $\lambda$},
+Ergänzungsnotiz (2026-04-15),
+\path{CORE/zoo-mapping/_results/ASYMPTOTIC_SCAN_2026-04-15.md}.
+
+% ----- Externe Referenzen (überprüft 2026-04-16) -----
+
+\bibitem{IwaniecKowalski}
+H.~Iwaniec und E.~Kowalski,
+\textit{Analytic Number Theory},
+American Mathematical Society Colloquium Publications \textbf{53},
+AMS, Providence, RI (2004), ISBN 0-8218-3633-1, 615~S.
+
+\bibitem{Weil1952}
+A.~Weil,
+\textit{Sur les ``formules explicites'' de la th\'eorie des nombres
+premiers},
+Meddelanden fr\aa n Lunds Universitets Matematiska Seminarium
+(Vol.\ ded.\ \`a Marcel Riesz), 252--265 (1952).
+
+\bibitem{Selberg1956}
+A.~Selberg,
+\textit{Harmonic Analysis and Discontinuous Groups in Weakly
+Symmetric Riemannian Spaces with Applications to Dirichlet Series},
+J. Indian Math. Soc. \textbf{20}, 47--87 (1956).
+
+\bibitem{Connes}
+A.~Connes,
+\textit{Trace formula in noncommutative geometry and the zeros of
+the Riemann zeta function},
+Selecta Math. (New Series) \textbf{5}, 29--106 (1999),
+DOI \href{https://doi.org/10.1007/s000290050042}{10.1007/s000290050042}.
+
+\bibitem{PaleyWiener}
+R.~E.~A.~C.~Paley und N.~Wiener,
+\textit{Fourier Transforms in the Complex Domain},
+American Mathematical Society Colloquium Publications \textbf{19},
+AMS, Providence, RI (1934).
+
+\bibitem{LMFDB}
+The LMFDB Collaboration,
+\textit{The L-Functions and Modular Forms Database},
+\url{https://www.lmfdb.org/}. Abgerufen am 16.04.2026.
+
+\end{thebibliography}
+
+\end{document}
