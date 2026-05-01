@@ -186,14 +186,11 @@ These stand independently of FST. The RFEP was abstracted from them; they are no
 | `scripts/bsd/compute_bsd_verification.py` | BSD | BSD formula sanity checks for selected LMFDB curves |
 | `scripts/bsd/compute_rank2_lmfdb.py` | BSD | Rank-2 regulator positivity sample and plot |
 | `scripts/hodge/compute_ghr_spectrum.py` | Hodge | GHR spectrum numerical verification |
-<<<<<<< HEAD
 | `scripts/hodge/compute_voisin_test.py` | Hodge | Voisin-style negative-control stress test |
 | `scripts/zeta-zoo/dedekind_ne_b_test.py` | Zeta Zoo | Dedekind Q(sqrt(-5)) NE-B analog probe |
 | `scripts/zeta-zoo/ihara_petersen_sge_test.py` | Zeta Zoo | Ihara/Petersen SGE YES-side test |
 | `scripts/zeta-zoo/sge_control_experiment.py` | Zeta Zoo | SGE YES/NO discriminating control experiment |
-=======
 | `masters/atlas/scripts/` | Atlas | Galerkin computation pipeline (35 scripts: basis, κ-grid, asymptotic scans, χ-specific tests) |
->>>>>>> d39f581 (Promote Atlas + Selberg to CoreCore Masters; expand README to Five Masters)
 
 ## Repository Structure
 
