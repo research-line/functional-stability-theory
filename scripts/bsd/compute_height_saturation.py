@@ -2,6 +2,8 @@
 Height Saturation Test for BSD Conjecture
 Tests h_disc(E,D) / R(E) -> 1 for quadratic twists
 """
+from pathlib import Path
+
 import numpy as np
 
 # Known elliptic curves with their data
@@ -129,9 +131,9 @@ try:
     ax.legend()
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
-    plt.savefig(r'C:\Users\User\OneDrive\.RESEARCH\Natur&Technik\3 Folgebeweise\BSD\compute_height_saturation.png',
-                dpi=150)
-    print("\n  Plot saved.")
+    out_path = Path(__file__).resolve().with_name("compute_height_saturation.png")
+    plt.savefig(out_path, dpi=150)
+    print(f"\n  Plot saved to: {out_path}")
 except Exception as e:
     print(f"\n  (matplotlib nicht verfuegbar: {e})")
 

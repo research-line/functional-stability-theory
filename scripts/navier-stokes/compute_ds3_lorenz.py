@@ -2,6 +2,8 @@
 DS3 Stress Test: Dissipative Selection on Lorenz Attractor
 Tests whether TV(v_eps) remains bounded as eps -> 0
 """
+from pathlib import Path
+
 import numpy as np
 from scipy.integrate import solve_ivp
 import os
@@ -175,7 +177,7 @@ try:
     ax3.legend(fontsize=8)
 
     plt.tight_layout()
-    outpath = r'C:\Users\User\OneDrive\.RESEARCH\Natur&Technik\3 Folgebeweise\Navier-Stokes\compute_ds3_lorenz.png'
+    outpath = Path(__file__).resolve().with_name("compute_ds3_lorenz.png")
     plt.savefig(outpath, dpi=150, bbox_inches='tight')
     print(f"\n  Plot saved to: {outpath}")
 except ImportError:

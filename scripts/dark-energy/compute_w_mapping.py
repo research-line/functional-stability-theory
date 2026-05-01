@@ -75,6 +75,8 @@ Datum: 2026-03-18
 
 import sys
 import os
+from pathlib import Path
+
 import numpy as np
 
 # Matplotlib
@@ -479,7 +481,7 @@ def main():
 
     plt.tight_layout()
 
-    out_path = r"C:\Users\User\OneDrive\.RESEARCH\Natur&Technik\3 Folgebeweise\Dark Energy\compute_w_mapping.png"
+    out_path = Path(__file__).resolve().with_name("compute_w_mapping.png")
     plt.savefig(out_path, dpi=150, bbox_inches='tight')
     print(f"    Plot gespeichert: {out_path}")
     plt.close()

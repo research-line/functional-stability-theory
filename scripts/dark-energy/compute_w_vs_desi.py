@@ -27,6 +27,8 @@ DESI Year 1 (2024) BAO+CMB+PantheonPlus (als Referenz):
 
 import sys
 import os
+from pathlib import Path
+
 import numpy as np
 
 # Sicherstellen dass matplotlib verfuegbar ist
@@ -274,7 +276,7 @@ def main():
     plt.tight_layout()
 
     # Speicherpfad
-    out_path = r"C:\Users\User\OneDrive\.RESEARCH\Natur&Technik\3 Folgebeweise\Dark Energy\compute_w_vs_desi.png"
+    out_path = Path(__file__).resolve().with_name("compute_w_vs_desi.png")
     plt.savefig(out_path, dpi=150, bbox_inches='tight')
     print(f"\nPlot gespeichert: {out_path}")
     plt.close()
