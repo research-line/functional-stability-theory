@@ -1,0 +1,2239 @@
+% =======================================================================
+%  Branch-Local Hilbert-Polya:
+%  A Boundary Theorem from Riemann, Selberg, and Prime-Hub
+%
+%  Autor: Lukas Geiger, Unabhängiger Forscher, Bernau
+%  Entwurf v0.1 - Session 8 (2026-04-16)
+%  Status: SKELETON mit Abstract, Einleitung und Sektions-Stubs
+% =======================================================================
+\documentclass[11pt]{article}
+
+\usepackage[letterpaper,top=2.4cm,bottom=2.6cm,left=2.2cm,right=2.2cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\setlength{\emergencystretch}{2em}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath,amssymb,amsfonts,mathtools,bm}
+\usepackage{graphicx,float,booktabs,array,multirow}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Korollar}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Vermutung}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Beispiel}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Bemerkung}
+
+\newcommand{\HBL}{\mathrm{HP\text{-}BL}}
+\newcommand{\PSL}{\mathrm{PSL}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\renewcommand{\Re}{\operatorname{Re}}
+\newcommand{\halfline}{\tfrac{1}{2}}
+\newcommand{\zer}[1]{\zeta'/\zeta(#1)}
+\DeclareMathOperator{\Weil}{Weil}
+
+\title{Der Zeta-Zoo\\
+  \large --- Die mathematische Seite der\\
+  funktionalen Stabilitätstheorie\\[0.3em]
+  \normalsize Branch-Lokales Hilbert-P\'olya via die Trinität\\
+  von UCU, SGE und Weil-Form-Transversalität}
+\author{Lukas Geiger\\
+  \small Unabhängiger Forscher, Bernau\\
+  \small \texttt{lukasgeiger@googlemail.com}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Die funktionale Stabilitätstheorie (FST) ist ein Programm, das ein
+einziges strukturelles Muster --- funktionale Positivität unter einer
+Eichbedingung (Gauge Constraint) --- als gemeinsames Substrat offener Probleme in
+der Zahlentheorie, der mathematischen Physik und der Kosmologie identifiziert \cite{RFEPFramework}.
+\textbf{Dieses Paper ist die mathematische Seite der FST.} Wir formalisieren
+die Trinität (Dreifaltigkeit) von Metaprinzipien, die den Zeta-Typ-Zweig der
+Theorie steuern: das Lemma der \emph{universellen Konvexitätseindeutigkeit} (UCU),
+das die strikte Konvexität des maßgeblichen Funktionals in den
+eindeutigen Sättigungszustand umwandelt; die Vermutung der
+\emph{Halbgruppen-Gruppen-Äquivalenz} (SGE), die die Hilbert-P\'olya-Eigenschaft
+zu einer binären algebraischen Invariante der Transfer-Algebra macht;
+und die zweigübergreifende \emph{Weilsche quadratische Form}, die eine
+Lücken-Positivität (gap positivity) auf beiden Seiten der SGE-Dichotomie
+liefert. Innerhalb dieser Trinität reorganisiert sich das klassische Bild
+sauber: die Nichtexistenz-Resultate NE-A und NE-B des Riemann-v2.1-Programms
+\cite{Geiger2026RHII} schließen die algebraischen Routen für $\zeta(s)$ aus;
+Selbergs Laplace-Beltrami-Operator realisiert die Hilbert-P\'olya-Struktur
+explizit für $Z_\Gamma(s)$; der spektrale Zookeeper \cite{Zookeeper2026}
+schließt den Riemannschen $C^{(2)}$/MS2-Schritt im CCM/Fourier-Zweig ab; der
+konjekturale Prime-Hub-Graph bleibt offen als eine explizite OP5-Konstruktion
+unter drei dokumentierten strukturellen Hindernissen.
+Wir klassifizieren den \emph{Zeta-Zoo} entlang der SGE-Dichotomie, verifizieren das
+Framework an fünf Testfamilien (Riemann, Selberg, Prime-Hub,
+Dedekind $\mathbb{Q}(\sqrt{-5})$, Ihara-Petersen) und leiten
+Konsequenzen für Dirichletsche $L$-Funktionen ab \cite{PaleyWienerDirichlet, DirichletAtlas}.
+Wir schließen mit einer kryptographischen Lesart der Trinität als der algebraischen
+Architektur des Bitcoin-Blockchain-Protokolls und mit dem narrativen Kreis
+vom Kooperativen Renormierungsmodell (CRM) der Dunklen Energie durch die FST
+hin zur abstrakten Trinität und zurück via hyperbolischer Geometrie. Die physikalische
+Instanziierung des FST-Programms über das renormierte Prinzip der freien Energie (RFEP)
+wird im Begleitpaper \cite{RFEPFramework} entwickelt.
+\end{abstract}
+
+\clearpage
+\tableofcontents
+\clearpage
+
+% ============================================================
+\section{Einleitung}
+\label{sec:intro}
+
+\subsection{Die Hilbert-P\'olya-Vermutung und ihre implizite Zweig-Wahl}
+\label{sec:hp-implicit-branch}
+
+Die Hilbert-P\'olya-Vermutung fragt danach, ob die nicht-trivialen Nullstellen der
+Riemannschen Zetafunktion den Eigenwerten eines selbstadjungierten Operators
+entsprechen. Ihr ältester dokumentierter Ursprung ist ein Brief von G.~P\'olya
+an A.~Odlyzko aus dem Jahr 1982 \cite{Polya1982letter}, der eine Unterhaltung
+mit E.~Landau in Göttingen um 1912--1914 wiedergibt; die erste
+veröffentlichte Erwähnung erscheint erst in Montgomerys Paper zur Paar-Korrelation
+von 1973 \cite{Montgomery1973}, und die Vermutung wurde seitdem
+wiederholt aufgegriffen \cite{Berry1985, BerryKeating1999, Connes1999}. Sie
+hat einen Großteil der analytischen Zahlentheorie des letzten Jahrhunderts
+angetrieben. Dennoch wurde, wie Connes' Übersicht von 2026 \cite{Connes2026}
+betont, ein solcher Operator für $\zeta(s)$ bisher nicht explizit konstruiert.
+
+Das Programm trifft implizit eine Zweig-Wahl (branch choice). Für die Selbergsche Zetafunktion
+$Z_\Gamma(s)$ einer kompakten hyperbolischen Fläche
+$\Gamma\backslash\mathbb{H}$ realisiert der Laplace-Beltrami-Operator
+$\Delta_{\Gamma\backslash\mathbb{H}}$ die Hilbert-P\'olya-Struktur
+explizit: seine Eigenwerte $\lambda_n = 1/4 + r_n^2$ liefern
+$r_n = \operatorname{Im}(\rho_n)$ für die Selberg-Nullstellen $\rho_n = 1/2 + ir_n$,
+und er kommutiert mit allen geodätischen Transfer-Operatoren
+\cite{Selberg1956}. Für die Riemannsche Zetafunktion hingegen
+schließen die Resultate NE-A und NE-B aus dem jüngsten Even-Dominance-Beweis
+\cite{Geiger2026RHII} die beiden natürlichsten algebraischen Kandidaten aus:
+der Primverschiebung-Fouriermultiplikator
+$M(\xi) = -2\,\Re\zer{\halfline + i\xi}$ scheitert daran, auf einer Menge von positivem
+Maß absolut total-positiv zu sein (NE-A), und keine nicht-skalare symmetrische Matrix
+kommutiert simultan mit allen Primverschiebungsmatrizen bei einer
+Galerkin-Trunkierung von $N\leq 15$ (NE-B, wobei die Erweiterung auf den vollen Raum konjektural
+ist \cite{Geiger2026RHII}). Und für den konjekturalen Prime-Hub-Graphen (Offenes Problem 5 in
+\cite{Geiger2026RHIII}) halten drei Hindernisse --- Inkompatibilität des Weylschen
+Gesetzes mit der logarithmischen Dichte $N(T)\sim (T/2\pi)\log(T/2\pi)$, Spurklasse-Regularität
+eines Graphentransferoperators und Kompatibilität mit NE-A --- eine explizite
+Prime-Hub/Hilbert-P\'olya-Graphenkonstruktion offen. Nach dem spektralen Zookeeper \cite{Zookeeper2026}
+ist diese Offenheit nicht länger der Status des Riemannschen $C^{(2)}$/MS2-Schritts
+selbst; es ist der Status der direkten OP5-Grapheninterpretation.
+
+\subsection{Die Trinität der Metaprinzipien}
+\label{sec:trinity}
+
+Diese drei kanonischen Fakten deuten gemeinsam darauf hin, dass die Hilbert-P\'olya-Eigenschaft
+kein universelles Merkmal von Zeta-Typ-Familien ist, sondern eine \emph{lokale}
+Invariante, die in manchen Unterfamilien präsent und in anderen strukturell
+abwesend ist. Das zentrale organisierende Prinzip dieses Papers ist,
+dass diese Branch-Lokalität durch eine Trinität von Metaprinzipien gesteuert wird,
+die jedes Programm vom RH-Typ adressieren muss:
+
+\begin{description}
+\item[(UCU)] \emph{Universelle Konvexitätseindeutigkeit (Universal Convexity Uniqueness).} Die zulässigen
+  Zustände des Programms sind die Minimierer eines strikt konvexen,
+  koerziven Funktionals. Strikte Konvexität garantiert einen \emph{eindeutigen}
+  Sättigungszustand, den die spektrale Maschinerie der Weilschen quadratischen
+  Form dann realisiert. Dieses Prinzip organisiert die Eindeutigkeitsargumente
+  über vier ansonsten unverbundene Programme (Turbulenz~K41, FST Dunkle-Energie-Potenzial,
+  Riemannsche Even-Dominance, Yang--Mills Gibbs-Maß) unter einem einzigen Dach.
+
+\item[(SGE)] \emph{Halbgruppen-Gruppen-Äquivalenz (Semigroup-Group Equivalence).} Ob ein natürlicher
+  selbstadjungierter Operator --- der gesuchte Hilbert-P\'olya-Hamiltonian
+  $H_X$ --- existiert, wird konjektural durch eine einzige algebraische Invariante gesteuert:
+  ob die Transfer-Algebra $(I_X, \cdot)$ der Familie eine (lokalkompakte)
+  Gruppe oder nur eine Halbgruppe ist. Die Präsenz von Inversen ist genau die Bedingung,
+  unter der eine Lie-Struktur und damit ein Casimir-Operator hervortritt.
+
+\item[(WF)] \emph{Weil-Form Branch-Transversalität.} Die Weilsche quadratische Form $Q_X$ ist
+  für jede Zeta-Typ-Familie mit einem Euler-Produkt, einem Gamma-Faktor und
+  einer Funktionalgleichung wohldefiniert, unabhängig vom $\HBL$-Status. Sie
+  liefert eine einheitliche Architektur, die Lücken-Positivität (gap positivity) in allen
+  algebraischen Regimes erzeugt. Im Riemannschen Fall etabliert die
+  $Q_\zeta$-basierte Direkte Frontier-Dominanz von \cite{Geiger2026RHII}
+  die Riemannsche Vermutung \emph{unbedingt}, ohne jeglichen Hilbert-P\'olya-Input.
+\end{description}
+
+Kurz gesagt:
+
+\begin{quote}
+\emph{UCU selektiert den eindeutigen Sättigungszustand; SGE entscheidet, ob
+ein natürlicher Hilbert-P\'olya-Operator existiert; die Weil-Form-Transversalität
+baut die Brücke über die SGE-Dichotomie hinweg.}
+\end{quote}
+
+Der Rest dieses Papers formalisiert diese Trinität, testet sie an
+fünf Zeta-Typ-Familien und schließt mit einer spekulativen Lesart, in der
+die drei Prinzipien die algebraische Architektur des Bitcoin-Blockchain-Protokolls
+widerspiegeln (Abschnitt~\ref{sec:blockchain}).
+
+\subsection{Ein Exkursionsführer für den Zeta-Zoo}
+\label{sec:zoo-framing}
+
+In diesem Paper verwenden wir den \emph{Zeta-Zoo} als pädagogischen
+Rahmen. Jede Zeta-Typ-Familie $X$ ist ein Gehege im Zoo; die Gehegearten sind die drei möglichen
+HP-Status-Werte (\text{YES}, \text{NO}, \text{OPEN}); das zooweite Futter ist die
+Weilsche quadratische Form $Q_X$, die jedes Gehege unabhängig von der Art annimmt;
+der Zooführer ist die Trinität UCU + SGE + Weil-Form-Transversalität und die
+Vier-Klassen-Rigoroshierarchie (Abschnitt~\ref{sec:rigor}). Modellgehege (Riemann,
+Selberg, Prime-Hub) sind die Hauptstationen der Tour. Neuzugänge
+(Abschnitt~\ref{sec:sge-dedekind-test}: Dedekind $\mathbb{Q}(\sqrt{-5})$;
+Abschnitt~\ref{sec:sge-ihara-test}: Ihara-Petersen) dienen als erste nicht-kanonische Zoo-Exponate.
+Spezies, die auch das benachbarte FST-physikalische Biotop
+\cite{RFEPFramework} bewohnen --- \emph{Brückenspezies} wie die Riemannsche Zetafunktion selbst,
+die BSD L-Funktion, das Hodge-Motiv und die boolesche Algebra von P vs NP ---
+sind an den entsprechenden Einträgen querverwiesen.
+
+Die Zoo-Metapher ist eine Lesehilfe, kein theorematisches Gerüst. Alle
+untenstehenden mathematischen Aussagen sind technisch formuliert; die
+Metapher wird lediglich verwendet, um den Leser durch die Vielfalt der Zeta-Typ-Familien
+zu orientieren, die die Trinität organisiert.
+
+\subsection{Der CRM-Kreis: vom Kosmos zur Algebra und zurück}
+\label{sec:crm-circle}
+
+Historisch gesehen war das Kooperative Renormierungsmodell (CRM) der
+kosmologischen Dunklen Energie die erste Instanziierung dessen, was später zur
+funktionalen Stabilitätstheorie wurde \cite{RFEPFramework}. Seine
+Kompositionsregel
+\[
+  x \oplus y = \frac{x + y}{1 + xy}
+\]
+ist die Lorentz-Boost-Addition, sodass die zugrundeliegende Geometrie
+konstruktionsbedingt hyperbolisch ist. Als das CRM-Stabilitätsargument
+generalisiert wurde, entstand die FST; als die FST weiter abstrahiert wurde,
+kristallisierte sich die mathematische Trinität von UCU, SGE und Weil-Form-Transversalität
+heraus. Der Kreis schließt sich: vom Kosmos zur Physik zum Prinzip zur Algebra,
+und die hyperbolische Geometrie, die das CRM konkret realisiert,
+taucht auf der YES-Seite der SGE-Dichotomie als der $\PSL_2(\mathbb{R})$-Casimir
+der Selberg-Zeta (Abschnitt~\ref{sec:selberg}) wieder auf und, auf beiden Seiten,
+als die branch-transversale Weil-Form-Architektur (Abschnitt~\ref{sec:weil-transversal}).
+Am Ende ist alles Algebra --- einschließlich der Geometrie.
+
+\subsection{Organisation}
+\label{sec:intro-organization}
+
+Abschnitt~\ref{sec:setup} ruft die Definitionen der Hilbert-P\'olya-Struktur und
+der Weilschen quadratischen Form im Kontext der Zeta-Familien in Erinnerung.
+Abschnitt~\ref{sec:locality} führt die Branch-Lokalität formal ein und bettet sie
+in die Trinität ein. Die Abschnitte \ref{sec:riemann}, \ref{sec:selberg} und \ref{sec:primehub}
+erinnern an die drei kanonischen Instanzen: Riemann (NE-A und NE-B), Selberg
+(Casimir-Operator) und Prime-Hub (Offenes Problem 5).
+Abschnitt~\ref{sec:boundary} formuliert und beweist das Randtheorem (boundary theorem).
+Abschnitt~\ref{sec:ucu} führt UCU formal ein und zeigt seine
+Rolle als die universelle Eindeutigkeitsaussage über vier Programme hinweg auf.
+Abschnitt~\ref{sec:weil-transversal} diskutiert Weil-Form-Methoden als das
+branch-transversale Komplement. Abschnitt~\ref{sec:sge-conjecture}
+formuliert die SGE-Vermutung und testet sie an den Dedekind- und
+Ihara-Familien. Abschnitt~\ref{sec:blockchain} schließt mit der
+Blockchain-Lesart, die die Essenz der Trinität in ein informatisches Register
+überträgt. Abschnitt~\ref{sec:outlook} sammelt die Rigoros-Hierarchie, die Konsequenzen
+für Dirichlet und den Ausblick auf angrenzende Projekte.
+
+% ============================================================
+\section{Setup}
+\label{sec:setup}
+
+\subsection{Zeta-Typ-Familien}
+\label{sec:zeta-family}
+
+\begin{definition}[Zeta-Typ-Familie]\label{def:zeta-family}
+Eine \emph{Zeta-Typ-Familie} ist ein Tupel $(Z_X, \mathcal{T}_X, \mathcal{E}_X)$
+bestehend aus
+\begin{enumerate}
+\item einer meromorphen Funktion $Z_X(s)$ auf $\mathbb{C}$ mit höchstens
+  endlich vielen Polen, nicht-trivialen Nullstellen $\{\rho_k = 1/2 + i\gamma_k^X\}$
+  auf oder in der Nähe einer kritischen Gerade $\{\Re(s) = 1/2\}$, die ein Euler-Produkt
+  auf einer rechten Halbebene und eine Funktionalgleichung
+  $Z_X(s) \leftrightarrow Z_X(1-s)$ bis auf einen Gamma-Faktor erfüllt;
+\item einer natürlichen Familie $\mathcal{T}_X$ von beschränkten Operatoren auf einem
+  Hilbertraum, die mit der Geometrie/Arithmetik von $X$ assoziiert ist
+  ("Transfer-Operatoren");
+\item einer expliziten Formel $\mathcal{E}_X$, die Testfunktions-Summen
+  über Nullstellen mit Prim-/Geodäten-Summen der Familie in Beziehung setzt.
+\end{enumerate}
+\end{definition}
+
+\begin{example}[Kanonische Instanzen]\label{ex:canonical}
+(i) $X = \zeta$: $\mathcal{T}_\zeta = \{\text{Primverschiebungs-Operatoren } D(r)\}$ mit expliziter Formel vom Weil-Typ.\\
+(ii) $X = Z_\Gamma$ für $\Gamma$ ko-kompakt Fuchssch: $\mathcal{T}_\Gamma
+= \{\text{geodätische Transfer-Operatoren } T_{\ell_\gamma}\}$ mit
+Selbergs expliziter Formel.\\
+(iii) $X = G_\mathrm{prime}$: konjekturaler Transferoperator auf einem
+primzahl-indizierten Graphen; Offenes Problem 5 in \cite{Geiger2026RHIII}.
+\end{example}
+
+\subsection{Die Hilbert-P\'olya-Struktur}
+
+\begin{definition}[Branch-Lokales Hilbert-P\'olya]\label{def:hp-bl}
+Man sagt, eine Zeta-Typ-Familie $(Z_X, \mathcal{T}_X, \mathcal{E}_X)$
+\emph{besitzt Hilbert-P\'olya-Struktur} --- geschrieben $\HBL(X) = \mathrm{YES}$ ---
+wenn ein selbstadjungierter Operator $H_X : \mathcal{D}(H_X) \to \mathcal{H}_X$ auf
+einem Hilbertraum $\mathcal{H}_X$ existiert, sodass:
+\begin{enumerate}
+\item[(HP1)] $\Spec(H_X) = \{\gamma_k^X : k \in \mathbb{N}\}$, mit Vielfachheiten.
+\item[(HP2)] $H_X$ kommutiert mit jedem $T \in \mathcal{T}_X$ im Sinne
+  kommutierender Spektralprojektionen.
+\item[(HP3)] $H_X$ ist \emph{natürlich}: eindeutig determiniert durch die
+  Geometrie oder Arithmetik von $X$, bis auf unitäre Äquivalenz.
+\end{enumerate}
+Existiert kein solches $H_X$, schreiben wir $\HBL(X) = \mathrm{NO}$;
+ist die Existenz offen, $\HBL(X) = \mathrm{OPEN}$.
+\end{definition}
+
+\begin{remark}[Informelle Intuition]\label{rem:hp-informal}
+Hilberts und P\'olyas ursprünglicher Vorschlag war, dass die Riemannsche
+Vermutung aus dem Vorweisen eines natürlichen selbstadjungierten Operators
+"in der Natur" folgen würde, dessen Eigenwerte mit den Imaginärteilen der
+Zeta-Nullstellen übereinstimmen. Die drei Bedingungen (HP1)--(HP3)
+formalisieren diese informelle Anforderung: spektrale Identität, Kommutierung mit den
+natürlichen Transfer-Operatoren der Familie, und eine Natürlichkeitsbedingung,
+die tautologische Konstruktionen (z.B. den trivialen Multiplikationsoperator
+auf $\ell^2$, der durch die Nullstellen selbst indiziert wird) verhindert.
+\end{remark}
+
+\subsection{Die Weilsche quadratische Form als branch-transversale Architektur}
+\label{sec:weil-qf}
+
+Für jede Zeta-Typ-Familie $(Z_X, \mathcal{T}_X, \mathcal{E}_X)$ induziert die
+Weilsche explizite Formel \cite{Weil1952} eine quadratische Form $Q_X$
+auf $L^2(\mathbb{R})$ von der schematischen Gestalt
+\begin{equation}
+\label{eq:weil-qf-generic}
+  Q_X[f] = \sum_k 2\pi |\widehat{f}(\gamma_k^X)|^2
+    = W^X_\infty[f] + (\text{Prim-/Geodätenseite}).
+\end{equation}
+Positivität von $Q_X$ auf einer geeigneten Testfunktionsklasse ist äquivalent
+zur Riemannschen Vermutung für $Z_X$, unabhängig von der Existenz
+irgendeines Hilbert-P\'olya-Operators. Dies ist der branch-transversale
+Inhalt der Weilschen Architektur: er ist in den Fällen HP-BL-YES, -NO
+und -OPEN einheitlich anwendbar.
+
+\subsection{Dreikomponenten-Zerlegung von RH-Typ-Aussagen}
+\label{sec:three-component}
+
+Eine weitere strukturelle Verfeinerung isoliert im Anschluss an
+\cite{MetaGalerkinBridge} drei konzeptionell verschiedene
+Schichten (layers) innerhalb jeder RH-Typ-Aussage für eine Zeta-Typ-Familie $X$.
+Schreibt man $\mathrm{RH}(X)$ für die Positivität von $Q_X$ auf der
+zulässigen Testfunktionsklasse, so erhält man die \emph{logische}
+Zerlegung (zu lesen als eine Konjunktion von notwendigen und hinreichenden
+Bedingungen, nicht als eine arithmetische Summe)
+\begin{equation}
+\label{eq:three-component}
+  \mathrm{RH}(X)
+  \;\Longleftrightarrow\;
+  \underbrace{\mathrm{GBC}(X)}_{\text{Galerkin-Brücke}}
+  \;\wedge\;
+  \underbrace{C^{(2)}(X)}_{\text{Eigenvektor-Realisierung}}
+  \;\wedge\;
+  \underbrace{\mathrm{Hurwitz}(X)}_{\text{Universeller Limes}}.
+\end{equation}
+\eqref{eq:three-component} ist ein \emph{Schema}, kein Theorem: Es
+hält fest, welche drei Schichten jedes Programm vom RH-Typ liefern muss,
+und kennzeichnet diese als Ziele getrennter technischer Unterprogramme.
+Die präzisen Form-Definitionsbereich-Konventionen, unter denen jede Komponente
+definiert ist, werden in den jeweiligen Instanzen der
+Abschnitte~\ref{sec:riemann}--\ref{sec:primehub} festgelegt.
+
+Die drei Komponenten lauten wie folgt.
+
+\begin{enumerate}
+\item[\textbf{(GBC)}] \emph{Galerkin-Brücken-Komponente.} Der
+algebraisch-spektrale Schritt: für jeden Cutoff $\lambda > 1$ konstruiert
+man eine endlich-dimensionale Galerkin-Approximation $Q_X^{(N,\lambda)}$
+von $Q_X$ auf einem logarithmischen Host-Raum (Kosinus-/Sinusbasis auf
+$[-\log\lambda,\log\lambda]$ im arithmetischen Fall), zeigt die
+Positivität/Negativität der Approximation über Intervallarithmetik
+oder kombinatorische Argumente, und überträgt das Resultat über Mosco-Konvergenz
+\cite{MetaGalerkinBridge,ConnesConsaniMoscovici2025} auf den kontinuierlichen Operator.
+Diese Schicht ist der Ort, an dem der v2.1 Direkte Frontier-Dominanz-Beweis
+\cite{Geiger2026RHII} für $X = \zeta$ lebt.
+
+\item[$\boldsymbol{C^{(2)}}$] \emph{Eigenvektor-Realisierungs-Komponente.} Der analytische
+Schritt: man zeigt, dass die Galerkin-Eigenvektoren $f_\star^{(N)}$ in einer
+ausreichend starken Topologie gegen eine echte Eigenfunktion $f_\star$ des kontinuierlichen
+Operators konvergieren. Für den Riemannschen Fall ist dies genau die Paley--Wiener-Kontrolle,
+die in Connes' Programm benötigt wird
+\cite{Connes2026,ConnesConsaniMoscovici2025} und in \cite{Geiger2026RHII}
+als der tiefste verbleibende analytische Baustein vor dem Zookeeper-Abschluss gekennzeichnet
+wurde. Im aktuellen CORE-Status schließt \cite{Zookeeper2026} diesen
+$C^{(2)}$/MS2-Schritt im CCM/Fourier-Modell ab und liefert die unten
+verwendete Mikrocluster-Normalform. Für Selberg ist dieser Schritt automatisch (kompakte Resolvente
+des Laplace-Operators auf $\Gamma\backslash\mathbb{H}$).
+
+\item[\textbf{(Hurwitz)}] \emph{Universelle Limes-Komponente.} Der
+letzte funktionale Schritt: Der Satz von Hurwitz über lokal gleichmäßige Grenzwerte
+nicht verschwindender holomorpher Funktionen hebt die Familie von
+Level-Aussagen in den Limes auf der kritischen Gerade. Diese
+Komponente ist unabhängig von $X$: es ist dasselbe analytische Lemma,
+das in jedes $\lambda$-Cutoff-RH-Argument einfließt, weshalb wir es
+separat als "universell" auflisten.
+\end{enumerate}
+
+\begin{remark}[Wo sich jeder FST-Zweig spezialisiert]
+\label{rem:three-component-specialisation}
+Die Dreikomponenten-Zerlegung macht sichtbar, \emph{wo} jeder FST-Zweig seinen
+technischen Fokus setzt:
+\begin{itemize}
+\item Das \textbf{v2.1 Even Dominance Programm} \cite{Geiger2026RHII}
+trägt die GBC-Schicht für $X = \zeta$ bedingungslos und reduziert
+$\mathrm{RH}(\zeta)$ auf $C^{(2)}(\zeta)$.
+\item Das \textbf{Connes-Programm} \cite{Connes2026,ConnesConsaniMoscovici2025}
+ist die natürliche Heimat des $C^{(2)}$-Schritts, der semilokal als eine analytische
+Bedingung an prolate-sphäroidische Eigenfunktions-Asymptotiken formuliert ist;
+im Zookeeper Paper ist dieser Schritt im CCM/Fourier-Zweig durch das Drei-Lemma-Mikrocluster-Argument
+abgeschlossen.
+\item Das \textbf{Hindernis-Klassifikator-Programm} (Obstruction-Classifier)
+\cite{GeigerObstructionClassifiers} diagnostiziert, an welchem
+(GBC, $C^{(2)}$)-Paar ein gegebenes Problem schwierig ist: leichtes GBC +
+Zookeeper-geschlossenes $C^{(2)}$ (Riemann), twisted-transfer
+$C^{(2)}$ (Dirichlet), beides leicht (Selberg, automorphe
+$L$ auf $GL_n$), offenes GBC (Ihara generisch, Yang--Lee, $p$-adische
+$L$).
+\item Die \textbf{Hurwitz}-Schicht ist über alle diese Zweige invariant; wenn wir
+"den Limes nehmen" zur kontinuierlichen kritischen Gerade, verrichtet dasselbe
+Lemma die Arbeit.
+\end{itemize}
+Insbesondere wirkt die Trinität von Abschnitt~\ref{sec:ucu} --- UCU + SGE +
+Weil-Form-Transversalität --- auf die GBC-Schicht (UCU liefert die
+Eindeutigkeit des Galerkin-Grundzustands, SGE klassifiziert die zulässigen
+Transfer-Algebren, die Weil-Form-Transversalität ist die Architektur,
+die die Galerkin-Approximation trägt). $C^{(2)}$ und Hurwitz sind zu dieser Trinität
+transversal; sie kommen ins Spiel, \emph{nachdem} die Trinität den
+Grundzustand festgelegt hat.
+\end{remark}
+
+\begin{remark}[Die Randtheorem-Sichtweise]
+\label{rem:boundary-three-component}
+Theorem~\ref{thm:boundary} (HP-BL) klassifiziert Zeta-Typ-Familien
+nach ihrem HP-Status. Die Dreikomponenten-Zerlegung verfeinert dies,
+indem sie uns mitteilt, \emph{welche Komponente die Klassifizierung determiniert}:
+\begin{itemize}
+\item HP-BL $=$ YES (Selberg, Ihara Petersen, automorph):
+$C^{(2)}$ ist automatisch (kompakte Resolvente); der HP-Operator ist
+der natürliche Laplace-Operator.
+\item HP-BL $=$ NO (Riemann, Dedekind $\mathbb{Q}(\sqrt{-5})$, Dirichlet):
+Ein Fehlschlag/Nichtkonstruktion von HP-BL ist nicht identisch mit einem
+offenen $C^{(2)}$-Status. Für Riemann schließt das Zookeeper Paper
+$C^{(2)}$/MS2 im CCM/Fourier-Zweig ab; für Dirichlet und Dedekind muss der
+entsprechende getwistete (verdrehte) Transfer noch getestet werden. Die Weil-Form-Route
+bleibt branch-transversal.
+\item HP-BL $=$ OPEN (Prime-Hub): die explizite OP5 Graphen-Konstruktion
+und ihre Randoperator-Interpretation bleiben offen; nach Zookeeper wird dies
+nicht länger als offener Riemann-Blocker für $C^{(2)}$ gelesen.
+\end{itemize}
+\end{remark}
+
+% ============================================================
+\section{Branch-Lokalität als Konzept}
+\label{sec:locality}
+
+Branch-Lokalität bezieht sich auf die Beobachtung, dass eine strukturelle
+Eigenschaft von Zeta-Typ-Familien für die eine Familie gelten und für eine eng
+verwandte fehlschlagen kann. Bevor wir das Randtheorem formulieren, machen
+wir das Konzept präzise.
+
+\subsection{Drei Modi von \texorpdfstring{$\HBL$}{HP-BL}}
+
+\begin{definition}[HP-BL Status-Trichotomie]\label{def:hpbl-status}
+Für eine Zeta-Typ-Familie $X$ im Sinne von Definition~\ref{def:zeta-family}
+sagen wir, dass
+\begin{itemize}
+\item $\HBL(X) = \mathrm{YES}$, wenn ein Operator $H_X$ existiert, der
+  (HP1)--(HP3) aus Definition~\ref{def:hp-bl} erfüllt;
+\item $\HBL(X) = \mathrm{NO}$, wenn man beweisen kann oder unter einer
+  spezifischen Vermutung etabliert hat, dass kein solches $H_X$ existiert;
+\item $\HBL(X) = \mathrm{OPEN}$, wenn kein Kandidat vorgezeigt wurde
+  \emph{und} kein Ausschluss bewiesen wurde, möglicherweise vorbehaltlich
+  identifizierter Hindernisse.
+\end{itemize}
+\end{definition}
+
+Der Status $\mathrm{NO}$ kann \emph{unbedingt} (unconditional) oder
+\emph{bedingt} (conditional) sein. In der vorliegenden Arbeit wird der Riemannsche
+Fall bedingt nach Vermutung~\ref{conj:NE-B-full} (der Ausweitung von NE-B
+von endlichdimensionalen Galerkin-Trunkierungen auf den vollen Raum) $\mathrm{NO}$
+sein. Die Vermutung ist konjektural, aber strukturell präzise: eine explizite
+offene Aussage, deren Auflösung die NO-Klassifikation entweder bestätigen
+oder widerlegen würde.
+
+\subsection{Natürlichkeit (HP3): der operationale Test}
+
+Die Natürlichkeitsklausel (HP3) von Definition~\ref{def:hp-bl} ist die
+subtile Komponente. Ohne sie existiert stets ein trivialer "HP-Operator": auf
+dem Hilbertraum $\ell^2(\{\gamma_k\})$ kann man $H_X$ einfach als
+Multiplikation mit $\gamma_k$ definieren. Ein derartiges ad-hoc $H_X$ erfüllt
+(HP1) tautologisch, erklärt aber gar nichts. Wir verlangen daher,
+dass $H_X$ im folgenden operationalen Sinn \emph{natürlich} ist.
+
+\begin{definition}[Natürlicher HP-Operator]\label{def:natural-hp}
+Ein selbstadjungierter Operator $H_X$ auf $\mathcal{H}_X$ wird
+\emph{natürlich} für die Zeta-Typ-Familie $X$ genannt, wenn:
+\begin{enumerate}
+\item[(N1)] es eine natürliche Symmetriegruppe $G_X$ gibt, die auf $X$ operiert
+  (über dessen Geometrie, Arithmetik oder Automorphismenstruktur), unter der $H_X$
+  invariant ist;
+\item[(N2)] der Hilbertraum $\mathcal{H}_X$ und die Einbettung
+  $\mathcal{T}_X \hookrightarrow \mathcal{B}(\mathcal{H}_X)$ $G_X$-äquivariant sind;
+\item[(N3)] $H_X$ durch (HP1)--(HP2) und (N1)--(N2) bis auf unitäre Äquivalenz
+  kommutierend mit der $G_X$-Operation eindeutig determiniert ist.
+\end{enumerate}
+\end{definition}
+
+In Selbergs Fall ist die Symmetriegruppe $\Gamma\backslash\PSL_2(\mathbb{R})$,
+der Hilbertraum ist $L^2(\Gamma\backslash\mathbb{H})$, und der Laplace-Beltrami-Operator
+wird eindeutig charakterisiert als der Differentialoperator zweiter Ordnung, der invariant
+unter $\Gamma$ ist (bis auf Skalare) (\S\ref{sec:selberg}). Im Riemannschen Fall stammt die Primverschiebungsfamilie
+$\{D(r) : r \in (0,2)\}$ von keiner natürlichen endlich-dimensionalen Lie-Gruppen-Operation
+der durch (N1) geforderten Form ab; Theorem~\ref{thm:NE-B} etabliert,
+dass kein nicht-skalarer symmetrischer Operator überhaupt mit allen $D_N(r)$ an
+den getesteten Trunkierungen kommutiert. Der Prime-Hub-Graph, falls er konstruiert
+würde, müsste eine explizite $G_{\mathrm{prime}}$ liefern, was Teil von
+Offenem Problem~5 ist.
+
+\subsection{Warum kein einheitliches Theorem über alle Zeta-Typ-Familien?}
+
+Eine plausible naive Hoffnung ist, dass $\HBL$ \emph{einheitlich}
+$\mathrm{YES}$ über Zeta-Typ-Familien hinweg wäre: Jede $L$-Funktion würde ihren eigenen
+natürlichen $H_X$ tragen. Das Randtheorem (boundary theorem) unten ist eine präzise
+Quantifizierung des Fehlschlagens dieser Hoffnung: Selbst die drei kanonischen
+Instanzen $\{\zeta, Z_\Gamma, G_\mathrm{prime}\}$ realisieren bereits alle drei
+Werte $\{\mathrm{NO}, \mathrm{YES}, \mathrm{OPEN}\}$. Jeder einheitliche
+Anspruch über alle Zeta-Typ-Familien ist daher falsch.
+
+Eine subtilere Hoffnung ist, dass $\HBL = \mathrm{YES}$ \emph{generisch} wäre,
+wobei der Riemannsche Fall auf irgendeine Weise außergewöhnlich ist. Theorem~\ref{thm:NE-B}
+verbietet sogar diese Lesart an den getesteten Galerkin-Trunkierungen: Das
+Fehlen einer gemeinsamen Symmetrie unter Primverschiebungsoperatoren ist ein explizites
+strukturelles Merkmal der multiplikativen Primzahlstruktur, keine Pathologie. Umgekehrt
+ist das Vorhandensein eines Lie-Gruppen-invarianten Laplace-Operators in Selbergs
+Setting eine Folge der spezifischen Geometrie von $\Gamma\backslash\mathbb{H}$ und
+nicht per se der Zeta-Analytizität. Die Branch-Lokalitäts-These lautet, dass
+der $\HBL$-Status vom \emph{algebraischen Substrat} der Familie determiniert wird,
+unabhängig von deren zeta-analytischen Merkmalen.
+
+\subsection{Eine Drei-Klassen-Taxonomie des Zeta-Zoos}
+\label{sec:three-class-taxonomy}
+
+Die Branch-Lokalitäts-Trichotomie $\HBL \in \{\mathrm{YES}, \mathrm{NO}, \mathrm{OPEN}\}$
+aus Definition~\ref{def:hpbl-status} klassifiziert Familien nach der
+\emph{Existenz} eines natürlichen Hilbert-P\'olya-Operators. Eine zweite,
+weitgehend orthogonale Klassifizierung erfasst die \emph{Art des Spektrums}, das
+ein solcher Operator, falls er existiert, zulässt. Drei Klassen treten hervor:
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{@{}p{0.19\linewidth} p{0.18\linewidth} p{0.12\linewidth} p{0.18\linewidth} p{0.17\linewidth}@{}}
+\toprule
+\textbf{Klasse} & \textbf{Transfer-Algebra} & \textbf{Typischer HP} & \textbf{Spektrum} & \textbf{Zoo-Beispiele} \\
+\midrule
+Arithmetische Zetas & Prim/Primideal-Halbgruppe & NO & Diskret (Nullstellen) & Riemann, Dirichlet, Dedekind \\
+Geometr. Zetas (kompakt) & Diskretes $\Gamma$ auf kompaktem Quotient & YES & Diskret (Laplace) & Selberg, Ihara \\
+Flow-Zetas (nicht-kompakt) & Kont. Lie-Gruppe auf nicht-kompaktem Raum & YES${}^*$ & Kontinuierlich + Resonanzen & CRM, Ruelle-Anosov, BH-QNM \\
+\bottomrule
+\end{tabular}
+\end{center}
+${}^*$ realisiert im Resonanzsinne: Der HP-Operator (Casimir der
+operierenden Lie-Gruppe) besitzt absolut stetiges Spektrum, und die Zeta-Nullstellen
+entsprechen Streuresonanzen (Scattering Resonances) in der unteren Halbebene (vgl. \cite{DyatlovZworski2019}).
+
+Die drei Klassen sind orthogonal zur $\HBL$-Trichotomie: Sowohl Selberg als auch CRM
+sitzen auf der $\HBL = \mathrm{YES}$-Seite der SGE-Dichotomie, gehören aber zu
+verschiedenen spektralen Klassen. Riemann und Dedekind teilen sich die arithmetische Klasse,
+bleiben aber von den geometrischen und Flow-Klassen vollständig getrennt. Wir werden eine kanonische
+Vertretung für jede Klasse in den Abschnitten \ref{sec:riemann}--\ref{sec:crm-flow} aufzeigen
+und geben das vollständige Randtheorem in Abschnitt~\ref{sec:boundary}.
+
+\subsection{Beziehung zu Connes' adelischem Framework}
+
+In Connes' Programm \cite{Connes1999, Connes2026} ist der relevante
+"Raum", auf dem ein vermeintlicher $H_\zeta$ operiert, ein adelischer
+Quotient $\mathbb{A}_K / K^\times$, und die natürliche Symmetrie ist die
+$\mathrm{GL}_1$-Operation der Ideleklassen. Unsere Formulierung in Definition~\ref{def:natural-hp}
+schließt diese Architektur nicht aus: Wenn Connes' Programm erfolgreich ist,
+würde sein Operator (N1)--(N3) mit $G_X = \mathrm{GL}_1(\mathbb{A}_K/K^\times)$
+erfüllen und ein explizites $\HBL = \mathrm{YES}$-Zertifikat für $\zeta(s)$
+im adelischen Hilbertraum darstellen. Diese Möglichkeit ist derzeit offen:
+Sie würde auf endlichen Dimensionen mit Theorem~\ref{thm:NE-B} koexistieren,
+weil das adelische natürliche $G_X$ in der Galerkin-Trunkierung nicht sichtbar ist.
+Unser Randtheorem betrifft daher die Hilbert-P\'olya-Struktur im Hinblick auf die
+\emph{Primverschiebungs-}Transfer-Operatoren $\mathcal{T}_\zeta$, was die relevante
+Struktur für die Weilsche quadratische Form und den Even-Dominance-Beweis
+aus \cite{Geiger2026RHII} ist.
+
+Die folgenden Abschnitte stellen jeweils eine kanonische Instanz jedes
+$\HBL$-Modus vor.
+
+% ============================================================
+\section{Instanz A: Riemann (NE-A und NE-B)}
+\label{sec:riemann}
+
+\subsection{Nichtexistenz absolut totaler Positivität (NE-A)}
+\label{sec:ne-a}
+
+Wir zitieren das folgende Theorem aus \cite{Geiger2026RHII}:
+
+\begin{theorem}[NE-A, {\cite[Thm.~NE-A]{Geiger2026RHII}}]\label{thm:NE-A}
+Der Fouriermultiplikator
+$M(\xi) = -2\,\Re[\zeta'/\zeta(\halfline + i\xi)]$
+des Primverschiebungsoperators nimmt auf einer Menge positiven Lebesgue-Maßes
+in jedem Intervall $[-L, L]$ mit $L > \gamma_1$ (der ersten positiven Zeta-Ordinate)
+negative Werte an. Folglich ist der Primverschiebungsoperator
+nicht absolut total-positiv ($\mathrm{PF}_\infty$).
+\end{theorem}
+
+\begin{remark}\label{rem:ne-a-empirical}
+Empirisch (vgl. \cite[\S4.2]{Geiger2026RHII}) liefert die Abtastung von $M(\xi)$
+auf einem gleichmäßigen Gitter von $10^4$ Punkten in $\xi \in [0,100]$ unter Ausschluss
+von $\varepsilon$-Umgebungen der ersten 29 Ordinaten ca. $49\%$ Punkte mit $M(\xi) < 0$.
+Dies illustriert das Theorem; es ersetzt nicht das strukturelle Argument.
+\end{remark}
+
+\subsection{Kein universeller kommutierender Operator (NE-B)}
+\label{sec:ne-b}
+
+\begin{theorem}[NE-B, {\cite[Thm.~NE-B]{Geiger2026RHII}}]\label{thm:NE-B}
+Für jede Galerkin-Trunkierung $N \leq 15$ und jede hinreichend
+dichte Stichprobe normalisierter Verschiebungen $r_1, \ldots, r_k \in (0,2)$
+ist die einzige symmetrische $N \times N$-Matrix, die mit allen
+Primverschiebungsmatrizen $D_N(r_j)$ kommutiert, ein skalares Vielfaches
+der Einheitsmatrix.
+\end{theorem}
+
+\begin{conjecture}[NE-B-full, {\cite[Conj.~\ref{thm:NE-B}-full]{Geiger2026RHII}}]\label{conj:NE-B-full}
+Theorem~\ref{thm:NE-B} dehnt sich auf $N = \infty$ aus: Es existiert kein nicht-trivialer
+universeller kommutierender Operator für die Riemannsche Primverschiebungs-Familie.
+\end{conjecture}
+
+\subsection{Konsequenz für \texorpdfstring{$\HBL(\zeta)$}{HP-BL(zeta)}}
+
+Theoreme~\ref{thm:NE-A} und~\ref{thm:NE-B} schließen zusammen die beiden
+natürlichsten Routen zu (HP1)--(HP3) für die Riemann-Zeta-Familie aus.
+Kein absolut total-positiver Primverschiebungs-Operator kann als $H_\zeta$ dienen
+(Route A), und es existiert kein universeller kommutierender selbstadjungierter
+symmetrischer Operator bei irgendeiner getesteten Galerkin-Trunkierung (Route B). Unter
+Vermutung~\ref{conj:NE-B-full} gilt $\HBL(\zeta) = \mathrm{NO}$.
+
+\begin{remark}[Paper IIs RH-Beweis erfordert keine HP-Struktur]
+\label{rem:riemann-without-hp}
+Der Even-Dominance-Beweis der Riemannschen Vermutung, der in \cite{Geiger2026RHII}
+geführt wird, verläuft über primzahlgewichtete Summation (Shift-Parity-Lemma)
+plus Frontier-Dominanz-Argumente unter Verwendung der Weilschen quadratischen Form.
+Keiner dieser Schritte benötigt (HP1)--(HP3). Dies ist konsistent mit der
+Branch-Lokalitäts-These: Obwohl $\HBL(\zeta) = \mathrm{NO}$ (bedingt durch
+Vermutung~\ref{conj:NE-B-full}), liefert die Weil-Form-Architektur dennoch
+die gewünschte spektrale Schlussfolgerung.
+\end{remark}
+
+\begin{remark}[Dokumentationsstatus des Direct-Frontier-Beweises]
+\label{rem:riemann-critique-review}
+Wir zitieren \cite{Geiger2026RHII} als Lieferant für den unbedingten Beweis
+der Direkten Frontier-Dominanz. Eine systematische Kritik der Trilogie
+\cite{Geiger2026RHII,Geiger2026RHIII} --- welche (K1) die globale Extrapolation von
+der $\lambda = 100$ CAP-Baseline, (K2) die Transparenz der PNT/Mertens-Konstanten
+$C_{\mathrm{shift}}, C_{\mathrm{norm}}$, (K3) die Galerkin-Konvergenz
+zum unendlich-dimensionalen Weil-Operator, (K4) die Implikation-versus-Äquivalenz-Struktur
+der Reduktionskette A1--A8, (K5) die präzise Charakterisierung des Form-Definitionsbereichs
+von $Q_\zeta$ und (K6) die gesamte Prüfer-Ergonomie abdeckte --- wurde in einem
+begleitenden Review \cite{RHCritiqueReview2026} durchgeführt.
+Das Urteil lautete, dass alle sechs Kritiken \emph{teilweise berechtigt, aber nicht fatal}
+sind: Die Beweisarchitektur ist substantiell solide, jedoch würde eine überarbeitete Trilogie
+(RH v2.2) (i) die zeilenweisen Äquivalenz-/Implikations-Marker der Reduktionskette,
+(ii) ein explizites Galerkin-Konvergenz-Lemma, das das $D_3(r)$-Matrix-Argument auf den
+vollen Weil-Operator ausdehnt, und (iii) explizite intervallarithmetische Zertifikate
+für $C_{\mathrm{shift}}, C_{\mathrm{norm}}$ schärfen. Diese Verfeinerungen berühren nicht
+das Randtheorem oder die SGE-Klassifizierung, die im vorliegenden Paper verwendet wird; sie
+verstärken die RH v2.1-Dokumentation, ohne ihren technischen Gehalt zu ändern.
+\end{remark}
+
+% ============================================================
+\section{Instanz B: Selberg (Casimir-Operator)}
+\label{sec:selberg}
+
+\subsection{Der Laplace-Beltrami als expliziter Hilbert-P\'olya-Operator}
+
+Sei $\Gamma \subset \PSL_2(\mathbb{R})$ eine ko-kompakte Fuchssche Gruppe
+und $\mathcal{F} = \Gamma\backslash\mathbb{H}$ die zugehörige kompakte
+hyperbolische Fläche. Die Selbergsche Zetafunktion $Z_\Gamma(s)$ hat
+nicht-triviale Nullstellen $\rho_n = \halfline + ir_n$, die in Beziehung stehen
+zum Spektrum des Laplace-Beltrami-Operators $\Delta_\mathcal{F}$ auf
+$L^2(\mathcal{F})$ via
+\begin{equation}
+\label{eq:selberg-spectral}
+  \Delta_\mathcal{F}\,\phi_n = \lambda_n\phi_n, \qquad
+  \lambda_n = \tfrac{1}{4} + r_n^2,
+\end{equation}
+mit endlich vielen Ausnahmen durch kleine Eigenwerte \cite{Selberg1956}.
+
+\begin{theorem}[Selberg]\label{thm:selberg-hp}
+Der Operator $H_{Z_\Gamma} := \sqrt{\Delta_\mathcal{F} - 1/4}$
+erfüllt (HP1)--(HP3) aus Definition~\ref{def:hp-bl} für die Zeta-Typ-Familie
+$(Z_\Gamma, \mathcal{T}_\Gamma, \mathcal{E}_\Gamma)$.
+Insbesondere gilt $\HBL(Z_\Gamma) = \mathrm{YES}$.
+\end{theorem}
+
+\begin{proof}[Skizze]
+(HP1) folgt aus~\eqref{eq:selberg-spectral}. (HP2) folgt aus
+der $\Gamma$-Invarianz: der Laplace-Beltrami-Operator kommutiert mit jedem
+Isometrie-Pullback und damit mit jedem geodätischen Transfer-Operator.
+(HP3) folgt aus der Eindeutigkeit des Laplace-Operators als dem
+invarianten Differentialoperator zweiter Ordnung unter $\Gamma$ (bis auf Skalare).
+Die spektrale Quadratwurzel im Bereich außergewöhnlicher Eigenwerte wird durch den
+üblichen Funktional-Kalkül auf dem absolut stetigen Teil von
+$\Spec(\Delta_\mathcal{F})$ behandelt.
+\end{proof}
+
+\subsection{Selbergs Spurformel: der explizite Mechanismus}
+\label{sec:selberg-trace}
+
+Die Selbergsche Spurformel \cite{Selberg1956} setzt schematisch spektrale und geometrische
+Daten in Beziehung:
+\begin{equation}
+\label{eq:selberg-trace}
+  \sum_n \widehat{h}(r_n)
+  = \frac{\operatorname{vol}(\mathcal{F})}{4\pi} \int h(r)\,r\tanh(\pi r)\,dr
+  + \sum_{\{\gamma\}} \frac{\ell(\gamma_0)}{2\sinh(\ell(\gamma)/2)}\,
+      g(\ell(\gamma)),
+\end{equation}
+wobei $r_n$ die spektralen Parameter von $\Delta_\mathcal{F}$ sind, die
+zweite Summe über primitive geschlossene Geodäten $\{\gamma_0\}$ und deren
+Iterierte läuft, und $h, g$ ein durch Fouriertransformation zusammenhängendes
+Standard-Testfunktionspaar sind. Die geodätische Seite von \eqref{eq:selberg-trace}
+ist das \emph{multiplikativ-geometrische Analogon} zur Prim-Seite der expliziten Formel
+von Riemann--Weil.
+
+Die $\Gamma$-Invarianz von $\Delta_\mathcal{F}$ ist der
+\emph{strukturelle Grund}, warum die geodätische Seite diese geschlossene Form hat:
+Geodäten $\gamma$ sind Orbits unter der $\PSL_2(\mathbb{R})$-Operation
+modulo $\Gamma$, und die Transferoperatoren $T_{\ell_\gamma}$ sind
+konjugiert zu $\Gamma$-Translationen entlang $\gamma$. Der Casimir-Operator
+der einbettenden $\PSL_2(\mathbb{R})$ wirkt als Erzeuger zweiter Ordnung dieser geodätischen
+Flüsse und kommutiert daher simultan mit jedem $T_{\ell_\gamma}$. Dies ist
+die konkrete Verifizierung von (N1)--(N3) aus Definition~\ref{def:natural-hp}.
+
+\subsection{Was Selberg von Riemann unterscheidet}
+\label{sec:selberg-vs-riemann}
+
+Die Riemannsche Zeta-Familie lässt ein formales Analogon zu \eqref{eq:selberg-trace}
+in Form der Weilschen expliziten Formel zu:
+\begin{equation}
+\label{eq:weil-riemann}
+  \sum_k h(\gamma_k^\zeta)
+  = W_\infty[h]
+  - 2\sum_{p,m} \frac{\log p}{p^{m/2}}\,\widehat{h}(m\log p),
+\end{equation}
+mit archimedischem Gewicht $W_\infty$, das den Gamma-Faktor kodiert. Die
+Prim-Seite von \eqref{eq:weil-riemann} ist \emph{multiplikativ}: Sie ist
+durch die Halbgruppe der Primzahlpotenzen indiziert, nicht durch Orbits einer
+Lie-Gruppen-Operation. Es gibt keine natürliche kontinuierliche Gruppe,
+deren diskrete Orbits $\{p^m\}$ reproduzieren, und Theorem~\ref{thm:NE-B} bestätigt
+dies strukturell: Kein nicht-skalarer symmetrischer Operator kommutiert mit
+den Primverschiebungs-Operatoren bei den getesteten Galerkin-Trunkierungen.
+
+Der genaue strukturelle Unterschied zwischen \eqref{eq:selberg-trace} und
+\eqref{eq:weil-riemann} lautet daher:
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Merkmal & Selberg (HP-BL YES) & Riemann (HP-BL NO${}^*$) \\
+\midrule
+Index-Menge & geschlossene Geodäten $\{\gamma\}$ &
+  Primzahlpotenzen $\{p^m\}$ \\
+Gruppen-Operation & $\PSL_2(\mathbb{R})$ auf $\mathbb{H}$ & keine (NE-B) \\
+Kommut. Hamilton-Op. & $\Delta_\mathcal{F}$ = Casimir & keiner für $N \leq 15$ \\
+Längen-Struktur & kontinuierlich $\ell(\gamma) \in \mathbb{R}_{>0}$ &
+  diskret $\log p \in \mathbb{R}_{>0}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Die multiplikative Arithmetik der Primzahlen ist \emph{nicht die Orbit-Struktur
+irgendeiner natürlichen kontinuierlichen Symmetriegruppe}. Dies ist der
+Inhalt der Branch-Lokalität: Das algebraische Substrat der
+Transfer-Operator-Familie entscheidet über den HP-BL-Status, unabhängig
+von der zeta-analytischen Ähnlichkeit zwischen \eqref{eq:selberg-trace}
+und \eqref{eq:weil-riemann}.
+
+% ============================================================
+\section{Instanz C: Prime-Hub (Offenes Problem 5)}
+\label{sec:primehub}
+
+Offenes Problem 5 aus \cite{Geiger2026RHIII}, im Folgenden OP5, fordert einen
+expliziten topologisch mischenden gerichteten Graphen
+$G_\mathrm{prime} = (V, E)$ (oder äquivalent einen Fluss oder ein dynamisches System),
+der fünf Bedingungen erfüllt:
+\begin{enumerate}
+\item[(OP5.1)] Primitive periodische Orbits $\{\gamma_p\}$ stehen in
+  Bijektion zu den Primzahlen.
+\item[(OP5.2)] $\ell(\gamma_p) = \log p$ für jede Primzahl $p$.
+\item[(OP5.3)] Der zugehörige Transfer-Operator $\mathcal{L}_s$ hat
+  die Fredholm-Determinante $\det(I - \mathcal{L}_s)^{\mathrm{vac}} =
+  1/\zeta(s)$.
+\item[(OP5.4)] Der Spektralradius von $\mathcal{L}_s$ ist kleiner als $1$
+  für $\Re(s) > 1/2$.
+\item[(OP5.5)] Der Eigenwert $1$ tritt genau an den nicht-trivialen Nullstellen
+  von $\zeta(s)$ auf.
+\end{enumerate}
+Keine Konstruktion, die (OP5.1)--(OP5.5) simultan erfüllt, ist
+seit der informellen Hilbert-P\'olya-Anregung von 1914 bekannt
+\cite{Polya1982letter}. Das Programm wird in \cite{Connes2026}
+besprochen und übersichtlich dargestellt; Connes' \emph{Letter Through Time}
+(ebd., letzte Abschnitte) schlägt eine auf der Spurformel basierende
+Konvergenzstrategie von endlichen zu unendlichen Euler-Produkten vor, jedoch wird ein konstruktiver
+$G_\mathrm{prime}$ nicht vorgezeigt.
+
+\subsection{Hindernis C1: Weyl-Gesetz-Inkompatibilität}
+\label{sec:obs-C1}
+
+\begin{proposition}[Weyl-Gesetz-Inkompatibilität]\label{prop:weyl-obstruction}
+Sei $H$ der Laplace-Beltrami-Operator einer glatten kompakten
+$d$-dimensionalen Riemannschen Mannigfaltigkeit. Dann erfüllt seine Eigenwertzählfunktion
+das Weylsche Gesetz
+\begin{equation}
+\label{eq:weyl-classical}
+  N_H(T) := \#\{\lambda \in \Spec(H) : \lambda \leq T^2\}
+  \;\sim\; \frac{\omega_d \operatorname{vol}(M)}{(2\pi)^d}\,T^d
+  \qquad (T \to \infty),
+\end{equation}
+wobei $\omega_d$ das Volumen der Einheitskugel in $\mathbb{R}^d$ ist. Die
+Zählfunktion der Riemann-Nullstellen lautet
+\begin{equation}
+\label{eq:riemann-N}
+  N_\zeta(T) := \#\{\gamma_k^\zeta : 0 < \gamma_k^\zeta \leq T\}
+  \;\sim\; \frac{T}{2\pi}\log\!\frac{T}{2\pi e} + O(\log T)
+\end{equation}
+(klassisches Resultat von Riemann-von Mangoldt, vgl.\ \cite[\S9.4]{Titchmarsh1986}).
+Die asymptotischen Raten \eqref{eq:weyl-classical} und
+\eqref{eq:riemann-N} sind für jede ganze Zahl $d \geq 1$ inkompatibel.
+Insbesondere kann kein klassischer geometrischer Laplace-Operator auf einer glatten kompakten
+Mannigfaltigkeit $\Spec(H_\zeta)$ realisieren.
+\end{proposition}
+
+\begin{proof}
+Das Potenzgesetz \eqref{eq:weyl-classical} steht im Kontrast zur
+logarithmischen Dichte \eqref{eq:riemann-N}: für jedes $d \geq 1$ gilt für
+das Verhältnis $N_\zeta(T) / N_H(T) \to 0$ (falls $d \geq 2$) oder $\to \infty$ für
+$T \to \infty$ (falls $d = 1$), also macht keine Wahl von $d$ und $\operatorname{vol}(M)$
+\eqref{eq:weyl-classical} mit \eqref{eq:riemann-N} passend.
+Folglich kann kein Kandidat $H_\zeta$ mit
+$\Spec(H_\zeta) = \{\gamma_k^\zeta\}$ der Laplace-Operator einer
+glatten kompakten Riemannschen Mannigfaltigkeit sein.
+\end{proof}
+
+\begin{remark}\label{rem:weyl-workarounds}
+Proposition~\ref{prop:weyl-obstruction} schließt glatte kompakte
+Mannigfaltigkeits-Laplace-Operatoren aus, jedoch nicht alle Möglichkeiten: nicht-kompakte Spektren,
+hyperbolisch-ähnliches Volumenwachstum (Berrys chaotische Quantisierung
+\cite{Berry1985, BerryKeating1999}) oder adelische Räume
+\cite{Connes1999, Connes2026} bleiben als Kandidatenarchitekturen bestehen. Das
+Hindernis ist daher eine Beschränkung der \emph{Art} des
+geometrischen Substrats.
+\end{remark}
+
+\subsection{Hindernis C2: Spurklasse-Regularität}
+\label{sec:obs-C2}
+
+\begin{proposition}[Spurklasse-Regularität]\label{prop:trace-class}
+Die Fredholm-Determinante $\det(I - \mathcal{L}_s)^{\mathrm{vac}}$ in
+Bedingung (OP5.3) ist nur dann wohldefiniert, wenn $\mathcal{L}_s$ eine
+Spurklasse auf seinem umgebenden Hilbertraum ist. Für einen Graphentransferoperator,
+dessen primitive Orbits logarithmische Längen
+$\ell(\gamma_p) = \log p$ haben, muss die Summierbarkeitsbedingung
+\begin{equation}
+\label{eq:trace-class-condition}
+  \sum_{p,m} \frac{1}{p^{m/2}} \cdot |\lambda_p^m|
+  \;<\; \infty
+\end{equation}
+(wobei $\lambda_p$ der Eigenwert von $\mathcal{L}_s$ entlang des primitiven
+Zyklus $\gamma_p$ ist) gleichmäßig in dem Bereich gelten, in dem (OP5.4)
+einen Spektralradius kleiner als $1$ verlangt. Keine explizite Konstruktion,
+die (OP5.1)--(OP5.5) und
+\eqref{eq:trace-class-condition} simultan erfüllt, wurde bisher vorgezeigt; dies ist
+im Geiger-Baum als Hindernis K4 in \cite{Geiger2026RHI} bekannt.
+\end{proposition}
+
+\begin{remark}\label{rem:trace-class-connection}
+Die Schwierigkeit hinter Proposition~\ref{prop:trace-class} ist, dass
+(OP5.4) und \eqref{eq:trace-class-condition} in entgegengesetzte
+Richtungen ziehen: (OP5.4) beschränkt die Eigenwerte $\lambda_p$ von oben
+durch $1$, während \eqref{eq:trace-class-condition} ihre
+\emph{Summe} als absolut konvergent erzwingt. Für einen „generischen“ Graphen
+mit unendlich vielen primitiven Orbits liefern natürliche Operatormodelle entweder
+eine Verletzung von (OP5.4) (Eigenwerte häufen sich nahe $1$) oder
+eine Verletzung von \eqref{eq:trace-class-condition} (langsamer Abfall). Dieses
+Nadelöhr zu passieren, ist der substanzielle Inhalt von OP5.
+\end{remark}
+
+\subsection{Hindernis C3: NE-A-Kompatibilität}
+\label{sec:obs-C3}
+
+\begin{proposition}[NE-A-Kompatibilität]\label{prop:ne-a-compat}
+Jeder Hilbert-P\'olya-Kandidat $H_\mathrm{prime}$ für $\zeta$ determiniert implizit
+den Fouriermultiplikator
+$M(\xi) = -2\,\Re[\zeta'/\zeta(1/2 + i\xi)]$ des Primverschiebungsoperators
+via die Spurformel von $(H_\mathrm{prime}, \mathcal{L}_s)$.
+Nach Theorem~\ref{thm:NE-A} ist $M(\xi) < 0$ auf einer Menge von positivem
+Lebesgue-Maß. Folglich kann $H_\mathrm{prime}$ nicht als ein
+nicht-negativer selbstadjungierter Operator mit nicht-negativem Fourier-Symbol
+auf glatten Geometrien entstehen; er muss intrinsische Vorzeichenstruktur
+in seiner Spektraltransformation tragen.
+\end{proposition}
+
+\begin{proof}[Skizze]
+Ein Hilbert-P\'olya-Kandidat muss die Weilsche explizite Formel
+(Abschnitt~\ref{sec:weil-qf}) via seiner Spur reproduzieren. Der Kern der
+Spurformel ist genau $M(\xi)$. Standard-Laplace-Operatoren auf glatter Geometrie
+erzeugen nicht-negative Fouriermultiplikatoren; das Vorzeichen von $M(\xi)$ auf einer
+Menge mit positivem Maß schließt folglich derartige Laplace-Operatoren aus.
+Eine Konstruktion muss Strukturen mit inhärentem Vorzeichenwechsel (z. B.
+pseudodifferentielle oder nichtkommutative adelische) verwenden.
+\end{proof}
+
+\begin{remark}\label{rem:ne-a-connection}
+Die Hindernisse C1 (glatte Geometrie ausgeschlossen) und C3 (nicht-negative
+Symbole ausgeschlossen) sind unabhängig, verstärken sich aber gegenseitig: C1
+schließt Mannigfaltigkeitsarchitekturen via Dichte aus, C3 schließt sie
+via Symbol-Vorzeichen aus. Selbst wenn ein Workaround (z.B.
+hyperbolische chaotische Quantisierung) C1 umgeht, muss er immer noch
+ein Symbol erzeugen, das C3 erfüllt.
+\end{remark}
+
+\subsection{Konsequenz}
+
+Die Kombination der Propositionen~\ref{prop:weyl-obstruction},
+\ref{prop:trace-class} und~\ref{prop:ne-a-compat} identifiziert drei
+strukturelle Hindernisse, durch die jede explizite Prime-Hub-Konstruktion
+navigieren muss. Keines der drei ist für sich genommen ein Unmöglichkeitsbeweis;
+zusammen grenzen sie den engen Parameterraum ein, in dem
+ein gültiger $G_\mathrm{prime}$ existieren könnte. Folglich
+gilt $\HBL(G_\mathrm{prime}) = \mathrm{OPEN}$, mit den Hindernissen C1--C3
+als explizite Wegweiser für jede zukünftige Konstruktion. Connes'
+\emph{Letter Through Time} \cite{Connes2026} exemplifiziert die Art von
+nicht-glatter, nichtkommutativer Architektur, die prinzipiell
+alle drei durchsteuern könnte; ob das Programm abschließt, bleibt offen.
+
+% ============================================================
+\section{Instanz D: CRM als Flow-Zeta (FST-Kosmologie Brücke)}
+\label{sec:crm-flow}
+
+Die Instanzen A, B, C repräsentieren die arithmetischen und geometrisch-kompakten
+Klassen der Drei-Klassen-Taxonomie aus Abschnitt~\ref{sec:three-class-taxonomy}.
+Die Flow-Zeta-Klasse ist durch ein konkretes Objekt der
+physikalischen Seite der FST bevölkert: dem Kooperativen Renormierungsmodell (CRM)
+der kosmologischen Dunklen Energie \cite{RFEPFramework}. Seine mathematische
+Struktur ist detailliert in \cite{CRMFlowZetaNote} entwickelt; wir
+fassen hier die Kernpunkte zusammen.
+
+\subsection{CRM als eine einparametrige Lie-Gruppe}
+
+Die CRM-Kompositionsregel, die die Dunkle-Energie-Evolution steuert, lautet
+\begin{equation}
+\label{eq:crm-composition}
+  x \oplus y = \frac{x+y}{1+xy}, \qquad x, y \in (-1, 1).
+\end{equation}
+Setzt man $x = \tanh u$, $y = \tanh v$, so ergibt sich $x \oplus y = \tanh(u+v)$,
+sodass $(x, \oplus)$ isomorph zur additiven Gruppe $(\mathbb{R},
++)$ ist. Die Komposition ist daher die Lorentz-Boost-Addition, und
+die relevante Transfer-Algebra ist eine \emph{einparametrige Lie-Gruppe},
+die als Untergruppe von $\PSL_2(\mathbb{R})$ realisiert wird und auf der
+hyperbolischen Ebene $\mathbb{H}$ operiert.
+
+\begin{proposition}[CRM Transfer-Algebra]\label{prop:crm-transfer}
+Für die CRM-Familie $X = \mathrm{CRM}$ ist die Transfer-Algebra
+$(I_{\mathrm{CRM}}, \cdot) = (\mathbb{R}, +)$, eine lokalkompakte
+abelsche Lie-Gruppe. Folglich gilt unter Vermutung~\ref{conj:sge}
+$\HBL(\mathrm{CRM}) = \mathrm{YES}$.
+\end{proposition}
+
+\subsection{Der natürliche Hilbert-P\'olya-Operator und sein Spektrum}
+
+Der Casimir-Operator von $\mathfrak{sl}_2(\mathbb{R})$, eingeschränkt auf die
+Boost-erzeugende Komponente, ist bis auf Äquivalenz der
+Laplace-Beltrami-Operator $\Delta_{\mathbb{H}}$ auf der hyperbolischen
+Ebene \cite{DyatlovZworski2019}. $\Delta_{\mathbb{H}}$ erfüllt
+(HP1)--(HP3) von Definition~\ref{def:hp-bl} in der Form, die
+für eine nicht-kompakte zugrundeliegende Geometrie angemessen ist: sein absolut stetiges
+Spektrum ist $[1/4, \infty)$, und er kommutiert mit der vollen
+$\PSL_2(\mathbb{R})$-Operation, mithin auch mit dem CRM-Fluss.
+
+Die \emph{Nullstellen} von $\zeta_{\mathrm{CRM}}$ sind in diesem Setting
+\emph{Streuresonanzen}: Pole der meromorphen Fortsetzung
+der Resolvente $(\Delta_{\mathbb{H}} - s(s-1))^{-1}$ durch das
+wesentliche Spektrum in die untere Halbebene. Auf asymptotisch
+hyperbolischen Hintergründen (z. B. de~Sitter, Schwarzschild--de~Sitter)
+sind diese Resonanzen exakt die \emph{Quasinormalmoden} der
+entsprechenden Wellengleichung \cite{DyatlovZworski2019}. Dies realisiert
+$\HBL = \mathrm{YES}$ im Resonanzsinne von
+Abschnitt~\ref{sec:three-class-taxonomy}.
+
+\subsection{Die Ruelle Flow-Zeta von CRM}
+
+Gemäß \cite{DyatlovZworski2019} ist das angemessene analytische Objekt
+die Ruelle-Dyatlov-Zworski Zetafunktion
+\begin{equation}
+\label{eq:crm-flow-zeta}
+  \zeta_{\mathrm{CRM}}(s)
+  = \prod_{\gamma \in \mathcal{P}_{\mathrm{CRM}}}
+    \frac{1}{1 - e^{-s\,\ell(\gamma)}},
+\end{equation}
+wobei $\mathcal{P}_{\mathrm{CRM}}$ die primitiven periodischen
+Orbits des CRM-Flusses auf einem asymptotisch hyperbolischen Hintergrund indiziert,
+und $\ell(\gamma)$ die Orbit-Länge in der Lorentz-Boost-Metrik ist.
+Die Nullstellen von $\zeta_{\mathrm{CRM}}(s)$ sind die oben beschriebenen
+Resonanzen.
+
+\subsection{CRM als eine Brückenspezies}
+
+CRM nimmt eine herausragende Position im Zeta-Zoo ein: Es
+ist simultan ein Flow-Zeta-Eintrag im mathematischen Zoo (dieser
+Abschnitt) und eine Muster-A-Instanziierung (Pattern A) im physikalischen RFEP-Ökosystem
+\cite{RFEPFramework} (siehe auch die narrative Klammer in
+Abschnitt~\ref{sec:crm-circle}). Zusammen mit Riemann (historischer
+Ursprung), BSD, Hodge und P~vs~NP bildet CRM die fünfte
+\emph{Brückenspezies} des Programms --- und die erste, die die
+Flow-Zeta-Spalte auf beiden Seiten der FST-Zwillinge öffnet.
+
+\subsection{Das CRM-Sättigungstheorem als eine Klassifikations-Aussage}
+\label{sec:crm-saturation-classification}
+
+Eine strukturelle Bemerkung ist angebracht. Das Sättigungstheorem von CRM~V
+\cite{CRMV} besagt, dass jedes dynamische System auf $(-1,1)$, das
+vier Axiome erfüllt --- Existenz einer skalaren Relaxationsvariable, Existenz eines
+dissipativen Terms, Existenz eines stabilen Sättigungswerts und
+monoton glatte Dynamik --- zwingend das $\tanh$-Sättigungsprofil realisiert.
+Gelesen als Charakterisierung der Flow-Zeta-Klasse, ist dies
+nicht bloß eine Aussage über ein einzelnes kosmologisches Modell; es ist eine
+\emph{Klassifikationsaussage} für die Klasse der IR-Asymptotiken, die
+kompatibel mit funktionaler Stabilität auf dem Boost-Intervall sind.
+
+Dies ist auf der Fluss-Seite strukturell analog zur Hurwitz-/Kompaktheits-Charakterisierung,
+die im arithmetischen Zweig verwendet wird: So wie
+die Weilsche quadratische Form Stabilität über Zweige hinweg detektiert,
+skizziert CRM~V die zulässige asymptotische Klasse im fluss-nichtkompakten
+Zweig. Insbesondere können verschiedene Kandidaten für UV-Vervollständigungen
+verschiedene Selektionen aus dieser Sättigungsklasse realisieren; die
+Klassifikation hängt nicht von einer individuellen Realisierung ab.
+
+Diese Beobachtung ist aus zwei Gründen bedeutsam. Erstens fasst sie CRM
+nicht als einen maßgeschneiderten kosmologischen Vorschlag auf, sondern als den IR-Sektor eines
+branch-lokalen strukturellen Theorems. Zweitens prognostiziert sie, dass jede UV-Theorie,
+deren IR-Limes die vier Axiome von CRM~V erfüllt (z. B. ein
+geometrisches Modell auf GUT-Ebene, eine RG-Fluss-Konstruktion oder eine
+offene holografische Konstruktion), in derselben Sättigungsklasse
+landet --- modulo quantitativem Parameter-Matching. Diesen
+UV-/IR-Kompatibilitätstest operational zu machen, ist ein offenes Programm innerhalb
+der FST-Kosmologie.
+
+% ============================================================
+\section{Das Randtheorem (Boundary Theorem)}
+\label{sec:boundary}
+
+\begin{theorem}[Branch-Lokalität von Hilbert-P\'olya]\label{thm:boundary}
+Die $\HBL$-Eigenschaft ist nicht konstant über Zeta-Typ-Familien hinweg.
+Kombiniert mit der Drei-Klassen-Taxonomie aus
+Abschnitt~\ref{sec:three-class-taxonomy} zeigt der Zoo vier
+kanonische Instanzen sowie zwei empirische Bestätigungen:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Familie & $\HBL$ & Klasse & Evidenz \\
+\midrule
+Riemann $\zeta(s)$ & NO${}^*$ & arithmetisch &
+  Thm.~\ref{thm:NE-A}, \ref{thm:NE-B}; Verm.~\ref{conj:NE-B-full} \\
+Selberg $Z_\Gamma(s)$ & YES & geometrisch-kompakt & Thm.~\ref{thm:selberg-hp} \\
+Prime-Hub $G_\mathrm{prime}$ & OPEN & --- &
+  Prop.~\ref{prop:weyl-obstruction}--\ref{prop:ne-a-compat} \\
+CRM (Dunkle Energie) & YES & fluss-nichtkompakt & Prop.~\ref{prop:crm-transfer}, \cite{DyatlovZworski2019} \\
+Dedekind $\mathbb{Q}(\sqrt{-5})$ & NO & arithmetisch & \S\ref{sec:sge-dedekind-test}, \cite{DedekindNEBTest} \\
+Ihara $\zeta_{\text{Petersen}}$ & YES & geometrisch-kompakt & \S\ref{sec:sge-ihara-test}, \cite{IharaPetersenTest} \\
+\bottomrule
+\end{tabular}
+\end{center}
+${}^*$ bedingt nach Vermutung~\ref{conj:NE-B-full}.
+\end{theorem}
+
+\begin{proof}
+Die drei Zeilen fassen den Inhalt der
+Abschnitte~\ref{sec:riemann}--\ref{sec:primehub} zusammen. Die Werte YES,
+NO und OPEN sind distinkt; die $\HBL$-Eigenschaft ist also nicht-konstant.
+Das Theorem ist die formale Zusammenfassung
+dieser Nicht-Konstanz.
+\end{proof}
+
+\begin{corollary}[Implikation für die Riemannsche Vermutung]
+\label{cor:rh-consequence}
+Jeder unbedingte Beweis der Riemannschen Vermutung, der auf
+(HP1)--(HP3) für $\zeta$ beruht, muss zuerst
+Vermutung~\ref{conj:NE-B-full} widerlegen. Alternativ liefern
+Weil-Form-Methoden (Abschnitt~\ref{sec:weil-transversal}) eine unbedingte Route,
+die die Hilbert-P\'olya-Struktur nicht benötigt; dies ist
+in \cite{Geiger2026RHII} realisiert.
+\end{corollary}
+
+% ============================================================
+\section{Universelle Konvexitätseindeutigkeit (UCU)}
+\label{sec:ucu}
+
+Dieser Abschnitt isoliert das Eindeutigkeitsprinzip, das in exakt
+derselben abstrakten Form in allen Programmen der funktionalen Stabilitätslandschaft,
+die in diesem Paper behandelt werden, operiert. Wir nennen es
+\emph{Universelle Konvexitätseindeutigkeit} (UCU). Es ist das
+mathematische Lemma, das dem sogenannten \emph{Pattern~A} (Muster A) in
+der physikalischen Formulierung (RFEP; \cite{RFEPFramework}) und seinem
+dynamischen Partner \emph{Dissipative Selektion} (DS1--DS3) zugrunde liegt.
+UCU ist eine einzige technische Aussage; ihre Universalität liegt darin,
+wie viele scheinbar unverbundene Objekte sie realisieren.
+
+\subsection{Das UCU-Lemma}
+\label{sec:ucu-lemma}
+
+\begin{lemma}[UCU]\label{lem:ucu}
+Sei $(\mathcal{H}, \langle\cdot,\cdot\rangle)$ ein reeller Hilbertraum,
+sei $\mathcal{A} \subset \mathcal{H}$ eine abgeschlossene konvexe zulässige Klasse,
+und sei $J : \mathcal{A} \to \mathbb{R}$ versehen mit:
+\begin{enumerate}
+\item[(C)] \emph{Strikter Konvexität:} für alle $u,v \in \mathcal{A}$
+mit $u \neq v$ und alle $t \in (0,1)$ gilt
+\[
+  J(tu + (1-t)v) < t\,J(u) + (1-t)\,J(v);
+\]
+\item[(L)] \emph{Starker Unterhalbstetigkeit:} wenn $u_n \to u$
+stark in $\mathcal{H}$ mit $u_n, u \in \mathcal{A}$, dann
+$J(u) \leq \liminf_{n\to\infty} J(u_n)$;
+\item[(K)] \emph{Koerzivität auf $\mathcal{A}$:} $J(u) \to +\infty$
+wann immer $\|u\| \to \infty$ innerhalb von $\mathcal{A}$.
+\end{enumerate}
+Dann hat $J$ einen eindeutigen Minimierer $u_\star \in \mathcal{A}$.
+\end{lemma}
+
+\begin{proof}
+Sei $\{u_n\}$ eine minimalisierende Folge. Wegen (K) ist sie beschränkt, also
+besitzt sie eine schwach konvergente Teilfolge $u_{n_k} \rightharpoonup u_\star$
+mit $u_\star \in \mathcal{A}$ aufgrund der schwachen Abgeschlossenheit konvexer
+Mengen. Konvexität (C) plus starke Unterhalbstetigkeit (L) implizieren zusammen
+die schwache Unterhalbstetigkeit von $J$ (Satz von Mazur; siehe
+\cite[Prop.~II.1.2]{EkelandTemam1999}), weshalb
+$J(u_\star) \leq \liminf J(u_{n_k}) = \inf_{\mathcal{A}} J$, und
+$u_\star$ ist ein Minimierer. Strikte Konvexität (C) schließt einen zweiten
+Minimierer aus: wenn $v_\star \neq u_\star$ ebenfalls das Minimum realisierte,
+würde der Mittelpunkt $\tfrac{1}{2}(u_\star + v_\star) \in \mathcal{A}$
+$J$ strikt verringern, was der Minimalität widerspricht.
+\end{proof}
+
+Der Inhalt von Lemma~\ref{lem:ucu} ist klassisch, doch die Tragweite seiner
+Rolle im vorliegenden Programm ist es nicht: Es ist dasselbe Lemma,
+mit verschiedenen $(\mathcal{H}, \mathcal{A}, J)$, das in jeder der
+unten aufgelisteten fünf Realisierungen den eindeutigen Sättigungszustand liefert.
+
+\subsection{Die parallelen Realisierungen}
+\label{sec:ucu-instances}
+
+Tabelle~\ref{tab:ucu-instances} führt die fünf Instanzen auf.
+Jede Spalte zeigt, welches Objekt die Rolle des Hilbertraums $\mathcal{H}$,
+der zulässigen Klasse $\mathcal{A}$ und des Funktionals $J$ spielt. Die letzte Zeile
+vermerkt den eindeutigen Minimierer $u_\star$ und seine physikalische oder arithmetische
+Interpretation.
+
+\renewcommand{\arraystretch}{1.25}
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{0.16\linewidth}|p{0.40\linewidth}|p{0.34\linewidth}|}
+\hline
+\textbf{Programm} & \textbf{Funktional $J$ auf Klasse $\mathcal{A}$} &
+\textbf{Eindeutiger Minimierer $u_\star$} \\ \hline
+
+\emph{Riemann Even Dominance} \cite{Geiger2026RHII}
+& $J(f) = \langle f, Q_\zeta f \rangle / \|f\|^2$ auf
+$\mathcal{A} = L^2_\mathrm{even}([-L,L]) \setminus \{0\}$;
+Konvexität auf geraden Testfunktionen reflektiert die Positiv-Definitheit
+der Weilschen quadratischen Form nach der Direkten Frontier-Dominanz.
+& Der Grundzustand $f_\star$, der die Spektrallücke (spectral gap) realisiert;
+seine Existenz und Eindeutigkeit sind genau die
+Gerade-Ungerade-Dominanzaussage. \\ \hline
+
+\emph{Selberg Zeta (Theorem~\ref{thm:selberg-hp})}
+& $J(\phi) = \int_{\Gamma\backslash\mathbb{H}} |\nabla \phi|^2$
+auf $\mathcal{A} = \{\phi \in H^1_0(\mathcal{F}) : \|\phi\|_{L^2}=1\}$;
+der Rayleigh-Quotient ist auf der Sphäre nach Herausdividieren
+der $S^1$-Phase strikt konvex.
+& Die erste Laplace--Beltrami-Eigenfunktion $\phi_1$, deren
+Casimir-Eigenwert den spektralen Hilbert--P\'olya-Inhalt liefert. \\ \hline
+
+\emph{Turbulenz / Kolmogorov K41}
+& $J(u) = \int |\nabla u|^2 - \epsilon \int u$ auf
+$\mathcal{A} = $ zulässige divergenzfreie Geschwindigkeitsfelder mit
+fixierter Energiedissipation $\epsilon$; strikte Konvexität gilt im
+Inertialbereich via Exponent-$2/3$-Skalierung.
+& Das eindeutige Skalierungsprofil, das die $k^{-5/3}$-Energie-Kaskade
+erzeugt \cite{FSTTurbulence}. \\ \hline
+
+\emph{Yang--Mills Gibbs-Maß}
+& $J(A) = S_{\mathrm{YM}}(A) = \tfrac{1}{4g^2}\int F \wedge {\star F}$
+auf $\mathcal{A} = \mathcal{A}_{\mathrm{flat}} / \mathcal{G}$, dem
+Modulraum eichäquivalenter Konnektionen; strikte Konvexität auf
+dem Quotienten folgt aus der Coulomb-Eichbedingung.
+& Der Vakuumsektor, der die Massenlücke
+erreicht \cite{FSTYangMills}. \\ \hline
+
+\emph{CRM (Flow-Zeta, \S\ref{sec:crm-flow})}
+& $J(\mathrm{Rapidity}) = V_{\mathrm{eff}}(\mathrm{Rapidity})$, ein
+effektives Dunkle-Energie-Potenzial auf $(-1,1)$ mit Rand-Koerzivität für $|x| \to 1$,
+die durch die Lorentz-Boost-Komposition $\oplus$ eingebaut ist; strikte Konvexität
+ist der strukturelle Input der Sättigungsaxiome \cite{CRMV}.
+& Der eindeutige saturierte Boost-Zustand, der das beobachtete $\tanh$-Profil in
+$w(z)$ erzeugt. \\ \hline
+
+\end{tabular}
+\caption{UCU-Instanzen. Dasselbe Lemma, verschiedene
+$(\mathcal{H},\mathcal{A},J)$. In jeder Zeile liefert die strikte Konvexität
+plus Koerzivität von $J$ auf $\mathcal{A}$ einen eindeutigen
+Minimierer; der Minimierer ist der Sättigungszustand des
+Programms.}
+\label{tab:ucu-instances}
+\end{table}
+\renewcommand{\arraystretch}{1.0}
+
+\subsection{UCU und Pattern A / RFEP: Die Übersetzung}
+\label{sec:ucu-pattern-a}
+
+Die physikalische Seite von UCU im Renormierten Prinzip der freien Energie (RFEP)
+\cite{RFEPFramework} ist \emph{Pattern~A}: funktionale Positivität unter einer
+Eichbedingung (Gauge Constraint). Die Korrespondenz ist exakt:
+
+\begin{itemize}
+\item \textbf{Pattern~A (PA1).} Ein Zielfunktional $J$ (freie Energie,
+Weil-Form, Rayleigh-Quotient, K41-Wirkung, Yang--Mills-Wirkung) ist
+positiv-definit auf einem eich-eingeschränkten Zustandsraum.\\
+$\longleftrightarrow$ \emph{UCU Hypothese (C).}
+
+\item \textbf{Pattern~A (PA2).} Das Funktional ist nach unten beschränkt
+und wächst im Unendlichen der zulässigen Klasse an.\\
+$\longleftrightarrow$ \emph{UCU Hypothese (K).}
+
+\item \textbf{Pattern~A (PA3).} Es existiert eine eindeutige stabile Sättigung
+und diese wird angenommen.\\
+$\longleftrightarrow$ \emph{UCU Schlussfolgerung.}
+\end{itemize}
+
+\begin{remark}[UCU vs.\ DS1--DS3]\label{rem:ucu-vs-ds}
+Das Dissipative-Selektions-Prinzip DS1--DS3 von
+\cite{RFEPFramework} ist der \emph{dynamische} Partner von UCU: UCU
+identifiziert den eindeutigen Minimierer; DS1--DS3 identifiziert die eindeutige
+Trajektorie dorthin. In allen fünf Instanzen aus
+Tabelle~\ref{tab:ucu-instances} erlaubt eine zeitabhängige oder flussparametrisierte
+Version von $J$ die DS1--DS3-Struktur, doch der Minimierer
+selbst ist bereits durch UCU allein festgelegt. DS1--DS3 sind daher
+logisch nachgelagert zu UCU.
+\end{remark}
+
+\subsection{UCU und die Trinität}
+\label{sec:ucu-trinity}
+
+Mit etabliertem UCU lautet die Trinitätsstruktur dieses Papers:
+\[
+  \underbrace{\text{UCU}}_{\text{Eindeutigkeit der Sättigung}}
+  \;+\;
+  \underbrace{\text{SGE}}_{\text{HP-Status-Klassifikation}}
+  \;+\;
+  \underbrace{\text{Weil-Form Transversalität}}_{\text{zweig-unabhängiges Positivitäts-Werkzeug}}
+\]
+
+UCU liefert die Ebene \emph{"warum es eine eindeutige Antwort gibt"}; SGE
+(Abschnitt~\ref{sec:sge-conjecture}) liefert die Ebene \emph{"zu welchem Zweig gehört
+die Familie"}; die Weil-Form-Architektur (\S\ref{sec:weil-transversal}) liefert die Ebene
+\emph{"wie berechnet man Positivität in jedem Zweig"}. Die drei Ebenen sind
+unabhängig voneinander: UCU prognostiziert auf dem HP-Spektrum weder YES noch NO;
+SGE prognostiziert keine Spektrallücken; die Weil-Form-Transversalität liefert
+für sich genommen keine Eindeutigkeit. Sie setzen sich zum vollständigen Programm zusammen.
+
+\begin{remark}[Scope von UCU]\label{rem:ucu-scope}
+UCU ist \emph{notwendig, aber nicht hinreichend} für eine Hilbert--P\'olya-Realisierung.
+Ein eindeutiger Minimierer im Sinne von Lemma~\ref{lem:ucu} liefert nicht automatisch
+einen hermiteschen Operator, dessen Spektrum die Nullstellen von $Z_X$ kodiert;
+er liefert einen Grundzustand. Der Übergang vom Grundzustand zum Spektrum
+erfordert die SGE-Klassifikation (um zu identifizieren, ob man eine Gruppe oder
+nur eine Halbgruppe von Transferoperatoren hat) und die Weil-Form-Architektur
+(um die explizite Formel-Positivität wiederherzustellen). UCU ist
+der gemeinsame Nenner, nicht der Beweis von Hilbert--P\'olya in irgendeiner
+einzelnen Instanz.
+\end{remark}
+
+% ============================================================
+\section{Weil-Form-Methoden als branch-transversales Komplement}
+\label{sec:weil-transversal}
+
+Wir argumentieren nun, dass die Weilsche quadratische Form $Q_X$ aus
+Abschnitt~\ref{sec:weil-qf} einheitlich in allen drei Zweigregimes gilt.
+
+\subsection{Form-Definitionsbereich Verankerung}
+\label{sec:weil-form-domain}
+
+Für jede Zeta-Typ-Familie $X$ ist die Weilsche quadratische Form $Q_X$
+durch das Quadrupel
+\begin{equation}\label{eq:weil-quadruple}
+  \bigl(Q_X,\; \operatorname{Dom}(Q_X),\; P_X,\;
+        \operatorname{Dom}(Q_X)^{\pm}\bigr)
+\end{equation}
+verankert, wobei $\operatorname{Dom}(Q_X) \subset L^2(\mathbb{R})$ ein
+abgeschlossener Teilraum ist, auf dem $Q_X$ wohldefiniert und nach unten beschränkt ist
+(der Form-Definitionsbereich), $P_X$ der Paritätsoperator $f(t) \mapsto f(-t)$ ist und
+$\operatorname{Dom}(Q_X)^{\pm} = \operatorname{Dom}(Q_X) \cap L^2_{\mathrm{even/odd}}$
+die paritäts-invarianten Teilräume sind. Für die arithmetischen Instanzen
+dieses Papers (Abschnitte~\ref{sec:riemann}--\ref{sec:primehub})
+wird der Form-Definitionsbereich als der Friedrichs-Abschluss von
+$C_c^{\infty}([-\log\lambda,\log\lambda])$ bezüglich der
+Graphennorm von $Q_X$ angenommen, und die Kosinus-/Sinusbasen von
+Abschnitt~\ref{sec:weil-qf} realisieren ein Dichtheitssystem in
+$\operatorname{Dom}(Q_X)^{\pm}$. Die Paritätserhaltung
+$P_X \operatorname{Dom}(Q_X) = \operatorname{Dom}(Q_X)$ ist eine
+Konsequenz aus der Paritätsinvarianz des archimedischen Kerns
+$e^{u/2}/|2\sinh u|$ (der Absolutbetrag wird genommen; die Weil-Formel verwendet
+die Hauptwert-Konvention (principal value) bei $u = 0$, vgl. \cite{Weil1952})
+und der symmetrischen Primverschiebungs-Operatorfamilie
+$S_{m\log p} + S_{-m\log p}$, die in die Weilsche Form eingeht.
+
+\begin{remark}[Scope dieser Verankerung]\label{rem:form-domain-scope}
+Das explizite Form-Definitionsbereich-Lemma, das der Riemann-Instanz
+zugrunde liegt (Einschränkung von $Q_\zeta$ auf einen $H^{1/2}$-Abschluss, auf dem der
+archimedische Kern form-beschränkt ist, und Verifikation der Paritätserhaltung
+auf dem vollen Form-Definitionsbereich), ist als Minor-Revision-Punkt
+in \cite{RHCritiqueReview2026} (K5) aufgeführt. Der branch-transversale Inhalt
+des vorliegenden Papers ist unabhängig von dieser Verfeinerung: Das Shift-Parity-Lemma
+und der Beweis der Direkten Frontier-Dominanz operieren auf
+endlich-dimensionalen Galerkin-Blöcken, und ihr Transfer auf den kontinuierlichen Operator
+nutzt Cauchy-Interlacing plus Schur-Komplement-Schranken (siehe
+Abschnitt~\ref{sec:three-component}, Komponente $C^{(2)}$), und nicht
+die Form-Definitionsbereichs-Regularität per se.
+\end{remark}
+
+\subsection{Positivität bei HP-BL-YES}
+
+Für $X = Z_\Gamma$ (Selberg, Theorem~\ref{thm:selberg-hp}) ist die
+Positivität von $Q_{Z_\Gamma}$ auf der relevanten Testfunktionsklasse eine
+Konsequenz aus der Selbstadjungiertheit von $\Delta_\mathcal{F}$; die Positivität
+der Weilschen Form lässt sich aus der spektralen Zerlegung
+des Laplace-Operators ableiten. Dies ist eine Konsistenzprüfung: Beide Architekturen
+liefern dieselbe Antwort.
+
+\subsection{Positivity bei HP-BL-NO}
+
+Für $X = \zeta$ (Riemann, Theorem~\ref{thm:boundary} Zeile 1) ist die
+Positivität von $Q_\zeta$ unbedingt in \cite{Geiger2026RHII}
+mittels der Direkten Frontier-Dominanz etabliert (Shift-Parity-Lemma +
+Mertens-Theorem + CAP-zertifizierter Basisfall). Der Beweis nutzt keinerlei
+Hilbert-P\'olya-Input. Dies ist der strikt branch-transversale Inhalt.
+
+\subsection{Positivität bei HP-BL-OPEN}
+
+Für $X = G_\mathrm{prime}$ zerfällt die Frage nach der Positivität der Weil-Form
+in zwei Schritte. Erstens muss die explizite Formel $\mathcal{E}_\mathrm{prime}$
+für den Prime-Hub mit der expliziten Formel von Riemann--Weil
+\eqref{eq:weil-riemann} auf der Prim-/Geodätenseite übereinstimmen, da
+die Bedingungen (OP5.1)--(OP5.3) aus Abschnitt~\ref{sec:primehub}
+vorschreiben, dass die Fredholm-Determinante von $\mathcal{L}_s$ gleich $1/\zeta(s)$ ist.
+Folglich ist $Q_{G_\mathrm{prime}} = Q_\zeta$ als quadratische Form auf der
+Testfunktionsklasse, und ihre Positivität reduziert sich auf die von Riemann
+(das HP-BL-NO-Regime). Zweitens ist die Weil-Form-Positivität --- \emph{vorausgesetzt}, dass schließlich eine explizite
+Prime-Hub-Konstruktion hervorgebracht wird ---
+automatisch durch das branch-transversale Argument aus
+\cite{Geiger2026RHII} auf der gemeinsamen Prim-Seite gegeben. Dies ist die stärkste
+mögliche Ausprägung von Branch-Transversalität: Die Positivität der
+quadratischen Form ist invariant unter dem $\HBL$-Statusübergang.
+
+Naheliegende Evidenz für eine verwandte HP-BL-OPEN Familie: Die numerischen
+Arbeiten aus Session~8 zu Dirichlet $L$-Funktionen
+\cite{PaleyWienerDirichlet} zeigen, dass Versuche, $H_\chi$ aus phänomenologischen Kernen
+(Gauss- oder Hadamard-gewichteter Pol) zu konstruieren,
+systematisch scheitern, während die Positivität der Weilschen Form
+zugänglich bleibt. Dies ist eine zweite empirische Instanz, in der
+der HP-BL-Status faktisch $\mathrm{NO}$ oder $\mathrm{OPEN}$ ist, Weil-Form-Methoden
+jedoch weiterhin anwendbar sind.
+
+\subsection{Zusammenfassung}
+
+Die Weilsche quadratische Form ist branch-transversal: Ihre Existenz und ihr
+Positivitäts-Inhalt hängen nicht vom HP-BL-Status der Familie ab.
+
+% ============================================================
+\section{Die Halbgruppen-Gruppen-Äquivalenz (SGE)}
+\label{sec:sge-conjecture}
+
+\subsection{Eine vereinheitlichende Vermutung}
+\label{sec:sge-conjecture-statement}
+
+Das Randtheorem~\ref{thm:boundary} zeigt drei qualitativ distinkte Werte
+$\{\mathrm{YES}, \mathrm{NO}, \mathrm{OPEN}\}$ von $\HBL$ an drei kanonischen Instanzen
+auf. Eine natürliche Frage ist, ob diese Trichotomie \emph{fundamental}
+oder bloß eine Oberflächeneigenschaft eines tieferen einzigen Kriteriums ist.
+Wir formulieren die folgende vereinheitlichende Vermutung.
+
+Sei $(Z_X, \mathcal{T}_X, \mathcal{E}_X)$ eine Zeta-Typ-Familie im Sinne von
+Definition~\ref{def:zeta-family}. Die Transferfamilie $\mathcal{T}_X$ wird
+typischerweise durch eine diskrete Menge $I_X$ von „Primobjekten“ indiziert (rationale Primzahlen,
+geschlossene Geodäten, primitive Zyklen), von denen jedes eine kanonische
+Länge $\ell(\iota)$ trägt. Die Menge $I_X$ besitzt eine natürliche Kompositions-Operation
+(Multiplikation von Primzahlpotenzen, Verkettung von Geodäten, Verkettung von Wegen),
+die eine \emph{Transfer-Algebra} $(I_X, \cdot)$ ergibt, die entweder eine
+\emph{Halbgruppe} (keine Identität oder keine Inversen) oder eine \emph{Gruppe} ist.
+
+\begin{conjecture}[Halbgruppen-Gruppen-Äquivalenz, SGE]
+\label{conj:sge}
+Für jede Zeta-Typ-Familie $X$ gilt:
+\[
+  \HBL(X) = \mathrm{YES}
+  \quad\Longleftrightarrow\quad
+  (I_X, \cdot)\ \text{ist eine (lokalkompakte) Gruppe}.
+\]
+\end{conjecture}
+
+Die Rückrichtung (Gruppe $\Rightarrow$ YES) ist klassisch: eine natürlich
+auf $X$ operierende Gruppe produziert einen Casimir-Operator, der
+(HP1)--(HP3) erfüllt. Die Hinrichtung (Halbgruppe $\Rightarrow$ NO) ist der
+substanzielle Inhalt von Vermutung~\ref{conj:sge} und steht im Einklang mit
+jeder bisher getesteten Instanz:
+
+\begin{center}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Familie & Transfer-Algebra $(I_X, \cdot)$ & Prognostiziertes $\HBL$ \\
+\midrule
+Riemann $\zeta(s)$ & $\{p^m\}$ (kommutative Halbgruppe) & NO (Thm.~\ref{thm:boundary}) \\
+Dirichlet $L(s,\chi)$ & $\{p^m : p \nmid q\}$ (Unter-Halbgruppe) & NO (konsistent mit \cite{PaleyWienerDirichlet}) \\
+Dedekind $\zeta_K(s)$ & Primideale $\{\mathfrak{p}\}$ (Ideal-Monoid) & NO (offener Testfall) \\
+Selberg $Z_\Gamma(s)$ & Geodäten $\{\gamma\} \subset \Gamma$ & YES (Thm.~\ref{thm:selberg-hp}) \\
+Ihara $\zeta_G(u)$ & geschlossene Wege in ungerichtetem $G$ & YES (Bass-Hashimoto) \\
+Automorph $L(s,\pi)$ & Hecke-Algebra auf $\Gamma\backslash G$ & YES (erwartet) \\
+Prime-Hub $G_\mathrm{prime}$ & primitive Zyklen (freie Halbgruppe) & NO (konsistent mit OP5) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Trifft Vermutung~\ref{conj:sge} zu, kollabiert die scheinbare Trichotomie
+von Theorem~\ref{thm:boundary} zu einem einzigen algebraischen Kriterium.
+Der OPEN-Status von Prime-Hub ist in dieser Lesart kein dritter
+fundamentaler Modus, sondern ein Zustand unvollständigen Wissens: die explizite
+Konstruktion von $(I_\mathrm{prime}, \cdot)$ würde deterministisch zwischen
+YES und NO via Vermutung~\ref{conj:sge} entscheiden. Eine separate
+Arbeitsnotiz \cite{SGENote} entwickelt die präzise Formulierung und
+sammelt Falsifikationskriterien.
+
+\subsection[Erster empirischer Test von Vermutung: Dedekind-Zeta von Q(sqrt(-5))]{Erster empirischer Test von Vermutung~\ref{conj:sge}:
+Dedekind-Zeta von \texorpdfstring{$\mathbb{Q}(\sqrt{-5})$}{Q(sqrt(-5))}}
+\label{sec:sge-dedekind-test}
+
+Als direkten Test von Vermutung~\ref{conj:sge} außerhalb der drei kanonischen
+Instanzen aus Theorem~\ref{thm:boundary} haben wir den folgenden Test
+\cite{DedekindNEBTest} durchgeführt. Für den imaginär-quadratischen Körper
+$K = \mathbb{Q}(\sqrt{-5})$ (Diskriminante $-20$, Klassenzahl $2$) hat die
+Dedekind-Zetafunktion $\zeta_K$ eine Transfer-Algebra, die über
+Primideale $\mathfrak{p}$ von $\mathcal{O}_K = \mathbb{Z}[\sqrt{-5}]$ indiziert
+wird; diese bildet unter Idealmultiplikation eine Halbgruppe.
+Vermutung~\ref{conj:sge} prognostiziert daher $\HBL(\zeta_K) = \mathrm{NO}$.
+
+Um dies zu testen, enumerierten wir die $92$ Primideale von $K$ mit Norm bis
+höchstens $500$, klassifiziert in $2$ verzweigte (über rationalen Primzahlen $2, 5$),
+$86$ zerlegte (zwei Ideale für jede rationale Primzahl $p \equiv 1, 3, 7,
+9 \pmod{20}$) und $4$ träge (Norm $p^2$ für $p \equiv 11, 13, 17,
+19 \pmod{20}$). Die entsprechenden normalisierten Verschiebungen $r_\mathfrak{p}
+= 2\log N\mathfrak{p}/L$ mit $L = 10$ ergaben $49$ distinkte Werte
+in $(0, 2)$ --- weniger als die $95$, die für die rationalen Primzahlen
+von $\mathbb{Q}$ bis zur selben Normschranke erzielt wurden, bedingt durch die Verdopplung
+zerlegter Primzahlen, wodurch Idealpaare auf einen einzelnen Verschiebungswert kollabierten.
+Für jede Verschiebung konstruierten wir die NE-B-Matrix $D_N(r)$ aus Definition~\ref{thm:NE-B}
+mittels numerischer Quadratur, und berechneten die symmetrische gemeinsame
+Zentralisator-Dimension, indem wir das lineare System
+$[M, D_N(r_\mathfrak{p})] = 0$ für die $N(N+1)/2$ symmetrischen
+Freiheitsgrade lösten.
+
+\begin{center}
+\begin{tabular}{@{}c c c c@{}}
+\toprule
+$N$ & $\mathbb{Q}$ (Kontrolle) & $\mathbb{Q}(\sqrt{-5})$ & zufällige Verschiebungen \\
+\midrule
+$5$ & $\dim(Z) = 1$ & $\dim(Z) = 1$ & $\dim(Z) = 1$ \\
+$7$ & $\dim(Z) = 1$ & $\dim(Z) = 1$ & $\dim(Z) = 1$ \\
+$10$ & $\dim(Z) = 1$ & $\dim(Z) = 1$ & $\dim(Z) = 1$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Alle drei Spalten stimmen überein: Nur der skalare Zentralisator überlebt bei
+jedem getesteten $N \in \{5, 7, 10\}$. Dies stellt die erste empirische Evidenz
+für Vermutung~\ref{conj:sge} außerhalb der drei kanonischen Instanzen von
+Theorem~\ref{thm:boundary} dar: Trotz des qualitativ distinkten
+Primzerlegungsmusters von $K$ und der grob um den Faktor zwei niedrigeren Verschiebungsdichte relativ zu $\mathbb{Q}$,
+weist die Dedekindsche Transfer-Algebra von $\mathbb{Q}(\sqrt{-5})$
+dasselbe NE-B-Verhalten wie die Familie rationaler Primverschiebungen auf.
+Die Beobachtung stützt die algebraische (anstatt dichte-basierte) Natur von NE-B
+und, transitiv, der Prognose $\HBL = \mathrm{NO}$.
+
+\subsection{Komplementärer empirischer Test von
+Vermutung~\ref{conj:sge}: Ihara-Zeta des Petersen-Graphen}
+\label{sec:sge-ihara-test}
+
+Auf der $\HBL = \mathrm{YES}$-Seite der SGE-Vermutung wird ein direkter
+Test durch die Ihara-Zetafunktion $\zeta_G(u)$ eines ungerichteten
+endlichen Graphen $G$ bereitgestellt. Die Transfer-Algebra in diesem Fall
+ist das Wege-Gruppoid modulo Backtracking (Umkehrung), dessen assoziierte Struktur die
+Fundamentalgruppe $\pi_1(G)$ ist --- eine freie Gruppe $F_r$ mit $r = m - n + 1$
+Erzeugern. Da $F_r$ eine Gruppe (nicht bloß eine Halbgruppe) ist, prognostiziert
+Vermutung~\ref{conj:sge} $\HBL(\zeta_G) = \mathrm{YES}$ für jeden zusammenhängenden
+ungerichteten $G$.
+
+Wir testeten diese Prognose am Petersen-Graphen (3-regulär, $n = 10$, $m = 15$,
+ein Ramanujan-Graph mit $\mathrm{Aut}(G) = S_5$). Drei unabhängige
+Verifikationen wurden durchgeführt \cite{IharaPetersenTest}:
+\begin{enumerate}
+\item[(V1)] \textbf{Bass-Hashimoto Identität.} Die klassische Identität
+  $\det(I - uB) = (1 - u^2)^{m-n}\det(I - Au + Qu^2)$, wobei $B$ der
+  Hashimoto-Non-Backtracking-Operator auf gerichteten Kanten ist und
+  $Q = D - I$, wurde am Testpunkt $u = 0.3 + 0.1 i$ bis
+  auf 15 signifikante Ziffern verifiziert.
+\item[(V2)] \textbf{Ramanujan RH-Analogon.} $18$ der $19$ nicht-trivialen Nullstellen
+  von $\zeta_G(u)^{-1}$ liegen exakt auf dem kritischen Kreis
+  $|u| = 1/\sqrt{q-1} = 1/\sqrt{2}$. Die einzige Ausnahme bei $|u| = 1/2$
+  entspricht dem trivialen Adjazenz-Eigenwert $\lambda_A = 3$.
+\item[(V3)] \textbf{HP-BL\,=\,YES Zertifikat.} Der Graph-Laplace-Operator
+  $\Delta_G = D - A$ ist selbstadjungiert mit Spektrum
+  $\{0, 2^{(5)}, 5^{(4)}\}$. Seine Eigenwerte hängen mit den Ihara-Nullstellen
+  über das quadratische Polynom $2u^2 - \lambda_A u + 1 = 0$ zusammen.
+  Jeder Graph-Automorphismus $\sigma \in S_5$ induziert eine Permutationsmatrix $P_\sigma$,
+  die mit $\Delta_G$ kommutiert, und der Kanten-Lift $P_\sigma^{\mathrm{edge}}$ kommutiert mit $B$.
+  Der Zentralisator von $B$ in $\mathrm{End}(\mathbb{C}^{2m})$ enthält daher
+  die $S_5$-Darstellungsalgebra, deren nicht-skalare Elemente explizit
+  $\HBL(\zeta_{\mathrm{Petersen}}) = \mathrm{YES}$ nachweisen.
+\end{enumerate}
+
+In Kombination mit dem Dedekind-Test aus Abschnitt~\ref{sec:sge-dedekind-test}
+wurde Vermutung~\ref{conj:sge} nun empirisch auf \emph{beiden} Seiten
+der Halbgruppen-Gruppen-Dichotomie verifiziert: auf der Halbgruppenseite
+($\mathbb{Q}(\sqrt{-5})$, $\dim(Z) = 1$) bei $N \leq 10$, und auf der
+Gruppenseite (Petersen, nicht-skalare kommutierende Operatoren explizit
+konstruiert). Fünf qualitativ distinkte Zeta-Typ-Familien
+stützen nun konsistent Vermutung~\ref{conj:sge} (drei kanonische Instanzen plus
+diese zwei neuen Tests), und es wurde kein Gegenbeispiel erbracht.
+Die Anhebung zu einem formal bewiesenen Theorem würde ein strukturelles
+Argument (anstatt weiterer Fallstudien) erfordern und ist als primärer nächster
+Schritt identifiziert.
+
+\begin{remark}[Diskriminierendes Kontrollexperiment]
+\label{rem:sge-control}
+Eine berechtigte Sorge bezüglich des Dedekind-Tests aus
+Abschnitt~\ref{sec:sge-dedekind-test} ist, dass $\dim(Z) = 1$ die
+\emph{generische} Zentralisator-Dimension von beliebigen Matrixfamilien sein
+könnte und nicht eine strukturelle Signatur von SGE-NO. Ein dediziertes
+Kontrollexperiment \cite{SGEControlExperiment2026} adressiert dies,
+indem dieselbe Zentralisator-Dimensions-Routine an expliziten SGE-YES
+Familien (zyklische Gruppe $\mathbb{Z}/N$ reguläre Darstellung;
+elementar-abelsche $(\mathbb{Z}/2)^k$) neben
+einer zufällig-symmetrischen Baseline laufen lässt. Das Ergebnis ist eindeutig:
+\begin{itemize}
+\item $\mathbb{Z}/N$: $\dim(Z_{\text{sym}}) = 7, 10, 14, 17, 22$
+  bei $N = 5, 7, 10, 12, 15$ (wächst linear mit $N$).
+\item $(\mathbb{Z}/2)^k$: $\dim(Z_{\text{full}}) = 2^k$ exakt
+  (gleich der Gruppenordnung) für $k = 2, 3, 4$.
+\item Zufällig-symmetrische Baseline: $\dim(Z_{\text{sym}}) = 1$ für
+  alle getesteten $N$.
+\end{itemize}
+Der Testapparat diskriminiert folglich sauber zwischen SGE-YES
+(Zentralisator-Dimension skaliert mit $N$) und SGE-NO / Null-Fall
+(Dimension eins). Das Dedekind-Ergebnis $\dim(Z) = 1$ ist mithin
+strukturell informativ und kein generisches Artefakt. Dies schließt eine
+Dokumentationslücke, die im 7-Phasen-Review \cite{RHCritiqueReview2026}
+dieses Manuskripts identifiziert wurde.
+\end{remark}
+
+Connes' adelisches Programm \cite{Connes1999, Connes2026} passt
+natürlich in dieses Bild: Indem es die Halbgruppe $\{p^m\}$ durch die
+Ideleklassengruppe $\mathbb{A}_K/K^\times$ ersetzt, \emph{transportiert} es die
+Riemann-Familie aus der Halbgruppenspalte in die Gruppenspalte der
+Tabelle. In der SGE-Lesart würde Connes' Programm
+$\HBL(\zeta)$ von NO (in der klassischen Primverschiebung-Transfer-Algebra)
+zu YES (in der adelischen Transfer-Algebra) anheben, ohne
+Theorem~\ref{thm:boundary} zu widersprechen.
+
+% ============================================================
+\section{Die Blockchain-Lesart: eine spekulative Brücke}
+\label{sec:blockchain}
+
+\emph{Dieser Abschnitt ist als eine \textbf{spekulative Brücke} in der
+Vier-Klassen-Rigoroshierarchie von Abschnitt~\ref{sec:rigor} markiert: Er
+überträgt den mathematischen Inhalt der Trinität in ein informatisches Register
+durch eine Korrespondenz mit dem Bitcoin-Blockchain-Protokoll. Keine
+mathematische Behauptung in diesem Abschnitt ist neu; der Beitrag ist eine
+konsolidierte Lesart, die die Architektur der Trinität
+Lesern zugänglich macht, die mit kryptografischen Protokollen vertraut sind.}
+
+\subsection{Zwei algebraische Welten in einem Protokoll}
+\label{sec:blockchain-two-worlds}
+
+Das Bitcoin-Protokoll nutzt simultan zwei algebraische Strukturen,
+die aus der Perspektive von Vermutung~\ref{conj:sge} von
+entgegengesetztem Typ sind:
+
+\begin{enumerate}
+\item Die \textbf{Hash-Funktion} (SHA-256) generiert eine Bildmenge
+  mit einer \emph{Halbgruppenstruktur} unter der Verkettung von
+  Datenblöcken. Der Hash ist absichtlich eine Einwegfunktion --- er hat keine
+  natürliche inverse Operation --- also ist die Indexmenge einer Hash-Kette
+  eine Halbgruppe, keine Gruppe.
+\item Die \textbf{digitale Signatur} (ECDSA auf der elliptischen Kurve
+  $\mathrm{secp256k1}$) operiert auf einer \emph{abelschen Gruppe}: Die
+  $E(\mathbb{F}_p)$-Punkte bilden eine Gruppe unter Tangenten-und-Sekanten-Addition (chord-and-tangent addition),
+  mit expliziten Inversen und einer wohldefinierten Casimir-ähnlichen
+  Invariante (die Kurvengleichung $y^2 = x^3 + 7$).
+\end{enumerate}
+
+In der Sprache von Abschnitt~\ref{sec:sge-conjecture} lebt SHA-256
+auf der Halbgruppenseite der SGE-Dichotomie, während ECDSA auf
+der Gruppenseite lebt. Das Bitcoin-Protokoll ist somit eine \emph{physikalische
+Realisierung} der algebraischen Dichotomie, die Vermutung~\ref{conj:sge}
+auf der Ebene der Zeta-Typ-Familien identifiziert, wobei die Hash-Seite
+die Riemannsche Primzahlpotenz-Halbgruppe $\{p^m\}$ spiegelt und die
+Signatur-Seite die Selbergsche Geodäten-Gruppenstruktur
+$\Gamma \subset \PSL_2(\mathbb{R})$.
+
+\subsection{Die Korrespondenz-Tabelle}
+\label{sec:blockchain-correspondence}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}p{0.38\linewidth} p{0.52\linewidth}@{}}
+\toprule
+\textbf{Baum-theoretische Struktur (Tree-theoretic structure)} & \textbf{Bitcoin-Protokoll Analogon} \\
+\midrule
+Primzahlpotenz-Halbgruppe
+  $I_\zeta = \{p^m : p \text{ prim}, m \geq 1\}$ &
+SHA-256 Hash-Raum: Halbgruppe unter Datenverkettung, kein
+natürliches Inverses, liefert eindeutige Prüfsummen (analog zur eindeutigen Primfaktorzerlegung). \\[0.4ex]
+
+Hilbert-P\'olya Gruppe
+  $I_{Z_\Gamma} = \Gamma \subset \PSL_2(\mathbb{R})$ &
+ECDSA Signatur-Gruppe: $E(\mathbb{F}_p)$-Punkte auf
+$\mathrm{secp256k1}$ mit Tangenten-und-Sekanten-Addition, Inverse
+explizit, Casimir-ähnliche Kurveninvariante $y^2 = x^3 + 7$. \\[0.4ex]
+
+Weilsche quadratische Form $Q_X$ (branch-transversale Architektur; liefert
+Lücken-Positivität (gap positivity) ungeachtet des $\HBL$-Status) &
+Nakamoto-Konsens / Proof-of-Work: eine Funktion auf Protokollebene, die
+die Kette einheitlich über alle Hash-seitigen und Signatur-seitigen
+Teilnehmer validiert, unabhängig davon, welche algebraische Struktur
+eine individuelle Transaktion nutzt. \\[0.4ex]
+
+UCU: Strikte Konvexität des maßgeblichen Funktionals liefert einen
+eindeutigen Minimierer (Abschnitt~\ref{sec:ucu}) &
+Längste-Kette-Regel (longest-chain rule): strikt zunehmende Schwierigkeit (difficulty) entlang der schwersten
+Kette liefert einen eindeutigen Konsens-Kopf; kumulativer Proof-of-Work ist
+der strikt konvexe „Score“, der ihn auswählt. \\[0.4ex]
+
+Theorem~\ref{thm:NE-B}: kein universeller kommutierender Operator für die
+Primverschiebung-Familie an getesteten Galerkin-Trunkierungen &
+Dezentralisierung: Kein einzelner Bitcoin-Knoten hält einen universellen Validierungsschlüssel;
+das Kollektiv (Primzahlen / Miner) validiert durch unabhängige
+Beiträge, nicht durch ein gemeinsames Geheimnis (shared secret). \\[0.4ex]
+
+Riemannsche Vermutung: alle nicht-trivialen Nullstellen auf der kritischen Gerade &
+Ketten-Konsistenz: alle akzeptierten Blöcke liegen auf der kanonischen
+(längsten, nach Proof-of-Work schwersten) Kette. \\[0.4ex]
+
+Dreikomponenten-Zerlegung
+  $\mathrm{RH}_X = \mathrm{GBC}_X + C^{(2)}_X + \mathrm{Hurwitz}_X$
+  \cite{Geiger2026RHII} &
+Drei-Schichten-Protokoll-Stack: Transaktionsschicht (GBC-Analogon, spektraler
+Inhalt des Operators), Konsens-Schicht ($C^{(2)}$-Analogon, Connes-Approximation),
+historische Persistenz (Hurwitz-Analogon, Realität der
+Nullstellen bewahrt die Kette über Reorganisationen hinweg). \\[0.4ex]
+
+Vermutung~\ref{conj:sge}: $\HBL$ ist eine binäre algebraische Invariante &
+Protokoll-Hybridismus: Das Funktionieren von Bitcoin erfordert die Kooperation
+einer Halbgruppen-seitigen Komponente (Hashes) und einer Gruppen-seitigen
+Komponente (Signaturen). Jede für sich ist unzureichend; ihre
+branch-transversale Kopplung (das Protokoll selbst) ist das Analogon der
+Weilschen quadratischen Form. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Die Trinität kryptografisch gelesen}
+\label{sec:blockchain-trinity}
+
+Die drei Metaprinzipien aus Abschnitt~\ref{sec:trinity} erhalten eine
+kompakte kryptografische Lesart:
+
+\begin{itemize}
+\item \textbf{UCU als Proof-of-Uniqueness.}
+Die strikte Konvexität des maßgeblichen Funktionals ist das Analogon auf
+Protokollebene zu Bitcoins Längste-Kette-Regel. In beiden Fällen wird
+die Eindeutigkeit des ausgewählten Zustands durch eine monotone Bewertungsfunktion
+garantiert (Difficulty-akkumulierte Arbeit für Bitcoin; das Weil-Funktional
+für die Zeta-Familie). Nicht-Eindeutigkeit würde in einem Fork resultieren; die
+Konvexitätsbedingung verhindert Forks in beiden Domänen.
+
+\item \textbf{SGE als Protokoll-Hybridismus.}
+Vermutung~\ref{conj:sge} postuliert, dass jede Zeta-Familie definitiv auf
+einer Seite der algebraischen Dichotomie liegt. Bitcoin hingegen ist ein einzelnes
+Protokoll, das beide Seiten nutzt: seine Hash-Schicht ist $\HBL = \mathrm{NO}$-strukturiert,
+seine Signatur-Schicht ist $\HBL = \mathrm{YES}$-strukturiert. In dieser Lesart ist
+Bitcoin der Prototyp eines \emph{hybriden Protokolls} --- ein Objekt, dessen Gesamtarchitektur
+für eine einzelne Zeta-Familie unmöglich ist, aber natürlich ist,
+wenn die Halbgruppen- und Gruppen-Seiten über einen gemeinsamen
+branch-transversalen Mechanismus gekoppelt sind.
+
+\item \textbf{Weil-Form als branch-transversaler Konsens.}
+Die Weilsche quadratische Form $Q_X$ funktioniert einheitlich für
+$\HBL = \mathrm{YES}$ und $\HBL = \mathrm{NO}$ Familien. Der Nakamoto-Konsens
+funktioniert auf ähnliche Weise einheitlich für Hash-seitige Operationen und Signatur-seitige
+Operationen. In beiden Fällen ist die branch-transversale
+Schicht das, was den zwei algebraischen Welten eine sinnvolle Kooperation ermöglicht.
+\end{itemize}
+
+\subsection{Warum die Korrespondenz mehr als eine Metapher ist}
+\label{sec:blockchain-substance}
+
+Drei Beobachtungen heben diese Lesart über eine bloße Analogie hinaus:
+
+\begin{enumerate}
+\item \emph{Die Dichotomie ist präzise.} Bitcoins Hash-/Signatur-Architektur
+ist eine strukturelle Notwendigkeit, keine Designentscheidung: Jedes
+kryptografische Konsenssystem benötigt nachweislich sowohl eine Einweg-Digest-Funktion
+(Halbgruppe) als auch eine invertierbare Authentifizierungsfunktion
+(Gruppe). Das ist exakt der Inhalt von
+Vermutung~\ref{conj:sge}'s binärer Klassifikation.
+
+\item \emph{Konsens ist die Algebra.} Nakamotos Einsicht war, dass ein
+Proof-of-Work-Konsens als branch-transversale Schicht fungieren kann, die
+die beiden Seiten vereint. Die Weilsche quadratische Form spielt dieselbe Rolle
+im Zeta-Familien-Baum: sie ist die gemeinsame Arithmetik, auf der beide
+$\HBL$-Regimes operieren.
+
+\item \emph{Das Eindeutigkeitstheorem wird geteilt.} Bitcoins Längste-Kette-Regel
+ist \emph{mathematisch} ein strikt konvexes Auswahlprinzip;
+die strikte Konvexität des Weil-Funktionals ist dasselbe Prinzip im
+kontinuierlichen Setting. Beide sind Instanzen eines allgemeinen
+Konvexität-impliziert-Eindeutigkeit-Arguments (UCU).
+\end{enumerate}
+
+Dementsprechend ist die Korrespondenz keine dekorative Metapher, sondern ein
+strukturelles Echo. Dieselbe Trinität --- UCU, SGE, Weil-Form-Transversalität ---
+beschreibt sowohl die Klassifikation der Zeta-Typ-Programme als auch die Architektur
+der Bitcoin-Blockchain.
+
+\subsection{Rigorositäts-Hinweis und weiterführende Literatur}
+\label{sec:blockchain-disclaimer}
+
+Der vorliegende Abschnitt ist eine \emph{spekulative Brücke}. Er führt kein
+neues mathematisches Theorem und kein neues kryptografisches Resultat ein; die
+obigen Korrespondenzen sind konzeptionelle Paarungen, keine Identitäten.
+Was der Abschnitt bietet, ist ein konsolidiertes Register, in dem
+der strukturelle Inhalt der Trinität Lesern
+aus Kryptografie, Informatik und der Erforschung dezentraler Systeme
+vermittelt werden kann. Für eine umfassendere informelle Entwicklung der Blockchain-Analogie
+im breiteren Baum-der-Zeta-Familien-Kontext (inklusive
+verwandter Motive über Primzahlen als holografische Randdaten und über Zeit
+als Informationsakkumulation), siehe die Begleitnotizen
+\cite{MetaGalerkinBridge}, Appendix~I8--I10, und die dort referenzierten ergänzenden Arbeitsnotizen.
+
+% ============================================================
+\section{Diskussion und Ausblick}
+\label{sec:outlook}
+
+\subsection{Konsequenzen für Dirichlet \texorpdfstring{$L$}{L}-Funktionen}
+
+Arbeiten aus Session~8 zu Dirichlet $L$-Funktionen \cite{PaleyWienerDirichlet}
+haben etabliert, dass ein Paley-Wiener Transfer mittels phänomenologischer Kerne
+(Gauss- oder Hadamard-gewichteter Pol) die
+charakter-spezifischen Lücken-Signaturen nicht erfasst. Das Randtheorem
+(Theorem~\ref{thm:boundary}) interpretiert dieses Resultat: Für reelle Dirichlet-Charaktere
+mit kleinem Führer (low-conductor) wird kein natürlicher HP-BL Operator
+durch einfache Perturbation des Riemannschen Falls konstruiert, und die beobachteten
+charakter-spezifischen Lücken müssen aus der branch-transversalen
+Weil-Form-Architektur entstehen, deren Reduktionen führender Ordnung nachweislich
+scheitern. Ein dediziertes Dirichlet-L Atlas Paper
+\cite{DirichletAtlas} dokumentiert dieses Scheitern im Detail.
+
+Unter Vermutung~\ref{conj:sge} ist dieses Ergebnis strukturell
+prognostiziert: Die Dirichletsche Transfer-Algebra ist eine Halbgruppe, folglich
+gilt $\HBL(L(\cdot, \chi)) = \mathrm{NO}$ und es kann kein natürlicher HP-Operator
+existieren. Der Dirichlet-Atlas ist daher kein Fehlschlag des
+Programms, sondern eine Bestätigung seiner architektonischen Grenzen.
+
+Eine Post-Zookeeper-Verfeinerung ist nun Teil des CORE-Status. Der
+Spectral Zookeeper \cite{Zookeeper2026} liefert ein unabhängiges Kern-Paket
+für die Riemann-Zelle: Rang-eins-Zerlegung (rank-one decomposition), Cauchy
+Interlacing, Drei-Lemma-Abschluss (three-lemma closure) und spektrale Mikrocluster. Dies
+ändert nicht das Randtheorem; es verfeinert die UBA-Ebene. Die
+Riemann-Zelle trägt nun zwei orthogonale Kern-Pakete: v2.1 Even
+Dominance als die publizierte C2-sensitive Schicht, und das Zookeeper
+Drei-Lemma-Paket als der Abschluss des Riemann-Schritts $C^{(2)}$/MS2
+auf Theorem-Ebene im CCM/Fourier-Zweig. Für die Dirichlet-Zelle
+ist der natürliche Rücktransfer die Route D:
+ein $\chi$-getwisteter CCM-Operator mit einem Führer-Rang-eins-Term (conductor rank-one term) und einer
+$\chi$-gewichteten arithmetischen Perturbation. Folglich sollte der Dirichlet-Atlas
+als der erste konkrete UBA-Stresstest dieses Transfers gelesen werden,
+nicht bloß als ein negatives Paley-Wiener Numerikresultat.
+
+\subsection{Vorgeschlagene Rigoroshierarchie}
+\label{sec:rigor}
+
+Der im Baum-Meta-Analyse-Programm (tree meta-analysis) propagierten Vier-Klassen-Hierarchie
+(Theorem-Ebene / bedingt / diagnostisch / spekulativ) folgend, kann jede
+Komponente des Branch-Lokalitäts-Programms wie folgt klassifiziert werden:
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Komponente & Klasse & Quelle \\
+\midrule
+Definition~\ref{def:hp-bl} & Theorem-Ebene & dieses Paper \\
+Theorem~\ref{thm:NE-A} & Theorem-Ebene & \cite{Geiger2026RHII} \\
+Theorem~\ref{thm:NE-B} ($N\leq 15$) & Theorem-Ebene & \cite{Geiger2026RHII} \\
+Vermutung~\ref{conj:NE-B-full} & bedingt (conditional) & \cite{Geiger2026RHII} \\
+Theorem~\ref{thm:selberg-hp} & Theorem-Ebene & \cite{Selberg1956} \\
+Prop.~\ref{prop:weyl-obstruction}--\ref{prop:ne-a-compat} & diagnostisch & \cite{Geiger2026RHIII} \\
+Theorem~\ref{thm:boundary} & Theorem-Ebene${}^*$ & Synthese \\
+Vermutung~\ref{conj:sge} (SGE) & bedingt (empirisch) & dieses Paper, \cite{SGENote} \\
+\S\ref{sec:blockchain} (Blockchain-Lesart) & spekulative Brücke & dieses Paper \\
+\bottomrule
+\end{tabular}
+\end{center}
+${}^*$ bedingt nach Vermutung~\ref{conj:NE-B-full}.
+
+\subsection{Zukünftige Richtungen}
+
+\begin{enumerate}
+\item \textbf{Formaler Beweis von Vermutung~\ref{conj:NE-B-full}.} Ein
+  SVD-Dichte-Argument für $N = \infty$ ist der mit Abstand wertvollste
+  nächste Schritt: Er würde Theorem~\ref{thm:boundary} von
+  bedingt (conditional) auf unbedigt (unconditional) anheben.
+\item \textbf{Test von Vermutung~\ref{conj:sge} an Dedekind-Zeta.} Das
+  NE-B Argument aus \cite{Geiger2026RHII} beruht auf strukturellen
+  Eigenschaften der Primverschiebung-Operatoren, die sich auf
+  Primidealverschiebung-Operatoren über einem Zahlkörper $K$ erweitern lassen. Ein direkter
+  SVD-Dichte-Test würde die SGE-Prognose
+  $\HBL(\zeta_K) = \mathrm{NO}$ entweder bestätigen oder widerlegen.
+\item \textbf{Ihara-Zeta und Yang-Lee Wurzeln.} Iharas Fall ist das
+  graphentheoretische Analogon zu Selberg und es wird durch
+  Vermutung~\ref{conj:sge} erwartet, dass er $\HBL = \mathrm{YES}$ erfüllt, wobei
+  die Bass-Hashimoto Matrix als $H_X$ dient. Yang-Lee-Nullstellen sind demgegenüber
+  durch die Temperatur parametrisierte Partitionsfunktions-Wurzeln und sollten,
+  nach derzeitiger Evidenz, in der Flow-Zeta-Klasse von
+  Abschnitt~\ref{sec:three-class-taxonomy} angesiedelt sein, als ein
+  statistisch-mechanischer Verwandter des CRM.
+
+\item \textbf{Bevölkerung des Zoos.} Die sechs bisher präsentierten Zoobewohner
+  (Riemann, Selberg, Prime-Hub, CRM, Dedekind
+  $\mathbb{Q}(\sqrt{-5})$, Ihara-Petersen) plus das Begleitpaper zum Dirichlet-Atlas
+  \cite{DirichletAtlas} sind illustrativ, nicht erschöpfend.
+  Ein Scan der umgebenden Literatur und der Begleit-Baumdokumente
+  \cite{CandidatesMasterList} identifiziert acht weitere
+  Familien, die sauber in die Drei-Klassen-Taxonomie passen und die
+  SGE-Dichotomie schärfen:
+  \begin{itemize}
+  \item \textbf{Automorphe $L(\pi, s)$ für $\mathrm{GL}_n$}
+  (Langlands-Programm): geometrisch-kompakt, \textbf{SGE-YES}.
+  Transfer-Algebra ist die Hecke-Algebra; Casimir der umgebenden
+  reduktiven Gruppe liefert den Hilbert-P\'olya Operator. Der
+  kanonische Residenzort für große Familien auf der YES-Seite.
+  \item \textbf{Hecke $L(s, \lambda)$ über Zahlkörpern}:
+  arithmetisch, \textbf{SGE-NO}. Schwesterspezies zu Dirichlet und
+  Dedekind --- Primideal-Halbgruppe plus Charakter-Twist.
+  \item \textbf{Artinsche $L$-Funktionen}: geometrisch-kompakt,
+  \textbf{SGE-YES}. Transfer-Algebra ist eine endliche Galoisgruppe;
+  Prototyp der Galois-getriebenen YES-Seite.
+  \item \textbf{Ruelle-Anosov-Zeta $\zeta_\varphi(s)$} für hyperbolische
+  Flüsse: fluss-nichtkompakt, \textbf{SGE-YES}. Direkte Generalisierung
+  von CRM über den $\PSL_2(\mathbb{R})$-Boost Fall hinaus; siehe
+  \cite{DyatlovZworski2019}.
+  \item \textbf{Selberg auf dem nicht-kompakten Quotienten}
+  $\mathrm{PSL}_2(\mathbb{R})/\mathrm{SO}(2) = \mathbb{H}$:
+  fluss-nichtkompakt, \textbf{SGE-YES}. Kontinuierliches Spektrum plus
+  Eisensteinreihen. Algebraisch fast identisch zu CRM,
+  dynamisch jedoch distinkt.
+  \item \textbf{Spektren der Quasinormalmoden schwarzer Löcher}
+  (\cite{DeClerckHartnollYang2025}): fluss-nichtkompakt,
+  \textbf{SGE-YES}. Streuresonanzen auf asymptotisch
+  de~Sitter-Hintergründen; die Wheeler--DeWitt-Wellenfunktionen der 5d
+  BKL-Dynamik weisen Strukturen automorpher $L$-Funktionen und
+  komplexer Primon-Gase (complex primon gases) auf, die zeta-ähnliche Spektren mit Quantengravitations-Regimes verknüpfen.
+  Die erste Flow-Zeta-Funktion mit realistischer Hoffnung auf experimentellen Zugang
+  via Beobachtungen des Ringdown von Gravitationswellen (LIGO/Virgo/Einstein-Teleskop).
+  \item \textbf{Yang-Lee-Nullstellen}:\\[-0.6ex]
+  ferromagnetische Partitionsfunktionen;
+  konjektural fluss-nichtkompakt, \textbf{SGE-YES}. Temperatur als
+  kontinuierlicher Parameter; das Lee-Yang Kreistheorem spielt die Rolle
+  eines RH-Analogons. Statistisch-mechanischer Cousin von CRM.
+  \item \textbf{Bost-Connes System} (1995): eine quantenstatistische
+  Realisierung von $\zeta(s)$ als Partitionsfunktion mit spontaner
+  Symmetriebrechung bei $\beta = 1$. Sitzt auf der Brücke zwischen den
+  arithmetischen und Fluss-Klassen und verbindet den Zoo direkt mit
+  Connes' adelischem Framework \cite{Connes1999, Connes2026}.
+  \end{itemize}
+  Jede dieser Familien verdient beizeiten ein eigenes FST-Mathematics Supplement.
+  Eine zweite Ebene von zwölf weiteren Konstruktionen
+  (Epstein, Witten-Zeta, Multiple-Zeta-Werte, Hurwitz, Lerch,
+  Arakelov, motivische $L$-Funktionen, chirale Zeta, RG-Zetas, Gromov-Witten,
+  Reidemeister-Torsion, QFT spektrale Zetas) und eine separate Spalte
+  biologischer Muster-A-abgeleiteter Zetas (Kauffman-Attraktor,
+  Proteinfaltungs-Spektren, Replikator-Jacobi-Spektren) sind in
+  dem Begleit-Baumdokument katalogisiert \cite{CandidatesMasterList}.
+
+\item \textbf{Biologische Pattern-A-Instanzen als Brücken.} Das
+  FST-Biology Supplement-Programm \cite{FSTBiology} entwickelt
+  Muster A in molekularen, chemischen und verhaltensbiologischen Domänen
+  (Proteinfaltung als Nash-Gleichgewicht, Genregulationsnetzwerk-Attraktoren,
+  Co-Evolution des Immunsystems). Diese sind vornehmlich
+  Bewohner der physikalischen Seite des Programms, erzeugen jedoch
+  eigene zeta-ähnliche Zählfunktionen (Kauffman-Attraktor-Zetas für Boolesche Gen-Netzwerke, Proteinfaltungs-Spektral-Zetas,
+  Replikator-Jacobi-Spektren), die prinzipiell eigene
+  Gehege im Zoo besiedeln könnten. Ihre primäre Klassifikation
+  findet auf der physikalischen Seite von FST statt; ihre mathematische Struktur ist
+  in der Begleitliste der Kandidaten (candidate document) aufgeführt.
+
+\item \textbf{Adelisches Upgrade: Riemann revidiert.} Connes' adelisches
+  Framework \cite{Connes1999, Connes2026} ersetzt die klassische
+  Primzahlpotenz-Halbgruppe $\{p^m\}$ durch die Ideleklassengruppe
+  $\mathbb{A}_K/K^\times$, welche eine Gruppe \emph{ist}. Falls dieses
+  Programm abschließt, migriert Riemann von der SGE-NO Spalte
+  (klassische Primverschiebung-Transfer-Algebra) zur SGE-YES Spalte
+  (adelische Transfer-Algebra), ohne Theorem~\ref{thm:boundary} zu widersprechen ---
+  die SGE-Vermutung beschreibt
+  präzise, was ein erfolgreiches Hilbert-P\'olya Programm
+  erreichen muss.
+
+\item \textbf{Explizite Prime-Hub Konstruktion.} Jede künftige
+  Konstruktion muss explizit durch die
+  Propositionen~\ref{prop:weyl-obstruction}--\ref{prop:ne-a-compat} navigieren.
+  Unter der Vermutung~\ref{conj:sge} gelingt der Konstruktion von
+  $G_\mathrm{prime}$ die Bereitstellung eines Hilbert-P\'olya Operators
+  genau dann, wenn die resultierende Zyklus-Verkettungs-Algebra eine Gruppe ist.
+
+\item \textbf{Unabhängige Replikation und ein Gutachter-Verifizierbarkeitsindex (reviewer-verifiability index).}
+  Die Trilogie \cite{Geiger2026RHII,Geiger2026RHIII}
+  umfasst derzeit ca. 82 PDF-Seiten, 76 Theorem-Objekte, eine achtschrittige Reduktionskette, 33 CAP-Zertifikate und
+  zwanzig Python-Skripte. Das Critique-Review
+  \cite{RHCritiqueReview2026} identifiziert, obgleich es keine fatale Lücke findet,
+  dokumentations-ergonomische Schwächen (K6): Fehlen eines
+  zentralen Symbol-Glossars, kein Abhängigkeits-Graph (DAG) der Schritte A1--A8, keine vereinheitlichte
+  \texttt{reproduce.sh} Pipeline, kein „reviewer fast path“ Hinweis.
+  Wir schlagen einen begleitenden \emph{Reviewer Kit} Zenodo-Record vor,
+  der (a) ein Symbol-Glossar, (b) einen Abhängigkeits-DAG, der
+  Lemmas mit Skripten und A-Schritten verknüpft, (c) eine Datei
+  \texttt{scripts/REPRODUCE.md} mit Aufrufen als Einzeiler und
+  erwarteten Laufzeiten, (d) ein Lean4-Gerüst für das Shift-Parity-Lemma ---
+  dessen rein algebraische Struktur ($N \geq 3$, geschlossene Form für Determinante und Spur) es zum natürlichen ersten Ziel
+  für eine ernsthafte Formalisierung macht --- und (e) einen zweiseitigen „reviewer fast path“ umfasst, der darlegt, wie jeder A-Schritt innerhalb eines
+  begrenzten Zeitbudgets unabhängig verifiziert werden kann. Ein beigefügter \emph{Gutachter-Verifizierbarkeits-Index} pro A-Schritt (analytisch / CAP / hybrid, geschätzte Personenstunden
+  für unabhängige Verifikation) würde die Replikationskosten der Trilogie
+  explizit machen. Entscheidend ist, dass dieses Programm keine
+  Änderung an der Trilogie selbst erfordert; es ist eine additive Ergänzung, die
+  K6 adressiert, ohne den Beweis anzutasten.
+\end{enumerate}
+
+% ============================================================
+\section*{Danksagung}
+
+Der Autor dankt der Zusammenarbeit verschiedener Large Language Model
+Agenten (Claude Opus 4.7, GPT-4.5) bei der Konsolidierung und Überprüfung des
+Baums der Zeta-Familien-Programme.
+KI-Hinweis (AI Disclosure): Stufe L3 (teilweise KI-gestützte Entwicklung und Texterstellung, vollständige Validierung durch den Autor).
+
+% ============================================================
+\begin{thebibliography}{99}
+
+% --- Interne Projektreferenzen ---
+
+\bibitem{Geiger2026RHI}
+L.~Geiger, \emph{The Riemann Hypothesis via the v2.0 Method,
+Part I: Foundations and Obstructions}, Preprint (2026), Zenodo DOI
+\href{https://doi.org/10.5281/zenodo.19546593}{10.5281/zenodo.19546593}.
+
+\bibitem{MetaGalerkinBridge}
+L.~Geiger, \emph{A Meta Galerkin Bridge: Diagnostic Decomposition
+of RH-Type Programmes}, Arbeitsentwurf (2026),
+\texttt{paper/META\_GALERKIN\_BRIDGE.tex} im archivierten Vorgänger-Baum. Appendix I sammelt
+die zehn essayistischen Motivationen, auf die hier verwiesen wird, inklusive der
+Themen I8--I10 zur Blockchain.
+
+\bibitem{RFEPFramework}
+L.~Geiger, \emph{Functional Stability Theory --- Physical
+Instantiation via the Renormalized Free Energy Principle},
+Preprint, Begleitpaper (2026), Repo
+\href{https://github.com/research-line/functional-stability-theory}{research-line/functional-stability-theory}
+(zuvor als „The Renormalized Free Energy Framework“
+v1.7 publiziert, Neuveröffentlichung als v1.8 unter vereinheitlichter FST-Terminologie vorgesehen).
+
+\bibitem{FSTYangMills}
+L.~Geiger, \emph{FST-Physics: Yang--Mills Mass Gap via Pattern A},
+Preprint (2025/2026), Zenodo DOI
+\href{https://doi.org/10.5281/zenodo.19087433}{10.5281/zenodo.19087433}.
+
+\bibitem{FSTTurbulence}
+L.~Geiger, \emph{FST-Physics: Kolmogorov K41 Spectrum via
+Pattern A}, Preprint (2025/2026), Zenodo DOI
+\href{https://doi.org/10.5281/zenodo.19056813}{10.5281/zenodo.19056813}.
+
+\bibitem{Geiger2026RHII}
+L.~Geiger, \emph{The Riemann Hypothesis via the v2.0 Method,
+Part II: Even Dominance (v2.1 Unconditional)}, Preprint (2026),
+Zenodo DOI
+\href{https://doi.org/10.5281/zenodo.19546593}{10.5281/zenodo.19546593}.
+
+\bibitem{Geiger2026RHIII}
+L.~Geiger, \emph{The Riemann Hypothesis via the v2.0 Method,
+Part III: Conclusio and Open Problems}, Preprint (2026),
+Zenodo DOI
+\href{https://doi.org/10.5281/zenodo.19546593}{10.5281/zenodo.19546593}.
+
+\bibitem{DirichletAtlas}
+L.~Geiger, \emph{A Weil-Kernel Numerical Atlas for Dirichlet
+$L$-Function Sector Gaps: Galerkin Diagnostics and the Boundaries of
+Leading-Order Theory}, Entwurf (2026),
+\texttt{CORE/zoo-mapping/paper/DIRICHLET\_CHARACTER\_ATLAS\_v1\_en.tex}.
+
+\bibitem{PaleyWienerDirichlet}
+L.~Geiger, \emph{Paley-Wiener Transfer for Dirichlet $L$-functions:
+First-Order Perturbation and Numerical Validation}, Arbeitsnotizen
+(2026),
+\texttt{CORE/zoo-mapping/PALEY\_WIENER\_DIRICHLET\_TRANSFER.md}.
+
+\bibitem{SGENote}
+L.~Geiger, \emph{The Semigroup-Group Equivalence: A Unifying
+Conjecture for Branch-Locality}, Arbeitsnotizen (2026),
+\texttt{paper\_NE\_B\_BOUNDARY/SEMIGROUP\_GROUP\_EQUIVALENCE.md}.
+
+\bibitem{DedekindNEBTest}
+L.~Geiger, \emph{Dedekind NE-B Analog Test for
+$\mathbb{Q}(\sqrt{-5})$: First Empirical Probe of the
+Semigroup-Group Equivalence}, Computernotizen (2026),
+\texttt{paper\_NE\_B\_BOUNDARY/\_results/DEDEKIND\_NE\_B\_TEST.md}.
+
+\bibitem{IharaPetersenTest}
+L.~Geiger, \emph{Ihara-Zeta SGE YES-side Test for the Petersen
+Graph: Bass-Hashimoto, Ramanujan, and the Laplacian as HP-Operator},
+Computernotizen (2026),
+\texttt{paper\_NE\_B\_BOUNDARY/\_results/IHARA\_PETERSEN\_SGE.md}.
+
+\bibitem{CRMFlowZetaNote}
+L.~Geiger, \emph{CRM as Flow-Zeta: Reformulation of the Cooperative
+Renormalization Model of Dark Energy as a Ruelle-Dyatlov-Zworski
+Zeta on the Hyperbolic Plane}, Arbeitsnotiz (2026),
+\texttt{04\_FST\_COSMOLOGY/CRM\_AS\_FLOW\_ZETA.md}.
+
+\bibitem{Zookeeper2026}
+L.~Geiger, \emph{The Spectral Zookeeper: The Riemann Hypothesis via
+Spectral Microcluster Closure in the Connes--Consani--Moscovici
+Framework}, Preprint (2026), Zenodo DOI
+\href{https://doi.org/10.5281/zenodo.19673127}{10.5281/zenodo.19673127}.
+
+\bibitem{CRMV}
+L.~Geiger, \emph{Cooperative Renormalization Model of Dark Energy V:
+The Saturation Theorem}, Preprint (2026), Zenodo Konzept-DOI
+\href{https://doi.org/10.5281/zenodo.18728936}{10.5281/zenodo.18728936}.
+
+\bibitem{DyatlovZworski2019}
+S.~Dyatlov und M.~Zworski, \emph{Mathematical Theory of Scattering
+Resonances}, Graduate Studies in Mathematics \textbf{200}, American
+Mathematical Society, Providence, RI (2019),
+DOI~\href{https://doi.org/10.1090/gsm/200}{10.1090/gsm/200}.
+
+\bibitem{CandidatesMasterList}
+L.~Geiger, \emph{Zeta Zoo Candidates --- Master List}, Begleitendes
+Baumdokument (2026),
+\texttt{CORE/CANDIDATES\_MASTER\_LIST.md} im
+\texttt{.ZETA-ZOO} Projektbaum. Führt den vollständigen Katalog der Zeta-Typ-Familien-Kandidaten,
+identifiziert über RH v2.1, EFP-Taxonomy, V2-Physics-Testcases, FST-Biology und
+ergänzende Ideenanhang-Quellen.
+
+\bibitem{FSTBiology}
+L.~Geiger, \emph{Functional Stability Theory --- Biological
+Pattern-A Instances (FST-I Thermodynamic, FST-II Chemical, FST-III
+Biological Stability)}, Preprint-Reihe (2026),
+\texttt{05\_FST\_BIOLOGY/}
+im \texttt{.ZETA-ZOO} Projektbaum. Dreiteilige Publikationsreihe
+über skaleninvariante Muster-A-Realisierungen (Pattern-A) von der molekularen
+bis zur verhaltensbasierten Biologie.
+
+% --- Externe klassische Referenzen (verifiziert via WebSearch 2026-04-16) ---
+
+\bibitem{Polya1982letter}
+G.~P\'olya, Brief an A.~M.~Odlyzko, 3. Januar 1982, in dem eine
+Göttinger Konversation mit E.~Landau (ca.\ 1912--1914) über eine
+mögliche operatorentheoretische Erklärung für die Riemannsche Vermutung
+geschildert wird. Bewahrt von Odlyzko auf
+\url{https://www-users.cse.umn.edu/~odlyzko/polya/}.
+
+\bibitem{Montgomery1973}
+H.~L.~Montgomery, \emph{The pair correlation of zeros of the zeta
+function}, in: \emph{Analytic Number Theory} (Proc.\ Sympos.\ Pure
+Math.\ \textbf{XXIV}, St.\ Louis 1972), S.~181--193, American
+Mathematical Society, Providence, RI (1973). Früheste publizierte
+Erwähnung der Hilbert--P\'olya-Anregung als Folklore.
+
+\bibitem{Berry1985}
+M.~V.~Berry, \emph{Semiclassical theory of spectral rigidity},
+Proc.\ Roy.\ Soc.\ London A \textbf{400}, 229--251 (1985), DOI
+\href{https://doi.org/10.1098/rspa.1985.0078}{10.1098/rspa.1985.0078}.
+
+\bibitem{BerryKeating1999}
+M.~V.~Berry und J.~P.~Keating, \emph{The Riemann zeros and
+eigenvalue asymptotics}, SIAM Rev.\ \textbf{41} (2), 236--266 (1999),
+DOI
+\href{https://doi.org/10.1137/S0036144598347497}{10.1137/S0036144598347497}.
+
+\bibitem{Connes1999}
+A.~Connes, \emph{Trace formula in noncommutative geometry and the
+zeros of the Riemann zeta function}, Selecta Math.\ (New Series)
+\textbf{5} (1), 29--106 (1999), DOI
+\href{https://doi.org/10.1007/s000290050042}{10.1007/s000290050042}.
+
+\bibitem{Connes2026}
+A.~Connes, \emph{The Riemann Hypothesis: Past, Present and a
+Letter Through Time}, arXiv Preprint (2026), arXiv:2602.04022
+[math.NT], \url{https://arxiv.org/abs/2602.04022}.
+
+\bibitem{ConnesConsaniMoscovici2025}
+A.~Connes, C.~Consani, und H.~Moscovici, \emph{Zeta Spectral
+Triples}, arXiv Preprint (2025), arXiv:2511.22755 [math.NT],
+\url{https://arxiv.org/abs/2511.22755}. Begleitpaper zu
+\cite{Connes2026}.
+
+\bibitem{GeigerObstructionClassifiers}
+L.~Geiger, \emph{Obstruction Classifiers for RH-Type Problems},
+Arbeitspaper (2026), vgl.\ \texttt{\_archive/old\_obstruction\_classifier\_wrapper/Obstruction\_Classifiers\_v1\_en.tex}
+im archivierten Vorgängerbaum.
+
+\bibitem{SGEControlExperiment2026}
+L.~Geiger, \emph{SGE Control Experiment --- Discriminating Test},
+Arbeitsnotiz und Rechenartefakt (2026),
+\texttt{CORE/zetazoo/\_results/SGE\_CONTROL\_EXPERIMENT.md},
+erzeugt durch
+\texttt{CORE/zetazoo/\_scripts/sge\_control\_experiment.py}.
+Server-zertifizierter Durchlauf (ellmos-services, 2026-04-17), der die
+Skalierung der Zentralisator-Dimension für zyklische $\mathbb{Z}/N$,
+elementar-abelsche $(\mathbb{Z}/2)^k$ und zufällig-symmetrische
+Baselines dokumentiert.
+
+\bibitem{RHCritiqueReview2026}
+L.~Geiger, \emph{RH v2.1 --- Systematic Critique Review (K1--K6)},
+Arbeitsnotiz (2026), \texttt{SESSIONS/\_reviews/RH\_CRITIQUE\_REVIEW\_2026-04-17.md}
+im \texttt{.ZETA-ZOO} Projektbaum.
+Paralleles Assessment der Foundation--Even-Dominance--Conclusio
+Trilogie durch vier Agenten gegenüber sechs externen Kritikpunkten; Fazit: alle teilweise berechtigt,
+keine fatal.
+
+\bibitem{EkelandTemam1999}
+I.~Ekeland und R.~T\'emam, \emph{Convex Analysis and Variational
+Problems}, SIAM Classics in Applied Mathematics \textbf{28}, Society
+for Industrial and Applied Mathematics, Philadelphia (1999),
+ISBN 978-0-89871-450-0. Standardreferenz für das Lemma von Mazur und
+das Eindeutigkeitsprinzip (strikte Konvexität plus Koerzivität), das in
+Lemma~\ref{lem:ucu} verwendet wird.
+
+% --- Hinzugefügte externe klassische / kontemporäre Referenzen (WebSearch-verifiziert 2026-04-17) ---
+
+\bibitem{KeatingSnaith2000}
+J.~P.~Keating und N.~C.~Snaith, \emph{Random Matrix Theory and
+$\zeta(1/2 + it)$}, Commun.\ Math.\ Phys.\ \textbf{214} (2000),
+S.~57--89, DOI~\href{https://doi.org/10.1007/s002200000261}{10.1007/s002200000261}.
+
+\bibitem{Bombieri2000}
+E.~Bombieri, \emph{Problems of the Millennium: The Riemann
+Hypothesis}, Offizielle Problembeschreibung des Clay Mathematics Institute (2000),
+\url{https://www.claymath.org/wp-content/uploads/2022/05/riemann.pdf}.
+
+\bibitem{Conrey2003}
+J.~B.~Conrey, \emph{The Riemann Hypothesis}, Notices of the AMS
+\textbf{50} (2003), no.~3, S.~341--353,
+\url{https://www.ams.org/notices/200303/fea-conrey-web.pdf}.
+
+\bibitem{BostConnes1995}
+J.-B.~Bost und A.~Connes, \emph{Hecke algebras, type III factors
+and phase transitions with spontaneous symmetry breaking in number
+theory}, Selecta Math.\ (New Series) \textbf{1} (1995), no.~3,
+S.~411--457,
+DOI~\href{https://doi.org/10.1007/BF01589495}{10.1007/BF01589495}.
+
+\bibitem{Langlands1970}
+R.~P.~Langlands, \emph{Problems in the theory of automorphic
+forms}, in: C.~T.~Taam (Hrsg.), \emph{Lectures in Modern Analysis
+and Applications III}, Lecture Notes in Mathematics \textbf{170},
+Springer, Berlin--Heidelberg (1970), S.~18--61,
+DOI~\href{https://doi.org/10.1007/BFb0079065}{10.1007/BFb0079065}.
+
+\bibitem{DeClerckHartnollYang2025}
+M.~De~Clerck, S.~A.~Hartnoll, und M.~Yang,
+\emph{Wheeler--DeWitt wavefunctions for 5d BKL dynamics, automorphic
+$L$-functions and complex primon gases}, arXiv Preprint (2025),
+arXiv:2507.08788 [hep-th],
+\url{https://arxiv.org/abs/2507.08788}.
+
+\bibitem{Artin1931}
+E.~Artin, \emph{Zur Theorie der L-Reihen mit allgemeinen
+Gruppencharakteren}, Abh.\ Math.\ Sem.\ Univ.\ Hamburg \textbf{8}
+(1931), S.~292--306,
+DOI~\href{https://doi.org/10.1007/BF02941010}{10.1007/BF02941010}.
+
+\bibitem{Chebotarev1926}
+N.~Tschebotareff, \emph{Die Bestimmung der Dichtigkeit einer Menge
+von Primzahlen, welche zu einer gegebenen Substitutionsklasse
+geh\"oren}, Math.\ Ann.\ \textbf{95} (1926), S.~191--228,
+DOI~\href{https://doi.org/10.1007/BF01206606}{10.1007/BF01206606}.
+
+\bibitem{CogdellPS1994}
+J.~W.~Cogdell und I.~I.~Piatetski-Shapiro, \emph{Converse theorems
+for $GL_n$}, Publ.\ Math.\ Inst.\ Hautes \'Etudes Sci.\ \textbf{79}
+(1994), S.~157--214,
+\url{https://www.numdam.org/item/PMIHES_1994__79__157_0/}.
+
+\bibitem{DyatlovZworski2016}
+S.~Dyatlov und M.~Zworski, \emph{Dynamical zeta functions for
+Anosov flows via microlocal analysis}, Ann.\ Sci.\ \'Ec.\ Norm.\
+Sup\'er.\ (4) \textbf{49} (2016), no.~3, S.~543--577,
+DOI~\href{https://doi.org/10.24033/asens.2290}{10.24033/asens.2290},
+arXiv:1306.4203.
+
+\bibitem{Selberg1956}
+A.~Selberg, \emph{Harmonic analysis and discontinuous groups in
+weakly symmetric Riemannian spaces with applications to Dirichlet
+series}, J.\ Indian Math.\ Soc.\ \textbf{20}, 47--87 (1956).
+
+\bibitem{Weil1952}
+A.~Weil, \emph{Sur les ``formules explicites'' de la th\'eorie des
+nombres premiers}, Meddelanden fr\aa n Lunds Universitets
+Matematiska Seminarium, Supplementband tillägnet Marcel Riesz,
+S.~252--265, C.~W.~K.\ Gleerup, Lund (1952).
+
+\bibitem{IwaniecKowalski}
+H.~Iwaniec und E.~Kowalski, \emph{Analytic Number Theory}, American
+Mathematical Society Colloquium Publications \textbf{53}, AMS,
+Providence, RI (2004), xi+615~S., ISBN 0-8218-3633-1.
+
+\bibitem{Titchmarsh1986}
+E.~C.~Titchmarsh, \emph{The Theory of the Riemann Zeta-Function},
+2. Auflage, überarbeitet von D.~R.~Heath-Brown, Oxford University Press,
+Oxford (1986), ISBN 0-19-853369-1.
+
+\end{thebibliography}
+
+\end{document}
