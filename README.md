@@ -20,7 +20,7 @@ Classified by the SGE taxonomy from the Zeta Zoo. These instantiate Pattern A on
 
 | Paper | Version | Status | Open Problem | DOI |
 |-------|---------|--------|--------------|-----|
-| [**BSD**](fst-mathematics/bsd/) | v1.1 | Reformulation | Higher Gross–Zagier (rank ≥ 2) | [10.5281/zenodo.19087443](https://doi.org/10.5281/zenodo.19087443) |
+| [**BSD**](fst-mathematics/bsd/) | v1.2 candidate | Reformulation; rank <= 1 verified | Higher Gross-Zagier (rank >= 2) | [10.5281/zenodo.19087443](https://doi.org/10.5281/zenodo.19087443) |
 | [**Hodge**](fst-mathematics/hodge/) | v1.1 | No-Go Theorem | = Deligne's question (1982) | [10.5281/zenodo.19087439](https://doi.org/10.5281/zenodo.19087439) |
 | [**P vs NP**](fst-mathematics/p-vs-np/) | v1.2 | Reformulation | Uniformity Bridge | [10.5281/zenodo.19056809](https://doi.org/10.5281/zenodo.19056809) |
 
@@ -176,6 +176,8 @@ These stand independently of FST. The RFEP was abstracted from them; they are no
 | `scripts/dark-energy/compute_w_mapping.py` | Dark Energy | Correct w_eff → w_DE mapping + DESI grid scan |
 | `scripts/dark-energy/compute_husawicki_mcmc.py` | Dark Energy | Hu-Sawicki f(R) MCMC fit against DESI+Planck+Cassini |
 | `scripts/bsd/compute_height_saturation.py` | BSD | Height saturation test for quadratic twists |
+| `scripts/bsd/compute_bsd_verification.py` | BSD | BSD formula sanity checks for selected LMFDB curves |
+| `scripts/bsd/compute_rank2_lmfdb.py` | BSD | Rank-2 regulator positivity sample and plot |
 | `scripts/hodge/compute_ghr_spectrum.py` | Hodge | GHR spectrum numerical verification |
 | `scripts/hodge/compute_voisin_test.py` | Hodge | Voisin-style negative-control stress test |
 | `scripts/zeta-zoo/dedekind_ne_b_test.py` | Zeta Zoo | Dedekind Q(sqrt(-5)) NE-B analog probe |

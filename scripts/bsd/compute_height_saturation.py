@@ -11,14 +11,12 @@ import numpy as np
 CURVES = [
     # Rank 0
     ("11a1", 0, 1.0, 11),
-    ("37a1", 0, 1.0, 37),
     # Rank 1
-    ("37b1", 1, 0.0511114, 37),
-    ("43a1", 1, 0.7257859, 43),
-    ("389a1", 1, 0.1524837, 389),
+    ("37a1", 1, 0.0511114082, 37),
+    ("43a1", 1, 0.0628165071, 43),
     # Rank 2
-    ("389a1_twist", 2, 0.1524837, 389),  # illustrative
-    ("5077a1", 2, 0.4168122, 5077),
+    ("389a1", 2, 0.1524837, 389),
+    ("433a1", 2, 0.2253984, 433),
 ]
 
 # For rank 0: BSD predicts L(E,1) = |Sha| * Omega * prod(c_p) / |E_tors|^2
@@ -40,11 +38,8 @@ print("=" * 60)
 # Test 1: For rank 1 curves, check if h(P)/R(E) is consistent
 print("\n[Test 1] Rank 1: Height / Regulator ratio")
 rank1_curves = [
-    ("37b1", 1, 0.0511114, 0.0511114),  # R = h(P) for rank 1
-    ("43a1", 1, 0.7257859, 0.7257859),
-    ("389a1", 1, 0.1524837, 0.1524837),
-    ("433a1", 1, 0.2515890, 0.2515890),
-    ("446d1", 1, 0.0903596, 0.0903596),
+    ("37a1", 1, 0.0511114082, 0.0511114082),  # R = h(P) for rank 1
+    ("43a1", 1, 0.0628165071, 0.0628165071),
 ]
 
 for label, rank, reg, height in rank1_curves:
@@ -54,8 +49,8 @@ for label, rank, reg, height in rank1_curves:
 # Test 2: For rank 2 curves, check regulator structure
 print("\n[Test 2] Rank 2: Known regulators")
 rank2_curves = [
-    ("389a1", 2, 0.15248, "Cremona"),  # Actually this is rank 2 over certain fields
-    ("5077a1", 2, 0.41681, "Cremona"),
+    ("389a1", 2, 0.15248, "Cremona/LMFDB"),
+    ("433a1", 2, 0.22540, "Cremona/LMFDB"),
     ("234446a1", 2, 1.50725, "Stein-Watkins"),
 ]
 
@@ -131,9 +126,9 @@ try:
     ax.legend()
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
-    out_path = Path(__file__).resolve().with_name("compute_height_saturation.png")
-    plt.savefig(out_path, dpi=150)
-    print(f"\n  Plot saved to: {out_path}")
+    outpath = Path(__file__).with_name('compute_height_saturation.png')
+    plt.savefig(outpath, dpi=150)
+    print(f"\n  Plot saved: {outpath}")
 except Exception as e:
     print(f"\n  (matplotlib nicht verfuegbar: {e})")
 
