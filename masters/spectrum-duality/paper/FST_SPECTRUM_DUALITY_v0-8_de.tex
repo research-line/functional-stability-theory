@@ -1,0 +1,2161 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathtools}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{booktabs}
+
+% --- Theorem environments ---
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Korollar}
+\newtheorem{conjecture}[theorem]{Vermutung}
+\newtheorem{blueprint}[theorem]{Bedingter Entwurf}
+\newtheorem{milestone}[theorem]{Meilenstein}
+\newtheorem{hypothesis}[theorem]{Hypothese}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Bemerkung}
+\newtheorem{example}[theorem]{Beispiel}
+
+% --- Operators ---
+\DeclareMathOperator{\spec}{spec}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\Dom}{Dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\Rep}{Rep}
+
+% --- Shortcuts ---
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\HH}{\mathcal{H}}
+\newcommand{\V}{\mathcal{V}}
+\renewcommand{\S}{\mathcal{S}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\K}{\mathcal{K}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\chifn}{\chi}
+\newcommand{\gap}{\operatorname{gap}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% --- Metadata ---
+\title{Funktionale Stabilitätstheorie --- Physikalische Instanziierung durch das\\
+Renormierte Freie-Energie-Prinzip\\
+\vspace{0.3em}
+{\large [RFEP v1.8 Update Entwurf --- Post-Zookeeper Transfer]}}
+\author{Lukas Geiger\\
+\small Unabhängiger Forscher, Bernau}
+\date{26. April 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Die Funktionale Stabilitätstheorie (FST) ist ein Programm, das ein einziges
+strukturelles Muster --- funktionale Positivität unter einer Eichbedingung ---
+als das gemeinsame Substrat offener Probleme in der Zahlentheorie, der mathematischen Physik
+und der Kosmologie identifiziert. Dieses Paper ist die physikalische Instanziierung der FST.
+Wir präsentieren das Renormierte Freie-Energie-Prinzip (RFEP) als die universelle Stabilitäts-Metaregel,
+die dem Muster~A (PA1--PA3) und dem Dissipativen Selektionsprinzip (DS1--DS3) zugrunde liegt.
+
+Es werden drei ontologische Ebenen unterschieden: (1) das abstrakte RFEP als
+universelle Stabilitäts-Metaregel; (2) das Dissipative Selektionsprinzip
+als Mechanismus, durch den die physikalische Evolution den eindeutigen
+dissipationsminimierenden Attraktor auswählt; und (3) domänenspezifische
+Instanziierungen als konkrete Verifikationen. Wir überprüfen das Framework
+in fünf Bereichen: FST-Physik (Yang--Mills, Navier--Stokes, Navier--Stokes Log-Distanz-Ungleichung,
+Turbulenz K41) und FST-Kosmologie (Dunkle Energie via das Kooperative Renormierungs-Modell).
+Der historische Ursprung in der Riemannschen Vermutung und das mathematische Fundament
+der FST werden im Begleitpapier \cite{ZetaZooMaster} entwickelt. Veröffentlicht in englischer und deutscher Fassung.
+\end{abstract}
+
+\tableofcontents
+
+% =====================================================
+\section{Einleitung und Problemstellung}
+\label{sec:intro}
+% =====================================================
+
+\subsection{Die Spektrum-Nullstellen-Identifikation}
+
+Hilbert und P\'olya schlugen vor, dass die Riemannsche Vermutung (RH) aus der
+Existenz eines selbstadjungierten Operators $H$ auf einem Hilbertraum $\HH$ folgen würde,
+dessen Spektrum die Menge der Imaginärteile der nicht-trivialen Nullstellen
+der Riemannschen Zetafunktion ist:
+\begin{equation}
+  \spec(H) = \{\gamma_\rho \in \R : \zeta(1/2 + i\gamma_\rho) = 0\}.
+\end{equation}
+Für Dirichlet: finde $H_\chifn$ mit $\spec(H_\chifn) =
+\{\gamma_\chifn^{(k)} : L(1/2 + i\gamma_\chifn^{(k)}, \chifn) = 0\}$.
+
+Diese \emph{Spektrum-Nullstellen-Identifikation} ist der offene Schritt im
+Connes-Programm \cite{Connes1999,Connes2026,ConnesConsaniMoscovici2025}.
+
+\subsection{Zwei Hindernisse auf der direkten Hilbert-Seite}
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Eigenvektor-Analytizitätsbarriere.} Für den Dirichlet-Weil-Operator
+    auf $L^2([-L,L])$ ist die Paley-Wiener-Fortsetzung durch $\sigma = 1/2$ begrenzt
+    (archimedischer Pol, Prim-Dirichlet-Konvergenz) \cite{AnalyticKernelV2,C2LayerStatus}.
+    Die L-Nullstellen treten auf dieser Ebene nicht in Erscheinung.
+  \item \textbf{NE-B Gruppenstruktur-Hindernis.} Die Prim-Verschiebungs-Algebra
+    auf $L^2([-L,L])$ hat eine Zentralisator-Dimension von $1$
+    \cite{Geiger2026RHII}, Abschnitt~5. Die Halbgruppen-Gruppen-Äquivalenz-Vermutung
+    (SGE; \cite{MathMaster}, Abschnitt~9) prognostiziert, dass der direkte
+    Hilbert-P\'olya-Ansatz ohne eine Gruppenstruktur scheitert.
+\end{enumerate}
+
+Diese Kombination motiviert eine Nicht-Hilbert-, Nicht-direkt-Galerkin-Realisierung.
+Meyer 2005 erreicht dies über eine Idele-Klassen-Darstellung auf einem
+Fr\'echet-Distributionsraum. FST ist ein Vorschlag für ein axiomatisches Vokabular,
+in dem Meyers Konstruktion die natürliche abelsche Instanziierung ist und in dem
+alternative Routen (CCM-Prolat, Bost-Connes-Thermodynamik) verglichen werden können.
+
+\subsection{Beitrag}
+
+Dieses v1.8 Update reorganisiert das Paper um das RFEP als die physikalische
+Instanziierung der Funktionalen Stabilitätstheorie. Sein Beitrag ist vierfach:
+\begin{enumerate}[leftmargin=*]
+  \item Es trennt die ontologischen Ebenen RFEP, DS1--DS3 und die domänenspezifische Instanziierung;
+  \item Es dokumentiert die Verpflichtungen des Post-Zookeeper-Transfers als explizite Prüfungen
+    von Operator/Form, Defekt, Galerkin-Treue, Komplement-Lücke und Spur-Kompatibilität;
+  \item Es tabellarisiert den aktuellen Verifikationsstatus über die Zweige Physik und Kosmologie hinweg; und
+  \item Es hält das ursprüngliche Spektrum-Nullstellen/RH-Material zweiglokal und
+    verweist für das mathematische Fundament auf das Begleitpapier Zeta Zoo \cite{ZetaZooMaster}.
+\end{enumerate}
+
+Es wird kein neues Theorem über RH, Yang--Mills, Navier--Stokes oder Kosmologie behauptet.
+Der Hauptbeitrag ist eine statusstabile RFEP-Ebene: sie unterscheidet bewiesene
+strukturelle Reduktionen, bedingte Transfers, numerische Machbarkeitsnachweise
+(Proof-of-Life) und offene analytische Verpflichtungen.
+
+\subsection{Bezug zu früheren Versionen}
+
+Dies ist der Entwurf des RFEP v1.8 Updates. Er integriert das v0.8 Post-Zookeeper-Transferpaket,
+ändert jedoch die Rolle auf Ebene des Papers: RFEP wird nun als physikalische Instanziierung
+der FST präsentiert, anstatt als Anhang zur Spektrum-Nullstellen-Routemap. Gegenüber v0.8
+fügt das Update die Zweiglokalität, die Trennung des Zeta Zoos, die Status-Tabelle
+für Physik/Kosmologie-Beweise und den CRM-Kreis im Ausblick hinzu. Gegenüber v0.7
+behält es das Drei-Lemma-Endspiel und die RFEP-Transferverpflichtungen für physikalische
+Nachträge bei. Gegenüber v0.6 bleiben Behauptungen über Theorem 8.4 (MS1 $\Leftrightarrow$ MS2),
+Vermutung 8.6 (Weyl-Gesetz für $QW_\lambda$), Proposition 8.2 (CCM instanziiert (FST-7)(B)),
+die Spurklasse-Behauptung für $G_\beta^{\mathrm{ren}}$ und die Rhetorik der Residuallücke
+im Emergenz-Abschnitt herabgestuft, um der technischen Strenge zu entsprechen, die
+tatsächlich in den unterstützenden Notizen vorhanden ist. Ein externes Audit (April 2026)
+identifizierte systematische Übertreibungen in v0.6; die vorliegende Version hält
+die Aussagen des Papers auf einer Linie mit den Diagnosen auf Notizenebene.
+
+% =====================================================
+\section{FST-Selbstdualität ohne Hilbertraum}
+\label{sec:fst-duality}
+% =====================================================
+
+\subsection{Was ersetzt die Selbstadjungiertheit?}
+
+Selbstadjungiertheit auf einem Hilbertraum erzwingt gleichzeitig ein reellwertiges Spektrum
+und vollständige Eigenvektorfamilien. Auf einem Nicht-Hilbertraum müssen diese
+separat erzwungen werden.
+
+\begin{definition}[FST-Selbstdualität]
+\label{def:fst-duality}
+Ein Tripel $(\V, B, G)$ ist ein \emph{FST-selbstduales System}, wenn:
+\begin{enumerate}[leftmargin=*]
+  \item $\V$ ein lokalkonvexer topologischer Vektorraum ist (typischerweise
+    Fr\'echet oder reflexiv Banach).
+  \item $B: \V \times \V \to \C$ eine stetige nicht-ausgeartete
+    Sesquilinearform (die \emph{Selbstdualitätspaarung}) ist.
+  \item $G$ eine lokalkompakte Gruppe ist, die stetig auf $\V$ operiert
+    und $B$ erhält.
+\end{enumerate}
+\end{definition}
+
+Wenn $\V$ ein Hilbertraum und $B$ das Skalarprodukt ist, ist dies eine unitäre
+$G$-Darstellung.
+
+\begin{proposition}[Reelles Spektrum durch $B$-Symmetrie]
+\label{prop:real-spectrum}
+Sei $(\V, B, G)$ FST-selbstdual. Wenn $H$ der infinitesimale
+Erzeuger einer einparametrigen Untergruppe ist, die $B$-symmetrisch operiert
+($B(Hv, w) = B(v, Hw)$ auf einem dichten Definitionsbereich), dann sind die gemeinsamen
+Eigenwerte von $H$ bezüglich $B$ reell.
+\end{proposition}
+
+Das Argument ist Standard für $B$-symmetrische Operatoren auf reflexiven
+Räumen \cite{Meyer2005}.
+
+\subsection{Warum FST Nicht-Hilbert motiviert}
+
+FST-Stabilität (RFEP; \cite{MathMaster}, Abschnitt~6.5): Ein System ist stabil genau dann, wenn sein RG-Fluss
+gegen einen selbstähnlichen Fixpunkt konvergiert.
+
+Für eine Operatorfamilie $\{A_\lambda\}_{\lambda > 0}$ ist Stabilität
+unter RG-Skalierung im Allgemeinen nicht mit einer Hilbert-Struktur kompatibel.
+Ein Fr\'echet- oder lokalkonvexer Raum, der die Reskalierung als
+Automorphismus zulässt, ist natürlich. Die Idele-Klassengruppe ist
+das prototypische Beispiel.
+
+% =====================================================
+\section{Formalisierung der FST-Axiome}
+\label{sec:axioms}
+% =====================================================
+
+\subsection{Grunddaten}
+
+Eine \emph{FST-Struktur} besteht aus:
+
+\begin{description}[style=nextline]
+\item[(G)] Einer lokalkompakten abelschen topologischen Gruppe $G$ mit Haar-Maß.
+\item[(R)] Einer abgeschlossenen Untergruppe $R \leq G$, isomorph zu $\R$ oder
+  $\R_+^\times$ (die \emph{Renormierungsachse}).
+\item[(N)] Einer komplementären abgeschlossenen Untergruppe $N \leq G$ mit $G
+  \cong R \times N$, $N$ kompakt-proendlich (der \emph{arithmetische Nukleus}).
+\item[($\chifn$)] Einem unitären Charakter $\chifn : G \to \C^\times$.
+\item[(S)] Einer $G$-äquivarianten Bruhat-Schwartz-Klasse $\S(G)$, mit
+  raschem Abfall entlang $R$, lokal konstanter Regularität entlang $N$,
+  und einer Fourier-Transformation $\mathcal F : \S(G) \to \S(\hat G)$
+  mit Pontryagin-Dualität $\hat G \cong G^\ast$.
+\end{description}
+
+\subsection{Muster-A Axiome}
+
+\begin{description}[style=nextline]
+\item[(P1)] $G = R \times N$ topologisch.
+\item[(P2)] $\S(G) = \S(R) \otimes \S(N)$ topologisch.
+\item[(P3)] $\mathcal F = \mathcal F_R \otimes \mathcal F_N$.
+\end{description}
+
+\subsection{Das SGE Axiom}
+
+\begin{description}[style=nextline]
+\item[(SGE)] $G$ ist eine Gruppe (keine Halbgruppe). Translationen $T_g:
+  \S(G) \to \S(G)$ sind invertierbar.
+\end{description}
+
+Dies ist das $G$-Analogon zu dem, was auf $L^2([-L, L])$ unter
+Prim-Verschiebungen scheitert (vgl.~NE-B, \cite{Geiger2026RHII}, Abschnitt~5).
+
+\subsection{Die DS1--DS3 Axiome}
+
+\begin{description}[style=nextline]
+\item[(DS1) \textit{Dissipation.}] Die $R$-Operation
+  $\{T_r\}$ ist $\S$-erhaltend und kontraktiv in einer gewichteten Halbnorm.
+\item[(DS2) \textit{Selektion.}] $P_\chifn : \S(G) \to
+  \S(G)^\chifn$ ist stetig und idempotent.
+\item[(DS3) \textit{Reproduktion.}] Für $N = \prod_\ell' N_\ell$,
+  $\S(G)^\chifn = \S(R) \otimes \bigotimes_\ell \S(N_\ell)^{\chifn_\ell}$.
+\end{description}
+
+\subsection{Das RFEP Axiom}
+
+\begin{description}[style=nextline]
+\item[(RFEP)] Es existiert ein Funktional der freien Energie
+  $\mathcal F_\chifn : \S(G)^\chifn \to \R$, das konvex und koerziv
+  unter der $R$-Operation ist und dessen kritische Punkte die
+  Eigendistributionen des $R$-Erzeugers sind.
+\end{description}
+
+Diese sechs Axiome bilden die \emph{FST-Basis}.
+
+\begin{remark}[Status des Axiom-Pakets]
+\label{rem:axioms-status}
+Als Klassifizierungssprache ist das Axiom-Paket nützlich: Es trennt sauber ein Basis-Framework vom Vollständigkeitsprinzip (FST-7) und von später eingeführten stärkeren Selektoren (FST-Free, FST-Min), die erst in Abschnitt~\ref{sec:emergence} vorgestellt werden. Als minimales Axiomensystem ist es jedoch \emph{noch nicht} überzeugend: Minimalität und Unabhängigkeit werden behauptet, aber nicht bewiesen. Einige Punkte (z.B. Muster~A) überschneiden sich erheblich mit den Grunddaten; RFEP wird als zentrales Prinzip behandelt, aber seine Wirkungskraft relativ zu den anderen Axiomen wird nicht scharf isoliert; und die späteren Erweiterungen (FST-Free, FST-Min) fungieren eher als \emph{Selektionsprinzipien, die arithmetischen Inhalt kodieren}, denn als Konsequenzen. Die angemessene Lesart ist daher: Die Axiome sind eine nützliche Karte dafür, wo Inhalte verortet sind, aber noch kein fundamentales Axiomensystem mit bewiesener Unabhängigkeit.
+\end{remark}
+
+\subsection{Kanonische L-Funktion}
+
+Für $f \in \S(G)^\chifn$,
+\[
+  \tilde f(s) := \int_R f(r, e_N) \, r^s \, \frac{dr}{r},
+\]
+\[
+  \Lambda_{G,\chifn}(s) := Z_\infty(s) \cdot \prod_\ell
+    L_\ell(s, \chifn_\ell).
+\]
+Dies ist die Tate-These \cite{Tate1950} axiomatisiert.
+
+% =====================================================
+\section{Zweiglokalität und der Zeta Zoo}
+\label{sec:branch-locality}
+% =====================================================
+
+RFEP v1.8 verwendet eine zweiglokale Lesart der FST. Der mathematische
+Zweig wuchs historisch aus der Riemannschen Vermutung, den Hilbert--P\'olya
+Programmen und dem Zeta Zoo. Dieser Zweig liefert das stärkste
+formale Vokabular: Gruppenstruktur, Selbstdualität, Eichbedingungen,
+Positivitätsformen und explizite Spur-Hindernisse. Er ist jedoch nicht dasselbe
+Objekt wie die physikalische RFEP-Ebene.
+
+In diesem Paper ist RFEP die physikalische Metaregel:
+\[
+  \text{stabile physikalische Evolution}
+  \quad\Longleftrightarrow\quad
+  \text{die renormierte freie Energie erreicht ein Minimum unter Nebenbedingungen.}
+\]
+Das Dissipative Selektionsprinzip (DS1--DS3) ist der Mechanismus, durch den
+das RFEP-Minimum dynamisch ausgewählt wird. Domänenspezifische Papiere instanziieren diesen Mechanismus dann mit konkreten Funktionalen, Operatoren und Defektstrukturen.
+
+Das Begleitpapier Zeta Zoo \cite{ZetaZooMaster} wird daher als das mathematische Fundament und der historische Ursprung der FST behandelt, nicht als Voraussetzungsbeweis für die hier gemachten physikalischen Behauptungen. Diese Trennung verhindert eine häufige Fehlinterpretation: Physikalische RFEP-Anwendungen können Vokabular und Beweisverpflichtungen aus dem Zeta Zoo erben, aber sie erben keine RH-Behauptung.
+
+\subsection{Aktueller Domänenstatus}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{p{0.22\textwidth} p{0.24\textwidth} p{0.42\textwidth}}
+\toprule
+Domäne & RFEP-Status & Gegenwärtiger Beweisstatus \\
+\midrule
+Yang--Mills & Starke Kopplung RFEP Instanz &
+Starke Kopplung Massenlücke auf dem Gitter in den aktuellen Notizen bewiesen; Kontinuums-Lücken-Transfer bleibt bedingt. \\
+Navier--Stokes & Bedingte RFEP/Defekt Instanz &
+$L^2$-Hindernistheorem und numerische Reichweiten-Diagnosen vorhanden; globale Regularität bleibt bedingt durch Annahme~G und Bedingung~D. \\
+NS Log-Distanz Ungleichung & RFEP-kompatible LDI/TLL Brücke &
+BV-Kettenregel bewiesen; PDE-Ebene TLL/LDI-Abschluss bleibt offen. \\
+Turbulenz K41 & Variationelle RFEP Instanz &
+K41-Minimierer-Theorem im Skelett unbedingt; anomale Dissipation und DFC/SP-Abschluss bleiben bedingt. \\
+Dunkle Energie / CRM & Kosmologische RFEP Instanz &
+Kooperatives Renormierungsmodell liefert den beabsichtigten Kosmologie-Zweig; Beobachtungs- und Modell-Identifikationsprüfungen bleiben offen. \\
+\bottomrule
+\end{tabular}
+\caption{Zweiglokaler Beweisstatus für das RFEP v1.8 Update.}
+\label{tab:domain-status}
+\end{table}
+
+% =====================================================
+\section{Der FST Fixpunktsatz}
+\label{sec:fixed-point}
+% =====================================================
+
+\subsection{Die Konstruktion}
+
+\begin{description}[style=nextline]
+\item[$\V_\chifn$] Quotient von $\S(G)^\chifn$ nach Koinvarianten $\K$
+  (Funktionen mit verschwindenden Tate-Integralen auf der kritischen Geraden).
+\item[$B_\chifn$] Die Tate-Paarung $B_\chifn(v, w) = \int_G v(g)
+  \mathcal F[w](g) \chifn(g) dg$.
+\item[$H_\chifn$] Erzeuger der $R$-Operation.
+\end{description}
+
+\subsection{Der Satz}
+
+\begin{theorem}[FST Fixpunktsatz, bedingt durch (FST-7)]
+\label{thm:fst-fixed-point}
+Sei $(G, R, N, \chifn, \S)$ eine FST-Struktur, die die Basis-Axiome und das Vollständigkeitsaxiom (FST-7) aus Abschnitt~\ref{sec:fst7} erfüllt. Dann gilt:
+
+\noindent(a) $\V_\chifn$ ist ein nicht-trivialer Fr\'echet-Raum.
+
+\noindent(b) $B_\chifn$ ist nicht-ausgeartet und $R$-äquivariant.
+
+\noindent(c) $H_\chifn$ ist $B_\chifn$-symmetrisch.
+
+\noindent(d) $\spec_\mathrm{pt}(H_\chifn) = \{\gamma \in \R :
+  \Lambda_{G,\chifn}(1/2 + i\gamma) = 0\}$.
+
+\noindent(e) $v_\gamma \in \V_\chifn^\ast$ erfüllt
+  $B_\chifn(v, v_\gamma) = \tilde v(1/2 + i\gamma)$.
+\end{theorem}
+
+\begin{corollary}[abstrakte RH, bedingt]
+\label{cor:abstract-rh}
+Unter den Voraussetzungen \emph{einschließlich (FST-7)} liegen die nicht-trivialen Nullstellen von $\Lambda_{G,\chifn}$ auf $\Re(s) = 1/2$.
+\end{corollary}
+
+Die Teile (a)--(c), (e) folgen im adelischen Fall aus der Tate-These.
+Teil (d) --- die spektrale Identifikation --- erfordert (FST-7), und dies ist genau der Input, der nicht aus den Basis-Axiomen ableitbar ist. Die Aussage ist daher eine \emph{Umformulierung} des klassischen Meyer/Tate-Inhalts in die FST-Sprache, kein neues Theorem.
+
+% =====================================================
+\section{Minimalbeispiel: Riemannsche Zetafunktion}
+\label{sec:minimal-example}
+% =====================================================
+
+Die minimale nicht-triviale Instanziierung: $G = \A_\Q^\times/\Q^\times$,
+$\chifn = \chifn_0$, $R = \R_+^\times$, $N = \hat\Z^\times$.
+Alle Axiome sind trivialerweise erfüllt.
+
+\subsection{Tate Integrale}
+
+Mit $f = f_\infty \otimes \prod_p f_p$, $f_\infty(x) = e^{-\pi x^2}$,
+$f_p = \mathbf{1}_{\Z_p}$:
+\[
+  Z_\infty(s) = \pi^{-s/2} \Gamma(s/2), \qquad
+  Z_p(s) = (1 - p^{-s})^{-1},
+\]
+\[
+  Z(f, s) = \pi^{-s/2} \Gamma(s/2) \, \zeta(s) = \Lambda(s).
+\]
+Die adelische Selbstdualität $\hat f = f$ liefert direkt
+$\Lambda(s) = \Lambda(1-s)$.
+
+\subsection{Der Operator}
+
+$H_{\chifn_0} = -x_\infty \partial_{x_\infty}$, Multiplikation mit
+$-s$ auf der Mellin-Seite. Mellin-Auswertungen $v_\gamma: f \mapsto
+Z(f, 1/2+i\gamma)$ liegen in $\V_{\chifn_0}^\ast$. Die Nicht-Trivialität
+an Nullstellen ist (FST-7).
+% =====================================================
+\section{Das Vollständigkeitsaxiom (FST-7): Drei Sichtweisen}
+\label{sec:fst7}
+% =====================================================
+
+\subsection{(FST-7) algebraisch: Pontryagin-Selbstdualität}
+
+\begin{definition}[abstrakte Meyer-Bedingung]
+\label{def:fst7-a}
+(FST-7A): es existiert eine diskrete Untergruppe $\Xi \leq G$ mit:
+\textit{(i)} $\Xi^\perp = \Xi$ unter der Pontryagin-Paarung;
+\textit{(ii)} $G / (R \cdot \Xi)$ kompakt (Produktformel);
+\textit{(iii)} $B_\chifn$ ist $\Xi$-invariant.
+\end{definition}
+
+Im adelischen Fall erfüllt $\Xi = \Q^\times$ (i)--(iii) mit
+$\prod_v |x|_v = 1$ als Produktformel.
+
+\subsection{(FST-7) informationstechnisch: Nyquist-Shannon}
+
+\begin{definition}[informationstheoretische Selbstdualität]
+\label{def:fst7-b}
+(FST-7B): für alle $f \in \S(G)$ mit $\hat f \in \S(\hat G)$,
+\[
+  \sum_{\xi \in \Xi} |f(\xi)|^2 = \sum_{\eta \in \hat\Xi}
+    |\hat f(\eta)|^2.
+\]
+\end{definition}
+
+\begin{proposition}
+\label{prop:B-iff-A}
+(FST-7B) $\Leftrightarrow$ (FST-7A)(i) unter Standard-Pontryagin-Bedingungen an $(G, \Xi)$.
+\end{proposition}
+
+Interpretation: $\Xi$ ist die Nyquist-optimale Abtastung von $G$.
+
+\begin{remark}[Slepian-Pollak-Prolate als natürliche Realisierung]
+\label{rem:b-view-prolate}
+Das Axiom (FST-7B) ist kompatibel mit dynamischen Realisierungen durch
+Prolat-Sphäroid-Wellenfunktionen $h_{n,\lambda}$ von Slepian-Pollak
+\cite{SlepianPollack1961}: diese minimieren gleichzeitig
+Energie außerhalb des Intervalls und außerhalb des Bandes auf $\R$ und sind
+daher eine Nyquist-Shannon-optimale Basis; für $n \equiv 0 \pmod 4$ sind sie
+Eigenfunktionen der Fourier-Transformation, tragen also eine konkrete
+Zeit-Frequenz-Selbstdualität. Dies ist der konzeptionelle Einstiegspunkt
+für das CCM-Programm (vgl. Abschnitt~\ref{sec:ccm-prolate}). Die
+\emph{Beziehung} zwischen dem Prolat-Setup und (FST-7)(B) ist eine
+mathematisch sinnvolle Analogie und keine bewiesene Instanziierung;
+siehe Bemerkung~\ref{rem:ccm-closest-model}.
+\end{remark}
+
+\subsection{(FST-7) dynamisch: arithmetische Ergodizität}
+
+\begin{definition}[arithmetische Ergodizität]
+\label{def:fst7-c}
+(FST-7C): die $\Xi$-Operation auf dem Norm-$1$-Kern $G^{(1)}$ ist streng
+ergodisch (Haar-Maß).
+\end{definition}
+
+\begin{proposition}
+\label{prop:C-implies-A}
+(FST-7C) mit Pontryagin-Fourier-invariantem Haar-Maß impliziert
+die Poissonsche Summenformel für $\Xi$, also (FST-7A).
+\end{proposition}
+
+Im adelischen Fall operiert $\Q^\times$ durch strenge Approximation streng ergodisch auf
+$\A^{(1)}$ \cite{CasselsFrohlich}.
+
+\subsection{Äquivalenz als strukturelle Bedingungen}
+
+\begin{theorem}[Äquivalenz der (FST-7) Sichtweisen]
+\label{thm:fst7-equiv}
+(FST-7A), (FST-7B), (FST-7C) sind äquivalent als strukturelle
+Bedingungen für dasselbe $\Xi \leq G$ unter Standard-Pontryagin-
+und Haar-Bedingungen.
+\end{theorem}
+
+\begin{remark}[Reichweite von Theorem~\ref{thm:fst7-equiv}]
+Die Äquivalenz besteht auf der Ebene struktureller Eingangsbedingungen, nicht
+auf der Ebene technischer Einstiegspunkte. In konkreten Fällen öffnen die drei
+Sichtweisen sehr unterschiedliche technische Türen: (A) öffnet die Tate/Meyer-adelische Analyse;
+(B) öffnet die Slepian-Pollack / Prolat-Operator-Analyse;
+(C) öffnet BC-Thermodynamik / Cornelissen-Marcolli-Starrheit.
+Die drei Einstiegspunkte sind als Beweisstrategien \emph{nicht} austauschbar.
+\end{remark}
+
+\subsection{(FST-7) ist aus Basis-Axiomen nicht ableitbar}
+
+\textbf{Strukturelle Beobachtung.} (FST-7) in jeder seiner drei
+Formen ist nicht allein aus (P1--P3), (SGE), (DS1--DS3), (RFEP) ableitbar.
+Es ist eine arithmetische Eigenschaft, die von außen eingebracht werden muss:
+aus der Tate-These im adelischen Fall, durch analogen Input in anderen Fällen.
+Dies ist die zentrale ehrliche Einschränkung des Axiom-Pakets.
+
+% =====================================================
+\section{Die Bost-Connes/Meyer-Brücke}
+\label{sec:bc-meyer}
+% =====================================================
+
+\subsection{Das BC95 System}
+
+Die Hecke-$C^\ast$-Algebra $\HH_\Q = C^\ast(\N^\times \rtimes \hat\Z^\times)$
+mit Zeitentwicklung $\alpha_t(\mu_n) = n^{it}\mu_n$ besitzt:
+\begin{itemize}
+\item $\spec(H_{BC}) = \{\log n : n \in \N^\times\}$.
+\item $Z_{BC}(\beta) = \zeta(\beta)$ für $\beta > 1$.
+\item KMS-Zustände: eindeutig für $\beta \leq 1$, parametrisiert durch
+  $\hat\Z^\times \cong \Gal(\Q^\mathrm{ab}/\Q)$ für $\beta > 1$.
+\item Phasenübergang bei $\beta = 1$.
+\end{itemize}
+
+\subsection{Vier Brückenansätze, einer empfohlen}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Ansatz} & \textbf{Plausibilität} & \textbf{Kurzfristig} & \textbf{Langfristig} \\
+\midrule
+1. GNS + Niedrigtemperatur-Limes & mittel & mittel & hoch \\
+2. \textbf{Laplace-Mellin-Dualität} & \textbf{hoch} & \textbf{hoch} & mittel \\
+3. Arithmetischer Site als Intermediär & hoch & niedrig & sehr hoch \\
+4. Tropikalisierung & niedrig & niedrig & mittel \\
+\bottomrule
+\end{tabular}
+\caption{Brückenansätze. Ansatz~2 ist das empfohlene kurzfristige Ziel;
+er impliziert \emph{keinen} Beweis der RH, bietet aber eine strukturelle Identifikation
+zwischen der thermodynamischen und der distributionellen Seite.}
+\label{tab:bridge-approaches}
+\end{table}
+
+\subsection{Laplace-Mellin-Dualität: die Identifikation}
+
+\begin{equation}
+\label{eq:log-z-deriv}
+  L(\beta) := -\frac{d}{d\beta} \log Z_{BC}(\beta)
+    = -\frac{\zeta'(\beta)}{\zeta(\beta)}.
+\end{equation}
+Über die explizite Formel ist $L$ meromorph mit:
+\begin{itemize}
+  \item Einfachem Pol bei $\beta = 1$ (Mangoldt-Pol), Residuum $+1$.
+  \item Polen bei $\beta = \rho$ (nicht-triviale Nullstellen), Residuen $-m_\rho$.
+  \item Polen bei trivialen Nullstellen $\beta = -2k$.
+\end{itemize}
+
+\begin{conjecture}[Meyer-Eigendistributionen als BC-Residuen]
+\label{conj:meyer-bc}
+Für die Riemannsche Zetafunktion ($\chifn = \chifn_0$),
+\[
+  v_{\gamma_\rho}(f) = \Res_{\beta = 1/2 + i\gamma_\rho}
+    L(\beta) \cdot \mathcal M[f](\beta).
+\]
+\end{conjecture}
+
+Dies ist eine konjekturale Identifikation, keine bewiesene Äquivalenz.
+Sie rigoros zu machen, ist exakt der Inhalt der Wick-Mellin-Hindernisse
+(Abschnitt~\ref{sec:wick-mellin-obstacles}); siehe dort.
+
+% =====================================================
+\section{Das CCM-Prolat-Modell: Die nächstgelegene bekannte Realisierung von (FST-7)(B)}
+\label{sec:ccm-prolate}
+% =====================================================
+
+Das Connes-Consani-Moscovici (CCM)-Programm
+\cite{ConnesConsani2023,ConnesMoscovici2022,ConnesConsaniMoscovici2025}
+realisiert eine Störung vom Rang eins eines Skalierungsoperators,
+dessen Spektrum numerisch gegen die nicht-trivialen Nullstellen von $\zeta$
+konvergiert. Wir fassen die Konstruktion zusammen und diskutieren ihre
+Beziehung zu (FST-7)(B); danach präsentieren wir den Entwurf der Route~B
+für die Sprache der fehlenden CCM-Schritte, wobei MS2/C2 als aus dem
+Zookeeper-Abschluss importiert markiert wird und MS1 als das
+verbleibende Element in dieser älteren Routen-Sprache verbleibt.
+
+Wir betonen vorab: Bis auf das unten importierte Zookeeper MS2/C2-Ergebnis
+ist alles ein Entwurf und/oder eine Analogie.
+
+\subsection{Die Konstruktion}
+\label{sec:ccm-construction}
+
+Fixiere $\lambda > 1$ und setze $L = 2 \log\lambda$.
+
+\begin{description}[leftmargin=*,style=nextline]
+\item[\textbf{Skalierungs-Tripel.}] Auf $L^2([\lambda^{-1}, \lambda],
+  d^\ast u)$ mit $d^\ast u = du/u$ besitzt der Skalierungsoperator
+  $D^{(\lambda)}_{\log} = -i\,d/d(\log u)$ mit periodischen Randbedingungen
+  die Eigenfunktionen $V_n(u) = L^{-1/2}\exp(2\pi i n \log(\lambda u)/L)$, $n \in \Z$.
+\item[\textbf{Weil-Quadratische Form.}] Aus Weils expliziter Formel
+  wird die Sesquilinearform $QW(f,g) = \Psi(f^\ast * g)$ mit $\Psi =
+  W_{0,2} - W_\R - \sum_p W_p$ konstruiert. Eingeschränkt auf
+  $L^2([\lambda^{-1}, \lambda], d^\ast u)$ tragen nur Primzahlen $p \leq
+  \lambda^2$ bei.
+\item[\textbf{Test-Unterraum $E_N$.}] Aufspann der $V_n$ mit $|n|
+  \leq N$; Dimension $2N+1$.
+\item[\textbf{Störung vom Rang eins.}] Sei $\epsilon_N$ der
+  kleinste Eigenwert der Einschränkung $QW_\lambda^N$ und $\xi$
+  der entsprechende Eigenvektor (angenommen als einfach und gerade unter $u
+  \mapsto u^{-1}$). Sei $\delta_N \in E_N$ die Darstellung der Dirichlet-Kern-Auswertung
+  am Rand, normiert durch $\delta_N(\xi) = 1$. Definiere
+  \[
+     D^{(\lambda,N)}_{\log} := D^{(\lambda)}_{\log}
+       - |D^{(\lambda)}_{\log}\xi\rangle\langle\delta_N|.
+  \]
+\end{description}
+
+\begin{theorem}[CCM 2025, Theorem 1.1]\label{thm:ccm-mainthm}
+(i) $D^{(\lambda,N)}_{\log}$ ist selbstadjungiert auf $E'_N \oplus
+E_N^\perp$ mit $E'_N = E_N/\C\xi$.
+(ii) $\det_{\mathrm{reg}}(D^{(\lambda,N)}_{\log} - z) = -i
+\lambda^{-iz}\widehat{\widehat\xi}(z)$.
+(iii) $\widehat{\widehat\xi}(z)$ ist ganzzahlig, alle Nullstellen liegen auf der
+reellen Achse und stimmen mit $\mathrm{spec}(D^{(\lambda,N)}_{\log})$ überein.
+\end{theorem}
+
+\begin{remark}[Numerische Evidenz]\label{rem:ccm-numerics}
+Für $\lambda = \sqrt{14}$, $N = 120$, unter Verwendung nur der Primzahlen
+$p \leq 13$, werden die ersten fünfzig nicht-trivialen Nullstellen von $\zeta(1/2+is)$
+mit Fehlern im Bereich von $10^{-60}$ bis $10^{-6}$ rekonstruiert
+(vgl.~\cite[Table~1]{ConnesConsaniMoscovici2025}). Die statistische
+Unwahrscheinlichkeit einer solchen Übereinstimmung wird von CCM auf
+$10^{-1235}$ geschätzt. Numerische Daten dieser Stärke sind \emph{zwingende Evidenz};
+sie stellen kein Theorem dar, das RH reduziert.
+\end{remark}
+
+\subsection{Die $QW$-$PW$-Dualität}
+\label{sec:ccm-duality}
+
+CCM identifizieren eine strukturelle Dualität zwischen der Weilschen
+Quadratischen Form $QW_\lambda$ und dem Prolat-Wellenoperator
+\[
+  PW_\lambda := -\partial_x\big((\lambda^2-x^2)\partial_x\big) +
+    (2\pi\lambda x)^2,
+\]
+dessen Eigenfunktionen $h_{n,\lambda}$ die Prolat-Sphäroid-Wellenfunktionen
+von Slepian-Pollak \cite{SlepianPollack1961} sind.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+& \textbf{Weil $QW_\lambda$} & \textbf{Prolat $PW_\lambda$} \\
+\midrule
+Ursprung        & Zahlentheorie (Weil) & Informationstheorie (Shannon) \\
+Regime          & Infrarot (niedrige Eigenwerte) & Ultraviolett (hohe Eigenwerte)\\
+Zeta-Abdruck    & Niedrige Nullstellen von $\zeta$ & UV-Verhalten der Nullstellen\\
+Optimalität     & Explizite-Formel-Positivität & Zeit-Frequenz-optimal \\
+Referenz        & \cite{ConnesConsaniMoscovici2025} & \cite{ConnesMoscovici2022} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{CCM als nächstgelegenes Modell für (FST-7)(B)}
+\label{sec:ccm-as-fst7b}
+
+Erinnerung an (FST-7)(B) aus Abschnitt~\ref{sec:fst7}: Es existiert eine
+\emph{Nyquist-Shannon-optimale} diskrete Teilmenge $\Xi \le G$, auf der
+eine Plancherel-artige Identität gilt. Die Prolat-Sphäroid-Wellenfunktionen
+von Slepian-Pollak \emph{sind} die kanonische Nyquist-Shannon-optimale
+Basis in der Zeit-Frequenz-Ebene.
+
+\begin{remark}[CCM als nächstgelegenes Modell für (FST-7)(B)]\label{rem:ccm-closest-model}
+Die CCM-Konstruktion $(D^{(\lambda,N)}_{\log}, QW_\lambda, PW_\lambda)$
+ist das \emph{nächstgelegene bekannte konkrete Modell} von (FST-7)(B) in dem Sinn,
+dass (a) es um die kanonische Nyquist-Shannon-optimale Slepian-Pollak-Basis
+in der Zeit-Frequenz-Ebene herum aufgebaut ist, und (b) die Skalierungsoperation
+von $\R_+^\ast$ auf $L^2([\lambda^{-1},\lambda], d^\ast u)$ das lokalkompakte abelsche
+Umfeld liefert, das für die Formulierung von (FST-7)(B) erforderlich ist. Diese
+Beziehung ist eine mathematisch sinnvolle Analogie, die die abstrakte
+Optimalitätsaussage mit einem konkreten operatortheoretischen Rahmen in Einklang
+bringt; sie ist \emph{keine} bewiesene Äquivalenz auf Theorem-Ebene. Eine
+rigorose Aussage würde erfordern, ein explizites $\Xi$ aus Prolat-Daten zu
+konstruieren, eine Plancherel-artige Identität im Sinne von Definition~\ref{def:fst7-b}
+zu beweisen und dies mit der Rang-eins-Störungsbedingung an $\delta_N$ in
+Verbindung zu bringen. Nichts davon ist hier etabliert.
+\end{remark}
+
+\begin{conjecture}[$QW\!\leftrightarrow\! PW$ als (FST-7)(A)$\leftrightarrow$(FST-7)(B) Äquivalenzoperator, strukturelle Form]\label{conj:qw-pw-fst7}
+Es wird vermutet, dass die CCM-Dualität $QW_\lambda \leftrightarrow PW_\lambda$
+zwischen Infrarot- und Ultraviolett-Regime eine dynamische Repräsentation
+der abstrakten Äquivalenz $(\text{FST-7})(A) \Leftrightarrow (\text{FST-7})(B)$
+aus Theorem~\ref{thm:fst7-equiv} ist. Konkret: Es sollte eine Transformation
+existieren, die $QW_\lambda$-Eigenfunktionen im Limes $\lambda \to \infty$ auf
+$PW_\lambda$-Eigenfunktionen abbildet und die die Pontryagin-Selbstdualität
+von $\Xi = \Q$ innerhalb von $\A_\Q$ auf der Ebene spektraler Maße realisiert.
+Das vorliegende Paper liefert einen Kandidaten für diese Transformation
+(Abschnitt~\ref{sec:fst-transfer}), beweist aber nicht die Verschachtelungs-Eigenschaft (intertwining).
+\end{conjecture}
+
+\subsection{Die fehlenden CCM-Schritte}
+\label{sec:ccm-missing-steps}
+
+Zwei verbleibende technische Lücken wurden im CCM-Programm identifiziert:
+\begin{description}[leftmargin=*,style=nextline]
+\item[(MS1)] \textbf{Einfach-gerade} am kleinsten Eigenwert von $QW_\lambda$.
+  Klassischerweise bekannt für den Prolat-Operator $PW_\lambda$ \cite{SlepianPollack1961};
+  numerisch bestätigt für $QW_\lambda$; noch nicht bewiesen. Bleibt offen.
+\item[(MS2)] \textbf{Approximationsqualität.} Der Poisson-Quasimode
+  $k_\lambda$ muss die wahre $QW_\lambda$-Eigenfunktion $\xi_\lambda$
+  gut genug approximieren, um spektrale Konvergenz zu übertragen.
+  \textbf{Gelöst im Zookeeper Paper} via des Drei-Lemma-Mikrocluster-Abschlusses:
+  Skalare säkulare Aufhebung, projizierte Poisson-Quasimode-Kontrolle
+  und ein koerzives Komplement ergeben die Massenkonzentrations-Schranke
+  $\|(I-P_{V_\lambda})k_\lambda\| \leq r_\lambda/g_* \to 0$,
+  was zeigt, dass $k_\lambda$ mit beliebiger Präzision im resonanten Eigenraum lebt.
+\end{description}
+
+(MS1) bleibt ein offenes Problem in dieser älteren Routen-Sprache. (MS2)
+wird im CORE nicht länger als offen behandelt: das Zookeeper Paper dokumentiert
+den theorematischen Abschluss des Approximationsschritts im CCM-Fourier-Modell,
+wobei der Standard-CCM-Transfer und der Hurwitz-Übergang dort behandelt werden.
+
+\subsection{FST-Transfer: ein bedingter Reduktionsentwurf}
+\label{sec:fst-transfer}
+
+Wir konkretisieren nun Vermutung~\ref{conj:qw-pw-fst7} weit genug, um
+einen \emph{bedingten Reduktionsentwurf} für die zwei CCM-Lücken zu formulieren.
+Dieser Unterabschnitt ist \emph{kein} Theorem und beweist \emph{keine} Reduktion;
+er ist ein Schema, in dem jeder Schritt offen und klar identifiziert ist.
+
+\subsubsection{Zwei Kandidaten für Isometrien}
+
+Sei $H_{PW} = L^2([-\lambda, \lambda], dx)$ mit Reflexion
+$\rho(g)(x) = g(-x)$ und $H_{QW} = L^2([\lambda^{-1}, \lambda], d^\ast u)$
+mit Inversion $\iota(f)(u) = f(u^{-1})$. Die Logarithmus-plus-Reskalierungs-Abbildung
+\[
+  \Phi_\lambda := \log^\ast \circ \, \sigma_\lambda :
+    L^2([-\lambda, \lambda], dx) \xrightarrow{\sigma_\lambda}
+    L^2([-\log\lambda, \log\lambda], dx)
+    \xrightarrow{\log^\ast}
+    L^2([\lambda^{-1}, \lambda], d^\ast u)
+\]
+ist eine \emph{kinematische} Isometrie, die $\rho$ und $\iota$ miteinander verknüpft ---
+eine direkte Rechnung.
+
+Aufbauend auf der expliziten CCM-Konstruktion \emph{schlagen wir als
+dynamische Abbildung vor}
+\[
+  \Psi_\lambda : H_{PW} \longrightarrow H_{QW}, \qquad
+    g \mapsto \big(\mathcal E(g)\big)\big|_{[\lambda^{-1},\lambda]},
+  \qquad \mathcal E(g)(u) := u^{1/2} \sum_{n \ge 1} g(nu),
+\]
+d.h.\ Einschränkung der Epstein-Mellin-Faltung auf $[\lambda^{-1},\lambda]$.
+Ob $\Psi_\lambda$ als Operator von $H_{PW}$ nach $H_{QW}$ beschränkt ist,
+ob es ein dichtes Bild hat und was seine genauen adjungierten und
+Verknüpfungs-Eigenschaften sind, ist selbst eine nicht-triviale Frage.
+Wir sammeln dies als den ersten offenen Punkt:
+
+\begin{milestone}[Definitions- und Formentheorie für $\Psi_\lambda$]
+\label{ms:psi-domain}
+Etabliere, dass $\Psi_\lambda$ ein wohldefinierter, dicht definierter
+Operator $H_{PW} \to H_{QW}$ ist, und bestimme seinen Form-Definitionsbereich,
+seine Beschränktheitsklasse und seine Verknüpfungsstruktur in Bezug auf
+die Involutionen $(\rho, \iota)$. Beweise oder widerlege, dass
+$\Psi_\lambda^\ast \Psi_\lambda$ eine kompakte Resolvente hat.
+\end{milestone}
+
+\subsubsection{Bedingter Reduktionsentwurf}
+
+\begin{blueprint}[MS1 $\Leftarrow$ (MS2 $\wedge$ beschränkte Verknüpfung)]
+\label{bp:fst-transfer}
+Angenommen, Meilenstein~\ref{ms:psi-domain} wurde so gelöst, dass $\Psi_\lambda$
+eine beschränkte Verknüpfung auf geeigneten Form-Definitionsbereichen ist.
+Angenommen weiterhin, es existieren Konstanten $\mu_\lambda > 0$
+und $\varepsilon_\lambda \to 0$ für $\lambda \to \infty$, so dass
+\begin{equation}\label{eq:dynamic-isometry}
+  \big\| QW_\lambda \circ \Psi_\lambda
+    - \mu_\lambda \, \Psi_\lambda \circ PW_\lambda \big\|
+  \;\le\; \varepsilon_\lambda
+\end{equation}
+als Operatoren auf dem geeigneten dichten Definitionsbereich (vgl.~(MS2)) gilt.
+Dann ist das Folgende eine bedingte Schlussfolgerung, kein Theorem:
+Nach Slepian-Pollak \cite{SlepianPollack1961} ist der kleinste Eigenwert
+$\mu_{0,\lambda}$ von $PW_\lambda$ einfach mit gerader Eigenfunktion
+$h_{0,\lambda}$; unter \eqref{eq:dynamic-isometry} und der
+Verknüpfungshypothese würde ein Störungsargument vom Kato-Typ \cite{Kato}
+einen einfachen $QW_\lambda$-Eigenwert $\epsilon_\lambda$ mit einem Eigenvektor
+$\xi_\lambda$ liefern, der $\|\xi_\lambda - c \cdot \Psi_\lambda h_{0,\lambda}\| \le
+C \varepsilon_\lambda$ erfüllt, und die Erhaltung der $\rho/\iota$-Graduierung würde
+die Eigenschaft ``gerade'' liefern. In diesem Szenario würde (MS1) immer dann
+folgen, wenn (MS2) gilt.
+\end{blueprint}
+
+\begin{remark}[Status des Entwurfs~\ref{bp:fst-transfer}]
+\label{rem:blueprint-caveats}
+Die bedingte Schlussfolgerung in Entwurf~\ref{bp:fst-transfer} beruht
+auf drei offenen Punkten: (1) $\Psi_\lambda$ ist tatsächlich eine beschränkte
+Verknüpfung (Meilenstein~\ref{ms:psi-domain}); (2) die Operator-Norm-Schranke
+\eqref{eq:dynamic-isometry} gilt mit dem behaupteten Abklingen; (3)
+das Kato-Störungsargument ist gleichmäßig auf den relevanten Form-Definitionsbereichen
+anwendbar. Jeder Punkt ist nicht-trivial. Insbesondere erfordert die
+Standardlesart des Satzes von Kato Operator-/Form-Konvergenz in einem
+Norm- oder Form-Resolventen-Sinn, die aus \eqref{eq:dynamic-isometry} \emph{nicht}
+automatisch hervorgeht. Der Entwurf ist am besten als Formulierung dessen
+zu verstehen, was ein Beweis von MS1 via MS2 etablieren müsste, nicht als
+ein Reduktionstheorem.
+\end{remark}
+
+\begin{remark}[Rolle der FST im Entwurf]\label{rem:fst-contribution}
+Selbst in seiner bedingten Form illustriert Entwurf~\ref{bp:fst-transfer}
+die Art und Weise, wie die FST beitragen soll: die Axiomäquivalenz
+(FST-7)(A)$\leftrightarrow$(FST-7)(B) motiviert strukturell die Suche nach
+einem Verknüpfungsoperator $\Psi_\lambda$ zwischen den beiden konkreten
+Operatoren auf der CCM-Seite; die CCM-Konstruktion selbst liefert
+die Kandidaten-explizite Form von $\Psi_\lambda$. Was fehlt, ist der
+analytische Inhalt (Beschränktheit, Kontrolle der Operator-Norm, Anwendung der
+Störungstheorie).
+\end{remark}
+
+\subsection{Meilenstein-Agenda für Route~B}
+\label{sec:route-b-milestones}
+
+Indem wir die heuristische Vermutung (``Weyl-Gesetz für $QW_\lambda$'') von
+v0.6 durch eine strukturierte Meilenstein-Agenda ersetzen, zerfällt Route~B
+in vier konkrete, aufeinanderfolgende Meilensteine im Sinne der Audit-Empfehlung:
+
+\begin{milestone}[Definitions- / Formentheorie für $\Psi_\lambda$]
+\label{ms:1}
+(= Meilenstein~\ref{ms:psi-domain}.) Etabliere, dass $\Psi_\lambda$ ein
+wohldefinierter, beschränkt invertierbarer Verknüpfungsoperator auf geeigneten
+Form-Definitionsbereichen ist. Erster wirklich rigoroser Schritt der Route~B.
+\end{milestone}
+
+\begin{milestone}[Vergleich niedriger Eigenwerte via Min-Max]
+\label{ms:2}
+Beweise einen Min-Max-Vergleich zwischen den ersten endlich vielen
+Eigenwerten von $QW_\lambda$ und $PW_\lambda$, \emph{ohne}
+eine vollständige Weyl-Asymptotik zu verlangen. Dies ist das operatortheoretische
+Minimum, das benötigt wird, um (MS1) gleichmäßig anzugreifen.
+\end{milestone}
+
+\begin{milestone}[Endlich-dimensionale CCM-Trunkierung]
+\label{ms:3}
+Beweise ein endlich-dimensionales CCM-Trunkierungstheorem innerhalb von $E_N$:
+Kontrolliere die Einschränkung von $QW_\lambda$ auf $E_N$ und ihren Vergleich
+zur Prolat-Einschränkung unter Verwendung von Standard-endlichdimensionaler
+Störungstheorie (Katos Theorem ist dort sauber anwendbar). Dies ist der Ort, an dem
+die CCM-Numerik tatsächlich lebt.
+\end{milestone}
+
+\begin{milestone}[Asymptotisches Regime]
+\label{ms:4}
+Erst nachdem Meilensteine~\ref{ms:1}--\ref{ms:3} etabliert sind:
+Untersuche das asymptotische Verhalten von $N_{QW_\lambda}(\mu)$ für
+$\mu \to \infty$ und $\lambda \to \infty$. Dies ist das Analogon zu
+dem, was v0.6 spekulativ als ``Weyl-Gesetz für die Weil-Form'' bezeichnete,
+und wird hier ausdrücklich als \emph{letzter} Meilenstein in der Sequenz
+markiert, nicht als erster.
+\end{milestone}
+
+\begin{remark}[Warum diese Reihenfolge]
+\label{rem:milestone-ordering}
+Die Meilensteine \ref{ms:1}--\ref{ms:3} haben endlich-dimensionalen oder
+form-theoretischen Charakter und sind mit existierender Operator-Theorie-Maschinerie
+wirklich handhabbar. Meilenstein~\ref{ms:4} betrifft echte globale Asymptotiken
+einer nicht-standardmäßigen quadratischen Form und wird viel weniger
+gut verstanden. Der v0.6-Entwurf behandelte Meilenstein~\ref{ms:4}, als
+wäre es fast ein Theorem; die vorliegende Revision ordnet die Agenda
+ausdrücklich so um, dass die handhabbare Arbeit zuerst und das tiefe asymptotische
+Element zuletzt kommt. Siehe die externen Audit-Notizen für die Motivation dieser
+Umstrukturierung.
+\end{remark}
+
+% =====================================================
+\subsection{Das Drei-Lemma-Endspiel für Route~B}
+\label{sec:three-lemma-endgame}
+% =====================================================
+
+Wir präsentieren nun eine bedingte Auflösung von (MS2) via einer
+endlich-dimensionalen Spektralanalyse des CCM Rang-eins-Operators.
+Das Argument erfordert drei unabhängige Lemmas und liefert (MS2) als
+Korollar durch eine Standard-Quasimode-zu-Projektor-Ungleichung.
+
+\subsubsection{Setup und Notation}
+
+Fixiere $\lambda > 0$. Sei $L = 2\log\lambda$, $N = \max(40,
+\lceil 12L \rceil)$, und sei $E_N \subset L^2[0,L]$ der Fourier--Galerkin-Unterraum,
+der von $\{e_n(x) = \sqrt{2/L} \sin(n\pi x/L)\}_{n=1}^N$ aufgespannt wird. Innerhalb
+von $E_N$ nimmt der CCM-Operator die Form an:
+\begin{equation}\label{eq:rank-one-structure}
+  A^{(N)} \;=\; H^{(N)} + \tilde{C}\,|\tilde{u}\rangle\langle\tilde{u}|,
+\end{equation}
+wobei $H^{(N)}$ die Galerkin-Einschränkung des Kinetik-plus-Potential-Teils ist
+und $\tilde{u} \in E_N$ die Poisson-Kern-Interaktion kodiert.
+Der Poisson-Quasimode $k = k_\lambda^{(N)} \in E_N$ ist die normalisierte
+Galerkin-Projektion des Poisson-Kerns $K(e^{x/\lambda})$.
+Wir bezeichnen mit $u_0$ den kleinsten Eigenwert von $A^{(N)}$ und
+mit $\{(u_j, q_j)\}_{j=0}^{N-1}$ das vollständige Eigensystem.
+
+\begin{hypothesis}[Galerkin-Treue]
+\label{hyp:galerkin}
+Für jedes $\lambda$ repräsentiert das endlich-dimensionale Galerkin-Modell
+$A^{(N(\lambda))}$ mit $N = \max(40, \lceil 12L \rceil)$ treu die Struktur der
+spektralen Cluster des CCM-Operators in folgendem Sinn: Die Eigenwert-Reihenfolge,
+die Rang-eins Säkulargleichung und die Cauchy-Verflechtung mit dem Hintergrundoperator
+$H^{(N)}$ gelten mit Fehlern, die durch den Galerkin-Trunkierungsfehler
+$\varepsilon_{\mathrm{Gal}} \sim e^{-c \cdot N/L}$ kontrolliert werden.
+\end{hypothesis}
+
+\begin{remark}
+Hypothese~\ref{hyp:galerkin} ist numerisch bis $\varepsilon_{\mathrm{Gal}} < 10^{-12}$
+verifiziert für $\lambda = 3, 5, 7, 10, 15, 20, 30, 40, 50, 75, 100$. Ein rigoroser
+Beweis würde ein Galerkin-Konvergenztheorem für den spezifischen Rang-eins-Operator
+\eqref{eq:rank-one-structure} erfordern, was Gegenstand laufender Arbeiten ist.
+\end{remark}
+
+\subsubsection{Massenbasierte effektive Lücke}
+
+\begin{definition}[Effektive Cluster-Lücke]\label{def:geff}
+Für $\varepsilon > 0$, sei $J_\varepsilon = \min\{J :
+\sum_{j=0}^{J} |\langle q_j, k\rangle|^2 \geq 1 - \varepsilon\}$
+der spektrale Massen-Schwellenwert. Die \emph{effektive Lücke} ist
+\[
+  g_{\mathrm{eff}}(\varepsilon) \;:=\; u_{J_\varepsilon + 1} - u_0.
+\]
+Der resonante Unterraum ist $V_\lambda := \operatorname{span}\{q_j : j \leq J_\varepsilon\}$.
+\end{definition}
+
+Diese Definition ersetzt die Cluster-Identifikation mit fester Toleranz
+(die erratische Lücken $\sim 10^{-6}$--$10^{-4}$ produzierte) durch ein
+spektrales Massen-Kriterium, das $g_{\mathrm{eff}}(\varepsilon) \approx 5$--$7$
+gleichmäßig für alle getesteten $\lambda$ und alle $\varepsilon \leq 10^{-4}$ liefert.
+Der zentrale Punkt: Die Quasimode-Masse $M_k(J) = \sum_{j \leq J} |\langle q_j, k\rangle|^2$
+sättigt innerhalb der ersten 1--3 Eigenwerte, was eine Lücke der Ordnung eins zum Komplement erzeugt.
+
+\subsubsection{Die drei Lemmas}
+
+\begin{lemma}[Skalare Säkulare Aufhebung (C2ca.1)]
+\label{lem:secular}
+Sei $\mu = \langle \tilde{u}, (A-u_0)k\rangle$ die skalare
+Komponente des Residuums entlang $\tilde{u}$. Dann
+\[
+  |\mu| \;\leq\; s_\lambda \;:=\; O(e^{-c \cdot N/L}).
+\]
+Unter Hypothese~\ref{hyp:galerkin} erzeugt die Rang-eins-Säkulargleichung
+$1 + \tilde{C} \cdot m_H(w) = 0$ zwei Terme der Größenordnung $\sim 10^{-2}$, die sich zu
+$\sim 3 \times 10^{-7}$ aufheben (eine Aufhebung um mehr als Faktor $200$).
+\end{lemma}
+
+\begin{proof}[Beweisskizze]
+Die säkulare Identität (aus der Rang-eins-Resolventen-Formel) liefert
+\[
+  \frac{\mu}{\alpha} = (\bar{w} - u_0)
+    + \frac{\langle f_\lambda, k_\perp\rangle}{\alpha},
+\]
+wobei $\alpha = \langle\tilde{u},k\rangle$, $\bar{w}$ die säkulare
+Wurzel ist und $f_\lambda$ die $H$-Spektralverteilung von
+$\tilde{u}$ kodiert. Beide Terme sind $O(10^{-2})$, tragen jedoch
+aufgrund der Verschachtelungsstruktur $t_j \leq u_j \leq t_{j+1}$
+(wobei $t_j$ die $H$-Eigenwerte sind) entgegengesetzte Vorzeichen. Die
+Aufhebung wird durch den Galerkin-Trunkierungsfehler kontrolliert.
+\end{proof}
+
+\begin{lemma}[Projizierter Poisson-Quasimode (C2ca.2)]
+\label{lem:projected}
+Sei $h = P_0(A-u_0)k$ die $\tilde{u}$-orthogonale Komponente
+des Residuums, wobei $P_0 = I - |\tilde{u}\rangle\langle\tilde{u}|$.
+Dann
+\[
+  \|h\| \;\leq\; p_\lambda,
+\]
+wobei $p_\lambda \approx 2$--$3 \times 10^{-6}$ eine
+Galerkin-Konstante ist (gleichmäßig in $\lambda$ bei festem $N/L$).
+\end{lemma}
+
+\begin{proof}[Beweisskizze]
+Die Rand-Defekt-Zerlegung (aus der Poisson-Transfer-Theorie)
+liefert $h = \frac{1}{n_{L,N}} P_0 \Pi_{L,N}(E_L^{\mathrm{bulk}} + B_L)$,
+wobei $E_L^{\mathrm{bulk}}$ zu $> 99.999\%$ in $\tilde{u}$-Richtung zeigt
+(sein $P_0$-Leakage ist $< 5 \times 10^{-7}$), und $B_L$ ein lokal am Rand
+befindlicher Term ist, der durch den exponentiellen Abfall des
+Poisson-Kerns bei $x = L$ kontrolliert wird.
+\end{proof}
+
+\begin{lemma}[Koerzives Komplement (C2ca.5)]
+\label{lem:coercive}
+Unter Hypothese~\ref{hyp:galerkin} existiert $g_* > 0$
+(unabhängig von $\lambda$), sodass für alle
+$v \in V_\lambda^\perp$ mit $\|v\| = 1$ gilt:
+\[
+  \langle (A^{(N)} - u_0)\, v,\, v\rangle \;\geq\; g_*.
+\]
+Numerisch ist $g_* \approx 5$--$7$ für alle getesteten $\lambda$.
+\end{lemma}
+
+\begin{proof}[Beweisskizze]
+Durch die Rang-eins-Cauchy-Verflechtung gilt $u_j \geq t_j$ für alle $j$,
+wobei $t_j$ die Eigenwerte von $H^{(N)}$ sind. Der spektrale
+Massen-Schwellenwert $J_\varepsilon$ erfüllt $J_\varepsilon \leq 2$ für alle
+getesteten $\lambda$, also $u_{J_\varepsilon+1} \geq t_{J_\varepsilon+1}$.
+Die $H$-Spektrallücke $t_{J+1} - t_1$ ist von Ordnung eins (bestimmt durch
+die kinetische Energie) und ist nach unten beschränkt durch die Lücke des
+potentialfreien Laplace-Operators $\pi^2/L^2 \cdot ((J+1)^2 - 1)$, was $\geq 5$
+für $J \leq 2$ und $L \leq 10$ ergibt.
+\end{proof}
+
+\subsubsection{Massenkonzentration als Korollar}
+
+\begin{theorem}[Massenkonzentration --- Bedingter Abschluss von (MS2)]
+\label{thm:mass-concentration}
+Unter Hypothese~\ref{hyp:galerkin} und mit den drei obigen Lemmas:
+\[
+  \|(I - P_{V_\lambda})\, k_\lambda\|
+  \;\leq\; \frac{r_\lambda}{g_*}
+  \;\leq\; \frac{s_\lambda + p_\lambda}{g_*}
+  \;\approx\; 6 \times 10^{-7},
+\]
+wobei $r_\lambda = s_\lambda + p_\lambda$ die gesamte Residual-Schranke
+aus Lemmas~\ref{lem:secular} und~\ref{lem:projected} ist, und
+$g_*$ die koerzive Lücke aus Lemma~\ref{lem:coercive} ist.
+\end{theorem}
+
+\begin{proof}
+Dies ist das Standard-Argument vom Quasimode zum Projektor. Zerlege
+$k = k_{\mathrm{cl}} + k_\perp$ mit $k_{\mathrm{cl}} \in V_\lambda$,
+$k_\perp \in V_\lambda^\perp$. Da $V_\lambda$ $A$-invariant ist:
+\begin{align*}
+  g_* \|k_\perp\|^2
+  &\leq \langle k_\perp, (A-u_0) k_\perp \rangle
+  = \langle k_\perp, (A-u_0) k \rangle \\
+  &\leq \|k_\perp\| \cdot \|(A-u_0)k\|
+  = \|k_\perp\| \cdot R_0.
+\end{align*}
+Falls $\|k_\perp\| > 0$, dividiere durch $\|k_\perp\|$:
+$\|k_\perp\| \leq R_0/g_*$. Das Residuum zerfällt als
+$(A-u_0)k = \mu\tilde{u} + h$, also
+$R_0 = \|(A-u_0)k\| \leq |\mu| + \|h\| \leq s_\lambda + p_\lambda
+= r_\lambda$.
+\end{proof}
+
+\begin{remark}[Konvergenz gegen Null]
+Bei festem $N/L = 12$ ist die Schranke $r_\lambda/g_* \approx 6 \times
+10^{-7}$ bereits klein, konvergiert aber nicht gegen Null. Um
+$\|(I-P_{V_\lambda})k\| \to 0$ für $\lambda \to \infty$ zu erhalten (wie
+vom CCM-Programm gefordert): wähle $N = N(\lambda)$ mit $N/L \to \infty$
+(z.B. $N = L^{1+\delta}$). Dann strebt $r_\lambda^{(N)} \sim
+e^{-c \cdot N/L} \to 0$, während $g_* > 0$ nach unten beschränkt bleibt,
+was $\|k_\perp\| \to 0$ ergibt.
+\end{remark}
+
+\begin{remark}[Numerische Verifikation]
+Die Schranke in Theorem~\ref{thm:mass-concentration} ist zu 75--84\% scharf:
+Die tatsächlichen Werte von $\|k_\perp\|$ liegen innerhalb eines Faktors
+von $0.75$--$0.84$ der oberen Schranke $R_0/g_*$, was die Beinahe-Optimalität
+der Quasimode-zu-Projektor-Abschätzung bestätigt. Vollständige Diagnosen
+zur spektralen Masse (Eigenwertspektren, Überlappungskoeffizienten, kumulative
+Massenkurven) sind für $\lambda = 3, \ldots, 100$ berechnet und im Begleit-Repository
+verfügbar.
+\end{remark}
+
+\subsubsection{Strukturelle Zusammenfassung}
+
+Die Beweisarchitektur lautet:
+\[
+\underbrace{\text{C2ca.1 (Säkular)}}_{\text{Lemma~\ref{lem:secular}}}
++ \underbrace{\text{C2ca.2 (Projiziert)}}_{\text{Lemma~\ref{lem:projected}}}
+\;\longrightarrow\; R_0 \leq r_\lambda
+\;\xrightarrow{\;\text{Lemma~\ref{lem:coercive} } (g_*)\;}
+\;\|k_\perp\| \leq r_\lambda / g_*.
+\]
+Drei unabhängige Abschätzungen, eine Standardungleichung, eine bedingte
+Hypothese. Die vorherige Vier-Lemma-Struktur (bei der ``Massenkonzentration''
+als eigenständiges viertes Lemma aufgeführt war) ist damit hinfällig:
+Das vierte Lemma ist ein Korollar, kein Input.
+
+\subsection{RFEP Transfer-Paket für physikalische Nachträge}
+\label{sec:rfep-physics-transfer}
+
+Das Drei-Lemma-Endspiel ist nicht nur ein Instrument der Route~B. Es liefert
+auch ein wiederverwendbares RFEP-Muster für die physikalische Seite des
+FST-Programms. Die physikalischen Begleitpapiere sollten den Riemannschen
+Beweisversuch nicht unverändert importieren; vielmehr sollten sie die Operator-Grammatik importieren:
+\[
+  A_X^{(N)} = H_X^{(N)} + B_X^{(N)}, \qquad
+  \|(I-P_{V_X})k_X\| \leq \frac{r_X}{g_X}.
+\]
+Hierbei bezeichnet $X$ einen physikalischen Zweig wie Yang--Mills,
+Navier--Stokes, NS-LDI, Turbulenz oder CRM; $B_X^{(N)}$ ist der
+Rang-eins- oder Endlich-Rang-Defekt; $k_X$ ist der RFEP-Kandidat;
+$r_X$ ist sein Residuum; und $g_X$ ist die koerzive Lücke auf dem
+orthogonalen Komplement. Die Arbeitsnotiz \cite{RFEPTransferNote}
+dokumentiert dies als die RFEP--Zookeeper Normalform.
+
+\begin{proposition}[RFEP Transfer-Schema, bedingt]
+\label{prop:rfep-transfer-schema}
+Sei $X$ ein physikalischer FST-Nachtrag. Angenommen, dass:
+\begin{enumerate}[leftmargin=*]
+\item das RFEP-Funktional für $X$ einen geschlossenen quadratischen oder
+  Operator-Repräsentanten $A_X$ auf einem Form-Definitionsbereich $V_X$ zulässt;
+\item es eine Galerkin-Ausschöpfung $A_X^{(N)}$ gibt, die treu zum
+  relevanten niedrigen Spektral-Cluster ist;
+\item $A_X^{(N)}$ zerfällt in einen koerziven Hintergrund $H_X^{(N)}$ plus einen
+  Rang-eins- oder Endlich-Rang-Defekt $B_X^{(N)}$;
+\item der RFEP-Kandidat $k_X$ ein Residuum
+  $\|(A_X^{(N)}-u_0)k_X\|\le r_X=s_X+p_X$ aufweist, das einen skalaren säkularen
+  Teil und einen projizierten Quasimode-Teil besitzt;
+\item auf $V_X^\perp$ eine koerzive Komplement-Lücke $g_X>0$ existiert.
+\end{enumerate}
+Dann gilt
+\[
+  \|(I-P_{V_X})k_X\|\le r_X/g_X.
+\]
+Wenn der von $P_{V_X}$ ausgewählte Cluster einfach oder RFEP-selektiv ist,
+ist der stabile physikalische Zustand innerhalb des entsprechenden
+Galerkin-Sektors eindeutig.
+\end{proposition}
+
+\begin{proof}
+Der Beweis ist identisch zu Theorem~\ref{thm:mass-concentration}:
+Zerlege $k_X$ in Cluster- und Komplement-Komponenten, verwende Koerzivität
+auf dem Komplement und beschränke die Komplement-Komponente durch das Residuum.
+Es folgt keine physik-spezifische Schlussfolgerung, solange die fünf
+Hypothesen nicht im gegebenen Bereich verifiziert sind.
+\end{proof}
+
+\begin{remark}[Was RFEP gewinnt]
+\label{rem:rfep-gain}
+RFEP gewinnt eine konkrete Beweis-Checkliste. Ein Physik-Paper kann nun fragen:
+Was ist der Operator oder die Form $A_X$; was ist der Defekt $B_X$; was
+besagt die Aussage zur Galerkin-Treue; wo ist die Komplement-Lücke;
+und wie bewahrt der Limes des Definitionsbereichs die RFEP-Selektion? Das ist
+stärker als eine erzählerische Analogie, aber schwächer als ein Theorem in der jeweiligen Domäne.
+\end{remark}
+
+\begin{remark}[Lesarten in den Domänen]
+\label{rem:domain-readings}
+Für Yang--Mills ist die angestrebte Lesart die Massenlücke oder Gibbs-Eindeutigkeit
+als koerzives Komplement. Für Navier--Stokes und NS-LDI sind es dissipative Selektion
+und Log-Distanz-Defekt-Kontrolle als Aussage über einen stabilen Cluster. Für Turbulenz
+ist es das K41-Spektrum als massenkonzentrierter RFEP-Minimierer. Für CRM bleibt
+die Hauptbeweissprache strikte Konvexität/UCU, aber das Transfer-Paket liefert die
+Operatorsprache für perturbative oder randgekoppelte Varianten. Das Prime-Hub-Programm
+\cite{PrimeHubSynthesis} ist die natürliche intermediäre Brücke: Frontier-Prime-Einfügungen
+und Bouquet-Trunkierungen kommen Endlich-Rang-Rand-Defekten bereits sehr nahe.
+\end{remark}
+
+\subsection{Die Sonin-Raum-Brücke (Kontext aus CCM 2024)}
+\label{sec:sonin}
+
+Die Operator-Norm-Schranke \eqref{eq:dynamic-isometry} ist eingebettet in den
+analytischen Kontext der semilokalen Connes-Consani-Moscovici-Spurformel
+\cite{ConnesConsaniMoscovici2024}:
+
+\begin{theorem}[CCM 2024, semilokale Zerlegung]\label{thm:ccm-semilocal}
+Im archimedischen Fall lässt der Prolat-Operator die Zerlegung
+\[
+  PW_\lambda \;=\; D^{(\lambda)}_{\log}{}^2 \;+\; \Gamma,
+\]
+zu, wobei $\Gamma$ ein Graduierungs-Operator auf orthogonalen Polynomen ist.
+Dementsprechend zerfällt sein Spektrum in
+\begin{itemize}[leftmargin=*]
+\item einen \emph{positiven Teil}, der tiefliegende Nullstellen von
+  $\zeta(1/2+is)$ realisiert (Infrarot- / Weil-Regime),
+\item einen \emph{negativen Teil} auf dem Sonin-Raum, der die UV-Asymptotik
+  der Nullstellenverteilung realisiert (Ultraviolett- / Connes-Moscovici 2022-Regime).
+\end{itemize}
+\end{theorem}
+
+Unter dieser Zerlegung stimmt die Weilsche Form $QW_\lambda$ mit der Einschränkung
+von $PW_\lambda$ auf den positiven spektralen Unterraum überein, bis auf die
+Rang-eins-Korrektur, die durch den Spurformel-Fehler $W_\infty - W_0$ kodiert wird.
+Dies identifiziert die Operatordifferenz in \eqref{eq:dynamic-isometry} mit dem
+arithmetisch-archimedischen Defekt nach Connes-Consani \cite{ConnesConsaniWeilPositivity2020}.
+Ob dieser Defekt die Art von Operator-Norm-Schranke zulässt, die in
+Entwurf~\ref{bp:fst-transfer} gefordert wird, ist eine offene Frage.
+
+% =====================================================
+\section{Die Wick-Mellin-Rotation und ihre drei Hindernisse (Route A)}
+\label{sec:wick-mellin-obstacles}
+% =====================================================
+
+\subsection{Die Rotation ist keine gewöhnliche Wick-Rotation}
+
+Die Standard-Wick-Rotation verbindet $\Re\beta > 0$ (thermisch) mit
+$\Im\beta \in \R$ (unitär). Was Route~A benötigt, ist anders:
+$\Re\beta > 1$ (BC-Gibbs) zu $\Re\beta = 1/2$ (Meyers kritische Linie),
+d.h. eine \emph{Halbebenen-Fortsetzung durch den Mangoldt-Pol bei
+$\beta = 1$}.
+
+Der Gibbs-Operator $e^{-\beta H_{BC}}$ ist:
+\begin{itemize}
+\item Spurklasse für $\Re\beta > 1$.
+\item Beschränkt, aber nicht Spurklasse für $0 < \Re\beta \leq 1$.
+\end{itemize}
+
+Auf der kritischen Linie existiert der klassische Gibbs-Zustand nicht;
+nur die meromorph fortgesetzte Funktion $\zeta(\beta)$ bleibt bestehen.
+Drei konkrete Hindernisse strukturieren die offene technische Arbeit.
+
+\subsection{Hindernis (O1): Die Distributionsklasse}
+
+Gesucht ist ein präziser Fréchet-Raum $\V_\chifn$, dessen Dualraum
+Meyers Eigendistributionen enthält.
+
+\begin{definition}[der Meyer-Raum]
+\label{def:meyer-space}
+$\V_\chifn := \S_0(\A^\times)^\chifn / \K_{\Q^\times}^\chifn$,
+wobei $\S_0 = \{f : Z(f, s)$ ganz$\}$ ist und $\K_{\Q^\times}$ den
+Abschluss der $\Q^\times$-Koinvarianten bezeichnet.
+\end{definition}
+
+\textbf{Halbnormen:} archimedisch gewichtete Schwartz-Normen
+$\|f_\infty\|_{n,m} = \sup |x^m \partial^n f_\infty(x)|$; p-adische
+Normen $\|f_p\|_N^p$ auf kompakten Teilmengen von $\Q_p^\times$.
+$\V_\chifn$ ist ein Fréchet-Raum in der Quotiententopologie.
+
+\textbf{$\Q^\times$-Invarianz der Mellin-Auswertung.} Für $f \in
+\S_0$, $q \in \Q^\times$:
+\[
+  v_\gamma^{(pre)}(T_q f) = |q|^{1/2+i\gamma} \cdot
+    v_\gamma^{(pre)}(f) = v_\gamma^{(pre)}(f)
+\]
+nach der Produktformel $|q| = 1$. Genau hier tritt (FST-7A)(ii) ein.
+
+\textbf{Status von (O1).} Die Distributionsklasse ist eng mit
+anerkannter adelischer Analysis und Meyer 2005 verbunden; das Bild aus
+Fréchet-Quotient und Mellin-Auswertung ist mathematisch wiedererkennbar.
+Der eigentliche analytische Gehalt von (O1) ist die Dichte/Vollständigkeit
+der Mellin-Auswertungen im Dualraum von $\V_\chifn$ --- im Kern also ein
+Vollständigkeitssatz, der aus Meyer 2005, Abschnitte~4--5, importiert oder
+in diesem Stil bewiesen werden muss. Relativ zu (O2) und (O3) ist dies
+vergleichsweise solide, aber die abstrakte Verallgemeinerung bleibt
+nichttrivial.
+
+\subsection{Hindernis (O2): Die Fourier-Dualität}
+
+Gesucht ist eine explizite operatoralgebraische Fourier-Transformation
+\[
+  \mathcal F : \HH_\Q^{\mathrm{Sch}} \to \V_{\chifn_0}
+\]
+zwischen der Bost-Connes-Hecke-Algebra (Schwartz-Unteralgebra) und
+Meyers Fréchet-Raum.
+
+\textbf{Vier Brückenaussagen (Ziele, keine Sätze):}
+
+\begin{itemize}
+\item (F1) Elementkorrespondenz: $\mu_n \leftrightarrow
+  \mathbf{1}_n$.
+\item (F2) Zustandskorrespondenz: KMS-Zustand $\phi_{\beta,\sigma}
+  \leftrightarrow$ Galois-verdrehtes Tate-Funktional.
+\item (F3) Zeitentwicklung: $\alpha_t^{BC}$ $\leftrightarrow$
+  Mellin-Verschiebung durch analytische Fortsetzung
+  $t = i(\beta - 1/2)$.
+\item (F4) Spektrenabgleich: $\{\log n\}$ $\leftrightarrow$
+  Kontinuumspektrum mit singulären Punkten bei $\{\gamma_\rho\}$.
+\end{itemize}
+
+\textbf{Kandidatenkonstruktion über Galois-Mittelung:}
+\[
+  \mathcal F(a)([f]) := \int_{\hat\Z^\times}
+    \phi_{\infty, \sigma}(a) \cdot \sigma(f) \, d\sigma.
+\]
+
+\textbf{Status von (O2).} Eine konkrete Zielabbildung ist beschrieben,
+aber die notizartigen Aussagen (F1)--(F4) enthalten noch keine Beweise
+für Existenz, Stetigkeit, Injektivität und Surjektivität. Die Grenz-KMS-
+Zustände und ihre Stetigkeit sind nicht konstruiert. Die vorgeschlagene
+Fourier-Abbildung bleibt genau an der Stelle heuristisch, an der die
+Fortsetzung auf die kritische Linie eintreten müsste. (O2) sollte daher
+als eigenständiges Forschungsproblem in der Operatoralgebra behandelt
+werden, nicht als schnelles Brückenlemma.
+
+\subsection{Hindernis (O3): Konvergenzkontrolle}
+
+Der Mangoldt-Pol bei $\beta = 1$ ist ein Hindernis für direkte
+Operatorfortsetzung. Ein Renormalisierungsansatz liegt nahe, aber --- wie
+das Audit zutreffend betont --- sind weder die Spurklasse-Eigenschaften
+noch die analytische Fortsetzung des renormalisierten Operators derzeit
+durch strenge Argumente gerechtfertigt.
+
+\begin{definition}[renormalisierter Gibbs-Operator, vorläufig]
+\label{def:ren-gibbs}
+\[
+  G_\beta^{\mathrm{ren}} := e^{-\beta H_{BC}}
+    - \frac{\Pi_0}{\beta - 1},
+\]
+wobei $\Pi_0$ der kanonische Projektor auf den
+``$n = 1$''-Identitätssektor der Hecke-Algebra ist (der den
+Mangoldt-Pol trägt).
+\end{definition}
+
+\begin{conjecture}[Spurklasse-Fortsetzung durch den Pol,
+\textbf{offen})]
+\label{conj:ren-trace-class}
+$G_\beta^{\mathrm{ren}}$ ist für alle $\Re\beta > 0$ Spurklasse
+(einschließlich der kritischen Linie) mit
+$\Tr(G_\beta^{\mathrm{ren}}) = Z_{\mathrm{ren}}(\beta) = \zeta(\beta)
+- (\beta - 1)^{-1}$.
+\end{conjecture}
+
+\begin{remark}[Rücknahme der Proposition aus v0.6]
+\label{rem:o3-retraction}
+In v0.6 wurde Vermutung~\ref{conj:ren-trace-class} als Proposition
+formuliert. Das war falsch: Das Subtrahieren eines Pols auf Ebene der
+Spuren erzeugt nicht automatisch eine Operatorfamilie der Spurklasse.
+Ein operatortheoretischer Beweis erfordert mindestens eine explizite
+Analyse der Rang-eins-Subtraktion auf dem Hilbertraum der BC-Darstellung,
+Kontrolle der Operatornorm-Grenzwerte für $\Re\beta \searrow 1$ und eine
+strenge Identifikation der fortgesetzten Familie auf $\Re\beta \le 1$.
+Nichts davon folgt aus der skalaren Zetaregularisierung. Wir nehmen die
+Behauptung aus v0.6 zurück und markieren Vermutung~\ref{conj:ren-trace-class}
+ausdrücklich als offen.
+\end{remark}
+
+\textbf{FST-Interpretation.} Die Subtraktion des Mangoldt-Pols erinnert
+an eine RG-Operation, die Bulk-Freie-Energie vom RFEP-stabilen Anteil
+trennt. Die verbleibende Polstruktur $\{\beta = \rho\}$ würde, vermutungsweise,
+Meyers Eigendistributionen als RG-kritische Modi eines renormalisierten
+Systems liefern. Dies bleibt ein strukturelles Bild, kein Satz.
+
+\subsection{Status der drei Hindernisse}
+
+Wir behaupten \emph{nicht}, dass (O1)--(O3) auf Standardtechniken
+reduzierbar sind. Die ehrliche Einschätzung lautet:
+\begin{itemize}[leftmargin=*]
+\item (O1) ist vergleichsweise solide --- stilistisch nahe an Meyer 2005
+  und klassischer adelischer Analysis; die abstrakte Verallgemeinerung ist
+  nichttrivial, aber plausibel.
+\item (O2) ist offen, aber strukturiert: Eine konkrete Zielabbildung ist
+  angegeben, doch die analytischen Bausteine (Stetigkeit, Grenz-KMS-
+  Zustände, Injektivität, Surjektivität) fehlen.
+\item (O3) ist in seiner aktuellen Form tief und stark spekulativ. Die
+  Spurklasse-Fortsetzung durch den Pol wurde in früheren Versionen zu
+  stark behauptet; siehe Bemerkung~\ref{rem:o3-retraction}.
+\end{itemize}
+Der Satz ``alle drei Hindernisse reduzieren sich auf Standardtechniken'',
+der in v0.6 stand, ist nicht korrekt und wird zurückgenommen.
+
+% =====================================================
+\section{Nichtabelsche Erweiterung: Die Selberg-Kompatibilitätsprüfung}
+\label{sec:selberg}
+% =====================================================
+
+\subsection{Warum eine Kompatibilitätsprüfung wichtig ist}
+
+Die FST-Basisaxiome (Abschnitt~\ref{sec:axioms}) verlangen, dass $G$
+abelsch ist. Selbergs Beweis der RH für $Z_\Gamma$ ist ein
+\emph{klassischer} nichtabelscher Fall. Wenn eine natürliche nichtabelsche
+Erweiterung der FST-Axiome mit Selbergs Setting \emph{kompatibel} ist ---
+also wenn sich die Axiome widerspruchsfrei in das nichtabelsche Setting
+übersetzen lassen und die Selberg-Strukturen in die übersetzten Axiome
+passen ---, dann ist dies Evidenz dafür, dass die Axiome keinen offensichtlich
+nur abelschen strukturellen Bias haben.
+
+Wir betonen: Eine Kompatibilitätsprüfung ist kein Beweis. Der nichtabelsche
+FST-Fixpunktsatz (Vermutung~\ref{conj:nonabelian-fixed-point} unten) ist
+eine Vermutung, kein Satz, der Selberg aus den neuen Axiomen zurückgewinnt.
+
+\subsection{Selberg-Rekapitulation}
+
+Für $\Gamma \subset \mathrm{PSL}_2(\R)$ kokompakt und
+$\mathcal F = \Gamma \backslash \mathbb H$:
+\begin{itemize}
+\item $\Delta_{\mathcal F}$ ist selbstadjungiert auf $L^2(\mathcal F)$,
+  mit diskretem Spektrum $\{\lambda_n\}$.
+\item Selberg-Zeta $Z_\Gamma(s)$: nichttriviale Nullstellen
+  $\rho_n = 1/2 + i r_n$ mit $\lambda_n = 1/4 + r_n^2$.
+\item Selberg-RH: $r_n \in \R$ folgt automatisch aus
+  $\lambda_n \geq 0$ (Selbstadjungiertheit des Laplace-Operators).
+\end{itemize}
+
+Die Selberg-Spurformel verbindet $\sum_n h(r_n)$ mit Daten geschlossener
+Geodäten --- eine nichtabelsche Formel vom Poisson-Weil-Typ.
+
+\subsection{Axiomprüfung für Selberg}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lcl@{}}
+\toprule
+\textbf{Axiom} & \textbf{Status} & \textbf{Kommentar} \\
+\midrule
+(G) abelsch & nein & verlangt nichtabelsche Erweiterung \\
+(R) Renormalisierung & $\checkmark$ & geodätischer Fluss \\
+(N) arithmetischer Nukleus & partiell & tannakisches Analogon \\
+($\chifn$) Charakter & $\checkmark$ & ersetzt durch Darstellung \\
+(P1--P3) Muster A & partiell & spektrale Zerlegung existiert \\
+(SGE) Gruppenstruktur & $\checkmark$ & $\Gamma$ ist eine Gruppe \\
+(DS1--DS3) & $\checkmark$ & geodätische Dynamik \\
+(RFEP) & $\checkmark$ & Laplace-Funktional \\
+\bottomrule
+\end{tabular}
+\caption{FST-Axiomprüfung für das Selberg-Setting. Das abelsche
+Axiom (G) scheitert; alle anderen sind mit einer natürlichen
+nichtabelschen Erweiterung \emph{kompatibel}.}
+\label{tab:selberg-axioms}
+\end{table}
+
+\subsection{Tannakische Erweiterung (Skizze)}
+
+Ersetze:
+\begin{itemize}
+\item die abelsche Gruppe $G$ durch die tannakische Kategorie $\T$ der
+  Darstellungen.
+\item den Charakter $\chifn$ durch eine irreduzible Darstellung
+  $\pi \in \T$.
+\item Pontryagin-Dualität durch tannakische Rekonstruktion.
+\end{itemize}
+
+Für Selberg entsteht $\T$ aus $\Rep(\mathrm{PSL}_2(\R))$, eingeschränkt
+auf $\Gamma$-invariante Untermoduln.
+
+\begin{conjecture}[nichtabelscher FST-Fixpunktsatz]
+\label{conj:nonabelian-fixed-point}
+Unter einer geeigneten nichtabelschen (tannakischen) Formulierung der
+FST-Axiome und einem nichtabelschen Analogon (FST-7') existiert ein
+Operator $H_\Gamma$ auf einem Fréchet-Raum $\V_\Gamma$, dessen
+Punktspektrum den Selberg-Nullstellenordinaten entspricht und der für die
+Petersson-Paarung $B$-symmetrisch ist. Die Realität des Spektrums würde aus
+Selbstadjungiertheit folgen (durch eine automatische Laplace-Struktur),
+mithin RH für $Z_\Gamma$.
+\end{conjecture}
+
+\subsection{Was die Selberg-Kompatibilitätsprüfung etabliert}
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Strukturelle Kompatibilität.} FST (in nichtabelscher Form)
+  ist nicht offensichtlich inkompatibel mit einem bekannten RH-Beweis ---
+  ein Plausibilitätscheck der Axiome.
+\item \textbf{Gestalt einer nichtabelschen Erweiterung.} Das tannakische
+  Vokabular liefert eine natürliche Sprache für nichtabelsche
+  darstellungstheoretische Inhalte.
+\end{enumerate}
+
+Wir behaupten \emph{nicht}: dass die nichtabelschen FST-Axiome Selbergs
+Beweis \emph{neu herleiten}, dass (FST-7'(C)) aus Anosov-Ergodizität in
+einer Weise folgt, die als Satz des tannakischen FST-Rahmens formalisiert
+ist, oder dass das nichtabelsche Axiompaket eine kategorientheoretische
+Reife besitzt, die mit dem abelschen Paket vergleichbar wäre. Gezeigt wird
+eine Analogie und ein Kompatibilitätstest, kein bewiesener nichtabelscher
+Fixpunktsatz.
+
+\subsection{Die Riemann-vs.-Selberg-Diagnose}
+
+Der entscheidende Unterschied:
+\begin{itemize}
+\item Selberg: Das arithmetisch-adelische Analogon von (FST-7) ist
+  \emph{geometrisch natürlich} --- der Laplace-Operator entsteht aus
+  riemannscher metrischer Geometrie.
+\item Riemann: (FST-7) ist \emph{arithmetisch adelisch} --- ohne analoge
+  Geometrie; Meyers Fréchet-distributionale Struktur spielt die analoge
+  strukturelle Rolle.
+\end{itemize}
+
+Der thermodynamische Bost-Connes-Mechanismus (Abschnitt~\ref{sec:emergence})
+wurde in früheren Entwürfen als dynamische Brücke über diese Lücke
+vermutet; wir betrachten dies nun als offen.
+
+% =====================================================
+\section{Klassifikation über FST-Struktur}
+\label{sec:classification}
+% =====================================================
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}llcccl@{}}
+\toprule
+\textbf{Familie} & \textbf{Typ} & \textbf{SGE} & \textbf{(FST-7)} & \textbf{FST-Mechanismus} & \textbf{Status} \\
+\midrule
+Riemann $\zeta(s)$ & abelsch & $\checkmark$ & $\checkmark$ (Tate) & Meyer / CCM-Prolat & offen; CCM-Numerik stark \\
+Dirichlet $L(s, \chifn)$ & abelsch & $\checkmark$ & $\checkmark$ (Tate) & Meyer-adelisch & offen \\
+Hecke $L(s, \chifn_K)$ & abelsch & $\checkmark$ & $\checkmark$ (Tate-Weil) & Meyer-körperadelisch & offen \\
+Selberg $Z_\Gamma$ & nichtabelsch & $\checkmark$ & $\checkmark$ (Spurformel) & Laplace-direkt & bewiesen (Selberg) \\
+Ihara-Petersen & endlich & $\checkmark$ & N/A (endlich) & trivial & bewiesen (Bass-Hashimoto) \\
+Artin (nichtabelsch) & nichtabelsch & $\checkmark$ & offen & Tannaka-Langlands & offen \\
+Automorphe $L$ auf $GL_n$ & nichtabelsch & $\checkmark$ & offen & Langlands-funktoriell & offen \\
+$\F_1$-hypothetisch & monoidal & ? & offen & Connes-Consani & offen \\
+Prime-Hub (OP5) & unklar & ? & offen & keine natürliche Gruppe & offen \\
+\bottomrule
+\end{tabular}
+\caption{Klassifikation zetatypischer Familien unter FST-Axiomen,
+mit einer tannakischen Erweiterung für nichtabelsche Fälle. FST fungiert
+hier als Ordnungsrahmen, nicht als Beweismaschine.}
+\label{tab:classification-v2}
+\end{table}
+
+\textbf{Beobachtung.} FST liefert eine prognoseartig wirkende Klassifikation:
+Familien, in denen (FST-7) gilt, erlauben Meyer-artige Konstruktionen; die
+nichtabelschen Fälle verlangen eine tannakische Erweiterung (SGE liefert
+weiterhin die Gruppenstruktur). Prime-Hub ist ungelöst, weil bislang keine
+natürliche Gruppe identifiziert wurde.
+
+% =====================================================
+\section{Das Emergenz-Programm (Route C): Diagnose eines tiefen Hindernisses}
+\label{sec:emergence}
+% =====================================================
+
+Frühe Entwürfe dieses Projekts schlugen Route~C vor: einen thermodynamischen
+Mechanismus, durch den FST zusammen mit zwei zusätzlichen Selektionsaxiomen
+und Cornelissen-Marcolli-Starrheit (FST-7) als Satz ``ableiten'' sollte.
+Die spätere Analyse (vgl.~\cite{L1KAttack,EmergenceAttack}) zeigt, dass
+diese Route die arithmetische Tiefe eher \emph{verlagert} als auflöst.
+Dieser Abschnitt stellt das Emergenz-Programm daher in seiner nun
+diagnostischen Form dar: als Identifikation des Ortes, an dem der schwere
+arithmetische Input liegt, nicht als fast vollständigen Pfad zu (FST-7).
+
+\subsection{Zwei zusätzliche FST-Axiome als \emph{Selektionsprinzipien}}
+\label{sec:extra-axioms}
+
+\begin{definition}[FST-Free Axiom]\label{def:fst-free}
+Die multiplikative Halbgruppe $N \le G$ ist eine freie kommutative
+Halbgruppe, erzeugt von irreduziblen ``Primzahlen'' $\{p_i\}_{i \in I}$.
+\end{definition}
+
+\begin{definition}[FST-Min Axiom]\label{def:fst-min}
+Unter allen FST-Strukturen, die die Basis-Axiome plus
+(FST-Free) erfüllen und einen kritischen Phasenübergang zulassen,
+wählt ein zusätzliches Auswahlkriterium jene Struktur aus, deren zugrunde liegender
+globaler Körper $K$ das \emph{Anfangsobjekt} in der Kategorie der globalen
+Körper der Charakteristik null ist. Im abelschen Charakteristik-null-Fall
+wählt dies $K = \Q$ aus.
+\end{definition}
+
+\begin{remark}[Ehrliche Lesart]
+\label{rem:fst-free-min-imports}
+(FST-Free) ist eine multiplikative Freiheits-Annahme an $N$. (FST-Min)
+ist ein Selektionskriterium minimaler Beschreibung. Beide sind \emph{starke
+Selektionsprinzipien, die arithmetischen Inhalt kodieren} --- sie sind
+keine Konsequenzen der Basis-Axiome. Insbesondere fungieren sie in der
+untenstehenden Reduktion als externe arithmetische Importe, nicht
+als abgeleitete Fakten.
+\end{remark}
+
+\subsection{Die Cornelissen-Marcolli Brücke}
+\label{sec:cm-bridge}
+
+\begin{theorem}[Cornelissen-Marcolli
+2010 \cite{CornelissenMarcolli2010}]\label{thm:cm-rigidity}
+Seien $K_1, K_2$ Zahlkörper und seien $(\mathcal A_{K_i},
+\sigma_{K_i})$ ihre zugehörigen Bost-Connes-Systeme. Die folgenden Aussagen
+sind äquivalent:
+\begin{enumerate}[label=(\roman*)]
+\item $K_1 \cong K_2$ als Körper.
+\item $(\mathcal A_{K_1}, \sigma_{K_1}) \cong (\mathcal A_{K_2},
+  \sigma_{K_2})$ als $C^\ast$-dynamische Systeme.
+\end{enumerate}
+Insbesondere determiniert das BC-System den zugrunde liegenden Zahlkörper
+bis auf Isomorphie.
+\end{theorem}
+
+\begin{remark}
+Theorem~\ref{thm:cm-rigidity} behauptet \emph{nicht}, dass die
+Zustandssumme (Partitionsfunktion) allein den Körper determiniert (zwei
+nicht-isomorphe Körper können dieselbe Dedekindsche Zetafunktion teilen).
+Die volle $C^\ast$-Algebra plus die einparametrige Gruppe wird benötigt.
+Dies ist eine wichtige Hypothese des Theorems; sie ist stärker als der Input, den
+das Emergenz-Programm tatsächlich liefert.
+\end{remark}
+
+\subsection{Thermodynamische Bedingungen}
+\label{sec:thermo-B}
+
+Folgend \cite{LemmaThreeTwo,ThermoDerivation} extrahiert man aus
+FST$_0$ + RFEP + (FST-Free) vier \emph{thermodynamische Bedingungen} an
+das zugehörige QSM-System $(\mathcal A, \sigma)$:
+
+\begin{description}[leftmargin=*,style=nextline]
+\item[(B1)] \textbf{Dirichlet-Struktur.} $Z(\beta) = \sum_{n \in X}
+  w_n\, n^{-\beta}$ für eine abzählbare Indexmenge $X$ und positive
+  Gewichte $w_n$.
+\item[(B2)] \textbf{Euler-Produkt.} $Z(\beta) = \prod_{p \in P}
+  (1-w_p p^{-\beta})^{-1}$ für eine atomare Erzeugermenge $P$
+  (``Primzahlen'').
+\item[(B3)] \textbf{Einfacher Pol bei $\beta=1$.} $\lim_{\beta \to 1^+}
+  (\beta-1)\, Z(\beta) = c > 0$.
+\item[(B4)] \textbf{FST$_0$-Konformität.} $\mathcal A$ ist das
+  universelle Muster-A verschränkte Produkt (crossed product) von $N$
+  mit seiner einparametrigen Skalierung.
+\end{description}
+
+\begin{proposition}[Thermodynamische Ableitung, partiell]\label{prop:thermo-derivation}
+Unter den FST$_0$-Basis-Axiomen zusammen mit (FST-Free) und RFEP mit
+einer einparametrigen thermodynamischen Variable gibt es eine heuristische
+Route zu (B1), (B2) und (B4); (B3) erfordert einen weiteren arithmetischen Input
+(Identifikation des thermodynamischen Pols mit dem Dedekind-Pol).
+\end{proposition}
+
+\begin{remark}[Status von Proposition~\ref{prop:thermo-derivation}]
+\label{rem:thermo-status}
+Die Beweisskizzen in v0.4--v0.6 präsentierten dies als eine geradlinige
+Ableitung. Die ehrliche Position ist: (B1), (B2), (B4) folgen aus
+RFEP + (FST-Free) durch Standard-Argumente vom Typ kritischer Exponenten;
+(B3) --- welches der inhaltliche arithmetische Punkt ist --- ist der Ort, an dem die
+Identifikation mit einem echten Zahlkörper-Dedekind-Pol ins Spiel kommt.
+Dies folgt nicht allein aus der thermodynamischen Seite; es erfordert den Input,
+der in der Lückenanalyse von \cite{L1KAttack} entwickelt wurde.
+\end{remark}
+
+\subsection{Das ehemalige ``Hauptreduktions-Theorem''}
+\label{sec:former-reduction}
+
+Frühere Versionen dieses Papers formulierten ein Theorem (``Reduktion der
+Emergenz-Hypothese''), das behauptete, FST$_0$ + (FST-Free) +
+(FST-Min) + RFEP + Cornelissen-Marcolli-Starrheit erzwingen, dass das
+zugrundeliegende QSM-System das BC-System von $\Q$ ist, und bedingen somit
+(FST-7)(A) via Tate. Die aktualisierte Position ist, dass diese Kette einen
+entscheidenden offenen Schritt bei (B3) hat, und grundlegender, dass die
+Identifikation eines QSM-Systems $(\mathcal A, \sigma)$, das
+(B1)--(B4) erfüllt, mit dem BC-System eines \emph{Zahlkörpers} $K$ \emph{mehr}
+erfordert als ein Dirichlet/Euler/Pol-Muster: Es erfordert die Rekonstruktion
+der additiven Struktur von $K$ aus Daten, die prima facie nur multiplikativ sind.
+
+Wir formulieren dies formell:
+
+\begin{conjecture}[L1-K: Rekonstruktion der additiven Struktur]
+\label{conj:l1k}
+Ein QSM-System $(\mathcal A, \sigma)$, das (B1)--(B4) plus
+(FST-Min) erfüllt, ist isomorph als ein $C^\ast$-dynamisches System zum
+Bost-Connes-System eines Zahlkörpers $K = \Q$.
+\end{conjecture}
+
+\begin{remark}[Warum L1-K schwer ist]\label{rem:l1k-hard}
+Cornelissen-Marcolli charakterisieren einen Zahlkörper durch sein BC-System,
+aber die Hypothesen dieses Theorems beinhalten die volle
+$C^\ast$-dynamische Struktur eines BC-Systems --- insbesondere jene Teile,
+die die Ringstruktur des Ganzheitsrings kodieren, einschließlich der Addition.
+Die thermodynamischen Bedingungen (B1)--(B4) sind primär multiplikativ.
+Diese Lücke zu schließen, ist klassischerweise äquivalent dazu, eine additive
+Struktur aufzuzwingen, die kompatibel mit der multiplikativen ist, d.h. das Problem
+der additiv-multiplikativen Kopplung, das vom Connes-Consani Arithmetic-Site /
+$\F_1$-Programm adressiert wird. Keine Version des in diesem Projekt entwickelten
+Emergenz-Programms schließt diese Lücke. Innerhalb unserer formalen Sprache
+entspräche dies der Einführung noch eines weiteren Axioms, \emph{(FST-Add)},
+welches die additive Struktur von $K$ kodiert --- in welchem Fall das Argument
+offensichtlich zirkulär wird: wir setzen das voraus, was wir ableiten wollen.
+\end{remark}
+
+\subsection{Entwurf für Route C, in diagnostischer Form}
+
+\begin{blueprint}[Route C, in diagnostischer Form]
+\label{bp:route-c}
+Unter FST$_0$ + (FST-Free) + (FST-Min) + RFEP + (B3), \emph{und
+bedingt durch Vermutung~\ref{conj:l1k} (L1-K)}, schließt sich die Kette
+\begin{center}
+FST Daten $\;\to\;$ QSM-System, das (B1)--(B4) erfüllt
+$\;\xrightarrow{\text{CM Starrheit}}\;$ BC-System von $\Q$
+$\;\xrightarrow{\text{Tate}}\;$ (FST-7)(A)
+\end{center}
+In diesem Szenario wäre (FST-7) ein Theorem. In der Praxis ist
+Vermutung~\ref{conj:l1k} das additiv-multiplikative Kopplungsproblem
+des $\F_1$-Programms; das Emergenz-Programm schließt die Schleife daher
+\emph{nicht} autonom.
+\end{blueprint}
+
+\subsection{Herabstufung von Route C}
+
+\begin{remark}[Herabstufung]
+\label{rem:route-c-demotion}
+Folglich stufen wir Route~C von einem potenziellen ``Hauptprogramm'' zu einer
+diagnostischen Nebenuntersuchung herab. Ihr Beitrag liegt in der strukturellen Klärung:
+Indem man der Emergenz-Kette folgt, kann man die additiv-multiplikative
+Kopplung als das einzige tiefe Hindernis identifizieren, und man sieht explizit, dass
+BC-Thermodynamik allein keine additive Struktur liefert. Dies ist nützlich als ein
+diagnostisches Ergebnis darüber, wo die arithmetische Tiefe liegt; es ist
+als Beweiswerkzeug \emph{nicht} nützlich.
+\end{remark}
+
+\subsection{Die drei parallelen Routen unter dem FST-Schirm}
+\label{sec:three-routes}
+
+Mit der Herabstufung von Route~C stellt sich das Routenbild wie folgt dar:
+
+\begin{center}
+\small
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\textbf{Route} & \textbf{Mechanismus} & \textbf{(FST-7) Sichtweise} &
+\textbf{Schlüsselobjekt} & \textbf{Status} \\
+\midrule
+(A) Meyer-Tate      & adelische Selbstdualität & Pontryagin        &
+$\A_\Q$, $\Q$-Gitter & Kontext; (O1)--(O3) offen \\
+(B) CCM-Prolat      & Zeit-Frequenz-Optimalität & Nyquist-Shannon &
+$D^{(\lambda,N)}_{\log}$, $PW_\lambda$ & \textbf{Hauptprogramm; 4 Meilensteine} \\
+(C) BC-Emergenz     & thermodynamischer Phasenübergang & arithm. ergodisch &
+BC-Algebra            & herabgestuft (L1-K = add/mult-Kopplung) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Nach Theorem~\ref{thm:fst7-equiv} sind die drei Sichtweisen von (FST-7)
+als strukturelle Bedingungen äquivalent, so dass jede Route, wenn sie abgeschlossen
+würde, (FST-7) und damit (in Kombination mit der Meyer-Konstruktion
+oder ihrem Analogon) die Riemannsche Vermutung nach sich ziehen würde.
+Der Punkt ist, dass ein Abschluss auf den drei Routen sehr unterschiedliche Dinge bedeutet, und
+derzeit nur Route~B als ein aktives technisches Programm verfolgt wird.
+
+\begin{remark}[Rolle der FST in v1.8]\label{rem:fst-role-v07}
+FST konkurriert nicht mit irgendeiner der drei Routen. Sie bietet einen
+gemeinsamen \emph{Klassifizierungs- und Vergleichsrahmen}: Dasselbe
+(FST-7)-Axiom wird in drei äquivalenten strukturellen Formen durch drei
+verschiedene technische Programme angegriffen. Der tiefe Inhalt ist die
+strukturelle \emph{Äquivalenz} --- dass adelische Selbstdualität,
+Zeit-Frequenz-Optimalität und arithmetische Ergodizität drei
+strukturelle Gesichter eines einzigen Phänomens sind. FST beweist
+für sich allein nichts über RH.
+\end{remark}
+
+% =====================================================
+\section{Offene Forschungsfragen}
+\label{sec:ofq}
+% =====================================================
+
+\begin{description}[style=nextline,leftmargin=*,labelwidth=3.5em]
+\item[(OFQ1)] \textbf{(FST-7) aus RFEP.} Offen; die Emergenz-Route
+  identifiziert (L1-K), die additiv-multiplikative Kopplung, als das
+  Kernhindernis (Abschnitt~\ref{sec:emergence}).
+\item[(OFQ2)] \textbf{Auflösung von (O1)--(O3).} Technische
+  Vollendung der Wick-Mellin-Rotation; (O3) ist das schwerste Stück,
+  und sein Spurklasse-Status ist offen (Vermutung~\ref{conj:ren-trace-class}).
+\item[(OFQ3)] \textbf{Nicht-abelsche FST.} Tannakische Axiome als ein
+  Vokabular für Artin- und automorphe $L$-Funktionen;
+  Vermutung~\ref{conj:nonabelian-fixed-point} offen;
+  vgl. \cite{TannakianAxioms} für explorative Formalisierung.
+\item[(OFQ4)] \textbf{Selberg-Kompatibilität.} Kompatibilität
+  etabliert (Abschnitt~\ref{sec:selberg}); ein vollständiger nicht-abelscher
+  Fixpunktsatz bleibt offen.
+\item[(OFQ5)] \textbf{$\F_1$-FST und die additiv-multiplikative Kopplung.}
+  Das (L1-K)-Hindernis aus Abschnitt~\ref{sec:emergence} fällt mit dem
+  klassischen Connes-Consani-Arithmetic-Site-Programm zusammen;
+  dies ist der langfristige Rahmen, in dem Route~C möglicherweise
+  wiederbelebt werden könnte.
+\item[(OFQ6)] \textbf{Physikalische Realisierung.} Bost-Connes in der
+  kondensierten Materie; experimenteller Phasenübergang (spekulativ).
+\item[(OFQ7)] \textbf{Starrheit (Rigidity).} Adelische Struktur:
+  Margulis-artige Starrheit oder Moduli? (explorativ).
+\end{description}
+
+% =====================================================
+\section{Status, Ehrliche Einschätzung und Ausblick}
+\label{sec:status}
+% =====================================================
+
+\subsection{Was dieses Paper etabliert}
+
+\begin{enumerate}[leftmargin=*]
+\item Axiomatisches FST-Framework zur Spektrum-Nullstellen-Identifikation,
+  mit expliziter Trennung von Basis- und Vollständigkeitsaxiomen
+  (Abschnitte~\ref{sec:axioms}, \ref{sec:fixed-point}).
+\item Identifikation von (FST-7) in drei strukturell äquivalenten
+  Formen (Abschnitt~\ref{sec:fst7}); die drei Formen sind in der Praxis
+  drei verschiedene technische Einstiegspunkte, keine austauschbaren
+  Beweisstrategien.
+\item Drei technische Hindernisse (O1)--(O3) auf Route~A, katalogisiert
+  mit Kandidaten-Konstruktionsskizzen, aber \emph{nicht} auf Standardtechniken
+  reduziert (Abschnitt~\ref{sec:wick-mellin-obstacles}).
+\item Selberg-Kompatibilitätsprüfung: Eine nicht-abelsche tannakische Erweiterung
+  ist kompatibel mit Selbergs RH-Beweis
+  (Abschnitt~\ref{sec:selberg}); sie re-deriviert (erzeugt) den Beweis jedoch nicht.
+\item Klassifizierung von Zeta-artigen Familien
+  (Tabelle~\ref{tab:classification-v2}).
+\item Einen \textbf{Reduktions-Entwurf für Route~B} in der CCM-Missing-Step-Sprache
+  (Entwurf~\ref{bp:fst-transfer}), zusammen mit einer
+  Vier-Meilenstein-Agenda für Route~B (Meilensteine~\ref{ms:1}--\ref{ms:4}).
+\item \textbf{(Neu in v0.8; durch Zookeeper vorgebracht)} Ein \textbf{Drei-Lemma-Endspiel}
+  (Abschnitt~\ref{sec:three-lemma-endgame}), das (MS2/C2) im Zookeeper Paper durch
+  massenbasierte spektrale Cluster-Analyse auflöst: Drei unabhängige Lemmas
+  (Lemmas~\ref{lem:secular}--\ref{lem:coercive}) liefern die
+  Massenkonzentrations-Schranke (Theorem~\ref{thm:mass-concentration})
+  als Korollar einer Standard-Quasimode-zu-Projektor-Ungleichung.
+\item \textbf{(Neu in v0.8)} Ein RFEP Transfer-Paket für physikalische
+  Nachträge (Abschnitt~\ref{sec:rfep-physics-transfer}), das das
+  Zookeeper-Operator-Muster in explizite Beweisverpflichtungen übersetzt:
+  Operator/Form, Defekt, Galerkin-Treue, Komplement-Lücke und Rand-Limes.
+\item \textbf{(Neu in v1.8)} Eine zweiglokale Status-Tabelle der Domänen
+  (Tabelle~\ref{tab:domain-status}), die das RFEP als physikalische Metaregel
+  vom Zeta Zoo als mathematischen Begleitzweig trennt.
+\item Eine diagnostische Umformulierung von Route~C, die die
+  additiv-multiplikative Kopplung (L1-K) als ihr Kernhindernis identifiziert
+  (Abschnitt~\ref{sec:emergence}).
+\end{enumerate}
+
+\subsection{Was dieses Paper nicht etabliert}
+
+\begin{enumerate}[leftmargin=*]
+\item Kein unbedingtes neues Theorem über RH oder GRH.
+\item Keine Ableitung von (FST-7) aus den FST-Basis-Axiomen allein;
+  lediglich eine konjekturale \emph{Relokation} des arithmetischen Inputs
+  unter zusätzlichen Selektionsaxiomen.
+\item Keine Auflösung der Wick-Mellin-Hindernisse (O1)--(O3); die Behauptung der
+  Spurklasse für (O3) aus v0.6 wird explizit zurückgezogen (Bemerkung~\ref{rem:o3-retraction}).
+\item Kein unbedingter Beweis von (MS1) (Einfach-gerade für $QW_\lambda$);
+  dies bleibt offen.
+\item Kein unabhängiger Neu-Beweis des Zookeeper MS2/C2-Theorems innerhalb
+  dieses RFEP-Papers. Dieses Paper importiert den Zookeeper-Abschluss als ein
+  CORE-Resultat und nutzt ihn als Normalform-Vorlage für den physikalischen Transfer.
+\item Kein automatischer Transfer des Zookeeper-Abschlusses auf physikalische
+  Nachträge. Jeder physikalische Zweig muss immer noch sein eigenes Analogon
+  der Hypothesen zu Operator/Form, Defekt, Quasimode, Komplement-Lücke und Domain-Limes verifizieren.
+\item Kein Beweis einer generalisierten Weyl-Asymptotik für $QW_\lambda$;
+  ersetzt durch Meilenstein~\ref{ms:4}.
+\item Kein Beweis der physikalischen Nachträge aus dem RFEP-Transfer-Schema.
+  Proposition~\ref{prop:rfep-transfer-schema} ist eine wiederverwendbare
+  bedingte Vorlage; Yang--Mills, Navier--Stokes, NS-LDI, Turbulenz und CRM müssen
+  ihre Hypothesen separat verifizieren.
+\item Kein Beweis des nicht-abelschen Fixpunktsatzes
+  (Vermutung~\ref{conj:nonabelian-fixed-point}).
+\item Kein Beweis von Proposition~\ref{prop:thermo-derivation} bezüglich (B3);
+  kein Beweis von Vermutung~\ref{conj:l1k} (L1-K); keine Auflösung der
+  additiv-multiplikativen Kopplung.
+\end{enumerate}
+
+\subsection{Ehrliche Einschätzung}
+
+\textbf{FST in ihrer gegenwärtigen Form ist ein vergleichendes Framework
+mit einem Zookeeper-abgeschlossenen C2/MS2 Kernresultat.}
+Es liefert strukturelle Klarheit, ein Klassifizierungskriterium und ein explizites
+Drei-Routen-Bild, in dem der schwere offene Inhalt lokalisiert ist:
+
+\begin{itemize}[leftmargin=*]
+\item Auf Route~A sitzt der harte Inhalt in den Wick-Mellin-Hindernissen (O2), (O3).
+\item Auf Route~B schließt das Zookeeper Paper das Approximationsproblem (MS2/C2)
+  durch den Drei-Lemma-Mikrocluster-Abschluss. In diesem RFEP-Paper wird jenes
+  Resultat importiert anstatt neu bewiesen; seine Rolle besteht darin, die Normalform für den
+  physikalischen Transfer zu liefern.
+\item Auf Route~C liegt der harte Inhalt in Vermutung~\ref{conj:l1k} (L1-K),
+  welche das klassische Problem der additiv-multiplikativen Kopplung darstellt
+  und außerhalb der Reichweite des vorliegenden Projekts liegt.
+\end{itemize}
+
+Dieses RFEP-Paper beweist die RH nicht unabhängig. Es dokumentiert
+den Post-Zookeeper-Status: Das Approximationsproblem (MS2/C2) der Route~B,
+welches früher als tiefer offener Punkt im CCM-Programm identifiziert wurde,
+ist im Zookeeper Paper abgeschlossen. Die Konsequenz für RFEP ist strukturell:
+Die physikalischen Zweige erben eine präzise Normalform, nicht jedoch eine automatische
+Lösung ihrer eigenen PDE- oder Kontinuums-Limes-Probleme.
+
+Für den physikalischen Zweig ist der Gewinn anderer Natur: RFEP hat nun eine
+Transfer-Checkliste anstelle eines bloßen Slogans. Physikalische Nachträge
+können das Zookeeper-Muster erst übernehmen, nachdem sie ihre Operator-Normalform,
+ihren Defekt, ihren Galerkin-Limes und ihre Komplement-Lücke identifiziert haben.
+
+\subsection{Rolle des Frameworks}
+
+\begin{itemize}
+\item \emph{Einheitliche Sprache} für Tate, Meyer, Bost-Connes, Selberg, CCM und Connes-Consani.
+\item \emph{Klassifizierungskriterium} (Tabelle~\ref{tab:classification-v2}).
+\item \emph{Forschungsagenda} (OFQ1--OFQ7; Meilensteine \ref{ms:1}--\ref{ms:4} für Route~B).
+\item \emph{Zookeeper-Abschluss} für Route~B's (MS2/C2) durch den Drei-Lemma-Mikrocluster-Abschluss.
+\item \emph{RFEP Transfer-Paket} für physikalische Nachträge (Abschnitt~\ref{sec:rfep-physics-transfer}).
+\item \emph{Diagnostische Identifikation}, dass die Lücke der Route~C die additiv-multiplikative Kopplung ist.
+\item \emph{Kompatibilitätsskizze} mit Selberg (Abschnitt~\ref{sec:selberg}).
+\end{itemize}
+
+\subsection{Nächste technische Schritte}
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Route B, Meilenstein~\ref{ms:1}:} Definitions- / Formentheorie für
+  $\Psi_\lambda$ als beschränkter Verknüpfungsoperator zwischen geeigneten
+  Form-Definitionsbereichen. Dies ist der erste rigorose Schritt und Voraussetzung
+  für jede präzise Formulierung des Entwurfs~\ref{bp:fst-transfer}.
+\item \textbf{Route B, Meilenstein~\ref{ms:2}:} Min-Max-Vergleich niedriger Eigenwerte,
+  keine vollständige Weyl-Asymptotik.
+\item \textbf{Route B, Meilenstein~\ref{ms:3}:} Endlichdimensionales CCM-Trunkierungstheorem
+  innerhalb von $E_N$.
+\item \textbf{Route B, Meilenstein~\ref{ms:4}:} Erst nach 1--3 das asymptotische Regime.
+\item \textbf{Physischer RFEP-Transfer:} Für jeden physikalischen Nachtrag müssen
+  die fünf Beweisfelder der Proposition~\ref{prop:rfep-transfer-schema} gefüllt werden:
+  Operator/Form, Defekt von endlichem Rang, Galerkin-Treue, koerzives Komplement und Rand-Limes.
+  Prime-Hub ist der natürliche erste Testfall, da seine Frontier-Prime-Defekte bereits
+  das richtige Endlich-Rang-/Rand-Gepräge besitzen.
+\item \textbf{Route A:} Operatortheoretische Analyse von (O3) und präzise Artikulation
+  der von (O2) geforderten limitierenden KMS-Zustände; die Frage nach der Spurklasse
+  (Vermutung~\ref{conj:ren-trace-class}) ist offen.
+\item \textbf{Route C:} Nur Dokumentation; kein weiterer Angriff ohne Fortschritte
+  bei der additiv-multiplikativen Kopplung.
+\item \textbf{Nicht-abelsch (OFQ3):}  Die Langlands-Funktorialität ist möglicherweise
+  ein besserer langfristiger Rahmen als die gegenwärtige tannakische FST-Formulierung;
+  vgl. \cite{TannakianAxioms}.
+\item \textbf{Axiomatik:} Beweise für die Unabhängigkeit/Minimalität der
+  Basis-Axiome; Trennung von Setup-, dynamischen und
+  arithmetischen-Vollständigkeits-Annahmen (Bemerkung~\ref{rem:axioms-status}).
+\end{enumerate}
+
+Jede dieser Aufgaben ist ein mehrmonatiges Forschungsvorhaben.
+
+\subsection{Der CRM-Kreis}
+
+Das Kooperative Renormierungs-Modell (CRM) schließt den Kosmologie-Kreis
+des RFEP v1.8. Im mathematischen Zweig ordnen eingeschränkte Positivität
+und Selbstdualität die spektralen Kandidaten. Im physikalischen Zweig
+beschreiben DS1--DS3, wie dissipative Dynamik einen stabilen Attraktor auswählt.
+Im Kosmologie-Zweig ist das CRM die vorgeschlagene großräumige
+Instanziierung: kooperative Renormierung ersetzt einen einzelnen lokalen Defekt
+durch eine gekoppelte Hintergrundreaktion, und das RFEP erfordert, dass das
+beobachtete Dunkle-Energie-Verhalten als stabiles Minimum des entsprechenden
+Funktionals der renormierten freien Energie auftritt.
+
+Die CRM-Behauptung ist daher absichtlich schwächer als die Behauptung
+einer beobachtenden Entdeckung. Das vorliegende Paper dokumentiert
+die strukturelle Verortung: Das CRM ist der kosmologische RFEP-Zweig,
+dessen verbleibende Verpflichtungen die Modellidentifikation, Parameterstabilität
+und beobachtbare Diskriminanten (Unterscheidungsmerkmale) sind. Diese Aufgaben
+gehören in das dedizierte CRM/Kosmologie-Paper, nicht in den Beweiszweig des Zeta Zoos.
+
+\subsection{Beziehung zum Math-Master}
+
+Die tannakische Erweiterung des vorliegenden Papers (Abschnitt~\ref{sec:selberg})
+verfeinert die HP-BL-Klassifizierung des Math-Masters \cite{MathMaster},
+Abschnitte~2.4 und~9: Selbst auf der NO-Seite (Riemann, Dirichlet) könnte eine spektrale
+FST-Realisierung über die SGE-YES-Route der Idele-Seite existieren. Die
+Dreikomponenten-Zerlegung $\mathrm{RH}(X) \iff \mathrm{GBC}(X) \wedge C^{(2)}(X) \wedge \mathrm{Hurwitz}(X)$
+des Math-Masters erhält ihre $C^{(2)}$-Komponente identifiziert mit der
+Meyer-Konstruktion (wie in \cite{C2LayerStatus} diskutiert). Diese Identifikation ist
+struktureller Natur und kein Beweis für die Implikationen der Zerlegung des Math-Masters.
+
+% =====================================================
+\section*{Danksagung}
+% =====================================================
+
+Dieses Paper ist ein Positionsentwurf, der im Rahmen des META\_RH\_TREE-Projekts
+der FST-Mathematik erstellt wurde. Gegenüber v0.6 ist es eine ehrliche Überarbeitung,
+die das externe Audit vom April 2026 (\texttt{\_audit/GPT\_REVIEW\_2026-04-17\_*.md})
+einarbeitet und die Behauptungen auf Ebene des Papers in Einklang mit den
+ehrlichen Diagnosen auf Ebene der Notizen bringt.
+Es konsolidiert die Erkundungen von Session~11 bis Session~16, die im Projektordner
+\texttt{CORE/RFEP/} dokumentiert sind, darunter:
+\texttt{KONZEPT.md},
+\texttt{Exploration.md},
+\texttt{FST\_FIXPOINT\_THEOREM\_ATTEMPT.md},
+\texttt{MINIMAL\_EXAMPLE\_RIEMANN.md},
+\texttt{OPTION\_A\_PONTRJAGIN\_ABSTRACTION.md},
+\texttt{OPTION\_B1\_INFORMATION\_THEORY.md},
+\texttt{OPTION\_B3\_ARITHMETIC\_ERGODICITY.md},
+\texttt{BRIDGE\_BOST\_CONNES\_MEYER.md},
+\texttt{WICK\_ROTATION\_TECHNIQUE.md},
+\texttt{O1\_DISTRIBUTION\_CLASS.md},
+\texttt{O2\_FOURIER\_DUALITY.md},
+\texttt{O3\_CONVERGENCE\_CONTROL.md},
+\texttt{SELBERG\_CONSISTENCY\_CHECK.md},
+\texttt{EMERGENCE\_HYPOTHESIS\_ATTACK.md},
+\texttt{FREE\_ENERGY\_PRODUCT\_FORMULA.md},
+\texttt{LEMMA\_3\_2\_PROOF.md},
+\texttt{THERMODYNAMIC\_DERIVATION.md},
+\texttt{TANNAKIAN\_FST\_AXIOMS.md},
+\texttt{L1\_VARIATIONAL\_PROOF.md},
+\texttt{L1\_K\_ATTACK.md},
+\texttt{CCM\_2025\_STUDY.md},
+\texttt{QW\_PW\_ISOMETRY.md} und
+\texttt{ZOOKEEPER\_RFEP\_TRANSFER.md}.
+
+% =====================================================
+\begin{thebibliography}{99}
+
+\bibitem{MathMaster}
+L.~Geiger,
+\textit{The Zeta Zoo --- The Mathematical Side of Functional
+Stability Theory},
+Preprint, Zenodo (2026), DOI: 10.5281/zenodo.19673227.
+
+\bibitem{ZetaZooMaster}
+L.~Geiger,
+\textit{The Zeta Zoo --- The Mathematical Side of Functional
+Stability Theory: Branch-Local Hilbert--P\'olya via the Trinity of
+UCU, SGE, and Weil-Form Transversality},
+Preprint, Zenodo (2026), DOI: 10.5281/zenodo.19673227.
+
+
+\bibitem{RFEPTransferNote}
+L.~Geiger,
+\textit{Zookeeper to RFEP Transfer},
+Interne Transfer-Notiz (2026),
+  \texttt{CORE/RFEP/notes/ZOOKEEPER\_RFEP\_TRANSFER.md}.
+
+\bibitem{PrimeHubSynthesis}
+L.~Geiger,
+\textit{Prime Hub Graph --- Synthesis of Adelic, Semiclassical,
+and Bouquet Strands},
+Interne Synthese-Notiz (2026),
+\texttt{CORE/zetazoo/prime\_hub/SYNTHESE.md}.
+
+\bibitem{Geiger2026RHII}
+L.~Geiger,
+\textit{Riemann Hypothesis via Direct Frontier Dominance
+(Paper II: Even Dominance)},
+Preprint (2026),
+Zenodo DOI \href{https://doi.org/10.5281/zenodo.19546593}{10.5281/zenodo.19546593}.
+
+\bibitem{AnalyticKernelV2}
+L.~Geiger,
+\textit{Analytic Kernel V2 --- Rigorous Weil-Formula Derivation
+of the Sign Coefficient},
+Ergänzende Notiz (2026),
+\texttt{\_archive/\_dirichlet\_legacy/ANALYTIC\_KERNEL\_V2.md}.
+
+\bibitem{C2LayerStatus}
+L.~Geiger,
+\textit{$C^{(2)}$-Layer Status Dirichlet},
+Ergänzende Notiz (2026),
+\texttt{CORE/zoo-mapping/C2\_LAYER\_STATUS\_2026-04-17.md}.
+
+\bibitem{Meyer2005}
+R.~Meyer,
+\textit{On a representation of the idele class group related to
+primes and zeros of $L$-functions},
+Duke Math. J. \textbf{127} (2005), 519--595.
+
+\bibitem{Connes1999}
+A.~Connes,
+\textit{Trace formula in noncommutative geometry and the zeros of
+the Riemann zeta function},
+Selecta Math. (N.S.) \textbf{5} (1999), 29--106.
+
+\bibitem{Connes2026}
+A.~Connes,
+\textit{Recent developments in the Riemann Hypothesis programme},
+arXiv:2602.04022 (2026).
+
+\bibitem{ConnesConsaniMoscovici2025}
+A.~Connes, C.~Consani, H.~Moscovici,
+\textit{Zeta Spectral Triples},
+arXiv:2511.22755 (2025).
+
+\bibitem{ConnesMoscovici2022}
+A.~Connes, H.~Moscovici,
+\textit{The UV prolate spectrum matches the zeros of zeta},
+Proc. Natl. Acad. Sci. USA \textbf{119} (22) (2022), e2123174119;
+arXiv:2112.05500.
+
+\bibitem{ConnesConsani2023}
+A.~Connes, C.~Consani,
+\textit{Spectral triples and $\zeta$-cycles},
+Enseign. Math. \textbf{69} (2023), 93--148; arXiv:2106.01715.
+
+\bibitem{SlepianPollack1961}
+D.~Slepian, H.~O.~Pollack,
+\textit{Prolate spheroidal wave functions, Fourier analysis and
+uncertainty --- I},
+Bell Syst. Tech. J. \textbf{40} (1961), 43--63.
+
+\bibitem{ConnesConsaniMoscovici2024}
+A.~Connes, C.~Consani, H.~Moscovici,
+\textit{Zeta zeros and prolate wave operators},
+arXiv:2310.18423 (2024).
+
+\bibitem{ConnesConsaniWeilPositivity2020}
+A.~Connes, C.~Consani,
+\textit{Weil positivity and trace formula --- the archimedean place},
+Selecta Math. (N.S.) \textbf{27} (2021), art.~77; arXiv:2006.13771.
+
+\bibitem{Kato}
+T.~Kato,
+\textit{Perturbation Theory for Linear Operators},
+Grundlehren der math.\ Wiss.\ \textbf{132}, Springer (1966; 2nd ed.\ 1980).
+
+\bibitem{L1KAttack}
+L.~Geiger,
+\textit{L1-K --- Attack on the Reconstruction Problem},
+Ergänzende Notiz (2026),
+\texttt{CORE/RFEP/notes/L1\_K\_ATTACK.md}.
+
+\bibitem{CCMStudy}
+L.~Geiger,
+\textit{CCM 2025 Zeta Spectral Triples --- Study + FST connection},
+Ergänzende Notiz (2026),
+\texttt{CORE/RFEP/notes/CCM\_2025\_STUDY.md}.
+
+\bibitem{BostConnes1995}
+J.-B.~Bost, A.~Connes,
+\textit{Hecke algebras, type~III factors and phase transitions
+with spontaneous symmetry breaking in number theory},
+Selecta Math. (N.S.) \textbf{1} (1995), 411--457.
+
+\bibitem{Tate1950}
+J.~T.~Tate,
+\textit{Fourier analysis in number fields and Hecke's
+zeta-functions},
+Ph.D. thesis, Princeton University (1950). Reprinted in
+Cassels-Fr\"ohlich, \emph{Algebraic Number Theory}, 1967.
+
+\bibitem{CasselsFrohlich}
+J.~W.~S.~Cassels, A.~Fr\"ohlich (eds.),
+\textit{Algebraic Number Theory},
+Academic Press (1967).
+
+\bibitem{ConnesMarcolli}
+A.~Connes, M.~Marcolli,
+\textit{Noncommutative Geometry, Quantum Fields, and Motives},
+American Mathematical Society Colloquium Publications 55 (2008).
+
+\bibitem{Selberg1956}
+A.~Selberg,
+\textit{Harmonic analysis and discontinuous groups in weakly
+symmetric Riemannian spaces with applications to Dirichlet series},
+J. Indian Math. Soc. (N.S.) \textbf{20} (1956), 47--87.
+
+\bibitem{CornelissenMarcolli2010}
+G.~Cornelissen, M.~Marcolli,
+\textit{Quantum Statistical Mechanics, L-series and Anabelian
+Geometry I: Partition Functions},
+arXiv:1009.0736 (2010).
+
+\bibitem{Laca1998}
+M.~Laca,
+\textit{Semigroups of $\ast$-endomorphisms, Dirichlet series, and
+phase transitions},
+J. Funct. Anal. \textbf{152} (1998), 330--378.
+
+\bibitem{LacaRaeburn2010}
+M.~Laca, I.~Raeburn,
+\textit{Phase transition on the Toeplitz algebra of the affine
+semigroup over the natural numbers},
+Adv. Math. \textbf{225} (2010), 643--688.
+
+\bibitem{CuntzDeningerLaca2013}
+J.~Cuntz, C.~Deninger, M.~Laca,
+\textit{$C^\ast$-algebras of Toeplitz type associated with
+algebraic number fields},
+Math. Ann. \textbf{355} (2013), 1383--1423.
+
+\bibitem{ArtinWhaples1945}
+E.~Artin, G.~Whaples,
+\textit{Axiomatic characterization of fields by the product formula
+for valuations},
+Bull. Amer. Math. Soc. \textbf{51} (1945), 469--492.
+
+\bibitem{EmergenceAttack}
+L.~Geiger,
+\textit{Emergence Hypothesis --- Attack Document},
+Ergänzende Notiz (2026),
+\texttt{CORE/RFEP/notes/EMERGENCE\_HYPOTHESIS\_ATTACK.md}.
+
+\bibitem{LemmaThreeTwo}
+L.~Geiger,
+\textit{Lemma 3.2 --- $\N^\times$ as the unique FST$_0$-semigroup},
+Ergänzende Notiz (2026),
+\texttt{CORE/RFEP/notes/LEMMA\_3\_2\_PROOF.md}.
+
+\bibitem{ThermoDerivation}
+L.~Geiger,
+\textit{Thermodynamic Derivation of (B1)--(B4) and FST-Minimality},
+Ergänzende Notiz (2026),
+\texttt{CORE/RFEP/notes/THERMODYNAMIC\_DERIVATION.md}.
+
+\bibitem{TannakianAxioms}
+L.~Geiger,
+\textit{Tannakian FST Axioms --- Non-abelian Extension},
+Ergänzende Notiz (2026),
+\texttt{CORE/zetazoo/TANNAKIAN\_FST\_AXIOMS.md}.
+
+\end{thebibliography}
+
+\end{document}

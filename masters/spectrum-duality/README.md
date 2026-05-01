@@ -1,61 +1,50 @@
-# FST Spectrum Duality — Three-Lemma Endgame for Route B
+# RFEP Spectrum Duality
 
-**Status:** Draft v0.8 (conditional closure of CCM missing step MS2)
-**Paper:** `paper/FST_SPECTRUM_DUALITY_v0-8_en.tex`
+**Status:** v1.8 draft synchronized from the local RFEP master.
+**Live Zenodo:** v1.7, concept DOI `10.5281/zenodo.19036190`.
+**Next publication step:** upload the prepared v1.8 EN/DE PDFs as the next Zenodo version.
 
 ## Overview
 
-This directory contains the FST axiom package for spectrum-zero identification
-and the **Three-Lemma Endgame** that conditionally resolves the CCM (Connes--Consani--Moscovici)
-missing step (MS2) via mass-based spectral cluster analysis.
+This directory contains the public RFEP Spectrum Duality draft, the physics-master layer of the Functional Stability Theory hierarchy. RFEP translates stability and operator gains from the Zeta-Zoo core into a reusable physical normal form for Yang-Mills, Navier-Stokes, NS-LDI, turbulence, and cosmology.
 
-### Key Result (Theorem, conditional)
+The v1.8 draft incorporates the Post-Zookeeper transfer as a reusable pattern:
 
-Under a Galerkin-faithfulness hypothesis (numerically verified to 12 digits):
+- rank-one or finite-rank defect language for physical obstructions
+- mass-based cluster gaps instead of isolated eigenvalue checks
+- coercive-complement control outside the target cluster
+- Galerkin-faithfulness as an explicit proof obligation
+- Prime-Hub boundary transfer as frontier or bouquet-style boundary data
 
-```
-||(I - P_{V_lambda}) k_lambda|| <= r_lambda / g_* -> 0   as N -> infinity
-```
+## Public Files
 
-Three independent lemmas + one standard inequality:
-- **C2ca.1** (Scalar Secular Cancellation): |mu| ~ 3e-7
-- **C2ca.2** (Projected Poisson Quasimode): ||h|| ~ 3e-6
-- **C2ca.5** (Coercive Complement): g_* >= 5 (order one, lambda-independent)
-- **C2ca.4** (Mass Concentration): COROLLARY of the above three
+| File | Purpose |
+|---|---|
+| `paper/FST_SPECTRUM_DUALITY_v0-8_en.tex` | English LaTeX source |
+| `paper/FST_SPECTRUM_DUALITY_v0-8_en.pdf` | English compiled draft |
+| `paper/FST_SPECTRUM_DUALITY_v0-8_de.tex` | German LaTeX source |
+| `paper/FST_SPECTRUM_DUALITY_v0-8_de.pdf` | German compiled draft |
 
-## Structure
-
-```
-paper/                  LaTeX paper (v0.8, Three-Lemma Endgame for Route B)
-zookeeper/              Companion paper: numerical verification ("The Spectral Zookeeper")
-scripts/                Numerical validation (Python, numpy/scipy)
-results/                Server computation outputs (JSON)
-proof-notes/            Formal proof documents (C2CA*.md)
-```
-
-## Scripts
-
-| Script | Purpose |
-|--------|---------|
-| `c2bt_spectral_mass.py` | **Main diagnostic:** tolerance-free spectral mass analysis |
-| `c2_quasimode_test.py` | Quasimode residual R0 computation |
-| `c2_cancellation_lambda_scan.py` | Secular cancellation T1+T2 across lambda |
-| `c2_poisson_decomposition.py` | Poisson kernel bulk/boundary decomposition |
-| `c2_n_scaling.py` | Galerkin dimension N scaling of residuals |
-| `b10_analytical_derivation.py` | Resolvent identity B10 verification |
-
-## Dependencies
-
-- Python 3.10+
-- numpy, scipy, matplotlib (standard scientific stack)
-- For server runs: SSH access to compute server (CCX13)
+No private proof notes, review material, Zenodo credentials, or internal planning documents are published in this directory. Those remain local until the publication gate permits release.
 
 ## Relation to FST Hierarchy
 
+```text
+Level 0: RH even dominance and CRM reference systems
+Level 1: Zookeeper and Zeta Zoo math masters
+Level 2: RFEP Spectrum Duality physics master
+Level 3: Domain supplements and applications
 ```
-Ebene 0:  RH v2.1 (published, DOI 10.5281/zenodo.19546593)
-Ebene 1:  THIS PAPER (conditional Route B endgame)    <-- you are here
-          Math-Master "The Zeta Zoo" (classification)
-          Physics-Master RFEP (physical instantiation)
-Ebene 3:  Domain Supplements (Selberg, Dirichlet, BSD, ...)
-```
+
+## Publication Gate
+
+The repository is public, but the v1.8 Zenodo upload is still pending. Before uploading v1.8:
+
+- verify that Zenodo metadata uses the concept DOI `10.5281/zenodo.19036190`
+- set the language metadata for the bilingual EN/DE file set
+- place the draft/preprint notice in the Zenodo description, not only in notes
+- use concept DOIs for Zookeeper and Zeta Zoo related identifiers
+
+## Reproducibility
+
+This RFEP master is a theory manuscript and does not add a standalone numerical script bundle in this directory. Numerical Zookeeper diagnostics live under `masters/zookeeper/scripts/`; domain-level generated figures live under the repository-level `scripts/` tree.
