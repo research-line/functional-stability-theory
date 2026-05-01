@@ -177,6 +177,7 @@ These stand independently of FST. The RFEP was abstracted from them; they are no
 | `scripts/dark-energy/compute_husawicki_mcmc.py` | Dark Energy | Hu-Sawicki f(R) MCMC fit against DESI+Planck+Cassini |
 | `scripts/bsd/compute_height_saturation.py` | BSD | Height saturation test for quadratic twists |
 | `scripts/hodge/compute_ghr_spectrum.py` | Hodge | GHR spectrum numerical verification |
+| `scripts/hodge/compute_voisin_test.py` | Hodge | Voisin-style negative-control stress test |
 
 ## Repository Structure
 
