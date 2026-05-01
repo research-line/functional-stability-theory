@@ -16,7 +16,7 @@ CURVES = [
     ("43a1", 1, 0.0628165071, 43),
     # Rank 2
     ("389a1", 2, 0.1524837, 389),
-    ("433a1", 2, 0.2253984, 433),
+    ("433a1", 2, 0.22469416, 433),
 ]
 
 # For rank 0: BSD predicts L(E,1) = |Sha| * Omega * prod(c_p) / |E_tors|^2
@@ -50,7 +50,7 @@ for label, rank, reg, height in rank1_curves:
 print("\n[Test 2] Rank 2: Known regulators")
 rank2_curves = [
     ("389a1", 2, 0.15248, "Cremona/LMFDB"),
-    ("433a1", 2, 0.22540, "Cremona/LMFDB"),
+    ("433a1", 2, 0.22469, "Cremona/LMFDB"),
     ("234446a1", 2, 1.50725, "Stein-Watkins"),
 ]
 
