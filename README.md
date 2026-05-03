@@ -187,6 +187,7 @@ These stand independently of FST. The RFEP was abstracted from them; they are no
 | `scripts/bsd/compute_rank2_lmfdb.py` | BSD | Rank-2 regulator positivity sample and plot |
 | `scripts/hodge/compute_ghr_spectrum.py` | Hodge | GHR spectrum numerical verification |
 | `scripts/hodge/compute_voisin_test.py` | Hodge | Voisin-style negative-control stress test |
+| `scripts/p-vs-np/compute_sat_entropy.py` | P vs NP | SAT slice-entropy experiment and result plot at the 3-SAT phase transition |
 | `scripts/zeta-zoo/dedekind_ne_b_test.py` | Zeta Zoo | Dedekind Q(sqrt(-5)) NE-B analog probe |
 | `scripts/zeta-zoo/ihara_petersen_sge_test.py` | Zeta Zoo | Ihara/Petersen SGE YES-side test |
 | `scripts/zeta-zoo/sge_control_experiment.py` | Zeta Zoo | SGE YES/NO discriminating control experiment |
