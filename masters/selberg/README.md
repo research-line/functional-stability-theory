@@ -33,7 +33,7 @@ The **Weil quadratic form** is the universal structure; the operator is *optiona
 | File | Purpose |
 |---|---|
 | `paper/RH_v2_for_Selberg_en.pdf` | English version (21 p.) |
-| `paper/RH_v2_for_Selberg_de.pdf` | German version (24 p.) |
+| `paper/RH_v2_for_Selberg_ger.pdf` | German version (24 p.) |
 | `paper/RH_v2_for_Selberg_kombi.pdf` | Combined EN+DE (~45 p.) |
 
 ## Position in the FST programme
