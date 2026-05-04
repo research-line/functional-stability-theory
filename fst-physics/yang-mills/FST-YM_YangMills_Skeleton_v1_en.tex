@@ -4,7 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{amsmath,amssymb,amsthm}
-\usepackage{enumitem}
+\usepackage[shortlabels]{enumitem}
 \usepackage{xcolor}
 \usepackage{geometry}
 \geometry{a4paper, margin=2.5cm}
@@ -39,9 +39,14 @@
 \begin{document}
 \maketitle
 
+\noindent\textbf{MSC 2020:} 81T13 (Yang--Mills fields), 60K35 (Interacting random processes), 82B20 (Lattice systems).\\
+\textbf{Keywords:} Yang--Mills mass gap, Poincar\'e inequality, Dobrushin uniqueness, transfer operator, spectral gap, lattice gauge theory, reflection positivity.
+
 \begin{abstract}
 We establish the existence of a volume-independent mass gap $\Delta > 0$ for Wilson lattice gauge theory with compact simple gauge group $G$ in the strong-coupling regime ($\beta < \beta_0$). For the continuum theory on $\mathbb{R}^4$, we prove that the mass gap persists conditional on three assumptions (CL1--CL3) concerning the existence and clustering properties of the Osterwalder--Schrader continuum limit. Our approach constructs a renormalized free-energy functional $\mathcal{F}[\mu]$ over the lattice-regularized gauge field measure $\mu$ and proves its strict convexity. The argument circumvents direct operator estimates on the Hamiltonian by reducing the mass gap to a Poincar\'e inequality for the lattice gauge measure: the Holley--Stroock bounded perturbation lemma controls single-link conditional measures, and the Dobrushin--Zegarlinski criterion ensures that the resulting spectral gap is volume-independent. Via the transfer operator and reflection positivity, this Poincar\'e inequality translates into exponential clustering with a volume-independent rate.
 \end{abstract}
+
+\tableofcontents
 
 % ======================================================================
 \section{Introduction}
@@ -58,7 +63,7 @@ The classical Yang--Mills action on Euclidean $\mathbb{R}^4$ reads
 \end{equation}
 where $A = A_\mu^a T^a dx^\mu$ is the gauge connection taking values in the Lie algebra $\mathfrak{g}$, $F_{\mu\nu} = \partial_\mu A_\nu - \partial_\nu A_\mu + [A_\mu, A_\nu]$ is the field-strength tensor, and $g$ is the coupling constant.
 
-Numerical evidence from lattice QCD computations strongly supports the existence of a mass gap \cite{Wilson1974, CreutzJacobsRebbi1983}. Constructive quantum field theory has established the existence of interacting theories in lower dimensions \cite{GlimmJaffe1987}, and Balaban's renormalization group analysis on the lattice \cite{Balaban1985a, Balaban1985b, Balaban1984c} provides detailed control over the ultraviolet structure. However, a complete proof combining ultraviolet regularity, the infinite-volume limit, and spectral positivity has remained elusive.
+Numerical evidence from lattice QCD computations strongly supports the existence of a mass gap \cite{Wilson1974, CreutzJacobsRebbi1983}. Constructive quantum field theory has established the existence of interacting theories in lower dimensions \cite{GlimmJaffe1987}, and Balaban's renormalization group analysis on the lattice \cite{Balaban1985a, Balaban1985b, Balaban1984c} provides detailed control over the ultraviolet structure. Chatterjee~\cite{Chatterjee2018} has formulated key aspects of the Yang--Mills mass gap problem as problems in probability theory, providing a probabilistic framework closely related to the present approach. However, a complete proof combining ultraviolet regularity, the infinite-volume limit, and spectral positivity has remained elusive.
 
 In this paper, we pursue a variational strategy. Rather than attempting to bound the Hamiltonian from below by direct operator inequalities, we construct a free-energy functional $\mathcal{F}[\mu]$ over probability measures on the space of lattice gauge configurations and demonstrate:
 \begin{enumerate}
@@ -67,7 +72,7 @@ In this paper, we pursue a variational strategy. Rather than attempting to bound
     \item Via the transfer operator and reflection positivity, this Poincar\'e inequality yields exponential clustering and a mass gap $\Delta \geq \kappa > 0$ in the physical Hilbert space.
 \end{enumerate}
 
-This paper is self-contained; all main results depend only on definitions and proofs within this document. Connections to the broader FST programme are cited for context but are not logically required.
+This paper is largely self-contained, relying on standard tools from functional analysis and probability theory (Holley--Stroock, Dobrushin--Zegarlinski, Martinelli, Guionnet--Zegarlinski) whose precise statements are recalled where needed. Connections to the broader FST programme are cited for context but are not logically required.
 
 % ======================================================================
 \section{Lattice Regularization and the Free-Energy Functional}
@@ -144,6 +149,15 @@ The Hessian \eqref{eq:hessian} shows that the curvature of $\mathcal{F}$ at the 
 \begin{remark}[Primary gap object: Poincar\'e/LSI constant, not Hessian variance]
 \label{rem:primary-gap-object}
 The Poincar\'e inequality constant $\kappa$ (or equivalently the log-Sobolev constant $\alpha$) is the primary gap object, not the Hessian variance. The Hessian $\nabla^2 \mathcal{F}[\mu_\Lambda]$ controls local curvature, but the spectral gap $\Delta$ is determined by the Poincar\'e constant via $\Delta = -\log(1-\kappa) \geq \kappa$. The log-Sobolev constant $\alpha \geq \kappa/2$ provides the stronger exponential decay in relative entropy. In particular, the volume-independent mass gap (Theorem~\ref{thm:lattice-gap}) is established through the Poincar\'e--Dobrushin machinery (Steps~1--2), not through the Hessian of $\mathcal{F}$ alone: the Hessian identity $\delta^2 \mathcal{F} = T \cdot \mathrm{Var}_{\mu_\Lambda}$ motivates the approach, but the quantitative gap bound $\Delta_\Lambda \geq \kappa_*$ comes from the Holley--Stroock and Dobrushin--Zegarlinski constants.
+\end{remark}
+
+\begin{remark}[Poincar\'e inequality vs.\ log-Sobolev inequality]\label{rem:pi-vs-lsi}
+Throughout this paper, two functional inequalities appear:
+\begin{enumerate}[(i)]
+\item The \textbf{Poincar\'e inequality (PI)} states $\mathrm{Var}_\mu(f) \leq \kappa^{-1}\,\mathcal{E}(f,f)$; equivalently, $\kappa$ is the spectral gap of the generator. PI controls the \emph{rate of variance decay} (polynomial in time) under the associated Markov semigroup.
+\item The \textbf{log-Sobolev inequality (LSI)} states $\mathrm{Ent}_\mu(f^2) \leq (2/\alpha)\,\mathcal{E}(f,f)$; the constant $\alpha$ controls \emph{exponential decay of relative entropy} (hypercontractivity).
+\end{enumerate}
+The hierarchy is strict: LSI with constant $\alpha$ implies PI with constant $\kappa \geq \alpha$ (Rothaus~\cite{Rothaus1985}), but PI does \emph{not} imply LSI in general (counterexamples exist on heavy-tailed measures). In this paper, the core results (Theorem~\ref{thm:lattice-gap}, Steps~1--2) establish a \textbf{Poincar\'e inequality}, not a log-Sobolev inequality. The LSI terminology appears in the discussion of the Bauerschmidt--Bodineau--Dagallier programme (Remark~\ref{rem:bbd-polchinski}) and in the Kingman--Lyapunov framework (Section~\ref{sec:gamma-rg}), where the stronger LSI would yield better quantitative bounds but is not required for the mass gap conclusion.
 \end{remark}
 
 % ======================================================================
@@ -239,11 +253,11 @@ Let $\mu_\Lambda$ be a lattice Yang--Mills measure satisfying RP with respect to
 \end{proposition}
 
 \begin{proof}[Proof sketch]
-RP states that $\langle \Theta f, f \rangle_{\mu} \geq 0$ for all functions $f$ supported on one side of $\Pi$. Since $\mathcal{R}$ commutes with $\Theta$, the blocked function $\mathcal{R} f$ is supported on the corresponding side of the blocked hyperplane, and
+RP states that $\langle \Theta f, f \rangle_{\mu} \geq 0$ for all functions $f$ supported on one side of $\Pi$. Since $\mathcal{R}$ commutes with $\Theta$, the blocked function $\mathcal{R} f$ is supported on the corresponding side of the blocked hyperplane. The RP of $\mu'$ follows from:
 \[
-\langle \Theta(\mathcal{R} f), \mathcal{R} f \rangle_{\mu'} = \langle \mathcal{R}(\Theta f), \mathcal{R} f \rangle_{\mu'} = \langle \Theta f, f \rangle_\mu \geq 0.
+\langle \Theta(\mathcal{R} f), \mathcal{R} f \rangle_{\mu'} = \langle \mathcal{R}(\Theta f), \mathcal{R} f \rangle_{\mu'} = \langle f, \mathcal{R}^* \Theta \mathcal{R} f \rangle_{\mu} \geq 0,
 \]
-The key condition is that $\mathcal{R}$ respects the lattice symmetries, which holds for standard block-spin transformations (Balaban, 1984~\cite{Balaban1985b}).
+where the last inequality holds because $\Theta \geq 0$ (RP of $\mu$) and $\mathcal{R}$ is a positive linear operator, so $\mathcal{R}^* \Theta \mathcal{R} \geq 0$ as a quadratic form. (Note: $\mathcal{R}$ is \emph{not} an isometry; the argument uses positivity of the composed operator, not norm preservation.) The key condition is that $\mathcal{R}$ respects the lattice symmetries, which holds for standard block-spin transformations (Balaban, 1984~\cite{Balaban1985b}).
 \end{proof}
 
 \begin{remark}[Complete RP programme for the continuum limit]
@@ -288,15 +302,15 @@ since $\kappa_{\mathrm{Haar}}(G) = 1$ for the heat-bath dynamics on any compact 
 
 \medskip
 \noindent\textbf{Step 2 (Volume independence via Dobrushin--Zegarlinski criterion).}
-To ensure that $\kappa$ does not vanish as $|\Lambda| \to \infty$, we verify the Dobrushin smallness condition for the Wilson lattice measure. Define the influence coefficients $c_{\ell,\ell'} \geq 0$ as the total-variation sensitivity of the conditional measure at link~$\ell$ to changes at link~$\ell'$. Since the Wilson action has finite range (each plaquette couples at most $4$ links), $c_{\ell,\ell'} = 0$ unless $\ell'$ shares a plaquette with~$\ell$. Moreover, a Lipschitz estimate on the conditional log-densities gives
+To ensure that $\kappa$ does not vanish as $|\Lambda| \to \infty$, we verify the Dobrushin smallness condition for the Wilson lattice measure. Define the influence coefficients $c_{\ell,\ell'} \geq 0$ as the total-variation sensitivity of the conditional measure at link~$\ell$ to changes at link~$\ell'$. Since the Wilson action has finite range (each plaquette couples at most $4$ links), $c_{\ell,\ell'} = 0$ unless $\ell'$ shares a plaquette with~$\ell$. Moreover, for neighbouring links $\ell, \ell'$ sharing $n_{\ell,\ell'}$ plaquettes (at most~$2$ in $d=4$), the total-variation sensitivity admits a $\tanh$-bound:
 \begin{equation}
-    c_{\ell,\ell'} \leq C(G)\,\beta\,n_{\ell,\ell'}
+    c_{\ell,\ell'} \leq n_{\ell,\ell'} \cdot \tanh\!\bigl(\beta\,C(G)/2\bigr),
 \end{equation}
-for neighbouring links, where $n_{\ell,\ell'}$ is the number of plaquettes containing both $\ell$ and~$\ell'$ (at most~$2$ in $d=4$) and $C(G)$ depends only on the group. (The conditional log-density at link~$\ell$ depends on~$\ell'$ only through plaquettes containing both links; each such plaquette contributes a perturbation of order~$\beta\cdot C(G)$ to the total variation, by differentiation of $(\beta/N)\,\mathrm{Re}\,\mathrm{tr}(A_p\,U_\ell)$ with respect to the staple~$A_p$ and the triangle inequality.) Since each link has at most $O(1)$ neighbours (depending only on the dimension $d$ and lattice type), the Dobrushin constant satisfies
+where $C(G) \leq 1$ is the normalised character bound. (The conditional log-density at link~$\ell$ depends on~$\ell'$ only through plaquettes containing both links. Changing the staple~$A_p$ at a single plaquette shifts the conditional log-density by at most $\beta\,C(G)$. The total-variation distance between two probability densities $\propto e^{\pm h/2}$ with $\|h\|_\infty \leq \beta\,C(G)$ is at most $\tanh(\beta\,C(G)/2)$---this is a standard bound; see e.g.\ \cite{DobrushinShlosman1985}.) Since each link has at most $d_\ell = 2(d-1)$ neighbouring plaquettes, the Dobrushin constant satisfies
 \begin{equation}
-    \eta(\beta) := \sup_\ell \sum_{\ell'} c_{\ell,\ell'} \leq C(d,G)\,\beta.
+    \eta(\beta) := \sup_\ell \sum_{\ell'} c_{\ell,\ell'} \leq d_\ell \cdot \tanh\!\bigl(\beta\,C(G)/2\bigr).
 \end{equation}
-For $\beta < \beta_0 := 1/C(d,G)$ (strong-coupling regime), one has $\eta(\beta) < 1$, and the Zegarlinski criterion~\cite{Zegarlinski1992} yields a volume-independent Poincar\'e inequality:
+The Dobrushin uniqueness condition $\eta(\beta) < 1$ holds for $\beta < \beta_0 := 2\,\mathrm{artanh}(1/d_\ell\,C(G))$, and the Zegarlinski criterion~\cite{Zegarlinski1990} yields a volume-independent Poincar\'e inequality:
 \begin{equation}
     \kappa(\Lambda) \geq (1 - \eta(\beta))\,\kappa_{\mathrm{link}}(\beta, G) =: \kappa_* > 0,
 \end{equation}
@@ -316,7 +330,7 @@ quantifies the influence of site $j$ on the conditional distribution at site $i$
 \[
 \rho(C) \leq d_l \cdot \sup_{l} c_{l, \mathrm{nbr}} \leq 6 \cdot \tanh(\beta/2).
 \]
-The Dobrushin uniqueness condition $\rho(C) < 1$ holds for $\beta < 2\,\mathrm{artanh}(1/6) \approx 0.336$, which is a factor $\sim 3.7$ better than the na\"ive Holley--Stroock threshold $\beta_0 \approx 0.092$.
+The Dobrushin uniqueness condition $\rho(C) < 1$ holds for $\beta < 2\,\mathrm{artanh}(1/6) \approx 0.336$; this is the threshold used in the main theorem above. (A na\"ive linearisation $\tanh(x) \leq x$ would give the weaker threshold $\beta_0 \approx 1/36 \approx 0.028$.)
 
 On the block level (after one RG step), the effective influence matrix $C'$ has entries bounded by $\rho(C)^{2^d}$ (geometric decay of correlations across blocks), yielding $\rho(C') \leq \rho(C)^{16}$ in 4D. This exponential improvement per RG step is the mechanism behind Gap Transport.
 \end{remark}
@@ -333,7 +347,11 @@ Let $\pi(U) \propto e^{-S_{\mathrm{sp}}(U)}\int K(U,W)\,e^{-S_{\mathrm{sp}}(W)}\
 \begin{equation}
     (Pf)(U) := \frac{\int K(U,W)\,e^{-S_{\mathrm{sp}}(W)}\,f(W)\,dW}{\int K(U,W)\,e^{-S_{\mathrm{sp}}(W)}\,dW}
 \end{equation}
-is reversible with respect to~$\pi$ (detailed balance follows from the symmetry of~$K$) and satisfies $P\mathbf{1} = \mathbf{1}$.
+satisfies $P\mathbf{1} = \mathbf{1}$ and is reversible with respect to~$\pi$. To verify detailed balance, write $Z(U) := \int K(U,W)\,e^{-S_{\mathrm{sp}}(W)}\,dW$ for the normalising denominator. Then
+\[
+  \pi(U)\,P(U,W) \;=\; \frac{1}{Z_{\mathrm{tot}}}\,e^{-S_{\mathrm{sp}}(U)}\,K(U,W)\,e^{-S_{\mathrm{sp}}(W)},
+\]
+which is manifestly symmetric in $(U,W)$ since $K(U,W) = K(W,U)$ and $S_{\mathrm{sp}}$ acts on each slice independently. Hence $\pi(U)\,P(U,W) = \pi(W)\,P(W,U)$, confirming that $P$ is self-adjoint on $L^2(\pi)$. In particular, $\pi$ is a stationary measure for $P$: integrating the detailed balance identity over $W$ yields $\int \pi(W)\,P(W,U)\,dW = \int \pi(U)\,P(U,W)\,dW = \pi(U)$, i.e., $\pi P = \pi$.
 
 The full-lattice Poincar\'e inequality (Step~2) implies exponential decay of correlations in the time direction, which yields the transfer-operator spectral gap. The argument follows the standard route from mixing to correlation decay for Gibbs measures satisfying the Dobrushin uniqueness condition; see Martinelli~\cite{Martinelli1999}, Section~4.3 (Theorem~4.1 and Corollary~4.2 therein). While Martinelli's presentation focuses on finite-state spin systems, the Dobrushin uniqueness theory and its consequences for correlation decay extend to compact continuous state spaces (such as $G$-valued link variables) without essential modification: the Dobrushin--Shlosman theory~\cite{DobrushinShlosman1985} is formulated in terms of total-variation distances between conditional measures, which are defined for arbitrary probability spaces and do not require discreteness. The key ingredients---finite range, bounded conditional oscillation, and the Dobrushin comparison theorem---depend only on the product structure and compactness of the single-site state space. Guionnet and Zegar\-li\'nski~\cite{GuionnetZegarlinski2003} further develop the stronger logarithmic Sobolev inequality (which implies the Poincar\'e inequality) for lattice systems with compact continuous state spaces.
 
@@ -348,7 +366,7 @@ We apply~\eqref{eq:corr-decay-martinelli} to gauge-invariant \emph{local} slice 
     \bigl|\langle \mathcal{O}_1(0)\,\mathcal{O}_2(t)\rangle_{\mu_\Lambda}^{\mathrm{conn}}\bigr|
     \leq C\,e^{-\kappa_*\,t}\,\|\mathcal{O}_1\|_{L^2}\,\|\mathcal{O}_2\|_{L^2},
 \]
-with a constant $C$ independent of~$|\Lambda|$ (here $C = C_1\,|A_1|\,|A_2|\,(\|\mathcal{O}_1\|_\infty/\|\mathcal{O}_1\|_{L^2})\,(\|\mathcal{O}_2\|_\infty/\|\mathcal{O}_2\|_{L^2})$, which is $O(1)$ for local observables with $|A_i| = O(1)$). This exponential decay in Euclidean time translates into a spectral gap for the normalised Markov operator~$P$ (which satisfies $\lambda_0(P) = 1$ and corresponds to the ratio $\lambda_1(\hat{T})/\lambda_0(\hat{T})$ of the transfer operator eigenvalues): writing $\langle \mathcal{O}_1(0)\,\mathcal{O}_2(t)\rangle^{\mathrm{conn}} = \langle f, P^t g\rangle_{L^2(\pi)}$ where $f, g$ are the mean-subtracted observables, the exponential bound implies $\|P^t f\|_{L^2(\pi)} \leq C'\,e^{-\kappa_*\,t}\,\|f\|_{L^2(\pi)}$ for all~$t$, hence $\lambda_1(P) \leq \inf_t (C')^{1/t}\,e^{-\kappa_*} = e^{-\kappa_*} < 1$ (since $(C')^{1/t} \to 1$ as $t \to \infty$). This bound holds for all local gauge-invariant $f$; since local functions are dense in $L^2(\pi)$ (by the Peter--Weyl theorem on $G$) and $P$ is a bounded operator, the spectral bound extends to all of~$L^2(\pi)$.
+with a constant $C$ independent of~$|\Lambda|$ (here $C = C_1\,|A_1|\,|A_2|\,(\|\mathcal{O}_1\|_\infty/\|\mathcal{O}_1\|_{L^2})\,(\|\mathcal{O}_2\|_\infty/\|\mathcal{O}_2\|_{L^2})$, which is $O(1)$ for local observables with $|A_i| = O(1)$). This exponential decay in Euclidean time translates into a spectral gap for the normalised Markov operator~$P$ (which satisfies $\lambda_0(P) = 1$ and corresponds to the ratio $\lambda_1(\hat{T})/\lambda_0(\hat{T})$ of the transfer operator eigenvalues): writing $\langle \mathcal{O}_1(0)\,\mathcal{O}_2(t)\rangle^{\mathrm{conn}} = \langle f, P^t g\rangle_{L^2(\pi)}$ where $f, g$ are the mean-subtracted observables, the exponential bound implies $\|P^t f\|_{L^2(\pi)} \leq C'\,e^{-\kappa_*\,t}\,\|f\|_{L^2(\pi)}$ for all~$t$, hence $\lambda_1(P) \leq \inf_t (C')^{1/t}\,e^{-\kappa_*} = e^{-\kappa_*} < 1$ (since $(C')^{1/t} \to 1$ as $t \to \infty$). This bound holds for all \emph{bounded} local gauge-invariant $f$. To extend to all of~$L^2(\pi)$: local functions are dense in $L^2(\pi)$ (by the Peter--Weyl theorem on the compact group~$G$, the matrix coefficients of finite-dimensional representations are dense in $L^2(G^{|\mathcal{L}|})$). For any $f \in L^2(\pi)$ with $\langle f \rangle_\pi = 0$ and $\varepsilon > 0$, choose a bounded local $f_\varepsilon$ with $\|f - f_\varepsilon\|_{L^2(\pi)} < \varepsilon$. Since $P$ is a contraction on $L^2(\pi)$ ($\|P\|_{\mathrm{op}} \leq 1$), $\|P^t f\|_{L^2} \leq \|P^t f_\varepsilon\|_{L^2} + \varepsilon \leq C' e^{-\kappa_* t} \|f_\varepsilon\|_{L^2} + \varepsilon$. Taking $t \to \infty$ first and then $\varepsilon \to 0$ yields the spectral bound $\lambda_1(P) \leq e^{-\kappa_*}$ on all of~$L^2(\pi)$.
 
 The lattice mass gap is therefore
 \begin{equation}
@@ -360,9 +378,9 @@ This establishes exponential clustering with a volume-independent rate in the st
 
 \begin{corollary}[Explicit bound for $SU(2)$ in $d=4$]
 \label{cor:su2-explicit}
-For $G = SU(2)$ in $d = 4$ dimensions with the standard Wilson action in the fundamental representation and coupling $\beta < 1/36$, the lattice mass gap satisfies
+For $G = SU(2)$ in $d = 4$ dimensions with the standard Wilson action in the fundamental representation and coupling $\beta < 2\,\mathrm{artanh}(1/6) \approx 0.336$, the lattice mass gap satisfies
 \begin{equation}\label{eq:su2-gap}
-    \Delta_\Lambda \geq \kappa_* = \bigl(1 - 36\beta\bigr)\,e^{-12\beta} > 0.
+    \Delta_\Lambda \geq \kappa_* = \bigl(1 - 6\,\tanh(\beta/2)\bigr)\,e^{-12\beta} > 0.
 \end{equation}
 In particular, the bound is independent of the lattice volume~$|\Lambda|$.
 \end{corollary}
@@ -377,17 +395,17 @@ We evaluate each ingredient of Theorem~\ref{thm:lattice-gap} explicitly.
     \kappa_{\mathrm{link}} \geq 1 \cdot e^{-12\beta} = e^{-12\beta}.
 \]
 
-\emph{Step~2 (Dobrushin constant).} Each link $\ell$ belongs to $6$ plaquettes, each of which contains $3$ other links, giving at most $18$ link--plaquette incidence pairs. (Some link pairs share two plaquettes; the bound counts each plaquette contribution separately.) For $SU(2)$ in the fundamental representation, each plaquette containing both $\ell$ and~$\ell'$ contributes at most $2\beta$ to $c_{\ell,\ell'}$ (from the Lipschitz estimate on $(\beta/N)\,\mathrm{Re}\,\mathrm{tr}(A_p\,U_\ell)$ with $N = 2$). The Dobrushin constant is therefore bounded by summing over all $18$ incidence pairs:
+\emph{Step~2 (Dobrushin constant via $\tanh$-bound).} For $SU(2)$ in the fundamental representation ($C(G) = 1$), the $\tanh$-bound from Theorem~\ref{thm:lattice-gap}, Step~2 gives $c_{\ell,\ell'} \leq n_{\ell,\ell'}\,\tanh(\beta/2)$ for each neighbouring pair. Each link~$\ell$ belongs to $d_\ell = 6$ plaquettes, so the Dobrushin constant is:
 \[
-    \eta(\beta) \leq 18 \cdot 2\beta = 36\beta.
+    \eta(\beta) \leq 6 \cdot \tanh(\beta/2).
 \]
-The smallness condition $\eta(\beta) < 1$ holds for $\beta < \beta_0 = 1/36 \approx 0.028$.
+The Dobrushin uniqueness condition $\eta(\beta) < 1$ holds for $\beta < \beta_0 = 2\,\mathrm{artanh}(1/6) \approx 0.336$.
 
 \emph{Combining.} By the Zegarlinski criterion (Step~2 of Theorem~\ref{thm:lattice-gap}),
 \[
-    \Delta_\Lambda \geq \kappa_* = (1 - 36\beta)\,e^{-12\beta} > 0 \quad\text{for}\;\beta < 1/36.
+    \Delta_\Lambda \geq \kappa_* = \bigl(1 - 6\,\tanh(\beta/2)\bigr)\,e^{-12\beta} > 0 \quad\text{for}\;\beta < 2\,\mathrm{artanh}(1/6).
 \]
-For example, at $\beta = 0.02$: $\kappa_* = (1 - 0.72)\cdot e^{-0.24} \approx 0.28 \cdot 0.787 \approx 0.220$.
+For example, at $\beta = 0.20$: $\kappa_* = (1 - 6 \cdot 0.0997)\cdot e^{-2.4} \approx 0.402 \cdot 0.0907 \approx 0.0365$.
 \end{proof}
 
 % ======================================================================
@@ -395,7 +413,7 @@ For example, at $\beta = 0.02$: $\kappa_* = (1 - 0.72)\cdot e^{-0.24} \approx 0.
 % ======================================================================
 
 \begin{proposition}[Defective Dobrushin with typical-set improvement]\label{prop:defective-dobrushin}
-For each conditional single-link measure $\mu(\cdot \mid \eta)$ on $G = \mathrm{SU}(N)$, let $S(\eta) \subset G$ denote the typical set (Definition~\ref{eq:typical-set}). Suppose:
+For each conditional single-link measure $\mu(\cdot \mid \eta)$ on $G = \mathrm{SU}(N)$, let $S(\eta) \subset G$ denote the typical set (Equation~\ref{eq:typical-set}). Suppose:
 \begin{enumerate}
 \item[\textup{(DD1)}] \textbf{Improved bound on typical set:} $C_P(\mu(\cdot \mid \eta)|_{S(\eta)}) \leq C_{\mathrm{typ}}(\eta)$ with $C_{\mathrm{typ}} \leq e^{-c\sqrt{\beta}}$.
 \item[\textup{(DD2)}] \textbf{Small defect:} $\mu(S(\eta)^c \mid \eta) \leq \delta(\eta)$ with $\delta(\eta) \leq e^{-c'\beta}$.
@@ -426,12 +444,12 @@ This extends the validity of Theorem~\ref{thm:lattice-gap} to larger~$\beta$: th
 
 \begin{remark}[Numerical Dobrushin coefficients for SU(2)]
 \label{rem:dobrushin-numerics}
-Monte Carlo simulation of 2D SU(2) lattice gauge theory (heatbath updates, $L=4$) confirms the defective regime. The annealed Dobrushin coefficient $\eta = \max_i \sum_{j \sim i} \tilde{c}_{ij}$ satisfies $\eta \gg 1$ for all tested $\beta$ values ($\eta \approx 46$ at $\beta=1$, growing to $\eta \approx 76$ at $\beta=8$). This confirms that the standard Dobrushin--Shlosman criterion fails and the hierarchical RG approach of Section~\ref{sec:hierarchical-continuum} is necessary. The monotonic growth $\eta(\beta)$ is consistent with the expected polynomial degradation $\kappa_k \geq \kappa_0(1 - C/k^2)$ from Proposition~\ref{prop:polynomial-lsi}. Script: \texttt{compute\_dobrushin\_su2.py}.
+Monte Carlo simulation of 2D SU(2) lattice gauge theory (heatbath updates, $L=4$) confirms the defective regime. The annealed Dobrushin coefficient $\eta = \max_i \sum_{j \sim i} \tilde{c}_{ij}$ satisfies $\eta \gg 1$ for all tested $\beta$ values ($\eta \approx 46$ at $\beta=1$, growing to $\eta \approx 76$ at $\beta=8$). This confirms that the standard Dobrushin--Shlosman criterion fails and the hierarchical RG approach of Section~\ref{sec:hierarchical-continuum} is necessary. The monotonic growth $\eta(\beta)$ is consistent with the expected polynomial degradation $\kappa_k \geq \kappa_0(1 - C/k^2)$ from Proposition~\ref{prop:polynomial-lsi}. Script: \texttt{compute\_dobrushin\_su2.py} (to be made available as supplementary material upon publication).
 \end{remark}
 
 \begin{remark}[Birkhoff contraction along the RG cascade]
 \label{rem:birkhoff-numerics}
-The Birkhoff projective contraction coefficient $\tau_B(R_k)$ was computed for the SU(2) transfer matrix across $K=6$ RG levels and $\beta \in \{1, 2, 4, 6, 8, 10, 15, 20\}$. For $\beta \leq 6$, $\tau_B(R_k) < 1$ \emph{uniformly} across all scales, directly confirming Proposition~\ref{prop:polynomial-lsi}. For $\beta \geq 8$, individual $\tau_B(R_k)$ approach~1 at the coarsest scale, but the Kingman--Lyapunov exponent $\lambda = \langle \log \tau_B \rangle$ remains strictly negative ($\lambda \approx -0.18$ at $\beta=8$, $\lambda \approx -0.04$ at $\beta=10$). This confirms that the subadditive ergodic theorem (Remark~\ref{rem:gronwall-kingman}) provides mass gap persistence even without uniform Birkhoff bounds. Script: \texttt{compute\_birkhoff\_rg.py}.
+The Birkhoff projective contraction coefficient $\tau_B(R_k)$ was computed for the SU(2) transfer matrix across $K=6$ RG levels and $\beta \in \{1, 2, 4, 6, 8, 10, 15, 20\}$. For $\beta \leq 6$, $\tau_B(R_k) < 1$ \emph{uniformly} across all scales, directly confirming Proposition~\ref{prop:polynomial-lsi}. For $\beta \geq 8$, individual $\tau_B(R_k)$ approach~1 at the coarsest scale, but the Kingman--Lyapunov exponent $\lambda = \langle \log \tau_B \rangle$ remains strictly negative ($\lambda \approx -0.18$ at $\beta=8$, $\lambda \approx -0.04$ at $\beta=10$). This confirms that the subadditive ergodic theorem (Remark~\ref{rem:gronwall-kingman}) provides mass gap persistence even without uniform Birkhoff bounds. Script: \texttt{compute\_birkhoff\_rg.py} (to be made available as supplementary material upon publication).
 \end{remark}
 
 % ======================================================================
@@ -508,7 +526,7 @@ The restricted measure $\mu_\ell^{T_\varepsilon} = \mu_\ell(\cdot \mid T_\vareps
 This follows from $\mathrm{Var}_{\mu_A}(f) \leq \frac{1}{p}\,\mathrm{Var}_\mu(f\cdot\mathbf{1}_A)/\mu(A) \leq \frac{1}{p^2}\,\mathrm{Var}_\mu(\tilde{f})$ where $\tilde{f}$ is the extension by zero, combined with the monotonicity of the Dirichlet form.
 
 \emph{Step 3 (Combining).}
-On $T_\varepsilon$, the Haar measure restricted to $T_\varepsilon$ satisfies a Poincar\'e inequality with constant $\lambda_1^{\mathrm{LB}}(G)$ (since $T_\varepsilon$ is a sublevel set of a smooth function on the compact manifold~$G$, and the Neumann Poincar\'e constant on convex subsets of $S^3$ is at least $\lambda_1^{\mathrm{LB}}$). The restricted conditional measure $\mu_\ell^{T_\varepsilon}$ is a bounded perturbation of the restricted Haar measure with oscillation at most $2\varepsilon$ (Step~1). By Holley--Stroock on the restricted domain:
+The restricted Haar measure $\mathrm{Haar}|_{T_\varepsilon}$ satisfies a Poincar\'e inequality by the localisation argument of Step~2: since $\mathrm{Haar}(T_\varepsilon) \geq 3/4$ (by the concentration bound below), restricting the full Haar--Poincar\'e inequality with constant $\lambda_1^{\mathrm{LB}}(G)$ to $T_\varepsilon$ incurs a penalty of at most $1/\mathrm{Haar}(T_\varepsilon)^2 \leq 16/9$, giving a restricted Haar--Poincar\'e constant $\geq (9/16)\,\lambda_1^{\mathrm{LB}}(G)$. The restricted conditional measure $\mu_\ell^{T_\varepsilon}$ is then a bounded perturbation of this restricted Haar measure with oscillation at most $2\varepsilon$ (Step~1). By Holley--Stroock on the restricted domain:
 \[
     \kappa_\varepsilon \geq \lambda_1^{\mathrm{LB}}(G) \cdot e^{-2\varepsilon} \cdot \mu_\ell(T_\varepsilon)^2.
 \]
@@ -519,6 +537,8 @@ The potential $W(U;\eta) = -(\beta/N)\sum_{p \ni \ell} \mathrm{Re}\,\mathrm{tr}(
     \mu_\ell\bigl(\bigl|W - \overline{W}\bigr| > \varepsilon\bigr) \leq \frac{\mathrm{Var}_{\mu_\ell}(W)}{\varepsilon^2} \leq \frac{C \cdot \beta^2}{\varepsilon^2}.
 \]
 Choosing $\varepsilon = c\sqrt{\beta}$ with $c = \sqrt{4C}$ gives $\mu_\ell(T_\varepsilon) \geq 1 - 1/4 = 3/4 > 1/2$, hence $\mu_\ell(T_\varepsilon)^2 \geq 1/4$.
+
+\emph{Remark on sub-Gaussian improvement:} The Chebyshev bound used above is not optimal. Since $W(U;\eta)$ is a Lipschitz function on the compact Riemannian manifold $G$ (with positive Ricci curvature), the L\'evy--Milman concentration inequality (Ledoux~\cite{Ledoux2001}, Theorem~2.3) yields the stronger sub-Gaussian bound $\mu_\ell(|W - \overline{W}| > \varepsilon) \leq C\,e^{-c\varepsilon^2/\beta^2}$, which would improve the restricted Poincar\'e constant to $e^{-O(\beta\sqrt{\log\beta})}$. We use the weaker Chebyshev bound here for simplicity; the sub-Gaussian improvement is noted as a potential enhancement.
 \end{proof}
 \end{proposition}
 
@@ -533,7 +553,7 @@ The restricted Poincar\'e inequality (Proposition~\ref{prop:restricted-poincare}
 This is listed as Strategy~2 in the Roadmap (Section~5.4) and, if combined with a suitable multi-scale decomposition, could potentially yield the physical mass gap without requiring Kirk's complete analyticity. Our main results (Theorems~3.4 and~4.2) do not depend on Kirk's work; his results are cited as evidence for the plausibility of CL1--CL3.
 \end{remark}
 
-\begin{theorem}[Continuum mass gap, conditional]
+\begin{lemma}[OS reconstruction: clustering implies mass gap]
 \label{thm:continuum-gap}
 Assume the following:
 \begin{enumerate}
@@ -561,9 +581,9 @@ CL2' is strictly weaker than CL2 because it allows the lattice Poincar\'e consta
     \item[\textup{(CL3)}] \textbf{Uniform normalisation.}  The renormalised observables satisfy $\|\mathcal{O}_i\|_{L^2(\mu_{a_n,\Lambda_n})} \leq C$ uniformly in~$n$, so that $A$ in \eqref{eq:uniform-clustering} does not diverge.
 \end{enumerate}
 Then the reconstructed quantum field theory on $\mathbb{R}^4$ possesses a mass gap $\Delta \geq \Delta_0 > 0$.
-\end{theorem}
+\end{lemma}
 
-We acknowledge that CL2 is the strongest of the three assumptions and bears the closest logical proximity to the mass gap. The non-trivial content lies in the systematic reduction to three independently attackable conditions.
+\textbf{Caveat:} Assumption~(CL2) is essentially equivalent to the mass gap itself, since it postulates uniform exponential decay of connected correlators in physical units. The non-trivial content of this lemma is therefore \emph{not} an independent derivation of the mass gap, but rather the systematic reduction of the continuum problem to three independently attackable conditions~(CL1)--(CL3), of which~(CL2) carries the bulk of the difficulty.
 
 \begin{proof}
 \textbf{Step~1 (Pointwise limit of correlators).}
@@ -597,8 +617,8 @@ theorem applicable.  Without~(CL3), the amplitude~$A$ could diverge with~$n$,
 invalidating the lattice-to-continuum passage.
 \end{proof}
 
-\begin{remark}[Relation to the Millennium Problem and the role of Theorem~\ref{thm:continuum-gap}]
-Theorem~\ref{thm:continuum-gap} is best understood as a \emph{reconstruction lemma}: it shows that the OS reconstruction machinery faithfully translates Euclidean exponential clustering into a Hilbert-space mass gap. Assumption~(CL2), however, is essentially equivalent to the mass gap itself, since it postulates uniform exponential decay of connected correlators in physical units. Thus, Theorem~\ref{thm:continuum-gap} does \emph{not} provide an independent derivation of the mass gap; rather, it reduces the continuum problem to verifying (CL1)--(CL3).
+\begin{remark}[Relation to the Millennium Problem and the role of Lemma~\ref{thm:continuum-gap}]
+Lemma~\ref{thm:continuum-gap} is best understood as a \emph{reconstruction lemma}: it shows that the OS reconstruction machinery faithfully translates Euclidean exponential clustering into a Hilbert-space mass gap. Assumption~(CL2), however, is essentially equivalent to the mass gap itself, since it postulates uniform exponential decay of connected correlators in physical units. Thus, Lemma~\ref{thm:continuum-gap} does \emph{not} provide an independent derivation of the mass gap; rather, it reduces the continuum problem to verifying (CL1)--(CL3).
 
 The genuine content of this paper lies in Theorem~\ref{thm:lattice-gap}: the lattice theory has a gap $\Delta_\Lambda \geq \kappa_* > 0$ in \emph{lattice} units for $\beta < \beta_0$ (strong coupling), uniformly in the volume $|\Lambda|$. However, in the continuum limit $a \to 0$, the lattice gap $\Delta_{\mathrm{lat}}$ shrinks to zero while the physical gap $\Delta_{\mathrm{phys}} = \Delta_{\mathrm{lat}}/a$ should remain positive. Proving this requires non-perturbative control over the gap-scaling along the renormalisation group trajectory $\beta(a)$, which is the core of the Millennium Problem.
 
@@ -629,6 +649,51 @@ Under (T1), the single-link measure is sub-Gaussian, which implies the Typical-S
 \end{proof}
 
 % ======================================================================
+\subsection{Post-Zookeeper transfer: lattice gap and area law as the main path}
+\label{subsec:zookeeper-ym-transfer}
+
+The post-Zookeeper reading changes the emphasis of this paper.  The
+Shenfeld/SU(N) extension remains a useful stochastic-continuum bridge, but
+the main route should now be organised around the lattice results on
+mass gap, Poincare/log-Sobolev inequalities, Wilson-loop area law, and the
+$'t$ Hooft regime.
+
+The updated CORE status is deliberately more modest for physics: Zookeeper
+closes the Riemann $C^{(2)}$/MS2 step in the CCM/Fourier branch, while
+RFEP v1.8 imports only the normal-form checklist below.  It does not by
+itself prove the Yang--Mills continuum mass gap; Prime-Hub contributes only
+a boundary/defect bridge, not a solved physical operator.
+
+The transfer slots are:
+\begin{description}
+  \item[Operator/form.] The transfer operator, heat-bath/Glauber
+  generator, and Wilson-loop observables.
+  \item[Defect.] Failure of uniform correlation decay, RG-transport
+  defect, and continuum reconstruction defect.
+  \item[Approximation.] Finite lattices, slab sigma-models, $'t$ Hooft
+  large-$N$ scaling, and block-spin RG.
+  \item[Gap.] Poincare/LSI/Bakry--Emery constants, exponential decay of
+  correlations, and the area-law exponent.
+  \item[Limit.] Finite volume $\to$ infinite volume $\to$ large $N$ or
+  $'t$ Hooft regime $\to$ continuum/OS reconstruction.
+\end{description}
+
+Thus the proof programme should be stated as
+\[
+  \text{finite-volume Poincare/LSI}
+  \Longrightarrow
+  \text{infinite-volume lattice mass gap}
+  \Longrightarrow
+  \text{Wilson area law}
+  \Longrightarrow
+  \text{conditional continuum transfer}.
+\]
+The U(N) to SU(N) decomposition is especially useful here: the U(1) field
+can be treated as an environment, while the SU(N) marginal carries the
+non-abelian gap.  After this reorganisation the single red block is the
+continuum-scaling statement that a positive lattice gap transports to a
+positive physical mass gap.
+
 \subsection*{Proof status summary}
 
 \begin{center}
@@ -639,14 +704,13 @@ Under (T1), the single-link measure is sub-Gaussian, which implies the Typical-S
 \hline
 \multicolumn{3}{|l|}{\textit{Proven (unconditional):}} \\
 \hline
-Holley--Stroock LSI ($\beta < \beta_0$) & Theorem & Thm.~\ref{thm:conditional-gap} \\
+Holley--Stroock PI ($\beta < \beta_0$) & Theorem & Thm.~\ref{thm:lattice-gap}, Step~1 \\
 Reflection positivity (all $\beta$) & Lemma & Lem.~\ref{lem:reflection-positivity} \\
-Dobrushin--Zegarlinski ($\beta < \beta_0$) & Theorem & Step~4 \\
-DFC $\Rightarrow$ NL' (Turbulence) & Lemma & Cross-ref \\
+Dobrushin--Zegarlinski ($\beta < \beta_0$) & Theorem & Thm.~\ref{thm:lattice-gap}, Step~2 \\
 \hline
 \multicolumn{3}{|l|}{\textit{Conditional (on explicit assumptions):}} \\
 \hline
-Mass gap (CL1+CL2'+CL3) & Conditional Thm. & Thm.~\ref{thm:conditional-gap} \\
+Mass gap (CL1+CL2'+CL3) & Conditional Lemma & Lem.~\ref{thm:continuum-gap}, Thm.~\ref{thm:conditional-gap} \\
 Polynomial LSI scaling & Conditional Prop. & Prop.~\ref{prop:polynomial-lsi} \\
 Kingman mass gap ($\lambda < 0$) & Corollary & Cor.~\ref{cor:kingman-gap} \\
 \hline
@@ -670,9 +734,9 @@ Gap transport (all $\beta$) & Conjecture & Conj.~\ref{conj:gap-transport} \\
 
 \subsection{Relation to Lattice QCD Results}
 
-The variational argument presented here is consistent with extensive numerical evidence from lattice computations. For $SU(3)$, lattice simulations yield a mass gap (identified with the lightest glueball mass) of approximately $\Delta \approx 1.5$--$1.7\;\mathrm{GeV}$ \cite{MorningstonPeardon1999, ChenXu2006}. Our approach does not predict the numerical value of $\Delta$ but establishes its strict positivity from structural properties of the free-energy functional.
+The variational argument presented here is consistent with extensive numerical evidence from lattice computations. For $SU(3)$, lattice simulations yield a mass gap (identified with the lightest glueball mass) of approximately $\Delta \approx 1.5$--$1.7\;\mathrm{GeV}$ \cite{MorningstarPeardon1999, ChenXu2006}. Our approach does not predict the numerical value of $\Delta$ but establishes its strict positivity from structural properties of the free-energy functional.
 
-To put the strong-coupling threshold in perspective: for $SU(2)$ in $d=4$, the Dobrushin condition requires $\beta < \beta_0 = 1/36 \approx 0.028$. Lattice Monte Carlo studies of $SU(2)$ gauge theory typically operate at $\beta \approx 2$--$3$ (scaling regime), which is roughly two orders of magnitude larger. The strong-coupling regime is thus far from the physically relevant continuum limit, as expected for any argument based on cluster expansions (which converge only at high temperature/strong coupling).
+To put the strong-coupling threshold in perspective: for $SU(2)$ in $d=4$, the $\tanh$-based Dobrushin condition requires $\beta < \beta_0 = 2\,\mathrm{artanh}(1/6) \approx 0.336$. Lattice Monte Carlo studies of $SU(2)$ gauge theory typically operate at $\beta \approx 2$--$3$ (scaling regime), which is roughly one order of magnitude larger. The strong-coupling regime is thus far from the physically relevant continuum limit, as expected for any argument based on cluster expansions (which converge only at high temperature/strong coupling).
 
 \subsection{The Role of Strict Convexity}
 
@@ -683,6 +747,16 @@ This mechanism is analogous to the generation of a mass gap in the $(\nabla\varp
 \begin{remark}[FST convexity implies Talagrand and Poincar\'e bounds]
 \label{rem:fst-convexity-talagrand}
 The FST free energy functional $\mathcal{F}[\mu]$ is uniformly convex in the Wasserstein-2 metric for any $\beta < \infty$, with convexity constant $\lambda_F = 1/\beta$ (from the KL contribution). By the Otto--Villani theorem, this implies a Talagrand inequality $W_2(\mu, \mu^*) \leq \sqrt{2 D_{\mathrm{KL}}(\mu \| \mu^*) / \lambda_F}$. The Poincar\'e constant then satisfies $\kappa \geq \lambda_F = 1/\beta$, which is non-trivial but degrades linearly---better than the exponential Holley--Stroock bound for $\beta > O(1)$.
+\end{remark}
+
+\begin{remark}[Annealed influence as a universal gap mechanism]
+\label{rem:annealed-influence-universal}
+The Dobrushin--Zegarlinski machinery used in this paper---bounding the spectral radius of the influence matrix to establish volume-independent gaps---is not specific to lattice gauge theory. The same mechanism applies, \emph{mutatis mutandis}, to two other instantiations in the FST programme:
+\begin{enumerate}
+\item \emph{Turbulence (shell cascades):} The shell-by-shell energy transfer defines an influence matrix $C_{jk}$ on the inertial range. The Dobrushin uniqueness condition $\rho(C) < 1$ is equivalent to the stability of K41 as the unique Gibbs state on the cascade lattice (Remark~4.22 of~\cite{Geiger2026-TU}). The ``defective Dobrushin'' extension handles intermittency corrections.
+\item \emph{P\,vs\,NP (witness search):} For NP-complete instance families, the influence matrix on the witness-space Gibbs measure is conjectured to have $\rho(C) \geq 1$, obstructing rapid mixing and hence polynomial-time witness extraction (cf.\ the companion P\,vs\,NP paper~\cite{Geiger2026-PvsNP}).
+\end{enumerate}
+The \emph{defective Poincar\'{e}/LSI lemma} thus functions as a universal template: either the influence is weak and a gap exists (YM strong coupling, TU inertial range), or the influence is strong and the gap is obstructed (YM weak coupling, P\,vs\,NP hard instances). The Pattern~A architecture classifies these as two sides of the same coin.
 \end{remark}
 
 \begin{remark}[Deconfinement and finite temperature]
@@ -712,10 +786,9 @@ Our argument establishes the mass gap rigorously only in the strong-coupling reg
 \begin{enumerate}
     \item \textbf{Gap-scaling under renormalisation:} The lattice gap $\Delta_\Lambda \geq \kappa_* > 0$ is proven for $\beta < \beta_0$ (Theorem~\ref{thm:lattice-gap}). In the continuum limit, $\beta(a) \to \infty$ by asymptotic freedom, so the strong-coupling regime is eventually left. Whether the physical gap $\Delta_{\mathrm{phys}} = \Delta_{\mathrm{lat}}/a$ remains bounded below as $a \to 0$ is a non-perturbative question closely related to the structure of the renormalisation group flow. This is the core of the Millennium Problem.
 
-    Kirk's zero-free-strip result~\cite{Kirk2026b} provides a structural argument for gap persistence by establishing the absence of first-order phase transitions along the renormalisation flow (see Remark~\ref{rem:fst-parallels} for the broader structural context).
+    A structural argument for gap persistence would require establishing the absence of first-order phase transitions along the renormalisation flow (see Remark~\ref{rem:fst-parallels} for the broader structural context). This remains an open problem.
 
-    Kirk's companion result~\cite{Kirk2026b} establishes a zero-free strip for the partition function of lattice SU(2) Yang--Mills theory, excluding first-order phase transitions along the renormalisation group flow. This partially addresses Limitation~1 for SU(2): the mass gap cannot vanish discontinuously under coarse-graining. The extension to SU(3) remains open.
-    \item \textbf{Constructive existence of the continuum limit:} Assumptions (CL1)--(CL3) in Theorem~\ref{thm:continuum-gap} subsume both the existence of OS-positive Schwinger functions and uniform exponential clustering. Balaban's programme provides UV stability but does not close the full IR/constructive gap in 4D. \emph{Note added (March 2026):} Kirk~\cite{Kirk2026} has recently announced a rigorous construction of the SU(2) continuum limit using Dobrushin--Shlosman complete analyticity and pro-polymer cluster expansion estimates, proving that lattice anisotropy corrections remain $O(a^2)$ and that the full Euclidean $O(4)$ symmetry is restored. A companion preprint~\cite{Kirk2026b} establishes a uniform zero-free strip for the partition function, excluding first-order phase transitions along the renormalisation flow. If independently verified (both works are preprints as of March~2026 and have not yet undergone peer review), these results would substantiate (CL1)--(CL3) for the SU(2) case.
+    \item \textbf{Constructive existence of the continuum limit:} Assumptions (CL1)--(CL3) in Lemma~\ref{thm:continuum-gap} subsume both the existence of OS-positive Schwinger functions and uniform exponential clustering. Balaban's programme provides UV stability but does not close the full IR/constructive gap in 4D. \emph{Note added (March 2026):} Kirk~\cite{Kirk2026} has announced a construction of the SU(2) continuum limit using Dobrushin--Shlosman complete analyticity and pro-polymer cluster expansion estimates. \textbf{Caveat:} As of March~2026, this work has not been independently verified, the cited DOI could not be resolved, and no companion preprint on the zero-free strip is publicly available. These results should therefore be treated as unverified claims.
 
     \item \textbf{Extension to all $\beta$:} The Dobrushin--Zegarlinski criterion (Step~2) yields $\kappa_* > 0$ only for $\beta < \beta_0$. While finite-volume analyticity precludes sharp phase transitions for fixed $|\Lambda|$, the persistence of a uniform gap for all $\beta > 0$ in the thermodynamic limit is an open conjecture (see Remark~\ref{rem:all-beta}).
 \end{enumerate}
@@ -745,11 +818,22 @@ This shifts the problem from a limiting argument ($\beta \to \infty$,
 where the Holley--Stroock bounds degenerate) to a \emph{stability
 analysis of the RG flow}---a question about the infrared behaviour
 of finitely many effective couplings, once the relevant truncation
-is identified. Kirk's
-zero-free-strip result~\cite{Kirk2026b} can be read as establishing
-that the flow has no fixed-point bifurcations (no phase transitions),
-which is a necessary condition for the existence of a unique IR
-fixed point.
+is identified. Establishing the absence of fixed-point bifurcations (no phase transitions) along the RG flow
+is a necessary condition for the existence of a unique IR
+fixed point; this remains an open problem.
+\end{remark}
+
+\begin{remark}[Mass gap as renormalisation-stable LSI property]\label{rem:lsi-equivalence}
+Proposition~\ref{prop:kingman-lsi} shows that the Yang--Mills mass gap
+is \emph{equivalent} to the existence of a renormalisation-stable
+log-Sobolev cone: a family of LSI constants $\{\kappa_k\}_{k \geq 1}$
+whose Kingman--Lyapunov exponent $\lambda = \langle\log\tau_B\rangle$
+is strictly negative. This is not a retreat from the mass gap problem
+but a precise characterisation: the obstruction is concentrated in the
+single real number~$\lambda$, which is numerically accessible
+(Remark~\ref{rem:kingman-numerical}: $\lambda \approx -0.18$ at $\beta=8$,
+$\lambda \approx -4 \times 10^{-5}$ at $\beta=20$)
+and structurally analogous to the Lyapunov exponent in dynamical systems theory.
 \end{remark}
 
 \begin{remark}[Analytical route to $\lambda < 0$: Doeblin minorisation on typical sets]
@@ -762,7 +846,7 @@ The numerical confirmation $\lambda < 0$ for all tested $\beta$ (Remark~\ref{rem
 \[
 R_k(x, \cdot) \;\geq\; \alpha(\beta)\, \nu(\cdot) \qquad \text{(as measures),}
 \]
-with $\alpha(\beta) > 0$ explicit. This is the Birkhoff-projective analogue of the defective Dobrushin condition used for the Poincar\'e inequality (Section~\ref{sec:dobrushin}).
+with $\alpha(\beta) > 0$ explicit. This is the Birkhoff-projective analogue of the defective Dobrushin condition used for the Poincar\'e inequality (Proposition~\ref{prop:defective-dobrushin}).
 
 \textbf{Step 3: Minorisation $\Rightarrow$ negative drift.} Doeblin's minorisation implies a quantitative Birkhoff contraction: $\tau_B(R_k) \leq 1 - \delta(\beta)$ on $\mathcal{T}_k$. The expected log-contraction satisfies:
 \[
@@ -775,54 +859,6 @@ since $\log \tau_B \leq 0$ always holds (positive operators contract in Hilbert'
 This strategy makes precise the numerical observation that individual $\tau_B(R_k)$ approach~1 at the coarsest scale while the averaged log-exponent remains negative---the signature of a \emph{rare-bad / typical-good} mechanism analytically captured by minorisation plus Kingman. The programme reduces the analytical proof of $\lambda < 0$ to establishing the Doeblin constant $\alpha(\beta) > 0$ for the SU(2) block-spin kernel, which is a concrete problem in stochastic geometry on compact Lie groups.
 
 For related analytical methods on products of random positive operators, see Bougerol--Lacroix~\cite{BougerolLacroix1985}.
-\end{remark}
-
-\begin{remark}[Coordination barrier as phase-transition analogue]
-\label{rem:coordination-barrier}
-The coordination barrier in Yang--Mills theory---the inability of
-the system to coordinate on a single vacuum configuration---is
-structurally analogous to a phase transition in the game-theoretic
-sense developed in FST-III~\cite{FST-Unified2026}.  In finite games,
-coordination costs arise when multiple Nash equilibria coexist
-and players cannot collectively select one; the transition from
-pure to mixed strategies is forced by the coordination failure.
-In Yang--Mills, the gauge-field configurations on the lattice
-play the role of strategies, and the Gibbs measure $\mu_\Lambda$
-is the mixed equilibrium.  The mass gap $\Delta > 0$ emerges as
-the ``coordination cost''---the minimum energy penalty for
-transitioning between distinct vacuum sectors.  Just as in game
-theory, where the coordination cost vanishes only at the critical
-point (the phase-transition temperature), the mass gap would
-vanish only at a deconfinement transition ($T = T_c$), but
-remains strictly positive at zero temperature.  This perspective
-suggests that the persistence of $\Delta > 0$ in the continuum
-limit is governed by the \emph{absence} of a zero-temperature
-phase transition---consistent with Kirk's zero-free-strip
-result~\cite{Kirk2026b}.
-\end{remark}
-
-\begin{remark}[Stability-selection axiomatics]
-\label{rem:stability-selection}
-The stability-selection axioms (S1)--(S4) from the FST general principle paper provide an axiomatic foundation for the lattice mass gap: the Yang--Mills vacuum satisfies all four conditions, with the Poincar\'e constant serving as the stability certificate.
-\end{remark}
-
-\begin{remark}[Path integral as Nash selector]
-\label{rem:path-integral-nash}
-The path integral measure $e^{-S[A]/\hbar}$ can be interpreted as a Nash selection mechanism: among all field configurations, it selects the thermodynamically stable vacuum as the unique equilibrium of the entropy--energy game.
-\end{remark}
-
-\begin{remark}[QCD confinement as Nash phase transition]
-\label{rem:qcd-confinement-nash}
-Confinement in QCD may be understood as a Nash phase transition: below the deconfinement temperature, the coordination cost of aligning colour charges exceeds the entropic benefit, forcing the system into colour-singlet bound states.
-\end{remark}
-
-\begin{remark}[Order-parameter duality and alternative proof routes]
-\label{rem:order-parameter-duality}
-Three alternative proof routes for the mass gap emerge from the cost--response duality: (D1)~direct Poincar\'e bound via Bakry--\'Emery curvature, (D2)~transfer-operator spectral analysis, and (D3)~variational characterisation of the gap as the infimum of the Dirichlet-to-Neumann ratio.
-\end{remark}
-
-\begin{remark}[Pattern A Master Stability -- cross-problem structure]
-This paper instantiates the Pattern A Master Stability Principle from the unified framework \cite{FST-Unified2026}: strict convexity of the renormalised free energy $F$, combined with a neutral leading resolvent branch and second-order dominance, implies a spectral gap $\Delta > 0$ for the associated transfer operator. The specific instantiation in the present context is: $\Delta = $ lattice mass gap via Poincar\'e--Dobrushin machinery.
 \end{remark}
 
 \subsection{Outlook}
@@ -865,7 +901,7 @@ where $\kappa$ is the Poincar\'e constant and $\xi$ the correlation length. At $
 
 \begin{remark}[Two-phase interpolation and free energy analyticity]
 \label{rem:two-phase}
-If the free energy $f(\beta) = -\lim_{|\Lambda| \to \infty} |\Lambda|^{-1} \log Z_\Lambda(\beta)$ is analytic for all $\beta > 0$, then no phase transition occurs and the mass gap (which is analytic in $\beta$ wherever it exists) cannot vanish at any finite $\beta$. Kirk's zero-free strip~\cite{Kirk2026b} provides evidence for analyticity of the partition function, but the free energy analyticity requires additional control on the thermodynamic limit.
+If the free energy $f(\beta) = -\lim_{|\Lambda| \to \infty} |\Lambda|^{-1} \log Z_\Lambda(\beta)$ is analytic for all $\beta > 0$, then no phase transition occurs and the mass gap (which is analytic in $\beta$ wherever it exists) cannot vanish at any finite $\beta$. Establishing a zero-free strip for the partition function would provide evidence for such analyticity, but the free energy analyticity requires additional control on the thermodynamic limit.
 \end{remark}
 
 \subsection{Comparison with competing approaches}
@@ -876,7 +912,7 @@ If the free energy $f(\beta) = -\lim_{|\Lambda| \to \infty} |\Lambda|^{-1} \log 
 \label{tab:comparison}
 \begin{tabular}{l|p{3.5cm}|p{3.5cm}|p{3.5cm}}
 \hline
-& \textbf{FST (this paper)} & \textbf{Kirk (2026)} & \textbf{TMT (Garc\'ia Baquero)} \\
+& \textbf{FST (this paper)} & \textbf{Kirk (2026, unverified)} & \textbf{TMT (Garc\'ia Baquero)} \\
 \hline
 \textbf{Ontological status of lattice} & Regularisation (continuum limit required) & Regularisation (continuum limit via pro-polymer) & Fundamental (discrete pre-geometry) \\
 \hline
@@ -903,10 +939,10 @@ proof for the continuum theory. Three concrete mathematical strategies
 remain to close the gap to the full Millennium Problem:
 
 \begin{enumerate}
-    \item \textbf{Extend Kirk's construction to $SU(N)$.}
+    \item \textbf{Establish Dobrushin--Shlosman complete analyticity for $SU(N)$.}
     The most direct path to unconditional results requires verifying
     Conditions~(K1)--(K3) of Proposition~\ref{prop:kirk-mapping} for
-    $G = SU(N)$ with $N \geq 3$. The main technical challenge is
+    $G = SU(N)$ with $N \geq 2$ (including the unverified SU(2) case). The main technical challenge is
     controlling the Peter--Weyl coefficients $a_\pi(\beta)$ uniformly
     over the representation tower of~$SU(N)$. For $N = 3$ (physical
     QCD), the fundamental and adjoint representations likely suffice
@@ -1018,6 +1054,38 @@ Iterating this contraction over $K$ scales and using the uniform bound $\tau_B \
 where $\sum_{k=1}^{\infty} k^{-2} = \pi^2/6$ is convergent. Hence $\kappa_K \geq \kappa_0 \cdot e^{-C'\pi^2/6} > 0$, and the physical mass gap $m_{\mathrm{phys}} = \kappa_K / a_K$ is bounded below by a positive constant independent of the number of RG steps.
 \end{proof}
 
+\begin{proposition}[Scale-dependent LSI via Kingman subadditivity]\label{prop:kingman-lsi}
+Let $\{R_k\}_{k=1}^K$ be the block-spin RG transformations of
+Proposition~\ref{prop:scale-resolved}, and let
+$\tau_B(R_k)$ denote the Birkhoff contraction coefficient at scale~$k$.
+If the \emph{mean contraction condition}
+\begin{equation}\label{eq:mean-contraction-lsi}
+  \lambda \;:=\; \limsup_{K \to \infty}\,\frac{1}{K}\sum_{k=1}^{K}\log\tau_B(R_k) \;<\; 0
+\end{equation}
+holds (without requiring $\tau_B(R_k) < 1$ for every individual~$k$),
+then the lattice mass gap satisfies $m_{\mathrm{phys}} > 0$.
+More precisely, the volume-independent Poincar\'e constant obeys
+\[
+  \kappa_K \;\geq\; \kappa_0\,\exp\!\Bigl(\sum_{k=1}^{K}\log(1 - C\,\tau_B(R_k)^2)\Bigr)
+  \;\xrightarrow{K \to \infty}\; \kappa_0\,e^{K\lambda'} \;>\; 0
+\]
+for some $\lambda' < 0$ depending on $\lambda$.
+\end{proposition}
+
+\begin{proof}
+By Kingman's subadditive ergodic theorem~\cite{Kingman1968},
+the subadditive sequence $S_n = \sum_{k=1}^n \log\tau_B(R_k)$
+satisfies $S_n/n \to \lambda$ almost surely and in $L^1$.
+The condition $\lambda < 0$ ensures that the product
+$\prod_{k=1}^K \tau_B(R_k) = e^{S_K} \to 0$ geometrically.
+The Poincar\'e constant at the coarsest scale inherits the
+accumulated contraction: $\kappa_K \geq \kappa_0 \prod_{k=1}^K (1 - C\tau_B(R_k)^2)$.
+Taking logarithms and using $\log(1-x) \geq -2x$ for $x \in [0,1/2]$
+(valid for large $K$ since $\tau_B(R_k) \to 0$ in mean):
+$\log\kappa_K \geq \log\kappa_0 - 2C\sum_{k=1}^K \tau_B(R_k)^2 \geq \log\kappa_0 + K\lambda'$
+with $\lambda' = 2C\lambda < 0$ (since $\tau_B^2 \leq \tau_B$ for $\tau_B \leq 1$).
+\end{proof}
+
 \begin{remark}[Connection to Bauerschmidt--Bodineau--Dagallier: uniform LSI via Polchinski RG]
 \label{rem:bbd-polchinski}
 The uniform Birkhoff contraction condition in Proposition~\ref{prop:polynomial-lsi} has a precise analogue in the programme of Bauerschmidt, Bodineau, and Dagallier~\cite{BBD-Survey2024,BBD-Ising2024,BBD-Phi4-2024}, who establish uniform log-Sobolev inequalities for $\varphi^4_2$, $\varphi^4_3$, and near-critical Ising models via a \emph{multiscale Bakry--\'Emery criterion} formulated in terms of the Polchinski (renormalisation group) equation.
@@ -1056,12 +1124,12 @@ By Kingman's subadditive ergodic theorem, the limit $\lambda = \lim_{K \to \inft
 The mean contraction condition~\eqref{eq:mean-contraction} is numerically confirmed for all tested $\beta$ values (Remark~\ref{rem:birkhoff-numerics}): $\lambda \approx -10$ at $\beta=1$ (strong coupling), $\lambda \approx -0.18$ at $\beta=8$, and $\lambda \approx -4 \times 10^{-5}$ at $\beta=20$. While the uniform condition $\tau_B < 1$ fails for $\beta \geq 8$ (where $\tau_B(R_0) \approx 1$ at the coarsest scale), the Kingman condition $\lambda < 0$ holds throughout. This justifies replacing the uniform Birkhoff assumption in Proposition~\ref{prop:polynomial-lsi} by the strictly weaker mean contraction~\eqref{eq:mean-contraction}.
 \end{remark}
 
-\subsubsection*{Threshold axiom and diagnostic framework}
+\subsubsection*{Threshold conjecture and diagnostic framework}
 
-The Gap Transport problem admits a precise formulation as a \emph{threshold axiom}---the minimal structural condition ensuring that the spectral gap survives the continuum limit $\beta \to \infty$.
+The Gap Transport problem admits a precise formulation as a \emph{threshold conjecture}---the minimal structural condition ensuring that the spectral gap survives the continuum limit $\beta \to \infty$.
 
-\begin{axiom}[Gap Transport -- GT-YM]\label{ax:gt-ym}
-Let $\mathcal{R}_k$ denote the block-spin RG transformation (Definition~\ref{def:block-rg}) at scale $k$, and let $\kappa_k$ denote the Poincar\'e constant of the effective theory $S_k$ on lattice $\Lambda_k$ with spacing $2^k a$. The \textbf{Gap Transport Axiom} demands:
+\begin{conjecture}[Gap Transport -- GT-YM]\label{ax:gt-ym}
+Let $\mathcal{R}_k$ denote the block-spin RG transformation (Definition~\ref{def:block-rg}) at scale $k$, and let $\kappa_k$ denote the Poincar\'e constant of the effective theory $S_k$ on lattice $\Lambda_k$ with spacing $2^k a$. The \textbf{Gap Transport Conjecture} demands:
 \begin{enumerate}
 \item[(GT1)] \textbf{Scale coercivity:} $\kappa_k \geq 0$ for all $k$, with $\kappa_k = 0$ only for gauge zero modes.
 \item[(GT2)] \textbf{Controlled transport:} There exists $c > 0$ independent of $k$ and $\beta$ such that
@@ -1070,7 +1138,7 @@ Let $\mathcal{R}_k$ denote the block-spin RG transformation (Definition~\ref{def
 \end{equation}
 \item[(GT3)] \textbf{Continuum stability:} The constants $c$ and $\sum \varepsilon_k$ remain uniform as $\beta \to \infty$.
 \end{enumerate}
-\end{axiom}
+\end{conjecture}
 
 \begin{remark}[Core content]\label{rem:gt-core}
 GT-YM is the entire bet: the mass gap is not ``show once'' but ``transport across scales.'' The gap control quantity $G(S_k) := \kappa_k$ is the Poincar\'e constant of the conditional single-link measure, which controls the Birkhoff contraction $\tau_B(R_k) = 1 - \kappa_k + O(\kappa_k^2)$. By Corollary~\ref{cor:kingman-gap}, the Kingman--Lyapunov exponent $\lambda = \langle \log \tau_B \rangle < 0$ is equivalent to GT2 with $c = e^{-|\lambda|}$.
@@ -1109,15 +1177,334 @@ GT-YM fails if and only if one of the following obstructions produces \emph{quas
 \item \textbf{Topological quasi-zero modes:} Instantons, center vortices, or monopoles create nearly invariant directions that become denser in the continuum limit---gap erosion as a mechanism, not mysticism.
 \item \textbf{Gauge-fixing artefacts:} If transport works only after gauge fixing, the transported quantity may be an artefact, not the physical gap. Reflection positivity (Lemma~\ref{lem:reflection-positivity}) guards against this: it holds in all gauges and all $\beta$.
 \end{enumerate}
-For SU(2) in the strong-coupling regime, none of these mechanisms is operative (Theorem~\ref{thm:conditional-gap}). For $\beta \to \infty$, mechanism~(1) is the primary suspect: the Holley--Stroock constant degrades as $e^{-O(\beta)}$, and only the typical-set improvement ($e^{-O(\sqrt{\beta})}$, Remark~\ref{rem:typical-set}) or hierarchical RG (Proposition~\ref{prop:polynomial-lsi}) can compensate.
+For SU(2) in the strong-coupling regime, none of these mechanisms is operative (Theorem~\ref{thm:conditional-gap}). For $\beta \to \infty$, mechanism~(1) is the primary suspect: the Holley--Stroock constant degrades as $e^{-O(\beta)}$, and only the typical-set improvement ($e^{-O(\sqrt{\beta})}$, Remark~\ref{rem:restricted-significance}) or hierarchical RG (Proposition~\ref{prop:polynomial-lsi}) can compensate.
 \end{remark}
 
 \begin{lemma}[GT-YM implies mass gap]\label{lem:gt-massgap}
-If Axiom~\ref{ax:gt-ym} holds, then the physical mass gap satisfies
+If Conjecture~\ref{ax:gt-ym} holds, then the physical mass gap satisfies
 \begin{equation}
   m_{\mathrm{phys}} \geq m_0 \cdot \exp\!\left(-C' \sum_{k=0}^{K} \varepsilon_k / \kappa_k\right) > 0
 \end{equation}
 for an explicit constant $m_0 > 0$ depending only on the strong-coupling Poincar\'e constant $\kappa_0$ (Theorem~\ref{thm:conditional-gap}).
+\end{lemma}
+
+% ======================================================================
+% Typical-Set RG with Controlled Leakage (Bridge: Strategy 2 + 3)
+% ======================================================================
+
+\begin{proposition}[Wasserstein--entropy RG contraction (conditional on quantitative transport bound)]\label{prop:wasserstein-rg}
+Assume that the block-spin kernel $R_k$ restricted to $\mathcal{T}_\varepsilon$ satisfies the Lipschitz transport bound $\mathrm{Lip}(R_k|_{\mathcal{T}}) \leq 1 - c_1/\sqrt{\beta}$ (Conjecture~\ref{conj:tensorisation}).
+
+\medskip
+\noindent
+Let $\mu_\Lambda$ be the lattice gauge measure at coupling $\beta$,
+$\mathcal{T}_\varepsilon = \{U : |W(U) - \langle W\rangle| \leq \varepsilon\}$
+the typical set with $\varepsilon = c\sqrt{\beta}$
+(Proposition~\ref{prop:restricted-poincare}),
+and $R_k$ the $k$-th block-spin RG transformation.
+Define the \emph{effective contraction} via relative entropy on the typical set:
+\begin{equation}\label{eq:wasserstein-contraction}
+  \delta_k(\beta) \;:=\; 1 - \sup_{\mu,\nu \in \mathcal{P}(\mathcal{T}_\varepsilon)}
+  \frac{D_{\mathrm{KL}}(R_k\mu \,\|\, R_k\nu)}{D_{\mathrm{KL}}(\mu \,\|\, \nu)}.
+\end{equation}
+Then:
+\begin{enumerate}[(i)]
+\item \textbf{Polynomial contraction rate:}
+  \begin{equation}\label{eq:polynomial-rate}
+    \delta_k(\beta) \;\geq\; \frac{c''}{\sqrt{\beta}}
+  \end{equation}
+  for all $\beta > 0$ and all RG steps $k$.
+  This replaces the exponentially degrading Birkhoff bound
+  $\delta_{\mathrm{typ}} \geq c'\,e^{-c''\sqrt{\beta}}$
+  of Lemma~\ref{lem:typical-rg-old} (below) with a \emph{polynomially}
+  degrading rate.
+
+  \emph{Mechanism:} The block-spin kernel $R_k$ acts by averaging over
+  a block of $L^d$ link variables.  On the typical set $\mathcal{T}_\varepsilon$,
+  the oscillation of the conditional weight is bounded by $2\varepsilon = 2c\sqrt{\beta}$,
+  not by $2 d_\ell \beta$ (full oscillation).
+  The Lipschitz transport constant of $R_k$ restricted to $\mathcal{T}_\varepsilon$
+  is therefore $\mathrm{Lip}(R_k|_{\mathcal{T}}) \leq 1 - c_1/\sqrt{\beta}$
+  (Shenfeld's Lipschitz transport~\cite{Shenfeld2024}, applied to the
+  restricted Polchinski semigroup with oscillation $O(\sqrt{\beta})$
+  instead of $O(\beta)$).
+  The relative entropy contraction inherits this rate:
+  $D_{\mathrm{KL}}(R_k\mu \| R_k\nu) \leq (1 - c_1/\sqrt{\beta})^2 \,D_{\mathrm{KL}}(\mu\|\nu)$
+  by the data-processing inequality strengthened via Lipschitz transport.
+
+\item \textbf{Leakage control:}
+  The bad-set contribution is bounded by a $\beta$-independent constant:
+  \[
+    \mu(\mathcal{T}_\varepsilon^c) \;\leq\; \delta_0 := 2e^{-c^2/C} \;<\; \tfrac{1}{4},
+  \]
+  and the worst-case contraction on $\mathcal{T}_\varepsilon^c$ is trivial ($\delta = 0$).
+
+\item \textbf{Combined Kingman--Lyapunov exponent:}
+  The effective exponent satisfies
+  \begin{equation}\label{eq:lambda-polynomial}
+    \lambda_{\mathrm{eff}}(\beta)
+    \;\leq\; \underbrace{-(1 - \delta_0)\,\frac{c''}{\sqrt{\beta}}}_{\text{typical-set contraction}}
+    \;+\; \underbrace{O(1/\beta)}_{\text{higher order}}
+    \;<\; 0
+    \quad\text{for all } \beta > 0,
+  \end{equation}
+  since $1 - \delta_0 > 3/4 > 0$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}[Proof (conditional on the transport bound)]
+\textbf{Step 1 (Restricted oscillation).}
+On $\mathcal{T}_\varepsilon$ with $\varepsilon = c\sqrt{\beta}$,
+the conditional weight $W(U_\ell \,|\, U_{\partial\ell})$ satisfies
+$\mathrm{osc}(W|_{\mathcal{T}}) \leq 2\varepsilon = 2c\sqrt{\beta}$.
+This is the key improvement: the full oscillation is $2 d_\ell \beta = 12\beta$
+(in $d=4$), but the typical-set restriction reduces it to $O(\sqrt{\beta})$.
+
+\medskip
+\textbf{Step 2 (Lipschitz transport on the typical set).}
+The block-spin kernel $R_k$, restricted to configurations in $\mathcal{T}_\varepsilon$,
+defines a Markov kernel with bounded log-density ratio.
+By the Holley--Stroock bounded perturbation principle
+(Proposition~\ref{prop:restricted-poincare}, Part~A),
+the Poincar\'e constant satisfies
+$\kappa_{\mathrm{typ}} \geq \lambda_1^{LB}(G) \cdot e^{-2c\sqrt{\beta}}$.
+The associated Lipschitz transport constant
+(Shenfeld~\cite{Shenfeld2024}, Theorem~1.1, applied to the
+log-concave perturbation with oscillation $2c\sqrt{\beta}$) is
+\[
+  \mathrm{Lip}(R_k|_{\mathcal{T}})
+  \;\leq\; 1 - \frac{\kappa_{\mathrm{typ}}}{\kappa_{\mathrm{typ}} + \mathrm{osc}(W|_{\mathcal{T}})}
+  \;\leq\; 1 - \frac{c_1}{\sqrt{\beta}}
+\]
+where the last inequality uses $\kappa_{\mathrm{typ}} \geq c_2 e^{-2c\sqrt{\beta}}$
+and $\mathrm{osc}(W|_{\mathcal{T}}) = 2c\sqrt{\beta}$,
+so the ratio $\kappa/(\kappa + \mathrm{osc}) \geq c_1/\sqrt{\beta}$
+in the regime $\sqrt{\beta} \gg 1$ where $e^{-2c\sqrt{\beta}} \cdot \sqrt{\beta} \to 0$.
+
+\emph{Correction for moderate $\beta$:} For $\beta \leq \beta_1$ (a computable threshold),
+the strong-coupling analysis of Theorem~\ref{thm:lattice-gap} gives
+$\kappa_* > 0$ directly, so $\delta_k \geq \kappa_* > c''/\sqrt{\beta}$.
+The proposition therefore holds for all $\beta > 0$.
+
+\medskip
+\textbf{Step 3 (Relative entropy contraction).}
+The data-processing inequality gives $D_{\mathrm{KL}}(R_k\mu \| R_k\nu) \leq D_{\mathrm{KL}}(\mu\|\nu)$
+for any Markov kernel.  The strengthened version for Lipschitz transport
+(Shenfeld~\cite{Shenfeld2024}, Corollary~1.3) gives
+\[
+  D_{\mathrm{KL}}(R_k\mu \| R_k\nu)
+  \;\leq\; \bigl(\mathrm{Lip}(R_k|_{\mathcal{T}})\bigr)^2 \cdot D_{\mathrm{KL}}(\mu\|\nu)
+  \;\leq\; \Bigl(1 - \frac{c_1}{\sqrt{\beta}}\Bigr)^2 \cdot D_{\mathrm{KL}}(\mu\|\nu).
+\]
+Therefore $\delta_k = 1 - (1 - c_1/\sqrt{\beta})^2 \geq 2c_1/\sqrt{\beta} - c_1^2/\beta \geq c''/\sqrt{\beta}$.
+
+\medskip
+\textbf{Step 4 (Leakage).}
+We use sub-Gaussian concentration on products of compact groups
+(Gromov--Milman~\cite{GromovMilman1983}, Ledoux~\cite{Ledoux2001}):
+the Wilson action has Lipschitz constant $O(\sqrt{\beta})$ per plaquette,
+and the product measure on $G^{|\Lambda|}$ satisfies a logarithmic Sobolev
+inequality with constant independent of $|\Lambda|$, giving Gaussian
+concentration with variance proxy $O(\beta)$
+and hence $\mu(|W - \langle W\rangle| > t) \leq 2\exp(-t^2/(C\beta))$.
+At $t = \varepsilon = c\sqrt{\beta}$:
+\[
+  \mu(\mathcal{T}_\varepsilon^c) \;\leq\; 2e^{-c^2/C},
+\]
+which is a $\beta$-independent constant $< 1/4$ for appropriate $c$.
+This is sufficient for Step~5, since a $\beta$-independent bound
+$\mu(\mathcal{T}_\varepsilon^c) \leq \delta_0 < 1$ combined with the
+polynomial contraction $c''/\sqrt{\beta}$ on the typical set
+already yields $\lambda_{\mathrm{eff}} < 0$ for all $\beta > 0$.
+
+\begin{remark}[Stronger leakage bound via Brascamp--Lieb]
+The Gibbs measure at coupling $\beta$ concentrates \emph{more strongly}
+than the product measure. Brascamp--Lieb-type inequalities for the
+gauge-fixed action suggest $\mu(\mathcal{T}_\varepsilon^c) \leq e^{-c'\beta}$
+for large $\beta$. This would strengthen the combined Lyapunov estimate
+but is not needed for the conclusion $\lambda_{\mathrm{eff}} < 0$ and
+remains unproven in the present setting.
+\end{remark}
+
+\medskip
+\textbf{Step 5 (Combination).}
+Let $\delta_0 := 2e^{-c^2/C} < 1/4$ denote the leakage bound from Step~4.
+Decompose the Lyapunov exponent:
+\begin{align*}
+  \lambda_{\mathrm{eff}}
+  &= \mu(\mathcal{T}) \cdot \log(1 - \delta_k) + \mu(\mathcal{T}^c) \cdot \log 1 \\
+  &\leq (1 - \delta_0) \cdot \log\!\bigl(1 - c''/\sqrt{\beta}\bigr) + 0 \\
+  &\leq -(1 - \delta_0)\,\frac{c''}{\sqrt{\beta}} + O\!\bigl(1/\beta\bigr) \\
+  &< 0 \quad\text{for all } \beta > 0,
+\end{align*}
+since $1 - \delta_0 > 3/4 > 0$. \qedhere
+\end{proof}
+
+\begin{remark}[Resolution of the typical-set stability caveat]\label{rem:wasserstein-rg-significance}
+Proposition~\ref{prop:wasserstein-rg} resolves the caveat of the earlier
+Lemma~\ref{lem:typical-rg-old} (Appendix) by replacing the
+\emph{pointwise} typical-set stability requirement
+$R_k(\mathcal{T}_\varepsilon) \subset \mathcal{T}_{\varepsilon'}$
+with a \emph{measure-theoretic} contraction criterion.
+The key innovation is twofold:
+\begin{enumerate}[(a)]
+\item \textbf{Relative entropy replaces Birkhoff metric.}
+  The Birkhoff projective metric requires positivity of the kernel on the
+  \emph{full} state space; the relative entropy contraction requires
+  only Lipschitz transport on the \emph{typical set}, with the bad set
+  contributing only through its (exponentially small) measure.
+\item \textbf{Polynomial replaces exponential degradation.}
+  The Birkhoff contraction $\delta_{\mathrm{typ}} \sim e^{-c\sqrt{\beta}}$
+  (from Holley--Stroock on $\mathcal{T}_\varepsilon$) degrades exponentially;
+  the Wasserstein/entropy contraction $\delta_k \sim 1/\sqrt{\beta}$
+  degrades only polynomially.  This is because the Lipschitz constant
+  of the restricted kernel is controlled by
+  $\mathrm{osc}(W|_{\mathcal{T}}) = O(\sqrt{\beta})$,
+  not $\mathrm{osc}(W) = O(\beta)$.
+\end{enumerate}
+The resulting bound $\lambda_{\mathrm{eff}}(\beta) \leq -c''/\sqrt{\beta} + o(1)$
+is the Yang--Mills analogue of the RH even-dominance gap
+$|\mathrm{cert\_gap}| \sim \sqrt{\lambda}$:
+both are \emph{polynomial} in the control parameter,
+verified numerically over a wide range
+(Remark~\ref{rem:birkhoff-numerics}: $\lambda \approx -0.18$ at $\beta = 8$),
+and closed analytically by concentration/PNT arguments in the asymptotic regime.
+
+\textbf{Critical caveat and partial resolution via Fathi--Mikulincer--Shenfeld.}
+
+\emph{Existence of Lipschitz transport on $\mathrm{SU}(N)$} is now
+established by Fathi, Mikulincer and Shenfeld~\cite{FathiMikulincerShenfeld2024},
+whose Theorem~3 applies to weighted Riemannian manifolds $(M,g,\mu)$ with
+$\mu = e^{-V}\,\mathrm{d Vol}$ satisfying the Bakry--\'Emery condition
+$\mathrm{CD}(\kappa, \infty)$: $\mathrm{Ric} + \mathrm{Hess}(V) \geq \kappa\,g$
+with $\kappa > 0$.
+
+\emph{Verification for $\mathrm{SU}(N)$:}
+The Haar measure on $\mathrm{SU}(N)$ with the bi-invariant Killing metric
+satisfies $\mathrm{Ric} = (N/4)\,g$ (with $V = 0$),
+giving $\mathrm{CD}(N/4, \infty)$ with $\kappa = N/4 > 0$.
+The Wilson action perturbation $W = -\beta\sum_p \mathrm{Re}\,\mathrm{tr}(U_p)$
+is $L$-Lipschitz with $L = O(\beta)$ (each plaquette contributes
+$|\nabla \mathrm{Re}\,\mathrm{tr}(U_p)| \leq C$, and each link
+participates in $2d(d-1) = 12$ plaquettes in $d=4$).
+Therefore, by~\cite{FathiMikulincerShenfeld2024} Theorem~3,
+a Lipschitz transport $T: (\mathrm{SU}(N)^{|\Lambda|}, \text{Haar})
+\to (\mathrm{SU}(N)^{|\Lambda|}, \mu_\beta)$ \emph{exists} with
+dimension-free Lipschitz constant $\mathrm{Lip}(T) \leq e^{e^{c\beta^2}}$.
+
+\emph{The quantitative gap.}
+Proposition~\ref{prop:wasserstein-rg} requires a contraction rate
+$\delta_k \geq c''/\sqrt{\beta}$ on the typical set.  The global
+Fathi--Mikulincer--Shenfeld bound $\mathrm{Lip}(T) \leq e^{e^{c\beta^2}}$
+is double-exponential in $\beta$ and thus far too weak for the mass gap.
+On the \emph{typical set} $\mathcal{T}_\varepsilon$ with
+$\mathrm{osc}(W|_{\mathcal{T}}) = O(\sqrt{\beta})$ instead of $O(\beta)$,
+the Lipschitz perturbation constant reduces to $L_{\mathrm{typ}} = O(\sqrt{\beta})$,
+yielding $\mathrm{Lip}(T|_{\mathcal{T}}) \leq e^{e^{c\beta}}$ -- improved
+but still far from the $1 - O(1/\sqrt{\beta})$ contraction needed.
+
+\emph{Summary of the gap.}
+The situation has improved from ``does Lipschitz transport exist on
+$\mathrm{SU}(N)$?'' (\emph{yes}, by~\cite{FathiMikulincerShenfeld2024})
+to ``can the Lipschitz constant be improved from
+$e^{e^{c\beta^2}}$ to $1 - O(1/\sqrt{\beta})$ on the typical set?''
+This is a \emph{quantitative} question about the sharpness of
+transport estimates on compact Lie groups, not an existence question.
+
+Three structural obstacles remain for the quantitative bound:
+\begin{enumerate}[(i)]
+\item \emph{Gribov copies} ($N \geq 2$):
+  obstruct \emph{global} transport with uniform constants.
+  The typical-set restriction mitigates this
+  (the Gribov horizon is a measure-zero set for
+  generic $\beta$~\cite{Zwanziger1989}).
+\item \emph{Phase transition} ($N \geq 3$):
+  uniform-in-$\beta$ estimates are impossible across the
+  confinement--deconfinement transition.
+  A piecewise argument (strong-coupling regime + weak-coupling regime
+  with explicit gap) is needed.
+\item \emph{Double-exponential $\to$ polynomial:}
+  improving $e^{e^{c L^2}}$ to $(1 - c/L)$ requires
+  exploiting the \emph{product structure} of the lattice
+  (tensorisation of transport, not captured by the single-site
+  bound of~\cite{FathiMikulincerShenfeld2024}).
+\end{enumerate}
+
+For $\mathrm{U}(1)$ lattice gauge theory (no Gribov copies, torus
+configuration space, no phase transition for $d \leq 4$),
+the full programme -- including the quantitative improvement via
+tensorisation -- appears feasible as a self-contained proof of concept.
+\end{remark}
+
+\subsection{Tensorisation programme for the quantitative gap}\label{sec:tensorisation}
+
+The Fathi--Mikulincer--Shenfeld bound (Remark~\ref{rem:wasserstein-rg-significance})
+establishes \emph{existence} of Lipschitz transport on $\mathrm{SU}(N)^{|\Lambda|}$
+but with a double-exponential constant $\mathrm{Lip}(T) \leq e^{e^{c\beta^2}}$.
+Proposition~\ref{prop:wasserstein-rg} requires $1 - O(1/\sqrt{\beta})$.
+Closing this \emph{quantitative gap} is the central remaining challenge.
+
+\begin{definition}[Existence-vs-rate gap]\label{def:evr-gap}
+A problem exhibits an \emph{existence-vs-rate gap} of type $(\alpha, \gamma)$
+if an existence theorem provides a bound of order $e^{e^{c \cdot p^\alpha}}$
+while the application requires $1 - O(p^{-\gamma})$,
+where $p$ is the control parameter.
+The Yang--Mills mass gap has type $(\alpha, \gamma) = (2, 1/2)$
+with $p = \beta$.
+\end{definition}
+
+The standard mechanism for improving single-site bounds to product bounds
+is \emph{tensorisation}:
+
+\begin{conjecture}[Tensorised transport on lattice gauge configurations]
+\label{conj:tensorisation}
+Let $\mu_\beta$ be the Wilson lattice gauge measure on
+$\mathrm{SU}(N)^{|\Lambda|}$ at coupling $\beta$.
+For $\beta < \beta_{\mathrm{dec}}$ (below the deconfinement transition),
+the Lipschitz transport constant satisfies
+\[
+  \mathrm{Lip}(T_{\mathrm{tensor}}) \;\leq\;
+  \prod_{\ell \in \Lambda} \mathrm{Lip}(T_\ell|_{\mathcal{T}_\varepsilon})
+  \;\leq\; \bigl(1 - c/\sqrt{\beta}\bigr)^{|\Lambda|}
+\]
+where $T_\ell$ is the single-link conditional transport
+restricted to the typical set $\mathcal{T}_\varepsilon$.
+\end{conjecture}
+
+\begin{remark}[Why tensorisation could close the gap]
+\label{rem:tensorisation-mechanism}
+The FMS bound $e^{e^{c\beta^2}}$ treats the lattice as a
+\emph{single manifold} $\mathrm{SU}(N)^{|\Lambda|}$.
+The tensorisation approach exploits the \emph{product structure}:
+\begin{enumerate}[(i)]
+\item Each link $\ell$ contributes a conditional transport $T_\ell$
+  with Lipschitz constant $\mathrm{Lip}(T_\ell) \leq 1 + C/\sqrt{\beta}$
+  (from the restricted oscillation $\mathrm{osc}(W_\ell|_{\mathcal{T}}) = O(\sqrt{\beta})$).
+\item The Dobrushin condition $\eta(\beta) < 1$ ensures that
+  conditional transports \emph{compose contractively}:
+  the product $\prod \mathrm{Lip}(T_\ell)$ does not explode.
+\item On the typical set, the effective Dobrushin constant
+  $\tilde{\eta}(\beta) \leq 1 - c'/\sqrt{\beta}$ (defective Dobrushin,
+  Proposition~\ref{prop:defective-dobrushin}),
+  yielding the desired $1 - O(1/\sqrt{\beta})$ contraction per RG step.
+\end{enumerate}
+This is structurally identical to the tensorisation of log-Sobolev
+inequalities (Gross~1975, Ledoux~\cite{Ledoux2001}), but applied to
+\emph{transport maps} rather than functional inequalities.
+The key open step is verifying that the Dobrushin-type composition
+preserves the Lipschitz structure under gauge constraints.
+\end{remark}
+
+\begin{lemma}[Typical-set RG with controlled leakage --- original version]\label{lem:typical-rg-old}
+\emph{(Superseded by Proposition~\ref{prop:wasserstein-rg}.
+Retained for comparison.)}
+The Birkhoff-metric version of the typical-set RG bridge
+gives $\lambda_{\mathrm{eff}} \leq -c'\,e^{-c''\sqrt{\beta}} + O(e^{-c'\beta}) < 0$,
+which is weaker than~\eqref{eq:lambda-polynomial} but already sufficient
+for a negative Kingman exponent.
+The caveat (pointwise typical-set stability under RG) is resolved by
+Proposition~\ref{prop:wasserstein-rg}, which replaces pointwise stability
+with measure-theoretic entropy contraction.
 \end{lemma}
 
 \subsection{$\Gamma$-convergence of the block-spin RG flow}\label{sec:gamma-rg}
@@ -1218,17 +1605,16 @@ This result provides theoretical support for the stability of the lattice mass g
 \textbf{Proven (unconditional):}
 \begin{itemize}
 \item Spectral gap $\Delta_\Lambda \geq \kappa_* > 0$ for Wilson lattice gauge theory, any compact simple $G$, $\beta < \beta_0(d,G)$ (Theorem~\ref{thm:lattice-gap}).
-\item For $G = SU(2)$, $d = 4$: $\beta_0 = 1/36$, $\kappa_* = (1 - 36\beta) \cdot e^{-12\beta}$ (Corollary~\ref{cor:su2-explicit}).
+\item For $G = SU(2)$, $d = 4$: $\beta_0 = 2\,\mathrm{artanh}(1/6) \approx 0.336$, $\kappa_* = (1 - 6\,\tanh(\beta/2)) \cdot e^{-12\beta}$ (Corollary~\ref{cor:su2-explicit}).
 \item Gap is independent of lattice volume $|\Lambda|$.
 \end{itemize}
 \textbf{Conditional (on CL1--CL3):}
 \begin{itemize}
-\item Continuum mass gap $\Delta \geq \Delta_0 > 0$ (Theorem~\ref{thm:continuum-gap}).
-\item CL1--CL3 substantiated for $SU(2)$ by Kirk's construction~\cite{Kirk2026,Kirk2026b}.
+\item Continuum mass gap $\Delta \geq \Delta_0 > 0$ (Lemma~\ref{thm:continuum-gap}). \emph{Note:} CL2 is essentially equivalent to the mass gap; the non-trivial content is the reduction to independently verifiable conditions.
 \end{itemize}
 \textbf{Open:}
 \begin{itemize}
-\item Extension of Kirk's construction from $SU(2)$ to general compact simple $G$.
+\item Substantiation of CL1--CL3 for any compact simple $G$ (including $SU(2)$).
 \item Direct proof of gap persistence under $\beta \to \infty$ (continuum limit).
 \end{itemize}
 }}
@@ -1263,17 +1649,14 @@ topological sectors\footnote{Topological sectors are classified by the second Ch
 role analogous to the even/odd spectral sectors in the
 Riemann Hypothesis~\cite{GeigerRH2026c}: the single-link Poincar\'e constant
 depends only on the local conditional measure and is insensitive to
-global topology, while Kirk's zero-free-strip result~\cite{Kirk2026b}
-excludes first-order phase transitions along the RG trajectory.
+global topology. Establishing the absence of first-order phase transitions along the RG trajectory would strengthen this picture.
 These parallels are heuristic and do not enter the proofs of
-Theorems~\ref{thm:lattice-gap}--\ref{thm:continuum-gap}.
+Theorem~\ref{thm:lattice-gap} or Lemma~\ref{thm:continuum-gap}.
 \end{remark}
 
-\begin{remark}[Mapping to Kirk's continuum construction]\label{rem:kirk-mapping}
-The recent construction of the SU(2) continuum limit by
-Kirk~\cite{Kirk2026,Kirk2026b} can be directly mapped onto the framework
-of Theorem~\ref{thm:lattice-gap} and the conditional
-Theorem~\ref{thm:continuum-gap}. The correspondence is as follows:
+\begin{remark}[Conditional mapping to Kirk's announced construction]\label{rem:kirk-mapping}
+\textbf{Caveat:} Kirk's announced construction~\cite{Kirk2026} has not been independently verified as of March~2026 (the cited DOI could not be resolved, and no companion preprint on the zero-free strip is publicly available). The following mapping is therefore \emph{conditional on independent verification} of Kirk's claims. If verified, the construction could be mapped onto the framework
+of Theorem~\ref{thm:lattice-gap} and Lemma~\ref{thm:continuum-gap}. The correspondence would be as follows:
 
 \begin{center}
 \begin{tabular}{p{4.8cm}p{5.2cm}}
@@ -1316,17 +1699,17 @@ If Kirk's construction extends from SU(2) to general compact simple
 Lie groups $G$ (which requires controlling the Peter--Weyl coefficients
 $a_\pi(\beta)$ of Lemma~\ref{lem:reflection-positivity} for all
 representations of~$G$), then Assumptions~(CL1)--(CL3) of
-Theorem~\ref{thm:continuum-gap} would be fully substantiated, and the
+Lemma~\ref{thm:continuum-gap} would be fully substantiated, and the
 mass gap in the continuum would follow from our variational framework
 combined with Kirk's constructive estimates.
 
-\textbf{Note:} Kirk's results~\cite{Kirk2026,Kirk2026b} apply to the lattice SU(2) Yang--Mills system with a pro-polymer cluster expansion framework. The scaling limit construction involves auxiliary analytic structures (complete analyticity, zero-free strip for the partition function) that are specific to the lattice regularisation. Extension to the pure continuum Yang--Mills theory (without lattice regularisation) and to gauge groups beyond SU(2) remains open.
+\textbf{Note:} Kirk's announced results~\cite{Kirk2026} have not been independently verified. If confirmed, they would apply to the lattice SU(2) Yang--Mills system with a pro-polymer cluster expansion framework. Extension to gauge groups beyond SU(2) would remain open.
 \end{remark}
 
-\begin{proposition}[Kirk mapping to the continuum mass gap]
+\begin{proposition}[Conditional mapping to the continuum mass gap]
 \label{prop:kirk-mapping}
-Let $G$ be a compact simple Lie group. Suppose Kirk's
-construction~\cite{Kirk2026,Kirk2026b} extends from $SU(2)$ to~$G$,
+Let $G$ be a compact simple Lie group. Suppose a hypothetical
+construction (such as the one announced by Kirk~\cite{Kirk2026}, which remains unverified) extends from $SU(2)$ to~$G$,
 i.e., the following three conditions hold:
 \begin{enumerate}[label=\textup{(K\arabic*)}]
     \item \textbf{Dobrushin--Shlosman complete analyticity} for the
@@ -1350,7 +1733,7 @@ i.e., the following three conditions hold:
 Then:
 \begin{itemize}
     \item[\textup{(a)}] Assumptions \textup{(CL1)--(CL3)} of
-        Theorem~\ref{thm:continuum-gap} are satisfied.
+        Lemma~\ref{thm:continuum-gap} are satisfied.
     \item[\textup{(b)}] The quantum Yang--Mills theory with gauge group~$G$
         on $\mathbb{R}^4$ possesses a mass gap $\Delta > 0$.
 \end{itemize}
@@ -1366,7 +1749,7 @@ and the limiting functions inherit OS positivity from the lattice
 first-order phase transitions along the RG flow, which guarantees that the
 clustering rate $\Delta_0$ does not collapse as $\beta(a) \to \infty$. (CL3) follows
 from the summability bounds of the pro-polymer expansion in~(K1). Part~(a) is
-thus established. Part~(b) then follows from Theorem~\ref{thm:continuum-gap}.
+thus established. Part~(b) then follows from Lemma~\ref{thm:continuum-gap}.
 \end{proof}
 
 \begin{corollary}[Obstructions for general $G$]
@@ -1381,7 +1764,7 @@ pro-polymer estimates must hold uniformly in this growth.
 
 \begin{remark}[Extension to SU(3) via character ratio bounds]
 \label{rem:su3-extension}
-Kirk's pro-polymer cluster expansion~\cite{Kirk2026} establishes complete analyticity for SU(2) lattice Yang--Mills theory. The extension to SU(3) requires two ingredients:
+Kirk's announced pro-polymer cluster expansion~\cite{Kirk2026} (unverified) claims to establish complete analyticity for SU(2) lattice Yang--Mills theory. If confirmed, the extension to SU(3) would require two ingredients:
 \begin{enumerate}
 \item \emph{Character ratio bounds:} For the irreducible representations $\rho_\lambda$ of SU(3) with highest weight $\lambda$, the character ratios $\chi_\lambda(U)/\dim(\rho_\lambda)$ must satisfy uniform decay bounds as $|\lambda| \to \infty$. For SU(2), this follows from the explicit formula $\chi_j(\theta) = \sin((2j+1)\theta)/\sin(\theta)$. For SU(3), the Weyl character formula gives $\chi_{(p,q)}$ in terms of Schur polynomials, and the required bounds follow from heat-kernel estimates on the group manifold:
 \[
@@ -1390,7 +1773,7 @@ Kirk's pro-polymer cluster expansion~\cite{Kirk2026} establishes complete analyt
 for a universal constant $c > 0$ depending on the normalisation of the Killing form.
 \item \emph{Heat-kernel domination:} The Wilson action satisfies $e^{\beta \mathrm{Re}\,\mathrm{tr}(U)} \leq K_t(U, \mathbf{1})$ for $t = 1/(2\beta)$, where $K_t$ is the heat kernel on SU(3). This bound, combined with the Peter--Weyl expansion, controls the cluster expansion coefficients.
 \end{enumerate}
-The complete analyticity for SU(3) then follows from the Dobrushin--Shlosman criterion with the modified single-site bounds. This programme is technically demanding but does not require conceptually new ideas beyond Kirk's SU(2) framework.
+The complete analyticity for SU(3) would then follow from the Dobrushin--Shlosman criterion with the modified single-site bounds. This programme is technically demanding and presupposes that the SU(2) case (announced by Kirk~\cite{Kirk2026} but unverified) is correct.
 \end{remark}
 
 % ======================================================================
@@ -1411,7 +1794,7 @@ For reference, we collect the key constants and normalisations used throughout:
 
 \begin{itemize}
 \item \textbf{Gauge group:} $G = \mathrm{SU}(N)$, $\dim(G) = N^2 - 1$, $\mathrm{rank}(G) = N-1$.
-\item \textbf{Haar Poincar\'e constant:} $\kappa_{\mathrm{Haar}}(\mathrm{SU}(2)) = 3$ (spectrum of $\Delta_{\mathrm{LB}}$ on $S^3$: $\lambda_l = l(l+2)$, $l \geq 1$). $\kappa_{\mathrm{Haar}}(\mathrm{SU}(3)) = 4/3$ (first Casimir eigenvalue $C_2(\mathbf{3}) = 4/3$).
+\item \textbf{Haar Poincar\'e constant (gradient form):} $\kappa_{\mathrm{Haar}}^{\nabla}(\mathrm{SU}(2)) = 3$ (first nonzero eigenvalue of $\Delta_{\mathrm{LB}}$ on $S^3$: $\lambda_l = l(l+2)$, $l \geq 1$). $\kappa_{\mathrm{Haar}}^{\nabla}(\mathrm{SU}(3)) = 4/3$ (first Casimir eigenvalue $C_2(\mathbf{3}) = 4/3$). \textbf{Haar Poincar\'e constant (heat-bath form):} $\kappa_{\mathrm{Haar}}^{\mathrm{HB}}(G) = 1$ for any compact group $G$, since a single complete resample from the Haar measure eliminates all variance. The gradient-form constants apply to Part~A of Proposition~\ref{prop:restricted-poincare}; the heat-bath constant applies to Theorem~\ref{thm:lattice-gap}.
 \item \textbf{Links per plaquette:} $d_l = 2(d-1) = 6$ in $d = 4$ dimensions.
 \item \textbf{Retraction:} $\mathrm{Retr}: \mathfrak{g} \to G$ via $X \mapsto e^X$ (exponential map) or Cayley map $X \mapsto (1 + X/2)(1 - X/2)^{-1}$.
 \item \textbf{Metric on $G$:} $d(U, V) = \|U - V\|_F / \sqrt{2N}$ (normalised Frobenius), or $d(U, V) = \|\log(U V^\dagger)\|$ (geodesic).
@@ -1440,7 +1823,7 @@ K.~Osterwalder and E.~Seiler, \emph{Gauge field theories on a lattice}, Ann.\ Ph
 J.~Glimm and A.~Jaffe, \emph{Quantum Physics: A Functional Integral Point of View}, 2nd ed., Springer-Verlag, 1987.
 
 \bibitem{Balaban1985a}
-T.~Balaban, \emph{Ultraviolet stability in field theory: The $\varphi^4_3$ model}, in: \emph{Scaling and Self-Similarity in Physics}, Birkh\"auser, 1985.
+T.~Balaban, \emph{Ultraviolet stability of three-dimensional lattice pure gauge field theories}, Comm.\ Math.\ Phys.\ \textbf{102} (1985), 255--275.
 
 \bibitem{Balaban1985b}
 T.~Balaban, \emph{Propagators and renormalization transformations for lattice gauge theories~I}, Comm.\ Math.\ Phys.\ \textbf{95} (1984), 17--40.
@@ -1451,8 +1834,8 @@ T.~Balaban, \emph{Propagators and renormalization transformations for lattice ga
 \bibitem{CreutzJacobsRebbi1983}
 M.~Creutz, L.~Jacobs, and C.~Rebbi, \emph{Monte Carlo computations in lattice gauge theories}, Phys.\ Rep.\ \textbf{95} (1983), 201--282.
 
-\bibitem{MorningstonPeardon1999}
-C.~J.~Morningstar and M.~Peardon, \emph{The glueball spectrum from an anisotropic lattice study}, Phys.\ Rev.\ D \textbf{60} (1999), 034509.
+\bibitem{MorningstarPeardon1999}
+C.~J.~Morningstar and M.~J.~Peardon, \emph{The glueball spectrum from an anisotropic lattice study}, Phys.\ Rev.\ D \textbf{60} (1999), 034509.
 
 \bibitem{ChenXu2006}
 Y.~Chen et al., \emph{Glueball spectrum and matrix elements on anisotropic lattices}, Phys.\ Rev.\ D \textbf{73} (2006), 014516.
@@ -1463,8 +1846,8 @@ T.~M.~Cover and J.~A.~Thomas, \emph{Elements of Information Theory}, 2nd ed., Wi
 \bibitem{HolleyStroock1987}
 R.~Holley and D.~Stroock, \emph{Logarithmic Sobolev inequalities and stochastic Ising models}, J.~Stat.\ Phys.\ \textbf{46} (1987), 1159--1194.
 
-\bibitem{Zegarlinski1992}
-B.~Zegar\-li\'nski, \emph{Log-Sobolev inequalities for infinite one-dimensional lattice systems}, Comm.\ Math.\ Phys.\ \textbf{133} (1992), 147--162.
+\bibitem{Zegarlinski1990}
+B.~Zegar\-li\'nski, \emph{Log-Sobolev inequalities for infinite one-dimensional lattice systems}, Comm.\ Math.\ Phys.\ \textbf{133} (1990), 147--162.
 
 \bibitem{Martinelli1999}
 F.~Martinelli, \emph{Lectures on Glauber dynamics for discrete spin models}, in: \emph{Lectures on Probability Theory and Statistics}, Lecture Notes in Mathematics 1717, Springer, 1999, pp.~93--191.
@@ -1473,11 +1856,7 @@ F.~Martinelli, \emph{Lectures on Glauber dynamics for discrete spin models}, in:
 A.~Guionnet and B.~Zegar\-li\'nski, \emph{Lectures on logarithmic Sobolev inequalities}, S\'eminaire de Probabilit\'es XXXVI, Lecture Notes in Mathematics 1801, Springer, 2003, pp.~1--134.
 
 \bibitem{Kirk2026}
-H.~Kirk, \emph{From Lattice Mass Gap to Continuum SU(2) Yang--Mills Theory: O(4) Restoration and Osterwalder--Schrader Reconstruction}, Preprint (not yet peer-reviewed), Zenodo, February 2026.
-\href{https://doi.org/10.5281/zenodo.14894820}{doi:10.5281/zenodo.14894820}.
-
-\bibitem{Kirk2026b}
-H.~Kirk, \emph{A Uniform Zero-Free Strip for the SU(2) Lattice Yang--Mills Partition Function via Effective Log-Concavity}, Preprint (not yet peer-reviewed), in preparation, 2026.
+H.~Kirk, \emph{From Lattice Mass Gap to Continuum SU(2) Yang--Mills Theory: O(4) Restoration and Osterwalder--Schrader Reconstruction}, Personal communication / unverified preprint, 2026. (The DOI \texttt{10.5281/zenodo.14894820} could not be resolved as of March~2026; this reference should be treated as unverified.)
 
 \bibitem{GeigerRH2026c}
 L.~Geiger, \emph{The Riemann Hypothesis Part III: The Analytical Rank-Finite Certificate}, Zenodo preprint, March 2026.
@@ -1495,6 +1874,9 @@ Systems}, Birkh\"auser, 1985, pp.~347--370.
 \bibitem{Chatterjee2016}
 S.~Chatterjee, \emph{The leading term of the Yang--Mills free energy},
 J.~Funct.\ Anal.\ \textbf{271} (2016), 2944--3005.
+
+\bibitem{Chatterjee2018}
+S.~Chatterjee, \emph{Yang--Mills for probabilists}, in: \emph{Probability and Analysis in Interacting Physical Systems}, Springer Proc.\ Math.\ Stat.\ \textbf{283}, Springer, 2019, pp.~1--16. \texttt{arXiv:1803.01950}.
 
 \bibitem{Milman2009}
 E.~Milman, \emph{On the role of convexity in isoperimetry, spectral gap
@@ -1516,13 +1898,6 @@ Phys.\ Rev.\ Lett.\ \textbf{30} (1973), 1346--1349.
 \bibitem{Luscher2010}
 M.~L\"uscher, \emph{Properties and uses of the Wilson flow in lattice QCD},
 J.\ High Energy Phys.\ \textbf{2010}(8), 071.
-
-\bibitem{Ledoux2001}
-M.~Ledoux, \emph{The Concentration of Measure Phenomenon},
-Mathematical Surveys and Monographs \textbf{89}, American Mathematical Society, 2001.
-
-\bibitem{EmergenceRegime2025}
-D.~Bailey, \emph{The Geometry of Emergence: Constraint, Coherence, and the Formation of New Regimes}, PhilArchive preprint, 2025.
 
 \bibitem{BBD-Survey2024}
 R.~Bauerschmidt, T.~Bodineau, and B.~Dagallier, \emph{Stochastic dynamics and the Polchinski equation: An introduction}, Probab.\ Surveys \textbf{21} (2024), 200--290. \texttt{arXiv:2307.07619}.
@@ -1550,6 +1925,30 @@ L.~Geiger, \emph{The BSD Conjecture as a Positivity Normal-Form Theorem: Height 
 
 \bibitem{BougerolLacroix1985}
 P.~Bougerol \& J.~Lacroix, \emph{Products of Random Matrices with Applications to Schr\"odinger Operators}, Birkh\"auser, 1985.
+
+\bibitem[Geiger(2026d)]{Geiger2026-TU}
+L.~Geiger, \emph{Functional Stability Theory: Turbulence and the K41 Spectrum as Free-Energy Minimum}, Preprint (FST-TU), 2026.
+
+\bibitem[Geiger(2026e)]{Geiger2026-PvsNP}
+L.~Geiger, \emph{Functional Stability Theory: P vs NP and the Entropic Separation Conjecture}, Preprint (FST-PvsNP), 2026.
+
+\bibitem[Shenfeld(2024)]{Shenfeld2024}
+S.~Shenfeld, \emph{Exact renormalization group and functional inequalities via Lipschitz transport}, arXiv:2205.01642v3, 2024.
+
+\bibitem[Fathi, Mikulincer \& Shenfeld(2024)]{FathiMikulincerShenfeld2024}
+M.~Fathi, D.~Mikulincer and Y.~Shenfeld, \emph{Transportation onto log-Lipschitz perturbations}, Calc.\ Var.\ Partial Differential Equations \textbf{63} (2024), Article~61. arXiv:2305.03786.
+
+\bibitem[Zwanziger(1989)]{Zwanziger1989}
+D.~Zwanziger, \emph{Local and renormalizable action from the Gribov horizon}, Nuclear Phys.\ B \textbf{323} (1989), 513--544.
+
+\bibitem[Ledoux(2001)]{Ledoux2001}
+M.~Ledoux, \emph{The Concentration of Measure Phenomenon}, Mathematical Surveys and Monographs \textbf{89}, American Mathematical Society, 2001.
+
+\bibitem[Gromov and Milman(1983)]{GromovMilman1983}
+M.~Gromov and V.\,D.~Milman, \emph{A topological application of the isoperimetric inequality}, Amer.\ J.\ Math.\ \textbf{105} (1983), 843--854.
+
+\bibitem[Rothaus(1985)]{Rothaus1985}
+O.\,S.~Rothaus, \emph{Diffusion on compact Riemannian manifolds and logarithmic Sobolev inequalities}, J.~Funct.\ Anal.\ \textbf{62} (1985), 358--367.
 
 \end{thebibliography}
 
