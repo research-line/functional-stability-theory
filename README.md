@@ -36,7 +36,7 @@ Derive Pattern A + DS1–DS3 from Spectrum Duality. These instantiate the Dissip
 |-------|---------|--------|--------------|-------------|
 | [**Turbulence**](fst-physics/turbulence/) | v1.3 | Journal-ready | DFC1 empirical (only input) | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
 | [**Yang–Mills**](fst-physics/yang-mills/) | v2.2 candidate | Conditional | Analytical proof of λ < 0 | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
-| [**Navier–Stokes**](fst-physics/navier-stokes/) | v2.1 | Conditional | Assumption G2 (projection regularity) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
+| [**Navier–Stokes**](fst-physics/navier-stokes/) | v2.2 candidate | Conditional | Assumption G2 (projection regularity) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
 | [**NS Log-Distance**](fst-physics/navier-stokes/) | v1.3 | Proof of Life | TLL for 3D NS analytically open | [10.5281/zenodo.19056807](https://doi.org/10.5281/zenodo.19056807) |
 
 ### FST-Cosmology
@@ -180,7 +180,11 @@ These stand independently of FST. The RFEP was abstracted from them; they are no
 | `scripts/yang-mills/compute_dobrushin_su2.py` | Yang-Mills | SU(2) lattice Dobrushin influence scan and gap plot |
 | `scripts/yang-mills/compute_birkhoff_rg.py` | Yang-Mills | Birkhoff contraction scan for hierarchical RG steps |
 | `scripts/navier-stokes/compute_ds3_lorenz.py` | Navier-Stokes | DS3 stress test on Lorenz attractor; TV saturation |
+| `scripts/navier-stokes/compute_bv_selection.py` | Navier-Stokes | Balanced-viscosity selection test on the Lorenz attractor |
+| `scripts/navier-stokes/compute_bv_multi_attractor.py` | Navier-Stokes | BV-selection stress test on Lorenz, Roessler, and Chen attractors |
+| `scripts/navier-stokes/compute_mu_reach.py` | Navier-Stokes | Measure-theoretic reach scan on Lorenz and KS attractors |
 | `scripts/navier-stokes/compute_tll_ldi_lorenz.py` | NS-LDI | **Proof of Life**: TLL+LDI on Lorenz attractor (5/5 tests) |
+| `scripts/navier-stokes/compute_tll_ldi_ks.py` | NS-LDI | TLL+LDI diagnostics and grid refinement on the KS attractor |
 | `scripts/dark-energy/compute_w_vs_desi.py` | Dark Energy | w_eff(z) comparison with DESI constraints |
 | `scripts/dark-energy/compute_w_mapping.py` | Dark Energy | Correct w_eff → w_DE mapping + DESI grid scan |
 | `scripts/dark-energy/compute_husawicki_mcmc.py` | Dark Energy | Hu-Sawicki f(R) MCMC fit against DESI+Planck+Cassini |
