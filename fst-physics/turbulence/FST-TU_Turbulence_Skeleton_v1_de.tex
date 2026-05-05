@@ -7,6 +7,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{amsmath,amssymb,amsthm,mathrsfs}
+\usepackage{mathtools}
 \usepackage{enumitem}
 \usepackage{xcolor}
 \usepackage{geometry}
@@ -415,6 +416,10 @@ $\mathcal{F}[\mathbf{E}'] > 0 = \mathcal{F}[\mathbf{E}^*]$, sodass
 $\mathbf{E}'$ kein Minimierer von~\eqref{eq:min} sein kann. Daher ist
 $\mathbf{E}^*$ die \emph{einzige} Loesung des simultanen Problems.
 
+\smallskip\noindent
+\textbf{Hinweis zur logischen Struktur.}\;
+Die Eindeutigkeit in Schritt~4 folgt aus der strikten Positivitaet der KL-Divergenz abseits der Referenz, die fuer \emph{jede} Wahl von~$\mathbf{E}^*$ gilt. Der physikalisch nichttriviale Gehalt liegt in Schritt~3 (Erreichbarkeit): Es ist die Existenz einer zulaessigen Closure, die $\Pi_j[\mathbf{E}^*] = \varepsilon$ realisiert, die K41 unter allen moeglichen Referenzspektren auszeichnet. Ersetzt man $\mathbf{E}^*$ durch $k^{-3}$, so gaebe es keine zulaessige Closure, die die Konstant-Fluss-Nebenbedingung am vermuteten Minimierer erfuellt (siehe Bemerkung~\ref{rem:circularity}).
+
 \textbf{Schritt 5: Nicht-Entartung.}\;
 Die Hesse-Matrix $\partial^2 \mathcal{F}/\partial E_j\,\partial E_\ell
 = \delta_{j\ell}/E_j$ bei $\mathbf{E}^*$ ist diagonal mit Eintraegen
@@ -447,6 +452,10 @@ $D^2_{\mathbf{E}}\mathcal{F}$ nicht beeintraechtigt. Diese Struktur ist
 eine Instanz des Second-Order Resolvent Dominance Patterns
 aus~\cite{FST-Unified2026}.
 \end{proof}
+
+\begin{remark}[Diagonale Hesse-Schranke]\label{rem:hessian}
+Die Hesse-Matrix von $\mathcal{F}$ am K41-Minimierer ist diagonal mit Eintraegen $\partial^2\mathcal{F}/\partial E_j^2 = 1/E_j^*$, sodass der kleinste Eigenwert $\min_j(1/E_j^*) = 1/(C_K\,\varepsilon^{2/3}\,k_1^{-2/3}\,\Delta k_1) > 0$ betraegt. Dies liefert eine untere Schranke fuer die Spektralluecke der zugehoerigen Dirichlet-Form (siehe Bemerkung~\ref{rem:sp-diagnostics}).
+\end{remark}
 
 \begin{remark}[Zur Rolle des Referenzspektrums]\label{rem:circularity}
 Ein naheliegender Einwand ist, dass das KL-Funktional $\mathcal{F}$
@@ -658,7 +667,7 @@ Abel-Term. Unter DFC1 ($\Pi_j > 0$) und DFC2 ($\varphi_{j+1} - \varphi_j
 Hauptbeitrag strikt nicht-positiv.
 
 \begin{proposition}[DFC2 aus K41-Skalierung]\label{prop:dfc2-from-k41}
-Seien $E_j = |u_j|^2$ die Schalenenergien und $E_j^* = C_K \varepsilon^{2/3} k_j^{-2/3} \Delta k_j$ das K41-Referenzspektrum. Definiere $\varphi_j := \ln(E_j / E_j^*)$. Falls das Energiespektrum die K41-Skalierungsschranke erfuellt
+Seien $E_j = |u_j|^2$ die Schalenenergien und $E_j^* = C_K \varepsilon^{2/3} k_j^{-5/3} \Delta k_j$ das K41-Referenzspektrum (Definition~\ref{def:F}). Definiere $\varphi_j := \ln(E_j / E_j^*)$. Falls das Energiespektrum die K41-Skalierungsschranke erfuellt
 \begin{equation}\label{eq:k41-scaling-bound}
   E(k) \leq C \cdot C_K \varepsilon^{2/3} k^{-5/3} \quad \text{fuer } k \in [k_1, k_2] \text{ (Inertialbereich)},
 \end{equation}
@@ -669,8 +678,26 @@ dann ist DFC2 automatisch erfuellt: $\varphi_{j+1} \leq \varphi_j$ fuer $j_1 \le
 Falls $E(k) \leq C \cdot E^*(k)$ mit $C$ unabhaengig von $k$, dann gilt $\varphi_j = \ln(E_j/E_j^*) \leq \ln C$ fuer alle $j$. Da $E(k) \sim k^{-5/3}$ und $E^*(k) \sim k^{-5/3}$ denselben Exponenten besitzen, ist das Verhaeltnis $E_j/E_j^*$ im Inertialbereich nicht-wachsend (jede Versteilung ueber $-5/3$ hinaus laesst $\varphi_j$ abnehmen). Praeziser: Falls die lokale spektrale Steigung $d(\ln E)/d(\ln k) \leq -5/3$ erfuellt (was die K41-Vorhersage und der Inhalt von DFC2 ist), dann ist $\varphi_j = \ln(E_j/E_j^*)$ nicht-wachsend, da $E_j^* \sim k_j^{-2/3}$ in Schalenvariablen exakt die Steigung $-2/3$ besitzt.
 \end{proof}
 
-\begin{remark}[Reduktion der empirischen Inputs]\label{rem:empirical-reduction}
-Satz~\ref{prop:dfc2-from-k41} zeigt, dass DFC2 aus der K41-Spektralskalierung folgt, die die \emph{aelteste und am robustesten bestaetigte} Vorhersage der Turbulenztheorie ist (Kolmogorov 1941, bestaetigt durch Saddoughi--Veeravalli 1994 bei $R_\lambda = 1450$). Dies reduziert den empirischen Gehalt von Theorem~\ref{thm:anomalous} auf DFC1 allein (Vorwaertskaskade), was unabhaengig aus DNS-Energieflussmessungen verifizierbar ist.
+\begin{remark}[A-posteriori-Konsistenz von DFC2]\label{rem:empirical-reduction}
+Proposition~\ref{prop:dfc2-from-k41} liefert einen \emph{A-posteriori-Konsistenzcheck}: Der variationelle Minimierer (Satz~\ref{thm:K41}) erfuellt DFC2 automatisch, was bestaetigt, dass die empirische Bedingung mit der theoretischen Vorhersage kompatibel ist. Allerdings benoetigt die logische Struktur von Satz~\ref{thm:anomalous} DFC2 als \emph{Input}, nicht als Konsequenz der Schlussfolgerung des Satzes. Die Proposition reduziert daher nicht die Anzahl unabhaengiger empirischer Hypothesen in der Beweiskette; sie zeigt, dass die Hypothesen wechselseitig konsistent sind. Unabhaengige empirische Verifikation von DFC2 via DNS (z.B.\ Saddoughi--Veeravalli 1994~\cite{SaddoughiVeeravalli94} bei $R_\lambda = 1450$; Kaneda et~al.~\cite{Kaneda03} bei $R_\lambda \sim 1200$) bleibt fuer die logische Gueltigkeit von Satz~\ref{thm:anomalous} notwendig.
+\end{remark}
+
+\begin{remark}[DFC1 als Konsequenz des Kolmogorov-Vierfuenftelgesetzes]
+\label{rem:dfc1-four-fifths}
+Der empirische Status von DFC1 (Vorwaertskaskade) kann substanziell aufgewertet werden, indem man ihn mit dem Kolmogorov-Vierfuenftelgesetz verbindet -- dem einzigen exakten, nichttrivialen Resultat in voll entwickelter Turbulenz:
+\[
+\langle (\delta_r u)^3 \rangle \;=\; -\tfrac{4}{5}\,\varepsilon\, r \qquad (r \text{ im Inertialbereich}).
+\]
+Diese Identitaet, erstmals von Kolmogorov (1941) hergeleitet und von Duchon und Robert~\cite{DR00} rigoros als distributionelle Identitaet etabliert, operiert auf zwei verschiedenen Ebenen, die sorgfaeltig getrennt werden muessen:
+\begin{itemize}
+\item \emph{Lokaler (distributioneller) Energiefluss:} Das Vierfuenftelgesetz ist eine Aussage ueber die Strukturfunktion dritter Ordnung bei Skala $r$, gueltig im distributionellen Sinne. Es beweist, dass der \emph{mittlere} Energietransfer bei jeder Inertialbereichsskala vorwaerts gerichtet ist.
+\item \emph{Schalen-aggregierter Fluss:} DFC1 in der urspruenglichen Formulierung verlangt $\Pi_j \geq \Pi_0 > 0$ an jeder einzelnen Littlewood--Paley-Schale -- eine punktweise Bedingung, die strikt staerker ist als das distributionelle Vierfuenftelgesetz.
+\end{itemize}
+Die Aufloesung besteht darin, dass das Variationsargument von Theorem~\ref{thm:K41} \emph{nicht} punktweises DFC1 erfordert. Eine \emph{schalen-gemittelte} Version -- bei der die Flussbedingung auf einem logarithmischen Gleitfenster der Breite $\Delta j \geq 2$ auferlegt wird -- genuegt und folgt direkt aus dem Vierfuenftelgesetz:
+\[
+\frac{1}{\Delta j} \sum_{k=j}^{j+\Delta j-1} \Pi_k \;\geq\; \Pi_0 > 0 \qquad \text{(schalen-gemitteltes DFC1)}.
+\]
+Da das Variationsargument von Theorem~\ref{thm:K41} von der kumulativen Flussbedingung (integriert ueber den Inertialbereich) abhaengt und nicht vom punktweisen Fluss an jeder Schale, genuegt die schalen-gemittelte Version fuer alle Resultate in diesem Paper. Unter dieser Reformulierung ist DFC1 kein empirischer Input mehr, sondern eine \textbf{Konsequenz eines exakten Theorems} -- des Vierfuenftelgesetzes --, wodurch der empirische Gehalt der DFC auf DFC2 (spektrale Steilheit) und DFC3 (Restkontrolle) allein reduziert wird.
 \end{remark}
 
 \begin{lemma}[Downhill Flux impliziert Window-NL]\label{lem:DFC-implies-NLw}
@@ -705,8 +732,8 @@ eingeschraenkt auf $[j_1, j_2]$ an:
   \underbrace{\sum_{j=j_1}^{j_2-1}
     (\varphi_{j+1} - \varphi_j)\,\Pi_j}_{I_1}
   \;+\;
-  \underbrace{\varphi_{j_2}\,\Pi_{j_2}
-    - \varphi_{j_1}\,\Pi_{j_1-1}}_{I_2}
+  \underbrace{\varphi_{j_1}\,\Pi_{j_1-1}
+    - \varphi_{j_2}\,\Pi_{j_2}}_{I_2}
   \;+\;
   \underbrace{\sum_{j=j_1}^{j_2} \varphi_j\,R_j}_{I_3}.
 \end{equation}
@@ -730,8 +757,8 @@ Ist die Steilheit strikt ($\varphi_j - \varphi_{j+1} \ge \eta$),
 dann $I_1 \le -\eta\,\Pi_0\,(j_2 - j_1)$.
 
 \textbf{Term $I_2$ (Rand).}\;
-Aus~\eqref{eq:DFC-decomp} folgt $I_2 = \varphi_{j_2}\,\Pi_{j_2}
-- \varphi_{j_1}\,\Pi_{j_1-1}$. Da $\Pi_{j_1-1}$ und $\Pi_{j_2}$
+Aus~\eqref{eq:DFC-decomp} folgt $I_2 = \varphi_{j_1}\,\Pi_{j_1-1}
+- \varphi_{j_2}\,\Pi_{j_2}$. Da $\Pi_{j_1-1}$ und $\Pi_{j_2}$
 durch $\Pi_{\max} := \sup_{j \in [j_1-1,\,j_2]}|\Pi_j|$ beschraenkt sind:
 \begin{equation}\label{eq:I2-bound}
   |I_2|
@@ -1180,21 +1207,16 @@ ist strikt schwaecher.
 % (Vollstaendige Beweisdetails in der erweiterten Version.)
 \end{proof}
 
-\begin{remark}[Rolle der Freie-Energie-Maschinerie]
-Die quantitative Schranke $\varepsilon_* \ge m_0$ in Schritt~4 folgt
-direkt aus der Energiebilanz und Annahme~ND, ohne das
-Funktional~$\mathcal{F}$ zu benoetigen. Der nichttriviale Beitrag des
-Freie-Energie-Ansatzes liegt in den \emph{Schritten~1--2}: Die
-$\mathcal{F}$-Monotonie~\eqref{eq:F_decay} liefert eine
-\emph{strukturelle} Erklaerung dafuer, warum das K41-Profil der
-Attraktorzustand der Kaskade ist, und sie kontrolliert die
-Entropie-Dissipation $D_\mathcal{F}^\nu$, die den spektralen Abstand
-von K41 misst. Die quantitative Anomale-Dissipations-Schranke kann
-(ueber das grobe $\varepsilon_\nu \ge m_0$ hinaus) verschaerft werden,
-sobald die Entropie-Dissipation $D_\mathcal{F}^\nu$ ueber eine
-\emph{spektrale Poincar\'e-Ungleichung} mit der physikalischen
-Dissipation verknuepft wird. Die Herstellung einer solchen Ungleichung
-fuer Leray--Hopf-Loesungen ist ein offenes Problem.
+\begin{remark}[Rolle der Freie-Energie-Maschinerie -- ehrliche Einschaetzung]
+\label{rem:F-role}
+Satz~\ref{thm:anomalous} enthaelt zwei logisch unabhaengige Ergebnisse, die unterschieden werden sollten:
+\begin{enumerate}
+\item[(a)] \textbf{Quantitative Schranke (ND allein).}\;
+  Die Schranke $\varepsilon_* \ge m_0$ folgt direkt aus der Energiebilanz und Annahme~ND, \emph{ohne} das Funktional~$\mathcal{F}$ oder die Hypothesen (H1)--(H3) zu benoetigen. Dies ist die operative Abschaetzung.
+\item[(b)] \textbf{Strukturelle Attraktoreigenschaft ($\mathcal{F}$-Maschinerie).}\;
+  Die $\mathcal{F}$-Monotonie~\eqref{eq:F_decay} liefert eine \emph{qualitative} Erklaerung dafuer, warum das K41-Profil der Attraktorzustand der Kaskade ist, und sie kontrolliert die Entropie-Dissipation $D_\mathcal{F}^\nu$, die den spektralen Abstand von K41 misst. Diese strukturelle Einsicht erfordert (H1)--(H3), liefert aber \emph{keine} schaerfere quantitative Schranke als~(a) ohne eine zusaetzliche spektrale Poincar\'e-Ungleichung (Vermutung~\ref{conj:spectral-poincare}).
+\end{enumerate}
+Die Hypothesen (H1)--(H3) sind daher logisch nur fuer die strukturelle Attraktor-Interpretation~(b) notwendig, nicht fuer die quantitative Anomale-Dissipations-Schranke~(a). Ein vollstaendiges quantitatives Upgrade von~(b) bleibt ein offenes Problem.
 \end{remark}
 
 \begin{remark}[Gueltigkeitsbereich der Entropie-Kompatibilitaetshypothese]
@@ -1426,9 +1448,13 @@ legt nahe, dass Abweichungen von K41 als ausnutzbare Strategien eines
 Spielers verstanden werden koennen, wenn der andere eingeschraenkt ist.
 \end{remark}
 
-\begin{remark}[Wasserstein-Konvexitaet und Talagrand-Schranke]
+\begin{remark}[Gewichtete $\ell^2$-Stabilitaet aus der Hesse-Schranke]
 \label{rem:talagrand}
-Das Funktional $F[E]$ ist gleichmaessig konvex in der $\ell^2$-Wasserstein-Metrik auf dem Raum der Energiespektren, mit Konvexitaetskonstante $\lambda_F$, bestimmt durch den KL-Beitrag. Nach dem Satz von Otto--Villani zieht der K41-Minimierer $E^*$ alle zulaessigen Spektren mit der Rate $W_2(E, E^*) \leq \sqrt{2 F[E] / \lambda_F}$ an. Dies liefert eine Stabilitaetsgarantie unabhaengig von der Reynolds-Zahl und ergaenzt die DFC-Slack-Schranke (Proposition~\ref{prop:dfc-slack}).
+Das Funktional $\mathcal{F}[E]$ ist gleichmaessig konvex um den K41-Minimierer $E^*$ mit diagonaler Hesse-Matrix $D^2\mathcal{F}|_{E^*} = \mathrm{diag}(1/E_j^*)$. Eine direkte Taylor-Entwicklung (ohne Bezug auf Optimal-Transport-Theorie) liefert die gewichtete Stabilitaetsschranke
+\[
+  \sum_j \frac{(E_j - E_j^*)^2}{E_j^*} \;\le\; 2\,\mathcal{F}[E]
+\]
+fuer alle zulaessigen Spektren $E$ mit $E_j > 0$. Dies liefert eine Reynolds-Zahl-unabhaengige Stabilitaetsgarantie: Stoerungen des K41-Profils werden in der $\ell^2(1/E_j^*)$-Norm durch den Freie-Energie-Ueberschuss kontrolliert. Die Schranke ergaenzt die DFC-Slack-Abschaetzung (Proposition~\ref{prop:dfc-slack}) und folgt aus der elementaren Ungleichung $x\ln(x/y) - x + y \ge (x-y)^2/(2y)$ fuer $x, y > 0$.
 \end{remark}
 
 % ===================================================================
@@ -1572,13 +1598,18 @@ $\varphi_j$ nicht-ansteigend im Inertialbereich & Vorhersage & DFC2 \\
 % ===================================================================
 \section{Diskussion}\label{sec:discussion}
 
+Die simultane Minimierung ueber alle zulaessigen Closures ist keine tautologische Umformulierung von K41: Kolmogorovs urspruengliche Herleitung stuetzt sich auf Dimensionsanalyse, waehrend unser Satz zeigt, dass K41 der einzige Minimierer eines wohldefinierten Variationsproblems ist, was eine strukturelle Erklaerung fuer die Universalitaet liefert.
+
 \subsection{Bezug zur Onsager-Vermutung}
 
 Unser Satz~\ref{thm:anomalous} liefert einen \emph{variationellen} Zugang
 zur anomalen Dissipation, der komplementaer zum
 Konvex-Integrations-Programm~\cite{Isett18} ist. Waehrend Isetts Ergebnis
-spezifische dissipative Euler-Loesungen konstruiert, zeigt unser Ansatz,
-dass \emph{jede} Navier--Stokes-Loesung mit ausreichendem Forcing mit
+spezifische dissipative Euler-Loesungen konstruiert, und nachfolgende
+Arbeiten von Buckmaster und Vicol~\cite{BV19} die Nicht-Eindeutigkeit
+schwacher Loesungen der Navier--Stokes-Gleichungen via konvexer
+Integration etabliert haben, zeigt unser Ansatz, dass \emph{jede}
+Navier--Stokes-Loesung mit ausreichendem Forcing mit
 einer von Null weg beschraenkten Rate dissipieren muss -- eine Aussage
 ueber das generische Verhalten turbulenter Stroemungen und nicht ueber die
 Existenz exotischer schwacher Loesungen.
@@ -1615,10 +1646,19 @@ Die wesentlichen Einschraenkungen der vorliegenden Arbeit:
 \item \textbf{Konditionalitaet.}\; Satz~\ref{thm:anomalous} ist konditional
   auf eine Entropie-Kompatibilitaetshypothese (oder aequivalent auf
   DFC1--DFC2, die empirisch verifiziert, aber nicht aus den
-  Navier--Stokes-Gleichungen bewiesen sind). DFC3 (Besov-Regularitaet)
-  setzt $u \in L^3_t B^{1/3}_{3,\infty}$ voraus, was genau die
-  Onsager-Schwelle ist und fuer allgemeine Leray--Hopf-Loesungen nicht
-  bekannt ist.
+  Navier--Stokes-Gleichungen bewiesen sind). Die DFC3-Bedingung erfordert
+  eine \emph{quantitative Schranke} fuer den Kommutator-Rest
+  (Gl.~\eqref{eq:DFC3-concrete}), die garantiert ist, wenn
+  $u \in L^3_t B^{1/3}_{3,\infty}$. Entscheidend ist, dass DFC3
+  \emph{nicht} verlangt, dass die Loesung exakt an der Onsager-Schwelle
+  liegt: Jede Besov-Regularitaet $B^s_{3,\infty}$ mit $s < 1/3$ genuegt,
+  allerdings mit einer groesseren Konstante $C_{\mathrm{rem}}$, die fuer
+  $s \to 1/3$ divergiert. Insbesondere koennen Loesungen, die tatsaechlich
+  anomale Dissipation aufweisen (und daher die $B^{1/3}_{3,\infty}$
+  Energieerhaltung nicht erfuellen koennen, vgl.~\cite{CET94}), DFC3 mit
+  Regularitaet unterhalb der Onsager-Schwelle immer noch erfuellen. Ob die
+  benoetigte Besov-Schranke fuer allgemeine Leray--Hopf-Loesungen gilt,
+  bleibt offen.
 \item \textbf{Inertialbereichs-Idealisierung.}\; Das Funktional $\mathcal{F}$
   ist auf dem Inertialbereich $\mathcal{J}$ definiert und ignoriert den
   Forcing- und Dissipationsbereich. Randeffekte bei $j_{\mathrm{in}}$ und
@@ -1683,13 +1723,13 @@ Die Vorhersagen dieses Rahmenwerks koennen anhand von Daten direkter numerischer
 
 \item \textbf{Minimierervergleich:} Vergleiche das DNS-Spektrum $E_{\mathrm{DNS}}(k)$ mit der K41-Vorhersage $E^*(k) = C_K \varepsilon^{2/3} k^{-5/3}$ im Inertialbereich $k_f \ll k \ll k_\eta$.
 
-\item \textbf{Falsifikationskriterium:} Das Rahmenwerk ist falsifiziert, wenn $F[E_{\mathrm{DNS}}] < F[E^*]$ im Inertialbereich gilt, d.h.\ wenn das DNS-Spektrum eine niedrigere freie Energie als K41 erreicht. Dies wuerde anzeigen, dass K41 nicht der globale Minimierer von $F$ ist.
+\item \textbf{Falsifikationskriterium:} Da $\mathcal{F}[E^*] = 0$ konstruktionsbedingt gilt, kann das Funktional nicht durch $\mathcal{F}[E_{\mathrm{DNS}}] < 0$ falsifiziert werden. Stattdessen ist das Rahmenwerk falsifiziert, wenn die DFC-Bedingungen (DFC1--DFC2) bei hohem $R_\lambda$ \emph{verletzt} werden, wo die Theorie ihr Gelten vorhersagt, oder wenn $\mathcal{F}[E_{\mathrm{DNS}}]$ nicht mit steigendem $R_\lambda$ abnimmt (was darauf hindeuten wuerde, dass K41 nicht der asymptotische Attraktor ist).
 
 \item \textbf{Intermittenztest:} Berechne die Hesse-Eigenwerte $\lambda_j = \partial^2 F / \partial E_j^2$ am DNS-Spektrum. Negative Eigenwerte im Dissipationsbereich zeigen Instabilitaet des K41-Minimierers auf diesen Skalen an.
 \end{enumerate}
 
 \begin{remark}[DFC als energetische Stabilit\"atsklasse]\label{rem:dfc-stability}
-Die Downhill-Flux-Bedingung muss nicht als punktweises Axiom verifiziert werden, sondern als \emph{energetische Stabilit\"atsklasse}: F\"ur jede zul\"assige St\"orung $\delta E$, die die DFC verletzt, muss der Free-Energy-\"Uberschuss $\mathcal{F}[E^* + \delta E] - \mathcal{F}[E^*] > 0$ strikt positiv sein. Dies schw\"acht die Anforderung von "`DFC gilt \"uberall in der Inertialregion"' zu "`DFC-verletzende Konfigurationen sind energetisch instabil"' ab. \"Offentlich verf\"ugbare DNS-Datens\"atze (JHTDB, $\mathrm{Re}_\lambda \sim 200$) gen\"ugen f\"ur diesen Test, da es um relative Free-Energy-Differenzen geht, nicht um asymptotische Exponenten. Die Nicht-Eindeutigkeitsresultate von De~Lellis--Bru\'e \cite{DeLellisBrue2024} sind kein Hindernis, sondern \emph{st\"arken} die Falsifizierbarkeit: Falls nicht-eindeutige Leray--Hopf-L\"osungen existieren, selektiert die DFC die physikalisch realisierte.
+Die Downhill-Flux-Bedingung muss nicht als punktweises Axiom verifiziert werden, sondern als \emph{energetische Stabilit\"atsklasse}: F\"ur jede zul\"assige St\"orung $\delta E$, die die DFC verletzt, muss der Free-Energy-\"Uberschuss $\mathcal{F}[E^* + \delta E] - \mathcal{F}[E^*] > 0$ strikt positiv sein. Dies schw\"acht die Anforderung von "`DFC gilt \"uberall in der Inertialregion"' zu "`DFC-verletzende Konfigurationen sind energetisch instabil"' ab. \"Offentlich verf\"ugbare DNS-Datens\"atze (JHTDB, $\mathrm{Re}_\lambda \sim 200$) gen\"ugen f\"ur diesen Test, da es um relative Free-Energy-Differenzen geht, nicht um asymptotische Exponenten. Die Nicht-Eindeutigkeitsresultate von Albritton--Bru\'e--Colombo \cite{AlbrittonBrueColombo2022} sind kein Hindernis, sondern \emph{st\"arken} die Falsifizierbarkeit: Falls nicht-eindeutige Leray--Hopf-L\"osungen existieren, selektiert die DFC die physikalisch realisierte.
 \end{remark}
 
 \begin{remark}[Numerische Verifikation von Satz~\ref{thm:K41}]\label{rem:numerical-F}
@@ -1720,6 +1760,44 @@ DFC1 und DFC2 wurden am Sabra-Schalenmodell (L'vov et al., 1998) mit $N=22$ Scha
     Nebenbedingungen erfordert.
 \end{itemize}
 
+\subsection{Post-Zookeeper-Split: Paper A schuetzen, Paper B schaerfen}
+\label{subsec:zookeeper-turbulence-transfer}
+
+Der Zookeeper-Transfer klaert die Publikationsteilung.  Paper A sollte
+die unbedingte Variationsaussage bleiben: K41 ist unter den angegebenen
+Zulaessigkeitsannahmen der eindeutige Minimierer des skalenaufgeloesten
+Freie-Energie-Funktionals.  Es sollte keine Claims ueber anomale
+Dissipation, Onsager-Nicht-Eindeutigkeit oder physikalische
+Loesungsselektion aufnehmen.
+
+Auch hier ist der Post-Zookeeper-Import RFEP-v1.8-Normalformdisziplin,
+kein neues unbedingtes Turbulenztheorem.  Der CORE-Abschluss betrifft den
+Riemann-$C^{(2)}$/MS2-Schritt; Turbulenz muss seine eigenen Flux-,
+Defekt-, Approximations-, Gap- und Viskositaetsgrenzwerte beweisen.
+
+Paper B ist der richtige Ort fuer die Defekttheorie.  Seine
+Transferfelder sind:
+\begin{description}
+  \item[Operator/Form.] Shell-Flux- und Littlewood--Paley-
+  Energietransferoperatoren.
+  \item[Defekt.] Der DFC-Flussdefekt, das anomalous-dissipation measure
+  und die Abweichung von der K41-Steigung.
+  \item[Approximation.] Shell-Modelle, DNS, Littlewood--Paley-Cutoffs und
+  Viskositaetsfamilien $\nu\to0$.
+  \item[Gap.] Der Hessian-Gap des K41-Minimierers und der spektrale
+  Poincare/SP-TU-Gap.
+  \item[Grenzuebergang.] Shell/DNS zur PDE, Viskositaet gegen null und
+  Langzeitmittel zur Inertial-Range-Aussage.
+\end{description}
+
+Das konkreteste Upgrade ist, DFC1 shell-gemittelt ueber gleitende
+Skalenfenster zu formulieren.  Dann kann Kolmogorovs $4/5$-Gesetz
+zusammen mit der lokalen Energiebilanz von Duchon--Robert und Eyink als
+exakter Energiefluss-Anker fuer Paper B dienen.  Die Resultate von
+Brue--De Lellis und Koautoren zur anomalen Dissipation liefern die
+Stresstest-Seite: Der Defekt sollte als Mass oder Distribution formuliert
+werden, kompatibel mit bekannten Vanishing-Viscosity-Szenarien.
+
 \subsection{Offene Richtungen}
 
 \begin{remark}[Energiekaskade als Minimax-Spiel]
@@ -1734,17 +1812,29 @@ Englands Prinzip der dissipativen Adaptation legt nahe, dass getriebene Systeme 
 Die Positivitaet $\Phi \geq 0$ beschraenkt die Kumulantenhierarchie der Energiefluktuationen: $|\kappa_n(E_j)| \leq n! \, \sigma^2 / (2\alpha^{n-2})$. Dies eroeffnet einen direkten Zugang zu den Intermittenz-Exponenten $\zeta_p$ ueber die Hesse-Fluktuationen von $F[E]$ um den K41-Minimierer.
 \end{remark}
 
-\begin{remark}[Koalitionsbruch-Modell]
-Die Energiekaskade laesst eine koalitionstheoretische Interpretation zu: Jede Schale $j$ bildet eine ,,Koalition`` mit benachbarten Schalen. Das K41-Spektrum entspricht dem Kern des kooperativen Spiels; intermittente Bursts repraesentieren transiente Koalitionsbrueche, bei denen einzelne Schalen voruebergehend vom kooperativen Gleichgewicht abweichen.
-\end{remark}
+% [Entfernt: Koalitionsbruch-Modell -- spekulative Metapher ohne formalen Inhalt]
 
-% [Entfernt: Skalenabhaengige-Kopplung-Analogie -- zu spekulativ]
+% [Entfernt: Skalenabhaengige-Kopplung-Analogie -- zu spekulativ fuer diesen Kontext]
 
 \begin{remark}[Shell-Kaskade als Dobrushin-Einflussmatrix]
 \label{rem:dobrushin-cascade}
 Der schalenweise Energietransfer im Inertialbereich definiert eine natuerliche Dobrushin-Einflussmatrix $C = (c_{jk})$, wobei $c_{jk}$ den Einfluss der Schale $k$ auf die Schale $j$ ueber den nichtlinearen Transfer $T_j$ quantifiziert. Fuer die K41-Kaskade ergibt die Naechste-Nachbar-Dominanz $c_{j,j\pm 1} = O(1)$ und $c_{jk} = O(2^{-|j-k|})$ fuer $|j-k| > 1$. Der Spektralradius $\rho(C) < 1$ (Dobrushin-Eindeutigkeit) ist aequivalent zur Stabilitaet des K41-Minimierers: Kleine Stoerungen von $E^*$ an Schale $k$ klingen exponentiell in $|j-k|$ ab.
 
 Diese Perspektive, importiert aus dem Yang--Mills-Begleitpaper, in dem die Dobrushin-Einflussmatrix die Gitter-Massenluecke kontrolliert, offenbart einen strukturellen Isomorphismus: Die Inertialbereichs-Kaskade ist ein ,,eindimensionales Gittersystem`` mit exponentiell abklingenden Wechselwirkungen, und K41 ist sein eindeutiger Gibbs-Zustand.
+\end{remark}
+
+\begin{remark}[DFC als defektive Monotonie mit kontrollierten Defekttermen]
+\label{rem:dfc-defective-monotonicity}
+Die Downhill-Flussbedingung laesst sich als \emph{defektive Monotonie}-Aussage verstehen, parallel zum defektiven Poincar\'{e}/LSI-Ansatz im Yang--Mills-Begleitpaper~\cite{Geiger2026-YM}:
+\begin{itemize}
+\item \emph{Idealfall (DFC1+DFC2+DFC3):} Das Freie-Energie-Funktional $F[E]$ ist streng monoton fallend entlang der Inertialkaskade. K41 ist der eindeutige Minimierer.
+\item \emph{Defektiver Fall:} Intermittenz (Bottleneck-Effekt, lokale Rueckstreuung) fuehrt Defektterme $\delta_j$ an jeder Schale ein:
+\[
+F[E_{j+1}] \;\leq\; F[E_j] - \Delta_j + \delta_j, \qquad \sum_j \delta_j < \infty.
+\]
+Die Summierbarkeit der Defekte stellt sicher, dass die Kaskade trotz lokaler Verletzungen ,,asymptotisch abwaerts'' bleibt. Dies ist strukturell identisch zum defektiven Dobrushin-Kriterium in Yang--Mills, wo der exponentiell unterdrueckte Defekt $e^{-c\sqrt{\beta}}$ (Proposition~3.4 von~\cite{Geiger2026-YM}) dieselbe Rolle spielt wie die summierbaren $\delta_j$ hier.
+\end{itemize}
+Die Formulierung als defektive Monotonie macht die DFC \emph{numerisch testbar}: Man messe $\Delta_j$ und $\delta_j$ an jeder Schale in DNS-Daten und verifiziere, dass $\sum \delta_j / \sum \Delta_j \ll 1$. Die DFC-mit-Spielraum-Variante (Ersetzung strikter Monotonie durch asymptotische Monotonie) ist die natuerliche Aussage fuer physikalische Turbulenz.
 \end{remark}
 
 \begin{remark}[Energiekaskade als Minimax ueber Inertialmannigfaltigkeiten]
@@ -1764,53 +1854,11 @@ der Minimax-Wert angenommen wird und der Sattelpunkt mit dem K41-Minimierer
 von~$F[E]$ uebereinstimmt.
 \end{remark}
 
-\begin{remark}[Wirbelroehren als verknotete Quasiteilchen der Kaskade]
-\label{rem:vortex-tubes}
-Konzentrierte Wirbelroehren tragen Helizitaet
-$\mathcal{H} = \int \mathbf{u} \cdot \boldsymbol{\omega}\, dx$~\cite{Moffatt69},
-eine topologische Invariante idealer Stroemungen, die den Verknotungsgrad des
-Wirbelfeldes misst. Verknotung erhoeht die lokale Dehnung und Kruemmung und
-verstaerkt dadurch den nichtlinearen Transfer~$T_j$ an den betroffenen Schalen.
-Dies motiviert eine topologische Erweiterung des Freie-Energie-Funktionals:
-\[
-  F_\lambda[E, \mathcal{K}] \;=\; F[E] \;+\; \lambda\, \mathcal{E}[\text{Knotenkomplexitaet}],
-\]
-wobei $\mathcal{E}[\cdot]$ Konfigurationen mit hoher topologischer Komplexitaet
-bestraft. Ob das K41-Spektrum der globale Minimierer von $F_\lambda$ bleibt --
-oder ob topologische Korrekturen den Inertialbereichs-Exponenten systematisch
-verschieben -- ist eine offene Frage, deren Loesung das variationelle Framework
-mit der Geometrie kohaerenter Strukturen verbinden wuerde.
-\end{remark}
+% [Entfernt: Wirbelroehren als Quasiteilchen -- spekulativ, kein formales Ergebnis]
 
-\begin{remark}[Entropie-Kompatibilitaet als Abwaertsbewegung im Knotenraum]
-\label{rem:downhill-knot}
-Die Annahme~\eqref{eq:NL} (entropiekompatible Kaskade) laesst sich geometrisch
-ueber Wirbelrekonnexionen~\cite{Moffatt69, ArnoldKhesin98} interpretieren.
-Rekonnexionsereignisse reduzieren die topologische Komplexitaet (Kreuzungszahl,
-Writhe) der Wirbelroehren und wandeln organisierte kinetische Energie in Waerme
-um. Jede Rekonnexion ist daher ein dissipativer Schritt, der sowohl die
-Knotenkomplexitaet als auch die freie Energie~$F[E]$ senkt: Die Kaskade ist
-,,bergab`` nicht nur im Energieraum, sondern auch im Knotenraum. Dies liefert
-eine mikroskopische, geometrische -- anstatt rein probabilistische --
-Begruendung dafuer, warum physikalische turbulente Kaskaden die Downhill Flux
-Condition~(DFC) erfuellen.
-\end{remark}
+% [Entfernt: Abwaerts im Knotenraum -- geometrische Metapher ohne rigorosen Inhalt]
 
-\begin{remark}[Helizitaets-Kaskade-Bruecke zur Navier--Stokes-Regularitaet]
-\label{rem:helicity-cascade-bridge}
-Die Downhill-im-Knotenraum-Interpretation der Kaskade
-(Bemerkung~\ref{rem:downhill-knot}) hat ein direktes Gegenstueck im
-Navier--Stokes-Begleitpaper: Der globale Attraktor $\mathcal{A}$
-zerfaellt in Helizitaets-Schichten $\mathcal{A}_h$, und Uebergaenge
-zwischen Schichten sind dissipativ (Rekonnexion senkt Helizitaet). Im
-Turbulenzkontext bedeutet dies, dass die DFC nicht nur eine empirische
-Beobachtung ist, sondern die topologische Struktur des Attraktors
-widerspiegelt: Die Kaskade ist bergab, \emph{weil} die
-Helizitaets-Stratifizierung des Attraktors sie dazu zwingt. Jede
-Aufloesung der DFC im Turbulenz-Setting schraenkt daher gleichzeitig
-die fuer das NS-Regularitaetsproblem relevante Attraktorgeometrie
-(Assumption~G dort) ein.
-\end{remark}
+% [Entfernt: Helizitaets-Kaskade-Bruecke -- haengt von entfernter Knotenraum-Bemerkung ab]
 
 \begin{remark}[Dobrushin-Eindeutigkeit auf der Inertialmannigfaltigkeit]
 \label{rem:dobrushin-inertial}
@@ -1985,11 +2033,41 @@ L.~De~Rosa, T.\,D.~Drivas und M.~Inversi,
 J.~Math.\ Fluid Mech.\ \textbf{26} (2024), Art.~62.
 \href{https://arxiv.org/abs/2301.09603}{arXiv:2301.09603}.
 
-\bibitem{DeLellisBrue2024}
-C.~De~Lellis und E.~Bru\'e, \textit{Non-uniqueness of Leray--Hopf solutions of the forced Navier--Stokes equations}, Ann.~Math., 2024.
+\bibitem{AlbrittonBrueColombo2022}
+D.~Albritton, E.~Bru\'e und M.~Colombo,
+\emph{Non-uniqueness of Leray solutions of the forced Navier--Stokes equations},
+Ann.\ of Math.\ \textbf{196} (2022), 415--455.
 
 \bibitem{Geiger2026-YM}
 L.~Geiger, \textit{Volume-Independent Spectral Gap for Strong-Coupling Lattice Gauge Theory via Poincar\'e-Dobrushin Machinery}, Preprint, 2026.
+
+\bibitem{SaddoughiVeeravalli94}
+S.\,G.~Saddoughi und S.\,V.~Veeravalli,
+\emph{Local isotropy in turbulent boundary layers at high Reynolds number},
+J.~Fluid Mech.\ \textbf{268} (1994), 333--372.
+
+\bibitem{JHTDB08}
+Y.~Li, E.~Perlman, M.~Wan, Y.~Yang, C.~Meneveau, R.~Burns, S.~Chen,
+A.~Szalay und G.~Eyink,
+\emph{A public turbulence database cluster and applications to study
+Lagrangian evolution of velocity increments in turbulence},
+J.~Turbulence \textbf{9} (2008), Nr.~31.
+
+\bibitem{Lvov98}
+V.\,S.~L'vov, E.~Podivilov, A.~Pomyalov, I.~Procaccia
+und D.~Vandembroucq,
+\emph{Improved shell model of turbulence},
+Phys.\ Rev.\ E \textbf{58} (1998), 1811--1822.
+
+\bibitem{BV19}
+T.~Buckmaster und V.~Vicol,
+\emph{Nonuniqueness of weak solutions to the Navier--Stokes equation},
+Ann.\ of Math.\ \textbf{189} (2019), 101--144.
+
+\bibitem{England2015}
+J.\,L.~England,
+\emph{Dissipative adaptation in driven self-assembly},
+Nature Nanotechnology \textbf{10} (2015), 919--923.
 
 \end{thebibliography}
 

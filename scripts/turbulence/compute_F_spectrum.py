@@ -19,13 +19,12 @@ DFC2: Spektrale Steilheit -- d(ln E)/d(ln k) <= -5/3 (K41-Schwelle)
 Autor: Lukas Geiger (Skript erstellt per Claude, 2026)
 """
 
-from pathlib import Path
-
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import warnings
+from pathlib import Path
 warnings.filterwarnings('ignore')
 
 # ---------------------------------------------------------------------------
@@ -381,7 +380,7 @@ ax2.text(0.98, 0.95, r'$\mathcal{F}[E] \geq 0$, Gleichheit nur bei $E = E^*$ (K4
          bbox=dict(boxstyle='round,pad=0.3', facecolor='lightyellow', edgecolor='gray'))
 
 plt.tight_layout()
-outfile = Path(__file__).resolve().with_name("compute_F_spectrum.png")
+outfile = Path(__file__).with_name("compute_F_spectrum.png")
 plt.savefig(outfile, dpi=150, bbox_inches='tight')
 print()
 print(f"Plot gespeichert: {outfile}")

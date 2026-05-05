@@ -34,7 +34,7 @@ Derive Pattern A + DS1–DS3 from Spectrum Duality. These instantiate the Dissip
 
 | Paper | Version | Status | Open Problem | Concept-DOI |
 |-------|---------|--------|--------------|-------------|
-| [**Turbulence**](fst-physics/turbulence/) | v1.3 | Journal-ready | DFC1 empirical (only input) | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
+| [**Turbulence**](fst-physics/turbulence/) | v1.4 candidate | Journal-ready | DFC1 empirical (only input) | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
 | [**Yang–Mills**](fst-physics/yang-mills/) | v2.2 candidate | Conditional | Analytical proof of λ < 0 | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
 | [**Navier–Stokes**](fst-physics/navier-stokes/) | v2.2 candidate | Conditional | Assumption G2 (projection regularity) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
 | [**NS Log-Distance**](fst-physics/navier-stokes/) | v1.3 | Proof of Life | TLL for 3D NS analytically open | [10.5281/zenodo.19056807](https://doi.org/10.5281/zenodo.19056807) |
@@ -177,6 +177,7 @@ These stand independently of FST. The RFEP was abstracted from them; they are no
 | Script | Paper | Description |
 |--------|-------|-------------|
 | `scripts/turbulence/compute_F_spectrum.py` | Turbulence | K41 as unique minimiser of F[E]; strict convexity test |
+| `scripts/turbulence/compute_goy_shell_dfc.py` | Turbulence | Sabra/GOY shell-model DFC1/DFC2 verification and result plot |
 | `scripts/yang-mills/compute_dobrushin_su2.py` | Yang-Mills | SU(2) lattice Dobrushin influence scan and gap plot |
 | `scripts/yang-mills/compute_birkhoff_rg.py` | Yang-Mills | Birkhoff contraction scan for hierarchical RG steps |
 | `scripts/navier-stokes/compute_ds3_lorenz.py` | Navier-Stokes | DS3 stress test on Lorenz attractor; TV saturation |
