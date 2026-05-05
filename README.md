@@ -176,6 +176,7 @@ These stand independently of FST. The RFEP was abstracted from them; they are no
 
 | Script | Paper | Description |
 |--------|-------|-------------|
+| `masters/zookeeper/scripts/` | Zookeeper | CCM microcluster-closure reproducibility pipeline; compact outputs in `masters/zookeeper/results/` |
 | `scripts/turbulence/compute_F_spectrum.py` | Turbulence | K41 as unique minimiser of F[E]; strict convexity test |
 | `scripts/turbulence/compute_goy_shell_dfc.py` | Turbulence | Sabra/GOY shell-model DFC1/DFC2 verification and result plot |
 | `scripts/yang-mills/compute_dobrushin_su2.py` | Yang-Mills | SU(2) lattice Dobrushin influence scan and gap plot |
