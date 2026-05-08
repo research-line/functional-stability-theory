@@ -35,7 +35,7 @@ Derive Pattern A + DS1–DS3 from Spectrum Duality. These instantiate the Dissip
 | Paper | Version | Status | Open Problem | Concept-DOI |
 |-------|---------|--------|--------------|-------------|
 | [**Turbulence**](fst-physics/turbulence/) | v1.4 candidate | Journal-ready | DFC1 empirical (only input) | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
-| [**Yang–Mills**](fst-physics/yang-mills/) | v2.2 candidate | Conditional | Analytical proof of λ < 0 | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
+| [**Yang–Mills**](fst-physics/yang-mills/) | v2.2 | Conditional | Strong-coupling lattice gap; continuum transfer conditional | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
 | [**Navier–Stokes**](fst-physics/navier-stokes/) | v2.2 candidate | Conditional | Assumption G2 (projection regularity) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
 | [**NS Log-Distance**](fst-physics/navier-stokes/) | v1.3 | Proof of Life | TLL for 3D NS analytically open | [10.5281/zenodo.19056807](https://doi.org/10.5281/zenodo.19056807) |
 

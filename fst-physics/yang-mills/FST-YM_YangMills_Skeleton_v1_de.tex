@@ -7,15 +7,30 @@
 \usepackage[shortlabels]{enumitem}
 \usepackage{xcolor}
 \usepackage{geometry}
-\geometry{a4paper, margin=2.5cm}
-\usepackage{hyperref}
+\geometry{a4paper, margin=2.45cm}
+\usepackage{array,booktabs,tabularx}
+\usepackage{microtype}
+\usepackage[unicode=true,hyperfootnotes=false]{hyperref}
+
+\setlength{\emergencystretch}{6em}
+\raggedbottom
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\renewcommand{\abstractname}{Zusammenfassung}
+\renewcommand{\contentsname}{Inhaltsverzeichnis}
 
 \hypersetup{
     colorlinks=true,
     linkcolor=blue!70!black,
     citecolor=green!50!black,
-    urlcolor=blue!70!black
+    urlcolor=blue!70!black,
+    bookmarksnumbered=true,
+    pdftitle={Volume-Independent Spectral Gap for Strong-Coupling Lattice Gauge Theory via Poincare-Dobrushin Machinery},
+    pdfauthor={Lukas Geiger},
+    pdfsubject={Yang-Mills-Massenluecke und Gittereichtheorie},
+    pdfkeywords={Yang-Mills, Massenluecke, Poincare-Ungleichung, Dobrushin-Eindeutigkeit, Gittereichtheorie, Reflexionspositivitaet}
 }
+\renewcommand*{\HyperDestNameFilter}[1]{de.#1}
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
@@ -31,10 +46,10 @@
 
 \title{\textbf{Volume-Independent Spectral Gap for Strong-Coupling Lattice Gauge Theory\\ via Poincar\'e--Dobrushin Machinery}}
 \author{Lukas Geiger\\
-\small Unabhaengiger Forscher, Bernau im Schwarzwald, Deutschland\\
+\small Unabhaengiger Forscher, Bernau, Deutschland\\
 \small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}%
 \thanks{KI-Werkzeuge (Claude von Anthropic) wurden für mathematische Formalisierung, Literaturverifikation und redaktionelle Verfeinerung eingesetzt. Alle mathematischen Inhalte wurden vom Autor entwickelt, verifiziert und freigegeben.}}
-\date{Maerz 2026}
+\date{Mai 2026}
 
 \begin{document}
 \maketitle
@@ -43,8 +58,12 @@
 \textbf{Keywords:} Yang--Mills mass gap, Poincar\'e inequality, Dobrushin uniqueness, transfer operator, spectral gap, lattice gauge theory, reflection positivity.
 
 \begin{abstract}
-Wir weisen die Existenz einer volumenunabhaengigen Massenluecke $\Delta > 0$ fuer die Wilson-Gittereichtheorie mit kompakter einfacher Eichgruppe $G$ im Strong-Coupling-Regime ($\beta < \beta_0$) nach. Fuer die Kontinuumstheorie auf $\mathbb{R}^4$ zeigen wir, dass die Massenluecke unter drei Annahmen (CL1--CL3) bezueglich der Existenz und der Clustering-Eigenschaften des Osterwalder--Schrader-Kontinuumslimes bestehen bleibt. Unser Ansatz konstruiert ein renormiertes Freie-Energie-Funktional $\mathcal{F}[\mu]$ ueber dem gitterregulierten Eichfeldmass $\mu$ und beweist dessen strikte Konvexitaet. Das Argument umgeht direkte Operatorabschaetzungen des Hamiltonians, indem es die Massenluecke auf eine Poincar\'e-Ungleichung fuer das Gitter-Eichfeldmass zurueckfuehrt: Das Holley--Stroock Bounded-Perturbation-Lemma kontrolliert die bedingten Einzel-Link-Masse, und das Dobrushin--Zegarlinski-Kriterium stellt sicher, dass die resultierende Spektralluecke volumenunabhaengig ist. Ueber den Transferoperator und Reflexionspositivitaet uebertraegt sich diese Poincar\'e-Ungleichung in exponentielles Clustering mit volumenunabhaengiger Rate.
+Wir weisen die Existenz einer volumenunabhaengigen Massenluecke $\Delta > 0$ fuer die Wilson-Gittereichtheorie mit kompakter einfacher Eichgruppe $G$ im Strong-Coupling-Regime ($\beta < \beta_0$) nach. Fuer die Kontinuumstheorie auf $\mathbb{R}^4$ halten wir den bedingten Osterwalder--Schrader-Rekonstruktionsschritt fest: exponentielles Clustering mit uniformer physikalischer Normierung wuerde eine Kontinuums-Massenluecke implizieren. Unser Ansatz konstruiert ein renormiertes Freie-Energie-Funktional $\mathcal{F}[\mu]$ ueber dem gitterregulierten Eichfeldmass $\mu$ und beweist dessen strikte Konvexitaet in dem Regime, in dem die Dobrushin--Zegarlinski-Abschaetzung greift. Das Argument umgeht direkte Operatorabschaetzungen des Hamiltonians, indem es die Gitter-Massenluecke auf eine Poincar\'e-Ungleichung fuer das Gitter-Eichfeldmass zurueckfuehrt: Das Holley--Stroock Bounded-Perturbation-Lemma kontrolliert die bedingten Einzel-Link-Masse, und das Dobrushin--Zegarlinski-Kriterium stellt sicher, dass die resultierende Spektralluecke volumenunabhaengig ist. Ueber den Transferoperator und Reflexionspositivitaet uebertraegt sich diese Poincar\'e-Ungleichung in exponentielles Clustering mit volumenunabhaengiger Rate.
 \end{abstract}
+
+\clearpage
+\tableofcontents
+\clearpage
 
 % ======================================================================
 \section{Introduction}
@@ -128,7 +147,7 @@ The functional $\mathcal{F}[\mu]$ defined in \eqref{eq:free-energy} is strictly 
 The energy term $\mu \mapsto \langle S_W \rangle_\mu$ is linear and hence convex. The entropy term $\mu \mapsto \int \log(d\mu/d\lambda)\, d\mu$ is strictly convex, as it equals $D_{\mathrm{KL}}(\mu \| \lambda)$ up to an additive constant. The strict convexity of the KL divergence is a standard result following from the strict convexity of $x \mapsto x \log x$ on $(0, \infty)$; see e.g.\ \cite{CoverThomas2006}, Theorem~2.7.2. The sum of a linear functional and a strictly convex functional is strictly convex.
 \end{proof}
 
-\subsection{The Hessian of $\mathcal{F}$ and the Spectral Bound}
+\subsection{The Hessian of \texorpdfstring{$\mathcal{F}$}{F} and the Spectral Bound}
 
 To connect the curvature of $\mathcal{F}$ at its minimum to the mass gap, we study the second variation of $\mathcal{F}$ around the equilibrium measure $\mu_\Lambda$.
 
@@ -150,12 +169,14 @@ Die Poincar\'e-Ungleichungskonstante $\kappa$ (oder aequivalent die logarithmisc
 \end{remark}
 
 \begin{remark}[Poincar\'e-Ungleichung vs.\ Log-Sobolev-Ungleichung]\label{rem:pi-vs-lsi}
+\begin{sloppypar}
 In diesem Paper treten zwei funktionale Ungleichungen auf:
 \begin{enumerate}[(i)]
 \item Die \textbf{Poincar\'e-Ungleichung (PI)} besagt $\mathrm{Var}_\mu(f) \leq \kappa^{-1}\,\mathcal{E}(f,f)$; aequivalent ist $\kappa$ die Spektralluecke des Generators. PI kontrolliert die \emph{Rate des Varianzzerfalls} (polynomiell in der Zeit) unter der zugehoerigen Markov-Halbgruppe.
 \item Die \textbf{Log-Sobolev-Ungleichung (LSI)} besagt $\mathrm{Ent}_\mu(f^2) \leq (2/\alpha)\,\mathcal{E}(f,f)$; die Konstante $\alpha$ kontrolliert den \emph{exponentiellen Zerfall der relativen Entropie} (Hyperkontraktivitaet).
 \end{enumerate}
 Die Hierarchie ist strikt: LSI mit Konstante $\alpha$ impliziert PI mit Konstante $\kappa \geq \alpha$ (Rothaus~\cite{Rothaus1985}), aber PI impliziert \emph{nicht} LSI im Allgemeinen (Gegenbeispiele existieren auf Massen mit schweren Schwänzen). In diesem Paper etablieren die Kernresultate (Theorem~\ref{thm:lattice-gap}, Schritte~1--2) eine \textbf{Poincar\'e-Ungleichung}, keine Log-Sobolev-Ungleichung. Die LSI-Terminologie erscheint in der Diskussion des Bauerschmidt--Bodineau--Dagallier-Programms (Bemerkung~\ref{rem:bbd-polchinski}) und im Kingman--Ljapunow-Framework (Abschnitt~\ref{sec:gamma-rg}), wo die staerkere LSI bessere quantitative Schranken liefern wuerde, aber fuer die Massenluecken-Schlussfolgerung nicht erforderlich ist.
+\end{sloppypar}
 \end{remark}
 
 % ======================================================================
@@ -364,7 +385,25 @@ Wir wenden~\eqref{eq:corr-decay-martinelli} auf eichinvariante \emph{lokale} Zei
     \bigl|\langle \mathcal{O}_1(0)\,\mathcal{O}_2(t)\rangle_{\mu_\Lambda}^{\mathrm{conn}}\bigr|
     \leq C\,e^{-\kappa_*\,t}\,\|\mathcal{O}_1\|_{L^2}\,\|\mathcal{O}_2\|_{L^2},
 \]
-mit einer Konstante $C$ unabhaengig von~$|\Lambda|$ (hier ist $C = C_1\,|A_1|\,|A_2|\,(\|\mathcal{O}_1\|_\infty/\|\mathcal{O}_1\|_{L^2})\,(\|\mathcal{O}_2\|_\infty/\|\mathcal{O}_2\|_{L^2})$, was fuer lokale Observablen mit $|A_i| = O(1)$ von der Ordnung $O(1)$ ist). Dieser exponentielle Zerfall in euklidischer Zeit uebersetzt sich in eine Spektralluecke des normierten Markov-Operators~$P$ (der $\lambda_0(P) = 1$ erfuellt und dem Verhaeltnis $\lambda_1(\hat{T})/\lambda_0(\hat{T})$ der Transferoperator-Eigenwerte entspricht): Schreibt man $\langle \mathcal{O}_1(0)\,\mathcal{O}_2(t)\rangle^{\mathrm{conn}} = \langle f, P^t g\rangle_{L^2(\pi)}$, wobei $f, g$ die mittelwertfreien Observablen sind, so impliziert die exponentielle Schranke $\|P^t f\|_{L^2(\pi)} \leq C'\,e^{-\kappa_*\,t}\,\|f\|_{L^2(\pi)}$ fuer alle~$t$, also $\lambda_1(P) \leq \inf_t (C')^{1/t}\,e^{-\kappa_*} = e^{-\kappa_*} < 1$ (da $(C')^{1/t} \to 1$ fuer $t \to \infty$). Diese Schranke gilt fuer alle lokalen eichinvarianten $f$; da lokale Funktionen in $L^2(\pi)$ dicht liegen (nach dem Peter--Weyl-Satz auf $G$) und $P$ ein beschraenkter Operator ist, uebertraegt sich die Spektralschranke auf ganz~$L^2(\pi)$.
+mit einer Konstante $C$ unabhaengig von~$|\Lambda|$.
+Man kann
+\[
+  C =
+  C_1 |A_1| |A_2|
+  \frac{\|\mathcal{O}_1\|_\infty}{\|\mathcal{O}_1\|_{L^2}}
+  \frac{\|\mathcal{O}_2\|_\infty}{\|\mathcal{O}_2\|_{L^2}}
+\]
+waehlen; fuer lokale Observablen mit $|A_i| = O(1)$ ist dies von Ordnung
+$O(1)$. Dieser exponentielle Zerfall in euklidischer Zeit uebersetzt sich in
+eine Spektralluecke des normierten Markov-Operators~$P$. Der Operator erfuellt
+$\lambda_0(P) = 1$ und entspricht dem Transferoperator-Eigenwertverhaeltnis
+$\lambda_1(\hat{T})/\lambda_0(\hat{T})$. Schreibt man
+$\langle \mathcal{O}_1(0)\,\mathcal{O}_2(t)\rangle^{\mathrm{conn}}
+= \langle f, P^t g\rangle_{L^2(\pi)}$, so impliziert die exponentielle
+Schranke $\|P^t f\|_{L^2(\pi)} \leq C'e^{-\kappa_*t}\|f\|_{L^2(\pi)}$.
+Also gilt $\lambda_1(P) \leq \inf_t (C')^{1/t}e^{-\kappa_*}
+= e^{-\kappa_*} < 1$. Diese Schranke uebertraegt sich durch Dichte lokaler
+Funktionen und die Kontraktionseigenschaft von~$P$ auf ganz~$L^2(\pi)$.
 
 Die Gitter-Massenluecke ist daher
 \begin{equation}
@@ -447,7 +486,7 @@ Monte-Carlo-Simulation der 2D SU(2)-Gittereichtheorie (Heatbath-Updates, $L=4$) 
 
 \begin{remark}[Birkhoff-Kontraktion entlang der RG-Kaskade]
 \label{rem:birkhoff-numerics}
-Der Birkhoff-projektive Kontraktionskoeffizient $\tau_B(R_k)$ wurde fuer die SU(2)-Transfermatrix ueber $K=6$ RG-Stufen und $\beta \in \{1, 2, 4, 6, 8, 10, 15, 20\}$ berechnet. Fuer $\beta \leq 6$ gilt $\tau_B(R_k) < 1$ \emph{uniform} ueber alle Skalen, was Proposition~\ref{prop:polynomial-lsi} direkt bestaetigt. Fuer $\beta \geq 8$ naehern sich einzelne $\tau_B(R_k)$ dem Wert~1 auf der groebsten Skala, aber der Kingman-Lyapunov-Exponent $\lambda = \langle \log \tau_B \rangle$ bleibt strikt negativ ($\lambda \approx -0{,}18$ bei $\beta=8$, $\lambda \approx -0{,}04$ bei $\beta=10$). Dies bestaetigt, dass der subadditive Ergodensatz (Bemerkung~\ref{rem:gronwall-kingman}) die Massenluecke auch ohne uniforme Birkhoff-Schranken sichert. Skript: \texttt{compute\_birkhoff\_rg.py}.
+Der Birkhoff-projektive Kontraktionskoeffizient $\tau_B(R_k)$ wurde fuer die SU(2)-Transfermatrix ueber $K=6$ RG-Stufen und $\beta \in \{1, 2, 4, 6, 8, 10, 15, 20\}$ berechnet. Fuer $\beta \leq 6$ gilt $\tau_B(R_k) < 1$ \emph{uniform} ueber alle Skalen, konsistent mit Proposition~\ref{prop:polynomial-lsi} in dieser Toy-Diskretisierung. Fuer $\beta \geq 8$ naehern sich einzelne $\tau_B(R_k)$ dem Wert~1 auf der groebsten Skala, aber die Kingman-Lyapunov-Diagnostik $\lambda = \langle \log \tau_B \rangle$ bleibt auf dem getesteten Gitter negativ ($\lambda \approx -0{,}18$ bei $\beta=8$, $\lambda \approx -0{,}04$ bei $\beta=10$). Dies stuetzt die Suche nach einem summierbaren-Defekt-RG-Kriterium, beweist aber ohne uniforme Summierbarkeits- oder Gap-Transport-Abschaetzung keine Massenluecken-Persistenz. Skript: \texttt{compute\_birkhoff\_rg.py}.
 \end{remark}
 
 % ======================================================================
@@ -679,15 +718,12 @@ Die Transferfelder sind:
 \end{description}
 
 Das Beweisprogramm sollte deshalb lauten:
-\[
-  \text{finite-volume Poincare/LSI}
-  \Longrightarrow
-  \text{infinite-volume lattice mass gap}
-  \Longrightarrow
-  \text{Wilson area law}
-  \Longrightarrow
-  \text{conditional continuum transfer}.
-\]
+\begin{align*}
+  &\text{finite-volume Poincare/LSI}\\
+  &\Longrightarrow \text{infinite-volume lattice mass gap}\\
+  &\Longrightarrow \text{Wilson area law}\\
+  &\Longrightarrow \text{conditional continuum transfer}.
+\end{align*}
 Die Zerlegung von U(N) nach SU(N) ist hier besonders nuetzlich: Das
 U(1)-Feld kann als Environment behandelt werden, waehrend das
 SU(N)-Marginal den nichtabelschen Gap traegt.  Nach dieser Reorganisation
@@ -697,37 +733,36 @@ transportiert.
 
 \subsection*{Beweisstatus-\"Ubersicht}
 
-\begin{center}
-\begin{tabular}{|l|l|l|}
-\hline
+\begin{table}[htbp]
+\centering
+\small
+\caption{Beweisstatus-Uebersicht}
+\label{tab:proof-status}
+\begin{tabularx}{\textwidth}{@{}L{4.0cm}L{3.0cm}Y@{}}
+\toprule
 \textbf{Komponente} & \textbf{Status} & \textbf{Referenz} \\
-\hline
-\hline
-\multicolumn{3}{|l|}{\textit{Bewiesen (unbedingt):}} \\
-\hline
+\midrule
+\multicolumn{3}{@{}l}{\textit{Bewiesen (unbedingt):}} \\
 Holley--Stroock PI ($\beta < \beta_0$) & Theorem & Thm.~\ref{thm:lattice-gap}, Schritt~1 \\
 Reflexionspositivit\"at (alle $\beta$) & Lemma & Lem.~\ref{lem:reflection-positivity} \\
 Dobrushin--Zegarlinski ($\beta < \beta_0$) & Theorem & Thm.~\ref{thm:lattice-gap}, Schritt~2 \\
-\hline
-\multicolumn{3}{|l|}{\textit{Konditional (unter expliziten Annahmen):}} \\
-\hline
+\midrule
+\multicolumn{3}{@{}l}{\textit{Konditional (unter expliziten Annahmen):}} \\
 Massenl\"ucke (CL1+CL2'+CL3) & Kond.\ Theorem & Thm.~\ref{thm:conditional-gap} \\
 Polynomiale LSI-Skalierung & Kond.\ Prop. & Prop.~\ref{prop:polynomial-lsi} \\
-Kingman-Massenl\"ucke ($\lambda < 0$) & Korollar & Kor.~\ref{cor:kingman-gap} \\
-\hline
-\multicolumn{3}{|l|}{\textit{Numerisch best\"atigt:}} \\
-\hline
+Kingman-/summierbarer-Defekt-Weg & Bedingtes Kriterium & Kor.~\ref{cor:kingman-gap} \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Numerisch best\"atigt:}} \\
 Defektiver Dobrushin ($\eta \gg 1$) & Monte Carlo & Bem.~\ref{rem:dobrushin-numerics} \\
 Birkhoff $\tau_B < 1$ ($\beta \leq 6$) & Transfermatrix & Bem.~\ref{rem:birkhoff-numerics} \\
-Kingman $\lambda < 0$ (alle $\beta$) & Transfermatrix & Bem.~\ref{rem:birkhoff-numerics} \\
-\hline
-\multicolumn{3}{|l|}{\textit{Offen:}} \\
-\hline
-$\lambda < 0$ analytisch f\"ur $\beta \to \infty$ & Vermutung & Abschn.~\ref{sec:gamma-rg} \\
+Kingman $\lambda < 0$ (getestetes $\beta$-Gitter) & Transfermatrix-Diagnostik & Bem.~\ref{rem:birkhoff-numerics} \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Offen:}} \\
+Summierbarer RG-Defekt analytisch f\"ur $\beta \to \infty$ & Vermutung & Abschn.~\ref{sec:gamma-rg} \\
 Gap-Transport (alle $\beta$) & Vermutung & Verm.~\ref{conj:gap-transport} \\
-\hline
-\end{tabular}
-\end{center}
+\bottomrule
+\end{tabularx}
+\end{table}
 
 % ======================================================================
 \section{Discussion}
@@ -735,9 +770,9 @@ Gap-Transport (alle $\beta$) & Vermutung & Verm.~\ref{conj:gap-transport} \\
 
 \subsection{Relation to Lattice QCD Results}
 
-The variational argument presented here is consistent with extensive numerical evidence from lattice computations. For $SU(3)$, lattice simulations yield a mass gap (identified with the lightest glueball mass) of approximately $\Delta \approx 1.5$--$1.7\;\mathrm{GeV}$ \cite{MorningstonPeardon1999, ChenXu2006}. Our approach does not predict the numerical value of $\Delta$ but establishes its strict positivity from structural properties of the free-energy functional.
+The variational argument presented here is consistent with extensive numerical evidence from lattice computations. For $SU(3)$, lattice simulations yield a mass gap (identified with the lightest glueball mass) of approximately $\Delta \approx 1.5$--$1.7\;\mathrm{GeV}$ \cite{MorningstarPeardon1999, ChenXu2006}. Our approach does not predict the numerical value of $\Delta$; it proves strict positivity in the strong-coupling lattice regime and formulates the additional transport conditions needed beyond that regime.
 
-To put the strong-coupling threshold in perspective: for $SU(2)$ in $d=4$, the Dobrushin condition requires $\beta < \beta_0 = 1/36 \approx 0.028$. Lattice Monte Carlo studies of $SU(2)$ gauge theory typically operate at $\beta \approx 2$--$3$ (scaling regime), which is roughly two orders of magnitude larger. The strong-coupling regime is thus far from the physically relevant continuum limit, as expected for any argument based on cluster expansions (which converge only at high temperature/strong coupling).
+To put the strong-coupling threshold in perspective: for $SU(2)$ in $d=4$, the $\tanh$-based Dobrushin condition requires $\beta < \beta_0 = 2\,\mathrm{artanh}(1/6) \approx 0.336$. Lattice Monte Carlo studies of $SU(2)$ gauge theory typically operate at $\beta \approx 2$--$3$ (scaling regime), which is roughly one order of magnitude larger. The strong-coupling regime is thus far from the physically relevant continuum limit, as expected for any argument based on cluster expansions (which converge only at high temperature/strong coupling).
 
 \subsection{The Role of Strict Convexity}
 
@@ -745,9 +780,9 @@ The strict convexity of $\mathcal{F}$ plays the role that coercivity of the Hami
 
 This mechanism is analogous to the generation of a mass gap in the $(\nabla\varphi)^4$ scalar field theory by the entropy of fluctuations, where the perturbative masslessness is an artifact of ignoring the full non-perturbative measure.
 
-\begin{remark}[FST-Konvexitaet impliziert Talagrand- und Poincar\'e-Schranken]
+\begin{remark}[Formale FST-Konvexitaet und Transport-Caveat]
 \label{rem:fst-convexity-talagrand}
-Das FST-Freie-Energie-Funktional $\mathcal{F}[\mu]$ ist gleichmaessig konvex in der Wasserstein-2-Metrik fuer jedes $\beta < \infty$, mit Konvexitaetskonstante $\lambda_F = 1/\beta$ (aus dem KL-Beitrag). Nach dem Satz von Otto--Villani impliziert dies eine Talagrand-Ungleichung $W_2(\mu, \mu^*) \leq \sqrt{2 D_{\mathrm{KL}}(\mu \| \mu^*) / \lambda_F}$. Die Poincar\'e-Konstante erfuellt dann $\kappa \geq \lambda_F = 1/\beta$, was nicht-trivial ist, aber linear degradiert -- besser als die exponentielle Holley--Stroock-Schranke fuer $\beta > O(1)$.
+Formal suggeriert der KL-Anteil von $\mathcal{F}[\mu]$ einen Wasserstein-konvexen Mechanismus mit Skala vergleichbar zu $1/\beta$. Um daraus eine Talagrand- oder Poincar\'e-Schaetzung fuer das Eichfeldmass zu gewinnen, braeuchte man jedoch eine verifizierte geodaetische Konvexitaets- beziehungsweise Curvature-Dimension-Aussage auf dem relevanten Eichorbit oder einer geeigneten Scheibe, plus Kompatibilitaet mit Reflexionspositivitaet. Diese Bemerkung ist daher nur eine Transport-Heuristik; sie beweist keine lineare untere Schranke $\kappa \gtrsim 1/\beta$.
 \end{remark}
 
 \begin{remark}[Annealed Influence als universeller Luecken-Mechanismus]
@@ -787,10 +822,9 @@ Our argument establishes the mass gap rigorously only in the strong-coupling reg
 \begin{enumerate}
     \item \textbf{Gap-scaling under renormalisation:} The lattice gap $\Delta_\Lambda \geq \kappa_* > 0$ is proven for $\beta < \beta_0$ (Theorem~\ref{thm:lattice-gap}). In the continuum limit, $\beta(a) \to \infty$ by asymptotic freedom, so the strong-coupling regime is eventually left. Whether the physical gap $\Delta_{\mathrm{phys}} = \Delta_{\mathrm{lat}}/a$ remains bounded below as $a \to 0$ is a non-perturbative question closely related to the structure of the renormalisation group flow. This is the core of the Millennium Problem.
 
-    Kirk's zero-free-strip result~\cite{Kirk2026b} provides a structural argument for gap persistence by establishing the absence of first-order phase transitions along the renormalisation flow (see Remark~\ref{rem:fst-parallels} for the broader structural context).
+    A zero-free or complete-analyticity result would provide a structural route for gap persistence by excluding first-order phase transitions along the renormalisation flow (see Remark~\ref{rem:fst-parallels} for the broader structural context). No such input is used as a proven theorem here.
 
-    Kirks Begleitresultat~\cite{Kirk2026b} etabliert einen nullstellenfreien Streifen fuer die Zustandssumme der Gitter-SU(2)-Yang--Mills-Theorie und schliesst Phasenuebergaenge erster Ordnung entlang des Renormierungsgruppenflusses aus. Dies adressiert Limitation~1 teilweise fuer SU(2): Die Massenluecke kann unter Vergoeberung (coarse-graining) nicht diskontinuierlich verschwinden. Die Erweiterung auf SU(3) bleibt offen.
-    \item \textbf{Constructive existence of the continuum limit:} Assumptions (CL1)--(CL3) in Theorem~\ref{thm:continuum-gap} subsume both the existence of OS-positive Schwinger functions and uniform exponential clustering. Balaban's programme provides UV stability but does not close the full IR/constructive gap in 4D. \emph{Note added (March 2026):} Kirk~\cite{Kirk2026} has recently announced a rigorous construction of the SU(2) continuum limit using Dobrushin--Shlosman complete analyticity and pro-polymer cluster expansion estimates, proving that lattice anisotropy corrections remain $O(a^2)$ and that the full Euclidean $O(4)$ symmetry is restored. A companion preprint~\cite{Kirk2026b} establishes a uniform zero-free strip for the partition function, excluding first-order phase transitions along the renormalisation flow. If independently verified (both works are preprints as of March~2026 and have not yet undergone peer review), these results would substantiate (CL1)--(CL3) for the SU(2) case.
+    \item \textbf{Constructive existence of the continuum limit:} Assumptions (CL1)--(CL3) in Theorem~\ref{thm:continuum-gap} subsume both the existence of OS-positive Schwinger functions and uniform exponential clustering. Balaban's programme provides UV stability but does not close the full IR/constructive gap in 4D. \emph{Note added (May 2026):} Kirk~\cite{Kirk2026} has posted a Zenodo preprint on a conditional SU(2) continuum-limit construction using Dobrushin--Shlosman complete analyticity and pro-polymer cluster expansion estimates. The preprint explicitly relies on weak-coupling hypotheses, and any companion zero-free-strip input remains to be independently verified. These results should therefore be treated as conditional preprint evidence, not as a closed proof of (CL1)--(CL3).
     \item \textbf{Extension to all $\beta$:} The Dobrushin--Zegarlinski criterion (Step~2) yields $\kappa_* > 0$ only for $\beta < \beta_0$. While finite-volume analyticity precludes sharp phase transitions for fixed $|\Lambda|$, the persistence of a uniform gap for all $\beta > 0$ in the thermodynamic limit is an open conjecture (see Remark~\ref{rem:all-beta}).
 \end{enumerate}
 
@@ -821,29 +855,28 @@ Dies verschiebt das Problem von einem Limes-Argument ($\beta \to \infty$,
 wo die Holley--Stroock-Schranken degenerieren) zu einer
 \emph{Stabilitaetsanalyse des RG-Flusses} -- einer Frage ueber das
 Infrarotverhalten endlich vieler effektiver Kopplungen, sobald die
-relevante Trunkierung identifiziert ist. Kirks
-Zero-Free-Strip-Resultat~\cite{Kirk2026b} kann so gelesen werden, dass
+relevante Trunkierung identifiziert ist. Ein unabhaengig verifizierter
+zero-free- oder complete-analyticity-Satz koennte so gelesen werden, dass
 der Fluss keine Fixpunkt-Bifurkationen aufweist (keine
-Phasenuebergaenge), was eine notwendige Bedingung fuer die Existenz
-eines eindeutigen IR-Fixpunkts ist.
+Phasenuebergaenge). Das bleibt hier eine offene Zusatzannahme.
 \end{remark}
 
 \begin{remark}[Massenluecke als renormierungsstabile LSI-Eigenschaft]\label{rem:lsi-equivalence}
-Proposition~\ref{prop:kingman-lsi} zeigt, dass die Yang--Mills-Massenluecke
-\emph{aequivalent} zur Existenz eines renormierungsstabilen
-Log-Sobolev-Kegels ist: einer Familie von LSI-Konstanten $\{\kappa_k\}_{k \geq 1}$,
-deren Kingman--Ljapunow-Exponent $\lambda = \langle\log\tau_B\rangle$
-strikt negativ ist. Dies ist kein Rueckzug vom Massenluecken-Problem,
-sondern eine praezise Charakterisierung: Das Hindernis konzentriert sich in der
-einzigen reellen Zahl~$\lambda$, die numerisch zugaenglich ist
+Korollar~\ref{cor:kingman-gap} formuliert eine renormierungsstabile
+Log-Sobolev-Route: Eine Familie von LSI-Konstanten $\{\kappa_k\}_{k \geq 1}$
+mit summierbarem Birkhoff-Defekt oder GT2-Fehlern wuerde die Massenluecke
+transportieren. Der Kingman--Ljapunow-Exponent
+$\lambda = \langle\log\tau_B\rangle$ ist dabei eine nuetzliche Diagnostik,
+aber ohne Summierbarkeitskontrolle keine aequivalente Charakterisierung.
+Die relevante numerische Groesse bleibt zugaenglich
 (Bemerkung~\ref{rem:kingman-numerical}: $\lambda \approx -0{,}18$ bei $\beta=8$,
 $\lambda \approx -4 \times 10^{-5}$ bei $\beta=20$)
-und strukturell analog zum Ljapunow-Exponenten der dynamischen Systemtheorie ist.
+und strukturell analog zum Ljapunow-Exponenten der dynamischen Systemtheorie.
 \end{remark}
 
 \begin{remark}[Analytischer Weg zu $\lambda < 0$: Doeblin-Minorisierung auf typischen Mengen]
 \label{rem:doeblin-analytical}
-Die numerische Bestaetigung $\lambda < 0$ fuer alle getesteten $\beta$ (Bemerkung~\ref{rem:kingman-numerical}) laesst eine natuerliche analytische Beweisstrategie ueber die \emph{Doeblin-Minorisierung} fuer Produkte zufaelliger positiver Operatoren zu.
+Die numerische Beobachtung $\lambda < 0$ auf dem getesteten $\beta$-Gitter (Bemerkung~\ref{rem:kingman-numerical}) laesst eine natuerliche analytische Beweisstrategie ueber die \emph{Doeblin-Minorisierung} fuer Produkte zufaelliger positiver Operatoren zu.
 
 \textbf{Schritt 1: Zufaelliger positiver Operatorkozykel.} Auf jeder RG-Stufe~$k$ ist der Block-Spin-Transferkern $R_k$ ein positiver Operator, dessen Zufaelligkeit aus der Randkonfiguration unter dem Gibbs-Mass der vorherigen Skala stammt. Dies definiert einen positiven Operatorkozykel $\{R_k\}_{k \geq 1}$.
 
@@ -887,8 +920,8 @@ nur am Deconfinement-Uebergang ($T = T_c$) verschwinden, bleibt aber
 bei Nulltemperatur strikt positiv. Diese Perspektive legt nahe, dass
 die Persistenz von $\Delta > 0$ im Kontinuumslimes durch die
 \emph{Abwesenheit} eines Nulltemperatur-Phasenuebergangs bestimmt
-wird -- konsistent mit Kirks
-Zero-Free-Strip-Resultat~\cite{Kirk2026b}.
+wird -- konsistent mit der offenen Suche nach einem zero-free- oder
+complete-analyticity-Zertifikat.
 \end{remark}
 
 \begin{remark}[Stabilitaets-Selektions-Axiomatik]
@@ -955,34 +988,36 @@ wobei $\kappa$ die Poincar\'e-Konstante und $\xi$ die Korrelationslaenge bezeich
 
 \begin{remark}[Zwei-Phasen-Interpolation und Freie-Energie-Analytizitaet]
 \label{rem:two-phase}
-Falls die freie Energie $f(\beta) = -\lim_{|\Lambda| \to \infty} |\Lambda|^{-1} \log Z_\Lambda(\beta)$ fuer alle $\beta > 0$ analytisch ist, tritt kein Phasenuebergang auf und die Massenluecke (die in $\beta$ analytisch ist, wo sie existiert) kann bei keinem endlichen $\beta$ verschwinden. Kirks nullstellenfreier Streifen~\cite{Kirk2026b} liefert Evidenz fuer die Analytizitaet der Zustandssumme, aber die Analytizitaet der freien Energie erfordert zusaetzliche Kontrolle ueber den thermodynamischen Limes.
+Falls die freie Energie $f(\beta) = -\lim_{|\Lambda| \to \infty} |\Lambda|^{-1} \log Z_\Lambda(\beta)$ fuer alle $\beta > 0$ analytisch ist, tritt kein Phasenuebergang auf und die Massenluecke (die in $\beta$ analytisch ist, wo sie existiert) kann bei keinem endlichen $\beta$ verschwinden. Ein nullstellenfreier Streifen wuerde Evidenz fuer die Analytizitaet der Zustandssumme liefern, aber die Analytizitaet der freien Energie erfordert zusaetzliche Kontrolle ueber den thermodynamischen Limes.
 \end{remark}
 
 \subsection{Vergleich mit konkurrierenden Ansaetzen}
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
+\scriptsize
 \caption{Vergleich der Ansaetze zur Yang--Mills-Massenluecke}
 \label{tab:comparison}
-\begin{tabular}{l|p{3.5cm}|p{3.5cm}|p{3.5cm}}
-\hline
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}L{3.6cm}Y Y Y@{}}
+\toprule
 & \textbf{FST (diese Arbeit)} & \textbf{Kirk (2026)} & \textbf{TMT (Garc\'ia Baquero)} \\
-\hline
+\midrule
 \textbf{Ontologischer Status des Gitters} & Regularisierung (Kontinuumslimes erforderlich) & Regularisierung (Kontinuumslimes via Pro-Polymer) & Fundamental (diskrete Praegeometrie) \\
-\hline
+\midrule
 \textbf{UV-Problem} & Auf CL1--CL3 verschoben & Geloest via vollstaendige Analytizitaet fuer SU(2) & Konstruktionsbedingt absent \\
-\hline
+\midrule
 \textbf{Massenluecken-Mechanismus} & Freie-Energie-Konvexitaet $+$ Poincar\'e--Dobrushin & Dobrushin--Shlosman vollstaendige Analytizitaet & Rigiditaet der Gitter-Bindungen \\
-\hline
+\midrule
 \textbf{Eichgruppe} & Beliebige kompakte Gruppe $G$ (explizit fuer SU(2)) & SU(2) (SU(3)-Erweiterung offen) & SU(3) nativ \\
-\hline
+\midrule
 \textbf{Kontinuumslimes} & Bedingt (Vermutung~\ref{conj:gap-transport}) & Partiell (nullstellenfreier Streifen schliesst Uebergaenge 1.~Ordnung aus) & Nicht anwendbar (diskret) \\
-\hline
+\midrule
 \textbf{Reflexionspositivitaet} & Starke Kopplung (Lemma~\ref{lem:reflection-positivity}) & Impliziert durch vollstaendige Analytizitaet & Nicht adressiert \\
-\hline
+\midrule
 \textbf{Limitierungen} & Luecken-Transport unbewiesen; CL2' heuristisch & Nur SU(2); keine explizite Lueckenschranke & Keine Kontinuums-QFT; keine Wightman-Axiome \\
-\hline
-\end{tabular}
+\bottomrule
+\end{tabularx}
 \end{table}
 
 \subsection{Fahrplan zum Millenniumsproblem}
@@ -1103,41 +1138,53 @@ D_{\mathrm{KL}}(\mu_k \| \mu_{k+1}) \leq \tau_B^2 \cdot D_{\mathrm{KL}}(\mu_{k-1
 \]
 Iteration dieser Kontraktion ueber $K$ Skalen und Verwendung der gleichmaessigen Schranke $\tau_B \leq 1 - \delta$ ergibt fuer die kumulative Degradation der Poincar\'e-Konstante
 \[
-\prod_{k=1}^{K} \frac{\kappa_k}{\kappa_{k-1}} \geq \prod_{k=1}^{K} (1 - C/k^2) = \exp\!\left(\sum_{k=1}^{K} \log(1 - C/k^2)\right) \geq \exp(-C' \cdot \pi^2/6),
+\begin{aligned}
+\prod_{k=1}^{K} \frac{\kappa_k}{\kappa_{k-1}}
+&\geq \prod_{k=1}^{K} (1 - C/k^2)\\
+&= \exp\!\left(\sum_{k=1}^{K} \log(1 - C/k^2)\right)\\
+&\geq \exp(-C' \cdot \pi^2/6),
+\end{aligned}
 \]
 wobei $\sum_{k=1}^{\infty} k^{-2} = \pi^2/6$ konvergiert. Daher gilt $\kappa_K \geq \kappa_0 \cdot e^{-C'\pi^2/6} > 0$, und die physikalische Massenluecke $m_{\mathrm{phys}} = \kappa_K / a_K$ ist durch eine positive Konstante nach unten beschraenkt, unabhaengig von der Anzahl der RG-Schritte.
 \end{proof}
 
-\begin{proposition}[Skalenabhaengige LSI via Kingman-Subadditivitaet]\label{prop:kingman-lsi}
+\begin{proposition}[Skalenabhaengige LSI via summierbaren Birkhoff-Defekt]\label{prop:kingman-lsi}
 Seien $\{R_k\}_{k=1}^K$ die Block-Spin-RG-Transformationen aus
 Proposition~\ref{prop:scale-resolved}, und sei
 $\tau_B(R_k)$ der Birkhoff-Kontraktionskoeffizient auf Skala~$k$.
-Falls die \emph{mittlere Kontraktionsbedingung}
+Die mittlere Kontraktionsbedingung
 \begin{equation}\label{eq:mean-contraction-lsi}
   \lambda \;:=\; \limsup_{K \to \infty}\,\frac{1}{K}\sum_{k=1}^{K}\log\tau_B(R_k) \;<\; 0
 \end{equation}
-gilt (ohne $\tau_B(R_k) < 1$ fuer jedes einzelne~$k$ zu erfordern),
-dann erfuellt die Gitter-Massenluecke $m_{\mathrm{phys}} > 0$.
-Genauer genuegt die volumenunabhaengige Poincar\'e-Konstante
+ist eine Diagnostik fuer mittlere Kontraktion. Eine positive limitierende
+LSI-/Poincar\'e-Konstante folgt, wenn die staerkere summierbare
+Defektbedingung
+\[
+  \sum_{k=1}^\infty \tau_B(R_k)^2 < \infty
+\]
+gilt (oder GT2 eine aequivalente summierbare Fehlerfolge liefert). Unter
+dieser Zusatzannahme genuegt die volumenunabhaengige Poincar\'e-Konstante
 \[
   \kappa_K \;\geq\; \kappa_0\,\exp\!\Bigl(\sum_{k=1}^{K}\log(1 - C\,\tau_B(R_k)^2)\Bigr)
-  \;\xrightarrow{K \to \infty}\; \kappa_0\,e^{K\lambda'} \;>\; 0
+  \;\xrightarrow{K \to \infty}\; \kappa_\infty \;>\; 0 .
 \]
-fuer ein $\lambda' < 0$, das von $\lambda$ abhaengt.
 \end{proposition}
 
 \begin{proof}
 Nach dem subadditiven Ergodensatz von Kingman~\cite{Kingman1968}
 erfuellt die subadditive Folge $S_n = \sum_{k=1}^n \log\tau_B(R_k)$
 die Relation $S_n/n \to \lambda$ fast sicher und in $L^1$.
-Die Bedingung $\lambda < 0$ stellt sicher, dass das Produkt
-$\prod_{k=1}^K \tau_B(R_k) = e^{S_K} \to 0$ geometrisch konvergiert.
-Die Poincar\'e-Konstante auf der groebsten Skala erbt die
-akkumulierte Kontraktion: $\kappa_K \geq \kappa_0 \prod_{k=1}^K (1 - C\tau_B(R_k)^2)$.
-Logarithmieren und Verwenden von $\log(1-x) \geq -2x$ fuer $x \in [0,1/2]$
-(gueltig fuer grosses $K$, da $\tau_B(R_k) \to 0$ im Mittel):
-$\log\kappa_K \geq \log\kappa_0 - 2C\sum_{k=1}^K \tau_B(R_k)^2 \geq \log\kappa_0 + K\lambda'$
-mit $\lambda' = 2C\lambda < 0$ (da $\tau_B^2 \leq \tau_B$ fuer $\tau_B \leq 1$).
+Die Bedingung $\lambda < 0$ stellt mittlere Kontraktion der komponierten
+positiven Kerne sicher, impliziert aber nicht, dass
+$\prod_k(1-C\tau_B(R_k)^2)$ einen positiven Grenzwert besitzt. Unter der
+Summierbarkeitsannahme gilt dagegen fuer alle hinreichend spaeten Faktoren
+$C\tau_B(R_k)^2\leq 1/2$, und
+\[
+  \sum_k |\log(1-C\tau_B(R_k)^2)|
+  \leq 2C\sum_k \tau_B(R_k)^2 < \infty .
+\]
+Folglich konvergiert das Produkt gegen eine strikt positive Zahl, also
+$\kappa_\infty>0$.
 \end{proof}
 
 \begin{remark}[Verbindung zu Bauerschmidt--Bodineau--Dagallier: uniforme LSI via Polchinski-RG]
@@ -1158,24 +1205,33 @@ Fuer Gitter-Yang--Mills ist die Erweiterung nicht-trivial, da die Polchinski-Gle
 Im BBD-Framework ist die Schluesselgroesse, die die LSI-Konstante kontrolliert, die Suszeptibilitaet $\chi = \sum_x \langle \sigma_0 \sigma_x \rangle_c$, die genau die Inverse der Massenluecke ist. Damit bestaetigt das BBD-Programm die strukturelle Erwartung dieses Papers: \emph{Das uniforme LSI-Problem und das Massenluecken-Problem sind zwei Seiten derselben Medaille}.
 \end{remark}
 
-\begin{corollary}[Massenluecke aus mittlerer Kontraktion]\label{cor:kingman-gap}
-Unter den Voraussetzungen von Proposition~\ref{prop:polynomial-lsi} ersetze man die uniforme Birkhoff-Schranke $\tau_B(R_k) \leq 1 - \delta$ durch die schwaechere mittlere Kontraktionsbedingung:
+\begin{corollary}[Mittlere Kontraktion als Diagnostik und summierbarer-Defekt-Kriterium]\label{cor:kingman-gap}
+Unter den Voraussetzungen von Proposition~\ref{prop:polynomial-lsi} ist die mittlere Kontraktionsbedingung
 \begin{equation}\label{eq:mean-contraction}
   \lambda := \limsup_{K \to \infty} \frac{1}{K} \sum_{k=1}^{K} \log \tau_B(R_k) < 0.
 \end{equation}
-Dann erfuellt die physikalische Massenluecke $m_{\mathrm{phys}} > 0$, und die Poincar\'e-Konstante genuegt
-\begin{equation}
-  \kappa_K \geq \kappa_0 \cdot \exp\!\left(\sum_{k=1}^{K} \log(1 - C \tau_B(R_k)^2)\right) \xrightarrow{K \to \infty} \kappa_0 \cdot e^{K\lambda'} > 0
+eine nuetzliche Diagnostik fuer die Kontraktion der komponierten RG-Kerne. Sie ist fuer sich genommen keine untere Schranke fuer die limitierende Poincar\'e-Konstante. Eine positive Grenzluecke folgt, wenn die staerkere summierbare Defektbedingung
+\begin{equation}\label{eq:summable-birkhoff-defect}
+  \sum_{k=1}^{\infty} \tau_B(R_k)^2 < \infty
 \end{equation}
-fuer ein $\lambda' < 0$, das nur von $\lambda$ und $C$ abhaengt.
+(oder allgemeiner GT2 mit $\sum_k \varepsilon_k < \infty$) gilt. Dann erfuellen die Poincar\'e-Konstanten
+\begin{equation}
+  \kappa_K \geq \kappa_0 \cdot \exp\!\left(\sum_{k=1}^{K} \log(1 - C \tau_B(R_k)^2)\right) \xrightarrow{K \to \infty} \kappa_\infty > 0
+\end{equation}
+nach Verwerfen endlich vieler Anfangsskalen, auf denen $C\tau_B(R_k)^2$ noch nicht klein ist.
 \end{corollary}
 
 \begin{proof}[Beweisskizze]
-Nach dem subadditiven Ergodensatz von Kingman existiert der Limes $\lambda = \lim_{K \to \infty} \frac{1}{K} \sum_{k=1}^{K} \log \tau_B(R_k)$ fast sicher (die Subadditivitaet folgt aus $\log \tau_B(R_n \circ \cdots \circ R_1) \leq \sum_{k=1}^n \log \tau_B(R_k)$). Da $\lambda < 0$, kontrahiert der komponierte Transferoperator $R_K \circ \cdots \circ R_1$ die Hilbert-Projektiv-Metrik mit exponentieller Rate $e^{K\lambda}$. Die Poincar\'e-Konstante $\kappa_K$ wird durch die akkumulierte Kontraktion kontrolliert: Jeder Faktor $(1 - C\tau_B(R_k)^2)$ kann fuer einzelne~$k$ nahe bei~1 liegen, aber das Produkt konvergiert, da $\sum_k \log(1 - C\tau_B(R_k)^2) \geq K\lambda' > -\infty$ fuer $\lambda' = \lambda' (\lambda, C) < 0$.
+Nach dem subadditiven Ergodensatz von Kingman existiert der Limes $\lambda = \lim_{K \to \infty} \frac{1}{K} \sum_{k=1}^{K} \log \tau_B(R_k)$ fast sicher (die Subadditivitaet folgt aus $\log \tau_B(R_n \circ \cdots \circ R_1) \leq \sum_{k=1}^n \log \tau_B(R_k)$). Aus $\lambda < 0$ folgt mittlere exponentielle Kontraktion der Hilbert-Projektiv-Metrik. Da aber $K\lambda' \to -\infty$ fuer $\lambda'<0$, liefert diese Durchschnittsaussage keine positive untere Schranke fuer $\kappa_K$. Gilt dagegen \eqref{eq:summable-birkhoff-defect}, dann ist fuer alle hinreichend grossen $k$ die Groesse $C\tau_B(R_k)^2 \leq 1/2$ und
+\[
+  \sum_k |\log(1-C\tau_B(R_k)^2)|
+  \leq 2C\sum_k \tau_B(R_k)^2 < \infty .
+\]
+Folglich konvergiert $\prod_k(1-C\tau_B(R_k)^2)$ gegen eine strikt positive Zahl, was $\kappa_\infty>0$ und damit die bedingte Lueckenaussage liefert.
 \end{proof}
 
-\begin{remark}[Numerische Bestaetigungen]\label{rem:kingman-numerical}
-Die mittlere Kontraktionsbedingung~\eqref{eq:mean-contraction} ist numerisch fuer alle getesteten $\beta$-Werte bestaetigt (Bemerkung~\ref{rem:birkhoff-numerics}): $\lambda \approx -10$ bei $\beta=1$ (starke Kopplung), $\lambda \approx -0{,}18$ bei $\beta=8$ und $\lambda \approx -4 \times 10^{-5}$ bei $\beta=20$. Waehrend die uniforme Bedingung $\tau_B < 1$ fuer $\beta \geq 8$ scheitert (wo $\tau_B(R_0) \approx 1$ auf der groebsten Skala), gilt die Kingman-Bedingung $\lambda < 0$ durchgehend. Dies rechtfertigt den Ersatz der uniformen Birkhoff-Annahme in Proposition~\ref{prop:polynomial-lsi} durch die strikt schwaechere mittlere Kontraktion~\eqref{eq:mean-contraction}.
+\begin{remark}[Numerische Diagnostik]\label{rem:kingman-numerical}
+Die mittlere Kontraktionsbedingung~\eqref{eq:mean-contraction} wird numerisch auf dem getesteten $\beta$-Gitter beobachtet (Bemerkung~\ref{rem:birkhoff-numerics}): $\lambda \approx -10$ bei $\beta=1$ (starke Kopplung), $\lambda \approx -0{,}18$ bei $\beta=8$ und $\lambda \approx -4 \times 10^{-5}$ bei $\beta=20$. Waehrend die uniforme Bedingung $\tau_B < 1$ fuer $\beta \geq 8$ scheitert (wo $\tau_B(R_0) \approx 1$ auf der groebsten Skala), motiviert der beobachtete negative Exponent das summierbare-Defekt-Programm. Er ersetzt die uniforme Birkhoff-Annahme in Proposition~\ref{prop:polynomial-lsi} jedoch nur, wenn \eqref{eq:summable-birkhoff-defect} oder GT2 separat verifiziert wird.
 \end{remark}
 
 \subsubsection*{Schwellenwert-Vermutung und diagnostisches Framework}
@@ -1195,20 +1251,20 @@ Sei $\mathcal{R}_k$ die Block-Spin-RG-Transformation (Definition~\ref{def:block-
 \end{conjecture}
 
 \begin{remark}[Kerninhalt]\label{rem:gt-core}
-GT-YM ist die gesamte Wette: Die Massenluecke ist nicht ,,einmal zeigen'', sondern ,,ueber Skalen transportieren''. Die Gap-Kontrollgroesse $G(S_k) := \kappa_k$ ist die Poincar\'e-Konstante des bedingten Einzellink-Masses, die die Birkhoff-Kontraktion $\tau_B(R_k) = 1 - \kappa_k + O(\kappa_k^2)$ kontrolliert. Nach Korollar~\ref{cor:kingman-gap} ist der Kingman--Ljapunow-Exponent $\lambda = \langle \log \tau_B \rangle < 0$ aequivalent zu GT2 mit $c = e^{-|\lambda|}$.
+GT-YM ist die gesamte Wette: Die Massenluecke ist nicht ,,einmal zeigen'', sondern ,,ueber Skalen transportieren''. Die Gap-Kontrollgroesse $G(S_k) := \kappa_k$ ist die Poincar\'e-Konstante des bedingten Einzellink-Masses, die die Birkhoff-Kontraktion $\tau_B(R_k) = 1 - \kappa_k + O(\kappa_k^2)$ kontrolliert. Korollar~\ref{cor:kingman-gap} zeigt, dass ein negativer Kingman--Ljapunow-Exponent eine nuetzliche Diagnostik ist; GT2 oder ein summierbarer Birkhoff-Defekt ist die eigentliche hinreichende Bedingung fuer die Erhaltung einer positiven unteren Schranke.
 \end{remark}
 
 \begin{proposition}[Aequivalenzen von GT-YM]\label{prop:gt-equivalences}
-Die folgenden Aussagen sind aequivalent:
+Die folgenden Aussagen kodieren denselben Gap-Transport-Mechanismus, sobald die jeweils genannten Uniformitaets- oder Summierbarkeitsannahmen vorliegen:
 \begin{enumerate}
 \item[(i)] \textbf{Skalenstabiles Poincar\'e:} GT-YM gilt mit uniformem $c > 0$.
 \item[(ii)] \textbf{Exponentieller Korrelationszerfall:} Fuer alle eichinvarianten Observablen $f, g$ mit $\mathrm{dist}(\mathrm{supp}(f), \mathrm{supp}(g)) = r$ gilt
   $|\langle f\, g \rangle - \langle f \rangle \langle g \rangle| \leq C\, e^{-m r}$
   mit $m > 0$ uniform im Gittervolumen und $\beta$.
 \item[(iii)] \textbf{Spektralluecke des Transferoperators:} Die Transfermatrix $T_k$ der Block-Spin-RG auf Skala $k$ hat eine Spektralluecke $\Delta_k \geq \Delta_0 > 0$ uniform in $k$.
-\item[(iv)] \textbf{Kingman-Kontraktion:} $\lambda = \limsup_{K \to \infty} \frac{1}{K} \sum_{k=1}^{K} \log \tau_B(R_k) < 0$.
+\item[(iv)] \textbf{Summierbarer Birkhoff-Defekt:} $\sum_k \tau_B(R_k)^2 < \infty$, oder aequivalent eine verifizierte GT2-Defektfolge mit $\sum_k\varepsilon_k<\infty$.
 \end{enumerate}
-Die Aequivalenzen (i)$\Leftrightarrow$(ii) folgen aus Dobrushin--Shlosman; (i)$\Leftrightarrow$(iii) ist der Satz von Birkhoff--Hopf; (i)$\Leftrightarrow$(iv) ist Korollar~\ref{cor:kingman-gap}.
+Die Aequivalenzen (i)$\Leftrightarrow$(ii) folgen aus Dobrushin--Shlosman, und (i)$\Leftrightarrow$(iii) ist der Birkhoff--Hopf-Mechanismus bei uniformen Konstanten. Item~(iv) ist ein hinreichendes Gap-Transport-Kriterium; die schwaechere numerische Bedingung $\lambda<0$ allein wird nicht als aequivalent zur Massenluecke behauptet.
 \end{proposition}
 
 \begin{remark}[Der Konstanten-Drift-Scanner]\label{rem:drift-scanner}
@@ -1221,7 +1277,7 @@ Um zu lokalisieren, wo der Gap-Transport bricht, scanne man drei Typen von Budge
 \end{remark}
 
 \begin{remark}[Defektiver Transport als Zwischenziel]\label{rem:defective-transport}
-Falls der strikte Transport GT2 scheitert, genuegt die defektive Version~\eqref{eq:gap-transport} mit summierbarem Fehler $\sum \varepsilon_k < \infty$ fuer eine Massenluecke: Der akkumulierte Defekt $\prod_k (1 - \varepsilon_k / \kappa_k)$ konvergiert, wenn $\varepsilon_k$ schneller als $\kappa_k$ abfaellt. Der Kingman-Weg (Korollar~\ref{cor:kingman-gap}) ist genau dieses defektive Szenario. Numerisch (Bemerkung~\ref{rem:birkhoff-numerics}): Einzelne $\tau_B(R_k)$ koennen auf der groebsten Skala gegen $1$ gehen, aber $\lambda < 0$ fuer alle getesteten $\beta$, was die Summierbarkeit des Defekts bestaetigt.
+Falls der strikte Transport GT2 scheitert, genuegt die defektive Version~\eqref{eq:gap-transport} mit summierbarem Fehler $\sum \varepsilon_k < \infty$ fuer eine Massenluecke: Der akkumulierte Defekt $\prod_k (1 - \varepsilon_k / \kappa_k)$ konvergiert, wenn $\varepsilon_k$ schneller als $\kappa_k$ abfaellt. Korollar~\ref{cor:kingman-gap} gibt die entsprechende Birkhoff-Form ueber $\sum_k\tau_B(R_k)^2<\infty$. Numerisch (Bemerkung~\ref{rem:birkhoff-numerics}) koennen einzelne $\tau_B(R_k)$ auf der groebsten Skala gegen $1$ gehen, waehrend $\lambda < 0$ auf dem getesteten Gitter bleibt; dies motiviert, beweist aber nicht, die benoetigte Summierbarkeit.
 \end{remark}
 
 \begin{remark}[No-Go-Mechanismen]\label{rem:gt-nogo}
@@ -1267,7 +1323,7 @@ Dann gilt:
   \begin{equation}\label{eq:polynomial-rate}
     \delta_k(\beta) \;\geq\; \frac{c''}{\sqrt{\beta}}
   \end{equation}
-  fuer alle $\beta > 0$ und alle RG-Schritte $k$.
+  fuer alle $\beta > 0$ und alle RG-Schritte $k$, bedingt auf die oben genannte Lipschitz-Transportschranke.
   Dies ersetzt die exponentiell degradierende Birkhoff-Schranke
   $\delta_{\mathrm{typ}} \geq c'\,e^{-c''\sqrt{\beta}}$
   aus Lemma~\ref{lem:typical-rg-old} (unten) durch eine \emph{polynomiell}
@@ -1277,11 +1333,12 @@ Dann gilt:
   einen Block von $L^d$ Link-Variablen. Auf der typischen Menge $\mathcal{T}_\varepsilon$
   ist die Oszillation des bedingten Gewichts beschraenkt durch $2\varepsilon = 2c\sqrt{\beta}$,
   nicht durch $2 d_\ell \beta$ (volle Oszillation).
-  Die Lipschitz-Transportkonstante von $R_k$ eingeschraenkt auf $\mathcal{T}_\varepsilon$
-  ist daher $\mathrm{Lip}(R_k|_{\mathcal{T}}) \leq 1 - c_1/\sqrt{\beta}$
-  (Shenfelds Lipschitz-Transport~\cite{Shenfeld2024}, angewandt auf die
-  eingeschraenkte Polchinski-Halbgruppe mit Oszillation $O(\sqrt{\beta})$
-  anstelle von $O(\beta)$).
+  Die benoetigte Lipschitz-Transportkonstante
+  $\mathrm{Lip}(R_k|_{\mathcal{T}}) \leq 1 - c_1/\sqrt{\beta}$
+  wird hier nicht hergeleitet; sie ist der quantitative Input von
+  Conjecture~\ref{conj:tensorisation}. Bestehende Lipschitz-Transportresultate
+  wie Shenfelds Satz~\cite{Shenfeld2024} motivieren dieses Ziel, liefern aber
+  nicht die benoetigte SU(N)-Gittereichfeld-Konstante.
   Die Kontraktion der relativen Entropie erbt diese Rate:
   $D_{\mathrm{KL}}(R_k\mu \| R_k\nu) \leq (1 - c_1/\sqrt{\beta})^2 \,D_{\mathrm{KL}}(\mu\|\nu)$
   durch die verstaerkte Datenverarbeitungsungleichung mittels Lipschitz-Transport.
@@ -1293,20 +1350,20 @@ Dann gilt:
   \]
   und die Worst-Case-Kontraktion auf $\mathcal{T}_\varepsilon^c$ ist trivial ($\delta = 0$).
 
-\item \textbf{Kombinierter Kingman--Ljapunow-Exponent:}
+\item \textbf{Bedingter Kingman--Ljapunow-Exponent:}
   Der effektive Exponent erfuellt
   \begin{equation}\label{eq:lambda-polynomial}
+  \begin{aligned}
     \lambda_{\mathrm{eff}}(\beta)
-    \;\leq\; \underbrace{-(1 - \delta_0)\,\frac{c''}{\sqrt{\beta}}}_{\text{Typische-Mengen-Kontraktion}}
-    \;+\; \underbrace{O(1/\beta)}_{\text{hoehere Ordnung}}
-    \;<\; 0
-    \quad\text{fuer alle } \beta > 0,
+    &\leq -(1 - \delta_0)\,\frac{c''}{\sqrt{\beta}} + O(1/\beta)\\
+    &< 0 \quad\text{fuer alle } \beta > 0,
+  \end{aligned}
   \end{equation}
   da $1 - \delta_0 > 3/4 > 0$.
 \end{enumerate}
 \end{proposition}
 
-\begin{proof}[Beweis (bedingt auf die Transportschranke)]
+\begin{proof}[Beweis der bedingten Implikation]
 \textbf{Schritt 1 (Eingeschraenkte Oszillation).}
 Auf $\mathcal{T}_\varepsilon$ mit $\varepsilon = c\sqrt{\beta}$
 erfuellt das bedingte Gewicht $W(U_\ell \,|\, U_{\partial\ell})$
@@ -1316,29 +1373,18 @@ Dies ist die zentrale Verbesserung: Die volle Oszillation betraegt $2 d_\ell \be
 
 \medskip
 \textbf{Schritt 2 (Lipschitz-Transport auf der typischen Menge).}
-Der Block-Spin-Kern $R_k$, eingeschraenkt auf Konfigurationen in $\mathcal{T}_\varepsilon$,
-definiert einen Markov-Kern mit beschraenktem Log-Dichteverhaeltnis.
-Nach dem Holley--Stroock Bounded-Perturbation-Prinzip
-(Proposition~\ref{prop:restricted-poincare}, Teil~A)
-erfuellt die Poincar\'e-Konstante
-$\kappa_{\mathrm{typ}} \geq \lambda_1^{LB}(G) \cdot e^{-2c\sqrt{\beta}}$.
-Die zugehoerige Lipschitz-Transportkonstante
-(Shenfeld~\cite{Shenfeld2024}, Theorem~1.1, angewandt auf die
-log-konkave Stoerung mit Oszillation $2c\sqrt{\beta}$) ist
+Angenommen sei die quantitative Transportschranke aus Conjecture~\ref{conj:tensorisation}
+fuer den Block-Spin-Kern $R_k$, eingeschraenkt auf Konfigurationen in
+$\mathcal{T}_\varepsilon$. Die zugehoerige Lipschitz-Transportkonstante ist
 \[
   \mathrm{Lip}(R_k|_{\mathcal{T}})
-  \;\leq\; 1 - \frac{\kappa_{\mathrm{typ}}}{\kappa_{\mathrm{typ}} + \mathrm{osc}(W|_{\mathcal{T}})}
   \;\leq\; 1 - \frac{c_1}{\sqrt{\beta}}
 \]
-wobei die letzte Ungleichung $\kappa_{\mathrm{typ}} \geq c_2 e^{-2c\sqrt{\beta}}$
-und $\mathrm{osc}(W|_{\mathcal{T}}) = 2c\sqrt{\beta}$ nutzt,
-sodass das Verhaeltnis $\kappa/(\kappa + \mathrm{osc}) \geq c_1/\sqrt{\beta}$
-im Regime $\sqrt{\beta} \gg 1$, wo $e^{-2c\sqrt{\beta}} \cdot \sqrt{\beta} \to 0$.
-
-\emph{Korrektur fuer moderates $\beta$:} Fuer $\beta \leq \beta_1$ (eine berechenbare Schwelle)
-liefert die Strong-Coupling-Analyse aus Theorem~\ref{thm:lattice-gap}
-direkt $\kappa_* > 0$, sodass $\delta_k \geq \kappa_* > c''/\sqrt{\beta}$.
-Die Proposition gilt daher fuer alle $\beta > 0$.
+als Annahme. Der vorherige Versuch, diese Schranke direkt aus Holley--Stroock
+und einem allgemeinen Shenfeld-Transporttheorem abzuleiten, liefert fuer
+SU(N)-Gittereichfelder keine hinreichend gute Konstante. Die Proposition
+beweist daher nur die Implikation von dieser quantitativen Transportschranke
+zum negativen effektiven Exponenten.
 
 \medskip
 \textbf{Schritt 3 (Kontraktion der relativen Entropie).}
@@ -1387,8 +1433,9 @@ Man zerlege den Ljapunow-Exponenten:
 \begin{align*}
   \lambda_{\mathrm{eff}}
   &= \mu(\mathcal{T}) \cdot \log(1 - \delta_k) + \mu(\mathcal{T}^c) \cdot \log 1 \\
-  &\leq (1 - \delta_0) \cdot \log\!\bigl(1 - c''/\sqrt{\beta}\bigr) + 0 \\
-  &\leq -(1 - \delta_0)\,\frac{c''}{\sqrt{\beta}} + O\!\bigl(1/\beta\bigr) \\
+  &\leq (1 - \delta_0) \cdot \log\!\bigl(1 - c''/\sqrt{\beta}\bigr) \\
+  &\leq -(1 - \delta_0)\,\frac{c''}{\sqrt{\beta}}
+    + O\!\bigl(1/\beta\bigr) \\
   &< 0 \quad\text{fuer alle } \beta > 0,
 \end{align*}
 da $1 - \delta_0 > 3/4 > 0$. \qedhere
@@ -1416,13 +1463,15 @@ Die zentrale Neuerung ist zweifach:
   $\mathrm{osc}(W|_{\mathcal{T}}) = O(\sqrt{\beta})$ kontrolliert wird,
   nicht durch $\mathrm{osc}(W) = O(\beta)$.
 \end{enumerate}
-Die resultierende Schranke $\lambda_{\mathrm{eff}}(\beta) \leq -c''/\sqrt{\beta} + o(1)$
-ist das Yang--Mills-Analogon der RH-Even-Dominance-Luecke
-$|\mathrm{cert\_gap}| \sim \sqrt{\lambda}$:
-Beide sind \emph{polynomiell} im Kontrollparameter,
-numerisch ueber einen weiten Bereich verifiziert
-(Bemerkung~\ref{rem:birkhoff-numerics}: $\lambda \approx -0{,}18$ bei $\beta = 8$),
-und analytisch durch Konzentrations-/PNT-Argumente im asymptotischen Regime geschlossen.
+Unter der bedingten Transportschranke von Proposition~\ref{prop:wasserstein-rg}
+waere die resultierende Abschaetzung
+$\lambda_{\mathrm{eff}}(\beta) \leq -c''/\sqrt{\beta} + o(1)$
+das Yang--Mills-Analogon der RH-Even-Dominance-Luecke
+$|\mathrm{cert\_gap}| \sim \sqrt{\lambda}$: Beide sind \emph{polynomiell}
+im Kontrollparameter. Fuer Yang--Mills ist diese polynomielle
+Transportabschaetzung ein Zieltheorem, gestuetzt nur durch die getesteten
+Birkhoff-/Kingman-Diagnostiken (Bemerkung~\ref{rem:birkhoff-numerics}), kein
+bewiesenes analytisches Resultat.
 
 \textbf{Kritischer Vorbehalt und partielle Aufloesung via Fathi--Mikulincer--Shenfeld.}
 
@@ -1561,7 +1610,7 @@ Proposition~\ref{prop:wasserstein-rg} aufgeloest, die punktweise Stabilitaet
 durch masstheoretische Entropie-Kontraktion ersetzt.
 \end{lemma}
 
-\subsection{$\Gamma$-Konvergenz des Block-Spin-RG-Flusses}\label{sec:gamma-rg}
+\subsection{\texorpdfstring{$\Gamma$}{Gamma}-Konvergenz des Block-Spin-RG-Flusses}\label{sec:gamma-rg}
 
 Die uniforme Birkhoff-Kontraktion $\tau_B(R_k) \leq 1 - \delta$ fuer jeden RG-Schritt ist strukturell zu stark: Sie erfordert mikroskopische Kontrolle, waehrend die Massenluecke ein makroskopisches Grenzphaenomen ist. Wir formulieren die RG als Trajektorienproblem, bei dem Kontraktion im Limes entsteht.
 
@@ -1643,7 +1692,7 @@ Da $\xi(a_k) \leq \gamma^k \xi(a_0)$ und $a_k = L^k a_0$, gilt $\xi(a_k)/a_k \le
 \end{proof}
 
 \begin{remark}[Zusammenhang mit subadditivem RG]\label{rem:gronwall-kingman}
-Lemma~\ref{lem:rg-gronwall} liefert das deterministische Gegenstueck zum Kingman-subadditiven Ansatz (Abschnitt~\ref{sec:gamma-rg}): Polynomiale Degradation CL2' plus Korrelationslaengenkontraktion impliziert ein konvergentes Fehlerprodukt, was aequivalent zu $\lambda < 0$ in der Lyapunov-Formulierung \eqref{eq:lyapunov-rg} ist. Der Kingman-Ansatz ist allgemeiner (erlaubt fluktuierendes $\kappa$), waehrend der Gronwall-Ansatz explizite Konstanten liefert.
+Lemma~\ref{lem:rg-gronwall} liefert das deterministische Gegenstueck zum Kingman-subadditiven Ansatz (Abschnitt~\ref{sec:gamma-rg}): Polynomiale Degradation CL2' plus Korrelationslaengenkontraktion impliziert ein konvergentes Fehlerprodukt. In der Lyapunov-Formulierung \eqref{eq:lyapunov-rg} ist ein negativer Exponent das diagnostische Signal, waehrend Summierbarkeit der induzierten Defekte die hinreichende Bedingung ist. Der Kingman-Ansatz ist allgemeiner (erlaubt fluktuierendes $\kappa$), waehrend der Gronwall-Ansatz explizite Konstanten liefert.
 \end{remark}
 
 \begin{remark}[Spektrale Robustheit an Gribov-Kopien (Sturm)]
@@ -1655,22 +1704,25 @@ Dieses Resultat liefert theoretische Unterstuetzung fuer die Stabilitaet der Git
 
 \begin{center}
 \fbox{\parbox{0.9\textwidth}{
-\textbf{Zusammenfassung der Resultate.}\\[4pt]
-\textbf{Bewiesene Resultate (unbedingt):}
+\textbf{Statusmatrix.}\\[4pt]
+\textbf{Bewiesenes Gitterresultat:}
 \begin{itemize}
 \item Spektralluecke $\Delta_\Lambda \geq \kappa_* > 0$ fuer die Wilson-Gittereichtheorie, beliebige kompakte einfache Gruppe $G$, $\beta < \beta_0(d,G)$ (Theorem~\ref{thm:lattice-gap}).
-\item Fuer $G = SU(2)$, $d = 4$: $\beta_0 = 1/36$, $\kappa_* = (1 - 36\beta) \cdot e^{-12\beta}$ (Korollar~\ref{cor:su2-explicit}).
+\item Fuer $G = SU(2)$, $d = 4$: $\beta_0 = 2\,\mathrm{artanh}(1/6) \approx 0.336$, $\kappa_* = (1 - 6\,\tanh(\beta/2)) \cdot e^{-12\beta}$ (Korollar~\ref{cor:su2-explicit}).
 \item Die Luecke ist unabhaengig vom Gittervolumen $|\Lambda|$.
 \end{itemize}
-\textbf{Bedingt (auf CL1--CL3):}
+\textbf{Bedingte Rekonstruktion:}
 \begin{itemize}
 \item Kontinuums-Massenluecke $\Delta \geq \Delta_0 > 0$ (Theorem~\ref{thm:continuum-gap}).
-\item CL1--CL3 fuer $SU(2)$ durch Kirks Konstruktion~\cite{Kirk2026,Kirk2026b} untermauert.
+\item Hinweis: CL2 ist im Wesentlichen aequivalent zur Massenluecke; der nichttriviale Gehalt liegt in der Reduktion auf unabhaengig pruefbare Bedingungen.
 \end{itemize}
-\textbf{Offen:}
+\textbf{Konjekturale RG-/Kontinuumsroute:}
 \begin{itemize}
-\item Erweiterung von Kirks Konstruktion von $SU(2)$ auf allgemeine kompakte einfache $G$.
-\item Direkter Beweis der Luecken-Persistenz unter $\beta \to \infty$ (Kontinuumslimes).
+\item Wasserstein-Transport, Tensorisierung, good-scale-density und RP-positive Dirichlet-Form-Koerzivitaet sind vorgeschlagene Mechanismen fuer Gap-Transport; sie werden hier nicht bewiesen.
+\end{itemize}
+\textbf{Numerische Evidenz:}
+\begin{itemize}
+\item Dobrushin-Defekt- und Birkhoff-/Kingman-Rechnungen stuetzen die RG-Route nur auf getesteten SU(2)-Trunkierungen.
 \end{itemize}
 }}
 \end{center}
@@ -1704,23 +1756,21 @@ topologische Sektoren\footnote{Topologische Sektoren werden durch die zweite Che
 Rolle analog zu den geraden/ungeraden Spektralsektoren bei der
 Riemannschen Vermutung~\cite{GeigerRH2026c}: Die Einzel-Link-Poincar\'e-Konstante
 haengt nur vom lokalen bedingten Mass ab und ist unempfindlich gegenueber
-globaler Topologie, waehrend Kirks Zero-Free-Strip-Resultat~\cite{Kirk2026b}
-Phasenuebergaenge erster Ordnung entlang der RG-Trajektorie ausschliesst.
+globaler Topologie, waehrend ein unabhaengig verifiziertes zero-free-Zertifikat
+Phasenuebergaenge erster Ordnung entlang der RG-Trajektorie ausschliessen wuerde.
 Diese Parallelen sind heuristisch und gehen nicht in die Beweise der
 Theoreme~\ref{thm:lattice-gap}--\ref{thm:continuum-gap} ein.
 \end{remark}
 
-\begin{remark}[Mapping to Kirk's continuum construction]\label{rem:kirk-mapping}
-The recent construction of the SU(2) continuum limit by
-Kirk~\cite{Kirk2026,Kirk2026b} can be directly mapped onto the framework
-of Theorem~\ref{thm:lattice-gap} and the conditional
-Theorem~\ref{thm:continuum-gap}. The correspondence is as follows:
+\begin{remark}[Conditional mapping to Kirk's continuum construction]\label{rem:kirk-mapping}
+\textbf{Caveat:} Kirk's construction~\cite{Kirk2026} is available as a Zenodo preprint as of May~2026, but it has not been independently verified and is explicitly conditional on weak-coupling hypotheses. The following mapping is therefore conditional on independent verification of the claims and hypotheses. If verified, the construction could be mapped onto the framework of Theorem~\ref{thm:lattice-gap} and the conditional Theorem~\ref{thm:continuum-gap}. The correspondence would be as follows:
 
 \begin{center}
-\begin{tabular}{p{4.8cm}p{5.2cm}}
-\hline
+\small
+\begin{tabularx}{\textwidth}{@{}Y Y@{}}
+\toprule
 \textbf{FST framework} & \textbf{Kirk's construction} \\
-\hline
+\midrule
 Holley--Stroock bound $\kappa_{\mathrm{link}} \geq \kappa_{\mathrm{Haar}}\,
 e^{-2 d_\ell \beta}$ (Step~1)
 & Single-plaquette Poincar\'e via bounded perturbation
@@ -1730,15 +1780,14 @@ Dobrushin--Zegarlinski: $\eta(\beta) < 1$ for $\beta < \beta_0$ (Step~2)
   extended to \emph{all} $\beta$ via pro-polymer
   cluster expansion \\[4pt]
 CL1 (OS-positive continuum limit)
-& Proven: anisotropy $O(a^2)$, full $O(4)$
+& Conditional preprint claim: anisotropy $O(a^2)$, full $O(4)$
   restoration in $a \to 0$ limit \\[4pt]
 CL2 (uniform exponential clustering)
-& Proven: zero-free strip for partition function
-  $\Rightarrow$ uniform clustering \\[4pt]
+& Would require independently verified uniform clustering or a zero-free strip \\[4pt]
 CL3 (uniform normalisation)
-& Follows from pro-polymer summability bounds \\
-\hline
-\end{tabular}
+& Would follow from verified pro-polymer summability bounds \\
+\bottomrule
+\end{tabularx}
 \end{center}
 
 \noindent
@@ -1749,9 +1798,10 @@ interdependencies between distant links \emph{at each scale of the
 cluster expansion separately}. This transforms the exponential
 divergence of the Holley--Stroock constants (which is the obstruction
 in our approach for $\beta > \beta_0$) into a convergent,
-polynomially bounded resummation. The result is a volume-independent
-spectral gap $\Delta \geq \kappa_{\mathrm{phys}} > 0$ that persists
-through the renormalisation group flow $\beta(a) \to \infty$.
+polynomially bounded resummation if the hypotheses and estimates are
+verified. In that conditional scenario one would obtain a volume-independent
+spectral gap $\Delta \geq \kappa_{\mathrm{phys}} > 0$ persisting through
+the renormalisation group flow $\beta(a) \to \infty$.
 
 If Kirk's construction extends from SU(2) to general compact simple
 Lie groups $G$ (which requires controlling the Peter--Weyl coefficients
@@ -1761,13 +1811,14 @@ Theorem~\ref{thm:continuum-gap} would be fully substantiated, and the
 mass gap in the continuum would follow from our variational framework
 combined with Kirk's constructive estimates.
 
-\textbf{Anmerkung:} Kirks Resultate~\cite{Kirk2026,Kirk2026b} gelten fuer das Gitter-SU(2)-Yang--Mills-System mit einem Pro-Polymer-Cluster-Expansions-Framework. Die Skalierungslimit-Konstruktion beinhaltet auxiliare analytische Strukturen (vollstaendige Analytizitaet, nullstellenfreier Streifen fuer die Zustandssumme), die spezifisch fuer die Gitterregularisierung sind. Die Erweiterung auf die reine Kontinuums-Yang--Mills-Theorie (ohne Gitterregularisierung) und auf Eichgruppen jenseits SU(2) bleibt offen.
+\textbf{Anmerkung:} Kirks Preprint~\cite{Kirk2026} betrifft das Gitter-SU(2)-Yang--Mills-System mit einem Pro-Polymer-Cluster-Expansions-Framework und bleibt bis zur unabhaengigen Pruefung als konditional zu behandeln. Die Skalierungslimit-Konstruktion beinhaltet auxiliare analytische Strukturen, die spezifisch fuer die Gitterregularisierung sind. Die Erweiterung auf die reine Kontinuums-Yang--Mills-Theorie (ohne Gitterregularisierung) und auf Eichgruppen jenseits SU(2) bleibt offen.
 \end{remark}
 
 \begin{proposition}[Kirk-Abbildung auf die Kontinuums-Massenluecke]
 \label{prop:kirk-mapping}
-Sei $G$ eine kompakte einfache Lie-Gruppe. Angenommen, Kirks
-Konstruktion~\cite{Kirk2026,Kirk2026b} laesst sich von $SU(2)$ auf~$G$ erweitern,
+Sei $G$ eine kompakte einfache Lie-Gruppe. Angenommen, eine unabhaengig
+verifizierte Konstruktion (zum Beispiel eine bestaetigte Version von
+Kirk~\cite{Kirk2026}) laesst sich von $SU(2)$ auf~$G$ erweitern,
 d.\,h.\ die folgenden drei Bedingungen gelten:
 \begin{enumerate}[label=\textup{(K\arabic*)}]
     \item \textbf{Dobrushin--Shlosman vollstaendige Analytizitaet} fuer die
@@ -1823,7 +1874,7 @@ in diesem Wachstum gelten.
 
 \begin{remark}[Erweiterung auf SU(3) via Charakter-Verhaeltnis-Schranken]
 \label{rem:su3-extension}
-Kirks Pro-Polymer-Cluster-Expansion~\cite{Kirk2026} etabliert vollstaendige Analytizitaet fuer die SU(2)-Gittereichtheorie. Die Erweiterung auf SU(3) erfordert zwei Zutaten:
+Kirks Pro-Polymer-Cluster-Expansion~\cite{Kirk2026} beansprucht eine conditional complete-analyticity-Route fuer die SU(2)-Gittereichtheorie. Falls diese Route unabhaengig bestaetigt wird, erfordert die Erweiterung auf SU(3) mindestens zwei Zutaten:
 \begin{enumerate}
 \item \emph{Charakter-Verhaeltnis-Schranken:} Fuer die irreduziblen Darstellungen $\rho_\lambda$ von SU(3) mit hoechstem Gewicht $\lambda$ muessen die Charakter-Verhaeltnisse $\chi_\lambda(U)/\dim(\rho_\lambda)$ gleichmaessige Abfallschranken fuer $|\lambda| \to \infty$ erfuellen. Fuer SU(2) folgt dies aus der expliziten Formel $\chi_j(\theta) = \sin((2j+1)\theta)/\sin(\theta)$. Fuer SU(3) liefert die Weyl-Charakterformel $\chi_{(p,q)}$ in Termen von Schur-Polynomen, und die erforderlichen Schranken folgen aus Waermekern-Abschaetzungen auf der Gruppenmannigfaltigkeit:
 \[
@@ -1832,7 +1883,7 @@ Kirks Pro-Polymer-Cluster-Expansion~\cite{Kirk2026} etabliert vollstaendige Anal
 fuer eine universelle Konstante $c > 0$, die von der Normierung der Killing-Form abhaengt.
 \item \emph{Waermekern-Domination:} Die Wilson-Wirkung erfuellt $e^{\beta \mathrm{Re}\,\mathrm{tr}(U)} \leq K_t(U, \mathbf{1})$ fuer $t = 1/(2\beta)$, wobei $K_t$ der Waermekern auf SU(3) ist. Diese Schranke kontrolliert, kombiniert mit der Peter--Weyl-Entwicklung, die Cluster-Expansions-Koeffizienten.
 \end{enumerate}
-Die vollstaendige Analytizitaet fuer SU(3) folgt dann aus dem Dobrushin--Shlosman-Kriterium mit den modifizierten Einzel-Link-Schranken. Dieses Programm ist technisch anspruchsvoll, erfordert aber keine konzeptuell neuen Ideen ueber Kirks SU(2)-Framework hinaus.
+Die vollstaendige Analytizitaet fuer SU(3) wuerde dann aus dem Dobrushin--Shlosman-Kriterium mit den modifizierten Einzel-Link-Schranken folgen. Dieses Programm ist technisch anspruchsvoll und setzt voraus, dass der SU(2)-Preprint-Fall korrekt und quantitativ ausreichend stark ist.
 \end{remark}
 
 % ======================================================================
@@ -1853,7 +1904,13 @@ Zur Referenz sammeln wir die wichtigsten Konstanten und Normierungen, die im ges
 
 \begin{itemize}
 \item \textbf{Eichgruppe:} $G = \mathrm{SU}(N)$, $\dim(G) = N^2 - 1$, $\mathrm{rank}(G) = N-1$.
-\item \textbf{Haar-Poincar\'e-Konstante:} $\kappa_{\mathrm{Haar}}(\mathrm{SU}(2)) = 3$ (Spektrum von $\Delta_{\mathrm{LB}}$ auf $S^3$: $\lambda_l = l(l+2)$, $l \geq 1$). $\kappa_{\mathrm{Haar}}(\mathrm{SU}(3)) = 4/3$ (erster Casimir-Eigenwert $C_2(\mathbf{3}) = 4/3$).
+\item \textbf{Haar-Poincar\'e-Konstanten.}
+Gradientenform:
+$\kappa_{\mathrm{Haar}}(\mathrm{SU}(2)) = 3$
+(Spektrum von $\Delta_{\mathrm{LB}}$ auf $S^3$:
+$\lambda_l = l(l+2)$, $l \geq 1$), und
+$\kappa_{\mathrm{Haar}}(\mathrm{SU}(3)) = 4/3$
+(erster Casimir-Eigenwert $C_2(\mathbf{3}) = 4/3$).
 \item \textbf{Links pro Plakette:} $d_l = 2(d-1) = 6$ in $d = 4$ Dimensionen.
 \item \textbf{Retraktion:} $\mathrm{Retr}: \mathfrak{g} \to G$ via $X \mapsto e^X$ (Exponentialabbildung) oder Cayley-Abbildung $X \mapsto (1 + X/2)(1 - X/2)^{-1}$.
 \item \textbf{Metrik auf $G$:} $d(U, V) = \|U - V\|_F / \sqrt{2N}$ (normierte Frobenius-Norm) oder $d(U, V) = \|\log(U V^\dagger)\|$ (geodaetisch).
@@ -1893,7 +1950,7 @@ T.~Balaban, \emph{Propagators and renormalization transformations for lattice ga
 \bibitem{CreutzJacobsRebbi1983}
 M.~Creutz, L.~Jacobs, and C.~Rebbi, \emph{Monte Carlo computations in lattice gauge theories}, Phys.\ Rep.\ \textbf{95} (1983), 201--282.
 
-\bibitem{MorningstonPeardon1999}
+\bibitem{MorningstarPeardon1999}
 C.~J.~Morningstar and M.~Peardon, \emph{The glueball spectrum from an anisotropic lattice study}, Phys.\ Rev.\ D \textbf{60} (1999), 034509.
 
 \bibitem{ChenXu2006}
@@ -1915,11 +1972,8 @@ F.~Martinelli, \emph{Lectures on Glauber dynamics for discrete spin models}, in:
 A.~Guionnet and B.~Zegar\-li\'nski, \emph{Lectures on logarithmic Sobolev inequalities}, S\'eminaire de Probabilit\'es XXXVI, Lecture Notes in Mathematics 1801, Springer, 2003, pp.~1--134.
 
 \bibitem{Kirk2026}
-H.~Kirk, \emph{From Lattice Mass Gap to Continuum SU(2) Yang--Mills Theory: O(4) Restoration and Osterwalder--Schrader Reconstruction}, Zenodo preprint, February 2026.
-\href{https://doi.org/10.5281/zenodo.14894820}{doi:10.5281/zenodo.14894820}.
-
-\bibitem{Kirk2026b}
-H.~Kirk, \emph{A Uniform Zero-Free Strip for the SU(2) Lattice Yang--Mills Partition Function via Effective Log-Concavity}, in preparation, 2026.
+H.~Kirk, \emph{From Lattice Mass Gap to Continuum SU(2) Yang--Mills Theory: O(4) Restoration and Osterwalder--Schrader Reconstruction}, Zenodo preprint, 2026.
+\href{https://doi.org/10.5281/zenodo.18824739}{doi:10.5281/zenodo.18824739}.
 
 \bibitem{GeigerRH2026c}
 L.~Geiger, \emph{The Riemann Hypothesis Part III: The Analytical Rank-Finite Certificate}, Zenodo preprint, March 2026.
