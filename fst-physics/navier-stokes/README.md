@@ -8,9 +8,9 @@ NS-LDI concept DOI: <https://doi.org/10.5281/zenodo.19056807>
 
 ## Status
 
-This folder contains the public Navier-Stokes v2.2 candidate paper files and
-the NS-LDI v1.3 paper files. The latest Navier-Stokes Zenodo release is still
-v2.1. The main regularity result remains conditional on Assumption G2
+This folder contains the public Navier-Stokes v2.2 paper files and
+the NS-LDI v1.3 paper files. The latest Navier-Stokes Zenodo release is
+v2.2 (record DOI <https://doi.org/10.5281/zenodo.20078143>). The main regularity result remains conditional on Assumption G2
 (projection regularity); the NS-LDI package remains a proof-of-life and
 diagnostic bridge, not an unconditional 3D Navier-Stokes proof.
 
@@ -20,6 +20,7 @@ diagnostic bridge, not an unconditional 3D Navier-Stokes proof.
 |------|---------|
 | `FST-NS_NavierStokes_Skeleton_v1_en.tex` / `FST-NS_NavierStokes_Skeleton_v1_en.pdf` | English Navier-Stokes paper source and PDF |
 | `FST-NS_NavierStokes_Skeleton_v1_de.tex` / `FST-NS_NavierStokes_Skeleton_v1_de.pdf` | German Navier-Stokes paper source and PDF |
+| `FST-NS_NavierStokes_Skeleton_v1_kombi.pdf` | Combined bilingual Navier-Stokes PDF |
 | `FST-NS_LogDistanceIntegrability_v1_en.tex` / `FST-NS_LogDistanceIntegrability_v1_en.pdf` | English NS-LDI paper source and PDF |
 | `FST-NS_LogDistanceIntegrability_v1_de.tex` / `FST-NS_LogDistanceIntegrability_v1_de.pdf` | German NS-LDI paper source and PDF |
 | `../../scripts/navier-stokes/compute_ds3_lorenz.py` | DS3 stress test on the Lorenz attractor |
