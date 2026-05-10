@@ -5,10 +5,12 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{booktabs}
-\usepackage{tabularx}
+\usepackage{array}
 \usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{mathrsfs}
+
+\emergencystretch=2em
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -22,15 +24,24 @@
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{example}[theorem]{Example}
 
-\usepackage{hyperref}
+\usepackage[hyperfootnotes=false]{hyperref}
+\pdfstringdefDisableCommands{%
+    \def\\{ }%
+}
 \hypersetup{
     pdftitle={Arithmetic Positivity and Absolute Hodge Classes: Why Hodge-Riemann Positivity Does Not Strengthen Deligne's Absoluteness},
     pdfauthor={Lukas Geiger},
+    pdfsubject={Boundary result for Hodge-Riemann positivity and absolute Hodge classes},
+    pdfkeywords={Hodge conjecture, absolute Hodge classes, arithmetic positivity, Hodge-Riemann relations, Deligne absoluteness},
     colorlinks=true,
     linkcolor=black,
     urlcolor=blue,
     citecolor=black
 }
+\renewcommand*{\HyperDestNameFilter}[1]{en.#1}
+\makeatletter
+\let\auto@bib\@empty
+\makeatother
 
 \begin{document}
 
@@ -41,21 +52,27 @@
 \title{Arithmetic Positivity and Absolute Hodge Classes:\\Why Hodge-Riemann Positivity Does Not\\Strengthen Deligne's Absoluteness}
 
 \author{Lukas Geiger}
-\thanks{ORCID: \url{https://orcid.org/0009-0005-7296-1534}}
-\affiliation{Independent Researcher, Bernau im Schwarzwald, Germany}
+\affiliation{Independent Researcher, Bernau, Germany}
 
 \date{\today}
 
 \begin{abstract}
-We introduce the concept of \textit{arithmetic positivity} for the Hodge Conjecture: a rational $(p,p)$-class $\alpha \in H^{2p}(X, \mathbb{Q})$ on a smooth projective variety $X/\mathbb{C}$ is called arithmetically positive if it simultaneously satisfies Hodge-Riemann positivity under all polarizations, Deligne's absoluteness under all automorphisms of $\mathbb{C}$, and Lefschetz compatibility. We prove that algebraic classes are arithmetically positive and establish functoriality under finite morphisms and K\"unneth products of primitive classes. Our \textbf{main result is a No-Go theorem}: the arithmetically positive cone coincides exactly with Deligne's absolute Hodge classes ($\mathrm{AP}^p(X) = \mathrm{AbsHodge}^p(X)$), because the Hodge-Riemann bilinear relations automatically guarantee the positivity conditions for any class of type $(p,p)$. This is a well-known consequence of the Hodge-Riemann relations; the contribution of this paper is to make the saturation boundary explicit and to delineate what Hodge-Riemann-based positivity methods cannot achieve. The natural attempt to strengthen Deligne's absoluteness through Hodge-Riemann positivity therefore produces no new constraints, and the Arithmetic Positivity Conjecture reduces to Deligne's question (1982): ``Are all absolute Hodge classes algebraic?'' Furthermore, the obstructions (O1) and (O3) in the No-Go formulation are vacuous for rational $(p,p)$-classes; only (O2), failure of absoluteness, is effective. We introduce the Galois-Hodge-Riemann spectrum as a visualization of the absoluteness test, illustrate the theoretical predictions numerically across selected test configurations, and discuss directions for finding genuinely stronger positivity conditions beyond the Hodge-Riemann relations.
+We introduce the concept of \textit{arithmetic positivity} for the Hodge Conjecture: a rational $(p,p)$-class $\alpha \in H^{2p}(X, \mathbb{Q})$ on a smooth projective variety $X/\mathbb{C}$ is called arithmetically positive if it simultaneously satisfies Hodge-Riemann positivity under all polarizations, Deligne's absoluteness under all automorphisms of $\mathbb{C}$, and Lefschetz compatibility. We prove that algebraic classes are arithmetically positive and record limited functoriality tests: finite pullback is controlled on the pullback ample subcone and becomes a full AP statement only under an explicit ample-cone comparison hypothesis; K\"unneth products are treated for primitive classes and product-generated ample cones; finite pushforward remains conjectural.
+
+Our \textbf{main result is a No-Go theorem}: the arithmetically positive cone coincides exactly with Deligne's absolute Hodge classes ($\mathrm{AP}^p(X) = \mathrm{AbsHodge}^p(X)$), because the Hodge-Riemann bilinear relations automatically guarantee the positivity conditions for any class of type $(p,p)$. This is a well-known consequence of the Hodge-Riemann relations; the contribution of this paper is to make the saturation boundary explicit and to delineate what Hodge-Riemann-based positivity methods cannot achieve. The natural attempt to strengthen Deligne's absoluteness through Hodge-Riemann positivity therefore produces no new constraints, and the Arithmetic Positivity Conjecture reduces to Deligne's question (1982): ``Are all absolute Hodge classes algebraic?'' Furthermore, the obstructions (O1) and (O3) in the No-Go formulation are vacuous for rational $(p,p)$-classes; only (O2), failure of absoluteness, is effective. We introduce the Galois-Hodge-Riemann spectrum as a visualization of the absoluteness test, illustrate the theoretical predictions numerically across selected test configurations, and discuss controlled test-family directions for finding genuinely stronger conditions beyond the Hodge-Riemann relations.
+
 This paper is an expository contribution documenting a structural limitation; it does not contain new results beyond the observation that $\mathrm{AP} = \mathrm{AbsHodge}$.
 \end{abstract}
 
 \keywords{Hodge Conjecture, algebraic cycles, arithmetic positivity, absolute Hodge classes, Hodge-Riemann bilinear form, No-Go theorem}
 
-\thanks{AI tools (Claude by Anthropic) were used for mathematical formalization, literature verification, and editorial refinement. All mathematical content was developed, verified, and approved by the author.}
-
 \maketitle
+
+\begin{center}
+\footnotesize
+ORCID: \url{https://orcid.org/0009-0005-7296-1534}\\
+AI tools (Claude by Anthropic) were used for mathematical formalization, literature verification, and editorial refinement. All mathematical content was developed, verified, and approved by the author.
+\end{center}
 
 
 % ===================================================================
@@ -107,15 +124,16 @@ As we show below, the positivity alternative proposed in this paper also encount
 We observe that major breakthroughs in adjacent conjectures follow a different pattern:
 
 \begin{center}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{ll}
-\hline
+\toprule
 Conjecture & Key positivity property \\
-\hline
+\midrule
 Weil conjectures & Non-negativity of Frobenius eigenvalues \\
 BSD (rank 1) & Non-negativity of N\'eron--Tate height \\
 Tate (abelian var.) & Positivity via Faltings' isogeny theorem \\
-\hline
-\end{tabular}
+\bottomrule
+\end{tabular}}
 \end{center}
 
 In each case, a positivity property of the relevant arithmetic object plays a structural role -- though the proof techniques differ substantially (Deligne's proof of the Weil conjectures uses $\ell$-adic cohomology and the Lefschetz fixed-point theorem; Gross--Zagier explicitly constructs a Heegner point and computes its height). The Hodge Conjecture lacks: \textit{a positivity structure that forces algebraicity without constructing cycles}.
@@ -139,7 +157,7 @@ This paper is self-contained; all main results depend only on definitions and pr
 
 \subsection{Hodge-Riemann bilinear form}
 
-Let $X$ be a smooth projective variety of dimension $n$, equipped with a K\"ahler form $\omega$ defining an ample class $L = [\omega] \in H^{1,1}(X) \cap H^2(X, \mathbb{Z})$. The \textit{Lefschetz operator} $\Lambda_L: H^k(X) \to H^{k+2}(X)$ is defined by $\Lambda_L(\alpha) = L \cup \alpha$.\footnote{We adopt the convention $\Lambda_L(\alpha) = L \cup \alpha$; note that some authors (e.g., Voisin~\cite{Voisin2002}, Griffiths--Harris~\cite{GH1978}) reserve $\Lambda$ for the dual Lefschetz operator (the adjoint of $L$ with respect to the Hodge inner product), while denoting the cup-product operation simply by $L$ or $L \wedge$.}
+Let $X$ be a smooth projective variety of dimension $n$, equipped with a K\"ahler form $\omega$ defining an ample class $L = [\omega] \in H^{1,1}(X) \cap H^2(X, \mathbb{Z})$. The \textit{Lefschetz operator} $\Lambda_L: H^k(X) \to H^{k+2}(X)$ is defined by $\Lambda_L(\alpha) = L \cup \alpha$. We use the convention $\Lambda_L(\alpha) = L \cup \alpha$; some authors reserve $\Lambda$ for the dual Lefschetz operator, while denoting the cup-product operation simply by $L$ or $L \wedge$ (Voisin~\cite{Voisin2002}; Griffiths--Harris~\cite{GH1978}).
 
 \begin{theorem}[Hard Lefschetz]
 \label{thm:hard_lefschetz}
@@ -312,7 +330,7 @@ For the No-Go approach to work, the arithmetically positive cone must be functor
 
 \begin{proposition}[Pullback -- finite morphisms]
 \label{prop:pullback}
-Let $f: Y \to X$ be a finite morphism of smooth projective varieties. If $\alpha \in \mathrm{AP}^p(X)$, then $f^*\alpha$ satisfies (AP1) for all ample classes in the subcone $f^*\mathrm{Amp}(X) \subset \mathrm{Amp}(Y)$, and satisfies (AP2)--(AP3). In particular, $f^*\alpha \in \mathrm{AP}^p(Y)$ whenever $f^*\mathrm{Amp}(X)$ is dense in $\mathrm{Amp}(Y)$ (e.g., when $\rho(Y) = 1$).
+Let $f: Y \to X$ be a finite morphism of smooth projective varieties. If $\alpha \in \mathrm{AP}^p(X)$, then $f^*\alpha$ satisfies (AP1) for ample classes in the pullback subcone $f^*\mathrm{Amp}(X) \subset \mathrm{Amp}(Y)$, and satisfies (AP2)--(AP3) on that subcone. It is a full element of $\mathrm{AP}^p(Y)$ only under an explicit ample-cone comparison hypothesis, for example when the relevant positivity inequalities extend from $f^*\mathrm{Amp}(X)$ to all of $\mathrm{Amp}(Y)$ by density or by equality of the numerical ample cones.
 \end{proposition}
 
 \begin{proof}
@@ -322,7 +340,7 @@ Let $f: Y \to X$ be finite of degree $d$.
 \[
 \int_Y f^*\alpha_0 \cup f^*\bar{\alpha}_0 \cup (f^*L_X)^{n-2p} = d \int_X \alpha_0 \cup \bar{\alpha}_0 \cup L_X^{n-2p},
 \]
-where $n = \dim X = \dim Y$. Since $d > 0$ and the right side satisfies $(-1)^p Q_{L_X}(\alpha_0, \alpha_0) \geq 0$ by assumption, we obtain $(-1)^p Q_{f^*L_X}(f^*\alpha_0, f^*\alpha_0) \geq 0$. For a general ample class $L_Y \in \mathrm{Amp}(Y)$, the set $\{L \in \mathrm{Amp}(Y) : (-1)^p Q_L(\beta_0, \beta_0) \geq 0\}$ (where $\beta_0$ is the $L$-primitive component of $f^*\alpha$) is closed in the ample cone (by continuity of $Q_L$ in $L$; cf.\ Voisin~\cite{Voisin2002}, Prop.\ 6.32). Since $f$ is finite, the subcone $\{f^*L_X : L_X \in \mathrm{Amp}(X)\}$ is contained in $\mathrm{Amp}(Y)$ and generates a subcone on which the inequality holds. The extension to all of $\mathrm{Amp}(Y)$ follows by the density of $f^*\mathrm{Amp}(X) + \mathrm{Amp}(Y)$ and the closedness of the positivity condition.
+where $n = \dim X = \dim Y$. Since $d > 0$ and the right side satisfies $(-1)^p Q_{L_X}(\alpha_0, \alpha_0) \geq 0$ by assumption, we obtain $(-1)^p Q_{f^*L_X}(f^*\alpha_0, f^*\alpha_0) \geq 0$ on the pullback ample subcone. For a general ample class $L_Y \in \mathrm{Amp}(Y)$, no extension follows from finiteness alone: the primitive component of $f^*\alpha$ varies with $L_Y$, and the pullback subcone need not be dense in the ample cone of $Y$. If an additional ample-cone comparison hypothesis gives density or equality of the relevant cone, then continuity of the Hodge-Riemann form and of the Lefschetz decomposition extends the inequality to all ample classes.
 
 \textit{(AP2):} Pullback commutes with $\sigma$-conjugation: $(f^*\alpha)^\sigma = (f^\sigma)^*(\alpha^\sigma)$, and $f^\sigma: Y^\sigma \to X^\sigma$ is again finite of the same degree. Since $\alpha^\sigma \in \mathrm{AP}^p(X^\sigma)$ by assumption, the result follows from the (AP1) argument applied to $f^\sigma$ and $\alpha^\sigma$.
 
@@ -338,7 +356,7 @@ For morphisms $f: Y \to X$ with $\dim Y > \dim X$, the pullback $f^*L_X$ is not 
 \end{remark}
 
 \begin{remark}[Density caveat]\label{rem:density-caveat}
-The extension from $f^*\mathrm{Amp}(X)$ to all of $\mathrm{Amp}(Y)$ requires that $f^*\mathrm{Amp}(X)$ is dense in $\mathrm{Amp}(Y)$ in the Euclidean topology on $N^1(Y)_{\mathbb{R}}$. This holds when $f$ is surjective and $\rho(Y) = 1$ (Picard number one), but may fail for higher Picard number. In the general case, the proposition applies to the subcone $f^*\mathrm{Amp}(X) \subset \mathrm{Amp}(Y)$; extension to all ample classes remains conditional on the density hypothesis.
+The extension from $f^*\mathrm{Amp}(X)$ to all of $\mathrm{Amp}(Y)$ requires an explicit ample-cone comparison. A useful sufficient condition is that the pullback subcone has dense image in the relevant numerical ample cone, or that the numerical ample cones agree after pullback. This may hold in Picard-number-one situations, but it fails in general. Without such a hypothesis, Proposition~\ref{prop:pullback} is only a subcone functoriality statement.
 \end{remark}
 
 \begin{conjecture}[Pushforward -- finite morphisms]
@@ -382,7 +400,12 @@ Each summand vanishes unless both factors are non-zero. Since $\alpha$ is $L_X$-
 \label{lem:sign_product}
 Under the hypotheses of Lemma~\ref{lem:primitive_product}, with $k = p + q$:
 \begin{equation}
-(-1)^k\, Q_L(\alpha \boxtimes \beta,\, \alpha \boxtimes \beta) = \binom{N-2k}{n-2p}\, \bigl[(-1)^p\, Q_{L_X}(\alpha, \alpha)\bigr] \cdot \bigl[(-1)^q\, Q_{L_Y}(\beta, \beta)\bigr],
+\begin{aligned}
+(-1)^k\, Q_L(\alpha \boxtimes \beta,\, \alpha \boxtimes \beta)
+&= \binom{N-2k}{n-2p}
+   \bigl[(-1)^p Q_{L_X}(\alpha, \alpha)\bigr] \\
+&\quad\cdot \bigl[(-1)^q Q_{L_Y}(\beta, \beta)\bigr],
+\end{aligned}
 \label{eq:sign_kunneth}
 \end{equation}
 where $N = n + m$ and $Q_L$, $Q_{L_X}$, $Q_{L_Y}$ are the Hodge-Riemann forms~\eqref{eq:HR_form} on $X \times Y$, $X$, and $Y$ respectively.
@@ -395,11 +418,22 @@ Q_L(\alpha \boxtimes \beta,\, \alpha \boxtimes \beta) = \int_{X \times Y} (\alph
 \]
 Expanding $L^{N-2k}$ via the binomial formula as in Lemma~\ref{lem:primitive_product}, the only non-vanishing term occurs at $a = n - 2p$, $b = m - 2q$ (forced by $a \leq n-2p$, $b \leq m-2q$, and $a + b = N - 2k = (n-2p) + (m-2q)$). By the K\"unneth formula for integration:
 \[
-\int_{X \times Y} (\alpha \boxtimes \beta)^2 \cup L^{N-2k} = \binom{N-2k}{n-2p} \left(\int_X \alpha^2 \cup L_X^{n-2p}\right) \left(\int_Y \beta^2 \cup L_Y^{m-2q}\right).
+\begin{aligned}
+\int_{X \times Y}(\alpha \boxtimes \beta)^2 \cup L^{N-2k}
+&= \binom{N-2k}{n-2p}
+   \left(\int_X \alpha^2 \cup L_X^{n-2p}\right)\\
+&\quad\cdot
+   \left(\int_Y \beta^2 \cup L_Y^{m-2q}\right).
+\end{aligned}
 \]
 By definition~\eqref{eq:HR_form}, the integrals on $X$ and $Y$ are precisely $Q_{L_X}(\alpha, \alpha)$ and $Q_{L_Y}(\beta, \beta)$. Therefore:
 \[
-Q_L(\alpha \boxtimes \beta,\, \alpha \boxtimes \beta) = \binom{N-2k}{n-2p}\, Q_{L_X}(\alpha, \alpha) \cdot Q_{L_Y}(\beta, \beta).
+\begin{aligned}
+Q_L(\alpha \boxtimes \beta,\, \alpha \boxtimes \beta)
+&= \binom{N-2k}{n-2p}\,
+   Q_{L_X}(\alpha, \alpha)\\
+&\quad\cdot Q_{L_Y}(\beta, \beta).
+\end{aligned}
 \]
 Multiplying both sides by $(-1)^k = (-1)^{p+q} = (-1)^p \cdot (-1)^q$ yields equation~\eqref{eq:sign_kunneth}.
 \end{proof}
@@ -409,7 +443,12 @@ We verify (AP1)--(AP3) for $\alpha \boxtimes \beta$ with $\alpha \in \mathrm{AP}
 
 \textit{(AP1):} Let $L = L_X \boxtimes 1 + 1 \boxtimes L_Y$ for ample classes $L_X \in \mathrm{Amp}(X)$, $L_Y \in \mathrm{Amp}(Y)$. By Lemma~\ref{lem:primitive_product}, $\alpha \boxtimes \beta$ is $L$-primitive, so it equals its own primitive component. By Lemma~\ref{lem:sign_product}:
 \[
-(-1)^{p+q}\, Q_L(\alpha \boxtimes \beta,\, \alpha \boxtimes \beta) = \binom{N-2k}{n-2p}\, \bigl[(-1)^p\, Q_{L_X}(\alpha, \alpha)\bigr] \cdot \bigl[(-1)^q\, Q_{L_Y}(\beta, \beta)\bigr].
+\begin{aligned}
+&(-1)^{p+q} Q_L(\alpha \boxtimes \beta,\, \alpha \boxtimes \beta)\\
+&\quad= \binom{N-2k}{n-2p}
+   \bigl[(-1)^p Q_{L_X}(\alpha, \alpha)\bigr]\\
+&\quad\cdot \bigl[(-1)^q Q_{L_Y}(\beta, \beta)\bigr].
+\end{aligned}
 \]
 The binomial coefficient $\binom{N-2k}{n-2p} > 0$, and both bracketed factors are $\geq 0$ by (AP1) for $\alpha$ and $\beta$. Hence $(-1)^{p+q}\, Q_L(\alpha \boxtimes \beta, \alpha \boxtimes \beta) \geq 0$. Ample classes of the form $L_X \boxtimes 1 + 1 \boxtimes L_Y$ form a subcone of $\mathrm{Amp}(X \times Y)$. Since the set $\{L \in \overline{\mathrm{Amp}}(X \times Y) : (-1)^{p+q} Q_L(\gamma_0, \gamma_0) \geq 0\}$ is closed (as $Q_L$ depends continuously on $L$) and contains this subcone, the inequality extends to the closure. For product varieties where $\mathrm{Amp}(X \times Y)$ is generated by pullback classes (e.g., when $X$ or $Y$ has Picard number~$1$), this suffices. In general, the extension to all of $\mathrm{Amp}(X \times Y)$ requires verifying the inequality for polarisations with mixed terms, which remains open.
 
@@ -546,7 +585,12 @@ Q_L^\sigma(\alpha) := Q_{L^\sigma}(\alpha^\sigma, \alpha^\sigma)\,.
 \end{equation}
 The \textit{Galois-Hodge-Riemann spectrum} of $\alpha$ is:
 \begin{equation}
-\mathrm{Spec}_{\mathrm{GHR}}(\alpha) := \left\{ (-1)^p\, Q_L^\sigma(\alpha) \,:\, \sigma \in \mathrm{Aut}(\mathbb{C}),\, L \in \mathrm{Amp}(X) \right\} \subset \mathbb{R}\,.
+\begin{aligned}
+\mathrm{Spec}_{\mathrm{GHR}}(\alpha)
+:= \{\, &(-1)^p Q_L^\sigma(\alpha) :\\
+&\sigma \in \mathrm{Aut}(\mathbb{C}),\,
+  L \in \mathrm{Amp}(X)\,\} \subset \mathbb{R}.
+\end{aligned}
 \end{equation}
 \end{definition}
 
@@ -600,8 +644,12 @@ Consider the elliptic curve $E: y^2 = x^3 - x$ over $\mathbb{Q}(i)$, which has c
 
 The GHR spectrum of $[\Gamma_\tau]$ is non-trivial. Let $\sigma \in \mathrm{Aut}(\mathbb{C})$ be complex conjugation restricted to $\mathbb{Q}(i)$, so $\sigma(i) = -i$. Then $E^\sigma \cong E$ (since $y^2 = x^3 - x$ has rational coefficients), but the CM endomorphism transforms as $\tau^\sigma = \sigma(i) = -i$, so $[\Gamma_\tau]^\sigma = [\Gamma_{-\tau}]$. Let $L = L_1 \boxtimes 1 + 1 \boxtimes L_1$ be the product polarisation, where $L_1$ is the principal polarisation on $E$. Then:
 \begin{align}
-(-1)^1\, Q_L^\mathrm{id}([\Gamma_\tau]) &= (-1)^1\, Q_L([\Gamma_i],\, [\Gamma_i]) = 1 + |\tau|^2 = 1 + 1 = 2, \label{eq:cm_id}\\
-(-1)^1\, Q_L^\sigma([\Gamma_\tau]) &= (-1)^1\, Q_{L^\sigma}([\Gamma_{-i}],\, [\Gamma_{-i}]) = 1 + |-\tau|^2 = 1 + 1 = 2. \label{eq:cm_sigma}
+(-1)^1 Q_L^\mathrm{id}([\Gamma_\tau])
+&= (-1)^1 Q_L([\Gamma_i], [\Gamma_i]) \notag\\
+&= 1 + |\tau|^2 = 2, \label{eq:cm_id}\\
+(-1)^1 Q_L^\sigma([\Gamma_\tau])
+&= (-1)^1 Q_{L^\sigma}([\Gamma_{-i}], [\Gamma_{-i}]) \notag\\
+&= 1 + |-\tau|^2 = 2. \label{eq:cm_sigma}
 \end{align}
 Both values are positive, as guaranteed by Theorem~\ref{thm:easy_direction}. However, the \emph{intermediate} computation differs: the class $[\Gamma_i]$ and $[\Gamma_{-i}]$ have different K\"unneth decompositions in $H^1(E) \otimes H^1(E)$, reflecting the fact that $\sigma$ permutes the eigenspaces of the CM action on $H^1(E, \mathbb{C}) = H^{1,0}(E) \oplus H^{0,1}(E)$. Explicitly, $\tau^*$ acts on $H^{1,0}(E)$ by multiplication by $i$ and on $H^{0,1}(E)$ by $-i$; under $\sigma$, these eigenvalues are exchanged.
 
@@ -692,7 +740,12 @@ The GHR obstruction (Definition~\ref{def:galois_HR}) remains meaningful as a con
 
 Combining Proposition~\ref{prop:absolute_implies_ap} with Theorem~\ref{thm:easy_direction}, the chain is:
 \begin{equation}
-\text{Algebraic} \xRightarrow{\text{Thm.~\ref{thm:easy_direction}}} \text{AP} = \text{Absolute} \xRightarrow{\text{?}} \text{Hodge}\,,
+\begin{aligned}
+\text{Algebraic}
+&\xRightarrow{\text{Thm.~\ref{thm:easy_direction}}}
+  \text{AP} = \text{Absolute}\\
+&\xRightarrow{\text{?}} \text{Hodge}\,,
+\end{aligned}
 \end{equation}
 where the equality $\text{AP} = \text{Absolute}$ is Remark~\ref{rem:ap_equals_absolute}. The HC reduces to: ``Are all Hodge classes absolute?'' (i.e., every arrow can be reversed). For abelian varieties, the last arrow is provided by Deligne's theorem (all Hodge classes on abelian varieties are absolute).
 
@@ -752,7 +805,7 @@ The Hodge--Riemann form $(-1)^p Q_L$ can be interpreted as positivity at the arc
 
 Since $\mathrm{AP}^p = \mathrm{AbsHodge}^p$ (Remark~\ref{rem:ap_equals_absolute}), the current AP conditions do not go beyond Deligne's absoluteness. This section surveys candidate \textit{strengthening} directions that could produce genuinely new constraints beyond the Hodge-Riemann relations.
 
-\subsubsection{$p$-adic slope constraints}
+\subsubsection{\texorpdfstring{$p$-adic slope constraints}{p-adic slope constraints}}
 
 \begin{remark}[$p$-adic positivity: Newton versus Hodge polygon]
 \label{rem:newton-hodge}
@@ -902,13 +955,14 @@ The Hodge--Riemann relations provide \emph{bilinear} positivity: $(-1)^p Q_L(\al
 
 \begin{remark}[Three routes to nonlinear positivity]
 \label{rem:nonlinear-positivity}
-\begin{enumerate}
-\item \emph{Positivity under degenerating polarisations:} For a family of ample classes $L_t \to L_0$ where $L_0$ is nef but not ample, the limit $\lim_{t \to 0} (-1)^p Q_{L_t}(\alpha, \bar\alpha)$ may be non-negative even when $Q_{L_0}$ is not defined. This ``boundary positivity'' captures classes that are algebraic in the limit but not detected by any single polarisation.
+\emph{Boundary positivity.}
+For a family of ample classes $L_t \to L_0$, where $L_0$ is nef but not ample, the signed values $(-1)^p Q_{L_t}$ can have a non-negative limit as $t \to 0$ even when $Q_{L_0}$ is not defined. This captures classes that are algebraic in the limit but not detected by any single polarisation.
 
-\item \emph{Positivity under motivic convolution:} For a product variety $X \times Y$, the K\"unneth decomposition gives $H^{p,p}(X \times Y) = \bigoplus_{\substack{a+c=p \\ b+d=p}} H^{a,b}(X) \otimes H^{c,d}(Y)$. For \emph{rational} $(p,p)$-classes restricted to the diagonal summands $H^{a,a}(X) \otimes H^{p-a,p-a}(Y)$, the positivity condition on the product is multiplicative (Lemma~\ref{lem:sign_product}). The cross terms $H^{a,b}(X) \otimes H^{c,d}(Y)$ with $a \neq b$ contribute to the $(p,p)$-type only when the mixed Hodge types cancel, and their positivity analysis requires going beyond the diagonal framework of this paper.
+\emph{Positivity under motivic convolution.}
+For a product variety $X \times Y$, the K\"unneth decomposition gives $H^{p,p}(X \times Y) = \bigoplus_{\substack{a+c=p \\ b+d=p}} H^{a,b}(X) \otimes H^{c,d}(Y)$. For \emph{rational} $(p,p)$-classes restricted to the diagonal summands $H^{a,a}(X) \otimes H^{p-a,p-a}(Y)$, the positivity condition on the product is multiplicative (Lemma~\ref{lem:sign_product}). The cross terms $H^{a,b}(X) \otimes H^{c,d}(Y)$ with $a \neq b$ contribute to the $(p,p)$-type only when the mixed Hodge types cancel, and their positivity analysis requires going beyond the diagonal framework of this paper.
 
-\item \emph{Positivity after Galois averaging:} For an absolutely Hodge class $\alpha$, the Galois average $\bar\alpha$ (cf.\ Remark~\ref{rem:galois-profinite}) is again an absolute Hodge class. For $p = 1$, $\bar\alpha$ is algebraic by the Lefschetz $(1,1)$-theorem. For $p \geq 2$, the algebraicity of $\bar\alpha$ is \emph{not known} in general---it is equivalent to (a special case of) Deligne's question. The arithmetic positivity conditions AP1--AP3 can be reformulated as: $\alpha$ is algebraic if and only if $\alpha$ is ``close'' to its Galois average in the $Q_L$-metric. This reformulation is informative only if the Galois average itself can be shown to be algebraic independently of the Hodge conjecture.
-\end{enumerate}
+\emph{Positivity after Galois averaging.}
+For an absolutely Hodge class $\alpha$, the Galois average $\bar\alpha$ (cf.\ Remark~\ref{rem:galois-profinite}) is again an absolute Hodge class. For $p = 1$, $\bar\alpha$ is algebraic by the Lefschetz $(1,1)$-theorem. For $p \geq 2$, the algebraicity of $\bar\alpha$ is \emph{not known} in general---it is equivalent to (a special case of) Deligne's question. The arithmetic positivity conditions AP1--AP3 can be reformulated as: $\alpha$ is algebraic if and only if $\alpha$ is ``close'' to its Galois average in the $Q_L$-metric. This reformulation is informative only if the Galois average itself can be shown to be algebraic independently of the Hodge conjecture.
 \end{remark}
 
 \begin{remark}[Galois averaging: profinite limit]\label{rem:galois-profinite}
@@ -928,13 +982,21 @@ The Python script \texttt{compute\_ghr\_spectrum.py} (accompanying this paper) c
 
 All test configurations confirm $(-1)^p Q_L \geq 0$ on $P^{p,p}$, as guaranteed by the Hodge-Riemann relations. The $K3 \times K3$ test with non-tensor-product perturbations -- classes that are \emph{not} of type $(p,p)$ after $\sigma$-conjugation, and hence not absolute Hodge -- produces negative eigenvalues of $(-1)^p Q_L$, illustrating that the GHR spectrum can detect non-absoluteness. This does not go beyond Deligne's absoluteness criterion: the negative eigenvalues arise precisely because the perturbed classes fail to be $(p,p)$-classes on the conjugate variety, so the Hodge-Riemann relations do not apply.
 
-\subsection{Post-Zookeeper transfer: test families before general Hodge}
+\subsection{Controlled test-family transfer beyond \texorpdfstring{$\mathrm{AP}=\mathrm{AbsHodge}$}{AP=AbsHodge}}
 \label{subsec:zookeeper-hodge-transfer}
 
 The post-Zookeeper interpretation of this paper is deliberately modest.
 Since arithmetic positivity collapses to absolute Hodge classes, the next
 step is not another global positivity axiom, but a test-family ladder for
 candidate strengthenings beyond Deligne's absoluteness.
+The symbols $\mathrm{AP}'$, $\mathrm{AP}''$, and
+$\mathrm{AP}^{\prime\prime\prime}$ do not denote proposed global
+replacements for the Hodge conjecture. They denote increasingly restrictive
+tests on controlled families: $\mathrm{AP}'$ records provenance defects,
+$\mathrm{AP}''$ asks for a bounded orbit-rigidity certificate, and
+$\mathrm{AP}^{\prime\prime\prime}$ filters out certificates whose auxiliary
+choices merely encode the target class. None of these conditions is claimed
+to imply the Hodge conjecture in general.
 
 The current CORE closure of Riemann-$C2/MS2$ does not strengthen this
 paper's Hodge result.  Hodge remains a negative control for the programme:
@@ -969,33 +1031,152 @@ automatically on all negative controls, it is too weak; if it separates a
 known positive family from a stress case, it becomes a genuine candidate
 for further formalisation.
 
+\subsubsection*{Towards \texorpdfstring{$\mathrm{AP}'$}{AP'}: Provenance defects}
+\label{subsec:provenance-defects}
+
+The first strengthening should be read as a provenance scanner rather than
+as another positivity cone. Relative to a named test family, define a defect
+vector
+\[
+D_{\mathrm{prov}}(\alpha)
+  = (D_{\mathrm{slope}},D_{\mathrm{Tate}},D_{\mathrm{MT}},
+     D_{\mathrm{mon}},D_{\mathrm{cycle}}),
+\]
+where the entries record, respectively, slope compatibility at good
+reductions, explanation by the Tate/Galois fixed part, Mumford--Tate
+compatibility, monodromy or o-minimal persistence, and the residual class
+left after subtracting the known algebraic cycle span.  A conditional
+fingerprint statement would say that, in a test family where the relevant
+Tate/standard-conjecture input and comparison functoriality are independently
+available, $D_{\mathrm{prov}}(\alpha)=0$ places $\alpha$ in the known
+algebraic cycle span.  This is a special-family diagnostic, not a global
+theorem.
+
+\subsubsection*{Towards \texorpdfstring{$\mathrm{AP}''$}{AP''}: Conditional Orbit-Rigidity}
+\label{subsec:orbit-rigidity}
+
+The five transfer slots suggest a prototype sharpening.  Let
+$f\colon \mathcal{X}_{S}\to S$ be a spread-out of $X$ over a smooth
+base~$S$, let $Z\subset S$ be an irreducible algebraic component of the
+Hodge locus of~$\alpha$, let $B$ denote the corresponding relative
+Chow or Hilbert component, and let $T\subset Z$ be a Zariski-dense
+subset at whose points $\alpha_{t}$ is algebraic relative to~$B$.
+We call $\alpha$ \emph{orbit-rigid on $(f,Z,B)$} if:
+\begin{enumerate}
+\item[(i)] \emph{Properness.} The relative Chow/Hilbert components
+  parametrising the relevant cycle classes are proper over~$S$.
+\item[(ii)] \emph{Density.} $T$ is Zariski-dense in~$Z$.
+\item[(iii)] \emph{Comparison functoriality.}  The comparison
+  isomorphisms between Betti, de~Rham, $\ell$-adic, and crystalline
+  realisations are functorial on the relevant quotient; no new residual
+  classes arise when lifting from a special to the generic fibre.
+\item[(iv)] \emph{Specialisation rigidity.}  Base change along
+  $Z\to S$ does not create new residual cycle classes.
+\end{enumerate}
+
+\begin{lemma}[Conditional Orbit-Rigidity]
+\label{lem:orbit-rigidity}
+Let $\alpha\in\mathrm{AbsHodge}^{p}(X)$ be orbit-rigid on $(f,Z,B)$
+in the sense above.  Then the restriction $\alpha_{\eta}$ to the generic
+fibre $\mathcal{X}_{\eta}$ over the generic point $\eta$ of~$Z$ lies in
+the image of the cycle class map
+$\mathrm{cl}\colon\mathrm{CH}^{p}(\mathcal{X}_{\eta})_{\mathbb{Q}}\to
+H^{2p}(\mathcal{X}_{\eta},\mathbb{Q}(p))$.
+If the base-point $0\in S$ lies in the same controlled component,
+then $\alpha$ is algebraic.
+\end{lemma}
+
+\begin{proof}[Proof idea]
+Properness of $B$ \emph{(i)} and Zariski-density of $T$ \emph{(ii)} imply via
+the valuative criterion that the closure of the algebraic locus in $B$
+contains the generic point~$\eta$ of~$Z$.  Comparison functoriality \emph{(iii)}
+ensures that each algebraic class over $t\in T$ lifts consistently in all
+cohomological realisations.  Specialisation rigidity \emph{(iv)} prevents
+accumulation of transcendental residual classes at the limit.  A complete
+proof requires the Cattani--Deligne--Kaplan principle for Hodge loci
+\cite{CattaniDeligneKaplan1995} together with a properness argument for
+the relative Hilbert scheme; both
+steps are conditional on the standard conjectures in the relevant
+characteristic-$p$ reductions.
+\end{proof}
+
+\begin{remark}
+\label{rem:ap-double-prime}
+Lemma~\ref{lem:orbit-rigidity} does not prove the Hodge Conjecture.
+It should be read as a conditional closure template, not as a new
+unconditional algebraicity theorem. Its force lies entirely in the
+independent verification of bounded relative Chow/Hilbert data, comparison
+functoriality, and specialisation rigidity in a named test family. Under
+those independently checked hypotheses, algebraicity propagates from a
+Zariski-dense set to the generic point.  Weil abelian fourfolds of
+discriminant one are a natural first candidate for a positive test;
+$K3\times K3$ perturbations outside the tensor-product locus serve as the
+first negative control.  Whether AP$''$ separates these two families
+determines whether it constitutes a genuine strengthening beyond
+$\mathrm{AbsHodge}$.
+\end{remark}
+
+\subsubsection*{Towards \texorpdfstring{$\mathrm{AP}^{\prime\prime\prime}$}{AP'''}: Uniformity and anti-advice}
+\label{subsec:ap-triple-prime}
+
+The orbit-rigidity certificate still has a failure mode: the family
+$f$, the Hodge-locus component $Z$, the Chow/Hilbert component $B$, or the
+dense set $T$ could be chosen after seeing the target class $\alpha$.  In
+that case the certificate may encode $\alpha$ rather than explain it.  We
+therefore use
+\[
+\mathrm{AP}^{\prime\prime\prime}_{\mathrm{unif}}(\alpha;R,C)
+\]
+as an anti-tautology filter for an $\mathrm{AP}''$ certificate $C$. It
+requires that the auxiliary data are generated from a pre-registered rule
+class $R$ depending only on the ambient data $(X,p)$ or on a fixed
+test-family ladder, with bounded advice, erosion stability under removal of
+an $\alpha$-specific incidence condition, support on a neighbouring family
+or Zariski-dense set, and failure on negative controls driven only by
+Hodge--Riemann form stability.  This condition does not add a new global
+Hodge conjecture; it says when a special-family certificate is non-tautological.
+
+\begin{center}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llllll}
+\toprule
+\textbf{Family} & \textbf{Cycle mechanism} & \textbf{AP$'$} & \textbf{AP$''$} & \textbf{AP$^{\prime\prime\prime}$} & \textbf{Status} \\
+\midrule
+CM/Weil fourfolds & endomorphism cycles & slope/Tate/MT & candidate & rule from endomorphisms & positive control \\
+Abelian fourfolds & known cycle span & Tate/MT & candidate & ambient family rule & positive control \\
+OG6-type families & hyperkaehler cycles & monodromy/cycle & open & needs registry & test case \\
+Char-$p$ Tate cases & Tate classes & slope/Tate & conditional & reduction rule & arithmetic test \\
+Voisin/$K3\times K3$ stress & none fixed & residual class & should fail & post-hoc risk & negative control \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
 \subsection*{Result classification}
 
 This paper is a \textbf{boundary result}: it determines precisely what positivity-based methods can and cannot achieve for the Hodge conjecture.
 
 \begin{center}
-\begin{tabular}{|l|l|}
-\hline
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{ll}
+\toprule
 \textbf{Result} & \textbf{Type} \\
-\hline
-\hline
-\multicolumn{2}{|l|}{\textit{No-go theorem:}} \\
-\hline
+\midrule
+\multicolumn{2}{l}{\textit{No-go theorem:}} \\
 AP $=$ AbsHodge (HR adds nothing) & Theorem \\
 HC reduces to Deligne's question & Corollary \\
-\hline
-\multicolumn{2}{|l|}{\textit{Constructive tools:}} \\
-\hline
+\midrule
+\multicolumn{2}{l}{\textit{Constructive tools:}} \\
 GHR spectrum definition & Definition \\
-Functoriality (finite morphisms) & Proposition \\
+Finite pullback / primitive K\"unneth & Partial, conditional \\
 Voisin-type GHR detection & Numerical \\
-\hline
-\multicolumn{2}{|l|}{\textit{Open (equivalent to Deligne 1982):}} \\
-\hline
+Conditional Orbit-Rigidity $(\mathrm{AP}'')$ & Lemma (conditional) \\
+Uniform anti-advice filter $(\mathrm{AP}''')$ & Methodological criterion \\
+\midrule
+\multicolumn{2}{l}{\textit{Open (equivalent to Deligne 1982):}} \\
 AbsHodge $\stackrel{?}{=}$ Algebraic & Open \\
 Stronger positivity beyond HR & Research direction \\
-\hline
-\end{tabular}
+\bottomrule
+\end{tabular}}
 \end{center}
 
 
@@ -1016,7 +1197,7 @@ The paper does not introduce a genuinely new conjecture; the saturation of Hodge
 
 \item \textbf{A visualization of the absoluteness test:} The Galois-Hodge-Riemann spectrum reformulates Deligne's absoluteness criterion in the language of Hodge-Riemann positivity, making explicit which Galois conjugation could witness non-algebraicity. It does not provide constraints beyond Deligne's absoluteness.
 
-\item \textbf{Functoriality results:} The arithmetically positive cone is functorial under finite pullback and K\"unneth product for primitive classes; finite pushforward remains conjectural.
+\item \textbf{Partial functoriality checks:} The paper records partial functoriality checks rather than a full functorial theory: finite pullback is conditional on the ample-cone comparison, primitive K\"unneth products are controlled for product polarizations, and finite pushforward remains open.
 \end{enumerate}
 
 The remaining challenge is Deligne's question: proving that absolute Hodge classes are algebraic. Future work should seek stronger positivity conditions -- beyond the Hodge-Riemann relations -- that could further narrow the gap between absolute Hodge classes and algebraic classes.
@@ -1189,5 +1370,10 @@ Integral $p$-adic Hodge theory.
 DOI: 10.1007/s10240-019-00102-z.
 
 \end{thebibliography}
+
+\makeatletter
+\let\test@bbl@sw\false@sw
+\auto@bib@empty
+\makeatother
 
 \end{document}
