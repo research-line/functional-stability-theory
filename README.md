@@ -25,7 +25,7 @@ Classified by the SGE taxonomy from the Zeta Zoo. These instantiate Pattern A on
 | Paper | Version | Status | Open Problem | Concept-DOI |
 |-------|---------|--------|--------------|-------------|
 | [**BSD**](fst-mathematics/bsd/) | v1.2 candidate | Reformulation; rank ≤ 1 verified | Higher Gross–Zagier (rank ≥ 2) | [10.5281/zenodo.19087443](https://doi.org/10.5281/zenodo.19087443) |
-| [**Hodge**](fst-mathematics/hodge/) | v1.1 | No-Go Theorem | = Deligne's question (1982) | [10.5281/zenodo.19087439](https://doi.org/10.5281/zenodo.19087439) |
+| [**Hodge**](fst-mathematics/hodge/) | v1.2 | Easy Direction + AP=AbsHodge | Hard Direction beyond Deligne | [10.5281/zenodo.19087439](https://doi.org/10.5281/zenodo.19087439) |
 | [**P vs NP**](fst-mathematics/p-vs-np/) | v1.2 | Reformulation | Uniformity Bridge | [10.5281/zenodo.19056809](https://doi.org/10.5281/zenodo.19056809) |
 
 ### FST-Physics
