@@ -1,0 +1,662 @@
+% ===================================================================
+% FST-IV: A Scale-Invariant Stability Principle from Particles to Cosmology
+%         -- An Overview of the Functional Stability Theory Programme
+% Target journal: Foundations of Physics / Entropy
+% Status: v1 (programmatic overview, structural and reductive contribution)
+% Author: Lukas Geiger, Bernau, Germany
+% Version history:
+%   v0 -- 2026-04 (initial skeleton, structural draft)
+%   v1 -- 2026-05-12 (series-hub: components table, building-blocks status,
+%                     bibitems with Zenodo DOIs, AI-disclosure L3,
+%                     EN/DE parity)
+% ===================================================================
+
+\documentclass[11pt,a4paper]{article}
+
+% --- Packages ------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{enumitem}
+\usepackage{xcolor}
+
+% --- Theorem environments ------------------------------------------
+\newtheorem{axiom}{Axiom}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{conjecture}{Conjecture}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+% --- Title ---------------------------------------------------------
+\title{Functional Stability Theory ---\\
+A Programmatic Hub:\\
+Universal Convexity-Uniqueness\\
+Across Scales\\[0.5em]
+\large\textit{From Particles to Cosmology}}
+
+\author{Lukas Geiger\\
+\textit{Independent Researcher, Bernau, Germany}\\
+ORCID: \url{https://orcid.org/0009-0005-7296-1534}}
+
+\date{May 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Functional Stability Theory (FST) is a research programme that proposes
+a single stability principle -- the \emph{Universal Convexity-Uniqueness
+criterion} (UCU) -- as a unifying framework for emergent structure
+across physical scales, from thermodynamic equilibria of fundamental
+parameters (FST-I) through autocatalytic chemistry (FST-II) and
+biological evolutionary stability (FST-III) up to cosmological dark
+energy and turbulence. This overview synthesises the programme. The
+universal game $(x_L, G_L, D_L)$ is summarised together with the
+Maximum Entropy Production Principle (MEPP) initial-condition axiom,
+and the three-lemma endgame UCU1 (strict convexity), UCU2 (existence
+of minimiser) and UCU3 (quantitative quadratic lower bound) is
+formulated as the technical core. The renormalisation group (RG)
+provides the mathematical bridge between scales. We tabulate the
+status of UCU1/UCU2/UCU3 across applications (thermodynamics,
+chemistry, biology, K41 turbulence, cosmological dark energy,
+Yang--Mills mass gap) and document the methodological lesson learned
+from the cosmological route (\emph{Pattern~A}): a positivity
+reformulation of an open conjecture is in general only a translation
+of language, not progress, unless its proof strength is independently
+verified. This article is an \emph{honest survey}: it describes what
+the programme delivers, what remains conditional, and which sub-problems
+are open (HD3' for Beal, full UCU3 for Yang--Mills, L4 RG-matching
+for the dark-energy/CRM-VI line).
+\end{abstract}
+
+\textbf{Keywords:} stability, entropy production, renormalisation group,
+Nash equilibrium, scale invariance, fine-tuning, dark energy,
+turbulence, mass gap.
+
+% ===================================================================
+\section{Introduction}
+\label{sec:intro}
+% ===================================================================
+
+The fine-tuning problem -- the empirical observation that a wide range
+of physical parameters (Standard-Model couplings, the cosmological
+constant, the chemical reaction networks compatible with life) appears
+to be selected with high precision among all logically possible values
+-- is usually treated as scale-specific: anthropic at the cosmological
+scale, kinetic at the chemical scale, evolutionary at the biological
+scale. Functional Stability Theory (FST) explores the alternative
+hypothesis that these selection statements are different manifestations
+of a single stability principle.
+
+The programme has a fixed shape across scales:
+\begin{enumerate}[label=(\roman*),leftmargin=2em]
+\item A configuration space $X$ on which a functional $F$ is defined.
+\item A conditional system: $F$ admits a unique minimiser provided
+      a strict convexity property (UCU1), an existence property (UCU2)
+      and a quantitative quadratic lower bound (UCU3) hold on
+      a closed convex feasibility set $K \subset X$.
+\item A renormalisation-group (RG) bridge connecting two scales,
+      ensuring that the minimiser at one scale induces a stability
+      statement at another.
+\end{enumerate}
+The contribution of this overview is therefore not a new theorem,
+but the \emph{programmatic} claim that scales as different as the
+Standard-Model parameter selection (FST-I) and dark-energy late-time
+acceleration (CRM-VI) admit the same conditional structure. Earlier
+papers in the series treat individual scales; the present article
+maps them onto a single architecture and identifies which sub-problems
+remain open.
+
+% ===================================================================
+\subsection*{FST Series at a Glance}
+\label{subsec:series-glance}
+% ===================================================================
+
+This paper serves as the \emph{programmatic hub} for the Functional
+Stability Theory series. Table~\ref{tab:series-components} lists the
+direct application-scale companion papers (FST-I, FST-II, FST-III,
+FST-DE) and the major published FST building blocks in the mathematics
+and physics lines that this overview references.
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.18}
+\small
+\begin{tabular}{lllc}
+\toprule
+\textbf{Paper} & \textbf{Scale / Target} & \textbf{Reference} &
+\textbf{Series role} \\
+\midrule
+\multicolumn{4}{l}{\textit{Direct application companions (FST-PRACTICAL)}} \\
+FST-I  & Thermodynamic / SM parameters   & \cite{GeigerFST-I-2026}  & hasPart \\
+FST-II & Chemical / autocatalysis        & \cite{GeigerFST-II-2026} & hasPart \\
+FST-III& Biological / protein folding    & \cite{GeigerFST-III-2026}& hasPart \\
+FST-DE & Cosmological / dark energy      & \cite{GeigerFST-DE-2026} & hasPart \\
+\midrule
+\multicolumn{4}{l}{\textit{Mathematical building blocks (FST-MATHEMATICS)}} \\
+RH v2.1 (Even Dominance)        & spectral stability      & \cite{GeigerRH-EvenDom-2026} & references \\
+Zeta Zoo (NE-B Boundary)        & classification          & \cite{GeigerZetaZoo-2026}    & references \\
+Zookeeper (CCM route)           & RH technical core       & \cite{GeigerZookeeper-2026}  & references \\
+FST Spectrum Duality            & physics-master          & \cite{GeigerSpectrumDuality-2026} & references \\
+Hodge Positivity                & AP / algebraicity       & \cite{GeigerHodge-2026}      & references \\
+BSD Positivity                  & elliptic curve heights  & \cite{GeigerBSD-2026}        & references \\
+P vs NP Entropy                 & complexity              & \cite{GeigerPvsNP-2026}      & references \\
+\midrule
+\multicolumn{4}{l}{\textit{Physical building blocks (FST-PHYSICS)}} \\
+Yang--Mills Mass Gap            & strong-coupling lattice & \cite{GeigerYM-2026}         & references \\
+Navier--Stokes Regularity       & 3D NS attractor route   & \cite{GeigerNS-2026}         & references \\
+NS-LDI Framework                & TLL/LDI bridge          & \cite{GeigerNSLDI-2026}      & references \\
+K41 Turbulence (joint minimiser)& Kolmogorov spectrum     & \cite{GeigerK41-2026}        & references \\
+\bottomrule
+\end{tabular}
+\caption{FST series components. ``hasPart'' (Zenodo Related Identifier
+\texttt{hasPart}) marks the four direct application-scale companions
+that are co-published with this overview. ``references'' marks
+published FST building blocks that the overview cites but does not
+formally bundle. All identifiers are persistent Zenodo DOIs; see the
+bibliography for resolvers.}
+\label{tab:series-components}
+\end{table}
+
+% ===================================================================
+\section{The Universal Game}
+\label{sec:universal-game}
+% ===================================================================
+
+\subsection{Two Axioms}
+
+\begin{axiom}[Initial Condition]
+The cosmos starts in a state of maximal gradient and minimal structure
+(low entropy, high free-energy gradient).
+\end{axiom}
+
+\begin{axiom}[Evolution: MEPP]
+Open non-equilibrium subsystems evolve, on the timescales of interest,
+along trajectories consistent with the Maximum Entropy Production
+Principle (MEPP)~\cite{MartyushevSeleznev2006}.
+\end{axiom}
+
+\subsection{Scale Triple}
+
+For each physical scale $L$ we associate a triple
+\[
+\mathcal{S}_L \;=\; (x_L,\; G_L,\; D_L),
+\]
+where $x_L$ is the configuration variable (field, population fraction,
+density profile), $G_L = (S_L, \Pi_L)$ is the local game
+(strategy space $S_L$ and payoff $\Pi_L$), and $D_L$ is the dynamics
+$\dot{x}_L = D_L(x_L; \Pi_L)$.
+
+\subsection{Stability Definition}
+
+\begin{definition}[Stable State]
+$x_L^*$ is \emph{stable} at scale $L$ if it is a locally attractive
+fixed point of $D_L$ (Lyapunov sense) and robust against invasion
+or perturbation (Nash/ESS criterion at the game level).
+\end{definition}
+
+The choice of payoff proxy at each scale (entropy production
+$\dot S$, free-energy destruction $-\Delta G$, mean fitness $\bar f$,
+etc.) is dictated by the physical setting; the FST claim is that the
+\emph{long-time stable} attractor correlates with the maximum payoff
+proxy under MEPP-compatible boundary conditions.
+
+% ===================================================================
+\section{The Universal Stability Criterion (UCU)}
+\label{sec:ucu}
+% ===================================================================
+
+The technical core of the programme is a three-lemma endgame
+formulated in the convex-analysis language of reflexive Banach spaces.
+We refer to \texttt{CORE/UCU\_FORMAL\_DEFINITIONS.md}
+for the formal definitions and the standard literature
+(Brezis~\cite{Brezis2011}, Ekeland--T\'emam~\cite{EkelandTemam1999},
+Evans~\cite{Evans2010}). Throughout this section, $X$ is a reflexive
+real Banach space, $K \subset X$ is non-empty, closed and convex, and
+$F : K \to \mathbb{R} \cup \{+\infty\}$ satisfies (A1) properness,
+(A2) weak lower semicontinuity, (A3) coercivity.
+
+\begin{lemma}[UCU1 -- Strict Convexity]
+\label{lem:ucu1}
+$F$ is \emph{strictly convex} on $K$:
+$F(\lambda x + (1{-}\lambda) y) < \lambda F(x) + (1{-}\lambda)F(y)$
+for all $x \neq y$ in $K$ and $\lambda \in (0,1)$.
+\end{lemma}
+
+\begin{lemma}[UCU2 -- Existence]
+\label{lem:ucu2}
+Under (A1)--(A3), $F$ attains its infimum on $K$:
+there exists $x^* \in K$ with $F(x^*) = \inf_K F$.
+\end{lemma}
+
+\begin{lemma}[UCU3 -- Quantitative Quadratic Lower Bound]
+\label{lem:ucu3}
+There exists $\mu > 0$ such that for all $x \in K$,
+\[
+F(x) \;\ge\; F(x^*) \;+\; \tfrac{\mu}{2}\,\|x - x^*\|^2.
+\]
+UCU3 splits into a \emph{local} and a \emph{global} version
+(see Section~\ref{sec:cross-scale}).
+\end{lemma}
+
+\noindent\textbf{Consequence (UCU-Theorem, conditional form).}
+If UCU1 + UCU2 + UCU3 hold on $K$, then $F$ admits a \emph{unique}
+minimiser, and the minimum is \emph{quantitatively isolated} in
+$\|\cdot\|$. The first two lemmas are classical (Tonelli direct
+method); UCU3 is the application-specific input that ties the
+abstract result to the physics of the scale.
+
+\begin{remark}
+The role of UCU3 is the same as the role of a \emph{spectral gap}
+in the resolvent picture of \cite{GeigerZookeeper-2026}: it converts a
+qualitative uniqueness statement into a quantitative stability
+estimate. Across scales, UCU3 reads ``no flat direction at the
+minimum''.
+\end{remark}
+
+% ===================================================================
+\section{Renormalisation Group as Mathematical Bridge}
+\label{sec:rg-bridge}
+% ===================================================================
+
+The RG provides the formal apparatus for relating the universal game
+at scale $L$ to that at scale $L+1$. A Kadanoff block transformation
+$R_b : (x_L, G_L, D_L) \mapsto (x_{L+1}, G_{L+1}, D_{L+1})$ is required
+to preserve at least one of the following invariants:
+\begin{enumerate}[label=(\Alph*),leftmargin=2em]
+\item the fixed-point structure (number and type of stable attractors),
+\item the best-response geometry (sign pattern of the Jacobian
+      around $x_L^*$),
+\item the existence of a Lyapunov / potential function.
+\end{enumerate}
+Whenever (A)--(C) is preserved, a UCU-stable scale-$L$ minimiser
+induces a UCU-stable scale-$(L{+}1)$ minimiser.
+
+\paragraph{Compact statement.}
+The RG-bridge is the mechanism by which the conditional UCU theorem
+becomes \emph{transferable}. In practice, the bridge has been worked
+out only in fragments (see the open problems in
+Section~\ref{sec:open}); for the cosmological RG-matching of the
+$R + \gamma R^2$ sector (CRM-VI), the L4 step remains open.
+
+% ===================================================================
+\section{Cross-Scale Status Map}
+\label{sec:cross-scale}
+% ===================================================================
+
+Table~\ref{tab:status} summarises the present status of UCU1, UCU2,
+UCU3 (local and global) across the six application scales of the
+programme.
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{lllllll}
+\toprule
+\textbf{Scale} & \textbf{Functional} & \textbf{UCU1} & \textbf{UCU2}
+& \textbf{UCU3 local} & \textbf{UCU3 global} \\
+\midrule
+FST-I (Thermo / SM)        & $\Sigma[\alpha,m_e/m_p,\dots]$ &
+\checkmark & \checkmark & plateau & open \\
+FST-II (Chemistry)         & $G[\text{hypercycle}]$ &
+\checkmark & \checkmark & local OK & open \\
+FST-III (Biology / fold)   & $F_{\text{fold}}[\phi]$ &
+\checkmark & \checkmark & local OK & open \\
+K41 (Turbulence)           & $F[E(k)]$ &
+\checkmark & \checkmark & \checkmark $(g^*=\tfrac12)$ & LSI open \\
+DE / CRM-VI (Cosmology)    & $\Phi(\rho)$ &
+\checkmark & \checkmark & \checkmark & L4 RG-match open \\
+YM (Mass gap)              & $\mathcal{E}[A]$ &
+? & ? & ? & UCU3 = \emph{mass-gap question} \\
+\bottomrule
+\end{tabular}
+\caption{Status of UCU1/UCU2/UCU3 across application scales.
+\checkmark{} = established conditional on standard inputs (Brezis,
+Ekeland--T\'emam direct method); ``open'' = sub-problem identified,
+not yet resolved within the FST framework. The Yang--Mills line
+is included to mark the analogue: UCU3 (global) for the YM functional
+\emph{is} the mass-gap question itself.}
+\label{tab:status}
+\end{table}
+
+\paragraph{Reading the table.}
+For thermodynamics, chemistry and biology, UCU1+UCU2 are obtained
+from convexity of free-energy-like functionals on physically motivated
+feasibility sets; UCU3 is local but not global, because non-equilibrium
+boundary conditions can produce competing basins. For K41 turbulence,
+the local UCU3 is achieved at the Kolmogorov scaling exponent
+$g^*=\tfrac12$, but a logarithmic Sobolev inequality (LSI) is required
+to upgrade to a global statement. For dark energy (CRM-VI), UCU1--UCU3
+hold for the de~Sitter functional $\Phi(\rho)$ on $\mathbb{R}_+$,
+but lifting the result through the L4 RG-matching to a full effective
+field theory is not yet completed.
+
+\subsection{Status of FST Building Blocks (mathematics and physics)}
+\label{subsec:building-blocks}
+
+Beyond the UCU-application table above, the FST programme includes a
+set of published \emph{building blocks} in the mathematics and physics
+lines. Table~\ref{tab:building-blocks} summarises their honest proof
+status (drawn from each project's individual proof note, see the
+companion repository at \texttt{STATUS\_UEBERSICHT.md}).
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.18}
+\small
+\begin{tabular}{p{2.8cm}p{2.0cm}p{2.5cm}p{4.3cm}}
+\toprule
+\textbf{Building block} & \textbf{Line} & \textbf{Status} &
+\textbf{Open core gap} \\
+\midrule
+RH v2.1 (Even Dominance) & mathematics & unconditional & analytic
+$c_{\text{gap}}$ derivation removes last numerical input \\
+Zeta Zoo / NE-B          & mathematics & conditional   & Prime-Hub /
+OP5 obstructions \\
+Hodge                    & mathematics & framework     & Hard direction
+(AP $\Rightarrow$ algebraic) \\
+BSD                      & mathematics & framework     & Higher
+Gross--Zagier for rank $\ge 2$ \\
+P vs NP (Entropy)        & mathematics & reformulation & Uniformity
+bridge (NOT a proof) \\
+\midrule
+Yang--Mills mass gap     & physics     & strong-coupling proven &
+RG/continuum transport conditional \\
+Navier--Stokes (Attractor) & physics   & conditional framework &
+Attractor regularity package, Assumption G/G' \\
+NS-LDI                   & physics     & framework + proof of life &
+TLL+LDI for 3D NS attractors \\
+K41 Turbulence (Paper A) & physics     & unconditional & --- (Paper B
+remains conditional on $\mathrm{DFC1}^{\vee}$) \\
+\midrule
+FST-DE (Dark Energy)     & cosmology   & framework + no-go &
+UV renormalisation, screening lift \\
+\bottomrule
+\end{tabular}
+\caption{Honest proof status of FST building blocks in the
+mathematics, physics and cosmology lines, as of 2026-05. Every entry
+references an individual project whose primary proof note (BEWEISNOTIZ.md)
+documents the precise lemma chain and the residual open gaps. The
+present overview neither proves nor enlarges any of these results;
+it locates each within the same UCU/RG/MEPP architecture. Where the
+status reads ``reformulation'' (P vs NP) or ``framework'' (Hodge,
+BSD, NS, FST-DE), the open core gap is explicitly the original
+Millennium-class difficulty -- consistent with the Pattern-A lesson
+(Section~\ref{sec:pattern-a}).}
+\label{tab:building-blocks}
+\end{table}
+
+% ===================================================================
+\section{The Pattern-A Lesson}
+\label{sec:pattern-a}
+% ===================================================================
+
+Across both the mathematics line (Hodge, Beal/abc, BSD, P~vs~NP) and
+the cosmology line (CRM-VI, dark energy), one methodological pattern
+has recurred so often that we treat it as a programme-level
+\emph{warning}.
+
+\begin{quote}
+\textbf{Pattern A (negative form).}
+A reformulation of an open conjecture $V$ into a ``positivity
+normal form'' $P$ is, in general, only a translation of language:
+typically $P \Leftrightarrow V$. Without an independent strength
+comparison, $P$ is not a proof of $V$.
+\end{quote}
+
+\noindent The cosmological variant is operationally identical:
+mapping a \emph{physical} question $V_{\text{phys}}$ onto a model
+$M$ that contains an open mathematical sub-question $S$ does not
+solve $V_{\text{phys}}$; it merely reduces it conditionally to $S$.
+The cosmological CC-problem and the inflationary initial-condition
+problem each met this pattern in the CRM-VI line. The lesson is
+recorded in \texttt{CORE/PATTERN\_A\_LESSON.md} and is the reason
+why every UCU-application paper now contains a section labelled
+\emph{Honest Status}.
+
+% ===================================================================
+\section{Open Sub-Problems}
+\label{sec:open}
+% ===================================================================
+
+The programme leaves three sharply identified open problems.
+
+\paragraph{HD3' for Beal.}
+The Beal-Verifier-Sieve framework reduces the Beal conjecture to four
+sub-statements HD3'-A through HD3'-D. As documented in
+\texttt{HD3\_B\_EFFECTIVE\_CHARACTER\_SUMS.md} and
+\texttt{HD3\_ACD\_TRIO\_OBSTRUCTIONS.md}, the strong character-sum
+bound HD3'-B (cancellation $q^{1+\varepsilon}$ rather than the
+standard square-root cancellation $q^{3/2}$) lies beyond standard
+Weil--Deligne tools, and HD3'-A (Salt-Closing) and HD3'-C (Counting)
+reduce to it. A note documenting the conditional structure of HD3'-A
+under HD3'-B is provided in \texttt{HD3\_A\_SALT\_CLOSING.md}.
+
+\paragraph{Global UCU3 for Yang--Mills.}
+The mass-gap question for $4d$ pure Yang--Mills is exactly the
+question whether the energy functional $\mathcal{E}[A]$ admits a
+\emph{global} quadratic lower bound around the vacuum: a global UCU3.
+This identification means that the FST framework does not solve
+Yang--Mills; it locates the mass-gap question as the canonical
+UCU3-global representative. UCU1 and UCU2 in the YM context are
+themselves open within the FST language.
+
+\paragraph{L4 RG-matching for CRM-VI.}
+The cosmological dark-energy line (CRM-VI) supplies UCU1--UCU3 on a
+reduced configuration space (de~Sitter functional in
+$\mathbb{R}_+$). Lifting the result through a four-step RG-match
+(L1 microscopic action, L2 effective potential, L3 cosmological
+background, L4 perturbations + matching to data) leaves L4 open.
+This is the cosmological analogue of the Pattern-A lesson: the
+mathematical reduction is conditional on a physical RG-match that
+has not yet been performed at the level required for journal
+acceptance.
+
+% ===================================================================
+\section{Honest Status}
+\label{sec:honest-status}
+% ===================================================================
+
+\begin{description}[leftmargin=2em,style=nextline]
+\item[What FST delivers.]
+A common architecture (universal game $+$ MEPP axiom $+$ UCU
+three-lemma endgame $+$ RG bridge) under which scales as different
+as the Standard-Model parameter space and dark-energy late-time
+acceleration admit a single conditional uniqueness/stability
+statement. A status map (Table~\ref{tab:status}) showing where
+the architecture is closed and where it is conditional. A
+methodological lesson (Pattern~A) which has already prevented
+multiple false-progress claims in the mathematics line.
+
+\item[What FST does \emph{not} deliver.]
+A solution of any individual hard open problem (Yang--Mills mass
+gap, Beal, BSD). FST fixes the \emph{shape} of the conditional
+statement; the application-specific UCU3-global step is, in each
+hard case, identified with the original difficulty. The novelty
+is therefore architectural and reductive, not constructive.
+
+\item[Falsification criterion.]
+The programme is falsified if, for any of the listed scales, UCU1
+or UCU2 fails on the natural feasibility set. UCU3-global failure
+is not a falsification: it is the locator of the open sub-problem
+at that scale.
+\end{description}
+
+% ===================================================================
+\section*{Acknowledgements}
+% ===================================================================
+This article is a programme overview. The author thanks collaborators
+(human and AI) involved in the FST-I, FST-II, FST-III and CRM lines
+of the programme. Computations supporting the cosmological line
+(Watkins-style spectrum experiments) were performed on
+\texttt{ellmos-services}.
+
+% ===================================================================
+\section*{AI Disclosure (Level L3)}
+% ===================================================================
+This paper was prepared with substantial AI assistance (Anthropic
+Claude, OpenAI GPT, Google Gemini variants). AI tools were used for:
+cross-paper synthesis between the FST-I, FST-II, FST-III, FST-DE
+companions; structural editing and consistency checking of the
+UCU/RG architecture; generation and verification of the cross-scale
+status maps (Tables~\ref{tab:series-components},
+\ref{tab:status} and~\ref{tab:building-blocks}); literature
+cross-referencing with Zenodo DOIs; and bilingual EN/DE
+synchronisation. All scientific claims, the UCU three-lemma
+architecture, the Pattern~A lesson, and the falsification criterion
+are the author's own and are subject to standard authorial
+responsibility. No section was written autonomously by AI.
+The categorisation follows the FST programme's five-level AI
+disclosure scheme (L1 = no AI; L5 = AI as principal contributor);
+this paper is L3 (AI as substantial assistant, human as principal
+author and responsible scientist).
+
+% ===================================================================
+% Bibliography (skeleton -- to be completed in v1)
+% ===================================================================
+\begin{thebibliography}{99}
+
+\bibitem{MartyushevSeleznev2006}
+L.M.~Martyushev, V.D.~Seleznev,
+\emph{Maximum entropy production principle in physics, chemistry and biology},
+Phys.~Rep.~\textbf{426} (2006), 1--45.
+
+\bibitem{Brezis2011}
+H.~Brezis,
+\emph{Functional Analysis, Sobolev Spaces and Partial Differential Equations},
+Springer, 2011.
+
+\bibitem{EkelandTemam1999}
+I.~Ekeland, R.~T\'emam,
+\emph{Convex Analysis and Variational Problems},
+SIAM Classics, 1999.
+
+\bibitem{Evans2010}
+L.C.~Evans,
+\emph{Partial Differential Equations}, 2nd~ed.,
+Amer.~Math.~Soc., 2010.
+
+\bibitem{Wilson1974}
+K.G.~Wilson, J.~Kogut,
+\emph{The renormalisation group and the $\varepsilon$-expansion},
+Phys.~Rep.~\textbf{12} (1974), 75--199.
+
+\bibitem{Jacobson1995}
+T.~Jacobson,
+\emph{Thermodynamics of spacetime: the Einstein equation of state},
+Phys.~Rev.~Lett.~\textbf{75} (1995), 1260--1263.
+
+\bibitem{MaynardSmith1982}
+J.~Maynard~Smith,
+\emph{Evolution and the Theory of Games},
+Cambridge Univ.~Press, 1982.
+
+% --- FST programme companion papers (hasPart) ----------------------
+\bibitem{GeigerFST-I-2026}
+L.~Geiger,
+\emph{Functional Stability Theory I: A Game-Theoretic Framework
+for the Thermodynamic Stability of Fundamental Parameters},
+Zenodo: \texttt{10.5281/zenodo.20130544}, 2026.
+
+\bibitem{GeigerFST-II-2026}
+L.~Geiger,
+\emph{Functional Stability Theory II: Chemical Stability and
+Autocatalytic Selection},
+Zenodo: \texttt{10.5281/zenodo.20130563}, 2026.
+
+\bibitem{GeigerFST-III-2026}
+L.~Geiger,
+\emph{Functional Stability Theory III: Biological Stability and
+Nash Frustration},
+Zenodo: \texttt{10.5281/zenodo.20130573}, 2026.
+
+\bibitem{GeigerFST-DE-2026}
+L.~Geiger,
+\emph{Dark Energy as Residual Vacuum Free Energy: a Convexity-Screening
+No-Go Theorem within the FST Programme},
+Zenodo: \texttt{10.5281/zenodo.19036235}, 2026.
+
+% --- FST mathematical building blocks (references) -----------------
+\bibitem{GeigerRH-EvenDom-2026}
+L.~Geiger,
+\emph{The Riemann Hypothesis via Even Dominance (Trilogy, v2.1)},
+Zenodo: \texttt{10.5281/zenodo.19546593}, 2026.
+
+\bibitem{GeigerZetaZoo-2026}
+L.~Geiger,
+\emph{Zeta Zoo: An NE-B Boundary Classification},
+Zenodo: \texttt{10.5281/zenodo.19673227}, 2026.
+
+\bibitem{GeigerZookeeper-2026}
+L.~Geiger,
+\emph{The Resolvent-Stability Reformulation of the Riemann Hypothesis
+(CCM/Zookeeper Route)},
+Zenodo: \texttt{10.5281/zenodo.19673127}, 2026.
+
+\bibitem{GeigerSpectrumDuality-2026}
+L.~Geiger,
+\emph{FST Spectrum Duality (v0.8)},
+Zenodo: \texttt{10.5281/zenodo.19672198}, 2026.
+
+\bibitem{GeigerHodge-2026}
+L.~Geiger,
+\emph{Hodge Conjecture as an Arithmetic Positivity Statement},
+Zenodo: \texttt{10.5281/zenodo.20109058}, 2026.
+
+\bibitem{GeigerBSD-2026}
+L.~Geiger,
+\emph{BSD Conjecture and Néron--Tate Height Positivity},
+Zenodo: \texttt{10.5281/zenodo.19087443}, 2026.
+
+\bibitem{GeigerPvsNP-2026}
+L.~Geiger,
+\emph{P vs NP via an Entropic No-Go Theorem},
+Zenodo: \texttt{10.5281/zenodo.19056809}, 2026.
+
+% --- FST physical building blocks (references) ---------------------
+\bibitem{GeigerYM-2026}
+L.~Geiger,
+\emph{Functional Stability Theory: Volume-Independent Spectral Gap
+for Lattice Yang--Mills},
+Zenodo: \texttt{10.5281/zenodo.19087433}, 2026.
+
+\bibitem{GeigerNS-2026}
+L.~Geiger,
+\emph{Navier--Stokes Regularity via an Attractor-Distance
+Stability Argument},
+Zenodo: \texttt{10.5281/zenodo.19087449} (Concept), 2026.
+
+\bibitem{GeigerNSLDI-2026}
+L.~Geiger,
+\emph{Log-Distance Integrability for Navier--Stokes: a TLL/LDI
+Bridge Framework},
+Zenodo: \texttt{10.5281/zenodo.19056807}, 2026.
+
+\bibitem{GeigerK41-2026}
+L.~Geiger,
+\emph{K41 as a Joint Minimiser of a Scale-Resolved Free-Energy
+Functional},
+Zenodo: \texttt{10.5281/zenodo.19056813}, 2026.
+
+% --- Older series and internal notes -------------------------------
+\bibitem{GeigerCRM2026}
+L.~Geiger,
+\emph{Cosmological Rotation Model -- Papers I--IV},
+Zenodo: \texttt{10.5281/zenodo.18728936}, 2026.
+
+\bibitem{FST-Unified2026}
+L.~Geiger,
+\emph{Pattern A as the Recurring Stability Logic across the FST
+Research Ecosystem}, internal note (CORE/PATTERN\_A\_LESSON.md),
+2026.
+
+\end{thebibliography}
+
+\end{document}
