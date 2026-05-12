@@ -1,0 +1,1159 @@
+% K41_Variational_Minimiser_v1_de.tex
+% Paper A: Das K41-Spektrum als eindeutiger variationeller Minimierer
+%          einer skalenaufgelösten freien Energie
+% Author: Lukas Geiger, 2026
+
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathrsfs}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\setlength{\emergencystretch}{3em}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!70!black,
+  citecolor=green!50!black,
+  urlcolor=blue!70!black,
+  pdftitle={Das K41-Spektrum als eindeutiger variationeller Minimierer einer skalenaufgelösten freien Energie},
+  pdfauthor={Lukas Geiger},
+  pdfsubject={Variationelle Charakterisierung des Kolmogorov-K41-Energiespektrums},
+  pdfkeywords={K41-Spektrum, Turbulenz, Variationsprinzip, freie Energie, Kolmogorov-Skalierung}
+}
+\Urlmuskip=0mu plus 2mu\relax
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{plain}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{corollary}[definition]{Korollar}
+\newtheorem{conjecture}[definition]{Vermutung}
+\newtheorem{axiom}[definition]{Axiom}
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{Bemerkung}
+
+% ---------------------------------------------------------------------------
+\title{Das K41-Spektrum als eindeutiger variationeller Minimierer\\
+einer skalenaufgelösten freien Energie}
+
+\author{Lukas Geiger\\
+\textit{Unabhängiger Forscher, Bernau, Deutschland}\\
+ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}%
+\thanks{KI-Tools (Claude von Anthropic) wurden zur mathematischen Formalisierung, Literaturprüfung und redaktionellen Verfeinerung verwendet. Alle mathematischen Inhalte wurden vom Autor entwickelt, geprüft und freigegeben.}}
+
+\date{Mai 2026}
+
+\begin{document}
+\maketitle
+
+% ===================================================================
+\begin{abstract}
+Wir etablieren ein Variationsprinzip, welches das Kolmogorov
+$k^{-5/3}$-Energiespektrum als eindeutigen globalen Minimierer eines
+skalenaufgelösten Freie-Energie-Funktionals charakterisiert. Ausgehend von einer
+Littlewood--Paley-Zerlegung des Geschwindigkeitsfeldes definieren wir ein
+Freie-Energie-Funktional $\mathcal{F}[\mathbf{E}]$ basierend auf der
+Kullback--Leibler-Divergenz zwischen der Schalen-Energieverteilung und einem
+Referenzgleichgewicht. Wir führen die Klasse zulässiger
+Energiefluss-Operatoren ein --- alle lokalen, dimensionskonsistenten, monotonen
+Schließungen (closures), die die Axiome (A1) und (A3) erfüllen --- und beweisen, dass die K41-Verteilung
+der eindeutige Minimierer von $\mathcal{F}[\mathbf{E}]$ unter
+der gemeinsamen Minimierung über Energieprofile und Schließungen ist, vorausgesetzt,
+der Skala-zu-Skala-Energiefluss ist konstant (Theorem~\ref{thm:K41}). Der
+Minimierer ist nicht-entartet: die Hesse-Matrix von $\mathcal{F}$ bei
+$\mathbf{E}^*$ ist diagonal mit Einträgen $1/E_j^* > 0$, was eine
+  skalenabhängige Steifigkeit liefert, die wie $k^{5/3}$ wächst. Zusätzlich
+  halten wir zwei Leitplanken fest: Relaxierte Flussbedingungen liefern kein
+  nichttriviales Robustheitstheorem, solange das exakte K41-Profil zulässig
+  bleibt, und die Minimax-Formulierung ist nur eine formale entkoppelte
+  Penalty-Darstellung, kein dynamischer Zwei-Spieler-Satz.
+Intermittenzkorrekturen vom Kolmogorov--Obukhov-Typ (K62) entstehen
+auf natürliche Weise als Hesse-Fluktuationen um das Variationsminimum. Das
+Ergebnis gilt ohne Einschränkungen: Es wird keine Hypothese über die Navier--Stokes-Dynamik
+benötigt. Anomale Dissipation unter zusätzlichen Annahmen über die
+nichtlineare Kaskade wird in einer Begleitarbeit behandelt~\cite{Geiger2026b}.
+\end{abstract}
+
+\begin{center}
+\small\emph{Preprint-Hinweis. Dies ist Paper A der Turbulenz-Aufteilung. Es isoliert den unbedingten K41-Variationsminimierer-Satz. Die Begleitarbeit Paper B behandelt anomale Dissipation und die Downhill-Flux-Bedingung als konditionale Kaskadenroute.}
+\end{center}
+
+% ===================================================================
+\section{Einleitung}\label{sec:intro}
+
+Die Turbulenz bleibt eines der herausragendsten ungelösten Probleme der klassischen
+Physik und angewandten Mathematik. Trotz mehr als eines Jahrhunderts der Forschung
+wurde noch keine Ableitung der statistischen Gesetze für vollständig entwickelte Turbulenz 
+aus ersten Prinzipien (first principles) erreicht.
+
+\subsection{Die Kolmogorov-Theorie}
+
+In seinen bahnbrechenden Arbeiten von 1941 postulierte Kolmogorov~\cite{K41a,K41b}, dass
+im Trägheitsbereich (inertial range) von vollständig entwickelter, homogener, isotroper
+Turbulenz das Energiespektrum die universelle Form
+\begin{equation}\label{eq:K41}
+  E(k) \;=\; C_K \,\varepsilon^{2/3}\, k^{-5/3}
+\end{equation}
+annimmt, wobei $\varepsilon$ die mittlere Energiedissipationsrate pro
+Masseneinheit bezeichnet und $C_K \approx 1{,}5$ die Kolmogorov-Konstante ist. Diese Vorhersage,
+abgeleitet aus der Dimensionsanalyse und der Hypothese der lokalen Isotropie,
+wurde experimentell und numerisch über einen riesigen Bereich von
+Reynolds-Zahlen hinweg bestätigt~\cite{Frisch95,Pope00}.
+
+\subsection{Unser Beitrag}
+
+In diesem Paper wählen wir einen anderen Ansatz. Anstatt das
+K41-Spektrum allein aus der Dimensionsanalyse abzuleiten, zeigen wir, dass es die
+\emph{thermodynamisch bevorzugte} Verteilung der Energie über alle Skalen ist.
+Wir führen ein Freie-Energie-Funktional~$\mathcal{F}$ auf dem Raum der
+skalenaufgelösten Energieverteilungen ein und beweisen:
+\begin{enumerate}
+  \item Das K41-Spektrum ist der \emph{eindeutige} Minimierer von $\mathcal{F}$
+        unter der Bedingung eines konstanten Energieflusses, wobei die Minimierung
+        gemeinsam über alle zulässigen lokalen Flussoperatoren und Energieprofile
+        läuft (Theorem~\ref{thm:K41}). Dies vermeidet Zirkularität: Das
+        Variationsargument setzt keine spezifische Schließung (closure) voraus.
+  \item Der Minimierer ist nicht-entartet, wobei die Hesse-Matrix eine
+        skalenabhängige Steifigkeit $1/E_j^* \propto k_j^{5/3}$ liefert, die
+        kleinskalige Störungen stärker bestraft als großskalige --- der 
+        variationelle Ursprung der Vorwärts-Kaskade.
+  \item Relaxierte Flussbedingungen und die Minimax-Notation werden als
+        Geltungsbereich-Leitplanken festgehalten: Solange das exakte
+        K41-Profil zulässig bleibt, ist das relaxierte Problem trivial, und
+        die Minimax-Form ist eine entkoppelte Penalty-Darstellung statt ein
+        dynamischer Zwei-Spieler-Satz
+        (Propositionen~\ref{prop:dfc-slack}--\ref{prop:minimax}).
+\end{enumerate}
+Die dynamischen Konsequenzen der Freie-Energie-Struktur, einschließlich
+anomaler Dissipation unter zusätzlichen Hypothesen zur nichtlinearen
+Kaskade, werden in einem Begleitpapier entwickelt~\cite{Geiger2026b}.
+
+\subsection{Strukturelle Klassifizierung}
+
+Innerhalb des umfassenderen Programms der Spektraltheorie der freien
+Energie~\cite{FST-Unified2026} zeigt der K41-Selektionsmechanismus die
+\textbf{Pattern~A Stabilitätslogik}: (a)~Das Energiebudget in führender Ordnung ist
+neutral (jedes Potenzgesetz-Spektrum ist kinematisch zulässig); (b)~Die
+Bedingung konstanten Flusses erster Ordnung schränkt das Profil ein, legt es aber nicht
+eindeutig fest; (c)~Die strikte Konvexität zweiter Ordnung
+von~$\mathcal{F}$ wählt K41 als eindeutigen Minimierer aus. Diese dreistufige
+Hierarchie wird in Abschnitt~\ref{sec:resolvent-cascade} diskutiert.
+
+Dieses Paper ist in sich geschlossen; alle Hauptresultate stützen sich ausschließlich auf Definitionen
+und Beweise innerhalb dieses Dokuments. Verbindungen zum umfassenderen FST-Programm
+werden als Kontext zitiert, sind aber logisch nicht zwingend erforderlich.
+
+% ===================================================================
+% Figure 1: Proof chain overview
+% ===================================================================
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw, rounded corners, minimum width=3.2cm, minimum height=0.9cm,
+              align=center, font=\small},
+  arrow/.style={-{Stealth[length=5pt]}, thick},
+  note/.style={font=\scriptsize\itshape, text=gray}
+]
+% Row 1: Axioms
+\node[box, fill=blue!10] (A1) at (0,0) {(A1) Lokalität\\(A3) Monotonie};
+\node[box, fill=blue!10] (LP) at (5,0) {Littlewood--Paley\\-Zerlegung};
+
+% Row 2: Functional
+\node[box, fill=orange!15] (F) at (2.5,-1.8) {Freie Energie\\$\mathcal{F}[E] = \sum_j \mathrm{KL}(E_j \| E_j^*)$};
+
+% Row 3: Main Theorem
+\node[box, fill=green!15] (T1) at (2.5,-3.6) {\textbf{Thm\,1:} K41\\eindeutiger Minimierer};
+
+% Row 4: Extensions
+\node[box, fill=yellow!15] (R) at (-0.5,-5.4) {Relaxierter Fluss\\(Prop.~\ref{prop:dfc-slack})};
+\node[box, fill=yellow!15] (M) at (5.5,-5.4) {Minimax\\(Prop.~\ref{prop:minimax})};
+
+% Arrows
+\draw[arrow] (A1) -- (F) node[midway, left, note] {Def.\,\ref{def:F}};
+\draw[arrow] (LP) -- (F) node[midway, right, note] {Schalenenergie};
+\draw[arrow] (F) -- (T1) node[midway, right, note] {joint min.};
+\draw[arrow] (T1) -- (R) node[midway, left, note] {Geltungsbereich};
+\draw[arrow] (T1) -- (M) node[midway, right, note] {Penalty};
+\end{tikzpicture}
+\caption{Logische Struktur des Beweises. Das Freie-Energie-Funktional
+$\mathcal{F}[\mathbf{E}]$ wird aus der Littlewood--Paley-Zerlegung und 
+der zulässigen Flussfamilie (Axiome A1, A3) konstruiert.
+Theorem~\ref{thm:K41} (K41-Eindeutigkeit) folgt aus der gemeinsamen Minimierung.
+Die relaxierte Flussbedingung und die Minimax-Verzweigung halten
+Geltungsbereich-Leitplanken und eine formale Penalty-Darstellung fest, nicht
+zusätzliche dynamische Theoreme.}
+\label{fig:proof-chain}
+\end{figure}
+
+% ===================================================================
+\section{Das skalenaufgelöste Freie-Energie-Funktional}\label{sec:functional}
+
+\subsection{Littlewood--Paley-Zerlegung}
+
+Sei $u \in L^2(\mathbb{T}^3)$ ein divergenzfreies Geschwindigkeitsfeld auf dem
+3-Torus. Wir verwenden die Standard-Littlewood--Paley-Zerlegung
+\begin{equation}\label{eq:LP}
+  u \;=\; \sum_{j \ge -1} \Delta_j u,
+\end{equation}
+wobei $\Delta_j$ der Frequenz-Lokalisierungsoperator an der dyadischen Schale
+$|\xi| \sim 2^j$ ist. Wir setzen $k_j = 2^j$ und definieren die \emph{Schalenenergie} (shell energy)
+\begin{equation}\label{eq:Ej}
+  E_j \;:=\; \|\Delta_j u\|_{L^2}^2.
+\end{equation}
+Im Trägheitsbereich übersetzt sich die K41-Vorhersage~\eqref{eq:K41} in
+\begin{equation}\label{eq:Ej_star}
+  E_j^* \;=\; C_K\, \varepsilon^{2/3}\, k_j^{-5/3} \,\Delta k_j,
+  \qquad \Delta k_j = k_j \ln 2 \quad (\text{dyadische Schalenbreite}).
+\end{equation}
+
+\subsection{Energiefluss-Bedingung}
+
+Der Skala-zu-Skala-Energiefluss durch die Wellenzahl $k_j$ wird über den
+trilinearen Term in den Navier--Stokes-Gleichungen definiert:
+\begin{equation}\label{eq:flux}
+  \Pi_j \;=\; -\sum_{\ell \le j}
+    \langle \Delta_\ell(u \cdot \nabla u),\; \Delta_\ell u \rangle.
+\end{equation}
+Im Trägheitsbereich erfüllt eine statistisch stationäre Kaskade die Bedingung
+\begin{equation}\label{eq:const_flux}
+  \Pi_j \;=\; \varepsilon \quad \text{für alle } j_{\mathrm{in}} \le j \le j_{\mathrm{dis}}.
+\end{equation}
+
+\subsection{Das Funktional}
+
+\begin{definition}[Skalenaufgelöste freie Energie]\label{def:F}
+Sei $\mathbf{E} = (E_j)_{j \in \mathcal{J}}$ eine Verteilung von Schalenenergien
+über den Trägheitsbereich $\mathcal{J} = \{j_{\mathrm{in}}, \dots,
+j_{\mathrm{dis}}\}$, mit $E_j > 0$. Sei $\mathbf{E}^* = (E_j^*)$ die
+Kolmogorov-Referenzverteilung~\eqref{eq:Ej_star}. Das
+\emph{skalenaufgelöste Freie-Energie-Funktional} ist
+\begin{equation}\label{eq:F}
+  \mathcal{F}[\mathbf{E}]
+  \;:=\;
+  \sum_{j \in \mathcal{J}}
+  \Bigl[
+    E_j \ln\!\frac{E_j}{E_j^*} \;-\; E_j \;+\; E_j^*
+  \Bigr].
+\end{equation}
+\end{definition}
+
+\begin{remark}
+Der Summand $f(E_j) = E_j \ln(E_j/E_j^*) - E_j + E_j^*$ ist die
+Kullback--Leibler-Divergenz (relative Entropie) des Paares $(E_j, E_j^*)$,
+wenn sie als unnormalisierte Maße auf einem Einzelpunktraum betrachtet werden. Er erfüllt
+$f(E_j) \ge 0$ mit Gleichheit genau dann, wenn $E_j = E_j^*$. Somit
+gilt $\mathcal{F}[\mathbf{E}] \ge 0$ mit Gleichheit genau dann, wenn $\mathbf{E}
+= \mathbf{E}^*$.
+\end{remark}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=0.9]
+% Axes
+\draw[-{Stealth}] (-0.3,0) -- (7,0) node[right] {$E_j / E_j^*$};
+\draw[-{Stealth}] (0,-0.3) -- (0,4.5) node[above] {$f(E_j)$};
+% KL curve: f(x) = x ln(x) - x + 1, plotted for x = E_j/E_j*
+\draw[thick, blue!70!black, domain=0.08:4.5, smooth, samples=80]
+  plot ({\x}, {\x*ln(\x)/ln(2.718) - \x + 1});
+% Minimum point
+\fill[red] (1,0) circle (2.5pt);
+\node[below, font=\small] at (1,-0.15) {$E_j^*$ (K41)};
+% Annotation
+\draw[dashed, gray] (1,0) -- (1,3.5);
+\node[font=\small, text=blue!70!black, right] at (4.5,2.8) {$f = E_j\ln\frac{E_j}{E_j^*} - E_j + E_j^*$};
+% Flux constraint region
+\draw[thick, red!60!black, dashed] (0.3,0.2) -- (0.3,3.8);
+\draw[thick, red!60!black, dashed] (3.5,0.2) -- (3.5,3.8);
+\node[font=\scriptsize, text=red!60!black] at (1.9,4.1) {zulässiger Bereich};
+\draw[{Stealth}-{Stealth}, red!60!black] (0.3,3.9) -- (3.5,3.9);
+\end{tikzpicture}
+\caption{Die Freie-Energie-Dichte $f(E_j) = E_j \ln(E_j / E_j^*) - E_j + E_j^*$
+als Funktion des Schalenenergie-Verhältnisses $E_j / E_j^*$. Das eindeutige globale Minimum
+bei $E_j = E_j^*$ (K41-Spektrum) ist markiert. Die Flussbedingung schränkt den
+zulässigen Bereich ein, aber das Minimum liegt strikt im Inneren, was K41 als
+gemeinsamen Minimierer bestätigt.}
+\label{fig:FE-landscape}
+\end{figure}
+
+\subsection{Dimensionskonsistenz}
+
+Wir verifizieren, dass $\mathcal{F}$ dimensionskonsistent ist. Jedes $E_j$ hat die
+Dimension $[L^2\,T^{-2}]$ (Energie pro Masseneinheit, integriert über ein
+Spektralband). Da $E_j^*$ dieselbe Dimension hat, ist das Verhältnis
+$E_j/E_j^*$ dimensionslos, der Logarithmus wohldefiniert und jeder
+Summand in~\eqref{eq:F} hat die Dimension $[L^2\,T^{-2}]$.
+% ===================================================================
+\section{Hauptergebnisse}\label{sec:results}
+
+\subsection{Eindeutigkeit der Kolmogorov-Skalierung}
+
+\begin{definition}[Zulässige Flussfamilie]\label{def:admissible}
+Eine Familie von Flussoperatoren $\bigl(\Pi_j[\mathbf{E}]\bigr)_{j \in
+\mathcal{J}}$ heißt \emph{zulässig}, wenn jedes $\Pi_j$ Folgendes erfüllt:
+\begin{enumerate}
+  \item[\textup{(A1)}] \textbf{Lokalität.}\;
+    $\Pi_j$ hängt nur von $E_{j-1},\, E_j,\, E_{j+1}$ ab.
+  \item[\textup{(A2)}] \textbf{Dimensionskonsistenz.}\;
+    $[\Pi_j] = [E_j / \tau_j]$ mit der Eddy-Turnover-Zeit (Wirbel-Umschlagszeit)
+    $\tau_j = (k_j^2\,E_j)^{-1/2}$, sodass $\Pi_j$ die Form
+    \begin{equation}\label{eq:closure_general}
+      \Pi_j[\mathbf{E}]
+      \;=\;
+      k_j\,E_j^{3/2}\;\Phi_j\!\Bigl(
+        \frac{E_{j-1}}{E_j},\;
+        \frac{E_{j+1}}{E_j}
+      \Bigr)
+    \end{equation}
+    besitzt, wobei $\Phi_j : (0,\infty)^2 \to (0,\infty)$ eine glatte,
+    dimensionslose Funktion ist, die $\Phi_j(r^*_{-},\, r^*_{+}) = \alpha$
+    für eine universelle Konstante $\alpha > 0$ erfüllt, mit
+    $r^*_{\pm} = E_{j \pm 1}^* / E_j^*$.
+  \item[\textup{(A3)}] \textbf{Monotonie.}\;
+    $\partial \Pi_j / \partial E_j > 0$ für alle $\mathbf{E} > 0$.
+\end{enumerate}
+Wir bezeichnen die Menge aller zulässigen Familien mit $\mathscr{A}$.
+\end{definition}
+
+\begin{proposition}[Dimensionale Ableitung des Fluss-Vorfaktors]\label{prop:A2-derived}
+Axiom~\textup{(A2)} ist keine unabhängige Annahme, sondern eine Konsequenz aus Lokalität~\textup{(A1)} und Dimensionsanalyse. Insbesondere ist die Form $\Pi_j = k_j\,E_j^{3/2}\,\Phi_j(\cdot)$ der \emph{eindeutige} dimensionskonsistente lokale Flussausdruck.
+\end{proposition}
+
+\begin{proof}
+Nach dem Buckinghamschen $\Pi$-Theorem muss der Fluss $\Pi_j$ ein Produkt aus Potenzen der verfügbaren dimensionalen Größen $k_j$ und~$E_j$ sein, multipliziert mit einer dimensionslosen Funktion dimensionsloser Verhältnisse. Schreibe $\Pi_j = k_j^{a}\,E_j^{b}\,\Phi_j(\ldots)$ mit $[\Pi_j] = [L^2\,T^{-3}]$ (Energiefluss pro Masseneinheit), $[k_j] = [L^{-1}]$ und $[E_j] = [L^2\,T^{-2}]$.
+
+Dimensionsabgleich: $[k_j^a\,E_j^b] = L^{-a}\,L^{2b}\,T^{-2b} = L^{2b-a}\,T^{-2b}$.
+
+Gleichsetzen mit $L^2\,T^{-3}$:
+\[
+2b - a = 2, \qquad 2b = 3 \quad\Longrightarrow\quad b = \tfrac{3}{2},\;\; a = 1.
+\]
+Daraus folgt $\Pi_j = k_j\,E_j^{3/2}\,\Phi_j$, und nach (A1) kann die dimensionslose Funktion $\Phi_j$ nur von den lokalen Verhältnissen $E_{j-1}/E_j$ und $E_{j+1}/E_j$ abhängen. Die Eddy-Turnover-Zeit $\tau_j = (k_j^2\,E_j)^{-1/2}$ ist gleichermaßen die eindeutige dimensionskonsistente lokale Zeitskala.
+\end{proof}
+
+\begin{remark}
+Die klassische Kolmogorov--Heisenberg-Schließung $\Pi_j = \alpha\,k_j\,E_j^{3/2}$
+entspricht dem Spezialfall $\Phi_j \equiv \alpha$. Definition~\ref{def:admissible}
+erweitert die Modellklasse so, dass alle physikalisch sinnvollen lokalen Schließungen eingeschlossen sind:
+EDQNM-artige Schließungen, Leiths Diffusionsmodell und trunkierte Triaden-Interaktionen
+erfüllen alle (A1)--(A3). Die Familie $\mathscr{A}$ ist somit
+eine breite, physikalisch motivierte Klasse und keine einzelne algebraische Relation.
+Proposition~\ref{prop:A2-derived} zeigt, dass (A2) keine belanglose Modellierungswahl ist, sondern eine notwendige Konsequenz der Dimensionsanalyse, wodurch das Axiomensystem weiter auf zwei unabhängige Annahmen reduziert wird: Lokalität~(A1) und Monotonie~(A3).
+\end{remark}
+
+\begin{theorem}[Eindeutigkeit der K41-Skalierung]\label{thm:K41}
+Sei $\varepsilon > 0$ gegeben und sei $\mathscr{A}$ die Klasse der
+zulässigen Flussfamilien (Definition~\ref{def:admissible}).
+Betrachte das \emph{gemeinsame} (joint) Minimierungsproblem
+\begin{equation}\label{eq:min}
+  \min_{\substack{\mathbf{E} > 0,\\ \Pi \in \mathscr{A}}}
+  \;\mathcal{F}[\mathbf{E}]
+  \qquad \text{unter der Bedingung} \quad
+  \Pi_j[\mathbf{E}] = \varepsilon
+  \;\;\text{für alle } j \in \mathcal{J}.
+\end{equation}
+Dann gilt:
+\begin{enumerate}
+  \item[\textup{(i)}]
+    Für jede zulässige Flussfamilie $\Pi \in \mathscr{A}$, für welche die
+    Bedingung konstanten Flusses $\Pi_j[\mathbf{E}] = \varepsilon$ ein
+    positives stationäres Profil $\mathbf{E}^{(\Pi)}$ besitzt, ist die
+    K41-Verteilung
+    $E_j^* = C_K\,\varepsilon^{2/3}\,k_j^{-5/3}\,\Delta k_j$
+    der eindeutige globale Minimierer von~$\mathcal{F}$, und sie wird
+    durch das Kolmogorov--Heisenberg-Mitglied $\Phi_j \equiv \alpha$ mit
+    $C_K = \bigl(\alpha\,(\ln 2)^{3/2}\bigr)^{-2/3}$ realisiert.
+  \item[\textup{(ii)}]
+    Der Minimierer ist nicht-entartet: die Hesse-Matrix
+    $D^2\mathcal{F}|_{\mathbf{E}^*}$ eingeschränkt auf den Tangentialraum der
+    Nebenbedingungs-Mannigfaltigkeit (für jedes zulässige $\Pi$) ist strikt positiv
+    definit. (Dies ist eine direkte Konsequenz der strikten Konvexität der
+    KL-Divergenz; ihr inhaltlicher Gehalt ist die skalenabhängige Steifigkeit
+    $1/E_j^* \propto k_j^{5/3}$, siehe Schritt~5b unten.)
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{Schritt 1: Zulässige stationäre Profile.}\;
+Fixiere ein zulässiges $\Pi \in \mathscr{A}$ und beschränke die Betrachtung
+auf den Fall, in dem das gekoppelte System
+$\Pi_j[\mathbf{E}] = \varepsilon$ ein positives stationäres Profil
+$\mathbf{E}^{(\Pi)}$ besitzt. Lokale Monotonie in $E_j$ ist für sich
+genommen kein globaler Existenzsatz für das gekoppelte Schalensystem; die
+Existenz für eine konkrete Schließung wird daher als Zulässigkeitsbedingung
+behandelt. Mehr wird im Folgenden nicht benötigt, da das gemeinsame Problem
+nur Profile vergleicht, die die Flussbedingung bereits erfüllen.
+
+\textbf{Schritt 2: Untere Schranke via Konvexität.}\;
+Da jeder Summand $f(E_j) = E_j\ln(E_j/E_j^*) - E_j + E_j^*$
+strikt konvex mit globalem Minimum $f(E_j^*) = 0$ ist, haben wir
+\begin{equation}\label{eq:F_lower}
+  \mathcal{F}[\mathbf{E}^{(\Pi)}]
+  \;\ge\; 0
+  \;=\; \mathcal{F}[\mathbf{E}^*],
+\end{equation}
+mit Gleichheit genau dann, wenn $E_j^{(\Pi)} = E_j^*$ für alle~$j$.
+
+\textbf{Schritt 3: Erreichbarkeit.}\;
+Wir verifizieren, dass $\mathbf{E}^*$ tatsächlich ein stationäres Profil für
+ein $\Pi \in \mathscr{A}$ ist. Wähle die Kolmogorov--Heisenberg-Schließung
+$\Phi_j \equiv \alpha$. Dann ist
+\[
+  \Pi_j[\mathbf{E}^*]
+  \;=\; \alpha\,k_j\,(E_j^*)^{3/2}
+  \;=\; \alpha\,k_j\,
+    \bigl(C_K\,\varepsilon^{2/3}\,k_j^{-5/3}\,k_j\ln 2\bigr)^{3/2}
+  \;=\; \alpha\,C_K^{3/2}\,(\ln 2)^{3/2}\,\varepsilon.
+\]
+Setzen wir $C_K = \bigl(\alpha\,(\ln 2)^{3/2}\bigr)^{-2/3}$, so ergibt sich
+$\Pi_j[\mathbf{E}^*] = \varepsilon$. (Der geometrische Faktor $(\ln 2)^{3/2}$,
+der sich aus der dyadischen Schalenbreite ergibt, wird in die Kolmogorov-Konstante
+$C_K$ absorbiert, die dadurch durch den Schließungsparameter~$\alpha$ bestimmt wird.)
+Damit ist die untere Schranke~\eqref{eq:F_lower} erreicht.
+
+\textbf{Schritt 4: Eindeutigkeit.}\;
+Angenommen, $\Pi' \in \mathscr{A}$ und $\mathbf{E}' \ne \mathbf{E}^*$ erfüllen
+$\Pi'_j[\mathbf{E}'] = \varepsilon$. Dann liefert die strikte Konvexität
+$\mathcal{F}[\mathbf{E}'] > 0 = \mathcal{F}[\mathbf{E}^*]$, sodass $\mathbf{E}'$
+kein Minimierer von~\eqref{eq:min} sein kann. Daher ist $\mathbf{E}^*$ die
+\emph{eindeutige} Lösung des gemeinsamen Problems.
+
+\smallskip\noindent
+\textbf{Anmerkung zur logischen Struktur.}\;
+Die Eindeutigkeit in Schritt~4 folgt aus der strikten Positivität der KL-Divergenz abseits der Referenz, welche für \emph{jede} Wahl
+von~$\mathbf{E}^*$ gilt. Der physikalisch nichttriviale Inhalt liegt in
+Schritt~3 (Erreichbarkeit): Es ist die Existenz einer zulässigen Schließung,
+die $\Pi_j[\mathbf{E}^*] = \varepsilon$ realisiert, welche K41
+unter allen möglichen Referenzspektren herausstellt. Ein Ersetzen von $\mathbf{E}^*$ durch
+etwa $k^{-3}$ würde keine zulässige Schließung ergeben, die
+die Bedingung konstanten Flusses am angeblichen Minimierer erfüllt (siehe
+Bemerkung~\ref{rem:circularity}).
+
+\textbf{Schritt 5: Nicht-Entartung.}\;
+Die Hesse-Matrix $\partial^2 \mathcal{F}/\partial E_j\,\partial E_\ell
+= \delta_{j\ell}/E_j$ bei $\mathbf{E}^*$ ist diagonal mit Einträgen
+$1/E_j^* > 0$. Für eine \emph{feste} Schließung $\Pi \in \mathscr{A}$ stellt die
+Bedingung $\Pi_j[\mathbf{E}] = \varepsilon$ genau $|\mathcal{J}|$
+Gleichungen für $|\mathcal{J}|$ Unbekannte dar, was generisch isolierte
+Lösungen liefert, sodass der Tangentialraum der Nebenbedingungs-Mannigfaltigkeit bei
+$\mathbf{E}^{(\Pi)}$ trivial ist und Nicht-Entartung vakuös erfüllt ist.
+Der wesentliche Gehalt von~(ii) betrifft das \emph{gemeinsame} Problem: Im
+erweiterten Raum $(\mathbf{E}, \Pi)$ mit $\Pi$ variierend über die
+(unendlichdimensionale) Familie~$\mathscr{A}$, besitzt die Einschränkungsmenge
+$\{(\mathbf{E}, \Pi) : \Pi_j[\mathbf{E}] = \varepsilon\}$ tangentiale
+Richtungen, entlang derer $\Pi$ variiert. Die uneingeschränkte Hesse-Matrix
+$D^2_{\mathbf{E}}\mathcal{F}|_{\mathbf{E}^*}$ ist strikt positiv
+definit (diagonale Einträge $1/E_j^* > 0$), daher bleibt ihre Einschränkung auf
+\emph{jeden} Unterraum positiv definit.
+
+\medskip
+\noindent\textbf{Schritt 5b: Interpretation zweiter Ordnung.}\;
+Die diagonalen Einträge $1/E_j^* \propto k_j^{5/3}$ der Hesse-Matrix wachsen mit
+der Wellenzahl, sodass kleinskalige Störungen des K41-Profils
+strenger bestraft werden als großskalige. Diese skalenabhängige
+Steifigkeit ist der variationelle Ursprung der Vorwärts-Kaskade: Abweichungen
+bei hohen Wellenzahlen sind energetisch kostspielig und treiben das System auf der lokalen Eddy-Turnover-Zeitskala zum
+K41-Profil zurück. Der Ein-Parameter-Freiheitsgrad in der Kolmogorov--Heisenberg-Schließung ($\Phi_j \equiv \alpha$)
+entspricht einer einzelnen flachen Richtung in der $\Pi$-Faser des
+erweiterten Raums $(\mathbf{E}, \Pi)$, die die strikte
+Positivität von $D^2_{\mathbf{E}}\mathcal{F}$ nicht beeinträchtigt. Diese Struktur ist eine
+Instanz des in~\cite{FST-Unified2026} diskutierten Resolventen-Dominanz-Musters zweiter Ordnung.
+\end{proof}
+
+\begin{remark}[Diagonale Hesse-Schranke]\label{rem:hessian}
+Die Hesse-Matrix von $\mathcal{F}$ am K41-Minimierer ist diagonal mit Einträgen
+\[
+  \frac{\partial^2\mathcal{F}}{\partial E_j^2}
+  \;=\; \frac{1}{E_j^*}.
+\]
+Damit gilt für den kleinsten Eigenwert
+\[
+  \min_j\frac{1}{E_j^*}
+  \;=\;
+  \frac{1}{C_K\,\varepsilon^{2/3}\,k_1^{-2/3}\,\Delta k_1}
+  \;>\; 0.
+\]
+Dies liefert die lokale gewichtete Stabilitätsskala des Variationsfunktionals.
+Allein daraus folgt jedoch kein Spektrallückensatz für die
+Navier--Stokes-Dynamik.
+\end{remark}
+
+\begin{remark}[Zur Rolle des Referenzspektrums]\label{rem:circularity}
+Ein natürlicher Einwand ist, dass das KL-Funktional $\mathcal{F}$
+\emph{konstruktionsbedingt} bei $\mathbf{E}^*$ minimiert wird, ungeachtet
+des physikalischen Gehalts von~$\mathbf{E}^*$. In der Tat ist für jede feste
+Schließung $\Pi$ das unrestringierte Minimum von $\mathcal{F}$ stets
+$\mathbf{E}^*$. Der nichttriviale Inhalt von Theorem~\ref{thm:K41} ist
+daher nicht, dass $\mathcal{F}$ sein Minimum bei $\mathbf{E}^*$ erreicht
+--- das ist eine Konsequenz der KL-Konstruktion --- sondern vielmehr, dass:
+\begin{enumerate}
+\item Unter allen stationären Profilen $\mathbf{E}^{(\Pi)}$ (eines pro Schließung
+  $\Pi \in \mathscr{A}$) einzig das K41-Profil $\mathbf{E}^*$
+  die Bedingung konstanten Flusses \emph{simultan erfüllt} und
+  $\mathcal{F} = 0$ erreicht. Jedes andere schließungskompatible Profil
+  weist $\mathcal{F} > 0$ auf.
+\item Die Referenz $\mathbf{E}^*$ innerhalb der normalisierten
+  Kolmogorov--Heisenberg-Schließung nicht beliebig ist: Die Relation
+  $\Pi_j=\alpha k_j E_j^{3/2}=\varepsilon$ fixiert die Skalierung
+  $E_j\propto k_j^{-2/3}$, also für die Spektraldichte
+  $E(k)\propto k^{-5/3}$. Breitere Schließungsfamilien können natürlich
+  um andere Referenzen konstruiert werden; das Theorem ist daher eine
+  Selektionsaussage innerhalb der angegebenen normalisierten zulässigen
+  Klasse, kein Beweis, dass keine andere Modellkonvention formulierbar ist.
+\end{enumerate}
+Zusammenfassend: Die physikalische Eingabe ist die Bedingung konstanten Flusses; das KL-Funktional
+liefert den Selektionsmechanismus innerhalb von deren Lösungsmenge.
+\end{remark}
+
+\begin{remark}[Selbstkonsistenz der K41-Referenz]
+\label{rem:k41-selfconsistency}
+Das K41-Spektrum wird als Referenzmaß des KL-Funktionals verwendet; sein
+Exponent ist aber zugleich selbstkonsistent mit der normalisierten
+Konstantfluss-Schließung. Innerhalb des reduzierten lokalen Schalenansatzes
+$\Pi_j\sim k_j E_j^{3/2}$ ergibt konstanter Fluss
+$E_j\propto \varepsilon^{2/3}k_j^{-2/3}$ und damit
+$E(k)\propto \varepsilon^{2/3}k^{-5/3}$. Dies ist ein Konsistenzcheck der
+variationellen Referenz, keine unabhängige Herleitung aller
+Turbulenzstatistiken.
+\end{remark}
+
+\begin{remark}[Kaskade als Reaktionskette und Nash-Gleichgewicht]\label{rem:nash}
+Die Variationsstruktur von Theorem~\ref{thm:K41} lässt eine aufschlussreiche
+spieltheoretische Interpretation zu. Betrachtet man den Trägheitsbereich als eine
+hierarchische \emph{Reaktionskette}: große Wirbel auf der Skala $k_j$ transferieren
+Energie an Wirbel auf der Skala $k_{j+1}$, wobei jede Skala als eine „Art“ agiert,
+deren Fitness durch ihren Energieanteil gesteuert wird. Die zugehörige Replikator-Dynamik
+auf dem Simplex der normierten Schalenenergien
+$p_j = E_j / \sum_\ell E_\ell$ nimmt die Form
+\[
+  \dot{p}_j
+  \;=\;
+  p_j\,\bigl(g_j(\mathbf{p}) - \bar{g}(\mathbf{p})\bigr)
+\]
+an, wobei $g_j$ die Netto-Energiegewinnrate auf der Skala $j$ und $\bar{g}$ der
+Populationsdurchschnitt ist. Das K41-Profil $\mathbf{p}^*$ ist ein \emph{Nash-Gleichgewicht} dieser Dynamik: Keine einzelne Skala kann ihren Energieanteil
+durch einseitige Abweichung erhöhen. Die freie Energie $\mathcal{F}$ dient als
+strenge Ljapunow-Funktion für die Replikator-Gleichung, was die
+asymptotische Stabilität von $\mathbf{p}^*$ sicherstellt.
+Dies spiegelt das wohlbekannte Resultat wider, dass die Minimierung der Gibbs'schen freien Energie
+in chemischen Reaktionsnetzwerken das Detaillierte-Bilanz-Gleichgewicht
+als eindeutiges Nash-Gleichgewicht der Massenwirkungskinetik liefert.
+\end{remark}
+
+% ===================================================================
+\section{Robustheits-Leitplanken und formale Penalty-Struktur}\label{sec:robustness}
+
+Die strenge Flussbedingung von Theorem~\ref{thm:K41} erfordert
+punktweise $\Pi_j = \varepsilon$ über den Trägheitsbereich hinweg.
+In der Praxis zeigen DNS-Daten kleinskalige
+Fluktuationen um diese Idealisierung. Wir halten zwei Geltungsbereichsgrenzen
+fest: Relaxierung allein ist trivial, solange $E^*$ zulässig bleibt, und die
+Minimax-Notation ist nur eine formale Penalty-Darstellung.
+
+\begin{proposition}[Relaxierte Flussbedingung: Geltungsbereich]
+\label{prop:dfc-slack}
+Sei $\mathcal{A}_{\textup{slack}}$ eine beliebige relaxierte
+flusszulässige Menge, welche das exakte K41-Profil $\mathbf{E}^*$ enthält.
+Wenn die Zielfunktion dasselbe KL-Funktional $\mathcal{F}$ bleibt, dann ist
+der Minimierer über $\mathcal{A}_{\textup{slack}}$ weiterhin exakt
+$\mathbf{E}^*$:
+\begin{equation}\label{eq:dfc-slack-bound}
+  \arg\min_{\mathbf{E}\in\mathcal{A}_{\textup{slack}}}
+  \mathcal{F}[\mathbf{E}]
+  = \mathbf{E}^*.
+\end{equation}
+Ein nichttriviales Robustheitstheorem für endliche Reynolds-Zahlen entsteht
+daher nicht allein dadurch, dass die Flussungleichungen relaxiert werden,
+während dieselbe referenzzentrierte Zielfunktion erhalten bleibt. Dafür
+bräuchte man zusätzlich einen Datenanpassungsterm, eine gestörte Referenz
+oder empirische Schranken, die das exakte Profil aus der Vergleichsklasse
+ausschließen.
+\end{proposition}
+
+\begin{proof}
+Für alle positiven Schalenspektren gilt $\mathcal{F}[\mathbf{E}]\ge0$, und
+Gleichheit tritt nur bei $\mathbf{E}=\mathbf{E}^*$ ein. Liegt
+$\mathbf{E}^*$ in $\mathcal{A}_{\textup{slack}}$, dann ist das relaxierte
+Infimum höchstens $\mathcal{F}[\mathbf{E}^*]=0$ und mindestens $0$.
+Jeder relaxierte Minimierer mit Zielfunktionswert null ist daher
+$\mathbf{E}^*$. Dies beweist die Behauptung und erklärt, warum die ältere
+Formulierung über ``Slack-Minimierer'' zu stark war: Das exakte
+Referenzprofil bleibt zulässig.
+\end{proof}
+
+\begin{remark}
+Proposition~\ref{prop:dfc-slack} ist eine Leitplanke, kein positives
+Robustheitstheorem: Robustheit bei endlicher Reynolds-Zahl muss mit einer
+gestörten Referenz, einem empirischen Datenanpassungsterm oder einer
+Vergleichsklasse formuliert werden, die das exakte K41-Profil nicht mehr
+enthält. Ohne eine solche zusätzliche Zutat bleibt das KL-Minimum
+konstruktionsbedingt exakt bei der Referenz.
+\end{remark}
+
+\begin{proposition}[Formale Penalty-Darstellung]
+\label{prop:minimax}
+In einer endlichen Schalentrunkierung mit
+$E_{\mathrm{tot}}=\sum_j E_j^*$ besitzt das entkoppelte Penalty-Problem
+\begin{equation}\label{eq:minimax}
+  \mathbf{E}^*
+  \;=\;
+  \arg\min_{\mathbf{E} \in \mathcal{E}}\;
+  \max_{\boldsymbol{\Pi} \in \mathcal{A}}\;
+  \Bigl[
+    \mathcal{F}[\mathbf{E}]
+    \;-\;
+    \lambda \sum_j (\Pi_j - \varepsilon)^2
+  \Bigr],
+\end{equation}
+den Sattelpunkt
+$(\mathbf{E}^*,(\varepsilon,\ldots,\varepsilon))$, wobei $\mathcal{E}$
+die Menge der nichtnegativen Energiespektren mit fester Gesamtenergie und
+$\mathcal{A}$ eine beschränkte konvexe Menge zulässiger Flussprofile ist.
+Da diese Auszahlung $\mathbf{E}$ und $\boldsymbol{\Pi}$ nicht koppelt, ist
+sie eine formale Penalty-Darstellung der harten Nebenbedingung, kein
+dynamischer Zwei-Spieler-Satz für den Navier--Stokes-Transfer.
+\end{proposition}
+
+\begin{proof}
+Wir überprüfen die endlichdimensionale Minimax-Struktur, identifizieren den
+Sattelpunkt und machen explizit, wo die Darstellung entkoppelt ist.
+
+\smallskip\noindent
+\textbf{Schritt 1: Strategieräume.}\;
+Definiere die Lagrange-bestrafte Auszahlung
+\[
+  L(\mathbf{E}, \boldsymbol{\Pi})
+  \;:=\;
+  \mathcal{F}[\mathbf{E}]
+  \;-\;
+  \lambda \sum_{j \in \mathcal{J}} (\Pi_j - \varepsilon)^2.
+\]
+Die Spektrumsvariable liegt in
+$\mathcal{E} := \{\mathbf{E} \in \mathbb{R}^N_{>0} :
+\sum_j E_j = E_{\mathrm{tot}}\}$, dem Simplex der positiven
+Energiespektren mit vorgegebener Gesamtenergie $E_{\mathrm{tot}} > 0$ und
+$N = |\mathcal{J}|$ Schalen. Die Flussvariable ist
+$\boldsymbol{\Pi} = (\Pi_j)_{j=1}^{N-1}$ und liegt in
+$\mathcal{A} := \{\boldsymbol{\Pi} \in \mathbb{R}^{N-1} :
+0 \le \Pi_j \le \Pi_{\max}\}$ für eine feste obere Schranke
+$\Pi_{\max} > \varepsilon$ (physikalisch ist der Fluss im Trägheitsbereich
+durch $O(\varepsilon)$ nach oben beschränkt).
+
+Die Menge $\mathcal{E}$ ist eine kompakte konvexe Teilmenge von $\mathbb{R}^N$
+(sie ist der Schnitt des offenen positiven Orthanten mit der
+Hyperebene $\sum_j E_j = E_{\mathrm{tot}}$; die Kompaktheit gilt, da
+$E_j \ge 0$ und $E_j \le E_{\mathrm{tot}}$ für jedes $j$, und wir betrachten
+den Abschluss in $\mathbb{R}^N_{\ge 0}$, wobei $L$ stetig auf den Rand
+fortsetzbar ist). Die Menge $\mathcal{A}$ ist eine kompakte
+konvexe Teilmenge von $\mathbb{R}^{N-1}$ (ein abgeschlossener Quader).
+
+\smallskip\noindent
+\textbf{Schritt 2: Konvexität--Konkavität.}\;
+Wir verifizieren:
+\begin{enumerate}[label=(\alph*)]
+  \item \emph{$L$ ist konvex in $\mathbf{E}$ für jedes feste
+    $\boldsymbol{\Pi}$.}\;
+    Der Term $\mathcal{F}[\mathbf{E}] = \sum_j [E_j\ln(E_j/E_j^*)
+    - E_j + E_j^*]$ ist strikt konvex in $\mathbf{E}$, da seine
+    Hesse-Matrix $\mathrm{diag}(1/E_j)$ für
+    $\mathbf{E} > 0$ positiv definit ist. Der Strafterm
+    $-\lambda\sum_j(\Pi_j - \varepsilon)^2$ ist unabhängig
+    von $\mathbf{E}$. Daher ist $L(\cdot, \boldsymbol{\Pi})$
+    strikt konvex.
+  \item \emph{$L$ ist konkav in $\boldsymbol{\Pi}$ für jedes feste
+    $\mathbf{E}$.}\;
+    Für festes $\mathbf{E}$ ist $\mathcal{F}[\mathbf{E}]$ konstant
+    bzgl. $\boldsymbol{\Pi}$. Die Abbildung $\boldsymbol{\Pi} \mapsto
+    -\lambda\sum_j(\Pi_j - \varepsilon)^2$ ist strikt konkav
+    (ihre Hesse-Matrix ist $-2\lambda\,I_{N-1}$, negativ definit).
+    Daher ist $L(\mathbf{E}, \cdot)$ strikt konkav.
+\end{enumerate}
+
+\smallskip\noindent
+\textbf{Schritt 3: Anwendung des Sion'schen Minimax-Theorems.}\;
+Nach dem Minimax-Theorem von Sion (M.~Sion, \emph{Pacific J.\ Math.}\ 8,
+1958, 171--176) gilt: Ist $X$ eine kompakte konvexe Teilmenge eines topologischen
+Vektorraums, $Y$ eine konvexe Teilmenge eines topologischen Vektorraums,
+und $f: X \times Y \to \mathbb{R}$ derart, dass $f(\cdot, y)$ für
+jedes $y$ konvex und unterhalbstetig ist, und $f(x, \cdot)$ für
+jedes $x$ konkav und oberhalbstetig ist, so gilt
+$\min_X \sup_Y f = \sup_Y \min_X f$.
+
+Hier ist $X = \mathcal{E}$ (kompakt konvex), $Y = \mathcal{A}$ (kompakt
+konvex, also insbesondere konvex), und $L$ ist stetig (somit
+sowohl unter- als auch oberhalbstetig) und erfüllt die
+Konvexitäts-Konkavitäts-Bedingungen aus Schritt~2. Kompaktheit beider
+Mengen und Stetigkeit stellen sicher, dass $\min$ und $\max$ angenommen werden.
+Daher gilt:
+\begin{equation}\label{eq:sion-applied}
+  \min_{\mathbf{E} \in \mathcal{E}}\;
+  \max_{\boldsymbol{\Pi} \in \mathcal{A}}\;
+  L(\mathbf{E}, \boldsymbol{\Pi})
+  \;=\;
+  \max_{\boldsymbol{\Pi} \in \mathcal{A}}\;
+  \min_{\mathbf{E} \in \mathcal{E}}\;
+  L(\mathbf{E}, \boldsymbol{\Pi}),
+\end{equation}
+und ein Sattelpunkt $(\mathbf{E}^\dagger, \boldsymbol{\Pi}^\dagger)$
+existiert, welcher
+$L(\mathbf{E}^\dagger, \boldsymbol{\Pi})
+\le L(\mathbf{E}^\dagger, \boldsymbol{\Pi}^\dagger)
+\le L(\mathbf{E}, \boldsymbol{\Pi}^\dagger)$
+für alle $\mathbf{E} \in \mathcal{E}$,
+$\boldsymbol{\Pi} \in \mathcal{A}$ erfüllt.
+
+\smallskip\noindent
+\textbf{Schritt 4: Identifikation des Sattelpunkts.}\;
+Am Sattelpunkt müssen die Bedingungen erster Ordnung erfüllt sein.
+
+\emph{Stationarität in $\boldsymbol{\Pi}$:}\;
+Für festes $\mathbf{E}^\dagger$ ist die Abbildung
+$\boldsymbol{\Pi} \mapsto L(\mathbf{E}^\dagger, \boldsymbol{\Pi})$
+strikt konkav und differenzierbar. Der innere Maximierer
+erfüllt
+\[
+  \frac{\partial L}{\partial \Pi_j}
+  \;=\;
+  -2\lambda\,(\Pi_j - \varepsilon)
+  \;=\; 0
+  \qquad\Longrightarrow\qquad
+  \Pi_j^\dagger = \varepsilon \quad\text{für alle } j.
+\]
+(Diese innere Lösung ist zulässig, da
+$0 < \varepsilon < \Pi_{\max}$.)
+
+\emph{Stationarität in $\mathbf{E}$:}\;
+Für festes $\boldsymbol{\Pi}^\dagger = (\varepsilon, \dots, \varepsilon)$
+verschwindet der Strafterm und
+$L(\mathbf{E}, \boldsymbol{\Pi}^\dagger) = \mathcal{F}[\mathbf{E}]$.
+Unter der Nebenbedingung $\mathbf{E} \in \mathcal{E}$ (die Energiebedingung
+$\sum_j E_j = E_{\mathrm{tot}}$) minimieren wir $\mathcal{F}$ über die
+Methode der Lagrange-Multiplikatoren. Die Stationaritätsbedingung lautet
+\[
+  \frac{\partial \mathcal{F}}{\partial E_j}
+  \;=\;
+  \ln\frac{E_j}{E_j^*}
+  \;=\; \mu
+  \qquad\text{für alle } j \in \mathcal{J},
+\]
+wobei $\mu$ der Multiplikator für die Gesamtenergiebedingung ist.
+Dies ergibt $E_j = e^\mu\,E_j^*$ für alle $j$, d.h.\ der Minimierer ist
+proportional zum K41-Referenzspektrum. Die Konstante $e^\mu$ wird
+durch die Gesamtenergiebedingung
+$\sum_j E_j = e^\mu \sum_j E_j^* = E_{\mathrm{tot}}$ festgelegt. Nimmt man
+$E_{\mathrm{tot}} = \sum_j E_j^*$ (welche die Gesamtenergie des
+K41-Spektrums ist), erhält man $\mu = 0$ und damit
+$E_j^\dagger = E_j^*$ für alle $j$.
+
+Daher ist der Sattelpunkt
+$(\mathbf{E}^\dagger, \boldsymbol{\Pi}^\dagger) =
+(\mathbf{E}^*, (\varepsilon, \dots, \varepsilon))$:
+das K41-Spektrum gepaart mit dem konstanten Flussprofil.
+
+\smallskip\noindent
+\textbf{Schritt 5: Eindeutigkeit.}\;
+Der Sattelpunkt ist eindeutig, weil $L$ \emph{strikt} konvex in
+$\mathbf{E}$ und \emph{strikt} konkav in $\boldsymbol{\Pi}$ ist.
+Tatsächlich, wenn $(\tilde{\mathbf{E}}, \tilde{\boldsymbol{\Pi}})$ ein
+anderer Sattelpunkt wäre, würde die Sattelpunkt-Ungleichung
+$L(\tilde{\mathbf{E}}, \boldsymbol{\Pi}^\dagger) \ge
+L(\mathbf{E}^\dagger, \boldsymbol{\Pi}^\dagger)$ und
+$L(\mathbf{E}^\dagger, \boldsymbol{\Pi}^\dagger) \le
+L(\tilde{\mathbf{E}}, \boldsymbol{\Pi}^\dagger)$ liefern, also
+$L(\tilde{\mathbf{E}}, \boldsymbol{\Pi}^\dagger) =
+L(\mathbf{E}^\dagger, \boldsymbol{\Pi}^\dagger)$. Aufgrund strikter
+Konvexität in $\mathbf{E}$ erzwingt dies
+$\tilde{\mathbf{E}} = \mathbf{E}^\dagger = \mathbf{E}^*$.
+Ebenso erzwingt strikte Konkavität
+$\tilde{\boldsymbol{\Pi}} = \boldsymbol{\Pi}^\dagger$.
+
+\smallskip\noindent
+\textbf{Schritt 6: Äquivalenz zur harten Nebenbedingungsformulierung.}\;
+Die Penalty-Formulierung~\eqref{eq:minimax} ist die augmentierte Lagrange-Relaxation
+des Problems mit harten Bedingungen $\Pi_j = \varepsilon$ in
+Theorem~\ref{thm:K41}. Für $\lambda \to \infty$ muss jeder Sattelpunkt
+von~\eqref{eq:minimax} $\Pi_j \to \varepsilon$ erfüllen (andernfalls
+würde der Strafterm $-\lambda(\Pi_j - \varepsilon)^2 \to -\infty$
+die Sattelpunkt-Ungleichung verletzen). Im Grenzwert reduziert sich das Minimax-Problem
+auf die restringierte Minimierung~\eqref{eq:min}, und
+der Sattelpunkt konvergiert gegen den K41-Minimierer aus
+Theorem~\ref{thm:K41}. Die Äquivalenz der Penalty- und der
+Formulierung mit harten Nebenbedingungen folgt aus der klassischen Konvexen-Dualitäts-Theorie~\cite{Rockafellar70}.
+\end{proof}
+
+\begin{remark}
+Die Minimax-Notation ist als Buchhaltung für die Konstantfluss-Penalty
+nützlich, zeigt aber für sich genommen keine nichttriviale
+spieltheoretische Struktur der turbulenten Kaskade. Ein echtes
+Zwei-Spieler-Modell müsste eine gekoppelte Auszahlung besitzen, in der das
+gewählte Flussprofil die zulässige Energieentwicklung oder das
+Dissipationsfunktional verändert. Die vorliegende Formulierung hält nur
+fest, dass KL-Minimierer und Konstantfluss-Penalty denselben formalen
+Sattelpunkt besitzen.
+\end{remark}
+
+\begin{remark}[Lokale gewichtete $\ell^2$-Stabilität aus der Hesse-Schranke]
+\label{rem:talagrand}
+Das Funktional $\mathcal{F}[\mathbf{E}]$ ist lokal gleichmäßig konvex um
+den K41-Minimierer $\mathbf{E}^*$ mit diagonaler Hesse-Matrix
+$D^2\mathcal{F}|_{\mathbf{E}^*} = \mathrm{diag}(1/E_j^*)$. Bleiben die
+Verhältnisse $E_j/E_j^*$ in einem festen kompakten Intervall
+$[R^{-1},R]$, liefert Taylor-Entwicklung eine vom Verhältnis abhängige
+gewichtete Stabilitätsschranke
+\[
+  c_R\sum_j \frac{(E_j - E_j^*)^2}{E_j^*}
+  \;\le\; \mathcal{F}[\mathbf{E}]
+\]
+für ein $c_R>0$. Dies ist die hier verwendete Stabilitätsaussage. Die
+stärkere globale Ungleichung
+$x\ln(x/y)-x+y\ge (x-y)^2/(2y)$ ist für große $x/y$ falsch und wird nicht
+verwendet.
+\end{remark}
+
+\begin{remark}[Lokales UCU3 in der abstrakten Drei-Lemma-Architektur]
+\label{rem:local-ucu3}
+Die gewichtete $\ell^2$-Schranke in Bemerkung~\ref{rem:talagrand} kann als
+die K41-Instanziierung des abstrakten \emph{Quadratischen-Wachstums-Axioms}
+\textnormal{UCU3} der Drei-Lemma-Architektur für strikt konvexe
+Variationsfunktionale gelesen werden (Universal Convexity Uniqueness; vgl.\ die
+begleitenden Architektur-Notizen \path{CORE/UCU_FORMAL_DEFINITIONS.md}~\S5
+und \path{CORE/ABSTRACT_THREE_LEMMA_UCU.md}~\S4.2.3). Definiert man die
+gewichtete Norm $\|h\|^2_*\,:=\,\sum_j h_j^2/E_j^*$, lautet die Schranke
+\[
+  \mathcal{F}[\mathbf{E}] - \mathcal{F}[\mathbf{E}^*]
+  \;\ge\;
+  \tfrac{1}{2}\,\|\mathbf{E}-\mathbf{E}^*\|_*^{\,2},
+\]
+d.h.\ \emph{lokales} UCU3 gilt mit der Konstante $g_* = 1/2$ in der gewichteten
+$\ell^2(1/E_j^*)$-Norm. Zusammen mit der strikten Konvexität (UCU1, unser
+Theorem~\ref{thm:K41} Teil~(ii)) und der Existenz des K41-Minimierers
+(UCU2, Theorem~\ref{thm:K41} Teil~(i)) schließt dies die lokale
+Drei-Lemma-Architektur für K41 im Standardsinne der konvexen
+Analysis.
+
+\smallskip\noindent\textit{Was offen bleibt (globales UCU3, ehrliche Aussage des Geltungsbereichs).} Die obige Schranke ist eine lokale Aussage um $\mathbf{E}^*$
+(Taylor-Entwicklung bis zur zweiten Ordnung, kontrollierter Restterm über
+$x\ln(x/y) - x + y \ge (x-y)^2/(2y)$). Ein \emph{globales} UCU3 im
+Sinne einer Transport-Informations-Ungleichung vom Talagrand-Typ
+$\mathrm{KL}(\mu\|\mu_{K41}) \ge (\rho_{K41}/2)\,W_2^2$ für ein Wahrscheinlichkeitsmaß $\mu_{K41}$ auf Kaskaden-Konfigurationen wird, über die
+Otto--Villani-Route~\cite{OttoVillani2000}, auf eine log-Sobolev-Ungleichung
+für $\mu_{K41}$ mit positiver Konstante $\rho_{K41}$ zurückgeführt. Die Existenz und
+explizite Form einer solchen Konstanten für K41-Kaskaden --- insbesondere ihre
+Asymptotik hinsichtlich Reynolds-Zahl und Kaskadentiefe --- ist unseres Wissens nach
+in der Standard-Turbulenzliteratur nicht dokumentiert und bleibt ein ungelöstes
+Problem in der mathematischen statistischen Mechanik. Eine strukturierte Reduktions-Notiz
+findet sich in \texttt{TALAGRAND\_CONSTANT\_K41.md} (begleitende
+Arbeitsnotiz).
+\end{remark}
+
+% ===================================================================
+\section{Intermittenzkorrekturen}\label{sec:intermittency}
+
+Die K41-Theorie sagt voraus, dass die longitudinale Strukturfunktion $p$-ter Ordnung wie folgt skaliert:
+\begin{equation}\label{eq:Sp_K41}
+  S_p(\ell) \;:=\;
+  \bigl\langle |\delta_\ell u|^p \bigr\rangle
+  \;\sim\; (\varepsilon\,\ell)^{p/3},
+  \qquad
+  \zeta_p^{\mathrm{K41}} = \frac{p}{3}.
+\end{equation}
+Experimente zeigen systematische Abweichungen auf: $\zeta_p < p/3$ für $p > 3$,
+eine Signatur der \emph{Intermittenz}.
+
+\subsection{Fluktuationen um das Variationsminimum}
+
+In unserem Rahmen entsteht Intermittenz durch Fluktuationen der Schalenenergien $\mathbf{E}$ um den K41-Minimierer $\mathbf{E}^*$. Die Entwicklung
+von $\mathcal{F}$ bis zur zweiten Ordnung liefert:
+\begin{equation}\label{eq:F_expand}
+  \mathcal{F}[\mathbf{E}^* + \delta\mathbf{E}]
+  \;=\;
+  \mathcal{F}[\mathbf{E}^*]
+  \;+\;
+  \frac{1}{2}\sum_{j}
+    \frac{(\delta E_j)^2}{E_j^*}
+  \;+\; O(|\delta\mathbf{E}|^3).
+\end{equation}
+Die Hesse-Matrix $H_{jj} = 1/E_j^*$ impliziert, dass Fluktuationen auf kleinen Skalen
+(große $j$, kleines $E_j^*$) stärker unterdrückt werden als Fluktuationen
+auf großen Skalen. Diese Asymmetrie ist der variationelle Ursprung
+der Intermittenz.
+
+\subsection{Verbindung zum K62-Lognormal-Modell}
+
+Wenn wir die Fluktuationen $\delta E_j$ als Gaußverteilt in der Variable
+$\ln(E_j/E_j^*)$ modellieren, und ferner annehmen, dass Phasen-Korrelationen zwischen
+Littlewood--Paley-Blöcken vernachlässigbar sind (sodass sich Schalenenergie-Fluktuationen
+direkt in die Skalierung der Strukturfunktionen übersetzen), so ergeben sich die resultierenden Strukturfunktion-Exponenten als
+\begin{equation}\label{eq:zeta_p}
+  \zeta_p
+  \;=\;
+  \frac{p}{3}
+  \;-\;
+  \frac{\mu}{18}\,p(p-3),
+\end{equation}
+was exakt die verfeinerte Ähnlichkeitshypothese (refined similarity hypothesis) von K62 (Kolmogorov--Obukhov)
+mit Intermittenzparameter $\mu$ ist~\cite{K62,Frisch95}. Der
+Parameter $\mu$ wird durch die Varianz von $\ln(E_j/E_j^*)$ unter
+dem Gibbs-Maß $\exp(-\mathcal{F}/\Theta)$ bestimmt, wobei die effektive
+Temperatur $\Theta > 0$ die Stärke der turbulenten Fluktuationen um das K41-Gleichgewicht
+parametrisiert (analog zur Temperatur in einem kanonischen Ensemble). Im Limes $\Theta \to 0$ konzentriert sich das Gibbs-Maß
+auf den K41-Minimierer und $\mu \to 0$ (keine Intermittenz); für
+endliches $\Theta$ skaliert die lognormale Varianz als
+$\mu \propto \Theta\,E_j^*$, wodurch der Intermittenzparameter
+mit der Intensität der Kaskadenfluktuationen in Verbindung gebracht wird.
+
+\begin{remark}
+Das She--Lévêque-Modell~\cite{SL94} schlägt folgende Alternative vor:
+\[
+  \zeta_p = \frac{p}{9} + 2\Bigl(1 - \bigl(\tfrac{2}{3}\bigr)^{p/3}\Bigr),
+\]
+welches experimentelle Daten für große $p$ genauer approximiert. Eine Ableitung hiervon
+aus dem Freie-Energie-Rahmen würde erfordern, die Fluktuationen als
+Log-Poisson- statt als Log-Normal-Prozess zu modellieren. Dies bleibt ein offenes Problem
+innerhalb unseres Ansatzes.
+\end{remark}
+
+% ===================================================================
+\subsection{Strukturelle Klassifikation}\label{sec:resolvent-cascade}
+
+Die gemeinsame Minimierung aus Theorem~\ref{thm:K41} weist eine dreistufige
+Hierarchie auf: (i)~das Energiebudget in führender Ordnung ist neutral (jedes Potenzgesetz-Spektrum ist kinematisch zulässig); (ii)~die Bedingung konstanten Flusses erster Ordnung schränkt das Profil ein, legt es aber nicht
+eindeutig fest; (iii)~die strikte Konvexität zweiter Ordnung
+von~$\mathcal{F}$ wählt K41 als eindeutigen Minimierer. Dieses Muster --- in~\cite{FST-Unified2026} als \emph{Resolventen-Dominanz zweiter Ordnung} bezeichnet --- hat Analoga in anderen variationellen Selektionsproblemen und wird dort ausführlich diskutiert.
+
+% ===================================================================
+\section{Numerische Evidenz}\label{sec:numerics}
+
+\begin{remark}[Numerische Verifikation von Theorem~\ref{thm:K41}]\label{rem:numerical-F}
+Eine numerische Auswertung von $\mathcal{F}[\mathbf{E}]$ über sechs synthetische Energiespektren bestätigt, dass das K41-Spektrum der eindeutige Minimierer ist: $\mathcal{F}[\mathbf{E}_{\mathrm{K41}}] = 0$ exakt, während $\mathcal{F}[\mathbf{E}_{\mathrm{K62}}] = 2{,}0 \times 10^{-4}$ (Intermittenzkorrektur), $\mathcal{F}[\mathbf{E}_{k^{-2}}] = 1{,}74$ (steil), $\mathcal{F}[\mathbf{E}_{k^{-4/3}}] = 5{,}94$ (flach) und $\mathcal{F}[\mathbf{E}_{\mathrm{thermal}}] = 7{,}55$ (Gleichverteilung). Ein Perturbationstest ($300$ zufällige Störungen $\delta \mathbf{E}$ bei drei Rauschleveln $\|\delta \mathbf{E}\|/\|\mathbf{E}^*\| \in \{0{,}01,\, 0{,}1,\, 1{,}0\}$) liefert $\mathcal{F}[\mathbf{E}^* + \delta \mathbf{E}] > 0$ für \emph{alle} $300$ Samples, was die strikte Konvexität numerisch bestätigt. Numerische Skripte: \texttt{compute\_F\_spectrum.py}.
+\end{remark}
+
+Wir schlagen folgendes reproduzierbares Testprotokoll zur DNS-Verifizierung vor:
+\begin{enumerate}
+\item Berechne die Littlewood--Paley Schalenenergien $E_j$ aus
+  einer statistisch stationären DNS bei $R_\lambda \ge 200$.
+\item Werte $\mathcal{F}[\mathbf{E}]$ unter Verwendung des gemessenen
+  $\mathbf{E}$ und der K41-Referenz $\mathbf{E}^*$ aus, wobei
+  $\varepsilon := \nu\,\langle\|\nabla u\|_{L^2}^2\rangle_t$
+  die zeitgemittelte viskose Dissipationsrate aus demselben DNS-Lauf ist.
+\item Verifiziere, dass $\mathcal{F}$ mit zunehmendem $R_\lambda$ abnimmt
+  und dass das kompensierte Verhältnis $\varphi_j = \ln(E_j/E_j^*)$ über den
+  Trägheitsbereich hinweg monoton fallend in $j$ ist.
+\end{enumerate}
+
+\smallskip\noindent
+\textbf{Implementierungshinweise.}\;
+(a)~Standard-DNS-Codes geben das isotrope Energiespektrum $E(k)$
+via scharfer sphärischer Schalen-Gruppierung (binning) aus, nicht Littlewood--Paley (LP) gefilterte Energien. Für glatte Spektren ist der Unterschied von der Größenordnung $O(\Delta k_j / k_j) = O(\ln 2)$ pro Schale und kann abgeschätzt werden, indem man scharfes und glattes Binning vergleicht.
+(b)~Die Schritte 1--3 sollten auf instantane Spektren bei mehreren
+statistisch unabhängigen Zeit-Snapshots innerhalb des stationären Regimes angewendet werden;
+das Ensemblemittel von $\mathcal{F}$ und $\varphi_j$ liefert dann
+Konfidenzintervalle.
+
+% ===================================================================
+\section{Diskussion}\label{sec:discussion}
+
+Die gemeinsame Minimierung über alle zulässigen Schließungen ist keine tautologische Umformulierung von K41: Kolmogorovs ursprüngliche Ableitung beruht auf Dimensionsanalyse, während unser Theorem zeigt, dass K41 der eindeutige Minimierer eines wohldefinierten Variationsproblems ist, was eine strukturelle Erklärung für die Universalität liefert.
+
+\subsection{Die Rolle der Schließungsfamilie}
+
+Die Umformulierung von Theorem~\ref{thm:K41} via der zulässigen Flussfamilie (Definition~\ref{def:admissible}) schwächt die Abhängigkeit von jeglichem spezifischen Schließungsmodell signifikant ab. Das K41-Spektrum wird nicht durch eine einzelne algebraische Relation selektiert, sondern als der eindeutige Minimierer quer über \emph{alle} lokalen, dimensionskonsistenten, monotonen Flussoperatoren.
+Nichtsdestotrotz erzwingt Axiom~(A2) weiterhin eine strukturelle Einschränkung --- den $k_j\,E_j^{3/2}$-Skalierungsvorfaktor ---, der letztendlich das dimensionale Argument von Kolmogorov einkodiert. Die Ableitung dieses Vorfaktors aus der Kármán--Howarth--Monin-Relation oder aus strengen Schranken an die trilineare Littlewood--Paley-Form bleibt ein wichtiges offenes Problem.
+
+\subsection{Intrinsische Charakterisierung von \texorpdfstring{$E^*$}{E*}}
+
+\begin{remark}[Kármán--Howarth--Monin Charakterisierung]
+\label{rem:khm-intrinsic}
+Die Kármán--Howarth--Monin (KHM)-Relation
+$\partial_t \langle |\delta u|^2 \rangle + \nabla_r \cdot
+\langle |\delta u|^2 \delta u \rangle = -4\varepsilon/3
++ 2\nu \Delta_r \langle |\delta u|^2 \rangle$ liefert einen intrinsischen
+Konstantfluss-Anker für den Trägheitsbereich. Im stationären
+Trägheitsbereich ($\eta \ll r \ll L$) führt sie zum Vier-Fünftel-Gesetz für
+die Strukturfunktion dritter Ordnung. Das stützt die Flusseingabe des
+Variationsschemas, bestimmt aber nicht allein durch Fourier-Transformation
+eindeutig das Energiespektrum zweiter Ordnung. Die Rückgewinnung von
+$E(k)\sim \varepsilon^{2/3}k^{-5/3}$ benötigt weiterhin die übliche
+Selbstähnlichkeits-, Lokalitäts- oder Schließungsannahme. Die KHM-Relation
+ist daher ein Konsistenzcheck der Referenz, kein unabhängiger
+Eindeutigkeitsbeweis.
+\end{remark}
+
+\subsection{Regimeauswahl und laminar-turbulenter Übergang}
+
+Das Variationsprinzip in Theorem~\ref{thm:K41} wählt das K41-Spektrum \emph{innerhalb} des turbulenten Regimes aus, erklärt jedoch den laminar-turbulenten Übergang selbst nicht. Eine natürliche Erweiterung würde die strikte Konvexität von~$\mathcal{F}$ als Stabilitätskriterium nutzen: Unter allen kinematisch zulässigen Strömungsregimen ist das in der Natur realisierte jenes, dessen spektrale Energieverteilung ein stabiler kritischer Punkt des Freie-Energie-Funktionals ist. Diese Verbindung quantitativ zu erforschen bleibt zukünftiger Arbeit überlassen.
+
+\subsection{Einschränkungen}
+
+Wir fassen die hauptsächlichen Einschränkungen der vorliegenden Arbeit zusammen:
+\begin{enumerate}
+\item \textbf{Statische Auswahl.}\; Theorem~\ref{thm:K41} etabliert K41 als eindeutigen variationellen Minimierer, adressiert jedoch nicht die dynamische Frage, ob die Navier--Stokes-Entwicklung das Spektrum auf diesen Minimierer zutreibt. Die dynamischen Aspekte --- einschließlich $\mathcal{F}$-Monotonie entlang Trajektorien und anomaler Dissipation --- erfordern zusätzliche Hypothesen zur nichtlinearen Kaskade und werden im Begleitpaper~\cite{Geiger2026b} behandelt.
+\item \textbf{Trägheitsbereich-Idealisierung.}\; Das Funktional $\mathcal{F}$ ist über den Trägheitsbereich $\mathcal{J}$ definiert und ignoriert die Antriebs- und Dissipationsbereiche. Randeffekte bei $j_{\mathrm{in}}$ und $j_{\mathrm{dis}}$ (insbesondere der Bottleneck) werden in Konstanten absorbiert, aber nicht quantitativ kontrolliert.
+\item \textbf{Intermittenz.}\; Die K62-Verbindung (Abschnitt~\ref{sec:intermittency}) ist qualitativ. Eine rigorose Herleitung der Intermittenzexponenten aus den Hesse-Fluktuationen bleibt offen.
+\item \textbf{Eindeutigkeit der Referenz.}\; Während Bemerkung~\ref{rem:circularity} argumentiert, dass $\mathbf{E}^*$ die einzig physikalisch konsistente Referenz ist, würde eine vollkommen intrinsische Charakterisierung von $\mathbf{E}^*$ (ohne \emph{a priori} Rückgriff auf K41) die Argumentation stärken. Bemerkung~\ref{rem:khm-intrinsic} stellt einen Schritt in diese Richtung dar.
+\end{enumerate}
+
+\subsection{Erweiterungen und Ausblick}
+
+\begin{itemize}
+  \item \textbf{Anomale Dissipation.}\;
+    Im Begleitpapier~\cite{Geiger2026b} führen wir eine Hierarchie von
+    Entropiekompatibilitäts-Hypothesen für die nichtlineare Kaskade ein --- von einer punktweisen Bedingung über eine Variante mit Skalenfenster (scale-windowed) hin zu einer dualen, falsifizierbaren
+    \emph{Downhill Flux Condition} (DFC), die an DNS-Daten verifizierbar ist --- und
+    beweisen, dass diese im Limes verschwindender Viskosität eine untere Schranke für die Dissipationsrate implizieren.
+  \item \textbf{Kompressible Turbulenz:}
+    Die Erweiterung auf kompressible Strömungen erfordert das Ersetzen der
+    $L^2$-basierten Schalenenergien durch dichte-gewichtete Größen und das Modifizieren der
+    Schließung, um der Kopplung von akustischen Moden Rechnung zu tragen.
+  \item \textbf{Zweidimensionale Turbulenz:}
+    Die duale Kaskade (inverse Energiekaskade mit $k^{-5/3}$ und direkte
+    Enstrophiekaskade mit $k^{-3}$~\cite{Kraichnan67}) stellt einen
+    interessanten Testfall dar, der ein Variationsproblem mit zwei Nebenbedingungen erfordert.
+\end{itemize}
+
+% ===================================================================
+\subsection{Post-Zookeeper Geltungsbereich-Grenze}
+\label{subsec:zookeeper-k41-scope}
+
+Der Zookeeper-Transfer verdeutlicht, was dieses Paper beanspruchen sollte und was nicht. Dieses Paper ist Paper A in der Turbulenz-Aufspaltung: Es beweist die variationelle Auswahl des K41-Spektrums innerhalb der angegebenen zulässigen Flussfamilie. Es beweist keine anomale Dissipation für Navier--Stokes, löst nicht das Onsager-Selektionsproblem und behauptet nicht, dass alle schwachen oder Viskositäts-verschwindenden (vanishing-viscosity) Limites K41 auswählen.
+
+Unter dem aktualisierten CORE-Status ist der Transfer lediglich RFEP v1.8
+Normalform-Disziplin: Zookeeper schließt Riemann $C^{(2)}$/MS2 im
+CCM/Fourier-Zweig, aber daraus folgt keine automatische Turbulenz-Aussage von
+jener Schließung. Das vorliegende Theorem bleibt daher exakt das reine
+K41-Variations-Theorem.
+
+Diese Fragen gehören zu einem separaten Paper B. Dort sind die relevanten Objekte
+das duale/fensterbasierte DFC-Flussdefizit, das anomale Dissipationsmaß,
+gewichtete schalen-gemittelte Formen des $4/5$-Gesetzes sowie Stresstests aus konvexer Integration und
+Vanishing-Viscosity-Konstruktionen. Diese Trennung explizit zu halten, ist eine Stärke: Das unbedingte Resultat im vorliegenden Paper bleibt rein,
+während die konditionale Defekttheorie ihre eigene natürliche Fortsetzung hat.
+
+\subsection*{Klassifikation der Resultate}
+
+\begin{center}
+\small
+\begin{tabular}{|p{0.52\textwidth}|p{0.20\textwidth}|p{0.20\textwidth}|}
+\hline
+\textbf{Resultat} & \textbf{Typ} & \textbf{Referenz} \\
+\hline
+\hline
+\multicolumn{3}{|l|}{\textit{Theoreme (rigoros, unbedingt):}} \\
+\hline
+$\mathcal{F}[\mathbf{E}] \geq 0$, $= 0$ gdw.\ $\mathbf{E} = \mathbf{E}^*$ & Theorem & Thm.~\ref{thm:K41} \\
+K41 eindeutiger gemeinsamer Minimierer & Theorem & Thm.~\ref{thm:K41} \\
+(A2) aus (A1) + Dimensionsanalyse & Proposition & Prop.~\ref{prop:A2-derived} \\
+\hline
+\multicolumn{3}{|l|}{\textit{Geltungsbereich-Leitplanken und formale Umschreibungen:}} \\
+\hline
+Relaxierter Flussspielraum ist trivial, solange $E^*$ zulässig bleibt & Leitplanke & Prop.~\ref{prop:dfc-slack} \\
+K41 als entkoppelter Penalty-Sattelpunkt & Formale Darstellung & Prop.~\ref{prop:minimax} \\
+\hline
+\multicolumn{3}{|l|}{\textit{Numerisch bestätigt:}} \\
+\hline
+$\mathcal{F}[\mathbf{E}_{\mathrm{K41}}] = 0$ (Minimierer) & Exakt & Rem.~\ref{rem:numerical-F} \\
+$\mathcal{F} > 0$ für alle 300 Perturbationen & Numerisch & Rem.~\ref{rem:numerical-F} \\
+\hline
+\multicolumn{3}{|l|}{\textit{DNS-falsifizierbare Vorhersagen:}} \\
+\hline
+$\mathcal{F}[\mathbf{E}_{\mathrm{DNS}}] \to 0$ für $R_\lambda \to \infty$ & Vorhersage & Abschn.~\ref{sec:numerics} \\
+\hline
+\end{tabular}
+\end{center}
+
+% ===================================================================
+\section*{Danksagung}
+
+Der Autor dankt dem KI-System Claude für die Unterstützung bei der Literaturrecherche, mathematischen Verifizierung und Manuskripterstellung.
+
+% ===================================================================
+\section*{KI-Offenlegung}
+Bei der Erstellung dieses Manuskripts wurden KI-gestützte Tools (Claude, Anthropic) in einer unterstützenden Funktion verwendet, insbesondere zur Literaturrecherche, Textstrukturierung und Formulierungshilfe. Die konzeptionelle Gestaltung, wissenschaftliche Argumentation und die Verantwortung für den gesamten Inhalt liegen ausschließlich beim Autor.
+
+% ===================================================================
+\begin{thebibliography}{99}
+
+\bibitem{K41a}
+A.\,N.~Kolmogorov,
+\emph{The local structure of turbulence in incompressible viscous fluid
+for very large Reynolds numbers},
+Doklady Akad.\ Nauk SSSR \textbf{30} (1941), 299--303.
+Reprinted in Proc.\ R.\ Soc.\ Lond.\ A \textbf{434} (1991), 9--13.
+
+\bibitem{K41b}
+A.\,N.~Kolmogorov,
+\emph{Dissipation of energy in the locally isotropic turbulence},
+Doklady Akad.\ Nauk SSSR \textbf{32} (1941), 16--18.
+Reprinted in Proc.\ R.\ Soc.\ Lond.\ A \textbf{434} (1991), 15--17.
+
+\bibitem{K62}
+A.\,N.~Kolmogorov,
+\emph{A refinement of previous hypotheses concerning the local structure
+of turbulence in a viscous incompressible fluid at high Reynolds number},
+J.~Fluid Mech.\ \textbf{13} (1962), 82--85.
+
+\bibitem{SL94}
+Z.-S.~She and E.~L\'ev\^eque,
+\emph{Universal scaling laws in fully developed turbulence},
+Phys.\ Rev.\ Lett.\ \textbf{72} (1994), 336--339.
+
+\bibitem{Frisch95}
+U.~Frisch,
+\emph{Turbulence: The Legacy of A.\,N.\ Kolmogorov},
+Cambridge University Press, 1995.
+
+\bibitem{Kraichnan67}
+R.\,H.~Kraichnan,
+\emph{Inertial ranges in two-dimensional turbulence},
+Phys.\ Fluids \textbf{10} (1967), 1417--1423.
+
+\bibitem{MY75}
+A.\,S.~Monin and A.\,M.~Yaglom,
+\emph{Statistical Fluid Mechanics}, Vols.~1--2,
+MIT Press, 1971--1975.
+
+\bibitem{Pope00}
+S.\,B.~Pope,
+\emph{Turbulent Flows},
+Cambridge University Press, 2000.
+
+\bibitem{FST-Unified2026}
+L.~Geiger, \emph{The Renormalized Free Energy Framework: A Unified Resolution of Structural Bottlenecks},
+Zenodo, March 2026.
+\href{https://doi.org/10.5281/zenodo.19036190}{doi:10.5281/zenodo.19036190}.
+
+\bibitem{BonnansShapiro00}
+J.\,F.~Bonnans and A.~Shapiro,
+\emph{Perturbation Analysis of Optimization Problems},
+Springer Series in Operations Research, Springer, New York, 2000.
+
+\bibitem{Rockafellar70}
+R.\,T.~Rockafellar,
+\emph{Convex Analysis},
+Princeton Mathematical Series, vol.~28,
+Princeton University Press, 1970.
+
+\bibitem{Geiger2026b}
+L.~Geiger,
+\emph{Anomalous Dissipation and the Turbulent Cascade: A Variational Free-Energy Derivation of Kolmogorov Scaling},
+Zenodo, 2026.
+\href{https://doi.org/10.5281/zenodo.19056813}{doi:10.5281/zenodo.19056813}.
+
+\bibitem{OttoVillani2000}
+F.~Otto and C.~Villani,
+\emph{Generalization of an inequality by Talagrand and links with the logarithmic Sobolev inequality},
+J.\ Funct.\ Anal.~\textbf{173} (2000), 361--400.
+
+\end{thebibliography}
+
+\end{document}

@@ -5,13 +5,17 @@ Functional Stability Theory program.
 
 Zenodo concept DOI: <https://doi.org/10.5281/zenodo.19056813>
 
+Companion K41 Paper-A concept DOI: <https://doi.org/10.5281/zenodo.20131305>
+
 ## Status
 
-This folder contains the public Skeleton/anomalous-dissipation paper files
-synchronized from the local v1.4-candidate working state. The latest Zenodo
-release is still v1.3. The DFC hierarchy is the empirical input; the separate
-K41 variational-minimizer Paper-A files remain local until their release
-strategy and Zenodo record are decided.
+This folder contains the public Skeleton/anomalous-dissipation companion paper
+files synchronized from the local v1.4-candidate working state. The latest
+Zenodo release is still v1.3. The DFC hierarchy is the conditional input.
+
+The unconditional K41 variational-minimizer theorem is now separated into
+`../k41-variational-minimiser/` and published under concept DOI
+<https://doi.org/10.5281/zenodo.20131305>.
 
 ## Files
 
@@ -19,9 +23,7 @@ strategy and Zenodo record are decided.
 |------|---------|
 | `FST-TU_Turbulence_Skeleton_v1_en.tex` / `FST-TU_Turbulence_Skeleton_v1_en.pdf` | English paper source and PDF |
 | `FST-TU_Turbulence_Skeleton_v1_de.tex` / `FST-TU_Turbulence_Skeleton_v1_de.pdf` | German paper source and PDF |
-| `../../scripts/turbulence/compute_F_spectrum.py` | K41 free-energy minimizer and strict convexity test |
 | `../../scripts/turbulence/compute_goy_shell_dfc.py` | Sabra/GOY shell-model DFC1/DFC2 verification |
-| `../../scripts/turbulence/compute_F_spectrum.png` | Generated K41 free-energy result plot |
 | `../../scripts/turbulence/compute_goy_shell_dfc.png` | Generated shell-model DFC result plot |
 
 ## Reproduce
@@ -29,12 +31,10 @@ strategy and Zenodo record are decided.
 From the repository root:
 
 ```bash
-PYTHONIOENCODING=utf-8 python scripts/turbulence/compute_F_spectrum.py
 PYTHONIOENCODING=utf-8 python scripts/turbulence/compute_goy_shell_dfc.py
 ```
 
-The scripts write their PNG outputs next to the scripts in
-`scripts/turbulence/`.
+The script writes its PNG output next to the script in `scripts/turbulence/`.
 
 ## Publication Gate
 
