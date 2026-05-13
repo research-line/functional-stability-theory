@@ -10,8 +10,10 @@ Companion K41 Paper-A concept DOI: <https://doi.org/10.5281/zenodo.20131305>
 ## Status
 
 This folder contains the public Skeleton/anomalous-dissipation companion paper
-files synchronized from the local v1.4-candidate working state. The latest
-Zenodo release is still v1.3. The DFC hierarchy is the conditional input.
+files synchronized from the local v1.4 upload-candidate working state. The
+current public file set is prepared for the Zenodo v1.4 release; the latest
+Zenodo release remains v1.3 until publication completes. The DFC hierarchy is
+the conditional input.
 
 The unconditional K41 variational-minimizer theorem is now separated into
 `../k41-variational-minimiser/` and published under concept DOI
@@ -23,6 +25,7 @@ The unconditional K41 variational-minimizer theorem is now separated into
 |------|---------|
 | `FST-TU_Turbulence_Skeleton_v1_en.tex` / `FST-TU_Turbulence_Skeleton_v1_en.pdf` | English paper source and PDF |
 | `FST-TU_Turbulence_Skeleton_v1_de.tex` / `FST-TU_Turbulence_Skeleton_v1_de.pdf` | German paper source and PDF |
+| `FST-TU_Turbulence_Skeleton_v1_kombi.pdf` | Combined bilingual English/German PDF |
 | `../../scripts/turbulence/compute_goy_shell_dfc.py` | Sabra/GOY shell-model DFC1/DFC2 verification |
 | `../../scripts/turbulence/compute_goy_shell_dfc.png` | Generated shell-model DFC result plot |
 

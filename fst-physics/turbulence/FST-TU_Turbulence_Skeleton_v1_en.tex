@@ -4,14 +4,19 @@
 
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
+\usepackage{microtype}
 \usepackage{amsmath,amssymb,amsthm,mathrsfs}
 \usepackage{mathtools}
 \usepackage{enumitem}
+\usepackage{array}
+\usepackage{tabularx}
 \usepackage{xcolor}
 \usepackage{geometry}
 \geometry{a4paper, margin=2.5cm}
+\setlength{\emergencystretch}{2em}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,calc}
 \usepackage{hyperref}
@@ -19,19 +24,39 @@
   colorlinks=true,
   linkcolor=blue!70!black,
   citecolor=green!50!black,
-  urlcolor=blue!70!black
+  urlcolor=blue!70!black,
+  pdftitle={Anomalous Dissipation and the Turbulent Cascade: A Variational Free-Energy Characterisation of Kolmogorov Scaling},
+  pdfauthor={Lukas Geiger},
+  pdfsubject={Preprint on anomalous dissipation, turbulence, and Kolmogorov scaling},
+  pdfkeywords={turbulence, anomalous dissipation, Kolmogorov scaling, variational principle, free energy},
+  pdflang={en-US}
 }
+\makeatletter
+\renewcommand*{\HyperDestNameFilter}[1]{en.#1}
+\makeatother
 
-\theoremstyle{definition}
+\newtheoremstyle{breakdef}
+  {8pt}{8pt}
+  {\normalfont}{}
+  {\bfseries}{.}
+  {\newline}{}
+\newtheoremstyle{breakplain}
+  {8pt}{8pt}
+  {\itshape}{}
+  {\bfseries}{.}
+  {\newline}{}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\theoremstyle{breakdef}
 \newtheorem{definition}{Definition}[section]
-\theoremstyle{plain}
+\theoremstyle{breakplain}
 \newtheorem{theorem}[definition]{Theorem}
 \newtheorem{lemma}[definition]{Lemma}
 \newtheorem{proposition}[definition]{Proposition}
 \newtheorem{corollary}[definition]{Corollary}
 \newtheorem{conjecture}[definition]{Conjecture}
 \newtheorem{axiom}[definition]{Axiom}
-\theoremstyle{remark}
+\theoremstyle{breakdef}
 \newtheorem{remark}[definition]{Remark}
 
 % ---------------------------------------------------------------------------
@@ -65,15 +90,19 @@ nonlinear cascade (and a non-degeneracy condition on the forcing),
 we derive a lower bound on the dissipation rate in the
 vanishing-viscosity limit (Theorem~\ref{thm:anomalous}), providing
 a new route to anomalous dissipation that complements the Onsager
-conjecture programme.  We introduce a hierarchy of progressively
-weaker sufficient conditions---from pointwise entropy compatibility
-through a scale-windowed variant to a falsifiable \emph{Downhill Flux
-Condition} (DFC) that can be checked against DNS data---and prove
-rigorously that DFC implies anomalous dissipation.
+    conjecture programme.  We introduce a hierarchy of progressively
+    weaker sufficient conditions---from pointwise entropy compatibility
+    through a scale-windowed variant to a dual, falsifiable \emph{Downhill
+    Flux Condition} (DFC) that can be checked against DNS data---and prove
+    that this dual DFC implies the required windowed entropy compatibility.
+    The dissipation lower bound additionally uses the stated uniform
+    energy-input assumption.
 Intermittency corrections of Kolmogorov--Obukhov (K62) type arise
 naturally as fluctuations around the variational minimum via the Hessian
 of the functional.
 \end{abstract}
+
+\clearpage
 
 % ===================================================================
 \section{Introduction}\label{sec:intro}
@@ -141,11 +170,10 @@ first-order constant-flux constraint restricts but does not uniquely
 determine the profile; (c)~the second-order strict convexity
 of~$\mathcal{F}$ selects K41 as the unique minimiser.  This three-level
 hierarchy is discussed in Section~\ref{sec:resolvent-cascade}.
-Our results do not resolve the Navier--Stokes regularity problem, but they
-establish the K41 scaling and anomalous dissipation as consequences
-of a variational principle, reducing their dependence on empirical input
-to a minimal set of physically transparent axioms (locality, monotonicity,
-and non-degenerate forcing).
+Our results do not resolve the Navier--Stokes regularity problem. They give
+an unconditional variational selection of K41 and a conditional cascade
+compatibility route for the anomalous-dissipation discussion; the quantitative
+lower bound still depends on the explicit uniform energy-input assumption.
 
 This paper is self-contained; all main results depend only on definitions and proofs within this document. Connections to the broader FST programme are cited for context but are not logically required.
 
@@ -172,7 +200,7 @@ This paper is self-contained; all main results depend only on definitions and pr
 \node[box, fill=green!15] (T2) at (5.5,-3.6) {\textbf{Thm\,2:} Anomalous\\dissipation};
 
 % Row 4: Conditions
-\node[box, fill=red!10] (DFC) at (5.5,-5.4) {DFC1\,+\,DFC2\,+\,DFC3\\(DNS-verifiable)};
+\node[box, fill=red!10] (DFC) at (5.5,-5.4) {DFC1$^\vee$\,+\,DFC2\,+\,DFC3\\(DNS/projection-testable)};
 
 % Arrows
 \draw[arrow] (A1) -- (F) node[midway, left, note] {Def.\,3.1--3.2};
@@ -184,8 +212,9 @@ This paper is self-contained; all main results depend only on definitions and pr
 \caption{Logical structure of the proof.  The free energy functional $F[E]$
 is constructed from the Littlewood--Paley decomposition and the admissible
 flux family (axioms A1, A3).  Theorem~1 (K41 uniqueness) follows from joint
-minimisation; Theorem~2 (anomalous dissipation) requires the Downhill Flux
-Condition (DFC), which is empirically verifiable via DNS.}
+minimisation; the conditional cascade part of Theorem~2 requires the
+Downhill Flux Condition (DFC), while the dissipation lower bound also uses
+uniform energy input.}
 \label{fig:proof-chain}
 \end{figure}
 
@@ -577,10 +606,10 @@ $j_2 - j_1 \ge 2$,
   \bigl(|\varphi_{j_1}| + |\varphi_{j_2}|\bigr),
 \end{equation}
 where $\varphi_j := \ln(E_j/E_j^*)$ and $C_{\mathrm{bdry}} > 0$ is a
-constant controlled by the Besov norm of~$u$.
+constant supplied by the available commutator/projection bounds.
 \end{definition}
 
-\begin{proposition}[Window-NL suffices for anomalous dissipation]
+\begin{proposition}[Window-NL suffices for the cascade hypothesis]
 \label{prop:window-NL}
 Theorem~\ref{thm:anomalous} remains valid if the pointwise
 condition~\eqref{eq:NL} is replaced by the window
@@ -637,9 +666,22 @@ A Leray--Hopf weak solution $u$ satisfies the \emph{Downhill Flux
 Condition} (DFC) on the inertial sub-window
 $[j_1, j_2] \subset \mathcal{J}$ if:
 \begin{enumerate}
-  \item[\textup{(DFC1)}] \textbf{Forward cascade.}\;
-    There exists $\Pi_0 > 0$ such that
-    $\Pi_j \ge \Pi_0$ for all $j \in [j_1, j_2]$.
+  \item[\textup{(DFC1$^\vee$)}] \textbf{Dual forward cascade.}\;
+    Let $a_j := \varphi_j-\varphi_{j+1}$ for
+    $j=j_1,\ldots,j_2-1$. There exist constants
+    $\Pi_0>0$ and $C_{\mathrm{proj}}\ge0$ such that
+    \begin{equation}\label{eq:DFC1-dual}
+      \sum_{j=j_1}^{j_2-1} a_j\,\Pi_j
+      \;\ge\;
+      \Pi_0\sum_{j=j_1}^{j_2-1} a_j
+      -
+      C_{\mathrm{proj}}\,
+      \bigl(|\varphi_{j_1}|+|\varphi_{j_2}|\bigr).
+    \end{equation}
+    The stronger pointwise condition $\Pi_j\ge\Pi_0$ for all
+    $j\in[j_1,j_2-1]$ implies~\eqref{eq:DFC1-dual} with
+    $C_{\mathrm{proj}}=0$, but the dual condition is the operative one
+    in the Abel summation argument below.
   \item[\textup{(DFC2)}] \textbf{Spectral steepness.}\;
     The compensated ratio $\varphi_j = \ln(E_j/E_j^*)$ is non-increasing:
     $\varphi_{j+1} \le \varphi_j$ for all $j \in [j_1, j_2-1]$.
@@ -652,11 +694,11 @@ $[j_1, j_2] \subset \mathcal{J}$ if:
       C_{\mathrm{rem}}\,
       \bigl(|\varphi_{j_1}| + |\varphi_{j_2}|\bigr).
     \end{equation}
-    This is guaranteed whenever
-    $u \in L^3_t B^{1/3}_{3,\infty}(\mathbb{T}^3)$
-    (see~\eqref{eq:remainder-bound} and the monotonicity
-    $\sup_{j \in [j_1,j_2]}|\varphi_j| \le |\varphi_{j_1}|$
-    from DFC2).
+    This is a quantitative commutator-localisation assumption. It follows
+    under suitable Besov/localisation bounds such as
+    $u \in L^3_t B^{1/3}_{3,\infty}(\mathbb{T}^3)$ together with DFC2
+    monotonicity, but it is not automatic for general Leray--Hopf
+    solutions.
 \end{enumerate}
 \end{definition}
 
@@ -668,46 +710,92 @@ scale) cascade. $T_j$ is the nonlinear transfer \emph{into} shell~$j$;
 $\sum_j T_j = 0$. The flux representation (Lemma~\ref{lem:flux}) reads
 $\sum_j \varphi_j T_j = +\sum_j(\varphi_{j+1}-\varphi_j)\Pi_j +
 \sum_j \varphi_j R_j$, with a \textbf{positive sign} before the Abel
-term. Under DFC1 ($\Pi_j > 0$) and DFC2 ($\varphi_{j+1} - \varphi_j
-\le 0$), each interior term is $\le 0$: the downhill structure makes
-the bulk contribution strictly non-positive.
+term. Writing $a_j:=\varphi_j-\varphi_{j+1}$, DFC2 gives $a_j\ge0$ and
+the interior Abel term is $-\sum_j a_j\Pi_j$. Under DFC1$^\vee$ this
+term is non-positive up to the explicitly stated projection-boundary
+defect; the older pointwise condition $\Pi_j\ge\Pi_0$ is only a strong
+sufficient case.
 
-\begin{proposition}[DFC2 from K41 scaling]\label{prop:dfc2-from-k41}
-Let $E_j = |u_j|^2$ denote the shell energies and $E_j^* = C_K \varepsilon^{2/3} k_j^{-5/3} \Delta k_j$ the K41 reference spectrum (Definition~\ref{def:F}). Define $\varphi_j := \ln(E_j / E_j^*)$. If the energy spectrum satisfies the K41 scaling bound
-\begin{equation}\label{eq:k41-scaling-bound}
-  E(k) \leq C \cdot C_K \varepsilon^{2/3} k^{-5/3} \quad \text{for } k \in [k_1, k_2] \text{ (inertial range)},
-\end{equation}
-then DFC2 is automatically satisfied: $\varphi_{j+1} \leq \varphi_j$ for $j_1 \leq j \leq j_2$.
+\begin{proposition}[Local slope condition implies DFC2]\label{prop:dfc2-from-k41}
+Let $E_j = |u_j|^2$ denote the shell energies and
+$E_j^* = C_K \varepsilon^{2/3} k_j^{-5/3}\Delta k_j$ the K41 reference
+spectrum (Definition~\ref{def:F}). Define
+$\varphi_j := \ln(E_j / E_j^*)$. If, on an inertial window,
+\[
+  \frac{E_{j+1}}{E_j}
+  \;\le\;
+  \frac{E_{j+1}^*}{E_j^*}
+  \;=\;2^{-2/3}
+  \qquad (j_1 \le j < j_2),
+\]
+equivalently if the spectral density has local slope at most $-5/3$
+after converting between density and shell energies, then DFC2 holds:
+$\varphi_{j+1}\le\varphi_j$.
 \end{proposition}
 
 \begin{proof}
-If $E(k) \leq C \cdot E^*(k)$ with $C$ independent of $k$, then $\varphi_j = \ln(E_j/E_j^*) \leq \ln C$ for all $j$. Since $E(k) \sim k^{-5/3}$ and $E^*(k) \sim k^{-5/3}$ with the same exponent, the ratio $E_j/E_j^*$ is non-increasing in the inertial range (any steepening beyond $-5/3$ makes $\varphi_j$ decrease). More precisely: if the local spectral slope satisfies $d(\ln E)/d(\ln k) \leq -5/3$ (which is the K41 prediction and the content of DFC2), then $\varphi_j = \ln(E_j/E_j^*)$ is non-increasing, since $E_j^* = C_K\,\varepsilon^{2/3}\,k_j^{-5/3}\,\Delta k_j \sim k_j^{-2/3}$ has slope exactly $-2/3$ in shell variables (the exponent changes from $-5/3$ to $-2/3$ because $\Delta k_j = k_j\ln 2$ contributes an additional factor of $k_j$; cf.~\eqref{eq:Ej_star}).
+The hypothesis is exactly
+\[
+  \frac{E_{j+1}/E_{j+1}^*}{E_j/E_j^*}\le 1.
+\]
+Taking logarithms gives
+$\ln(E_{j+1}/E_{j+1}^*)\le \ln(E_j/E_j^*)$, which is DFC2. A uniform
+upper bound $E(k)\le C E^*(k)$ alone would only bound $\varphi_j$ from
+above; it would not force monotonicity of the ratios.
 \end{proof}
 
 \begin{remark}[A-posteriori consistency of DFC2]\label{rem:empirical-reduction}
-Proposition~\ref{prop:dfc2-from-k41} provides an \emph{a-posteriori consistency check}: the variational minimiser (Theorem~\ref{thm:K41}) automatically satisfies DFC2, confirming that the empirical condition is compatible with the theoretical prediction.  However, the logical structure of Theorem~\ref{thm:anomalous} requires DFC2 as an \emph{input}, not as a consequence of the theorem's conclusion.  The proposition therefore does not reduce the number of independent empirical hypotheses in the proof chain; it shows that the hypotheses are mutually consistent.  Independent empirical verification of DFC2 via DNS (e.g., Saddoughi--Veeravalli 1994~\cite{SaddoughiVeeravalli94} at $R_\lambda = 1450$; Kaneda et~al.~\cite{Kaneda03} at $R_\lambda \sim 1200$) remains necessary for the logical validity of Theorem~\ref{thm:anomalous}.
+Proposition~\ref{prop:dfc2-from-k41} provides only an
+\emph{a-posteriori consistency check}: the variational K41 profile has the
+required local slope, and spectra steeper than K41 on a window also satisfy
+DFC2. The proposition does not derive DFC2 from a mere K41 upper envelope.
+The logical structure of Theorem~\ref{thm:anomalous} therefore still requires
+DFC2 as an input or as an independently verified DNS/local-slope condition.
 \end{remark}
 
-\begin{remark}[DFC1 as a consequence of Kolmogorov's four-fifths law]
+\begin{remark}[Dual DFC1 and Kolmogorov's four-fifths law]
 \label{rem:dfc1-four-fifths}
-The empirical status of DFC1 (forward cascade) can be substantially upgraded by connecting it to the Kolmogorov four-fifths law---the only exact, non-trivial result in fully developed turbulence:
+The empirical status of DFC1$^\vee$ (forward cascade in the Abel-dual
+pairing) can be substantially upgraded by connecting it to the
+Kolmogorov four-fifths law---the only exact, non-trivial result in fully
+developed turbulence:
 \[
 \langle (\delta_r u)^3 \rangle \;=\; -\tfrac{4}{5}\,\varepsilon\, r \qquad (r \text{ in the inertial range}).
 \]
-This identity, first derived by Kolmogorov (1941) and rigorously established as a distributional identity by Duchon and Robert~\cite{DR00}, operates at two distinct levels that must be carefully separated:
+This identity, first derived by Kolmogorov (1941) and rigorously
+established as a distributional identity by Duchon and Robert~\cite{DR00},
+operates at two distinct levels that must be carefully separated:
 \begin{itemize}
-\item \emph{Local (distributional) energy flux:} The four-fifths law is a statement about the third-order structure function at scale $r$, valid in the distributional sense. It proves that the \emph{mean} energy transfer is forward at every inertial-range scale.
-\item \emph{Shell-aggregated flux:} DFC1 as originally stated requires $\Pi_j \geq \Pi_0 > 0$ at each individual Littlewood--Paley shell---a pointwise condition that is strictly stronger than the distributional four-fifths law.
+\item \emph{Local (distributional) energy flux:} The four-fifths law is a
+statement about the third-order structure function at scale $r$, valid in
+the distributional sense. It proves that the \emph{mean} energy transfer
+is forward at inertial-range scales.
+\item \emph{Littlewood--Paley flux pairing:} Pointwise shell positivity
+$\Pi_j \geq \Pi_0>0$ is strictly stronger than this distributional
+statement. The quantity used in the proof is instead the weighted
+pairing $\sum_j(\varphi_j-\varphi_{j+1})\Pi_j$.
 \end{itemize}
-The resolution is that the variational argument of Theorem~\ref{thm:K41} does \emph{not} require pointwise DFC1. A \emph{shell-averaged} version---where the flux condition is imposed on a logarithmic sliding window of width $\Delta j \geq 2$---is sufficient and follows directly from the four-fifths law:
+The resolution is that the variational argument of Theorem~\ref{thm:K41}
+does \emph{not} require pointwise DFC1. The sufficient condition is the
+dual window inequality
 \[
-\frac{1}{\Delta j} \sum_{k=j}^{j+\Delta j-1} \Pi_k \;\geq\; \Pi_0 > 0 \qquad \text{(shell-averaged DFC1)}.
+\sum_{j=j_1}^{j_2-1}(\varphi_j-\varphi_{j+1})\Pi_j
+\;\ge\;
+\Pi_0\sum_{j=j_1}^{j_2-1}(\varphi_j-\varphi_{j+1})
+- C_{\mathrm{proj}}(|\varphi_{j_1}|+|\varphi_{j_2}|).
 \]
-Since the variational argument of Theorem~\ref{thm:K41} depends on the cumulative flux constraint (integrated over the inertial range), not on the pointwise flux at each shell, the shell-averaged version is sufficient for all results in this paper. Under this reformulation, DFC1 is \textbf{strongly motivated by an exact theorem}---the four-fifths law---which substantially upgrades its empirical status, though the shell-averaged version still requires control of the commutator corrections (i.e., DFC3) for a fully rigorous reduction. The empirical content of the DFC is thereby concentrated in DFC2 (spectral steepness) and the quantitative aspects of DFC3 (remainder control).
+The four-fifths law, Duchon--Robert, and Eyink provide the correct
+coarse-grained flux anchor for this condition, but they do not by
+themselves prove the Littlewood--Paley projection estimate. The remaining
+bridge is a controlled projection/coarea estimate from positive
+coarse-grained scale flux to DFC1$^\vee$. Thus DFC1$^\vee$ is not an
+unconditional theorem here; it is the sharp falsifiable condition that
+replaces the older pointwise shell requirement.
 \end{remark}
 
 \begin{lemma}[Downhill Flux implies Window-NL]\label{lem:DFC-implies-NLw}
-If a Leray--Hopf solution satisfies \textup{(DFC1)--(DFC3)} on a
+If a Leray--Hopf solution satisfies \textup{(DFC1$^\vee$), (DFC2), (DFC3)}
+on a
 sub-window $[j_1, j_2]$ with $j_2 - j_1 \ge 2$, then
 \begin{equation}\label{eq:DFC-quantitative}
   \sum_{j=j_1}^{j_2} \varphi_j\,T_j
@@ -719,12 +807,20 @@ sub-window $[j_1, j_2]$ with $j_2 - j_1 \ge 2$, then
   C_{\mathrm{bdry}}\,
   \bigl(|\varphi_{j_1}| + |\varphi_{j_2}|\bigr),
 \end{equation}
-where $C_{\mathrm{bdry}} \le C_{\mathrm{rem}}(B) + \sup_{j}|\Pi_j|$. In particular,
+where
+\[
+  C_{\mathrm{bdry}}
+  \;\le\;
+  C_{\mathrm{rem}}(B)+\sup_j|\Pi_j|+C_{\mathrm{proj}}.
+\]
+In particular,
 the window-entropy compatibility~\eqref{eq:NLw} holds. If the
 spectral steepness is strict ($\varphi_j - \varphi_{j+1} \ge \eta > 0$
-for some $\eta$), the negative bulk term satisfies
+for some $\eta$), the negative bulk term satisfies, up to the same
+projection-boundary defect,
 \begin{equation}\label{eq:bulk-strict}
-  I_1 \;\le\; -\,\eta\,\Pi_0\,(j_2 - j_1) \;<\; 0.
+  I_1 \;\le\; -\,\eta\,\Pi_0\,(j_2 - j_1)
+  + C_{\mathrm{proj}}\bigl(|\varphi_{j_1}|+|\varphi_{j_2}|\bigr).
 \end{equation}
 \end{lemma}
 
@@ -745,22 +841,27 @@ restricted to $[j_1, j_2]$:
 \end{equation}
 
 \textbf{Term $I_1$ (interior flux).}\;
-By (DFC2), $\varphi_{j+1} - \varphi_j \le 0$; by (DFC1),
-$\Pi_j \ge \Pi_0 > 0$. Hence
+By (DFC2), $a_j:=\varphi_j-\varphi_{j+1}\ge0$. Hence
 \[
   I_1
-  \;=\; \sum_{j=j_1}^{j_2-1}
-    \underbrace{(\varphi_{j+1} - \varphi_j)}_{\le\, 0}\;
-    \underbrace{\Pi_j}_{\ge\, \Pi_0}
-  \;\le\; -\,\Pi_0
-    \sum_{j=j_1}^{j_2-1}(\varphi_j - \varphi_{j+1})
-  \;\le\; 0.
+  \;=\; -\sum_{j=j_1}^{j_2-1} a_j\,\Pi_j.
 \]
-The sum telescopes: $\sum(\varphi_j - \varphi_{j+1}) =
-\varphi_{j_1} - \varphi_{j_2}$, giving
-$I_1 \le -\Pi_0\,(\varphi_{j_1} - \varphi_{j_2})$.
+Using DFC1$^\vee$,
+\[
+  I_1
+  \;\le\;
+  -\,\Pi_0\sum_{j=j_1}^{j_2-1}a_j
+  + C_{\mathrm{proj}}\bigl(|\varphi_{j_1}|+|\varphi_{j_2}|\bigr)
+  \;\le\;
+  -\,\Pi_0(\varphi_{j_1}-\varphi_{j_2})
+  + C_{\mathrm{proj}}\bigl(|\varphi_{j_1}|+|\varphi_{j_2}|\bigr).
+\]
+The equality $\sum a_j=\varphi_{j_1}-\varphi_{j_2}$ is the same
+telescoping identity used in the pointwise version.
 If the steepness is strict ($\varphi_j - \varphi_{j+1} \ge \eta$),
-then $I_1 \le -\eta\,\Pi_0\,(j_2 - j_1)$.
+then
+$I_1 \le -\eta\,\Pi_0\,(j_2 - j_1)
++ C_{\mathrm{proj}}(|\varphi_{j_1}|+|\varphi_{j_2}|)$.
 
 \textbf{Term $I_2$ (boundary).}\;
 From~\eqref{eq:DFC-decomp}, $I_2 = \varphi_{j_1}\,\Pi_{j_1-1}
@@ -791,14 +892,17 @@ inequality used here.
 
 \medskip\noindent
 \textbf{Combining.}\;
-$\sum_{j=j_1}^{j_2} \varphi_j\,T_j
+\[
+\sum_{j=j_1}^{j_2} \varphi_j\,T_j
 = I_1 + I_2 + I_3
-\le \underbrace{-\Pi_0\,(\varphi_{j_1}-\varphi_{j_2})}_{\le\,0}
-+ \underbrace{(\Pi_{\max} + C_{\mathrm{rem}})}_
+\le
+\underbrace{-\Pi_0\,(\varphi_{j_1}-\varphi_{j_2})}_{\le\,0}
++ \underbrace{(\Pi_{\max}+C_{\mathrm{rem}}+C_{\mathrm{proj}})}_
   {=:\,C_{\mathrm{bdry}}}
-\,(|\varphi_{j_1}|+|\varphi_{j_2}|)$.
+  (|\varphi_{j_1}|+|\varphi_{j_2}|).
+\]
 This is exactly~\eqref{eq:NLw} with
-$C_{\mathrm{bdry}} = \Pi_{\max} + C_{\mathrm{rem}}$.
+$C_{\mathrm{bdry}} = \Pi_{\max} + C_{\mathrm{rem}} + C_{\mathrm{proj}}$.
 \end{proof}
 
 \begin{remark}[Edge cases and summation conventions]
@@ -870,10 +974,12 @@ corresponds to the K41 prediction and is the form verified in DNS.
 The DFC is a \emph{physically verifiable} condition, not a mathematical
 assumption about the NS equations:
 \begin{itemize}
-  \item \textbf{(DFC1) Forward cascade:} Confirmed in all DNS at
-    $R_\lambda \gtrsim 100$. Backscatter (localised inverse transfer)
-    occurs but is sub-dominant: $\langle\Pi_j\rangle > 0$ throughout the
-    inertial range~\cite{Frisch95,ES06,Kaneda03,Gotoh02}.
+  \item \textbf{(DFC1$^\vee$) Dual forward cascade:} DNS supports
+    positive mean energy transfer at $R_\lambda \gtrsim 100$.
+    Backscatter (localised inverse transfer) occurs, so pointwise
+    $\Pi_j\ge\Pi_0$ is too strong as a primitive condition; the relevant
+    test is the weighted Abel pairing~\eqref{eq:DFC1-dual}
+    ~\cite{Frisch95,ES06,Kaneda03,Gotoh02}.
   \item \textbf{(DFC2) Spectral steepness:} The compensated spectrum
     $E(k)\,k^{5/3}/\varepsilon^{2/3}$ is approximately constant
     ($\approx C_K$) in the inertial range and \emph{decreasing} beyond
@@ -884,16 +990,12 @@ assumption about the NS equations:
     (bottleneck effect), which can be absorbed into the boundary
     constant $C_{\mathrm{bdry}}$.
   \item \textbf{(DFC3) Remainder control:} The
-    inequality~\eqref{eq:DFC3-concrete} is a \emph{consequence}
-    of two ingredients: (a)~the explicit commutator
-    bound~\eqref{eq:remainder-bound} from~\cite{CET94,DR00}, and
-    (b)~DFC2 monotonicity ($\sup_{[j_1,j_2]}|\varphi_j| \le
-    |\varphi_{j_1}|$). Both are rigorous; no empirical input is
-    needed. Concretely: $C_{\mathrm{rem}} =
-    C_{\mathrm{rem}}^{\mathrm{univ}}\,\|u\|_{L^3_t
-    B^{1/3}_{3,\infty}}^3$, and the Besov norm is bounded by
-    $C\,\|u_0\|_{L^2}$ via the energy inequality and Bernstein's
-    lemma~\cite{CET94}.
+    inequality~\eqref{eq:DFC3-concrete} is a conditional quantitative
+    commutator-localisation hypothesis. It follows from explicit
+    commutator estimates such as~\eqref{eq:remainder-bound} only when
+    an appropriate Besov/localisation bound is available, together with
+    DFC2 monotonicity. No uniform Leray--Hopf bound of this kind follows
+    from the energy inequality alone.
 \end{itemize}
 
 \medskip\noindent
@@ -901,38 +1003,39 @@ assumption about the NS equations:
 \medskip
 
 \begin{center}
-\begin{tabular}{llll}
+\footnotesize
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.3cm} Y >{\raggedright\arraybackslash}p{4.1cm} >{\raggedright\arraybackslash}p{1.9cm}}
 \hline
 \textbf{Label} & \textbf{Statement} & \textbf{Type} & \textbf{Source} \\
 \hline
-DFC1 & Forward cascade & Empirical (DNS) & \cite{Frisch95} \\
+DFC1$^\vee$ & Dual forward cascade & Empirical/projection bridge & \cite{Frisch95} \\
 DFC2 & Spectral steepness & Empirical (DNS) & \cite{ES06} \\
-DFC3 & Besov regularity & Lemma ($B^s_{3,\infty}$, $s < 1/3$ suffices) & \cite{CET94} \\
+DFC3 & Conditional commutator localisation & Assumption/conditional estimate & \cite{CET94} \\
 Lem.~\ref{lem:DFC-implies-NLw} & DFC $\Rightarrow$ NL$'$ & \textbf{Theorem} & This paper \\
 Prop.~\ref{prop:window-NL} & NL$'$ $\Rightarrow$ Thm~\ref{thm:anomalous} & \textbf{Theorem} & This paper \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 \medskip\noindent
 The logical chain is:
-$\textup{DFC1} + \textup{DFC2} + \textup{DFC3}
+$\textup{DFC1}^{\vee} + \textup{DFC2} + \textup{DFC3}
 \;\xRightarrow{\text{Lem.~\ref{lem:DFC-implies-NLw}}}\;
 \textup{NL}'
 \;\xRightarrow{\text{Prop.~\ref{prop:window-NL}}}\;
 \textup{Thm~\ref{thm:anomalous}}$.
-The only non-rigorous inputs are (DFC1) and (DFC2), stated as
-\emph{falsifiable inequalities} on the measured spectral flux
-($\Pi_j \ge \Pi_0$) and compensated slope ($\varphi_{j+1} \le
-\varphi_j$). The implication $\textup{DFC} \Rightarrow \textup{NL}'
-\Rightarrow \textup{Thm~\ref{thm:anomalous}}$ is purely analytic.
-A reviewer can verify or falsify (DFC1)--(DFC2) from published DNS
-data independently of the mathematical framework.
+The non-rigorous inputs are DFC1$^\vee$ and DFC2, stated as falsifiable
+inequalities on the measured weighted spectral flux~\eqref{eq:DFC1-dual}
+and compensated slope ($\varphi_{j+1} \le \varphi_j$). The implication
+$\textup{DFC} \Rightarrow \textup{NL}' \Rightarrow
+\textup{Thm~\ref{thm:anomalous}}$ is purely analytic once the dual flux
+condition is assumed. A reviewer can verify or falsify DFC1$^\vee$--DFC2
+from DNS data independently of the mathematical framework.
 \end{remark}
 
-\begin{remark}[Independent support for DFC1 from vanishing viscosity theory]
+\begin{remark}[Independent support for dual DFC1 from vanishing viscosity theory]
 \label{rem:Drivas-VV}
-The forward-cascade assumption (DFC1) receives independent theoretical
+The dual forward-cascade assumption (DFC1$^\vee$) receives independent theoretical
 support from the vanishing viscosity programme of
 Drivas~\cite{Drivas2019cascade}:
 for any space-time $L^3$ weak solution of the Euler equations arising as a
@@ -948,11 +1051,11 @@ further: any bounded Euler solution arising as a zero-viscosity limit of
 Navier--Stokes solutions cannot have anomalous dissipation supported on a
 set of Hausdorff dimension smaller than~$d$. This bound is sharp.
 
-These results do \emph{not} rigorise DFC1 in its present form
-($\Pi_j \ge \Pi_0 > 0$, a strict lower bound on the shell-averaged flux),
-but they provide a mathematically rigorous justification for the physical
-expectation $D(u) \ge 0$ that underlies it. The strict positivity of
-$\Pi_j$ across the inertial range remains an empirical input.
+These results do \emph{not} prove the Littlewood--Paley projection bridge
+needed for DFC1$^\vee$, but they provide a mathematically rigorous
+justification for the physical expectation $D(u)\ge0$ that underlies the
+weighted forward-flux pairing. The quantitative weighted inequality
+remains an empirical/projection input.
 \end{remark}
 
 The following two lemmas provide the analytic backbone. The first
@@ -974,9 +1077,6 @@ $T_j = \Pi_{j-1} - \Pi_j + R_j$.
       C_0\,B^3\,\sup_{j \in [j_1,j_2]} |\varphi_j|,
     \end{equation}
     where $C_0 > 0$ is a universal constant.
-  \item[\textup{(iii)}] Every Leray--Hopf solution with
-    $\|u_0\|_{L^2} \le M$ satisfies $B \le C_1\,M$ (energy inequality
-    $+$ Bernstein's lemma).
 \end{enumerate}
 \end{lemma}
 
@@ -989,12 +1089,9 @@ and the off-diagonal decay $\|[\Delta_j, S_{j'}]\|_{L^1 \to L^1}
 \le C_0\,B^3$; see~\cite{CET94}, Proposition~1 and~\cite{DR00},
 Lemma~2.1. The weighted sum follows from
 $\sum |{\varphi_j}|\,|{R_j}| \le \sup|\varphi_j|\,\sum|R_j|
-\le \sup|\varphi_j|\cdot C_0 B^3$.
-Part~(iii): the energy inequality $\frac{1}{2}\|u(t)\|_{L^2}^2
-+ \nu\int_0^t \|\nabla u\|_{L^2}^2 \le \frac{1}{2}\|u_0\|_{L^2}^2
-+ \int_0^t \langle f,u\rangle$ combined with Bernstein's inequality
-$\|\Delta_j u\|_{L^3} \le C\,2^{j/3}\|\Delta_j u\|_{L^2}$ gives the
-Besov bound.
+  \le \sup|\varphi_j|\cdot C_0 B^3$. No claim is made that every
+Leray--Hopf solution has a $\nu$-uniform $L^3_tB^{1/3}_{3,\infty}$ bound;
+when such a bound is available on a window, the estimate above applies.
 \end{proof}
 
 The following lemma, based on the distributional energy balance of
@@ -1041,7 +1138,7 @@ standard paraproduct estimates in Besov spaces; see~\cite{DR00}
 and~\cite{CET94}.
 \end{proof}
 
-\begin{theorem}[Anomalous dissipation bound]\label{thm:anomalous}
+\begin{theorem}[Conditional cascade compatibility and energy-input lower bound]\label{thm:anomalous}
 Let $(u^\nu)_{\nu > 0}$ be a family of Leray--Hopf weak solutions of the
 incompressible Navier--Stokes equations on $\mathbb{T}^3$:
 \begin{equation}\label{eq:NSE}
@@ -1066,15 +1163,17 @@ Assume that the cascade satisfies \emph{one} of the following
   \item[\textup{(H2)}] Window-entropy compatibility~\eqref{eq:NLw}
     (Definition~\ref{def:NLw}), or
   \item[\textup{(H3)}] The Downhill Flux Condition
-    \textup{(DFC1)--(DFC3)} of Definition~\ref{def:DFC}.
+    \textup{(DFC1$^\vee$), (DFC2), (DFC3)} of Definition~\ref{def:DFC}.
 \end{enumerate}
 Further assume \textup{($\nu$-uniform energy injection)}:
 there exists $m_0 > 0$, independent of $\nu$, such that
 $T^{-1}\int_0^T \langle f, u^\nu \rangle\,dt \ge m_0$
 for all $\nu > 0$.
 
-Then there exists a constant $\varepsilon_* > 0$, depending only on $f$
-and $M$, such that
+Then the cascade assumptions provide the entropy-compatibility route used
+in the variational framework. Moreover, by the global energy balance and
+the uniform energy-injection assumption, there exists a constant
+$\varepsilon_* > 0$, depending only on $f$ and $M$, such that
 \begin{equation}\label{eq:anomalous}
   \liminf_{\nu \to 0}\; \varepsilon_\nu
   \;\ge\; \varepsilon_*.
@@ -1113,20 +1212,23 @@ evolution $\frac{1}{2}\frac{d}{dt}E_j = -\nu k_j^2 E_j + T_j
 + \langle \Delta_j u, \Delta_j f\rangle$ (up to commutator corrections),
 the three contributions are:
 \begin{enumerate}
-  \item \emph{Viscous term:} contributes
-    $-2\nu \sum_j k_j^2\,E_j^\nu\,
-    \ln\!\bigl(\frac{E_j^\nu+\delta}{E_j^*+\delta}\bigr)$.
-    Individual summands $k_j^2\,E_j\,\ln(E_j/E_j^*)$ can have either
-    sign (positive when $E_j > E_j^*$, negative when $E_j < E_j^*$),
-    so the viscous contribution does not have a definite sign.
-    Its role in the monotonicity~\eqref{eq:F_decay} is to provide a
-    dissipative correction that drives the spectrum toward~$\mathbf{E}^*$:
-    shells with $E_j > E_j^*$ are dissipated faster than equilibrium,
-    while shells with $E_j < E_j^*$ are dissipated more slowly;
-  \item \emph{Nonlinear transfer:} by Assumption~\eqref{eq:NL}
+  \item \emph{Viscous term.} It contributes
+    \[
+      -2\nu \sum_j k_j^2\,E_j^\nu\,
+      \ln\!\bigl(\tfrac{E_j^\nu+\delta}{E_j^*+\delta}\bigr).
+    \]
+    Individual summands $k_j^2\,E_j\,\ln(E_j/E_j^*)$ can have either sign:
+    they are positive when $E_j > E_j^*$ and negative when
+    $E_j < E_j^*$. Hence the viscous contribution has no fixed sign.
+    Its role in~\eqref{eq:F_decay} is instead dissipative: it pushes the
+    spectrum toward~$\mathbf{E}^*$, because shells with $E_j > E_j^*$ are
+    damped faster than equilibrium, while shells with $E_j < E_j^*$ are
+    damped more slowly;
+  \item \emph{Nonlinear transfer.} By Assumption~\eqref{eq:NL}
     (entropy-compatible cascade),
-    $\sum_j \ln\bigl(\frac{E_j+\delta}{E_j^*+\delta}\bigr)\,T_j
-    \le 0$;
+    \[
+      \sum_j \ln\bigl(\tfrac{E_j+\delta}{E_j^*+\delta}\bigr)\,T_j \le 0;
+    \]
   \item \emph{Forcing:} bounded by $C\,\|f\|_{H^s}^2$ via Cauchy--Schwarz.
 \end{enumerate}
 Combining these and passing $\delta \downarrow 0$ via Fatou's lemma
@@ -1340,146 +1442,96 @@ analogues in other variational selection problems and is discussed in
 detail there.
 
 % ===================================================================
-\subsection{Robustness and game-theoretic structure}\label{sec:robustness}
+\subsection{Robustness guardrails and formal penalty representation}\label{sec:robustness}
 
-The strict-DFC framework of Definition~\ref{def:DFC} requires
-pointwise lower bounds $\Pi_j \ge \Pi_0$ and exact monotonicity of the
-compensated spectrum.  In practice, DNS data exhibit small-scale
-fluctuations around these idealisations.  We formulate two extensions
-that make the variational principle robust and reveal its game-theoretic
-content.
+The strict-DFC framework of Definition~\ref{def:DFC} requires the dual
+weighted lower bound~\eqref{eq:DFC1-dual} and exact monotonicity of the
+compensated spectrum. DNS data exhibit small-scale fluctuations around
+these idealisations, but two previously tempting extensions need to be
+kept as guardrails rather than new unconditional theorems.
 
-\begin{proposition}[Relaxed flux constraint]
+\begin{proposition}[Relaxed flux constraint: scope caveat]
 \label{prop:dfc-slack}
-Let $\{\eta_j\}_{j=1}^{N-1}$ and $\{\delta_j\}_{j=1}^{N-1}$ be
-non-negative sequences satisfying $\sum_j \eta_j < \infty$ and
-$\sum_j \delta_j < \infty$.  Define the \emph{relaxed admissible set}
-\[
-  \mathcal{A}_{\textup{slack}}
-  \;=\;
-  \bigl\{
-    (\Pi_j)_{j=1}^{N-1} :\;
-    \Pi_j \ge \Pi_0 - \eta_j,\quad
-    \varphi_{j+1} \le \varphi_j + \delta_j
-    \;\text{for all } j
-  \bigr\},
-\]
-where $\varphi_j = F_j[\mathbf{E}] - F_j[\mathbf{E}^*]$ denotes the
-shell-wise KL divergence.  Then the minimiser of
-$\mathcal{F}[\mathbf{E}]$ over $\mathcal{A}_{\textup{slack}}$
-satisfies
-\begin{equation}\label{eq:dfc-slack-bound}
-  \|\mathbf{E} - \mathbf{E}^*\|_{\ell^2}^2
-  \;\le\;
-  C\,\Bigl(\sum_j \eta_j \;+\; \sum_j \delta_j\Bigr)
-\end{equation}
-for a constant $C$ depending only on the spectral gap of the
-strict-DFC problem.  In particular, K41 is recovered as
-$\eta_j, \delta_j \to 0$.
+Let $\mathcal{A}_{\textup{slack}}$ be any relaxed admissible class that
+contains the exact K41 profile $\mathbf{E}^*$ and keeps the objective
+equal to $\mathcal{F}[\mathbf{E}]$. Then minimising
+$\mathcal{F}$ over $\mathcal{A}_{\textup{slack}}$ still gives
+$\mathbf{E}^*$ exactly. A non-trivial slack theorem requires an additional
+data-fit term, a perturbed reference, or a constraint that excludes
+$\mathbf{E}^*$.
 \end{proposition}
 
-\begin{proof}[Proof sketch]
-The strict-DFC functional $\mathcal{F}$ restricted to the exact
-admissible set $\mathcal{A}$ has a unique minimiser $\mathbf{E}^*$
-with positive \emph{local} spectral gap $\gamma > 0$: by Taylor
-expansion, $\mathcal{F}[\mathbf{E}] \ge \gamma\,\|\mathbf{E} -
-\mathbf{E}^*\|_{\ell^2}^2$ for $\mathbf{E}$ near $\mathbf{E}^*$,
-where $\gamma = \min_j(1/E_j^*) > 0$ is the smallest Hessian
-eigenvalue. (For large deviations, the KL divergence grows
-logarithmically rather than quadratically; global coercivity
-holds in~$\ell^1$ via Pinsker's inequality, not in~$\ell^2$.)  The relaxed set
-$\mathcal{A}_{\textup{slack}} \supset \mathcal{A}$ enlarges the
-feasible region by perturbations of total size
-$\sigma := \sum_j \eta_j + \sum_j \delta_j$.  By standard
-perturbation theory for convex programmes (cf.\
-Bonnans--Shapiro~\cite{BonnansShapiro00}), the minimiser over
-$\mathcal{A}_{\textup{slack}}$ shifts by at most
-$O(\sigma/\gamma)$ in~$\ell^2$, and the objective value changes by
-at most $O(\sigma^2/\gamma)$.  The bound~\eqref{eq:dfc-slack-bound}
-follows with $C = 1/\gamma$.
+\begin{proof}
+By construction, $\mathcal{F}[\mathbf{E}]\ge0$ and
+$\mathcal{F}[\mathbf{E}^*]=0$. If $\mathbf{E}^*\in
+\mathcal{A}_{\textup{slack}}$, no feasible profile can have lower
+objective value. Hence the relaxed problem is exact rather than a genuine
+robustness estimate.
 \end{proof}
 
 \begin{remark}
-Proposition~\ref{prop:dfc-slack} shows that the K41 selection is
-\emph{stable}: arbitrarily small summable perturbations of the flux
-constraint and the monotonicity condition produce correspondingly
-small deviations from the Kolmogorov spectrum.  This is essential for
-the physical relevance of the framework, since no finite-Reynolds-number
-flow satisfies the DFC exactly.
+Finite-Reynolds-number robustness should therefore be formulated as a
+statistical or inverse problem: measured spectra are compared against the
+K41 reference with explicit data errors and projection errors. The relaxed
+DFC inequalities are useful diagnostics, not by themselves a displacement
+bound away from $\mathbf{E}^*$.
 \end{remark}
 
-\begin{proposition}[Minimax characterisation]
+\begin{proposition}[Formal penalty representation]
 \label{prop:minimax}
-The K41 spectrum $\mathbf{E}^*$ is the saddle point of the minimax
-problem
+In a finite shell truncation, the pair
+$(\mathbf{E}^*,\boldsymbol{\Pi}^*)$ with
+$\Pi_j^*=\varepsilon$ is a saddle point of the decoupled penalty functional
 \begin{equation}\label{eq:minimax}
-  \mathbf{E}^*
-  \;=\;
-  \arg\min_{\mathbf{E} \in \mathcal{E}}\;
-  \max_{\boldsymbol{\Pi} \in \mathcal{A}}\;
-  \Bigl[
-    \mathcal{F}[\mathbf{E}]
-    \;-\;
-    \lambda \sum_j (\Pi_j - \varepsilon)^2
-  \Bigr],
+  \mathcal{L}(\mathbf{E},\boldsymbol{\Pi})
+  =
+  \mathcal{F}[\mathbf{E}]
+  -
+  \lambda\sum_j(\Pi_j-\varepsilon)^2,
+  \qquad \lambda>0,
 \end{equation}
-where $\mathcal{E}$ is the set of non-negative energy spectra with
-fixed total energy, and $\mathcal{A}$ is the set of admissible flux
-profiles.  The min-player (viscous dissipation) selects the spectrum,
-while the max-player (nonlinear transfer) selects the flux profile.
+on the product of positive spectra and bounded flux profiles. This is a
+formal penalty representation of K41 plus constant flux, not a dynamical
+two-player theorem.
 \end{proposition}
 
-\begin{proof}[Proof sketch]
-The objective in~\eqref{eq:minimax} is convex in~$\mathbf{E}$ (since
-$\mathcal{F}$ is strictly convex and the penalty term is independent
-of~$\mathbf{E}$) and concave in~$\boldsymbol{\Pi}$ (since the penalty
-$-\lambda\sum_j(\Pi_j - \varepsilon)^2$ is concave).  In the
-finite-dimensional truncation to $N$ shells, $\mathcal{E}$ is compact
-(bounded energy spectra with fixed total energy form a closed bounded
-subset of~$\mathbb{R}^N_{>0}$).  The set $\mathcal{A}$ of admissible
-flux \emph{profiles} $(\Pi_j)_{j=1}^{N-1}$ is convex; compactness
-holds when a uniform upper bound $\Pi_j \le \Pi_{\max}$ is imposed
-(which is physically natural, since $\Pi_j \le C\,\varepsilon$ in the
-inertial range).  Under these conditions, Sion's minimax theorem
-applies: the minimax value equals the maximin value, and a saddle point
-exists.  The Karush--Kuhn--Tucker conditions at the saddle point
-reproduce:
-\begin{enumerate}[label=(\roman*)]
-  \item the Euler--Lagrange equation
-    $\partial\mathcal{F}/\partial E_j = \mu$ (constant Lagrange
-    multiplier), which yields $E_j = E_j^*$ (K41);
-  \item the stationarity in~$\Pi_j$:
-    $\Pi_j = \varepsilon$ for all~$j$ (constant flux).
-\end{enumerate}
-The uniqueness of the saddle point follows from the strict
-convexity--concavity of the objective. Note that
-the penalty formulation~\eqref{eq:minimax} is a soft-constraint
-relaxation of the hard constraint $\Pi_j = \varepsilon$ in
-Theorem~\ref{thm:K41}; the equivalence of the two formulations
-in the limit $\lambda \to \infty$ follows from standard duality
-theory~\cite{Rockafellar70}.
+\begin{proof}
+The $\mathbf{E}$ and $\boldsymbol{\Pi}$ variables are decoupled in
+\eqref{eq:minimax}. The unique minimiser of $\mathcal{F}$ is
+$\mathbf{E}^*$, and the unique maximiser of the negative quadratic penalty
+is $\Pi_j=\varepsilon$ for every shell. The stated saddle inequalities
+therefore follow directly.
 \end{proof}
 
 \begin{remark}
-The minimax formulation reveals the \emph{game-theoretic structure}
-of the turbulent cascade.  Viscous dissipation acts as a conservative
-agent minimising the free energy (favouring smooth, large-scale
-motion), while the nonlinear cascade acts as an adversarial agent
-maximising the energy transfer toward small scales.  The K41 spectrum
-is the Nash equilibrium of this two-player zero-sum game.
-This perspective connects the variational framework to the theory of
-adversarial robustness in optimisation~\cite{Rockafellar70} and
-suggests that deviations from K41 can be understood as exploitable
-strategies by one player when the other is constrained.
+The minimax notation is useful bookkeeping for the constant-flux penalty.
+A genuine game-theoretic claim would require a coupled payoff in which the
+flux variables are generated by the nonlinear dynamics and react to the
+chosen spectrum.
 \end{remark}
 
 \begin{remark}[Weighted $\ell^2$-stability from the Hessian bound]
 \label{rem:talagrand}
-The functional $\mathcal{F}[E]$ is uniformly convex about the K41 minimiser $E^*$ with diagonal Hessian $D^2\mathcal{F}|_{E^*} = \mathrm{diag}(1/E_j^*)$. A direct Taylor expansion (without appeal to optimal transport theory) yields the weighted stability bound
+The functional $\mathcal{F}[E]$ is uniformly convex about the K41 minimiser
+$E^*$ with diagonal Hessian
+\[
+  D^2\mathcal{F}\big|_{E^*} = \mathrm{diag}(1/E_j^*).
+\]
+A direct Taylor expansion, without appeal to optimal transport theory,
+yields the weighted stability bound
 \[
   \sum_j \frac{(E_j - E_j^*)^2}{E_j^*} \;\le\; 2\,\mathcal{F}[E]
 \]
-for all admissible spectra $E$ with $E_j > 0$.  This provides a Reynolds-number-independent stability guarantee: perturbations of the K41 profile are controlled in the $\ell^2(1/E_j^*)$-norm by the free-energy excess.  The bound complements the DFC-slack estimate (Proposition~\ref{prop:dfc-slack}) and follows from the elementary inequality $x\ln(x/y) - x + y \ge (x-y)^2/(2y)$ for $x, y > 0$.
+for all admissible spectra $E$ with $E_j > 0$. This provides a
+Reynolds-number-independent stability guarantee: perturbations of the K41
+profile are controlled in the $\ell^2(1/E_j^*)$-norm by the free-energy
+excess. The bound complements the DFC-slack estimate
+(Proposition~\ref{prop:dfc-slack}) and follows from the elementary
+inequality
+\[
+  x\ln(x/y) - x + y \;\ge\; \frac{(x-y)^2}{2y}
+  \qquad (x,y>0).
+\]
 \end{remark}
 
 % ===================================================================
@@ -1544,7 +1596,7 @@ SP-TU fails if and only if there exist \emph{quasi-null modes}: a sequence $g_k 
 \item \textbf{Multi-scale leakage:} Dissipation acts on small scales while variance ``parks'' on large scales, producing a defective coercivity that cannot be closed by a single $\lambda$.
 \item \textbf{Intermittency bursts:} Rare, intense events create heavy-tailed fluctuations that violate the Gaussian assumption underlying the Hessian bound.
 \end{enumerate}
-For K41 turbulence in the inertial range, none of these mechanisms is operative: the forward cascade (DFC1) prevents trapping, the scale locality (A1) prevents leakage, and the log-normal intermittency (Section~\ref{sec:intermittency}) decays as $1/N_{\mathrm{shells}}$ (Remark~\ref{rem:mu-disambiguation}). SP-TU is therefore \emph{expected} to hold, but a rigorous proof remains open.
+For K41 turbulence in the inertial range, none of these mechanisms is expected to dominate: the dual forward cascade (DFC1$^\vee$) suppresses trapping in the weighted Abel direction, the scale locality (A1) prevents leakage, and the log-normal intermittency (Section~\ref{sec:intermittency}) decays as $1/N_{\mathrm{shells}}$ (Remark~\ref{rem:mu-disambiguation}). SP-TU is therefore \emph{expected} to hold, but a rigorous proof remains open.
 \end{remark}
 
 \begin{lemma}[SP-TU implies universal dissipation control]\label{lem:sp-dissipation}
@@ -1560,12 +1612,47 @@ By the Poincar\'e inequality~\eqref{eq:sp-tu} applied to $g = \delta E / E^*$, t
 \end{proof}
 
 \begin{remark}[Finite-$N$ spectral gap via shell-model Markov structure]\label{rem:finite-N-gap}
-For finite-dimensional truncations (GOY/SABRA shell models with $N$ shells plus stochastic forcing), the shell-to-shell energy transfer matrix $T_{ij}$ can be normalised to a stochastic kernel. If this kernel is irreducible and satisfies a Dobrushin-type condition $\eta = \max_i \sum_{j \neq i} |T_{ij} - T_{ij}'| < 1$ (which holds for sufficiently strong forcing relative to the nonlinearity), then a Poincar\'e inequality with gap $\Delta_{\mathrm{spectral}} \geq 1 - \eta > 0$ follows from standard Markov chain theory. This provides a rigorous finite-$N$ analogue of the conjectured spectral Poincar\'e inequality, and establishes a direct structural parallel with the Yang--Mills Dobrushin--Zegarlinski machinery \cite{Geiger2026-YM}. The extension to the $N \to \infty$ limit requires control of $\eta(N)$---precisely the turbulence analogue of the Yang--Mills continuum limit.
+For finite-dimensional truncations, namely GOY/SABRA shell models with
+$N$ shells plus stochastic forcing, the shell-to-shell energy transfer
+matrix $T_{ij}$ can be normalised to a stochastic kernel. If this kernel
+is irreducible and satisfies the Dobrushin-type condition
+\[
+  \eta := \max_i \sum_{j \neq i} |T_{ij} - T_{ij}'| < 1,
+\]
+which holds for sufficiently strong forcing relative to the nonlinearity,
+then standard Markov-chain theory yields a Poincar\'e inequality with
+gap
+\[
+  \Delta_{\mathrm{spectral}} \ge 1 - \eta > 0.
+\]
+This provides a rigorous finite-$N$ analogue of the conjectured spectral
+Poincar\'e inequality and establishes a direct structural parallel with
+the Yang--Mills Dobrushin--Zegarlinski machinery
+\cite{Geiger2026-YM}. Extending this argument to the limit
+$N \to \infty$ requires control of $\eta(N)$, precisely the turbulence
+analogue of the Yang--Mills continuum limit.
 \end{remark}
 
 \begin{remark}[Intrinsic characterisation of $E^*$ via K\'arm\'an--Howarth--Monin]
 \label{rem:khm-intrinsic}
-The K\'arm\'an--Howarth--Monin (KHM) relation $\partial_t \langle |\delta u|^2 \rangle + \nabla_r \cdot \langle |\delta u|^2 \delta u \rangle = -4\varepsilon/3 + 2\nu \Delta_r \langle |\delta u|^2 \rangle$ provides an intrinsic route to $E^*$ without assuming K41 \emph{a priori}: in the inertial range ($\eta \ll r \ll L$), the viscous term vanishes and the stationary KHM relation forces $\langle |\delta u|^2 \delta u \rangle = -4\varepsilon r / 5$ (the four-fifths law). Fourier-transforming yields $E^*(k) = C_K \varepsilon^{2/3} k^{-5/3}$ as the \emph{unique} spectrum consistent with stationary KHM. Thus the KHM relation serves as an independent ``fixed-point equation'' for $E^*$, confirming the self-consistency result of Remark~\ref{rem:k41-selfconsistency} from a PDE perspective rather than a variational one.
+The K\'arm\'an--Howarth--Monin relation
+\[
+  \partial_t \langle |\delta u|^2 \rangle
+  + \nabla_r \cdot \langle |\delta u|^2 \delta u \rangle
+  = -4\varepsilon/3 + 2\nu \Delta_r \langle |\delta u|^2 \rangle
+\]
+provides an intrinsic constant-flux anchor without assuming K41
+\emph{a priori}. In the inertial range $(\eta \ll r \ll L)$, the viscous
+term vanishes and the stationary KHM relation yields
+\[
+  \langle |\delta u|^2 \delta u \rangle = -4\varepsilon r / 5,
+\]
+that is, the four-fifths law. This supports the flux input used by the
+variational scheme, but it does not by Fourier transformation alone
+determine the second-order spectrum uniquely. Recovering
+$E(k)\sim \varepsilon^{2/3}k^{-5/3}$ still requires the usual
+self-similarity, locality, or closure input. Thus KHM is a consistency
+check on the reference spectrum, not an independent uniqueness proof.
 \end{remark}
 
 \begin{conjecture}[Intermittency exponents from Hessian fluctuations]
@@ -1589,7 +1676,8 @@ The Hessian-trace prediction $\sigma_H^2 \sim 1/N_{\mathrm{shells}}$ quantifies 
 \subsection*{Result classification}
 
 \begin{center}
-\begin{tabular}{|l|l|l|}
+\footnotesize
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}p{3.8cm}|Y|}
 \hline
 \textbf{Result} & \textbf{Type} & \textbf{Reference} \\
 \hline
@@ -1597,13 +1685,13 @@ The Hessian-trace prediction $\sigma_H^2 \sim 1/N_{\mathrm{shells}}$ quantifies 
 \multicolumn{3}{|l|}{\textit{Theorems (rigorous):}} \\
 \hline
 $\mathcal{F}[E] \geq 0$, $= 0$ iff $E = E^*$ & Theorem & Thm.~\ref{thm:K41} \\
-DFC $\Rightarrow$ NL' & Lemma & Lem.~\ref{lem:DFC-implies-NLw} \\
-NL' $\Rightarrow$ anomalous dissipation & Theorem & Thm.~\ref{thm:anomalous} \\
-DFC2 from K41 scaling & Proposition & Prop.~\ref{prop:dfc2-from-k41} \\
+DFC$^\vee$ $\Rightarrow$ NL' & Lemma & Lem.~\ref{lem:DFC-implies-NLw} \\
+Energy input $\Rightarrow$ dissipation lower bound & Theorem & Thm.~\ref{thm:anomalous} \\
+Local slope condition implies DFC2 & Proposition & Prop.~\ref{prop:dfc2-from-k41} \\
 \hline
 \multicolumn{3}{|l|}{\textit{Empirical hypotheses (DNS-verifiable):}} \\
 \hline
-DFC1 (forward cascade $\Pi_j > 0$) & Empirical & Def.~\ref{def:DFC}, $R_\lambda \gtrsim 100$ \\
+DFC1$^\vee$ (dual forward cascade) & Empirical/projection bridge & Def.~\ref{def:DFC}, $R_\lambda \gtrsim 100$ \\
 \hline
 \multicolumn{3}{|l|}{\textit{Numerically confirmed:}} \\
 \hline
@@ -1616,7 +1704,7 @@ $\mathcal{F} > 0$ for 500/500 snapshots & Shell model & Rem.~\ref{rem:sabra-dfc}
 $\mathcal{F}[E_{\mathrm{DNS}}] \to 0$ as $R_\lambda \to \infty$ & Prediction & Sec.~\ref{sec:discussion} \\
 $\varphi_j$ non-increasing in inertial range & Prediction & DFC2 \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 % ===================================================================
@@ -1626,16 +1714,13 @@ The joint minimisation over all admissible closures is not a tautological restat
 
 \subsection{Relation to the Onsager conjecture}
 
-Our Theorem~\ref{thm:anomalous} provides a \emph{variational} route to
-anomalous dissipation that is complementary to the convex-integration
-programme~\cite{Isett18}.  While Isett's result constructs specific
-dissipative Euler solutions, and subsequent work by Buckmaster and
-Vicol~\cite{BV19} established non-uniqueness of weak
-solutions to the Navier--Stokes equations via convex integration,
-our approach shows that \emph{any}
-Navier--Stokes solution with sufficient forcing must dissipate at a rate
-bounded away from zero---a statement about the generic behaviour of
-turbulent flows rather than the existence of exotic weak solutions.
+Theorem~\ref{thm:anomalous} separates two issues. The lower bound on
+dissipation follows from the global energy balance plus the stated
+\(\nu\)-uniform energy-input assumption. The variational contribution is
+the conditional route from DFC1$^\vee$--DFC2--DFC3 to entropy-compatible
+cascade structure and K41 selection. This is complementary to the
+convex-integration programme~\cite{Isett18,BV19}, but it is not an
+unconditional selection theorem for all Navier--Stokes weak solutions.
 
 \subsection{The role of the closure family}
 
@@ -1666,19 +1751,16 @@ is left to future work.
 We collect the principal limitations of the present work:
 \begin{enumerate}
 \item \textbf{Conditionality.}\; Theorem~\ref{thm:anomalous} is conditional
-  on an entropy-compatibility hypothesis (or, equivalently, on DFC1--DFC2,
-  which are empirically verified but not proved from the Navier--Stokes
-  equations).  The DFC3 condition requires a \emph{quantitative bound}
-  on the commutator remainder (eq.~\eqref{eq:DFC3-concrete}), which is
-  guaranteed when $u \in L^3_t B^{1/3}_{3,\infty}$.  Crucially, DFC3
-  does \emph{not} require the solution to lie exactly at the Onsager
-  threshold: any Besov regularity $B^s_{3,\infty}$ with $s < 1/3$
-  suffices, at the cost of a larger constant $C_{\mathrm{rem}}$ that
-  diverges as $s \to 1/3$.  In particular, solutions that genuinely
-  exhibit anomalous dissipation (and therefore cannot satisfy $B^{1/3}_{3,\infty}$
-  energy conservation, cf.~\cite{CET94}) may still satisfy DFC3 with
-  regularity below the Onsager threshold.  Whether the required Besov
-  bound holds for general Leray--Hopf solutions remains open.
+  on an entropy-compatibility hypothesis (or on the sufficient hierarchy
+  DFC1$^\vee$--DFC2--DFC3). DFC1$^\vee$ is motivated by positive
+  coarse-grained flux, but the projection bridge from
+  Duchon--Robert/Eyink scale flux to the weighted Littlewood--Paley pairing
+  is not proved here. The DFC3 condition requires a \emph{quantitative bound}
+  on the commutator remainder (eq.~\eqref{eq:DFC3-concrete}). Such a bound
+  follows in regularity/localisation regimes where the commutator estimate
+  is available, but it is not automatic from the Leray--Hopf energy
+  inequality. Whether a useful DFC3 bound holds for general turbulent
+  vanishing-viscosity families remains open.
 \item \textbf{Inertial-range idealisation.}\; The functional $\mathcal{F}$
   is defined on the inertial range $\mathcal{J}$, ignoring the forcing
   and dissipation ranges.  Boundary effects at $j_{\mathrm{in}}$ and
@@ -1710,8 +1792,10 @@ reproducible test protocol:
 \item Verify that $\mathcal{F}$ decreases with increasing $R_\lambda$
   and that the compensated ratio $\varphi_j = \ln(E_j/E_j^*)$ is
   non-increasing in $j$ across the inertial range (DFC2).
-\item Compute the spectral flux $\Pi_j$ and verify $\Pi_j \ge \Pi_0 > 0$
-  across the inertial range (DFC1).
+\item Compute the spectral flux $\Pi_j$ and verify the weighted
+  inequality~\eqref{eq:DFC1-dual} for
+  $a_j=\varphi_j-\varphi_{j+1}\ge0$ across inertial windows
+  (DFC1$^\vee$). Pointwise $\Pi_j\ge\Pi_0>0$ is a stronger optional test.
 \end{enumerate}
 Steps 3--4 constitute a direct, falsifiable test of the Downhill Flux
 Condition that is independent of the mathematical framework.
@@ -1740,13 +1824,28 @@ The predictions of this framework can be tested against direct numerical simulat
 
 \item \textbf{Minimiser comparison:} Compare the DNS spectrum $E_{\mathrm{DNS}}(k)$ with the K41 prediction $E^*(k) = C_K \varepsilon^{2/3} k^{-5/3}$ in the inertial range $k_f \ll k \ll k_\eta$.
 
-\item \textbf{Falsification criterion:} Since $\mathcal{F}[E^*] = 0$ by construction, the functional cannot be falsified by finding $\mathcal{F}[E_{\mathrm{DNS}}] < 0$. Instead, the framework is falsified if the DFC conditions (DFC1--DFC2) are \emph{violated} at high $R_\lambda$ where the theory predicts they should hold, or if $\mathcal{F}[E_{\mathrm{DNS}}]$ fails to decrease with increasing $R_\lambda$ (indicating that K41 is not the asymptotic attractor).
+\item \textbf{Falsification criterion.}
+  Since $\mathcal{F}[E^*] = 0$ by construction, the functional cannot be
+  falsified by finding $\mathcal{F}[E_{\mathrm{DNS}}] < 0$. Instead, the
+  DFC route is challenged if DFC1$^\vee$ or DFC2 is \emph{violated} at
+  high $R_\lambda$, where the theory predicts they should hold, or if
+  $\mathcal{F}[E_{\mathrm{DNS}}]$ fails to decrease with increasing
+  $R_\lambda$, indicating that K41 is not the asymptotic attractor.
+  Pointwise failures of $\Pi_j\ge\Pi_0$ alone do not refute the dual
+  route.
 
 \item \textbf{Intermittency test:} Compute the Hessian eigenvalues $\lambda_j = \partial^2 F / \partial E_j^2$ at the DNS spectrum. Negative eigenvalues in the dissipation range indicate instability of the K41 minimiser at those scales.
 \end{enumerate}
 
 \begin{remark}[DFC as energetic stability class]\label{rem:dfc-stability}
-The Downhill Flux Condition need not be verified as a pointwise axiom but rather as an \emph{energetic stability class}: for any admissible perturbation $\delta E$ that violates DFC, the free-energy excess $\mathcal{F}[E^* + \delta E] - \mathcal{F}[E^*] > 0$ must be strictly positive. This relaxes the requirement from ``DFC holds everywhere in the inertial range'' to ``DFC-violating configurations are energetically unstable.'' Publicly available DNS datasets (JHTDB~\cite{JHTDB08}, $\mathrm{Re}_\lambda \sim 200$) suffice for this test, since it involves relative free-energy differences rather than asymptotic exponents. The non-uniqueness results of Albritton--Bru\'e--Colombo \cite{AlbrittonBrueColombo2022} are not an obstacle but rather \emph{strengthen} the falsifiability: if non-unique Leray--Hopf solutions exist, DFC selects the physically realised one.
+The Downhill Flux Condition should be tested as a dual/windowed energetic
+stability diagnostic rather than as a pointwise shell axiom. Publicly
+available DNS datasets (JHTDB~\cite{JHTDB08}, $\mathrm{Re}_\lambda \sim 200$)
+are suitable for this test because it involves relative free-energy
+differences and Abel-weighted flux pairings rather than asymptotic exponents
+alone. In the presence of non-unique Leray--Hopf solutions, DFC would provide
+a falsifiable selection diagnostic; the present paper does not prove that it
+selects the physically realised branch.
 \end{remark}
 
 \begin{remark}[Numerical verification of Theorem~\ref{thm:K41}]\label{rem:numerical-F}
@@ -1755,7 +1854,7 @@ A numerical evaluation of $\mathcal{F}[E]$ over six synthetic energy spectra con
 
 \begin{remark}[Sabra shell model validation of DFC]
 \label{rem:sabra-dfc}
-DFC1 and DFC2 were tested on the Sabra shell model~\cite{Lvov98} with $N=22$ shells, $\nu = 10^{-7}$, using an IMEX integrator (500 snapshots). DFC2 (spectral steepness) is strongly confirmed: inertial-range slopes are $-0.663$, $-0.675$, $-0.661$, $-0.699$, $-0.700$ for shells $n=5,\ldots,9$ (K41 prediction: $-2/3 \approx -0.667$, deviation $< 2\%$). The free energy satisfies $\mathcal{F}[E] > 0$ for all 500 snapshots (100\%), with $\mathcal{F}[\langle E \rangle] = 0.198$, confirming the K41 spectrum as approximate minimizer. DFC1 (forward cascade) shows sign-alternating flux $\Pi_n$, a known feature of shell models; the time-averaged flux is consistent with forward energy transfer. Script: \texttt{compute\_goy\_shell\_dfc.py}.
+Pointwise DFC1 and DFC2 were tested on the Sabra shell model~\cite{Lvov98} with $N=22$ shells, $\nu = 10^{-7}$, using an IMEX integrator (500 snapshots). DFC2 (spectral steepness) is strongly confirmed: inertial-range slopes are $-0.663$, $-0.675$, $-0.661$, $-0.699$, $-0.700$ for shells $n=5,\ldots,9$ (K41 prediction: $-2/3 \approx -0.667$, deviation $< 2\%$). The free energy satisfies $\mathcal{F}[E] > 0$ for all 500 snapshots (100\%), with $\mathcal{F}[\langle E \rangle] = 0.198$, confirming the K41 spectrum as approximate minimizer. The pointwise flux $\Pi_n$ is sign-alternating, a known feature of shell models; this motivates testing DFC1$^\vee$ by the weighted Abel pairing instead of by pointwise positivity. Existing script: \texttt{compute\_goy\_shell\_dfc.py}; planned dual test: \texttt{compute\_dual\_dfc.py}.
 \end{remark}
 
 \subsection{Extensions}
@@ -1790,7 +1889,7 @@ defect, approximation, gap, and vanishing-viscosity limits.
 
 Paper B is the correct place for the defect theory.  Its transfer slots
 are:
-\begin{description}
+\begin{description}[style=nextline,leftmargin=3.2cm,labelwidth=2.8cm]
   \item[Operator/form.] Shell-flux and Littlewood--Paley energy-transfer
   operators.
   \item[Defect.] The DFC flux defect, anomalous-dissipation measure, and
@@ -1803,18 +1902,23 @@ are:
   to an inertial-range statement.
 \end{description}
 
-The most concrete upgrade is to reformulate DFC1 in shell-averaged form
-over sliding scale windows.  Then the Kolmogorov $4/5$ law, together with
-the local energy-balance perspective of Duchon--Robert and Eyink, can be
-used as the exact energy-flux anchor for Paper B.  The anomalous
-dissipation results of Brue--De Lellis and collaborators provide the
-stress-test side: the defect should be represented as a measure or
-distribution compatible with known vanishing-viscosity scenarios.
+The most concrete upgrade is to reformulate DFC1 as the dual weighted
+condition DFC1$^\vee$ over sliding scale windows. Then the Kolmogorov
+$4/5$ law, together with the local energy-balance perspective of
+Duchon--Robert and Eyink, can be used as the exact coarse-grained flux
+anchor for Paper B, while the remaining projection estimate to
+Littlewood--Paley weights is kept explicit. The anomalous dissipation
+results of Brue--De Lellis and collaborators provide the stress-test
+side: the defect should be represented as a measure or distribution
+compatible with known vanishing-viscosity scenarios.
 
 \subsection{Open directions}
 
-\begin{remark}[Energy cascade as minimax game]
-The Kolmogorov spectrum can be interpreted as the saddle point of a minimax game between energy injection (maximising transfer) and viscous dissipation (minimising it). The K41 spectrum emerges as the unique Nash equilibrium of this scale-by-scale zero-sum game.
+\begin{remark}[Energy cascade and minimax notation]
+The Kolmogorov spectrum can be represented by a decoupled minimax penalty:
+the spectrum minimises the KL free energy while a quadratic penalty enforces
+constant flux. This is useful notation, not a proved dynamical zero-sum game
+between injection and dissipation.
 \end{remark}
 
 \begin{remark}[Dissipative adaptation]
@@ -1831,38 +1935,44 @@ The positivity $\Phi \geq 0$ bounds the cumulant hierarchy of energy fluctuation
 
 \begin{remark}[Shell cascade as Dobrushin influence matrix]
 \label{rem:dobrushin-cascade}
-The shell-by-shell energy transfer in the inertial range defines a natural Dobrushin-type influence matrix $C = (c_{jk})$ where $c_{jk}$ quantifies the influence of shell $k$ on shell $j$ via the nonlinear transfer $T_j$. For the K41 cascade, nearest-neighbour dominance gives $c_{j,j\pm 1} = O(1)$ and $c_{jk} = O(2^{-|j-k|})$ for $|j-k| > 1$. The spectral radius $\rho(C) < 1$ (Dobrushin uniqueness) is equivalent to the stability of the K41 minimiser: small perturbations of $E^*$ at shell $k$ decay exponentially in $|j-k|$.
+The shell-by-shell energy transfer in the inertial range defines a
+natural Dobrushin-type influence matrix $C = (c_{jk})$, where $c_{jk}$
+quantifies the influence of shell $k$ on shell $j$ via the nonlinear
+transfer $T_j$. For the K41 cascade, nearest-neighbour dominance gives
+$c_{j,j\pm 1} = O(1)$ and
+$c_{jk} = O(2^{-|j-k|})$ for $|j-k| > 1$. The spectral radius
+$\rho(C) < 1$, that is, Dobrushin uniqueness, is equivalent to the
+stability of the K41 minimiser: small perturbations of $E^*$ at shell
+$k$ decay exponentially in $|j-k|$.
 
-This perspective, imported from the Yang--Mills companion paper where the Dobrushin influence matrix controls the lattice mass gap, reveals a structural isomorphism: the inertial-range cascade is a ``one-dimensional lattice system'' with exponentially decaying interactions, and K41 is its unique Gibbs state.
+This perspective, imported from the Yang--Mills companion paper where the
+Dobrushin influence matrix controls the lattice mass gap, reveals a
+structural isomorphism: the inertial-range cascade is a
+``one-dimensional lattice system'' with exponentially decaying
+interactions, and K41 is its unique Gibbs state.
 \end{remark}
 
 \begin{remark}[DFC as defective monotonicity with controlled defect terms]
 \label{rem:dfc-defective-monotonicity}
 The Downhill Flux Condition can be understood as a \emph{defective monotonicity} statement, parallel to the defective Poincar\'{e}/LSI approach in the Yang--Mills companion paper~\cite{Geiger2026-YM}:
 \begin{itemize}
-\item \emph{Ideal case (DFC1+DFC2+DFC3):} The free-energy functional $F[E]$ is strictly monotone decreasing along the inertial cascade. K41 is the unique minimiser.
+\item \emph{Ideal case (DFC1$^\vee$+DFC2+DFC3):} The free-energy functional $F[E]$ is strictly monotone decreasing along the inertial cascade. K41 is the unique minimiser.
 \item \emph{Defective case:} Intermittency (bottleneck effect, local backscatter) introduces defect terms $\delta_j$ at each shell:
 \[
 F[E_{j+1}] \;\leq\; F[E_j] - \Delta_j + \delta_j, \qquad \sum_j \delta_j < \infty.
 \]
 The summability of defects ensures that the cascade remains ``asymptotically downhill'' despite local violations. This is structurally identical to the defective Dobrushin criterion in Yang--Mills, where the exponentially suppressed defect $e^{-c\sqrt{\beta}}$ (Proposition~3.4 of~\cite{Geiger2026-YM}) plays the same role as the summable $\delta_j$ here.
 \end{itemize}
-The defective-monotonicity formulation makes the DFC \emph{numerically testable}: measure $\Delta_j$ and $\delta_j$ at each shell in DNS data, and verify that $\sum \delta_j / \sum \Delta_j \ll 1$. The DFC-with-slack variant (replacing strict monotonicity by asymptotic monotonicity) is the natural statement for physical turbulence.
+The defective-monotonicity formulation makes the DFC \emph{numerically testable}: measure $\Delta_j$ and $\delta_j$ at each shell in DNS data, and verify that $\sum \delta_j / \sum \Delta_j \ll 1$. The DFC-with-slack variant is best read as a finite-Reynolds diagnostic until paired with a data-fit or perturbation theorem.
 \end{remark}
 
-\begin{remark}[Energy cascade as minimax via inertial manifolds]
+\begin{remark}[Penalty viewpoint on inertial reductions]
 \label{rem:minimax-inertial}
-The theory of inertial manifolds~\cite{FoiasSellTemam88} provides a rigorous framework
-for the minimax interpretation of the energy cascade. On the inertial manifold
-$\mathcal{M}$, the high-frequency modes $Q_N u$ are deterministically enslaved to
-the low-frequency modes $P_N u$, reducing the infinite-dimensional dynamics to a
-finite-dimensional ODE\@. Within this reduced system, the K41 spectrum emerges as
-the saddle point of a scale-specific KL-divergence: energy injection maximises the
-transfer across shells (``attacker''), while the flux constraint and viscous
-dissipation jointly select the unique minimiser (``defender''). The zero
-Lipschitz deviation $\mathrm{dev}_m(\mathcal{A}) = 0$ of the attractor projection
-ensures that the minimax value is attained and that the saddle point coincides
-with the K41 minimiser of~$F[E]$.
+If an inertial-manifold or finite-mode reduction is available, the KL
+free-energy penalty can be tested in that reduced system with explicit
+closure errors. Such a reduction may provide a controlled setting for a
+future coupled game formulation, but the present paper only proves the
+decoupled penalty statement of Proposition~\ref{prop:minimax}.
 \end{remark}
 
 % [Removed: Vortex tubes as quasiparticles -- speculative, no formal result]
@@ -1871,24 +1981,23 @@ with the K41 minimiser of~$F[E]$.
 
 % [Removed: Helicity cascade bridge -- depends on removed knot-space remark]
 
-\begin{remark}[Dobrushin uniqueness on the inertial manifold]
+\begin{remark}[Dobrushin diagnostics on reduced cascades]
 \label{rem:dobrushin-inertial}
 The shell cascade as a Dobrushin influence matrix
-(Remark~\ref{rem:dobrushin-cascade}) and the minimax interpretation
-via inertial manifolds (Remark~\ref{rem:minimax-inertial}) can be
-synthesised: on the inertial manifold $\mathcal{M}$, the
-infinite-dimensional shell dynamics reduces to a finite-dimensional ODE,
-and the Dobrushin uniqueness condition $\rho(C) < 1$ can be verified
-\emph{exactly} on this reduced system. The K41 spectrum is then the
-unique Gibbs state of the reduced one-dimensional lattice model, and
-the Dobrushin spectral radius provides a quantitative stability margin.
-This synthesis imports the Yang--Mills mass gap machinery into the
-turbulence setting via the inertial manifold reduction, closing the
-conceptual loop between all three companion papers.
+(Remark~\ref{rem:dobrushin-cascade}) can be tested in finite-mode or
+inertial reductions when those reductions are available. A verified bound
+$\rho(C)<1$ would give a quantitative stability diagnostic for the reduced
+cascade, but this paper does not prove Dobrushin uniqueness or a turbulence
+mass gap. The analogy with the Yang--Mills companion paper is therefore a
+research program, not an imported theorem.
 \end{remark}
 
 \begin{remark}[Pattern A Master Stability -- cross-problem structure]
-This paper instantiates the Pattern A Master Stability Principle from the unified framework \cite{FST-Unified2026}: strict convexity of the renormalised free energy $F$, combined with a neutral leading resolvent branch and second-order dominance, implies a spectral gap $\Delta > 0$ for the associated transfer operator. The specific instantiation in the present context is: $\Delta = $ stability margin of the K41 minimiser under flux perturbations.
+This paper instantiates the Pattern A Master Stability template from the
+unified framework \cite{FST-Unified2026}: strict convexity of the
+renormalised free energy $F$ supplies a local stability margin for the K41
+minimiser. A genuine spectral gap for a transfer operator would require the
+additional cascade-operator analysis left open above.
 \end{remark}
 
 % ===================================================================
