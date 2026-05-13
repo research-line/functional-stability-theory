@@ -26,6 +26,7 @@ release until the next upload is complete.
 | `FST-NS_NavierStokes_Skeleton_v1_kombi.pdf` | Combined bilingual Navier-Stokes PDF |
 | `FST-NS_LogDistanceIntegrability_v1_en.tex` / `FST-NS_LogDistanceIntegrability_v1_en.pdf` | English NS-LDI paper source and PDF |
 | `FST-NS_LogDistanceIntegrability_v1_de.tex` / `FST-NS_LogDistanceIntegrability_v1_de.pdf` | German NS-LDI paper source and PDF |
+| `FST-NS_LogDistanceIntegrability_v1_kombi.pdf` | Combined bilingual NS-LDI PDF generated from the public EN/DE pair |
 | `../../scripts/navier-stokes/compute_ds3_lorenz.py` | DS3 stress test on the Lorenz attractor |
 | `../../scripts/navier-stokes/compute_bv_selection.py` | Balanced-viscosity selection test on the Lorenz attractor |
 | `../../scripts/navier-stokes/compute_bv_multi_attractor.py` | BV-selection stress test on Lorenz, Roessler, and Chen attractors |
@@ -55,6 +56,7 @@ The scripts write PNG and JSON outputs next to the scripts or under
 Internal proof notes, review chains, planning files, Zenodo credentials,
 revision notes, and private comparison notes are intentionally not part of this
 public package. The repository contains the current public reproducibility
-scripts and result artifacts for the Zenodo-backed v2.2 release only. Local
-working notes and the unreleased v2.3 candidate remain local-only until the
-next release gate is cleared.
+scripts and result artifacts for the Zenodo-backed Navier-Stokes v2.2 release
+and the DOI-backed NS-LDI v1.3 package only. Local working notes, the stricter
+Navier-Stokes v2.3 candidate, and newer NS-LDI draft revisions remain local-only
+until the next release gate is cleared.
