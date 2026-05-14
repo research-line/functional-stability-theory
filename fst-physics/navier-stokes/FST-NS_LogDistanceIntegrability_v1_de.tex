@@ -1,22 +1,32 @@
-% FST-NS_LogDistanceIntegrability_v1_de.tex
+﻿% FST-NS_LogDistanceIntegrability_v1_de.tex
 \documentclass[12pt,a4paper]{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
+\usepackage{microtype}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{enumitem}
 \usepackage{xcolor}
 \usepackage{geometry}
+\usepackage{graphicx}
 \geometry{a4paper, margin=2.5cm}
 \usepackage{hyperref}
 
 \hypersetup{
+    unicode=true,
     colorlinks=true,
     linkcolor=blue!70!black,
     citecolor=green!50!black,
-    urlcolor=blue!70!black
+    urlcolor=blue!70!black,
+    pdftitle={Log-Distanz-Integrierbarkeit für dissipative Strömungen},
+    pdfauthor={Lukas Geiger},
+    pdfsubject={BV-Selektionen auf fraktalen Attraktoren},
+    pdfkeywords={Log-Distanz-Integrierbarkeit, trajektorienweise log-Lipschitz, beschränkte Variation, dissipative PDEs, Navier-Stokes}
 }
+\renewcommand{\theHequation}{de.\thesection.\arabic{equation}}
+\providecommand*{\HyperDestNameFilter}[1]{de.#1}
+\setlength{\emergencystretch}{4em}
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
@@ -29,6 +39,7 @@
 \theoremstyle{remark}
 \newtheorem{remark}[definition]{Bemerkung}
 \newtheorem{example}[definition]{Beispiel}
+\renewcommand{\theHdefinition}{de.\thesection.\arabic{definition}}
 
 \renewcommand{\proofname}{Beweis}
 
@@ -38,45 +49,50 @@
 \newcommand{\BV}{\mathrm{BV}}
 \newcommand{\id}{\mathrm{id}}
 
-\title{\textbf{Log-Distanz-Integrierbarkeit fuer dissipative Stroemungen:\\
+\title{\textbf{Log-Distanz-Integrierbarkeit für dissipative Strömungen:\\
 BV-Selektionen auf fraktalen Attraktoren}}
 \author{Lukas Geiger\\
-\small Unabhaengiger Forscher, Bernau im Schwarzwald, Deutschland\\
+\small Unabhängiger Forscher, Bernau, Deutschland\\
 \small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}%
 \thanks{KI-Werkzeuge (Claude von Anthropic) wurden für mathematische Formalisierung, Literaturverifikation und redaktionelle Verfeinerung eingesetzt. Alle mathematischen Inhalte wurden vom Autor entwickelt, verifiziert und freigegeben.}}
-\date{Maerz 2026}
+\date{Mai 2026}
 
 \begin{document}
+\pagenumbering{gobble}
 \maketitle
 
 \begin{center}
 \small
 \textbf{MSC 2020:} 37L30, 47H09, 46B20, 35Q30, 26A45\\
-\textbf{Schluesselwoerter:} Naechstpunkt-Projektion, log-Lipschitz-Regularitaet,
-beschraenkte Variation, Attraktorgeometrie, dissipative PDEs, Navier--Stokes
+\textbf{Schlüsselwörter:} Nächstpunkt-Projektion, log-Lipschitz-Regularität,
+beschränkte Variation, Attraktorgeometrie, dissipative PDEs, Navier--Stokes
 \end{center}
 
 \begin{abstract}
-Wir fuehren einen Regularitaetsrahmen fuer Naechstpunkt-Projektionen
-auf kompakte Attraktoren dissipativer Semiflows in Hilbertraeumen ein.
+Wir führen einen Regularitätsrahmen für Nächstpunkt-Projektionen
+auf kompakte Attraktoren dissipativer Semiflows in Hilberträumen ein.
 Das klassische Lipschitz-Projektionstheorem (Federer, 1959) erfordert
 positive Reichweite -- eine Bedingung, die mit fraktaler
 Attraktorgeometrie unvereinbar ist.  Wir ersetzen sie durch eine
 \emph{trajektorienweise log-Lipschitz}-Bedingung (TLL), die den
-Projektionsmodul auf der geometrisch natuerlichen Skala des
+Projektionsmodul auf der geometrisch natürlichen Skala des
 Attraktorabstands statt der Partitionsfeinheit kontrolliert.
 In Kombination mit einer \emph{Log-Distanz-Integrierbarkeits}-Bedingung
-(LDI) ergibt dies Selektionen beschraenkter Variation entlang absolut
-stetiger Trajektorien -- genau die Regularitaet, die fuer
-Gronwall-artige Argumente in bedingten Regularitaetskriterien
-benoetigt wird.  Der Rahmen gilt fuer jeden dissipativen Semiflow
-mit kompaktem Attraktor endlicher fraktaler Dimension, einschliesslich
-der 3D-Navier-Stokes-Gleichungen, Reaktions-Diffusions-Systeme und
-gedaempfter Wellengleichungen.  Zwei verifizierbare hinreichende
-Bedingungen fuer LDI werden identifiziert: beschraenkte Variation
-der Log-Distanz-Funktion und exponentielle Sublevel-Zeitmass-Abnahme.
+(LDI) ergibt dies Selektionen beschränkter Variation entlang absolut
+stetiger Trajektorien -- genau die Regularität, die für
+Gronwall-artige Argumente in bedingten Regularitätskriterien
+benötigt wird.  Der Rahmen gilt direkt für dissipative Semiflows
+mit kompaktem Attraktor endlicher fraktaler Dimension; für die
+3D-Navier-Stokes-Gleichungen ist er als bedingte Schnittstelle für
+einen starken oder vorab gewählten Trajektorienattraktor-Rahmen zu
+lesen. Reaktions-Diffusions-Systeme und gedämpfte Wellengleichungen
+liefern sauberere Testklassen.  Zwei verifizierbare hinreichende
+Bedingungen für LDI werden identifiziert: beschränkte Variation
+der Log-Distanz-Funktion und potenzgesetzliche Sublevel-Zeitkontrolle.
 \end{abstract}
 
+\clearpage
+\pagenumbering{arabic}
 
 % ==================================================================
 \section{Einleitung}
@@ -86,30 +102,30 @@ Sei $H$ ein separabler Hilbertraum und $\mathcal{A} \subset H$ eine
 kompakte Menge -- der globale Attraktor eines dissipativen Semiflows
 $\{S(t)\}_{t \ge 0}$.  Eine grundlegende Frage in der qualitativen
 Theorie dissipativer partieller Differentialgleichungen ist die
-Regularitaet der Naechstpunkt-Projektion
+Regularität der Nächstpunkt-Projektion
 \[
   P(x) \;\in\; \arg\min_{a \in \mathcal{A}} \|x - a\|_H
 \]
 als Funktion der Zeit entlang einer Trajektorie $u(t) = S(t)\,u_0$.
 Ist die Abbildung $t \mapsto P(u(t))$ absolut stetig (AC), so
-schliessen sich Gronwall-artige Energieabschaetzungen automatisch;
+schließen sich Gronwall-artige Energieabschätzungen automatisch;
 ist sie lediglich messbar, bleiben kritische Fehlerterme
 unkontrolliert.
 
 Die klassische Theorie (Federer~\cite{Federer1959}) garantiert
-Lipschitz-Stetigkeit der Naechstpunkt-Projektion auf der tubularen
+Lipschitz-Stetigkeit der Nächstpunkt-Projektion auf der tubularen
 Umgebung von Mengen mit \emph{positiver Reichweite}.  Attraktoren
 dissipativer PDEs haben jedoch generisch nicht-ganzzahlige fraktale
 Dimension und Reichweite null
-(vgl.~\cite{Temam1997}, Kapitel~V).  Dies schliesst die direkte
+(vgl.~\cite{Temam1997}, Kapitel~V).  Dies schließt die direkte
 Anwendung von Federers Theorem aus.
 
-Ziel dieser Arbeit ist die Einfuehrung einer schwaecheren
-Regularitaetsklasse -- \emph{trajektorienweise log-Lipschitz}-Projektionen
--- die mit fraktaler Geometrie vertraeglich ist und dennoch fuer die
-Kontrolle der projizierten Trajektorie durch beschraenkte Variation (BV)
-genuegt.  Motiviert durch log-Lipschitz-Regularitaetsergebnisse fuer
-dissipative Stroemungen
+Ziel dieser Arbeit ist die Einführung einer schwächeren
+Regularitätsklasse -- \emph{trajektorienweise log-Lipschitz}-Projektionen
+-- die mit fraktaler Geometrie verträglich ist und dennoch für die
+Kontrolle der projizierten Trajektorie durch beschränkte Variation (BV)
+genügt.  Motiviert durch log-Lipschitz-Regularitätsergebnisse für
+dissipative Strömungen
 (vgl.~\cite{BaeCannone2016}) beobachten wir, dass die naive globale
 log-Lipschitz-Bedingung
 \begin{equation}\label{eq:global-LL-intro}
@@ -117,7 +133,7 @@ log-Lipschitz-Bedingung
   \;\le\;
   C\,\|x-y\|\,\bigl(1 + \log\tfrac{R}{\|x-y\|}\bigr)
 \end{equation}
-\emph{nicht} BV von $P \circ u$ fuer AC-Kurven~$u$ impliziert: Die
+\emph{nicht} BV von $P \circ u$ für AC-Kurven~$u$ impliziert: Die
 Partitionssummen $\sum_i \Delta_i(1+\log(R/\Delta_i))$ divergieren
 logarithmisch bei Verfeinerung des Gitters
 (Abschnitt~\ref{sec:counterexample}).  Die korrekte Formulierung
@@ -125,30 +141,30 @@ ersetzt das Inkrementskalen-Gewicht $\log(R/\|x-y\|)$ durch das
 Attraktorabstands-Gewicht $\log(R/d(t))$, wobei
 $d(t) = \dist(u(t),\mathcal{A})$.  Dies liefert eine
 trajektorienadaptierte Bedingung, deren BV-Summen konvergieren,
-wann immer eine Log-Distanz-Integrierbarkeitsbedingung (LDI) erfuellt ist.
+wann immer eine Log-Distanz-Integrierbarkeitsbedingung (LDI) erfüllt ist.
 
 
-\paragraph{Hauptbeitraege.}
-Diese Arbeit leistet drei Beitraege: (i)~Wir fuehren die \emph{trajektorienweise log-Lipschitz}-Bedingung (TLL) und die \emph{Log-Distanz-Integrierbarkeit} (LDI) als die natuerliche Regularitaetsskala fuer BV-Projektionen auf fraktale Attraktoren ein, streng zwischen Lipschitz (zu stark) und H\"older (zu schwach). (ii)~Wir beweisen eine BV-Kettenregel (Theorem~\ref{thm:BV-chain}), die zeigt, dass TLL\,+\,LDI fuer beschraenkte-Variations-Selektionsregularitaet genuegt. (iii)~Wir identifizieren hinreichende geometrische Bedingungen (beschraenkte Variation der Log-Distanz, starke tangentiale Kegelbedingung), die mit der fraktalen Geometrie dissipativer PDE-Attraktoren vertraeglich sind.
+\paragraph{Hauptbeiträge.}
+Diese Arbeit leistet drei Beiträge: (i)~Wir führen die \emph{trajektorienweise log-Lipschitz}-Bedingung (TLL) und die \emph{Log-Distanz-Integrierbarkeit} (LDI) als die natürliche Regularitätsskala für BV-Projektionen auf fraktale Attraktoren ein, streng zwischen Lipschitz (zu stark) und H\"older (zu schwach). (ii)~Wir beweisen eine BV-Kettenregel (Theorem~\ref{thm:BV-chain}), die zeigt, dass TLL\,+\,LDI für beschränkte-Variations-Selektionsregularität genügt. (iii)~Wir identifizieren hinreichende geometrische Bedingungen (beschränkte Variation der Log-Distanz und Sublevel-Zeitkontrolle), die mit der fraktalen Geometrie dissipativer PDE-Attraktoren verträglich sind.
 
 \begin{remark}[Input-Output-Vertrag]
 \label{rem:api-contract}
-Das zentrale Ergebnis dieser Arbeit laesst sich als Input-Output-Vertrag formulieren:
+Das zentrale Ergebnis dieser Arbeit lässt sich als Input-Output-Vertrag formulieren:
 \begin{description}
-\item[Input:] Eine absolut stetige Trajektorie $u \in AC([0,T]; H)$, ein kompakter Attraktor $\mathcal{A} \subset H$ und die Naechste-Punkt-Projektion $P : \mathcal{A}^R \to \mathcal{A}$.
-\item[Bedingungen:] (TLL) Die Projektion $P$ ist trajektorienweise log-Lipschitz entlang $u$; (LDI) das Log-Distanz-Gewicht $\log(R/d(t))$ ist $\|u'\|$-integrierbar.
-\item[Output:] Die zusammengesetzte Selektion $v(t) := P(u(t))$ gehoert zu $BV([0,T]; H)$ mit der expliziten Schranke $\mathrm{Var}(v) \leq C_{\mathrm{TLL}} \int_0^T \|u'(t)\| \,\Omega(t)\,dt$.
+\item[Input:] Eine absolut stetige Trajektorie $u \in AC([0,T]; H)$, ein kompakter Attraktor $\mathcal{A} \subset H$ und eine feste messbare Nächstpunkt-Selektion $P : \mathcal{A}^R \to \mathcal{A}$.
+\item[Bedingungen:] (TLL) Die gewählte Abbildung $P$ ist trajektorienweise log-Lipschitz entlang $u$; (LDI) das Log-Distanz-Gewicht $\log(R/d(t))$ ist $\|u'\|$-integrierbar.
+\item[Output:] Die zusammengesetzte Selektion $v(t) := P(u(t))$ gehört zu $BV([0,T]; H)$ mit der expliziten Schranke $\mathrm{Var}(v) \leq C_{\mathrm{TLL}} \int_0^T \|u'(t)\| \,\Omega(t)\,dt$.
 \end{description}
-Dieser Vertrag ist so konzipiert, dass er direkt mit dem Begleitpaper~\cite{FST-NS2026} zusammenwirkt: Der Output (BV-Selektion) ist praezise Annahme~$G'$ dieses Papers.
+Dieser Vertrag ist so konzipiert, dass er direkt mit dem Begleitpaper~\cite{FST-NS2026} zusammenwirkt: Der Output (BV-Selektion) ist präzise Annahme~$G'$ dieses Papers.
 
 \smallskip\noindent
 \textbf{Assumption~$G'$} (aus~\cite{FST-NS2026}):
-\emph{Es existiert eine Naechstpunkt-Selektion
+\emph{Es existiert eine Nächstpunkt-Selektion
 $v(t) = P(u(t)) \in \mathcal{A}$, sodass
-$v \in BV([0,T];\,H)$ fuer jedes $T < T^*$.}
+$v \in BV([0,T];\,H)$ für jedes $T < T^*$.}
 
 \smallskip\noindent
-Kombiniert mit Condition~D aus~\cite{FST-NS2026} (einer Energieungleichung fuer den Attraktorabstand) impliziert Assumption~$G'$ globale Regularitaet fuer die 3D-Navier--Stokes-Gleichungen. Der Attraktor $\mathcal{A}$ darf fraktale Geometrie besitzen -- TLL und LDI sind mit nicht-ganzzahliger Hausdorff-Dimension vertraeglich.
+Kombiniert mit Condition~D und den übrigen Hypothesen aus~\cite{FST-NS2026} (einschließlich der Energieungleichung für den Attraktorabstand) ist Assumption~$G'$ der BV-Selektionsinput in dessen bedingtem Regularitätsargument. Die vorliegende Arbeit beweist nur den Schritt TLL\,+\,LDI $\Rightarrow$ BV. Der Attraktor $\mathcal{A}$ darf fraktale Geometrie besitzen -- TLL und LDI sind mit nicht-ganzzahliger Hausdorff-Dimension verträglich.
 \end{remark}
 
 
@@ -166,28 +182,28 @@ $\{S(t)\}_{t \ge 0}$ stetiger Abbildungen $S(t): H \to H$ mit
 $S(0) = \id$, $S(t+s) = S(t) \circ S(s)$, die einen
 \emph{kompakten globalen Attraktor}
 $\mathcal{A} \subset H$ besitzt: eine kompakte, invariante
-($S(t)\mathcal{A} = \mathcal{A}$ fuer alle $t \ge 0$) Menge, die
-jede beschraenkte Teilmenge von~$H$ anzieht.
+($S(t)\mathcal{A} = \mathcal{A}$ für alle $t \ge 0$) Menge, die
+jede beschränkte Teilmenge von~$H$ anzieht.
 \end{definition}
 
 \begin{definition}[Tubulare Umgebung und Abstand]
 \label{def:tube}
-Fuer $R > 0$ ist die \emph{$R$-tubulare Umgebung} von $\mathcal{A}$
+Für $R > 0$ ist die \emph{$R$-tubulare Umgebung} von $\mathcal{A}$
 \[
   \mathcal{A}^R
   \;:=\;
   \{x \in H : \dist(x, \mathcal{A}) < R\},
 \]
 wobei $\dist(x, \mathcal{A}) := \inf_{a \in \mathcal{A}} \|x - a\|$.
-Fuer eine Kurve $u: [0,T] \to \mathcal{A}^R$ schreiben wir
+Für eine Kurve $u: [0,T] \to \mathcal{A}^R$ schreiben wir
 $d(t) := \dist(u(t), \mathcal{A})$.
 \end{definition}
 
-\begin{definition}[Naechstpunkt-Selektion]
+\begin{definition}[Nächstpunkt-Selektion]
 \label{def:selection}
-Eine \emph{Naechstpunkt-Selektion} ist eine messbare Abbildung
+Eine \emph{Nächstpunkt-Selektion} ist eine messbare Abbildung
 $P: \mathcal{A}^R \to \mathcal{A}$ mit
-$\|x - P(x)\| = \dist(x, \mathcal{A})$ fuer alle
+$\|x - P(x)\| = \dist(x, \mathcal{A})$ für alle
 $x \in \mathcal{A}^R$ und $P|_{\mathcal{A}} = \id$.
 Eine solche Selektion existiert nach dem Satz von
 Kuratowski--Ryll-Nardzewski, angewandt auf die kompaktwertige
@@ -195,58 +211,63 @@ Multifunktion
 $x \mapsto \arg\min_{a \in \mathcal{A}} \|x-a\|$.
 \end{definition}
 
-\begin{proposition}[Minimale metrische Ableitungsselektion]
+\begin{proposition}[Messbare und tie-gebrochene Nächstpunkt-Selektionen]
 \label{prop:minimal-selection}
-Unter den Naechstpunkt-Selektionen
-$P: \mathcal{A}^R \to \mathcal{A}$ existiert eine
-\emph{kanonische Selektion} $u^*(t)$ entlang jeder absolut stetigen
-Trajektorie $u \in \AC([0,T];\,H)$, definiert durch
+Sei $u \in \AC([0,T];\,H)$ und setze
 \[
-  u^*(t)
-  \;:=\;
-  \arg\min_{a \in \mathcal{A},\;\|u(t)-a\|=d(t)}
-  |a|'(t),
-  \qquad
-  |a|'(t)
-  \;:=\;
-  \lim_{h \to 0}
-  \frac{\dist(a,\,P(u(t+h)))}{|h|},
+  \Pi(t) := \{a \in \mathcal{A} : \|u(t)-a\| = d(t)\}.
 \]
-die die metrische Ableitung
-$|u^*|'(t) = \lim_{h\to 0} \|u^*(t+h) - u^*(t)\|/|h|$
-unter allen Naechstpunkt-Selektionen minimiert. Diese Selektion ist
-f.ue.\ eindeutig: Fuer f.ue.\ $t \in [0,T]$ ist der Minimierer der
-metrischen Ableitung ueber der (kompakten) Naechstpunkt-Menge
-$\{a \in \mathcal{A} : \|u(t)-a\| = d(t)\}$ eindeutig.
+Dann ist $\Pi(t)$ eine nichtleere, kompaktwertige messbare
+Multifunktion und besitzt daher messbare Selektionen
+$v(t) \in \Pi(t)$.  Ist ein Borel-Tie-Breaker
+$R:\mathcal{A}\to\mathbb{R}$ vorgegeben, der auf $\Pi(t)$ für
+f.ü.\ $t$ ein eindeutiges Minimum annimmt (zum Beispiel nach einer
+endlich-dimensionalen oder Moreau--Yosida-Regularisierung), dann
+definiert
+\[
+  v_R(t) \in \arg\min_{a\in\Pi(t)} R(a)
+\]
+auf diesen Zeiten eine kanonisch tie-gebrochene
+Nächstpunkt-Selektion.  Auf der verbleibenden mehrdeutigen Menge
+kann eine beliebige messbare Selektion unter den Minimierern
+gewählt werden.
 \end{proposition}
 
 \begin{proof}
-Die Naechstpunkt-Menge $\Pi(t) := \{a \in \mathcal{A} :
-\|u(t)-a\| = d(t)\}$ ist kompakt und nichtleer fuer jedes~$t$.
-Das Funktional der metrischen Ableitung $a \mapsto
-\limsup_{h\to 0}\|P_{a}(u(t+h)) - a\|/|h|$ ist unterhalbstetig auf
-der kompakten Menge~$\Pi(t)$, nimmt also sein Minimum an. Fuer
-f.ue.~$t$, an dem $|u'|(t)$ existiert, hat die Naechstpunkt-Menge
-ein eindeutiges Element, das die metrische Ableitung minimiert: Falls
-zwei verschiedene Minimierer $a_1, a_2 \in \Pi(t)$ auf einer Menge
-positiven Masses existierten, wuerde die Konvexitaet der Norm
-$\|(a_1+a_2)/2 - u(t)\| < d(t)$ fuer den Mittelpunkt liefern
-(strikte Konvexitaet der Hilbertnorm), im Widerspruch zu
-$a_1,a_2 \in \mathcal{A}$. Also gilt Eindeutigkeit f.ue.
+Die Nächstpunkt-Menge $\Pi(t) := \{a \in \mathcal{A} :
+\|u(t)-a\| = d(t)\}$ ist kompakt und nichtleer für jedes~$t$,
+weil $\mathcal{A}$ kompakt ist und $a\mapsto\|u(t)-a\|$ stetig
+ist.  Der Graph von $\Pi$ ist messbar, da $u$ messbar ist und die
+Distanzfunktion stetig ist.  Der Satz von Kuratowski--Ryll-Nardzewski
+liefert daher eine messbare Nächstpunkt-Selektion.  Für einen festen
+Borel-Tie-Breaker $R$ ist die eingeschränkte Argmin-Korrespondenz
+$t\mapsto\arg\min_{\Pi(t)}R$ wiederum kompaktwertig und messbar;
+bei f.ü.\ eindeutigen Minimierern folgt die angegebene
+tie-gebrochene Selektion.  Eine f.ü.\ Eindeutigkeit der
+Nächstpunkte wird im Allgemeinen nicht behauptet.
 \end{proof}
 
-\begin{remark}
-Die kanonische Selektion $u^*$ ist der natuerliche Kandidat fuer TLL
-(Definition~\ref{def:TLL}): Unter allen messbaren
-Naechstpunkt-Selektionen hat sie die kleinste metrische Ableitung
-und damit die besten Chancen, die log-Lipschitz-Schranke zu erfuellen.
-Im Abschnitt Einschraenkungen haben wir festgestellt, dass verschiedene
-Selektionen unterschiedliche Regularitaet haben koennen; die minimale
-metrische Ableitungsselektion ist die ,,beste''.
+\begin{remark}[Rolle des Tie-Breakings]
+Die BV-Kettenregel unten beweist nicht, dass eine bevorzugte
+Nächstpunkt-Selektion TLL erfüllt.  Sie setzt vielmehr eine messbare
+Selektion $P$ mit TLL voraus und leitet daraus die BV-Aussage ab.
+Tie-Breaker wie minimale Enstrophie, lexikographische
+Endlich-Moden-Ordnung oder eine regularisierte
+Metrische-Ableitungs-Regel sind nützliche Kandidaten zur Konstruktion
+einer solchen Selektion; ihre TLL-Regularität ist aber in jedem
+konkreten System ein zusätzlicher Satz.
 \end{remark}
 
-\begin{remark}[Eindeutigkeit fuer nichtkonvexe Mengen]\label{rem:uniqueness-caveat}
-Das Mittelpunktargument im Beweis erfordert, dass $\frac{1}{2}(a_1 + a_2)$ naeher an $u(t)$ liegt als sowohl $a_1$ als auch $a_2$, was aus der strikten Konvexitaet der Norm folgt. Fuer nichtkonvexe $\mathcal{A}$ muss der Mittelpunkt jedoch nicht in $\mathcal{A}$ liegen. Die Eindeutigkeit der minimalen metrischen Ableitungsselektion gilt daher \emph{generisch} (fuer f.ue.~$t$, sodass der naechste Punkt in $\mathcal{A}$ eindeutig ist), kann aber auf einer Nullmenge versagen, auf der $\mathcal{A}$ mehrere aequidistante Punkte besitzt. Fuer Attraktoren dissipativer PDEs hat die Menge der mehrdeutigen Zeitpunkte nach Federers Theorem ueber die Singularitaeten von Distanzfunktionen das Mass Null.
+\begin{remark}[Eindeutigkeit für nichtkonvexe Mengen]\label{rem:uniqueness-caveat}
+Für nichtkonvexe $\mathcal{A}$ kann die Nächstpunkt-Menge
+$\Pi(t)$ mehr als ein Element enthalten, und weder die strikte
+Konvexität der Hilbertnorm noch die Differenzierbarkeit der
+eindimensionalen Funktion $t\mapsto d(t)$ erzwingen Eindeutigkeit
+des nächsten Punktes in einer nichtkonvexen Menge.  Porositätsresultate
+für die mehrdeutige Umgebungsmenge sind daher generische
+Hintergrundinformationen, aber kein f.ü.-Eindeutigkeitsargument
+entlang jeder absolut stetigen Trajektorie.  Deshalb ist der
+Hauptsatz für eine feste Selektion formuliert, die TLL erfüllt.
 \end{remark}
 
 
@@ -255,7 +276,7 @@ Das Mittelpunktargument im Beweis erfordert, dass $\frac{1}{2}(a_1 + a_2)$ naehe
 \label{sec:counterexample}
 % ==================================================================
 
-Wir zeigen zunaechst, dass die globale log-Lipschitz-Bedingung
+Wir zeigen zunächst, dass die globale log-Lipschitz-Bedingung
 \eqref{eq:global-LL-intro}, selbst kombiniert mit
 Log-Distanz-Integrierbarkeit, nicht direkt BV von $P \circ u$ liefert.
 
@@ -264,21 +285,21 @@ Log-Distanz-Integrierbarkeit, nicht direkt BV von $P \circ u$ liefert.
 Sei $P: \mathcal{A}^R \to \mathcal{A}$ mit
 \eqref{eq:global-LL-intro} und Konstante $C > 0$.  Sei
 $u: [0,1] \to \mathcal{A}^R$ Lipschitz mit
-$\|u'(t)\| = 1$ f.ue.  Fuer die gleichmaessige Partition
-$t_i = i/n$ ($i = 0, \ldots, n$) erfuellt die aus
+$\|u'(t)\| = 1$ f.ü.  Für die gleichmäßige Partition
+$t_i = i/n$ ($i = 0, \ldots, n$) erfüllt die aus
 \eqref{eq:global-LL-intro} gewonnene obere Schranke
 \[
   \sum_{i=0}^{n-1} \|P(u(t_{i+1})) - P(u(t_i))\|
   \;\le\;
   C\,(1 + \log(nR)),
 \]
-die fuer $n \to \infty$ divergiert.  Insbesondere liefert die
+die für $n \to \infty$ divergiert.  Insbesondere liefert die
 globale LL-Bedingung keine endliche \emph{a priori}-Schranke
-fuer $\Var(P \circ u)$.
+für $\Var(P \circ u)$.
 \end{proposition}
 
 \begin{proof}
-Jedes Inkrement erfuellt $\Delta_i := \|u(t_{i+1}) - u(t_i)\| = 1/n$.
+Jedes Inkrement erfüllt $\Delta_i := \|u(t_{i+1}) - u(t_i)\| = 1/n$.
 Nach \eqref{eq:global-LL-intro}:
 \[
   \sum_{i=0}^{n-1} \|P(u(t_{i+1})) - P(u(t_i))\|
@@ -288,24 +309,24 @@ Nach \eqref{eq:global-LL-intro}:
   \;=\;
   C\,(1 + \log(nR)).
 \]
-Fuer $n \to \infty$ waechst dies wie $C\log n \to \infty$.
+Für $n \to \infty$ wächst dies wie $C\log n \to \infty$.
 Die aus \eqref{eq:global-LL-intro} abgeleitete Schranke divergiert
 also mit der Gitterverfeinerung und liefert keine endliche obere
-Schranke fuer $\Var(P \circ u)$.  (Ob die Variation selbst unendlich
-ist, haengt von der spezifischen Geometrie von~$\mathcal{A}$ ab;
+Schranke für $\Var(P \circ u)$.  (Ob die Variation selbst unendlich
+ist, hängt von der spezifischen Geometrie von~$\mathcal{A}$ ab;
 entscheidend ist, dass die globale LL-Bedingung als \emph{Werkzeug}
 zur Herleitung von BV unzureichend ist.)
 \end{proof}
 
 \begin{remark}
 Die Divergenz ist \emph{logarithmisch}, nicht polynomiell -- viel
-langsamer als fuer H\"older-Abbildungen (wo $\sum \Delta_i^\alpha$
-fuer $\alpha < 1$ konvergiert).  Dies macht globales LL ,,beinahe''
-hinreichend fuer BV, aber die logarithmische Akkumulation ueber
+langsamer als für H\"older-Abbildungen (wo $\sum \Delta_i^\alpha$
+für $\alpha < 1$ konvergiert).  Dies macht globales LL ,,beinahe''
+hinreichend für BV, aber die logarithmische Akkumulation über
 unendlich viele Partitionspunkte verhindert es.  Die trajektorienweise
 log-Lipschitz-Bedingung vermeidet dies, indem sie das Log-Gewicht am
 Attraktorabstand $d(t)$ verankert, der nicht von der Partition
-abhaengt.
+abhängt.
 \end{remark}
 
 
@@ -316,31 +337,30 @@ abhaengt.
 
 \begin{definition}[Trajektorienweise log-Lipschitz-Projektion (TLL)]
 \label{def:TLL}
-Sei $u \in \AC([0,T];\, H)$ mit $u(t) \in \mathcal{A}^R$ fuer
+Sei $u \in \AC([0,T];\, H)$ mit $u(t) \in \mathcal{A}^R$ für
 alle~$t$, und sei $P: \mathcal{A}^R \to \mathcal{A}$ eine
-Naechstpunkt-Selektion.  Wir sagen, dass $P$ die
+Nächstpunkt-Selektion.  Wir sagen, dass $P$ die
 \emph{trajektorienweise log-Lipschitz-Bedingung} (TLL) entlang~$u$
-erfuellt, wenn Konstanten $C_{\mathrm{TLL}} > 0$ und $h_0 > 0$
-existieren, sodass fuer alle $t \in [0,T]$ mit $d(t) > 0$ und alle
+erfüllt, wenn Konstanten $C_{\mathrm{TLL}} > 0$ und $h_0 > 0$
+existieren, sodass für alle $t \in [0,T]$ mit $d(t) > 0$ und alle
 $h \in \mathbb{R}$ mit $0 < |h| < h_0$ und
 $t+h \in [0,T]$
-(d.h.\ sowohl Vorwaerts- als auch Rueckwaerts-Inkremente) gilt:
+(d.h.\ sowohl Vorwärts- als auch Rückwärts-Inkremente) gilt:
 \begin{equation}\label{eq:TLL}
   \|P(u(t+h)) - P(u(t))\|
   \;\le\;
   C_{\mathrm{TLL}}\,\|u(t+h) - u(t)\|\,
   \Omega(t),
-  \tag{TLL}
 \end{equation}
 wobei $\Omega(t) := 1 + \log(R/d(t))$ das
 \emph{Log-Distanz-Gewicht} ist.
 
 Auf der Menge $\{t : d(t) = 0\}$ (wo $u(t) \in \mathcal{A}$)
-gilt $P(u(t)) = u(t)$ durch Idempotenz von~$P$.  Fuer den
-Uebergang $d(t) = 0$, $d(t+h) > 0$ gilt
+gilt $P(u(t)) = u(t)$ durch Idempotenz von~$P$.  Für den
+Übergang $d(t) = 0$, $d(t+h) > 0$ gilt
 $\|P(u(t+h)) - u(t)\| = \|P(u(t+h)) - P(u(t))\|$.
-Da $u(t) \in \mathcal{A}$ ein Kandidat fuer den naechsten Punkt
-von $u(t+h)$ ist, liefert die Minimalitaet von $P$:
+Da $u(t) \in \mathcal{A}$ ein Kandidat für den nächsten Punkt
+von $u(t+h)$ ist, liefert die Minimalität von $P$:
 $\|u(t+h) - P(u(t+h))\| \le \|u(t+h) - u(t)\|$.
 Zusammen mit der Dreiecksungleichung:
 \[
@@ -353,76 +373,82 @@ Zusammen mit der Dreiecksungleichung:
 Dies ergibt $|v'|(t) \le 2\,|u'|(t)$ auf $\{d = 0\}$.
 \end{definition}
 
-\begin{remark}[Konvention $C_{\mathrm{TLL}} \ge 2$]
+\begin{remark}[Konvention \texorpdfstring{$C_{\mathrm{TLL}} \ge 2$}{C_TLL >= 2}]
 \label{rem:CTLL-convention}
 Der Faktor~$2$ auf $\{d = 0\}$ wird durch die TLL-Schranke
 absorbiert, sofern $C_{\mathrm{TLL}} \ge 2$ und $\Omega(t) \ge 1$.
 Durchgehend verwenden wir die Konvention
 $C_{\mathrm{TLL}} := \max(C_{\mathrm{TLL}},\,2)$;
-dies aendert die BV-Schranke \eqref{eq:BV-bound} um hoechstens
+dies ändert die BV-Schranke \eqref{eq:BV-bound} um höchstens
 einen Faktor~$2$ und beeinflusst die Integrierbarkeit
 von~\eqref{eq:LDI} nicht.
 \end{remark}
 
 \begin{remark}[Geometrische Interpretation von TLL]
 \label{rem:TLL-geometry}
-Die Bedingung TLL besagt, dass die Naechstpunkt-Projektion,
+Die Bedingung TLL besagt, dass die Nächstpunkt-Projektion,
 ausgewertet entlang der Trajektorie~$u$, eine lokale
-Lipschitz-Konstante hat, die \emph{hoechstens logarithmisch}
-divergiert, wenn sich die Trajektorie dem Attraktor naehert:
+Lipschitz-Konstante hat, die \emph{höchstens logarithmisch}
+divergiert, wenn sich die Trajektorie dem Attraktor nähert:
 \[
   \mathrm{Lip}_{\mathrm{loc}}(P \circ u;\, t)
   \;\lesssim\;
   1 + \log\frac{R}{d(t)}.
 \]
 Im Abstand $d(t) \sim R$ vom Attraktor ist die Projektion
-im Wesentlichen Lipschitz (der Log-Term ist $O(1)$).  Fuer
-$d(t) \to 0$ waechst das Log-Gewicht und spiegelt die zunehmende
-geometrische Komplexitaet der Attraktorgrenze auf feinen Skalen
+im Wesentlichen Lipschitz (der Log-Term ist $O(1)$).  Für
+$d(t) \to 0$ wächst das Log-Gewicht und spiegelt die zunehmende
+geometrische Komplexität der Attraktorgrenze auf feinen Skalen
 wider.  Die logarithmische Rate ist die \emph{kritische Schwelle}:
-Schnelleres Wachstum (z.B. polynomiell) wuerde LDI generisch
-zum Scheitern bringen, waehrend langsameres Wachstum (beschraenkt)
-Lipschitz-Projektion implizieren wuerde -- zu stark fuer fraktale
+Schnelleres Wachstum (z.B. polynomiell) würde LDI generisch
+zum Scheitern bringen, während langsameres Wachstum (beschränkt)
+Lipschitz-Projektion implizieren würde -- zu stark für fraktale
 Geometrie.
 \end{remark}
 
 \begin{remark}[TLL als Aubin-Eigenschaft der Projektionskorrespondenz]
 \label{rem:TLL-Aubin}
-Die TLL-Bedingung laesst eine natuerliche Umformulierung in der
+Die TLL-Bedingung lässt eine natürliche Umformulierung in der
 Sprache der Variationsanalyse zu.  Definiere die
 \emph{Projektionskorrespondenz}
 \[
   \Gamma: t \;\mapsto\;
   \bigl\{a \in \mathcal{A} : \|a - u(t)\| = d(t)\bigr\},
 \]
-die jeder Zeit die Menge der naechsten Attraktorelemente zuordnet.
-Die TLL-Bedingung $|d'(t)| \le C/|\log d(t)|$
-(d.h., die metrische Ableitung der Abstandsfunktion wird durch den
-inversen Logarithmus kontrolliert) ist aequivalent zur
-\emph{Aubin-Eigenschaft} (metrische Regularitaet) der Korrespondenz
-$\Gamma$ mit Rate $1/|\log r|$.  Konkret ist $\Gamma$
-metrisch regulaer mit Rate $\phi(r) = 1/|\log r|$, wenn
+die jeder Zeit die Menge der nächsten Attraktorelemente zuordnet.
+Die TLL-Bedingung (Definition~\ref{def:TLL}) ist \emph{analog} zur
+\emph{Aubin-Eigenschaft} (metrische Regularität) der Korrespondenz
+$\Gamma$ mit Rate $1/|\log r|$.  Konkret ist $\Gamma$ metrisch
+regulär mit Rate $\phi(r) = 1/|\log r|$, wenn
 \[
   \dist\bigl(a,\, \Gamma(t')\bigr)
   \;\le\;
   L\,\phi\bigl(\|u(t') - u(t)\|\bigr)\,\|u(t') - u(t)\|
 \]
-fuer $a \in \Gamma(t)$ und $t'$ nahe~$t$ gilt.
-Diese Umformulierung verbindet die Projektionsregularitaetstheorie
-mit dem Aubin-Kriterium und dem Rahmenwerk metrischer Regularitaet
-von Rockafellar--Wets~\cite{RockafellarWets1998} und
+für $a \in \Gamma(t)$ und $t'$ nahe~$t$ gilt.
+TLL und die Aubin-Eigenschaft sind im Allgemeinen \emph{nicht}
+äquivalent: TLL gewichtet mit
+$\Omega(t) = 1 + \log(R/d(t))$ (dem \emph{Attraktorabstand}),
+während die Aubin-Formulierung mit
+$1/|\log\|u(t')-u(t)\||$ (der \emph{Inkrementgröße}) gewichtet.
+Beide Formulierungen fallen nur in dem Spezialfall zusammen, in dem
+$d(t) \sim \|u(t')-u(t)\|$ gilt, also wenn Trajektorien den Attraktor
+nicht-tangential erreichen.  Diese Analogie verbindet die
+Projektionsregularitätstheorie mit dem Aubin-Kriterium und dem
+Rahmenwerk metrischer Regularität von
+Rockafellar--Wets~\cite{RockafellarWets1998} und
 Dontchev--Rockafellar~\cite{DontchevRockafellar2009}.
-Der zentrale Vorteil ist, dass Aubin-Eigenschafts-Kriterien fuer
+Der zentrale Vorteil ist, dass Aubin-Eigenschafts-Kriterien für
 mengenwertige Abbildungen gut entwickelt sind und verifizierbare
-hinreichende Bedingungen liefern (z.B.\ ueber die
+hinreichende Bedingungen liefern (z.B.\ über die
 Mordukhovich-Koderivierte), die auf die Attraktorprojektion
-anwendbar sein koennten.
+anwendbar sein könnten.
 \end{remark}
 
 \begin{remark}[TLL vs.\ globales LL]
 \label{rem:TLL-vs-LL}
 Die globale log-Lipschitz-Bedingung \eqref{eq:global-LL-intro}
-impliziert \emph{nicht} TLL.  Fuer $h \to 0$ bei festem~$t$:
+impliziert \emph{nicht} TLL.  Für $h \to 0$ bei festem~$t$:
 \[
   \log\frac{R}{\|u(t+h)-u(t)\|}
   \;\approx\;
@@ -431,12 +457,12 @@ impliziert \emph{nicht} TLL.  Fuer $h \to 0$ bei festem~$t$:
   \log\frac{R}{|u'(t)|} + \log\frac{1}{h}
   \;\to\; \infty,
 \]
-waehrend $\log(R/d(t))$ fest bleibt.  Die globale Bedingung
+während $\log(R/d(t))$ fest bleibt.  Die globale Bedingung
 erzeugt ein \emph{Inkrementskalen}-Log-Gewicht, das mit der
 Partitionsfeinheit divergiert; TLL erzeugt ein
 \emph{Abstandsskalen}-Log-Gewicht, das nur von der aktuellen
-Geometrie abhaengt.  Dies ist der strukturelle Grund, warum TLL
-BV liefert, waehrend globales LL dies nicht tut.
+Geometrie abhängt.  Dies ist der strukturelle Grund, warum TLL
+BV liefert, während globales LL dies nicht tut.
 \end{remark}
 
 
@@ -455,37 +481,36 @@ Im Rahmen von Definition~\ref{def:TLL} sagen wir, dass
   \int_{\{d>0\}} \|u'(t)\|\,
   \bigl(1 + \log\tfrac{R}{d(t)}\bigr)\,\mathrm{d}t
   \;<\; \infty.
-  \tag{LDI}
 \end{equation}
 Auf der Menge $\{t : d(t) = 0\}$ gilt $v(t) = u(t)$ und der
 BV-Beitrag wird durch $\int_{\{d=0\}} \|u'(t)\|\,\mathrm{d}t
 < \infty$ kontrolliert (da $u$ AC ist), sodass nur die Region
-$\{d > 0\}$ fuer \eqref{eq:LDI} relevant ist.  Um die
+$\{d > 0\}$ für \eqref{eq:LDI} relevant ist.  Um die
 BV-Schranke \eqref{eq:BV-bound} einheitlich auf ganz $[0,T]$
 zu formulieren, setzen wir $\Omega(t) := 1$ auf $\{d=0\}$
 (konsistent mit der Faktor-$2$-Schranke aus
 Bemerkung~\ref{rem:CTLL-convention}).
 \end{definition}
 
-\begin{remark}[Minimalitaet von LDI]
+\begin{remark}[Minimalität von LDI]
 \label{rem:LDI-minimal}
-Die Bedingung LDI ist praezise zwischen den bekannten
-Regularitaetsklassen positioniert:
+Die Bedingung LDI ist präzise zwischen den bekannten
+Regularitätsklassen positioniert:
 \begin{itemize}
   \item \textbf{Lipschitz-Projektion} ($\Omega \equiv 1$):
-    LDI reduziert sich auf $\int \|u'\| < \infty$, was fuer
+    LDI reduziert sich auf $\int \|u'\| < \infty$, was für
     AC-Kurven automatisch gilt.  Dies ist das Federer-/positive-Reichweite-Regime.
   \item \textbf{H\"older-Projektion} ($\Omega(t) \sim d(t)^{-\beta}$,
     $\beta > 0$): LDI erfordert $\int \|u'\|\,d(t)^{-\beta} < \infty$,
-    was generisch in der Naehe des Attraktors scheitert.  Deshalb
+    was generisch in der Nähe des Attraktors scheitert.  Deshalb
     liefern Man\'e-Projektoren (H\"older-Inverse) kein BV.
   \item \textbf{Log-Lipschitz-Projektion} (TLL):
     LDI erfordert $\int \|u'\|\,\log(1/d) < \infty$, den
-    Grenzfall -- logarithmische Singularitaeten sind unter milden
+    Grenzfall -- logarithmische Singularitäten sind unter milden
     dynamischen Bedingungen integrierbar.
 \end{itemize}
 Das log-Lipschitz/LDI-Paar besetzt somit das \emph{kritische}
-Regularitaetsfenster fuer BV-Selektionen auf fraktalen Attraktoren.
+Regularitätsfenster für BV-Selektionen auf fraktalen Attraktoren.
 \end{remark}
 
 
@@ -494,14 +519,14 @@ Regularitaetsfenster fuer BV-Selektionen auf fraktalen Attraktoren.
 \label{sec:main}
 % ==================================================================
 
-\begin{theorem}[BV-Kettenregel fuer log-Lipschitz-Projektionen]
+\begin{theorem}[BV-Kettenregel für log-Lipschitz-Projektionen]
 \label{thm:BV-chain}
 Sei $\{S(t)\}_{t \ge 0}$ ein dissipativer Semiflow auf einem
 separablen Hilbertraum~$H$ mit kompaktem globalem Attraktor
 $\mathcal{A} \subset H$.  Sei $u \in \AC([0,T];\, H)$ mit
-$u(t) \in \mathcal{A}^R$ fuer alle~$t$, und sei
-$P: \mathcal{A}^R \to \mathcal{A}$ eine Naechstpunkt-Selektion,
-die TLL \eqref{eq:TLL} entlang~$u$ erfuellt.  Setze $v(t) := P(u(t))$.
+$u(t) \in \mathcal{A}^R$ für alle~$t$, und sei
+$P: \mathcal{A}^R \to \mathcal{A}$ eine Nächstpunkt-Selektion,
+die TLL \eqref{eq:TLL} entlang~$u$ erfüllt.  Setze $v(t) := P(u(t))$.
 
 Wenn LDI \eqref{eq:LDI} gilt, dann ist
 $v \in \BV([0,T];\, H)$ mit der expliziten Schranke
@@ -522,7 +547,7 @@ Der Beweis gliedert sich in drei Schritte.
 \medskip
 \noindent
 \textbf{Schritt 1 (Schranke der metrischen Ableitung).}\;
-Fuer jede stetige Kurve $v: [0,T] \to H$ ist die \emph{obere
+Für jede stetige Kurve $v: [0,T] \to H$ ist die \emph{obere
 metrische Ableitung} bei $t$ definiert als
 \[
   |v'|^+(t)
@@ -530,12 +555,12 @@ metrische Ableitung} bei $t$ definiert als
   \limsup_{h \to 0} \frac{\|v(t+h) - v(t)\|}{|h|}
   \;\in\; [0,+\infty].
 \]
-Diese Groesse existiert ueberall (als Wert in $[0,+\infty]$)
-und ist Borel-messbar.  Fuer absolut stetige Kurven ist der
-$\limsup$ f.ue.\ ein genuiner Limes
+Diese Größe existiert überall (als Wert in $[0,+\infty]$)
+und ist Borel-messbar.  Für absolut stetige Kurven ist der
+$\limsup$ f.ü.\ ein genuiner Limes
 (vgl.~\cite[Theorem~1.1.2]{AmbrosioGigliSavare2008}).
 Da $u$ AC ist, existiert $|u'|(t) := \lim_{h\to 0}\|u(t+h)-u(t)\|/|h|$
-fuer f.ue.~$t$.
+für f.ü.~$t$.
 
 \smallskip\noindent
 \emph{Fall $d(t)>0$:}\;
@@ -544,7 +569,7 @@ Division von \eqref{eq:TLL} durch $|h|$ und Bildung des $\limsup$:
   |v'|^+(t)
   \;\le\;
   C_{\mathrm{TLL}}\,|u'|(t)\,\Omega(t)
-  \qquad \text{fuer f.ue.\ } t \text{ mit } d(t) > 0.
+  \qquad \text{für f.ü.\ } t \text{ mit } d(t) > 0.
 \end{equation}
 (Die rechte Seite ist ein genuiner Limes; die linke Seite kann
 ein $\limsup$ sein, der durch dieselbe Schranke dominiert wird.)
@@ -553,7 +578,7 @@ ein $\limsup$ sein, der durch dieselbe Schranke dominiert wird.)
 \emph{Fall $d(t)=0$ (Inneres von $\mathcal{Z}$):}\;
 Auf $\mathcal{Z} := \{t \in [0,T] : d(t) = 0\}$ gilt
 $u(t) \in \mathcal{A}$ und $v(t) = P(u(t)) = u(t)$.
-Da $u(t) \in \mathcal{A}$ ein Kandidat-Minimierer fuer
+Da $u(t) \in \mathcal{A}$ ein Kandidat-Minimierer für
 $\dist(u(t+h), \mathcal{A})$ ist, liefert die
 Dreiecksungleichung
 $\|P(u(t+h)) - u(t)\| \le 2\,\|u(t+h) - u(t)\|$
@@ -562,58 +587,58 @@ also $|v'|^+(t) \le 2\,|u'|(t)$.
 
 \smallskip\noindent
 \emph{Randpunkte von $\mathcal{Z}$:}\;
-An $t_0 \in \partial\mathcal{Z}$ mit $d(t_0)=0$ koennen Folgen
-$t_n \to t_0$ mit $d(t_n) > 0$ existieren.  Fuer die Stetigkeit von
+An $t_0 \in \partial\mathcal{Z}$ mit $d(t_0)=0$ können Folgen
+$t_n \to t_0$ mit $d(t_n) > 0$ existieren.  Für die Stetigkeit von
 $v$ bei $t_0$: $\|v(t_n) - v(t_0)\| = \|P(u(t_n)) - u(t_0)\|
 \le d(t_n) + \|u(t_n) - u(t_0)\| \to 0$, da $u$
 stetig ist und $d = \dist(\cdot,\mathcal{A}) \circ u$ Stetigkeit
 erbt (die Abstandsfunktion ist $1$-Lipschitz).  Die Schranke der metrischen Ableitung
 $|v'|^+(t_0) \le 2\,|u'|(t_0)$ bleibt durch dasselbe
-Dreiecksungleichungsargument gueltig.
+Dreiecksungleichungsargument gültig.
 
 \smallskip\noindent
 Da $\Omega(t) \ge 1$ und $C_{\mathrm{TLL}} \ge 2$
 (Bemerkung~\ref{rem:CTLL-convention}), gilt die
 Schranke \eqref{eq:metric-deriv-bound} auf ganz $[0,T]$
-(mit $|v'|^+$ statt $|v'|$, wo der Limes moeglicherweise
-nicht existiert; dies genuegt fuer das BV-Kriterium in Schritt~3).
+(mit $|v'|^+$ statt $|v'|$, wo der Limes möglicherweise
+nicht existiert; dies genügt für das BV-Kriterium in Schritt~3).
 
 \medskip
 \noindent
 \textbf{Schritt 2 (Stetigkeit von~$v$).}\;
-Die Naechstpunkt-Projektion auf eine kompakte (aber nichtkonvexe)
+Die Nächstpunkt-Projektion auf eine kompakte (aber nichtkonvexe)
 Menge ist im Allgemeinen nur oberhalbstetig als mengenwertige
-Abbildung und muss nicht ueberall einwertig sein.  Die
+Abbildung und muss nicht überall einwertig sein.  Die
 TLL-Bedingung \eqref{eq:TLL} impliziert jedoch direkt die Stetigkeit
-von $v = P \circ u$ entlang der Trajektorie: Fuer $d(t) > 0$ gilt
+von $v = P \circ u$ entlang der Trajektorie: Für $d(t) > 0$ gilt
 $\|v(t+h) - v(t)\| \le C_{\mathrm{TLL}}\,\|u(t+h)-u(t)\|\,
-\Omega(t) \to 0$ fuer $h \to 0$; fuer $d(t) = 0$ gilt
+\Omega(t) \to 0$ für $h \to 0$; für $d(t) = 0$ gilt
 $\|v(t+h)-v(t)\| \le 2\,\|u(t+h)-u(t)\| \to 0$
-(einschliesslich Randpunkte von $\mathcal{Z}$, vgl.\ Schritt~1).
+(einschließlich Randpunkte von $\mathcal{Z}$, vgl.\ Schritt~1).
 Also ist $v$ stetig auf $[0,T]$.
 
 \medskip
 \noindent
 \textbf{Schritt 3 (BV-Schranke).}\;
 Wir zeigen $\|v(b) - v(a)\| \le \int_a^b g(t)\,\mathrm{d}t$
-fuer alle $0 \le a < b \le T$, wobei
+für alle $0 \le a < b \le T$, wobei
 $g(t) := C_{\mathrm{TLL}}\,|u'|(t)\,\Omega(t) \in L^1$
 (nach LDI).  Da $v$ stetig ist (Schritt~2), folgt die
-BV-Schranke $\Var(v) \le \int_0^T g$ durch Summation ueber
+BV-Schranke $\Var(v) \le \int_0^T g$ durch Summation über
 jede Partition.
 
 Setze $f(t) := \|v(t) - v(a)\|$.  Dann ist $f: [a,b] \to \mathbb{R}$
 stetig und reellwertig,
-$f(a) = 0$, und die obere Dini-Ableitung erfuellt
+$f(a) = 0$, und die obere Dini-Ableitung erfüllt
 $D^+ f(t) \le |v'|^+(t)$ (da
 $f(t+h) - f(t) \le \|v(t+h)-v(t)\|$ nach der umgekehrten
 Dreiecksungleichung, und Division durch $h > 0$ mit
 $\limsup$ ergibt $D^+ f \le |v'|^+$).
-Nach Schritt~1 gilt $|v'|^+(t) \le g(t)$ f.ue.  Ein klassisches Resultat ueber Dini-Ableitungen
+Nach Schritt~1 gilt $|v'|^+(t) \le g(t)$ f.ü.  Ein klassisches Resultat über Dini-Ableitungen
 (vgl.\ \cite[Kapitel~VII, \S\S\,9--10]{Saks1937}; siehe
 auch \cite[Kapitel~3]{AmbrosioFuscoPallara2000}) besagt:
-Fuer eine stetige Funktion $f:[a,b] \to \mathbb{R}$ mit
-$D^+ f(t) \le g(t)$ f.ue.\ und $g \in L^1$ gilt die
+Für eine stetige Funktion $f:[a,b] \to \mathbb{R}$ mit
+$D^+ f(t) \le g(t)$ f.ü.\ und $g \in L^1$ gilt die
 Ungleichung $f(b) - f(a) \le \int_a^b g(t)\,\mathrm{d}t$.
 Daher
 \[
@@ -621,7 +646,7 @@ Daher
   \;\le\; \int_a^b g(t)\,\mathrm{d}t
   \;\le\; \int_0^T g(t)\,\mathrm{d}t.
 \]
-Summation ueber jede Partition $0 = t_0 < \cdots < t_n = T$:
+Summation über jede Partition $0 = t_0 < \cdots < t_n = T$:
 \[
   \sum_i \|v(t_{i+1}) - v(t_i)\|
   \;\le\;
@@ -638,9 +663,9 @@ was \eqref{eq:BV-bound} ergibt.
 Die Schranke \eqref{eq:BV-bound} folgt aus den Schritten~1--3.
 \end{proof}
 
-\begin{remark}[Direkte Verifikation ueber Partitionssummen]
+\begin{remark}[Direkte Verifikation über Partitionssummen]
 \label{rem:partition-sum}
-Fuer eine feste Partition mit Feinheit $< h_0$ laesst sich die
+Für eine feste Partition mit Feinheit $< h_0$ lässt sich die
 Endlichkeit der Partitionssumme direkt aus TLL ablesen, ohne die
 Dini-Ableitungs-Maschinerie: Auf jedem Teilintervall liefert TLL
 $\|v(t_{i+1}) - v(t_i)\|
@@ -648,14 +673,14 @@ $\|v(t_{i+1}) - v(t_i)\|
 (oder die Faktor-$2$-Schranke auf $\{d = 0\}$, absorbiert durch
 $C_{\mathrm{TLL}} \ge 2$).  Die resultierende Partitionssumme
 $\sum_i C_{\mathrm{TLL}}\,\Omega(t_i)\int_{t_i}^{t_{i+1}}
-\|u'\|\,\mathrm{d}t$ ist fuer jede feste Partition endlich
+\|u'\|\,\mathrm{d}t$ ist für jede feste Partition endlich
 (da $\Omega$ auf jeder kompakten Menge disjunkt von $\{d=0\}$
-beschraenkt ist und der $\{d=0\}$-Beitrag durch $2\int\|u'\|$
-kontrolliert wird).  Der Uebergang zum Supremum ueber \emph{alle}
+beschränkt ist und der $\{d=0\}$-Beitrag durch $2\int\|u'\|$
+kontrolliert wird).  Der Übergang zum Supremum über \emph{alle}
 Partitionen -- also zur Definition von
 $\Var(v)$ -- erfordert jedoch das Dini-Ableitungs-Argument
 von Schritt~3, das das punktweise $\Omega(t_i)$-Gewicht
-zum integrierten $\Omega(t)$-Gewicht verschaerft.
+zum integrierten $\Omega(t)$-Gewicht verschärft.
 \end{remark}
 
 \begin{remark}[Banachraum-Allgemeinheit]
@@ -664,28 +689,28 @@ Der Beweis von Satz~\ref{thm:BV-chain} verwendet nur die Norm,
 Kompaktheit von~$\mathcal{A}$ und messbare Selektion -- kein
 inneres Produkt und keine Hilbertraum-Struktur.  Die
 BV-Kettenregel gilt daher wortwortlich in jedem separablen
-Banachraum.  Wir beschraenken uns nur wegen der PDE-Anwendungen
-in Abschnitt~\ref{sec:applications} auf Hilbertraeume.
+Banachraum.  Wir beschränken uns nur wegen der PDE-Anwendungen
+in Abschnitt~\ref{sec:applications} auf Hilberträume.
 \end{remark}
 
 
 % ==================================================================
-\section{Hinreichende Bedingungen fuer LDI}
+\section{Hinreichende Bedingungen für LDI}
 \label{sec:sufficient}
 % ==================================================================
 
 Die Bedingung LDI \eqref{eq:LDI} ist eine einzelne
-Integrierbarkeitsanforderung.  Wir geben zwei unabhaengige
+Integrierbarkeitsanforderung.  Wir geben zwei unabhängige
 hinreichende Bedingungen an, die jeweils aus dynamischen
-Informationen ueber den Semiflow verifizierbar sind.
+Informationen über den Semiflow verifizierbar sind.
 
 % ------------------------------------------------------------------
-\subsection{Variante A: Log-Distanz hat beschraenkte Variation}
+\subsection{Variante A: Log-Distanz hat beschränkte Variation}
 % ------------------------------------------------------------------
 
 \begin{proposition}[BV-Log-Distanz impliziert LDI]
 \label{prop:variant-A}
-Angenommen $d(t) > 0$ fuer f.ue.\ $t \in [0,T]$ und
+Angenommen $d(t) > 0$ für f.ü.\ $t \in [0,T]$ und
 $\log(R/d(t)) \in \BV([0,T])$.  Dann gilt LDI.
 \end{proposition}
 
@@ -706,42 +731,41 @@ $\|u'(t)\|\,\ell(t)$ lokal integrierbar:
 \label{rem:log-BV}
 Die Bedingung $\log(R/d) \in \BV$ erfordert, dass die Trajektorie
 nicht unendlich oft zwischen verschiedenen Abstandsskalen zum
-Attraktor oszilliert.  Formal schliesst sie unendliche
-,,Zickzack-Frequenz'' in $d(t)$ aus.  Fuer monoton anziehende
-Trajektorien ($d(t)$ schliesslich fallend) ist dies automatisch
-erfuellt.  Fuer Trajektorien mit transienten Oszillationen folgt
+Attraktor oszilliert.  Formal schließt sie unendliche
+,,Zickzack-Frequenz'' in $d(t)$ aus.  Für monoton anziehende
+Trajektorien ($d(t)$ schließlich fallend) ist dies automatisch
+erfüllt.  Für Trajektorien mit transienten Oszillationen folgt
 BV von $\log d$, wenn die Gesamtzahl der Skalenkreuzungen
-$\{t : d(t) = \varepsilon\}$ fuer jedes
+$\{t : d(t) = \varepsilon\}$ für jedes
 $\varepsilon > 0$ endlich ist -- eine generische Eigenschaft
 dissipativer Semiflows mit isolierten Gleichgewichten.
 \end{remark}
 
 % ------------------------------------------------------------------
-\subsection{Variante B: Sublevel-Zeitmass-Kontrolle}
+\subsection{Variante B: Sublevel-Zeitmaß-Kontrolle}
 % ------------------------------------------------------------------
 
 \begin{definition}[Sublevel-Zeit-Kontrolle (STC)]
 \label{def:STC}
-Die Trajektorie~$u$ erfuellt \emph{Sublevel-Zeit-Kontrolle} mit
+Die Trajektorie~$u$ erfüllt \emph{Sublevel-Zeit-Kontrolle} mit
 Exponent $\alpha > 0$, wenn ein $C_* > 0$ existiert mit
 \begin{equation}\label{eq:STC}
   \bigl|\{t \in [0,T] : d(t) \le \varepsilon\}\bigr|
   \;\le\;
   C_*\,\varepsilon^\alpha
-  \qquad \text{fuer alle } \varepsilon \in (0, R].
-  \tag{STC}
+  \qquad \text{für alle } \varepsilon \in (0, R].
 \end{equation}
 \end{definition}
 
-\begin{remark}[STC impliziert $|\{d=0\}| = 0$]
+\begin{remark}[STC impliziert \texorpdfstring{$|\{d=0\}| = 0$}{Mass von d=0 ist null}]
 \label{rem:STC-d0}
-Der Grenzuebergang $\varepsilon \to 0$ in \eqref{eq:STC} zeigt
+Der Grenzübergang $\varepsilon \to 0$ in \eqref{eq:STC} zeigt
 $|\{d = 0\}| = 0$.  STC ist daher nur auf Trajektorien anwendbar,
 die keine positive Zeit auf dem Attraktor verbringen.  Dies ist der
-generische Fall fuer nicht-stationaere Loesungen, die sich
-$\mathcal{A}$ asymptotisch naehern.  Fuer Trajektorien, die den
+generische Fall für nicht-stationäre Lösungen, die sich
+$\mathcal{A}$ asymptotisch nähern.  Für Trajektorien, die den
 Attraktor in endlicher Zeit erreichen (z.B.\ Konvergenz zu einem
-Gleichgewicht mit $u(t) \in \mathcal{A}$ fuer $t \ge t_1$), ist
+Gleichgewicht mit $u(t) \in \mathcal{A}$ für $t \ge t_1$), ist
 Variante~A (BV-Log-Distanz) die geeignete hinreichende Bedingung.
 \end{remark}
 
@@ -749,17 +773,17 @@ Variante~A (BV-Log-Distanz) die geeignete hinreichende Bedingung.
 \label{prop:variant-B}
 Falls STC \eqref{eq:STC} mit einem $\alpha > 0$ gilt und
 $u' \in L^2(0,T;\,H)$, dann ist
-$\log(R/d) \in L^p(0,T)$ fuer jedes $p < \infty$, und LDI gilt.
+$\log(R/d) \in L^p(0,T)$ für jedes $p < \infty$, und LDI gilt.
 \end{proposition}
 
 \begin{proof}
 \textbf{Schritt 1 (Tonelli-Darstellung).}\;
-Da $u(t) \in \mathcal{A}^R$, gilt $d(t) \le R$ fuer alle~$t$.
-Auf der Menge $\{t : d(t) = 0\}$ (wo $u(t) \in \mathcal{A}$) ist
-der Integrand $\|u'(t)\|\,\log(R/d(t)) = +\infty$; wir setzen den
-Beitrag per Konvention auf null (auf dieser Menge gilt $v(t) = u(t)$
-und die BV-Kettenregel-Schranke ist trivial erfuellt).
-Auf $\{t : d(t) > 0\}$ ergibt die Schichtzerlegungsidentitaet
+Da $u(t) \in \mathcal{A}^R$, gilt $d(t) \le R$ für alle~$t$.
+Nach Bemerkung~\ref{rem:STC-d0} impliziert STC
+$|\{d=0\}|=0$. Alle logarithmischen Integrale unten werden daher über
+$\{d>0\}$ genommen; Trajektorien mit Attraktorkontakt positiven Maßes
+gehören zu Variante~A, nicht zu STC. Auf $\{t : d(t) > 0\}$ ergibt die
+Schichtzerlegungsidentität
 $\log(R/d(t)) = \int_{d(t)}^{R} s^{-1}\,\mathrm{d}s$ mit Tonelli:
 \begin{equation}\label{eq:tonelli}
   \int_{\{d>0\}} \|u'(t)\|\,\log\frac{R}{d(t)}\,\mathrm{d}t
@@ -808,116 +832,112 @@ $s^{\alpha/2-1}$ nahe $s=0$ integrierbar ist.
 \textbf{Schritt 4 ($L^p$-Schranken).}\;
 Dasselbe Tonelli-Argument mit H\"older-Exponenten $p$ und $q$
 ($1/p + 1/q = 1$) ergibt
-$\|\log(R/d)\|_{L^p} \le C(p,\alpha,R,C_*)$ fuer jedes
+$\|\log(R/d)\|_{L^p} \le C(p,\alpha,R,C_*)$ für jedes
 $p < \infty$, sodass LDI aus jeder endlichen $L^q$-Schranke
-fuer~$\|u'\|$ folgt.
+für~$\|u'\|$ folgt.
 \end{proof}
 
-\begin{remark}[Quellen von STC in dissipativen Stroemungen]
+\begin{remark}[Quellen von STC in dissipativen Strömungen]
 \label{rem:STC-sources}
 Die Sublevel-Zeit-Kontrolle \eqref{eq:STC} ist der genuine neue
-analytische Input.  Drei Mechanismen koennen sie erzeugen:
+analytische Input.  Drei Mechanismen können sie erzeugen:
 
 \begin{enumerate}[label=(\roman*)]
-  \item \textbf{Exponentielles Tracking:}\;
-    Falls $d(t) \le C_0\,e^{-\lambda t}$ fuer $t \ge t_0$, dann gilt
-    $\{d \le \varepsilon\} \subset
-    \{t \ge (\log(C_0/\varepsilon))/\lambda\}$,
-    dessen Mass $O(\log(1/\varepsilon))$ ist -- viel kleiner als
-    $C_*\,\varepsilon^\alpha$ fuer jedes $\alpha > 0$.
-    Exponentielles Tracking impliziert also STC mit \emph{jedem}
-    Exponenten.
+  \item \textbf{Untere Distanzhülle auf endlichen Fenstern:}\;
+    Eine einseitige Attraktionsabschätzung $d(t)\le C_0 e^{-\lambda t}$
+    kontrolliert $\log(R/d(t))$ nicht von oben und impliziert für sich
+    genommen keine STC.  Benötigt wird eine nicht-superexponentielle
+    untere Hülle, etwa $d(t)\ge c_T e^{-\lambda_T t}$ auf einem festen
+    Zeitfenster $[0,T]$.  Dann kann $\{d\le\varepsilon\}$ erst nach der
+    Schwelle $(\log(c_T/\varepsilon))/\lambda_T$ auftreten; dies liefert
+    STC-Konstanten auf dem festen Fenster (abhängig von
+    $T,c_T,\lambda_T$) und direkter die logarithmische Schranke aus
+    Lemma~\ref{lem:stc-tracking}.
   \item \textbf{Lyapunov-Dissipation:}\;
     Falls ein Lyapunov-Funktional $E$ die Bedingung
     $-\dot{E} \ge \Psi(d)$ mit nicht zu flachem $\Psi$ nahe $d=0$
-    erfuellt (z.B.\ $\Psi(d) \ge c\,d^\beta$ fuer ein $\beta$),
+    erfüllt (z.B.\ $\Psi(d) \ge c\,d^\beta$ für ein $\beta$),
     dann werden die Sublevel-Zeiten durch das gesamte Energiebudget
     $E(0) - \inf E$ kontrolliert.
   \item \textbf{Keine schnellen Oszillationen:}\;
-    Energetische Einschraenkungen (endliches Dissipationsintegral)
+    Energetische Einschränkungen (endliches Dissipationsintegral)
     verhindern beliebig schnelle Hin-und-Her-Bewegungen nahe dem
     Attraktor und begrenzen die Anzahl der Exkursionen in
     $\{d \le \varepsilon\}$.
 \end{enumerate}
 Jeder Mechanismus liefert STC mit verschiedenen Exponenten~$\alpha$.
-Die STC-Bedingung ist physikalisch plausibel fuer alle
+Die STC-Bedingung ist physikalisch plausibel für alle
 Standardklassen dissipativer PDEs.
 \end{remark}
 
-\begin{lemma}[Exponentielles Tracking impliziert Log-Integrierbarkeit]
+\begin{lemma}[Untere Exponentialhülle impliziert Log-Integrierbarkeit]
 \label{lem:stc-tracking}
-Falls $d(t) \le C\,e^{-\lambda t}$ fuer ein $\lambda > 0$ und
-$C > 0$, dann gilt $\log(1/d) \in L^p([0,T])$ fuer alle $p < \infty$
-und alle $T > 0$, und die LDI-Bedingung ist erfuellt mit
+Seien $0<c\le R$ und $\lambda\ge 0$, und auf $[0,T]$ gelte
 \[
-  \int_0^T \log\frac{1}{d(t)}\,\mathrm{d}t
-  \;\le\;
-  \lambda T + \log(1/C)\cdot T.
+  0<d(t)\le R,
+  \qquad
+  d(t)\ge c\,e^{-\lambda t}.
 \]
-Insbesondere gilt STC mit jedem Exponenten $\alpha > 0$, und
-das LDI-Integral ist linear in~$T$ beschraenkt.
+Dann ist $\log(R/d)\in L^\infty(0,T)$, und
+\[
+  \int_0^T \log\frac{R}{d(t)}\,\mathrm{d}t
+  \;\le\;
+  T\log\frac{R}{c} + \frac{\lambda T^2}{2}.
+\]
+Falls zusätzlich $u'\in L^1(0,T;\,H)$ gilt, dann gilt LDI auf $[0,T]$.
 \end{lemma}
 
 \begin{proof}
-Aus $d(t) \le C\,e^{-\lambda t}$ folgt
-$\log(1/d(t)) \ge \lambda t - \log C$, und ebenso
+Die untere Hülle liefert
 \[
-  \log\frac{1}{d(t)}
+  \log\frac{R}{d(t)}
   \;\le\;
-  \log\frac{1}{C\,e^{-\lambda t}}
+  \log\frac{R}{c\,e^{-\lambda t}}
   \;=\;
-  \lambda t + \log\frac{1}{C}.
+  \log\frac{R}{c}+\lambda t.
 \]
 Daher
 \[
-  \int_0^T \log\frac{1}{d(t)}\,\mathrm{d}t
+  \int_0^T \log\frac{R}{d(t)}\,\mathrm{d}t
   \;\le\;
-  \int_0^T \bigl(\lambda t + \log(1/C)\bigr)\,\mathrm{d}t
+  \int_0^T \bigl(\log(R/c)+\lambda t\bigr)\,\mathrm{d}t
   \;=\;
-  \frac{\lambda T^2}{2} + \log(1/C)\cdot T.
+  T\log\frac{R}{c}+\frac{\lambda T^2}{2}.
 \]
-Fuer die LDI-Bedingung \eqref{eq:LDI}, mit $u' \in L^2$:
+Für die LDI-Bedingung \eqref{eq:LDI}:
 \[
   \int_0^T \|u'(t)\|\,\log\frac{R}{d(t)}\,\mathrm{d}t
   \;\le\;
-  \|u'\|_{L^2}\,
-  \Bigl(\int_0^T \bigl(\log(R/C) + \lambda t\bigr)^2\,\mathrm{d}t
-  \Bigr)^{1/2}
+  \Bigl(\log\frac{R}{c}+\lambda T\Bigr)
+  \|u'\|_{L^1(0,T;H)}
   \;<\; \infty
 \]
-nach der H\"olderschen Ungleichung, da der rechte Faktor ein
-Polynom in~$T$ ist. Die $L^p$-Integrierbarkeit
-$\log(1/d) \in L^p([0,T])$ fuer alle $p < \infty$ folgt, da
-$\log(1/d(t)) \le \lambda t + \log(1/C)$, was fuer jedes
-endliche~$T$ in $L^\infty([0,T])$ liegt.
+weil der logarithmische Faktor auf dem endlichen Fenster beschränkt ist.
 \end{proof}
 
-\begin{remark}[Exponentielles Tracking als staerkstes STC-Regime]
+\begin{remark}[Exponentialhüllen und STC]
 \label{rem:exp-tracking-strongest}
-Lemma~\ref{lem:stc-tracking} zeigt, dass exponentielles Tracking
-das ,,einfachste'' dynamische Regime fuer LDI ist: Die Log-Distanz
-ist durch eine lineare Funktion der Zeit beschraenkt, was LDI
-automatisch fuer jede Trajektorie mit endlicher Energie
-($u' \in L^2$) macht. Dies ist das Regime, das fuer starke
-Loesungen der 3D-Navier-Stokes-Gleichungen bedingt auf globale
-Regularitaet erwartet wird (Beispiel~\ref{ex:NS}). Der
-nicht-triviale Fall tritt ein, wenn exponentielles Tracking
-versagt -- z.B.\ nahe potentiellem Blow-up -- wo die
-schwaechere STC-Bedingung (polynomieller Sublevel-Abfall) oder
-Variante~A (BV-Log-Distanz) die relevanten Werkzeuge werden.
+Lemma~\ref{lem:stc-tracking} ist bewusst mit einer unteren Hülle
+formuliert.  Eine reine Attraktionsabschätzung
+$d(t)\le C_0e^{-\lambda t}$ gibt nur eine obere Schranke für die
+Distanz zum Attraktor; sie verhindert nicht, dass $d(t)$ viel kleiner
+wird, und kann daher $\log(R/d(t))$ nicht von oben beschränken.
+Exponentielle Attraktion ist also nützliche Evidenz, aber LDI benötigt
+entweder direkte STC, BV-Kontrolle der Log-Distanz oder eine untere
+Hülle beziehungsweise eine Nicht-superexponentialitätsabschätzung.
 \end{remark}
 
-\begin{remark}[STC als realistischer Kandidat fuer Navier--Stokes]
+\begin{remark}[STC als realistischer Kandidat für Navier--Stokes]
 \label{rem:stc-realistic}
-Von den drei hinreichenden Bedingungen fuer LDI (Variante~A: BV-Log-Distanz; Variante~B: Sublevel-Zeitkontrolle; exponentielles Tracking) ist die \emph{Sublevel-Zeitkontrolle} (STC) der realistischste Kandidat fuer 3D-Navier--Stokes:
+Von den drei hinreichenden Bedingungen für LDI (Variante~A: BV-Log-Distanz; Variante~B: Sublevel-Zeitkontrolle; Variante~C: untere exponentielle Distanzhülle) ist die \emph{Sublevel-Zeitkontrolle} (STC) der realistischste Kandidat für 3D-Navier--Stokes:
 \begin{enumerate}
-\item \emph{Exponentielles Tracking} ($d(t) \leq C_0 e^{-\lambda t}$) ist das ,,einfache Regime`` -- gueltig fern von Blow-up, wo der Attraktor exponentiell anziehend ist. Nahe potentieller Singularitaeten koennen die Tracking-Raten degenerieren, was exponentielles Tracking fragil macht.
-\item \emph{STC} ($|\{d(t) \leq \varepsilon\}| \leq C_* \varepsilon^\alpha$) ist robust: Es erfordert lediglich, dass die Trajektorie auf keiner Skala zu lange nahe dem Attraktor verweilt. Zwei PDE-Mechanismen machen STC fuer Navier--Stokes plausibel:
+\item \emph{Exponentielle Attraktion} ($d(t) \leq C_0 e^{-\lambda t}$) ist das einfache dynamische Regime fern von Blow-up, aber für sich genommen kein LDI-Beweis. LDI verwendet entweder direkte STC oder eine untere Distanzhülle wie in Lemma~\ref{lem:stc-tracking}.
+\item \emph{STC} ($|\{d(t) \leq \varepsilon\}| \leq C_* \varepsilon^\alpha$) ist robust: Es erfordert lediglich, dass die Trajektorie auf keiner Skala zu lange nahe dem Attraktor verweilt. Zwei PDE-Mechanismen machen STC für Navier--Stokes plausibel:
 \begin{itemize}
-\item \emph{Dissipative Zeitskalen-Separation:} Nahe dem Attraktor ist die Niedermoddynamik langsam (kontrolliert durch den Attraktor), waehrend die Hochmoddynamik schnell ist (viskose Daempfung). Diese Separation begrenzt die Verweilzeit auf jeder Distanzskala.
+\item \emph{Dissipative Zeitskalen-Separation:} Nahe dem Attraktor ist die Niedermoddynamik langsam (kontrolliert durch den Attraktor), während die Hochmoddynamik schnell ist (viskose Dämpfung). Diese Separation begrenzt die Verweilzeit auf jeder Distanzskala.
 \item \emph{Endlich viele bestimmende Moden:} Die Anzahl der bestimmenden Moden $N_d \sim G^{2/3}$ (wobei $G$ die Grashof-Zahl ist) begrenzt die effektive Dimension der Dynamik nahe $\mathcal{A}$ und verhindert pathologische Akkumulation auf jeder Distanzskala.
 \end{itemize}
-\item \emph{BV-Log-Distanz} (Variante~A) erfordert monotone Annaeherung an den Attraktor, was generisch durch oszillierende Loesungen verletzt wird.
+\item \emph{BV-Log-Distanz} (Variante~A) erfordert monotone Annäherung an den Attraktor, was generisch durch oszillierende Lösungen verletzt wird.
 \end{enumerate}
 \end{remark}
 
@@ -930,111 +950,132 @@ Von den drei hinreichenden Bedingungen fuer LDI (Variante~A: BV-Log-Distanz; Var
 Wir illustrieren, wie der abstrakte Rahmen auf konkrete
 PDE-Situationen anwendbar ist.  In jedem Fall besitzt der Semiflow
 einen kompakten globalen Attraktor, und die Frage ist, ob TLL und
-LDI gelten.
+LDI gelten. Für dreidimensionale Navier-Stokes muss dieser bedingte
+starke Semiflow-Rahmen vom unbedingten Leray-Hopf- beziehungsweise
+Trajektorienattraktor-Rahmen unterschieden werden.
 
 % ------------------------------------------------------------------
-\subsection{3D-Navier-Stokes auf $\mathbb{T}^3$}
+\subsection{3D-Navier-Stokes auf \texorpdfstring{$\mathbb{T}^3$}{T3}}
 % ------------------------------------------------------------------
 
 \begin{example}[Navier-Stokes-Gleichungen]
 \label{ex:NS}
-Sei $H = L^2(\mathbb{T}^3;\,\mathbb{R}^3)$ (divergenzfrei),
-$\mathcal{A}$ der globale Attraktor (im Sinne von Temam~\cite{Temam1997}) mit glatter
-Antriebskraft~$f$.  Nach Temam~\cite{Temam1997}:
+Sei $H = L^2(\mathbb{T}^3;\,\mathbb{R}^3)$ (divergenzfrei) und
+$f$ glatt. Die folgende Anwendung ist bedingt darauf zu lesen, dass
+man in einem starken einwertigen Semiflow oder in einem vorab
+gewählten Trajektorienattraktor-Rahmen arbeitet, in dem dieselben
+Kompaktheits- und Selektionsobjekte fixiert sind. In der unbedingten
+Leray-Hopf-Theorie verhindert die Nicht-Eindeutigkeit, dass man einfach einen
+Temam-artigen globalen starken Attraktor als gewöhnliches
+Semiflow-Objekt aufruft. Im bedingten starken Attraktor-Ast liefert
+die Standard-Attraktortheorie:
 \begin{itemize}
   \item $\mathcal{A}$ ist kompakt in $H^1$ (also auch in $H$).
   \item Jedes $a \in \mathcal{A}$ ist $C^\infty$.
   \item Exponentielles Tracking gilt \emph{bedingt auf globale
-    Regularitaet}: Fuer starke Loesungen, die auf $[0,\infty)$
-    existieren, gilt $d(t) \le C_0\,e^{-\lambda t}$ fuer $t \ge t_0$.
-    (Fuer schwache Leray-Hopf-Loesungen ist nur algebraische
-    Attraktion in $L^2$ unbedingt bekannt.)
+    Regularität}: Für starke Lösungen, die auf $[0,\infty)$
+    existieren, gilt $d(t) \le C_0\,e^{-\lambda t}$ für $t \ge t_0$.
+    (Für schwache Leray-Hopf-Lösungen ist nur algebraische
+    Attraktion in $L^2$ unbedingt bekannt.)  Diese Attraktionsabschätzung
+    ist für sich genommen kein LDI-Beweis; sie muss mit STC,
+    BV-Log-Distanz-Kontrolle oder einer unteren Hülle kombiniert werden.
 \end{itemize}
 
-Der Attraktor hat endliche fraktale Dimension
+In Regimen, in denen die endlichdimensionalen Attraktorabschätzungen
+gelten, hat der Attraktor endliche fraktale Dimension
 $d_f(\mathcal{A}) \le c_1\,G^{2/3}(1+\log G)^{1/3}$
 (wobei $G$ die Grashof-Zahl ist;
 vgl.~\cite{ConstantinFoiasTemam1985}), hat aber generisch
-Reichweite~$0$ -- was Federers Theorem ausschliesst.
+Reichweite~$0$ -- was Federers Theorem ausschließt.
 
 \medskip\noindent
 \textbf{Status von TLL:}\; Offen.  Die Squeezing-Eigenschaft des
 Navier-Stokes-Semiflows (vgl.~\cite{FoiasManleyRosaTemam2001},
 Kapitel~14) liefert exponentielle Kontraktion hochfrequenter
-Differenzen auf dem Attraktor.  Kombiniert mit
-Man\'e-Projektor-Abschaetzungen deutet dies darauf hin, dass die
-Naechstpunkt-Projektion entlang von Trajektorien hoechstens einen
-log-Lipschitz-Modul besitzt -- ein rigoroser Beweis erfordert jedoch
-quantitative Kontrolle der Projektionsstabilitaet im
-Hochmoden-Komplement $Q_N H$.
+Differenzen auf dem Attraktor. Kombiniert mit
+Man\'e-Projektor-Abschätzungen deutet dies auf eine mögliche
+endlichmodige Route zu TLL hin, kontrolliert aber für sich genommen
+nicht die Nächstpunkt-Abbildung. Ein rigoroser Beweis erfordert
+quantitative Kontrolle der Projektionsstabilität im
+Hochmoden-Komplement $Q_N H$ und des gewählten Nächstpunkt-Zweigs.
 
 \medskip\noindent
-\textbf{Status von LDI:}\; Folgt aus exponentiellem Tracking
-auf $[t_0, T]$ fuer jedes feste $T < \infty$
-(Bemerkung~\ref{rem:STC-sources}).  Die kritische Frage betrifft das
-Blow-up-Regime $T \nearrow T^*$, wo $\|u'\| \to \infty$.
-Die BV-Schranke \eqref{eq:BV-bound} liefert Annahme~G$'$ aus
-\cite{FST-NS2026}, die globale Regularitaet ueber das
-Attraktorabstands-Argument impliziert.
+\textbf{Status von LDI:}\; Offen für das kritische 3D-Problem.
+LDI folgt auf festen Fenstern aus STC oder aus dem Unterhüllen-Kriterium
+von Lemma~\ref{lem:stc-tracking}, aber nicht aus der einseitigen
+Attraktionsabschätzung $d(t)\le C_0e^{-\lambda t}$ allein.  Die
+kritische Frage betrifft das Blow-up-Regime $T \nearrow T^*$, wo
+$\|u'\| \to \infty$ und die Distanzgeometrie degenerieren kann.
+Wenn TLL und LDI in einem nicht-zirkulären gewählten Rahmen
+bewiesen sind, liefert die BV-Schranke \eqref{eq:BV-bound}
+Annahme~G$'$ aus \cite{FST-NS2026}; das Begleitpaper nutzt diese
+Annahme dann als Teil seines bedingten Attraktorabstands-Arguments.
 
 \medskip\noindent
 \textbf{Verbindung zum Log-Dirichlet-Quotienten:}\;
-Das Begleitpaper~\cite{FST-NS2026} fuehrt den
+Das Begleitpaper~\cite{FST-NS2026} führt den
 \emph{Log-Dirichlet-Quotienten}
 $Q_{\mathrm{LD}}(t) = \|\nabla(u-v)\|^2 / \|u-v\|^2$ ein und zeigt,
-dass dessen Integrierbarkeit die Gronwall-Abschaetzung von
+dass dessen Integrierbarkeit die Gronwall-Abschätzung von
 exponentiellem zu algebraischem Wachstum transformiert. Die
-LDI-Bedingung der vorliegenden Arbeit liefert genau den Mechanismus,
-der $Q_{\mathrm{LD}}$-Integrierbarkeit sicherstellt: Die BV-Kettenregel
-kontrolliert die Komposition $\log d \circ u$, was den
-Log-Dirichlet-Quotienten von oben beschraenkt.
+LDI-Bedingung der vorliegenden Arbeit liefert den
+Selektionsvariations-Input für diese Route: Die BV-Kettenregel
+kontrolliert die relevante Log-Distanz-Variation. Eine echte
+$Q_{\mathrm{LD}}$-Schranke benötigt weiterhin die Vergleichbarkeits-
+und Energiehypothesen des Begleitframeworks.
 \end{example}
 
 % ------------------------------------------------------------------
 \subsection{Reaktions-Diffusions-Systeme}
 % ------------------------------------------------------------------
 
-\begin{example}[Reaktions-Diffusion auf beschraenkten Gebieten]
+\begin{example}[Reaktions-Diffusion auf beschränkten Gebieten]
 \label{ex:RD}
-Betrachte $\partial_t u = D\Delta u + f(u)$ auf einem beschraenkten
+Betrachte $\partial_t u = D\Delta u + f(u)$ auf einem beschränkten
 Gebiet $\Omega \subset \mathbb{R}^n$ mit Dirichlet- oder
 Neumann-Randbedingungen, wobei $D > 0$ eine Diffusionsmatrix ist und
-$f$ eine Dissipativitaetsbedingung
-$\langle f(u), u \rangle \le C - c|u|^2$ erfuellt.  Der Semiflow
+$f$ eine Dissipativitätsbedingung
+$\langle f(u), u \rangle \le C - c|u|^2$ erfüllt.  Der Semiflow
 besitzt einen kompakten globalen Attraktor
 $\mathcal{A} \subset L^2(\Omega)$ mit endlicher fraktaler
 Dimension~\cite{Temam1997}.
 
-Fuer skalare Gleichungen ($u \in \mathbb{R}$) in einer Raumdimension
-mit Gradienten-Nichtlinearitaet $f(u) = -V'(u)$ besteht der
-Attraktor aus Gleichgewichten und heteroklinen Orbits, und die
-Naechstpunkt-Projektion ist Lipschitz (tatsaechlich hat der Attraktor
-eine Lipschitz-Graph-Struktur als Inertialmannigfaltigkeit;
-vgl.~\cite{MalletParetSell1988}).  TLL und LDI gelten trivial.
+Für skalare Gleichungen ($u \in \mathbb{R}$) in einer Raumdimension
+mit Gradienten-Nichtlinearität $f(u) = -V'(u)$ besteht der
+Attraktor aus Gleichgewichten und heteroklinen Orbits.  In Regimen,
+in denen der Inertialmannigfaltigkeits-Zweig hinreichend regulär ist
+(etwa prox-regulär oder $C^{1,1}$ in einer Röhrenumgebung), ist die
+Nächstpunkt-Projektion auf diesem Zweig Lipschitz; dann folgen TLL
+und LDI im Sinne von Theorem~\ref{thm:squeezing-tll}.
+Inertialmannigfaltigkeitsresultate vom Mallet-Paret--Sell-Typ liefern
+die natürliche Testumgebung~\cite{MalletParetSell1988}.
 
-Fuer Systeme in hoeheren Dimensionen kann der Attraktor
+Für Systeme in höheren Dimensionen kann der Attraktor
 nicht-ganzzahlige fraktale Dimension und Reichweite null haben.
 Der log-Lipschitz-Rahmen bietet dann einen Weg zu BV-Selektionen,
-den Federers Theorem nicht bereitstellt.  Die Spektrallueckenbedingung
-fuer Inertialmannigfaltigkeiten ist fuer viele
-Reaktions-Diffusions-Systeme erfuellt~\cite{EdenFoiasNicolaenkoTemam1994},
-was die Attraktorgeometrie regulaerer macht als im
+den Federers Theorem nicht bereitstellt.  Die Spektrallückenbedingung
+für Inertialmannigfaltigkeiten ist für viele
+Reaktions-Diffusions-Systeme erfüllt~\cite{EdenFoiasNicolaenkoTemam1994},
+was die Attraktorgeometrie regulärer macht als im
 Navier-Stokes-Fall.
 \end{example}
 
 % ------------------------------------------------------------------
-\subsection{Gedaempfte Wellengleichungen}
+\subsection{Gedämpfte Wellengleichungen}
 % ------------------------------------------------------------------
 
-\begin{example}[Gedaempfte semilineare Wellengleichung]
+\begin{example}[Gedämpfte semilineare Wellengleichung]
 \label{ex:wave}
 Betrachte $\partial_{tt} u + \gamma\,\partial_t u = \Delta u + f(u)$
 auf $\Omega \subset \mathbb{R}^3$ mit $\gamma > 0$ und subkritischer
-Nichtlinearitaet.  Der Semiflow auf $H^1_0 \times L^2$ besitzt einen
+Nichtlinearität.  Der Semiflow auf $H^1_0 \times L^2$ besitzt einen
 kompakten globalen Attraktor mit endlicher fraktaler Dimension
 (vgl.~\cite{BabinVishik1992}).  Die exponentielle Tracking-Eigenschaft
-gilt mit Rate $\lambda = \gamma/2$ (Spektralluecke des gedaempften
-Wellenoperators; vgl.~\cite{BabinVishik1992}, Kapitel~V).
+gilt mit Rate $\lambda = \gamma/2$ (Spektrallücke des gedämpften
+Wellenoperators; vgl.~\cite{BabinVishik1992}, Kapitel~V).  Für LDI
+ist diese Attraktionsabschätzung weiterhin nur ein dynamischer Input;
+sie muss wie oben mit STC oder einer unteren Distanzhülle kombiniert
+werden.
 
 Die Attraktorgeometrie liegt zwischen Reaktions-Diffusion
 (wo Inertialmannigfaltigkeiten oft existieren) und Navier-Stokes
@@ -1052,30 +1093,31 @@ anwendbar ist, mit TLL als einzigem geometrischen Input.
 \subsection{Die neue mathematische Schnittstelle}
 
 Der zentrale Beitrag dieser Arbeit ist die Identifikation der
-\emph{kritischen Regularitaetsschnittstelle} fuer BV-Selektionen
+\emph{kritischen Regularitätsschnittstelle} für BV-Selektionen
 auf fraktalen Attraktoren.  Die Schnittstelle wird durch eine
 einzige Frage charakterisiert:
 
 \begin{center}
 \fbox{\parbox{0.85\textwidth}{%
 \textbf{Kernfrage.}\;
-Erfuellt fuer einen dissipativen Semiflow mit kompaktem Attraktor
-$\mathcal{A} \subset H$ die Naechstpunkt-Projektion die
+Erfüllt für einen dissipativen Semiflow mit kompaktem Attraktor
+$\mathcal{A} \subset H$ die Nächstpunkt-Projektion die
 trajektorienweise log-Lipschitz-Kontrolle \eqref{eq:TLL}?
 }}
 \end{center}
 
 \noindent
-Dies ist eine Frage ueber die \emph{Regularitaet des Attraktors
-aus Sicht der Trajektorie}, nicht ueber die globale Geometrie
+Dies ist eine Frage über die \emph{Regularität des Attraktors
+aus Sicht der Trajektorie}, nicht über die globale Geometrie
 von~$\mathcal{A}$.  Die Unterscheidung ist entscheidend: Globale
 geometrische Bedingungen (positive Reichweite, Inertialmannigfaltigkeit)
-erzwingen Struktur auf dem \emph{gesamten} Attraktor, waehrend TLL
-Regularitaet nur in Richtung der dynamischen Annaeherung erfordert.
+erzwingen Struktur auf dem \emph{gesamten} Attraktor, während TLL
+Regularität nur in Richtung der dynamischen Annäherung erfordert.
 
-\subsection{Bezug zu bestehenden Regularitaetstheorien}
+\subsection{Bezug zu bestehenden Regularitätstheorien}
 
 \begin{center}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lllll}
 \hline
 \textbf{Bedingung} & \textbf{Projektion} & \textbf{Komposition}
@@ -1086,7 +1128,7 @@ Positive Reichweite $> 0$
   & AC $\Rightarrow$ AC
   & Nein
   & Federer~\cite{Federer1959} \\
-Prox-regulaer
+Prox-regulär
   & lokal Lipschitz
   & AC $\Rightarrow$ AC (lokal)
   & Nein
@@ -1107,63 +1149,66 @@ Man\'e-Projektor
   & \textbf{Ja}
   & \textbf{Diese Arbeit} \\
 \hline
-\end{tabular}
+\end{tabular}%
+}
 \end{center}
 
 \noindent
 Der TLL+LDI-Rahmen ist der einzige Eintrag, der gleichzeitig
-(i)~fraktale Geometrie beruecksichtigt (nicht-ganzzahlige Dimension,
-Reichweite~$0$), (ii)~BV-Regularitaet liefert (hinreichend fuer
+(i)~fraktale Geometrie berücksichtigt (nicht-ganzzahlige Dimension,
+Reichweite~$0$), (ii)~BV-Regularität liefert (hinreichend für
 Gronwall-artige Argumente) und (iii)~als Trajektorien-Bedingung
-formuliert ist (unabhaengig von der globalen Attraktorstruktur).
+formuliert ist (unabhängig von der globalen Attraktorstruktur).
 
-\subsection{Einschraenkungen}
+\subsection{Einschränkungen}
 
 \begin{itemize}
-  \item \textbf{Selektionsabhaengigkeit.}\;
-    Die TLL-Bedingung ist fuer eine \emph{gegebene} messbare
-    Naechstpunkt-Selektion~$P$ formuliert.  Auf nichtkonvexen
-    kompakten Mengen ist die Naechstpunkt-Abbildung generisch
-    mehrwertig, und verschiedene Selektionen koennen unterschiedliche
-    Regularitaet haben.  Der Rahmen erfordert die Existenz
-    \emph{mindestens einer} Selektion, die TLL erfuellt; er
+  \item \textbf{Selektionsabhängigkeit.}\;
+    Die TLL-Bedingung ist für eine \emph{gegebene} messbare
+    Nächstpunkt-Selektion~$P$ formuliert.  Auf nichtkonvexen
+    kompakten Mengen ist die Nächstpunkt-Abbildung generisch
+    mehrwertig, und verschiedene Selektionen können unterschiedliche
+    Regularität haben.  Der Rahmen erfordert die Existenz
+    \emph{mindestens einer} Selektion, die TLL erfüllt; er
     behauptet nicht, dass jede messbare Selektion dies tut.
-    In der Praxis ist die ,,beste'' Selektion (z.B.\ diejenige,
-    die die metrische Ableitung minimiert) der natuerliche Kandidat.
-  \item \textbf{TLL ist offen fuer 3D-NS.}\;
-    Die Squeezing-Eigenschaft und Man\'e-Projektor-Abschaetzungen
-    deuten auf log-Lipschitz-Stabilitaet der Projektion hin, aber ein
-    rigoroser Beweis erfordert quantitative Schranken fuer das
-    Hochmoden-Projektionskomplement, die derzeit nicht verfuegbar sind.
+    In der Praxis sind vorregistrierte tie-gebrochene Selektionen
+    (z.B.\ minimale Enstrophie, lexikographische Endlich-Moden-Ordnung
+    oder eine regularisierte Metrische-Ableitungs-Regel) die natürlichen
+    Kandidaten.
+  \item \textbf{TLL ist offen für 3D-NS.}\;
+    Die Squeezing-Eigenschaft und Man\'e-Projektor-Abschätzungen
+    deuten auf log-Lipschitz-Stabilität der Projektion hin, aber ein
+    rigoroser Beweis erfordert quantitative Schranken für das
+    Hochmoden-Projektionskomplement, die derzeit nicht verfügbar sind.
   \item \textbf{LDI ist nur unter Blow-up nicht-trivial.}\;
-    Fuer glatte Loesungen auf kompakten Zeitintervallen gilt LDI
+    Für glatte Lösungen auf kompakten Zeitintervallen gilt LDI
     automatisch.  Die Bedingung wird erst im Grenzfall
     $T \nearrow T^*$ (Blow-up-Zeit) kritisch, wo $\|u'\| \to \infty$.
   \item \textbf{BV, nicht AC.}\;
-    Der Rahmen liefert BV-Regularitaet, die fuer
-    Stieltjes-Integral-basierte Gronwall-Argumente genuegt, aber nicht
-    fuer punktweise Differentialungleichungen.  Ein Upgrade von BV auf
-    AC wuerde Lipschitz-Projektion (positive Reichweite) erfordern --
+    Der Rahmen liefert BV-Regularität, die für
+    Stieltjes-Integral-basierte Gronwall-Argumente genügt, aber nicht
+    für punktweise Differentialungleichungen.  Ein Upgrade von BV auf
+    AC würde Lipschitz-Projektion (positive Reichweite) erfordern --
     genau die Bedingung, die wir zu vermeiden suchen.
-  \item \textbf{BV-Schranke haengt von $\|u'\|$ ab.}\;
+  \item \textbf{BV-Schranke hängt von $\|u'\|$ ab.}\;
     Die Schranke \eqref{eq:BV-bound} lautet
     $\Var(v) \le C_{\mathrm{TLL}} \int_0^T \|u'\|\,\Omega\,dt$.
-    Fuer Navier--Stokes haengt $\|u'\|$ von der Loesungsnorm ab,
+    Für Navier--Stokes hängt $\|u'\|$ von der Lösungsnorm ab,
     und nahe einem potentiellen Blow-up ($T \nearrow T^*$) gilt
     $\|u'\| \to \infty$. Der Gronwall-Abschluss erfordert, dass die
     BV-Schranke ,,absorbiert'' werden kann, bevor $\Var(v)$ divergiert.
-    Die Details dieser Absorption haengen vom
-    Begleitpaper~\cite{FST-NS2026} ab und liegen ausserhalb des
+    Die Details dieser Absorption hängen vom
+    Begleitpaper~\cite{FST-NS2026} ab und liegen außerhalb des
     Rahmens dieser Arbeit.
 \end{itemize}
 
 
 \subsection*{Zentrales offenes Problem}
 \begin{quote}
-\textbf{Selektionsregularitaetsproblem.}
-Sei $u(t)$ eine Leray--Hopf-Loesung der 3D-Navier--Stokes-Gleichungen und $\mathcal{A}$ der globale Attraktor. Erfuellt die Naechstpunkt-Projektion $P_\mathcal{A}$ die TLL-Bedingung entlang $u(t)$? Aequivalent: Erlaubt die Attraktorgeometrie BV-regulaere Selektionen?
+\textbf{Selektionsregularitätsproblem.}
+In einem starken Navier--Stokes-Semiflow oder in einer vorab gewählten Trajektorienattraktor-Formulierung für Leray--Hopf-Lösungen: Erfüllt die Nächstpunkt-Projektion oder die gewählte Nächstpunkt-Korrespondenz $P_\mathcal{A}$ die TLL-Bedingung entlang $u(t)$? Äquivalent: Erlaubt die Attraktorgeometrie nicht-zirkuläre BV-reguläre Selektionen?
 
-Eine bejahende Antwort, kombiniert mit der BV-Kettenregel dieser Arbeit, wuerde Assumption~G der Begleitarbeit \cite{FST-NS2026} und damit globale Regularitaet liefern.
+Eine bejahende Antwort, kombiniert mit der BV-Kettenregel dieser Arbeit, würde Assumption~$G'$ für das Begleitframework~\cite{FST-NS2026} liefern. Jeder Schluss auf globale Regularität hängt weiterhin zusätzlich von Condition~D und den übrigen Hypothesen dieses bedingten Frameworks ab.
 \end{quote}
 
 
@@ -1171,103 +1216,118 @@ Eine bejahende Antwort, kombiniert mit der BV-Kettenregel dieser Arbeit, wuerde 
 \section{Schlussfolgerung}
 % ==================================================================
 
-Wir haben einen Regularitaetsrahmen fuer Naechstpunkt-Projektionen
-auf kompakte Attraktoren eingefuehrt, der die kritische Luecke
-zwischen H\"older (unzureichend fuer BV) und Lipschitz (unvereinbar
+Wir haben einen Regularitätsrahmen für Nächstpunkt-Projektionen
+auf kompakte Attraktoren eingeführt, der die kritische Lücke
+zwischen H\"older (unzureichend für BV) und Lipschitz (unvereinbar
 mit fraktaler Geometrie) besetzt.  Die trajektorienweise
 log-Lipschitz-Bedingung (TLL) kontrolliert den Projektionsmodul auf
 der Attraktorabstandsskala, und die
 Log-Distanz-Integrierbarkeitsbedingung (LDI) stellt sicher, dass die
 resultierenden BV-Summen konvergieren.
 
-Der Rahmen reduziert bedingte Regularitaetskriterien fuer dissipative
-PDEs -- einschliesslich der 3D-Navier-Stokes-Gleichungen -- auf eine
-einzige geometrisch-dynamische Frage: Hat die Naechstpunkt-Projektion
-hoechstens logarithmisches Blow-up entlang dissipativer Trajektorien?
-Diese Frage ist unabhaengig von der spezifischen PDE und haengt nur
-vom Zusammenspiel zwischen Attraktorgeometrie und den
-Kontraktionseigenschaften des Semiflows ab.
+Der Rahmen reduziert bedingte Regularitätskriterien für dissipative
+PDEs -- einschließlich starker oder vorab gewählter
+dreidimensionaler Navier-Stokes-Formulierungen -- auf eine
+geometrisch-dynamische Frage: Hat eine feste Nächstpunkt-Selektion
+höchstens logarithmisches Blow-up entlang dissipativer Trajektorien?
+Diese Frage ersetzt nicht die PDE-spezifischen Kompaktheits-,
+Selektions- und Grenzübergangshypothesen; sie isoliert den
+geometrischen Teil dieser Last.
 
 
 % ==================================================================
-\section{Zeitgemittelte Selektion und BV-Regularitaet (spekulativ)}
+\section{Zeitgemittelte Selektion und BV-Regularität (spekulativ)}
 \label{sec:time-averaged}
 % ==================================================================
 
 \emph{Dieser Abschnitt ist spekulativ: Er skizziert einen alternativen Ansatz,
 dessen Kernschritte offene Vermutungen bleiben. Die Resultate der
-Abschnitte~\ref{sec:main}--\ref{sec:applications} haengen nicht von
+Abschnitte~\ref{sec:main}--\ref{sec:applications} hängen nicht von
 diesem Material ab.}
 
 \medskip
 
-Die zentrale Obstruktion zur Schliessung der Regularitaetsluecke ist
-die BV-Kontrolle der Naechstpunkt-Selektion
+Die bevorzugte Transferarchitektur ist inzwischen der endlichmodige
+Skeleton-Grenzübergang mit vorregistrierten regularisierten Selektoren
+(Abschnitt~\ref{sec:zookeeper-ldi-transfer}). Die folgende
+Zeitmittelungskonstruktion bleibt nur als ergänzende Selektionsheuristik
+erhalten.
+
+\medskip
+
+Die zentrale Obstruktion zur Schließung der Regularitätslücke ist
+die BV-Kontrolle der Nächstpunkt-Selektion
 $v(t) \in \arg\min_{a \in \mathcal{A}} \|u(t) - a\|$.  Wir schlagen
 vor, die punktweise Selektion durch eine \emph{zeitgemittelte}
-Selektion zu ersetzen, die automatisch BV-regulaer ist.
+Selektion zu ersetzen, die nach zusätzlichem geometrischem Input
+besseres BV-Verhalten haben kann.
 
 \begin{definition}[Moreau--Yosida-regularisierte Selektion]
 \label{def:my-selection}
-Fuer $\varepsilon > 0$ definiere die \emph{zeitgemittelte
-Naechstpunkt-Selektion}
+Für $\varepsilon > 0$ definiere die \emph{zeitgemittelte
+Minimierermenge}
 \[
-  v_\varepsilon(t)
+  \Pi_\varepsilon(t)
   \;:=\;
   \arg\min_{a \in \mathcal{A}}
   \int_{t-\varepsilon}^{t+\varepsilon}
   \|u(s) - a\|^2 \, ds.
 \]
+Jedes gewählte Element $v_\varepsilon(t)\in\Pi_\varepsilon(t)$ muss
+durch einen vorregistrierten messbaren Tie-Breaker ausgewählt werden.
 \end{definition}
 
 \begin{conjecture}[Eigenschaften von $v_\varepsilon$]
 \label{conj:bv-regularity}
 Unter den Standardannahmen (endlich-dimensionaler Attraktor,
-Energiedissipationsschranke) wird erwartet, dass die regularisierte
-Selektion~$v_\varepsilon$ folgende Eigenschaften erfuellt:
+Energiedissipationsschranke) ist eine vorregistrierte regularisierte
+Selektion $v_\varepsilon(t)\in\Pi_\varepsilon(t)$ ein Kandidat für die
+folgenden Eigenschaften:
 \begin{enumerate}[label=(\roman*)]
-\item \emph{Eindeutigkeit:}  $v_\varepsilon(t)$ ist f.ue.\ eindeutig
-  (strikte Konvexitaet des zeitintegrierten Kostenfunktionals auf~$H$;
-  fuer die Minimierung ueber das nicht-konvexe Kompaktum~$\mathcal{A}$
-  erfordert Eindeutigkeit ein separates Argument ueber
-  Hausdorff-Stabilitaet der Minimierer-Menge, das offen bleibt).
-\item \emph{BV-Schranke:}
+\item \emph{Eindeutigkeit:}  $v_\varepsilon(t)$ ist f.ü.\ eindeutig
+  (strikte Konvexität des zeitintegrierten Kostenfunktionals auf~$H$;
+  für die Minimierung über das nicht-konvexe Kompaktum~$\mathcal{A}$
+  erfordert Eindeutigkeit ein separates Argument über
+  Hausdorff-Stabilität der Minimierer-Menge, das offen bleibt).
+\item \emph{BV-Schranke bei festem \(\varepsilon\):}
   $\Var(v_\varepsilon;\,[0,T])
    \;\le\;
    C_\varepsilon
    \int_0^T \|\partial_t u(s)\|\,ds
    \;<\; \infty$,
-  wobei $C_\varepsilon = T/(2\varepsilon) \to \infty$ fuer
-  $\varepsilon \to 0$. Eine \emph{uniforme} BV-Schranke (unabhaengig
-  von~$\varepsilon$) wuerde zusaetzlichen geometrischen Input erfordern;
-  siehe Bemerkung~\ref{rem:epsilon-limit}.
+  für einen Zweig, für den die Sensitivitätsabschätzung unten gilt,
+  wobei $C_\varepsilon$ typischerweise für $\varepsilon \to 0$
+  divergiert. Eine \emph{uniforme} BV-Schranke (unabhängig
+  von~$\varepsilon$) ist eine zusätzliche geometrische Hypothese, keine
+  Konsequenz der Definition; siehe Bemerkung~\ref{rem:epsilon-limit}.
 \item \emph{TLL-Vererbung:}  Falls~$u$ TLL mit Konstante
-  $C_{\mathrm{TLL}}$ erfuellt, wird erwartet, dass $v_\varepsilon$ TLL mit
-  Konstante $C_{\mathrm{TLL}} + O(\varepsilon)$ erfuellt. Ein rigoroser
+  $C_{\mathrm{TLL}}$ erfüllt, wird erwartet, dass $v_\varepsilon$ TLL mit
+  Konstante $C_{\mathrm{TLL}} + O(\varepsilon)$ erfüllt. Ein rigoroser
   Beweis erfordert Kontrolle der Diskrepanz zwischen punktweisem und
   gemitteltem Abstand, was offen bleibt.
-\item \emph{Gronwall-Kompatibilitaet:}  Die Gronwall-Abschaetzungen
-  des Hauptresultats (Satz~\ref{thm:BV-chain}) bleiben voraussichtlich fuer
-  $v_\varepsilon$ gueltig mit einem zusaetzlichen Fehlerterm
+\item \emph{Gronwall-Kompatibilität:}  Die Gronwall-Abschätzungen
+  des Hauptresultats (Satz~\ref{thm:BV-chain}) bleiben voraussichtlich für
+  $v_\varepsilon$ gültig mit einem zusätzlichen Fehlerterm
   $O(\varepsilon\,\|\partial_t u\|_{L^2})$. Eine rigorose Formulierung
   erfordert die Spezifikation des relativen Entropiefunktionals~$H$ und
-  der Konstanten $\alpha, \beta, \gamma$; dies wird auf zukuenftige Arbeit verschoben.
+  der Konstanten $\alpha, \beta, \gamma$; dies wird auf zukünftige Arbeit verschoben.
 \end{enumerate}
 \end{conjecture}
 
-\begin{proof}[Partielle Begruendung]
+\begin{remark}[Partielle Heuristik]
 \emph{(i)}\; Die Abbildung
 $a \mapsto \int_{t-\varepsilon}^{t+\varepsilon} \|u(s)-a\|^2\,ds$
-ist strikt konvex auf~$H$. Die Minimierung erfolgt jedoch ueber das
+ist strikt konvex auf~$H$. Die Minimierung erfolgt jedoch über das
 kompakte, im Allgemeinen \emph{nicht-konvexe} $\mathcal{A}$.
-Eindeutigkeit des Minimierers ueber einer nicht-konvexen Menge erfordert
-ein separates Argument (z.B.\ ueber Hausdorff-Stabilitaet der
-Minimierer-Menge oder ein generisches Transversalitaetsargument).
-Dieser Schritt bleibt fuer allgemeine Attraktoren offen; er gilt,
+Eindeutigkeit des Minimierers über einer nicht-konvexen Menge erfordert
+ein separates Argument (z.B.\ über Hausdorff-Stabilität der
+Minimierer-Menge oder ein generisches Transversalitätsargument).
+Dieser Schritt bleibt für allgemeine Attraktoren offen; er gilt,
 wenn~$\mathcal{A}$ eine Lipschitz-Mannigfaltigkeit ist.
 
-\emph{(ii)}\; Die Erste-Variations-Bedingung fuer den Minimierer
-liefert
+\emph{(ii)}\; Falls ein gewählter Zweig eindeutig und unter
+Zeitverschiebungen lokal stabil ist, legt die übliche
+First-Variation-Sensitivität die Abschätzung
 \[
   \|v_\varepsilon(t+h) - v_\varepsilon(t)\|
   \;\le\;
@@ -1279,8 +1339,11 @@ liefert
   \int_{t-\varepsilon}^{t+\varepsilon}
   \|\partial_t u(s)\|\,ds.
 \]
-Integration ueber $t \in [0,T]$ und Fubini ergibt die BV-Schranke
-mit $C_\varepsilon = T/(2\varepsilon)$.
+Integration über $t \in [0,T]$ und Fubini würde eine
+BV-Schranke bei festem \(\varepsilon\) mit einer Konstante der
+Größenordnung $\varepsilon^{-1}$ ergeben. Dies ist kein Beweis für
+beliebige nicht-konvexe Attraktoren; es notiert nur die Abschätzung,
+die für einen stabil gewählten Zweig zu rechtfertigen wäre.
 
 \emph{(iii)}\; Die TLL-Konstante verschlechtert sich um das
 Zeitmittelungsfenster:
@@ -1294,41 +1357,41 @@ Zeitmittelungsfenster:
 wobei der zweite Term aus der Diskrepanz zwischen punktweisem und
 gemitteltem Abstand entsteht.
 
-\emph{(iv)}\; Die Gronwall-Abschaetzung nimmt einen zusaetzlichen
+\emph{(iv)}\; Die Gronwall-Abschätzung nimmt einen zusätzlichen
 Forcingterm aus der Zeitmittelung auf:
 \[
   \frac{d}{dt} H(u \mid v_\varepsilon)
   \;\le\;
   -\alpha\,H + \beta + \gamma\,\varepsilon,
 \]
-wobei $\gamma$ von $\|\partial_t u\|$ abhaengt, aber nicht von~$H$.
-Das Standard-Gronwall-Lemma ist anwendbar; der zusaetzliche
+wobei $\gamma$ von $\|\partial_t u\|$ abhängt, aber nicht von~$H$.
+Das Standard-Gronwall-Lemma ist anwendbar; der zusätzliche
 $\gamma\varepsilon$-Term verschwindet im Limes
 $\varepsilon \to 0$.
-\end{proof}
+\end{remark}
 
-\begin{remark}[Grenzuebergang $\varepsilon \to 0$]
+\begin{remark}[Grenzübergang \texorpdfstring{$\varepsilon \to 0$}{epsilon to 0}]
 \label{rem:epsilon-limit}
-Die zentrale Frage ist, ob die BV-Schranke den Grenzuebergang
-$\varepsilon \to 0$ ueberlebt:
+Die zentrale Frage ist, ob die BV-Schranke den Grenzübergang
+$\varepsilon \to 0$ überlebt:
 \begin{itemize}
 \item Falls\; $\sup_\varepsilon \Var(v_\varepsilon;\,[0,T]) < \infty$,
   konvergiert eine Teilfolge $v_{\varepsilon_k}$ in~$L^1$ gegen eine
-  BV-Selektion~$v_0$, die die \emph{kanonische} Naechstpunkt-Selektion
+  BV-Selektion~$v_0$, die die \emph{kanonische} Nächstpunkt-Selektion
   ist.
-\item Die gleichmaessige BV-Schranke gilt genau dann, wenn der
-  Attraktor $\mathcal{A}$ eine ,,zeitgemittelte Reichweite''
-  $\mathrm{reach}_{\mathrm{avg}}(\mathcal{A}) > 0$ besitzt, die
-  echt schwaecher ist als positive Reichweite: Sie erlaubt isolierte
-  Spitzen vom Mass null.
+\item Eine gleichmäßige BV-Schranke würde einer neuen geometrischen
+  Bedingung entsprechen, die man ,,zeitgemittelte Reichweite'' nennen
+  kann. Der Ausdruck ist hier nur ein Name für die fehlende
+  Stabilitätshypothese; es wird keine Äquivalenz zu einem bekannten
+  Reichweitenbegriff behauptet.
 \end{itemize}
-Dies ist die praezise Formulierung der ,,BV-Regularitaetsluecke'' und
+Dies ist die präzise Formulierung der ,,BV-Regularitätslücke'' und
 verbindet sich mit:
 \begin{itemize}
 \item \emph{Moreau--Yosida-Regularisierung} in der konvexen Analysis
   (die zeitgemittelten Kosten sind die Moreau-Enveloppe),
 \item \emph{Viskoser Selektion} in Gradientensystemen (die Zeitmittelung
-  wirkt als kuenstliche Viskositaet),
+  wirkt als künstliche Viskosität),
 \item \emph{Thermodynamischer Selektion} im Dark-Energy-Begleitpaper
   (die IR-Mittelung von~$\Phi[\rho]$).
 \end{itemize}
@@ -1336,46 +1399,63 @@ verbindet sich mit:
 
 
 % ==================================================================
-\section{Post-Zookeeper-Transfer: Vom Proof of Life zu gedaempften 3D-Navier--Stokes}
+\section{Post-Zookeeper-Transfer: Vom Proof of Life zu gedämpften 3D-Navier--Stokes}
 \label{sec:zookeeper-ldi-transfer}
 
-Die Zookeeper-Normalform macht dieses Paper zum natuerlichen Testtraeger
+Die Zookeeper-Normalform macht dieses Paper zum natürlichen Testträger
 des Navier--Stokes-Asts.  Hier sind Defekt, Gap und Selektionsmechanismus
 bereits explizit:
 
-In der aktualisierten CORE-Lesart heisst das: RFEP v1.8 importiert eine
+In der aktualisierten CORE-Lesart heißt das: RFEP v1.8 importiert eine
 Normalform-Checkliste aus dem Zookeeper-Abschluss von Riemann
 $C^{(2)}$/MS2.  Das ist noch kein Beweis der dreidimensionalen
-Navier--Stokes-Regularitaet; der Transfer von gedaempften zu klassischen
+Navier--Stokes-Regularität; der Transfer von gedämpften zu klassischen
 Systemen bleibt die astspezifische Pflicht.
-\begin{description}
+\begin{description}[style=nextline,leftmargin=0pt,labelsep=0pt]
   \item[Operator/Form.] Die Abstand-zum-Attraktor-Abbildung und ihre
   messbaren nearest-point-Selektionen.
   \item[Defekt.] Das Log-Distanz-Integral, die Projektionsvariation und
   der BV-Defekt.
   \item[Approximation.] Lorenz $\to$ Kuramoto--Sivashinsky $\to$
-  Reaktions-Diffusion $\to$ gedaempfte 3D-Navier--Stokes $\to$
+  Reaktions-Diffusion $\to$ gedämpfte 3D-Navier--Stokes $\to$
   klassische 3D-Navier--Stokes.
-  \item[Gap.] TLL, Squeezing, exponentielles Tracking und Damping-Gaps.
-  \item[Grenzuebergang.] Von endlichdimensionalen Attraktoren zu
-  PDE-Attraktoren und von gedaempften/hyperviskosen Systemen zur
-  klassischen Gleichung mit $\beta=1$.
+  \item[Gap.] TLL, Squeezing, untere Distanzhüllen und Damping-Gaps.
+  \item[Grenzübergang.] Von endlichdimensionalen Attraktoren zu
+  PDE-Attraktoren und von gedämpften\slash hyperviskosen Systemen
+  zur klassischen Gleichung mit $\beta=1$.
 \end{description}
 
-Das unmittelbare naechste Ziel ist daher nicht das volle
-Millenniumsproblem.  Es ist ein Transfersatz fuer gedaempfte
+Das unmittelbare nächste Ziel ist daher nicht das volle
+Millenniumsproblem.  Es ist ein Transfersatz für gedämpfte
 3D-Navier--Stokes-Gleichungen: In einem Parameterbereich, in dem die
 Literatur zu dynamischen Systemen einen globalen Attraktor und verbesserte
-Regularitaet liefert, soll Daempfung plus Attraktorregularitaet
-TLL/LDI und damit BV-Selektion implizieren.  Die bestehenden Lorenz- und
-Kuramoto--Sivashinsky-Tests werden dadurch zu den ersten zwei Stufen einer
-groesseren Leiter, nicht zu isolierter numerischer Evidenz.
+Regularität liefert, soll Dämpfung zusammen mit unabhängig
+kontrollierter Projektionszweig-Geometrie und LDI eine BV-Selektion
+implizieren.  Die bestehenden Lorenz- und Kuramoto--Sivashinsky-Tests
+werden dadurch zu den ersten zwei Stufen einer größeren Leiter, nicht zu
+isolierter numerischer Evidenz.
+
+Ein nicht-zirkulärer Transfer sollte daher als
+Skeleton-Kompaktheitsproblem formuliert werden. Für ein regularisiertes
+System setze \(A_{\delta,N}=P_N\mathcal{A}_\delta\) und definiere einen
+vorregistrierten Selektor
+\[
+v_{\delta,N,\eta}(t)\in\arg\min_{a\in A_{\delta,N}}
+\frac12\|P_Nu_\delta(t)-a\|^2+\eta R_N(a),
+\]
+wobei \(R_N\) vor Beobachtung des Erfolgs fixiert wird, etwa als
+endlichmodige lexikographische Ordnung, minimale Enstrophie oder
+minimale metrische Ableitung. Der benötigte Satz lautet nicht:
+gedämpfter Erfolg impliziert klassischen Erfolg. Er lautet:
+Skeleton-Konvergenz, uniforme Skeleton-TLL, uniforme
+Tie-/Sublevel-Zeitkontrolle und uniforme BV-Schranken implizieren eine
+BV-Grenzselektion für das klassische Problem.
 
 \section{Offene Richtungen}
 \label{sec:open-directions}
 % ==================================================================
 
-Der TLL+LDI-Rahmen eroeffnet mehrere konkrete Forschungsrichtungen,
+Der TLL+LDI-Rahmen eröffnet mehrere konkrete Forschungsrichtungen,
 die thematisch gruppiert sind.
 
 % ------------------------------------------------------------------
@@ -1386,20 +1466,22 @@ die thematisch gruppiert sind.
 \label{rem:pilot-verification}
 Drei Kandidatensysteme zur Pilotverifikation der TLL- und LDI-Bedingungen:
 \begin{enumerate}
-\item \emph{Reaktions-Diffusion (2D):} Glatte Nichtlinearitaet, gut verstandene Attraktoren. TLL und LDI gelten erwartungsgemaess aufgrund der parabolischen Glaettung.
-\item \emph{Hyperviskose NSE ($(-\Delta)^\beta$, $\beta \geq 5/4$):} Inertialmannigfaltigkeiten existieren (Mallet-Paret--Sell, 1988), was TLL garantiert. Dient als Brueckensystem zwischen dem handhabbaren Reaktions-Diffusions-Fall und den vollen NS ($\beta = 1$).
-\item \emph{Kuramoto--Sivashinsky (1D):} Deterministisches Chaos ohne Singularitaeten. Der Attraktor ist endlich-dimensional und glatt, was TLL+LDI durch direkte Berechnung verifizierbar macht.
+\item \emph{Reaktions-Diffusion (2D):} Glatte Nichtlinearität, gut verstandene Attraktoren. TLL und LDI gelten erwartungsgemäß aufgrund der parabolischen Glättung.
+\item \emph{Hyperviskose NSE ($(-\Delta)^\beta$, $\beta \geq 5/4$):} Kandidatisches Brückensystem, in dem Inertialmannigfaltigkeits- und Glättungsabschätzungen die zusätzliche Röhrenzweig-Kontrolle für TLL liefern könnten. Dies ist eine Testroute, keine automatische TLL-Garantie.
+\item \emph{Kuramoto--Sivashinsky (1D):} Deterministisches Chaos ohne Singularitäten. Der Attraktor ist endlich-dimensional und glatt, was TLL+LDI durch direkte Berechnung verifizierbar macht.
 \end{enumerate}
 \end{remark}
 
 \begin{remark}[Proof of Life: TLL und LDI auf dem Lorenz-Attraktor]
 \label{rem:tll-ldi-lorenz}
-Wir verifizieren TLL und LDI numerisch auf dem Lorenz-Attraktor ($\sigma = 10$, $\rho = 28$, $\beta = 8/3$), einem 3D-chaotischen System mit fraktaler Attraktordimension $\approx 2.06$. Der Attraktor wird durch $50\,000$ Trajektorienpunkte approximiert; eine Testtrajektorie wird mit Stoerung $(2, 2, 2)$ von einem Attraktorelement aus initialisiert und fuer $T = 100$ Zeiteinheiten integriert.
+Wir verifizieren TLL und LDI numerisch auf dem Lorenz-Attraktor ($\sigma = 10$, $\rho = 28$, $\beta = 8/3$), einem 3D-chaotischen System mit fraktaler Attraktordimension $\approx 2.06$. Der Attraktor wird durch $50\,000$ Trajektorienpunkte approximiert; eine Testtrajektorie wird mit Störung $(2, 2, 2)$ von einem Attraktorelement aus initialisiert und für $T = 100$ Zeiteinheiten integriert.
 
-\emph{Ergebnisse} (alle fuenf Diagnosen bestanden):
+\emph{Ergebnisse} (die vier beweisrelevanten Diagnosen bestanden; die
+Exponentialzeile ist eine separate Annäherungsraten-Diagnose):
 
 \begin{center}
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{l|l|l}
 \textbf{Test} & \textbf{Ergebnis} & \textbf{Detail} \\
 \hline
@@ -1407,24 +1489,25 @@ TLL (Definition~\ref{def:TLL}) & PASS & $C_{\mathrm{TLL}}(95\%) = 0{,}19$, max $
 LDI (Definition~\ref{def:LDI}) & PASS & $\int \|u'\| \Omega\,\mathrm{d}t = 6{,}47 \times 10^4$ (endlich) \\
 BV-Kettenregel (Theorem~\ref{thm:BV-chain}) & PASS & $\mathrm{Var}(v) / (C_{\mathrm{TLL}} \cdot \mathrm{LDI}) = 0{,}52$ \\
 STC (Definition~\ref{def:STC}) & PASS & $\alpha = 1{,}11 > 0$ \\
-Exponentielle Annaeherung (Lemma~\ref{lem:stc-tracking}) & PASS & $\lambda = 0{,}064 > 0$
-\end{tabular}
+Exponentielle Annäherungsrate & DIAGNOSTIK & $\lambda = 0{,}064 > 0$; nicht als LDI-Beweis verwendet
+\end{tabular}%
+}
 \end{center}
 
-Wesentliche Beobachtungen: (i) Die TLL-Konstante ist bemerkenswert klein ($C_{\mathrm{TLL}} \approx 0{,}19$ am 95. Perzentil), was bestaetigt, dass die Naechste-Punkt-Projektion entlang chaotischer Trajektorien gutartig ist; (ii) das LDI/L$^1$-Verhaeltnis betraegt $6{,}86$, was zeigt, dass das Log-Distanz-Gewicht das Integral um weniger als eine Groessenordnung vergroessert; (iii) die BV-Kettenregelschranke wird mit Spielraum erfuellt (Verhaeltnis $0{,}52 < 1$); (iv) Sublevel-Time-Control gilt mit Exponent $\alpha \approx 1{,}1$, konsistent mit der erwarteten Potenzgesetz-Annaeherung an den Attraktor.
+Wesentliche Beobachtungen: (i) Die TLL-Konstante ist bemerkenswert klein ($C_{\mathrm{TLL}} \approx 0{,}19$ am 95. Perzentil), was bestätigt, dass die Nächste-Punkt-Projektion entlang chaotischer Trajektorien gutartig ist; (ii) das LDI/L$^1$-Verhältnis beträgt $6{,}86$, was zeigt, dass das Log-Distanz-Gewicht das Integral um weniger als eine Größenordnung vergrößert; (iii) die BV-Kettenregelschranke wird mit Spielraum erfüllt (Verhältnis $0{,}52 < 1$); (iv) Sublevel-Time-Control gilt mit Exponent $\alpha \approx 1{,}1$, konsistent mit der erwarteten Potenzgesetz-Annäherung an den Attraktor.
 
 \emph{Limitierungen des numerischen Tests:}
 Die Attraktor-Approximation verwendet $50\,000$ Trajektorienpunkte,
-was $d(t)$ relativ zum wahren Attraktor systematisch ueberschaetzt
-(was TLL-Konstanten kleiner erscheinen laesst). Zudem handelt es
+was $d(t)$ relativ zum wahren Attraktor systematisch überschätzt
+(was TLL-Konstanten kleiner erscheinen lässt). Zudem handelt es
 sich um einen einzelnen Test bei den klassischen Lorenz-Parametern
 ($\sigma=10$, $\rho=28$, $\beta=8/3$) in $\mathbb{R}^3$ -- einer
 endlichdimensionalen ODE, keiner unendlichdimensionalen PDE.
-Ein systematischer Parameterscan ueber $\rho$ (einschliesslich
-Near-Onset-Werten $\rho \approx 24$) wuerde die Evidenz
-verstaerken. Trotz dieser Vorbehalte bestaetigt der Test, dass die
+Ein systematischer Parameterscan über $\rho$ (einschließlich
+Near-Onset-Werten $\rho \approx 24$) würde die Evidenz
+verstärken. Trotz dieser Vorbehalte bestätigt der Test, dass die
 TLL+LDI-Bedingungen nicht leer sind: Sie sind in mindestens einem
-konkreten chaotischen dynamischen System erfuellt.
+konkreten chaotischen dynamischen System erfüllt.
 \end{remark}
 
 \begin{remark}[Proof of Life~II: TLL und LDI auf dem Kuramoto--Sivashinsky-Attraktor]
@@ -1436,10 +1519,11 @@ endlichdimensionalem Attraktor. Die pseudospektrale Diskretisierung verwendet $N
 Fourier-Moden; der Attraktor wird durch $5\,001$ Punkte im
 $M = 32$-dimensionalen Fourier-Koeffizientenraum approximiert.
 
-\emph{Ergebnisse} (primaerer Lauf, $N = 128$):
+\emph{Ergebnisse} (primärer Lauf, $N = 128$):
 
 \begin{center}
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{l|l|l}
 \textbf{Test} & \textbf{Ergebnis} & \textbf{Detail} \\
 \hline
@@ -1447,14 +1531,16 @@ TLL (Definition~\ref{def:TLL}) & PASS & $C_{\mathrm{TLL}}(95\%) = 9{,}0$, max $=
 LDI (Definition~\ref{def:LDI}) & PASS & $\int \|u'\| \Omega\,\mathrm{d}t = 5576$ (endlich), LDI/$L^1$ $= 1{,}86$ \\
 BV-Kettenregel (Theorem~\ref{thm:BV-chain}) & PASS & $\mathrm{Var}(v) / (C_{\mathrm{TLL}} \cdot \mathrm{LDI}) = 0{,}059$ \\
 STC (Definition~\ref{def:STC}) & PASS & $\alpha = 0{,}91 > 0$ \\
-Exponentielles Tracking & N/A & $\lambda = -0{,}074$ (chaotisches Wandern, keine monotone Annaeherung)
-\end{tabular}
+Exponentielles Tracking & N/A & $\lambda = -0{,}074$ (chaotisches Wandern, keine monotone Annäherung)
+\end{tabular}%
+}
 \end{center}
 
 \emph{Gitterverfeinerung} ($N = 32, 64, 128, 256$; $N=32$ verwendet $L = 22$):
 
 \begin{center}
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{r|r|r|r|r|r|c}
 $N$ & $M$ & $C_{\mathrm{TLL}}(95\%)$ & LDI/$L^1$ & BV-Verh. & STC $\alpha$ & Alle \\
 \hline
@@ -1462,141 +1548,168 @@ $N$ & $M$ & $C_{\mathrm{TLL}}(95\%)$ & LDI/$L^1$ & BV-Verh. & STC $\alpha$ & All
 64  & 32 & 8{,}75 & 1{,}41 & 0{,}083 & 1{,}20 & PASS \\
 128 & 32 & 5{,}10 & 2{,}02 & 0{,}078 & 1{,}11 & PASS \\
 256 & 32 & 2{,}66 & 2{,}77 & 0{,}099 & 0{,}79 & PASS
-\end{tabular}
+\end{tabular}%
+}
 \end{center}
 
-Wesentliche Beobachtungen: (i)~Alle vier Diagnosen bestehen bei jeder Aufloesung -- das
+Wesentliche Beobachtungen: (i)~Alle vier Diagnosen bestehen bei jeder Auflösung -- das
 TLL/LDI-Framework ist \emph{kein} Artefakt endlicher Diskretisierung.
-(ii)~Das BV-Verhaeltnis ist gleichmaessig klein ($< 0{,}15$), was zeigt, dass die
+(ii)~Das BV-Verhältnis ist gleichmäßig klein ($< 0{,}15$), was zeigt, dass die
 Kettenregelschranke weit vom Optimum entfernt ist.
 (iii)~Anders als das Lorenz-System ($\mathbb{R}^3$) ist KS eine \emph{PDE}
 mit unendlichdimensionalem Phasenraum, trunkiert auf $N$ Fourier-Moden.
-Die Attraktordimension ($\sim 8$--$12$ fuer $L = 32\pi$) liegt deutlich ueber
-dem Lorenz-Wert ($\sim 2{,}06$), was dies zu einem wesentlich haerteren Test macht.
-(iv)~Exponentielles Tracking schlaegt fehl (erwartet: Die Testtrajektorie wandert
+Die Attraktordimension ($\sim 8$--$12$ für $L = 32\pi$) liegt deutlich über
+dem Lorenz-Wert ($\sim 2{,}06$), was dies zu einem wesentlich härteren Test macht.
+(iv)~Exponentielles Tracking schlägt fehl (erwartet: Die Testtrajektorie wandert
 \emph{auf} dem Attraktor, nicht zu ihm hin).
 Skript: \texttt{compute\_tll\_ldi\_ks.py}; Ergebnisse: \texttt{ks\_tll\_ldi\_results.json}.
 \end{remark}
 
-\begin{remark}[Ginzburg--Landau als TLL/LDI-Bruecke]
+\begin{remark}[Ginzburg--Landau als TLL/LDI-Brückenkandidat]
 \label{rem:ginzburg-landau}
-Die komplexe Ginzburg--Landau-Gleichung $\partial_t u = (1+i\alpha)\Delta u + u - (1+i\beta)|u|^2 u$ besitzt fuer bestimmte Parameterbereiche eine endlich-dimensionale Inertialmannigfaltigkeit. Vollstaendige Verifikation von TLL+LDI auf diesem System, gefolgt von einem Lifting-Argument auf 2D-NS (via Parameterfortsetzung in der Nichtlinearitaet), wuerde einen konkreten Weg zum vollen NS-Regularitaetsproblem liefern.
+Die komplexe Ginzburg--Landau-Gleichung $\partial_t u = (1+i\alpha)\Delta u + u - (1+i\beta)|u|^2 u$ besitzt für bestimmte Parameterbereiche eine endlich-dimensionale Inertialmannigfaltigkeit. Vollständige Verifikation von TLL+LDI auf diesem System, gefolgt von einem Lifting-Argument auf 2D-NS (via Parameterfortsetzung in der Nichtlinearität), würde einen konkreten Testweg für das NS-LDI-Transferprogramm liefern. Dies ist nicht als direkter Weg zum vollen klassischen 3D-NS-Problem ohne die oben isolierten uniformen Projektionszweig-Abschätzungen zu lesen.
 \end{remark}
 
-\begin{theorem}[Squeezing impliziert TLL fuer endlich-dimensionale Attraktoren]\label{thm:squeezing-tll}
+\begin{theorem}[Konditionales Squeezing-zu-TLL-Kriterium]\label{thm:squeezing-tll}
 Sei $u_t + Au + B(u,u) = f$ eine dissipative PDE auf einem Hilbertraum $H$
 mit kompaktem globalem Attraktor $\mathcal{A}$ endlicher fraktaler Dimension $d_F$.
 Die Squeezing-Eigenschaft gelte: Es existieren $N \in \mathbb{N}$,
-$\theta \in (0,1)$ und $T > 0$, sodass fuer alle $u_0, v_0$ in der
+$\theta \in (0,1)$ und $T > 0$, sodass für alle $u_0, v_0$ in der
 absorbierenden Kugel
 \[
-  \|Q_N(S(T)u_0 - S(T)v_0)\| \leq \theta\,\|u_0 - v_0\|
-  \quad\text{oder}\quad
-  \|Q_N(S(T)u_0 - S(T)v_0)\| \leq \|P_N(S(T)u_0 - S(T)v_0)\|,
+\begin{aligned}
+  \|Q_N(S(T)u_0 - S(T)v_0)\|
+  &\leq \theta\,\|u_0 - v_0\|,\\
+  \text{oder}\qquad
+  \|Q_N(S(T)u_0 - S(T)v_0)\|
+  &\leq \|P_N(S(T)u_0 - S(T)v_0)\|.
+\end{aligned}
 \]
 wobei $P_N$ auf die ersten $N$ Eigenmoden von $A$ projiziert.
-Dann gilt die Trajektorien-Log-Lipschitz-Bedingung (TLL, Definition~\ref{def:TLL})
-mit
+Zusätzlich sei entlang der betrachteten Trajektorie ein einwertiger
+Nächstpunkt-Zweig $\pi_{\mathcal{A}}$ auf einer Röhre
+$\{x:\dist(x,\mathcal{A})<r_0\}$ gegeben, die das betrachtete
+Trajektoriensegment enthält, und dieser Zweig sei dort mit Konstante
+$L_\pi$ Lipschitz.  Dann gilt die Trajektorien-Log-Lipschitz-Bedingung
+(TLL, Definition~\ref{def:TLL}) auf diesem Segment mit
 \[
-  C_{\mathrm{TLL}} \leq C(N, d_F, \theta)\,\bigl(1 + |\log\theta|\bigr).
+  C_{\mathrm{TLL}} \leq \max\{L_\pi,2\}.
 \]
+Sind die Röhrenzweig-Konstanten durch die Squeezing-Daten kontrolliert,
+kann man dies schematisch als
+$C_{\mathrm{TLL}}\le C(N,d_F,\theta,r_0,L_\pi)$ schreiben.
 \end{theorem}
 
 \begin{proof}
-Das Argument verlaeuft in drei Schritten.
+Das Argument verläuft in zwei Schritten.
 
 \emph{Schritt~1 (Lipschitz-Graph).}
 Die Squeezing-Eigenschaft impliziert, dass der globale Attraktor $\mathcal{A}$
-in einem Lipschitz-Graphen ueber dem endlich-dimensionalen Unterraum $P_N H$ liegt.
+in einem Lipschitz-Graphen über dem endlich-dimensionalen Unterraum $P_N H$ liegt.
 Dies ist das Man\'e-Projektionstheorem angewandt auf die Squeezing-Dichotomie:
 Da die Hochmoden-Komponente $Q_N$ relativ zur Niedrigmoden-Komponente $P_N$
-kontrahiert, ist die Einschraenkung $P_N|_{\mathcal{A}}$ injektiv mit
+kontrahiert, ist die Einschränkung $P_N|_{\mathcal{A}}$ injektiv mit
 Lipschitz-Inverser \cite{FoiasTemam1979,Mane1981}.
 Konkret existiert $L = L(N, d_F) < \infty$, sodass
-$\|Q_N(u - v)\| \leq L\,\|P_N(u - v)\|$ fuer alle $u, v \in \mathcal{A}$.
+$\|Q_N(u - v)\| \leq L\,\|P_N(u - v)\|$ für alle $u, v \in \mathcal{A}$.
 
-\emph{Schritt~2 (Naechstpunkt-Projektion ist lokal Lipschitz auf dem Graphen).}
-Es muss gezeigt werden, dass die \emph{Naechstpunkt-Projektion} $\pi_{\mathcal{A}}$
-(nicht die lineare Projektion $P_N$) lokal Lipschitz in einer Roehrenumgebung
-des Lipschitz-Graphen $\mathcal{A} = \mathrm{graph}(\Phi)$ ist,
-wobei $\Phi: P_N H \to Q_N H$ mit $\mathrm{Lip}(\Phi) \leq L$.
-
-Ein Lipschitz-Graph mit Konstante $L$ ist \emph{prox-regulaer} im Sinne
-von Poliquin--Rockafellar--Thibault~\cite{PoliquinRockafellarThibault2000}:
-Die Reichweite erfuellt $\mathrm{reach}(\mathrm{graph}(\Phi)) \geq r_0 > 0$
-(abhaengig von $L$ und der Kruemmung der Einbettung), und auf der
-$r_0$-Roehrenumgebung ist die Naechstpunkt-Projektion
-$\pi_{\mathcal{A}}$ einwertig und Lipschitz. Genauer gilt
-fuer beliebige $x, y$ mit $\dist(x, \mathcal{A}) < r_0$ und
-$\dist(y, \mathcal{A}) < r_0$:
+\emph{Schritt~2 (Der fehlende Projektionsregularitätsinput).}
+Der vorige Schritt allein impliziert \emph{nicht}, dass die
+Nächstpunkt-Projektion auf $\mathcal{A}$ Lipschitz ist: Ein allgemeiner
+Lipschitz-Graph muss weder positive Reichweite besitzen noch
+prox-regulär sein.  Genau dies ist die eigentliche Lücke.  Unter der
+zusätzlichen Annahme eines Lipschitz-Röhrenzweigs gilt jedoch für
+$t,t+h$ im betrachteten Segment
 \[
-  \|\pi_{\mathcal{A}}(x) - \pi_{\mathcal{A}}(y)\|
-  \;\leq\;
-  \frac{\sqrt{1 + L^2}}{1 - \max(\dist(x,\mathcal{A}), \dist(y,\mathcal{A}))/r_0}
-  \,\|x - y\|.
+  \|\pi_{\mathcal{A}}(u(t+h))-\pi_{\mathcal{A}}(u(t))\|
+  \le L_\pi\,\|u(t+h)-u(t)\|.
 \]
-Fuer Punkte $u(t)$ auf der Trajektorie mit $d(t) = \dist(u(t), \mathcal{A})$
-bleibt der Nenner von Null weg beschraenkt, solange $d(t) < r_0/2$
-(was schliesslich durch die absorbierende-Kugel-Eigenschaft gilt). Dies ergibt
-$\|\pi_{\mathcal{A}}(u(t)) - \pi_{\mathcal{A}}(u(t+h))\|
-\leq 2\sqrt{1+L^2}\,\|u(t+h) - u(t)\|$
-fuer $u(t), u(t+h)$ in der $(r_0/2)$-Roehre.
-
-\emph{Schritt~3 (Log-Faktor aus exponentiellem Approach).}
-Fuer Trajektorien $u(t)$ in der absorbierenden Kugel, die noch nicht auf $\mathcal{A}$ liegen,
-liefert die Squeezing-Eigenschaft exponentiellen Approach:
-$d(u(t), \mathcal{A}) \leq C\,\theta^{t/T}\,d(u(0), \mathcal{A})$.
-Logarithmierung ergibt $\log(R/d(u(t), \mathcal{A})) \geq (t/T)\,|\log\theta| - C'$.
-Der TLL-Modul $\Omega(t) = 1 + \log(R/d(t))$ waechst daher hoechstens linear
-in $t$, waehrend die exponentielle Kontraktion in den hohen Moden den
-kompensierenden Abfall liefert. Kombination mit den Schritten~1--2 und den
-exponentiellen Tracking-Abschaetzungen von Eden--Foias--Nicolaenko--Temam \cite{EdenFoiasNicolaenkoTemam1994}
-ergibt die Schranke $C_{\mathrm{TLL}} \leq C(N, d_F, \theta)\,(1 + |\log\theta|)$.
+Da $\Omega(t)\ge 1$ ist, ist dies gerade TLL mit
+$C_{\mathrm{TLL}}\le L_\pi$ außerhalb von $\{d=0\}$; die Konvention
+$C_{\mathrm{TLL}}\ge 2$ behandelt die Menge $\{d=0\}$ wie in
+Bemerkung~\ref{rem:CTLL-convention}.  Squeezing identifiziert also
+die endlich-dimensionale Graphroute, aber prox-reguläre oder sonst
+Lipschitz-kontrollierte Nächstpunkt-Zweige sind der zusätzliche
+Baustein, der daraus TLL macht.
 \end{proof}
 
-\begin{remark}[Hyperviskose Navier--Stokes als vollstaendiger TLL/LDI-Testfall]
+\begin{remark}[Hyperviskose Navier--Stokes als konditionaler TLL/LDI-Pilot]
 \label{rem:hyperviscous}
-Fuer die hyperviskose NS-Gleichung $\partial_t u + (-\Delta)^\beta u + (u\cdot\nabla)u = -\nabla p + f$
-mit $\beta \geq 5/4$ auf $\mathbb{T}^3$ existieren Inertialmannigfaltigkeiten
-(Mallet-Paret--Sell~\cite{MalletParetSell1988}, Romanov~\cite{Romanov2000}). Die Squeezing-Eigenschaft gilt
-mit expliziten Konstanten, sodass Theorem~\ref{thm:squeezing-tll} direkt anwendbar ist:
-TLL gilt mit $C_{\mathrm{TLL}} \leq C(\beta, \nu, f)$.
-Kombiniert mit LDI (das aus dem exponentiellen Tracking auf der
-Inertialmannigfaltigkeit folgt) ergibt dies einen \emph{vollstaendigen geschlossenen Zyklus}:
+Für die hyperviskose NS-Gleichung $\partial_t u + (-\Delta)^\beta u + (u\cdot\nabla)u = -\nabla p + f$
+mit $\beta \geq 5/4$ auf $\mathbb{T}^3$ machen die bekannte
+Glättung und die Literatur zu Inertialmannigfaltigkeiten dieses System
+zu einem starken Piloten für das Kriterium oben.  Wenn der relevante
+Inertialmannigfaltigkeits-Zweig uniforme Nächstpunkt-Röhrenkontrolle
+und unabhängige LDI-Kontrolle liefert (etwa über STC oder eine untere
+Distanzhülle), erhält man die konditionale Kette
 \[
-  \text{IM existiert} \;\Rightarrow\; \text{Squeezing} \;\Rightarrow\; \text{TLL}
-  \;\Rightarrow\; \text{TLL + LDI} \;\Rightarrow\; \text{BV-Selektion (G')}
-  \;\Rightarrow\; \text{Regularitaet (Thm~3.1 des Begleitpapiers)}
+\begin{aligned}
+  \text{IM/prox-regulärer Zweig}
+  &\Rightarrow \text{Squeezing + Zweigkontrolle}\\
+  &\Rightarrow \text{TLL}
+  \Rightarrow \text{TLL + LDI}
+  \Rightarrow \text{BV-Selektion (G')}\\
+  &\Rightarrow \text{konditionale Regularität im Begleitpaper}.
+\end{aligned}
 \]
-Dies ist das erste System, in dem die gesamte TLL/LDI $\to$ BV $\to$ Regularitaets-Kette
-ohne offene Annahmen schliesst.
-Fuer klassische NS ($\beta = 1$) gilt die Squeezing-Eigenschaft, aber
-die Existenz einer Inertialmannigfaltigkeit ist offen -- dies ist genau die Luecke,
-die der $\mu$-Reach-Ansatz (Begleitpapier) adressiert.
+Dies ist als proof-grade Testroute zu lesen, nicht als unbedingter
+Abschluss des klassischen 3D-Navier--Stokes-Problems.  Für klassische
+NS ($\beta = 1$) bleiben der uniforme Nächstpunkt-Zweig/TLL-Input und
+die entsprechende LDI-Kontrolle offen.
 \end{remark}
 
 % ------------------------------------------------------------------
-\subsection{Mathematische Werkzeuge fuer TLL und LDI}
+\subsection{Mathematische Werkzeuge für TLL und LDI}
 % ------------------------------------------------------------------
 
-\begin{remark}[Brueckenlemma: Squeezing zu TLL]
+\begin{remark}[Brückenheuristik: Squeezing zu TLL]
 \label{rem:bridge-squeezing}
-Die Squeezing-Eigenschaft (Foias--Temam) besagt, dass hohe Moden schneller kontrahieren als niedrige Moden divergieren. Kombiniert mit dem Theorem der bestimmenden Moden impliziert dies: $d(u(t), \mathcal{A}) \leq C e^{-\gamma_N t} d(u(0), \mathcal{A}) + C' \sup_{s \leq t} |P_N u(s) - P_N v(s)|$ fuer ein $v \in \mathcal{A}$. Logarithmierung ergibt $\log(1/d(t)) \geq \gamma_N t - C''$, was die dem TLL zugrundeliegende Log-Modul-Schranke ist.
+Die Squeezing-Eigenschaft (Foias--Temam) besagt, dass hohe Moden schneller kontrahieren als niedrige Moden divergieren. Kombiniert mit bestimmenden Moden kann sie Abschätzungen der Form
+\[
+  d(u(t),\mathcal{A})
+  \le C e^{-\gamma_N t}d(u(0),\mathcal{A})
+      + C'\sup_{s\le t}\|P_N u(s)-P_N v(s)\|
+\]
+für eine geeignete Vergleichstrajektorie $v\in\mathcal{A}$ liefern.
+Solche Abschätzungen sind nützlicher Input für Log-Distanz-Schranken,
+beweisen aber nicht für sich allein Nächstpunkt-TLL.  Sie müssen mit
+der Röhren-Projektionszweig-Regularität aus
+Theorem~\ref{thm:squeezing-tll} kombiniert werden.
 \end{remark}
 
 \begin{remark}[Verdopplungs- und Assouad-Struktur]
 \label{rem:doubling-assouad}
-TLL kann in Begriffen der Assouad-Dimension der Attraktortrajektorie umformuliert werden: Wenn die Trajektorie $\{u(t) : t \in [0,T]\}$ Assouad-Dimension $< 1$ hat, dann hat der ,,approximative Tangentialkegel'' einen Oeffnungswinkel beschraenkt durch $C/|\log r|$, was aequivalent zu TLL mit Rate $1/|\log r|$ ist. Dies verbindet die Regularitaetstheorie mit der geometrischen Masstheorie. Neuere Strukturresultate ueber Mengen positiver Reichweite~\cite{Lytchak2024} liefern zusaetzliche Werkzeuge zum Verstaendnis der Geometrie von Attraktorumgebungen.
+Assouad-artige Kontrolle der Attraktortrajektorie kann einen Weg zu
+TLL liefern: Wenn die Trajektorie $\{u(t):t\in[0,T]\}$ hinreichend
+dünne metrische Struktur besitzt, können approximative Tangentialkegel
+logarithmische Öffnungsschranken der Ordnung $C/|\log r|$ haben.  Dies
+ist ein plausibler hinreichender Mechanismus für TLL, aber keine
+Äquivalenz in dieser Arbeit.  Neuere Strukturresultate über Mengen
+positiver Reichweite~\cite{Lytchak2024} liefern zusätzliche Werkzeuge
+zum Verständnis der Geometrie von Attraktorumgebungen.
 \end{remark}
 
-\begin{remark}[LDI als Schwanzintegral-Aequivalenz]
+\begin{remark}[LDI als Schwanzintegral-Äquivalenz]
 \label{rem:ldi-tail}
-Die LDI-Bedingung $\int_0^T \log(1/d(t))\,\mathrm{d}t < \infty$ ist aequivalent zur Schwanzintegral-Bedingung $\int_0^R \frac{1}{s} \left( \int_{\{0 < d \leq s\}} \|u'(t)\|\,\mathrm{d}t \right) \mathrm{d}s < \infty$, die die Integrierbarkeit von $\log(1/d)$ mit der ,,Geschwindigkeit'' der Trajektorie nahe dem Attraktor in Beziehung setzt. Diese Formulierung ist fuer Energieabschaetzungen besser geeignet.
+Die LDI-Bedingung
+\[
+  \int_{\{d>0\}} \|u'(t)\|\,\log\frac{R}{d(t)}\,\mathrm{d}t < \infty
+\]
+ist äquivalent zur Schwanzintegral-Bedingung
+\[
+  \int_0^R \frac{1}{s}
+  \left(
+    \int_{\{0 < d \leq s\}} \|u'(t)\|\,\mathrm{d}t
+  \right)\mathrm{d}s < \infty.
+\]
+Sie setzt die gewichtete Integrierbarkeit von $\log(R/d)$ mit der
+,,Geschwindigkeit'' der Trajektorie nahe dem Attraktor in Beziehung
+und ist für Energieabschätzungen besser geeignet.
 \end{remark}
 
-\begin{remark}[Klaerung zu Proposition~\ref{prop:variant-B}]
+\begin{remark}[Klärung zu Proposition~\ref{prop:variant-B}]
 \label{rem:prop-variant-B-clarification}
-Die BV $\to$ $L^\infty$-Einbettung in Proposition~\ref{prop:variant-B} erfordert die zusaetzliche Bedingung $d(t) > 0$ f.\"u.: Die Trajektorie darf den Attraktor nicht auf einer Menge positiven Masses beruehren. Dies ist fuer Leray--Hopf-Loesungen automatisch erfuellt (die analytisch im Raum sind und daher nicht mit einem Attraktorelement auf einem Intervall uebereinstimmen koennen, es sei denn sie sind dieses Element).
+Die BV $\to$ $L^\infty$-Einbettung in Proposition~\ref{prop:variant-B} erfordert die zusätzliche Bedingung $d(t) > 0$ f.ü. Die Trajektorie darf den Attraktor nicht auf einer Menge positiven Maßes berühren. Dies ist eine Kein-Kontakt-positiven-Maßes-Annahme, kein automatischer Leray-Hopf-Fakt. Für starke analytische Lösungen kann sie unter zusätzlichen Hypothesen gerechtfertigt werden; auf Intervallen, auf denen die Trajektorie auf dem Attraktor liegt, ist stattdessen Variante~A zu verwenden.
 \end{remark}
 
 % ------------------------------------------------------------------
@@ -1605,17 +1718,17 @@ Die BV $\to$ $L^\infty$-Einbettung in Proposition~\ref{prop:variant-B} erfordert
 
 \begin{remark}[Stochastische Stabilisierung]
 \label{rem:stochastic-stabilisation}
-Hinzufuegen von Feller-artigem Rauschen $\sigma\,\mathrm{d}W$ zu den Navier--Stokes-Gleichungen kann TLL ,,fast sicher'' erzwingen: Das Rauschen verhindert, dass die Trajektorie sich dem Attraktor tangential naehert (was log-Lipschitz verletzen wuerde), und die Feller-Eigenschaft stellt sicher, dass die Uebergangshalbgruppe beschraenkte Funktionen auf stetige abbildet, was die fuer das Selektionsprinzip benoetigte Regularitaet liefert.
+Hinzufügen von Feller-artigem Rauschen $\sigma\,\mathrm{d}W$ zu den Navier--Stokes-Gleichungen kann helfen, TLL-artige Transversalität ,,fast sicher'' zu erzwingen: Das Rauschen kann dauerhaft tangentiale Annäherung an den Attraktor reduzieren, und die Feller-Eigenschaft liefert Stetigkeit der Übergangshalbgruppe. Dies ist eine heuristische Stabilisierungsroute, kein Satz, dass stochastischer Antrieb automatisch einen TLL-Nächstpunkt-Zweig liefert.
 \end{remark}
 
-\begin{remark}[Hochmoden-Stabilitaetsvermutung]
+\begin{remark}[Hochmoden-Stabilitätsvermutung]
 \label{rem:high-mode-stability}
-Eine hinreichende Bedingung fuer TLL im NS-Kontext: Wenn die hohen Fourier-Moden $Q_N u = (I - P_N) u$ die Bedingung $\|Q_N u(t)\| \leq C N^{-\alpha}$ gleichmaessig auf dem Attraktor fuer ein $\alpha > 1/2$ erfuellen, dann gilt $d(t) \leq C' N^{-\alpha}$ und TLL folgt aus der Abschaetzung der bestimmenden Moden. Diese ,,Hochmoden-Stabilitaetsvermutung'' ist schwaecher als die Existenz einer Inertialmannigfaltigkeit (die $\alpha > 1$ erfordert) und koennte durch Galerkin-Energieabschaetzungen verifizierbar sein. Neuere scharfe Dimensionsabschaetzungen fuer NS-artige Attraktoren~\cite{IlyinKalantarovZelik2025} liefern quantitativen Input fuer solche Schranken.
+Ein möglicher Weg zu TLL im NS-Kontext ist Hochmoden-Stabilität: Wenn die hohen Fourier-Moden $Q_N u = (I - P_N)u$ uniforme Abfallabschätzungen erfüllen und der dadurch induzierte Nächstpunkt-Zweig im entsprechenden Niedrigmoden-Skeleton kontrolliert ist, kann TLL aus bestimmenden-Moden-Abschätzungen plus dem Röhrenzweig-Kriterium folgen. Hochmoden-Abfall allein genügt nicht, weil er Distanz zu einem Niedrigmoden-Skeleton kontrolliert, nicht die Regularität der Nächstpunkt-Abbildung. Neuere scharfe Dimensionsabschätzungen für NS-artige Attraktoren~\cite{IlyinKalantarovZelik2025} liefern quantitativen Input für diese Route.
 \end{remark}
 
 \begin{remark}[Perspektive der Variationsanalysis]
 \label{rem:variational-analysis}
-Die Theorie der metrischen Regularitaet und Variationsanalysis (Rockafellar--Wets~\cite{RockafellarWets1998}, Dontchev--Rockafellar~\cite{DontchevRockafellar2009}) bietet eine natuerliche Heimat fuer die TLL- und LDI-Bedingungen: TLL steht in Beziehung zur Aubin-Eigenschaft der Attraktorprojektion, und LDI ist eine Calmness-Bedingung fuer die Distanzfunktion. Das vollstaendige Werkzeugset der Variationsanalysis -- einschliesslich Ekelands Variationsprinzip, des Mordukhovich-Kriteriums und der Attouch--Th\'era-Dualitaet -- ist anwendbar und in diesem Kontext wenig erforscht.
+Die Theorie der metrischen Regularität und Variationsanalysis (Rockafellar--Wets~\cite{RockafellarWets1998}, Dontchev--Rockafellar~\cite{DontchevRockafellar2009}) bietet eine natürliche Heimat für die TLL- und LDI-Bedingungen: TLL steht in Beziehung zur Aubin-Eigenschaft der Attraktorprojektion, und LDI ist eine Calmness-Bedingung für die Distanzfunktion. Das vollständige Werkzeugset der Variationsanalysis -- einschließlich Ekelands Variationsprinzip, des Mordukhovich-Kriteriums und der Attouch--Th\'era-Dualität -- ist anwendbar und in diesem Kontext wenig erforscht.
 \end{remark}
 
 % ------------------------------------------------------------------
@@ -1625,23 +1738,23 @@ Die Theorie der metrischen Regularitaet und Variationsanalysis (Rockafellar--Wet
 \begin{remark}[Weitere Forschungsrichtungen]
 \label{rem:further-ns-logdist}
 \begin{enumerate}
-\item \emph{Selektionsregularitaet ueber Trajektorienattraktoren:} Formulierung der minimalen metrischen Ableitungsselektion im Chepyzhov--Vishik-Trajektorienattraktor-Rahmen, wo Nichteindeutigkeit durch Betrachtung ganzer Trajektorien statt Anfangsdaten behandelt wird.
-\item \emph{Quantitative Tracking-Lemmata:} Herleitung von Massabschaetzungen $|\{t : d(t) \leq \varepsilon\}| \leq C \varepsilon^\alpha$ ueber Energie-/Absorbierende-Kugel-Argumente und ,,Kein-klebriger-Kontakt''-Bedingungen.
+\item \emph{Selektionsregularität über Trajektorienattraktoren:} Formulierung der minimalen metrischen Ableitungsselektion im Chepyzhov--Vishik-Trajektorienattraktor-Rahmen, wo Nichteindeutigkeit durch Betrachtung ganzer Trajektorien statt Anfangsdaten behandelt wird.
+\item \emph{Quantitative Tracking-Lemmata:} Herleitung von Maßabschätzungen $|\{t : d(t) \leq \varepsilon\}| \leq C \varepsilon^\alpha$ über Energie-/Absorbierende-Kugel-Argumente und ,,Kein-klebriger-Kontakt''-Bedingungen.
 \item \emph{Ekelands Variationsprinzip:} Nutzung von Ekelands Prinzip zur Konstruktion von ,,Fast-Minimierern'' mit kontrollierter Variation, wodurch die Notwendigkeit positiver Reichweite von $\mathcal{A}$ umgangen wird.
-\item \emph{Mengenwertige BV-Selektion:} Bestimmung, welche dynamischen Regularitaetsbedingungen an den Fluss beschraenkte Hausdorff-Variation der Minimierermenge $\{u \in \mathcal{A} : d(u, u(t)) = d_{\mathcal{A}}(u(t))\}$ erzwingen.
-\item \emph{Approximative Prox-Regularitaet:} Herstellung einer modifizierten Reichweite nach Entfernung einer meageren Menge (Lebesgue-Null): Der Attraktor kann auf einer vernachlaessigbaren Menge keine positive Reichweite haben, sie aber generisch beibehalten. Resultate von Lytchak~\cite{Lytchak2024} ueber die Struktur von Mengen positiver Reichweite legen nahe, dass eine solche Zerlegung durchfuehrbar sein koennte.
-\item \emph{Schwache Selektionsfunktionen:} Ersetzung starker Lipschitz-Projektionen durch Selektionsfunktionen beschraenkter Hausdorff-Variation, die unter schwaecheren Regularitaetsannahmen existieren.
-\item \emph{Geometrisches Euler-System:} Konstruktion einer kohaerenten Hierarchie endlicher Galerkin-Approximationen $\mathcal{A}_N \to \mathcal{A}$ als ,,Reichweiten-Surrogat'': Selbst wenn $\mathrm{reach}(\mathcal{A}) = 0$, haben die Galerkin-Approximationen $\mathcal{A}_N$ positive Reichweite und konvergieren im Hausdorff-Abstand.
+\item \emph{Mengenwertige BV-Selektion:} Bestimmung, welche dynamischen Regularitätsbedingungen an den Fluss beschränkte Hausdorff-Variation der Minimierermenge $\{u \in \mathcal{A} : d(u, u(t)) = d_{\mathcal{A}}(u(t))\}$ erzwingen.
+\item \emph{Approximative Prox-Regularität:} Herstellung einer modifizierten Reichweite nach Entfernung einer meageren Menge (Lebesgue-Null): Der Attraktor kann auf einer vernachlässigbaren Menge keine positive Reichweite haben, sie aber generisch beibehalten. Resultate von Lytchak~\cite{Lytchak2024} über die Struktur von Mengen positiver Reichweite legen nahe, dass eine solche Zerlegung durchführbar sein könnte.
+\item \emph{Schwache Selektionsfunktionen:} Ersetzung starker Lipschitz-Projektionen durch Selektionsfunktionen beschränkter Hausdorff-Variation, die unter schwächeren Regularitätsannahmen existieren.
+\item \emph{Geometrisches Euler-System:} Konstruktion einer kohärenten Hierarchie endlicher Galerkin-Approximationen $\mathcal{A}_N \to \mathcal{A}$ als ,,Reichweiten-Surrogat''. Für beliebige projizierte Attraktor-Punktwolken darf positive Reichweite nicht vorausgesetzt werden; der benötigte Input ist stattdessen ein verifizierter oder regularisierter Skeleton-Zweig mit kontrollierter Reichweite/Prox-Regularität und Hausdorff- oder Mosco-Konvergenz.
 \end{enumerate}
 \end{remark}
 
 % ------------------------------------------------------------------
-\subsection{Paper-uebergreifende Verbindungen}
+\subsection{Paper-übergreifende Verbindungen}
 % ------------------------------------------------------------------
 
-\begin{remark}[DFC aus Turbulenz als topologischer Trichter fuer TLL]
+\begin{remark}[DFC aus Turbulenz als topologische Trichterheuristik für TLL]
 \label{rem:dfc-funnel}
-Die Abwaerts-Flussbedingung (Downhill Flux Condition, DFC) aus dem Begleitpaper zur Turbulenz~\cite{FST-NS2026} impliziert, dass Energie ,,abwaerts'' durch den Inertialbereich fliesst. Uebersetzt in die Attraktorgeometrie bedeutet dies, dass Trajektorien sich $\mathcal{A}$ durch einen topologischen Trichter naehern: Die DFC beschraenkt die Annaeherungsrichtung und erzwingt eine log-Lipschitz-Rate. Dies liefert einen physikalischen Mechanismus fuer TLL, der unabhaengig von den abstrakten funktionalanalytischen Argumenten ist.
+Die Abwärts-Flussbedingung (Downhill Flux Condition, DFC) aus dem Begleitpaper zur Turbulenz~\cite{FST-NS2026} formuliert, dass Energie ,,abwärts'' durch den Inertialbereich fließt. Übersetzt in die Attraktorgeometrie legt dies ein topologisches Trichterbild nahe: DFC kann die Annäherungsrichtung beschränken und dadurch eine log-Lipschitz-Rate unterstützen. Dies ist eine physikalische Heuristik für TLL, kein Ersatz für die Röhren-Projektionszweig-Abschätzung aus Theorem~\ref{thm:squeezing-tll}.
 \end{remark}
 
 
@@ -1649,12 +1762,12 @@ Die Abwaerts-Flussbedingung (Downhill Flux Condition, DFC) aus dem Begleitpaper 
 % KI-Offenlegung
 % ===================================================================
 \subsection*{KI-Offenlegung}
-Bei der Erstellung dieses Manuskripts wurden KI-gestuetzte Werkzeuge
-(Claude, Anthropic) in unterstuetzender Funktion eingesetzt,
-insbesondere fuer Literaturrecherche, Textstrukturierung und
+Bei der Erstellung dieses Manuskripts wurden KI-gestützte Werkzeuge
+(Claude, Anthropic) in unterstützender Funktion eingesetzt,
+insbesondere für Literaturrecherche, Textstrukturierung und
 Formulierungshilfe.  Die konzeptionelle Gestaltung, die
-wissenschaftliche Argumentation und die Verantwortung fuer den
-gesamten Inhalt liegen ausschliesslich beim Autor.
+wissenschaftliche Argumentation und die Verantwortung für den
+gesamten Inhalt liegen ausschließlich beim Autor.
 
 
 \begin{thebibliography}{99}
@@ -1724,7 +1837,7 @@ Cambridge University Press, 2001.
 L.~Geiger,
 \emph{A Thermodynamic Obstruction to Finite-Time Blow-Up in the 3D
 Navier--Stokes Equations (Conditional Framework)},
-Zenodo, 2026.  DOI:\@ to be assigned.
+Zenodo, 2026.  DOI:\@ 10.5281/zenodo.19087449.
 
 \bibitem{IlyinKalantarovZelik2025}
 A.~Ilyin, V.~Kalantarov, and S.~Zelik,
@@ -1794,3 +1907,6 @@ English transl.\ in Russian Acad.\ Sci.\ Izv.\ Math.
 \end{thebibliography}
 
 \end{document}
+
+
+
