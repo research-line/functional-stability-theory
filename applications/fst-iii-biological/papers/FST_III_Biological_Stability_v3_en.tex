@@ -1,7 +1,7 @@
 % ===================================================================
 % FST-III: Biological Stability and Nash Frustration
 % Target: Journal of Theoretical Biology / BioSystems
-% Version: 2.0 (integrated source material)
+% Version: 3.0 (source-check corrections, 2026-05-14)
 % ===================================================================
 
 \documentclass[12pt,a4paper]{article}
@@ -9,15 +9,28 @@
 % Packages
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[english]{babel}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{physics}
 \usepackage{graphicx}
-\usepackage{hyperref}
 \usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{natbib}
-\usepackage{cleveref}
 \usepackage{enumitem}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage{xurl}
+\usepackage[unicode=true]{hyperref}
+\usepackage{cleveref}
+
+\graphicspath{{../results/}{../fst_nash/results/}}
+\setlength{\emergencystretch}{3em}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\makeatletter
+\renewcommand*{\HyperDestNameFilter}[1]{en.#1}
+\makeatother
 
 % Theorem environments
 \newtheorem{proposition}{Proposition}
@@ -36,6 +49,13 @@ ORCID: \url{https://orcid.org/0009-0005-7296-1534}}
 
 \date{March 2026}
 
+\hypersetup{
+  pdftitle={Functional Stability Theory III: Biological Stability and Nash Frustration},
+  pdfauthor={Lukas Geiger},
+  pdfsubject={Biological stability across scales in Functional Stability Theory},
+  pdfkeywords={evolutionary game theory, protein folding, gene regulation, dissipative adaptation, Free Energy Principle, MEPP, Boolean networks}
+}
+
 \begin{document}
 
 \maketitle
@@ -45,6 +65,8 @@ This paper presents a unified framework for biological organization spanning mol
 \end{abstract}
 
 \textbf{Keywords:} evolutionary game theory, ESS, protein folding, gene regulation, MEPP, dissipative adaptation, Free Energy Principle, Boolean networks, major transitions, renormalization group
+
+\clearpage
 
 % ===================================================================
 \section{Introduction}
@@ -103,7 +125,7 @@ Within the FST-III framework, three central thermodynamic hypotheses describe th
 \centering
 \caption{Thermodynamic principles and their biological relevance. MEPP applies to strongly driven systems; Prigogine's minimum entropy production holds only near equilibrium.}
 \label{tab:thermo-principles}
-\begin{tabular}{lll}
+\begin{tabularx}{\textwidth}{@{}L{0.21\textwidth} L{0.28\textwidth} Y@{}}
 \toprule
 \textbf{Principle} & \textbf{Description} & \textbf{Biological Relevance} \\
 \midrule
@@ -112,7 +134,7 @@ State Selection & Stability correlates with high $\dot{S}$ & Complex food web st
 Gradient Response & Adaptation to increasing energy input & Photosynthetic efficiency increase \\
 Prigogine (LMEP) & Minimal entropy near equilibrium & Only for linear, weakly driven systems \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \begin{remark}[MEPP as Stability Filter, not Selection Law]
@@ -163,17 +185,17 @@ A key insight from the resolvent analysis of the Riemann Hypothesis \citep{Geige
 \centering
 \caption{Mapping of game-theoretic concepts to physical and biological counterparts.}
 \label{tab:game-biology-mapping}
-\begin{tabular}{lll}
+\begin{tabularx}{\textwidth}{@{}L{0.18\textwidth} L{0.29\textwidth} Y@{}}
 \toprule
 \textbf{Game Concept} & \textbf{Physical Correspondence} & \textbf{Biological Example} \\
 \midrule
 Nash Equilibrium & Stable steady state & Phenotype coexistence \\
 ESS & Attractor with local stability & Allele fixation \\
 Payoff Matrix & Energy/fitness landscape & Enzyme-substrate affinity \\
-Mixed Strategy & Polymorphism/heterogeneity & Division of labor in colonies \\
+Mixed Strategy & Population heterogeneity & Division of labor in colonies \\
 Nash Frustration & Residual instability at stability boundary & Functional flexibility in proteins \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \subsection{Protein Folding as an Optimization Game}
@@ -204,7 +226,7 @@ Formally, \emph{residue-level Nash frustration} is computed from the best-respon
 where $\lambda_k$ and $v_k$ are eigenvalues and eigenvectors of $J$, respectively. The \emph{global Nash frustration} of the entire protein is summarized by the spectral radius $\rho(J) = \max_k |\lambda_k|$; when $\rho(J) > 1$, at least one mode is unstable under best-response dynamics. These two measures---residue-level scores and the global spectral radius---are complementary: $\rho(J)$ quantifies the overall departure from Nash stability, while the residue-level score localizes the instability.
 
 \textbf{Empirical validation and $\eta$-independence.}
-We validated the Nash frustration metric against experimental NMR chemical shift perturbation (CSP) data from BMRB entry~4428 \cite{BMRB4428} for HP35 (villin headpiece subdomain, 1YRF). The CSP per residue is computed as $\text{CSP}_i = \sqrt{\Delta\delta_{\text{H}}^2 + (\Delta\delta_{\text{N}}/5)^2}$, where $\Delta\delta$ denotes the secondary chemical shift relative to random-coil reference values \cite{Wishart1995}; the factor $1/5$ is the standard weighting for ${}^{15}$N chemical shifts \cite{Williamson2013}.
+We validated the Nash frustration metric against experimental NMR chemical shift perturbation (CSP) data derived from BMRB entry~4428 \cite{BMRB4428}. This BMRB entry is the HP67 villin-headpiece NMR data set (primary PDB 1QQV); for the HP35 structural benchmark (PDB 1YRF), we used the documented residue-level mapping from the C-terminal HP67 subdomain to HP35, excluding mutated or missing positions. The CSP per residue is computed as $\text{CSP}_i = \sqrt{\Delta\delta_{\text{H}}^2 + (\Delta\delta_{\text{N}}/5)^2}$, where $\Delta\delta$ denotes the secondary chemical shift relative to random-coil reference values \cite{Wishart1995}; the factor $1/5$ is the standard weighting for ${}^{15}$N chemical shifts \cite{Williamson2013}.
 
 The Spearman rank correlation between per-residue Nash frustration and CSP is $\rho_S = 0.44$ ($p = 0.033$, $n = 24$ residues), providing initial evidence that frustration scores capture the rank ordering of NMR-observed structural perturbation. We note that the statistical power of this test is moderate ($\approx 60\%$ at $\alpha = 0.05$ for the observed effect size), and replication on additional proteins is needed to confirm the result. The five most frustrated residues (M11, T12, S1, L0, L19) exhibit CSP values of 1.26, 0.68, 2.13, 1.44, and 1.10\,ppm, confirming that frustration hotspots correspond to experimentally detectable structural strain. One outlier (K23, CSP~$= 2.67$\,ppm but low frustration) is attributable to the well-known Trp ring-current shift at this position rather than structural instability.
 
@@ -212,8 +234,8 @@ Crucially, the frustration--CSP correlation is \emph{strictly independent} of~$\
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{results/fst_iii/eta_calibration/eta_calibration_csp.pdf}
-\caption{Scatter plot of per-residue Nash frustration scores versus NMR chemical shift perturbation (CSP) for HP35 (1YRF). Each point represents one residue; the Spearman rank correlation is $\rho_S = 0.44$ ($p = 0.033$). Colour encodes the learning-rate parameter $\eta$, demonstrating that the frustration--CSP relationship is strictly independent of $\eta$ (all $\eta$-values collapse onto the same curve). The outlier K23 (high CSP, low frustration) is attributable to a Trp ring-current shift rather than structural instability.}
+\includegraphics[width=\textwidth]{eta_calibration/eta_calibration_csp.pdf}
+\caption{Scatter plot of per-residue Nash frustration scores versus NMR chemical shift perturbation (CSP) for the HP35/1YRF benchmark, using BMRB-4428-derived HP67 chemical shifts mapped to the C-terminal HP35 subdomain. Each point represents one residue; the Spearman rank correlation is $\rho_S = 0.44$ ($p = 0.033$). Colour encodes the learning-rate parameter $\eta$, demonstrating that the frustration--CSP relationship is strictly independent of $\eta$ (all $\eta$-values collapse onto the same curve). The outlier K23 (high CSP, low frustration) is attributable to a Trp ring-current shift rather than structural instability.}
 \label{fig:eta-calibration}
 \end{figure}
 
@@ -243,7 +265,7 @@ Extended three-protein analysis (LaTeX table generation, convergence diagnostics
 \centering
 \caption{Comparison of energetic frustration (Ferreiro et al.) and Nash frustration (this work). The two measures probe complementary aspects of protein stability.}
 \label{tab:frustration-comparison}
-\begin{tabular}{lll}
+\begin{tabularx}{\textwidth}{@{}L{0.18\textwidth} L{0.34\textwidth} Y@{}}
 \toprule
 \textbf{Concept} & \textbf{Energetic Frustration} & \textbf{Nash Frustration} \\
 \midrule
@@ -252,7 +274,7 @@ Method & Contact energy statistics & Best-response Jacobian eigenanalysis \\
 Interpretation & Evolutionary constraint & Game-theoretic coordination \\
 High values indicate & Functional sites, interfaces & Folding intermediates, kinetic traps \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 Computational experiments on three structurally distinct proteins confirm that Nash frustration identifies biologically meaningful residues. Table~\ref{tab:nash-results} summarizes the results.
@@ -294,21 +316,21 @@ To assess whether Nash frustration carries information about biological function
 \centering
 \caption{Benchmark of Nash frustration as a predictor of functional residues. AUC: area under the ROC curve; AUPRC: area under the precision-recall curve. Mean frustration values are reported as mean $\pm$ standard deviation. Script: \texttt{frustration\_benchmark.py}.}
 \label{tab:frustration-benchmark}
-\begin{tabular}{lcccc}
+\begin{tabularx}{\textwidth}{@{}L{0.18\textwidth} c c Y Y@{}}
 \toprule
 \textbf{Protein} & \textbf{AUC} & \textbf{AUPRC} & \textbf{Mean frust.\ (functional)} & \textbf{Mean frust.\ (passive)} \\
 \midrule
 HP35 (1YRF) & 0.616 & 0.550 & $0.160 \pm 0.269$ & $0.031 \pm 0.082$ \\
 Protein G (1PGA) & 0.688 & 0.618 & $0.229 \pm 0.247$ & $0.096 \pm 0.101$ \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 The AUC values of 0.62 (HP35) and 0.69 (Protein~G) indicate weak to moderate discriminatory power---below the $\text{AUC} = 0.7$ threshold commonly considered ``acceptable'' in diagnostic applications \citep{Ferreiro2014}. Nash frustration carries information about functional residues beyond chance level (AUC $> 0.5$), but is not diagnostically strong. For context, the Protein Frustratometer typically achieves AUC $> 0.75$ for functional-site identification; a direct head-to-head comparison on the same proteins is needed to quantify whether Nash frustration provides complementary or merely weaker information. Functional residues exhibit significantly higher mean Nash frustration than passive residues in both proteins ($0.160$ vs.\ $0.031$ for HP35; $0.229$ vs.\ $0.096$ for Protein~G), confirming that game-theoretic instability preferentially localizes at biologically active sites. The modest AUC values are expected given the proof-of-concept nature of the analysis: the $\eta$-parameter remains uncalibrated, and the game-theoretic potential omits side-chain interactions, solvent effects, and electrostatics. These results are consistent with the interpretation that Nash frustration captures a complementary signal to energetic frustration---one that reflects coordination failure rather than energetic suboptimality---but requires further calibration before it can serve as a standalone predictor.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{results/fst_iii/benchmark/frustration_benchmark_roc.png}
+\includegraphics[width=\textwidth]{benchmark/frustration_benchmark_roc.png}
 \caption{Receiver operating characteristic (ROC) curves for Nash frustration as a binary classifier of functional versus passive residues. HP35 (1YRF, AUC\,=\,0.62) and Protein~G (1PGA, AUC\,=\,0.69) both exceed the random baseline (dashed diagonal), confirming that game-theoretic instability preferentially localizes at biologically active sites. The moderate AUC values reflect the proof-of-concept status of the analysis; improvements are expected upon inclusion of side-chain interactions and solvent effects.}
 \label{fig:frustration-benchmark-roc}
 \end{figure}
@@ -487,7 +509,7 @@ Kauffman argued that network stability depends on connectivity and the type of B
 \centering
 \caption{Boolean network regimes and their biological interpretation. Networks at the edge of chaos exhibit maximum evolvability.}
 \label{tab:network-regimes}
-\begin{tabular}{lll}
+\begin{tabularx}{\textwidth}{@{}L{0.22\textwidth} L{0.28\textwidth} Y@{}}
 \toprule
 \textbf{Network Regime} & \textbf{Dynamic Behavior} & \textbf{Biological Function} \\
 \midrule
@@ -495,7 +517,7 @@ Ordered & Frozen states, low variability & Structural integrity, basal metabolis
 Critical (Edge of Chaos) & Complex patterns, high information flow & Adaptive behavior, differentiation, learning \\
 Chaotic & High sensitivity, instability & Pathological states, malignancy \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 These attractors in gene regulatory networks form the material basis for the game-theoretic strategies at higher levels. An ESS at the macro-level requires stable genetic attractors at the micro-level that reliably produce the necessary phenotypic traits \citep{BooleanMicroarray,KauffmanOrigins}.
@@ -912,18 +934,21 @@ The key open challenges are the calibration of the absolute Nash frustration sca
 
 \bibitem[Geiger(2026a)]{FSTI}
 Geiger, L. (2026).
-\newblock Functional Stability Theory I: Thermodynamic Stability of Fundamental Parameters.
-\newblock Preprint (FST-I).
+\newblock Functional Stability Theory I: A Game-Theoretic Framework for the Thermodynamic Stability of Fundamental Parameters.
+\newblock \textit{Zenodo preprint}, v1.1.
+\newblock Concept DOI: 10.5281/zenodo.20130544.
 
 \bibitem[Geiger(2026b)]{FSTII}
 Geiger, L. (2026).
 \newblock Functional Stability Theory II: Chemical Stability and Autocatalytic Selection.
-\newblock Preprint (FST-II).
+\newblock \textit{Zenodo preprint}, v1.2.
+\newblock Concept DOI: 10.5281/zenodo.20130563.
 
 \bibitem[Aktipis et al.(2015)]{AktipisCancer}
 Aktipis, C.~A. et al. (2015).
-\newblock Cancer across the tree of life.
+\newblock Cancer across the tree of life: cooperation and cheating in multicellularity.
 \newblock \textit{Phil. Trans. R. Soc. B}, 370, 20140219.
+\newblock DOI: 10.1098/rstb.2014.0219.
 
 \bibitem[Anfinsen(1973)]{Anfinsen1973}
 Anfinsen, C.~B. (1973).
@@ -934,6 +959,7 @@ Anfinsen, C.~B. (1973).
 Graudenzi, A., Serra, R., Villani, M., Damiani, C., Colacci, A. \& Kauffman, S.~A. (2011).
 \newblock Dynamical properties of a Boolean model of gene regulatory network with memory.
 \newblock \textit{Journal of Computational Biology}, 18(10), 1291--1303.
+\newblock DOI: 10.1089/cmb.2010.0069.
 
 \bibitem[M\"ussel et al.(2010)]{BooleanMicroarray}
 M\"ussel, C., Hopfensitz, M. \& Kestler, H.~A. (2010).
@@ -1004,6 +1030,7 @@ Maynard Smith, J. \& Price, G.~R. (1973).
 Bohl, K., Hummert, S., Werner, S., Basanta, D., Deutsch, A., Schuster, S., Theissen, G. \& Schroeter, A. (2014).
 \newblock Evolutionary game theory: molecules as players.
 \newblock \textit{Molecular BioSystems}, 10(12), 3066--3074.
+\newblock DOI: 10.1039/C3MB70601J.
 
 \bibitem[Maynard Smith(1982)]{MaynardSmith1982}
 Maynard Smith, J.
@@ -1025,6 +1052,7 @@ Nash, J.~F. (1950).
 Okasha, S. (2006).
 \newblock \textit{Evolution and the Levels of Selection}.
 \newblock Oxford University Press.
+\newblock DOI: 10.1093/acprof:oso/9780199267972.001.0001.
 
 \bibitem[Michod(1999)]{Michod1999}
 Michod, R.~E. (1999).
@@ -1040,6 +1068,7 @@ Farzulla, M. (2026).
 Friston, K. et al. (2025).
 \newblock From pixels to planning: scale-free active inference.
 \newblock \textit{Frontiers in Network Physiology}, 5, 1521963.
+\newblock DOI: 10.3389/fnetp.2025.1521963.
 
 \bibitem[Wilson(1975)]{ScaleRGResearch}
 Wilson, K.~G. (1975).
@@ -1061,11 +1090,13 @@ S\'anchez-Ca\~nizares, J. (2021).
 Gallos, L.~K., Makse, H.~A. \& Sigman, M. (2012).
 \newblock A small world of weak ties provides optimal global integration of self-similar modules in functional brain networks.
 \newblock \textit{PNAS}, 109(8), 2825--2830.
+\newblock DOI: 10.1073/pnas.1106612109.
 
 \bibitem[Szathm\'ary \& Maynard Smith(1995)]{SzathmaryMaynardSmith1995}
 Szathm\'ary, E. \& Maynard Smith, J. (1995).
 \newblock The major evolutionary transitions.
 \newblock \textit{Nature}, 374, 227--232.
+\newblock DOI: 10.1038/374227a0.
 
 \bibitem[Ferreiro et~al.(2007)]{Ferreiro2007}
 Ferreiro, D.U., Hegler, J.A., Komives, E.A. \& Wolynes, P.G. (2007).
@@ -1100,18 +1131,21 @@ Brown, J.~H., Gillooly, J.~F., Allen, A.~P., Savage, V.~M. \& West, G.~B. (2004)
 
 \bibitem[Geiger(2026c)]{GeigerRH2026c}
 Geiger, L. (2026).
-\newblock The Riemann Hypothesis Part III: The Analytical Rank-Finite Certificate.
-\newblock \textit{Zenodo preprint}, March 2026.
+\newblock From Landscape to Proof: The Even-Dominance Route to the Riemann Hypothesis.
+\newblock \textit{Zenodo preprint}, v2.1.
+\newblock Concept DOI: 10.5281/zenodo.19035640.
 
 \bibitem[Geiger(2026e)]{GeigerRH2026b}
 Geiger, L. (2026).
-\newblock Even Dominance of the Weil Quadratic Form: Spectral Analysis, Computer-Assisted Proof, and the Resolvent Gap Theorem.
-\newblock \textit{Zenodo preprint}, March 2026.
+\newblock A Conditional Proof of the Riemann Hypothesis via Even Dominance of the Weil Quadratic Form.
+\newblock \textit{Zenodo preprint}, v1.2.
+\newblock Concept DOI: 10.5281/zenodo.19764771.
 
 \bibitem[Geiger(2026d)]{FST-Unified2026}
 Geiger, L. (2026).
-\newblock The Renormalized Free Energy Framework: A Unified Resolution of Structural Bottlenecks.
-\newblock \textit{FST Framework Paper}, 2026.
+\newblock FST Spectrum Duality: The Renormalized Free Energy Principle as Physical Instantiation of Functional Stability Theory.
+\newblock \textit{Zenodo preprint}, v1.7.
+\newblock Concept DOI: 10.5281/zenodo.19036190.
 
 \bibitem[Sawada et al.(2025)]{Toma2025}
 Sawada, Y., Daigaku, Y. \& Toma, K. (2025).
@@ -1151,8 +1185,8 @@ J.-M.~Lasry and P.-L.~Lions (2007).
 D.~Vardar, D.~A.~Buckley, B.~S.~Frank, and C.~J.~McKnight (1999).
 \newblock NMR structure of an F-actin-binding ``headpiece'' motif from villin.
 \newblock \textit{Journal of Molecular Biology}, 294, 1299--1310.
-\newblock DOI: 10.1006/jmbi.1999.3363.
-\newblock BMRB entry 4428.
+\newblock DOI: 10.1006/jmbi.1999.3321.
+\newblock BMRB entry 4428; BMRB DOI: 10.13018/BMR4428.
 
 \bibitem[Wishart et al.(1995)]{Wishart1995}
 D.~S.~Wishart, C.~G.~Bigam, A.~Holm, R.~S.~Hodges, and B.~D.~Sykes (1995).

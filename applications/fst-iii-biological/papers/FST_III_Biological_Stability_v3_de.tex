@@ -1,7 +1,7 @@
 % ===================================================================
 % FST-III: Biologische Stabilit\"at und Nash-Frustration
 % Zieljournal: Journal of Theoretical Biology / BioSystems
-% Version: 2.0 (integriertes Quellmaterial)
+% Version: 3.0 (Quellencheck-Korrekturen, 2026-05-14)
 % ===================================================================
 
 \documentclass[12pt,a4paper]{article}
@@ -9,15 +9,28 @@
 % Packages
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{physics}
 \usepackage{graphicx}
-\usepackage{hyperref}
 \usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{natbib}
-\usepackage{cleveref}
 \usepackage{enumitem}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage{xurl}
+\usepackage[unicode=true]{hyperref}
+\usepackage{cleveref}
+
+\graphicspath{{../results/}{../fst_nash/results/}}
+\setlength{\emergencystretch}{3em}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\makeatletter
+\renewcommand*{\HyperDestNameFilter}[1]{de.#1}
+\makeatother
 
 % Theorem environments
 \newtheorem{proposition}{Proposition}
@@ -36,6 +49,13 @@ ORCID: \url{https://orcid.org/0009-0005-7296-1534}}
 
 \date{M\"arz 2026}
 
+\hypersetup{
+  pdftitle={Funktionale Stabilitätstheorie III: Biologische Stabilität und Nash-Frustration},
+  pdfauthor={Lukas Geiger},
+  pdfsubject={Biologische Stabilität über Skalen in der Funktionalen Stabilitätstheorie},
+  pdfkeywords={evolutionäre Spieltheorie, Proteinfaltung, Genregulation, dissipative Adaptation, Free Energy Principle, MEPP, Boolesche Netzwerke}
+}
+
 \begin{document}
 
 \maketitle
@@ -45,6 +65,8 @@ Dieses Paper pr\"asentiert einen vereinigenden Rahmen f\"ur biologische Organisa
 \end{abstract}
 
 \textbf{Schl\"usselw\"orter:} evolution\"are Spieltheorie, ESS, Proteinfaltung, Genregulation, MEPP, dissipative Adaptation, Free Energy Principle, Boolesche Netzwerke, Haupt\"uberg\"ange, Renormierungsgruppe
+
+\clearpage
 
 % ===================================================================
 \section{Einleitung}
@@ -103,7 +125,7 @@ Innerhalb des FST-III-Rahmens beschreiben drei zentrale thermodynamische Hypothe
 \centering
 \caption{Thermodynamische Prinzipien und ihre biologische Relevanz. MEPP gilt f\"ur stark getriebene Systeme; Prigogines minimale Entropieproduktion gilt nur nahe dem Gleichgewicht.}
 \label{tab:thermo-principles}
-\begin{tabular}{lll}
+\begin{tabularx}{\textwidth}{@{}L{0.22\textwidth} L{0.28\textwidth} Y@{}}
 \toprule
 \textbf{Prinzip} & \textbf{Beschreibung} & \textbf{Biologische Relevanz} \\
 \midrule
@@ -112,7 +134,7 @@ Zustandsselektion & Stabilit\"at korreliert mit hohem $\dot{S}$ & Stabilisierung
 Gradientenantwort & Adaptation an zunehmenden Energieeintrag & Erh\"ohung photosynthetischer Effizienz \\
 Prigogine (LMEP) & Minimale Entropie nahe Gleichgewicht & Nur f\"ur lineare, schwach getriebene Systeme \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \begin{remark}[MEPP als Stabilit\"atsfilter, nicht als Selektionsgesetz]
@@ -156,17 +178,17 @@ Eine Schl\"usseleinsicht aus der Resolventenanalyse der Riemannschen Vermutung \
 \centering
 \caption{Abbildung spieltheoretischer Konzepte auf physikalische und biologische Gegenst\"ucke.}
 \label{tab:game-biology-mapping}
-\begin{tabular}{lll}
+\begin{tabularx}{\textwidth}{@{}L{0.18\textwidth} L{0.29\textwidth} Y@{}}
 \toprule
 \textbf{Spielkonzept} & \textbf{Physikalische Entsprechung} & \textbf{Biologisches Beispiel} \\
 \midrule
 Nash-Gleichgewicht & Stabiler station\"arer Zustand & Ph\"anotyp-Koexistenz \\
 ESS & Attraktor mit lokaler Stabilit\"at & Allel-Fixierung \\
 Payoff-Matrix & Energie-/Fitnesslandschaft & Enzym-Substrat-Affinit\"at \\
-Gemischte Strategie & Polymorphismus/Heterogenit\"at & Arbeitsteilung in Kolonien \\
+Gemischte Strategie & Populationsheterogenit\"at & Arbeitsteilung in Kolonien \\
 Nash-Frustration & Residuale Instabilit\"at an der Stabilit\"atsgrenze & Funktionelle Flexibilit\"at in Proteinen \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \subsection{Proteinfaltung als Optimierungsspiel}
@@ -197,16 +219,16 @@ Formal wird \emph{residuen-spezifische Nash-Frustration} aus dem Best-Response-J
 wobei $\lambda_k$ und $v_k$ Eigenwerte bzw.\ Eigenvektoren von $J$ sind. Die \emph{globale Nash-Frustration} des gesamten Proteins wird durch den Spektralradius $\rho(J) = \max_k |\lambda_k|$ zusammengefasst; wenn $\rho(J) > 1$, ist mindestens ein Modus unter Best-Response-Dynamik instabil. Diese beiden Ma\ss{}e---residuen-spezifische Scores und der globale Spektralradius---sind komplement\"ar: $\rho(J)$ quantifiziert die Gesamtabweichung von Nash-Stabilit\"at, w\"ahrend der residuen-spezifische Score die Instabilit\"at lokalisiert.
 
 \textbf{Empirische Validierung und $\eta$-Unabh\"angigkeit.}
-Wir validierten die Nash-Frustrations-Metrik gegen experimentelle NMR Chemical-Shift-Perturbation (CSP)-Daten aus BMRB-Eintrag~4428 \cite{BMRB4428} f\"ur HP35 (Villin-Headpiece-Subdom\"ane, 1YRF). Die CSP pro Rest berechnet sich als $\text{CSP}_i = \sqrt{\Delta\delta_{\text{H}}^2 + (\Delta\delta_{\text{N}}/5)^2}$, wobei $\Delta\delta$ die sekund\"are chemische Verschiebung relativ zu Random-Coil-Referenzwerten \cite{Wishart1995} bezeichnet; der Faktor $1/5$ ist die Standard-Gewichtung f\"ur ${}^{15}$N \cite{Williamson2013}.
+Wir validierten die Nash-Frustrations-Metrik gegen experimentelle NMR Chemical-Shift-Perturbation (CSP)-Daten, die aus BMRB-Eintrag~4428 \cite{BMRB4428} abgeleitet wurden. Dieser BMRB-Eintrag ist der HP67-Villin-Headpiece-NMR-Datensatz (primär PDB 1QQV); für den HP35-Strukturbenchmark (PDB 1YRF) wurde die dokumentierte Residuenabbildung vom C-terminalen HP67-Subdomänenbereich auf HP35 verwendet, wobei mutierte oder fehlende Positionen ausgeschlossen wurden. Die CSP pro Rest berechnet sich als $\text{CSP}_i = \sqrt{\Delta\delta_{\text{H}}^2 + (\Delta\delta_{\text{N}}/5)^2}$, wobei $\Delta\delta$ die sekund\"are chemische Verschiebung relativ zu Random-Coil-Referenzwerten \cite{Wishart1995} bezeichnet; der Faktor $1/5$ ist die Standard-Gewichtung f\"ur ${}^{15}$N \cite{Williamson2013}.
 
 Die Spearman-Rangkorrelation zwischen residuen-spezifischer Nash-Frustration und CSP betr\"agt $\rho_S = 0{,}44$ ($p = 0{,}033$, $n = 24$ Reste) und zeigt, dass Frustrationswerte die Rangordnung der NMR-beobachteten strukturellen Perturbation korrekt abbilden. Die f\"unf am st\"arksten frustrierten Reste (M11, T12, S1, L0, L19) weisen CSP-Werte von 1{,}26, 0{,}68, 2{,}13, 1{,}44 und 1{,}10\,ppm auf, was best\"atigt, dass Frustrations-Hotspots experimentell nachweisbarer struktureller Spannung entsprechen. Ein Ausrei\ss{}er (K23, CSP~$= 2{,}67$\,ppm bei niedriger Frustration) ist auf den bekannten Trp-Ringstromeffekt an dieser Position zur\"uckzuf\"uhren.
 
-Entscheidend ist, dass ein systematischer Scan \"uber $\eta \in \{0{,}001;\; 0{,}005;\; 0{,}01;\; 0{,}015;\; 0{,}02;\; 0{,}05;\; 0{,}1\}$ zeigt, dass die Frustrations-CSP-Korrelation \emph{strikt unabh\"angig} von~$\eta$ ist (Variation~$< 10^{-6}$). Dies folgt aus der Struktur der Frustrationskarte: Alle instabilen Eigenmoden stammen von negativen Hesse-Eigenwerten, und $\eta$ skaliert das Instabilit\"atsgewicht linear, was sich unter Max-Normalisierung herausk\"urzt. Daher dient $\eta$ ausschlie\ss{}lich als Konvergenzparameter f\"ur die Best-Response-Dynamik, \emph{nicht} als Physikparameter, der empirischer Kalibrierung bedarf. Dieses Ergebnis, validiert gegen zwei unabh\"angige Random-Coil-Referenzs\"atze (Wishart~1995, $r = 0{,}18$; Kjaergaard--Poulsen~2011, $r = 0{,}20$; $|\Delta r| < 0{,}02$), hebt die Methode von einer Machbarkeitsstudie zu einem empirisch fundierten, parameterfreien Diagnostikum f\"ur Protein-Strukturstabilit\"at.
+Entscheidend ist, dass ein systematischer Scan \"uber sieben $\eta$-Werte zwischen $0{,}001$ und $0{,}1$ zeigt, dass die Frustrations-CSP-Korrelation \emph{strikt unabh\"angig} von~$\eta$ ist (Variation~$< 10^{-6}$). Dies folgt aus der Struktur der Frustrationskarte: Alle instabilen Eigenmoden stammen von negativen Hesse-Eigenwerten, und $\eta$ skaliert das Instabilit\"atsgewicht linear, was sich unter Max-Normalisierung herausk\"urzt. Daher dient $\eta$ ausschlie\ss{}lich als Konvergenzparameter f\"ur die Best-Response-Dynamik, \emph{nicht} als Physikparameter, der empirischer Kalibrierung bedarf. Dieses Ergebnis, validiert gegen zwei unabh\"angige Random-Coil-Referenzs\"atze (Wishart~1995, $r = 0{,}18$; Kjaergaard--Poulsen~2011 \cite{KjaergaardPoulsen2011}, $r = 0{,}20$; $|\Delta r| < 0{,}02$), hebt die Methode von einer Machbarkeitsstudie zu einem empirisch fundierten, parameterfreien Diagnostikum f\"ur Protein-Strukturstabilit\"at.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{results/fst_iii/eta_calibration/eta_calibration_csp.pdf}
-\caption{Streudiagramm der residuenspezifischen Nash-Frustrationswerte gegen NMR-Chemical-Shift-Perturbation (CSP) f\"ur HP35 (1YRF). Jeder Punkt repr\"asentiert einen Rest; die Spearman-Rangkorrelation betr\"agt $\rho_S = 0{,}44$ ($p = 0{,}033$). Die Farbkodierung zeigt den Lernraten-Parameter $\eta$ und demonstriert, dass die Frustrations-CSP-Beziehung strikt unabh\"angig von $\eta$ ist (alle $\eta$-Werte fallen auf dieselbe Kurve). Der Ausrei\ss{}er K23 (hohe CSP, niedrige Frustration) ist auf den Trp-Ringstromeffekt zur\"uckzuf\"uhren, nicht auf strukturelle Instabilit\"at.}
+\includegraphics[width=\textwidth]{eta_calibration/eta_calibration_csp.pdf}
+\caption{Streudiagramm der residuenspezifischen Nash-Frustrationswerte gegen NMR-Chemical-Shift-Perturbation (CSP) für den HP35/1YRF-Benchmark, unter Verwendung von aus BMRB 4428 abgeleiteten HP67-Verschiebungen, die auf die C-terminale HP35-Subdomäne abgebildet wurden. Jeder Punkt repr\"asentiert einen Rest; die Spearman-Rangkorrelation betr\"agt $\rho_S = 0{,}44$ ($p = 0{,}033$). Die Farbkodierung zeigt den Lernraten-Parameter $\eta$ und demonstriert, dass die Frustrations-CSP-Beziehung strikt unabh\"angig von $\eta$ ist (alle $\eta$-Werte fallen auf dieselbe Kurve). Der Ausrei\ss{}er K23 (hohe CSP, niedrige Frustration) ist auf den Trp-Ringstromeffekt zur\"uckzuf\"uhren, nicht auf strukturelle Instabilit\"at.}
 \label{fig:eta-calibration}
 \end{figure}
 
@@ -234,7 +256,7 @@ Erweiterte Drei-Proteine-Analyse (LaTeX-Tabellenerzeugung, Konvergenzdiagnostik)
 \centering
 \caption{Vergleich von energetischer Frustration (Ferreiro et al.) und Nash-Frustration (diese Arbeit). Die beiden Ma\ss{}e erfassen komplement\"are Aspekte der Proteinstabilit\"at.}
 \label{tab:frustration-comparison}
-\begin{tabular}{lll}
+\begin{tabularx}{\textwidth}{@{}L{0.18\textwidth} L{0.34\textwidth} Y@{}}
 \toprule
 \textbf{Konzept} & \textbf{Energetische Frustration} & \textbf{Nash-Frustration} \\
 \midrule
@@ -243,7 +265,7 @@ Methode & Kontaktenergie-Statistik & Best-Response-Jacobian-Eigenanalyse \\
 Interpretation & Evolution\"are Einschr\"ankung & Spieltheoretische Koordination \\
 Hohe Werte zeigen & Funktionelle Stellen, Schnittstellen & Faltungsintermediate, kinetische Fallen \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 Rechnerische Experimente an drei strukturell verschiedenen Proteinen best\"atigen, dass Nash-Frustration biologisch bedeutsame Reste identifiziert. Tabelle~\ref{tab:nash-results} fasst die Ergebnisse zusammen.
@@ -285,21 +307,21 @@ Um zu beurteilen, ob Nash-Frustration Information \"uber biologische Funktion \"
 \centering
 \caption{Benchmark der Nash-Frustration als Pr\"adiktor funktioneller Reste. AUC: Fl\"ache unter der ROC-Kurve; AUPRC: Fl\"ache unter der Precision-Recall-Kurve. Mittlere Frustrationswerte als Mittelwert $\pm$ Standardabweichung. Skript: \texttt{frustration\_benchmark.py}.}
 \label{tab:frustration-benchmark}
-\begin{tabular}{lcccc}
+\begin{tabularx}{\textwidth}{@{}L{0.18\textwidth} c c Y Y@{}}
 \toprule
 \textbf{Protein} & \textbf{AUC} & \textbf{AUPRC} & \textbf{Mittl.\ Frust.\ (funktionell)} & \textbf{Mittl.\ Frust.\ (passiv)} \\
 \midrule
 HP35 (1YRF) & 0{,}616 & 0{,}550 & $0{,}160 \pm 0{,}269$ & $0{,}031 \pm 0{,}082$ \\
 Protein G (1PGA) & 0{,}688 & 0{,}618 & $0{,}229 \pm 0{,}247$ & $0{,}096 \pm 0{,}101$ \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 Die AUC-Werte von 0{,}62 (HP35) und 0{,}69 (Protein~G) zeigen moderate Diskriminationsf\"ahigkeit: Nash-Frustration tr\"agt Information \"uber funktionelle Reste \"uber das Zufallsniveau hinaus (AUC $> 0{,}5$), ist aber diagnostisch nicht stark. Funktionelle Reste weisen in beiden Proteinen signifikant h\"ohere mittlere Nash-Frustration auf als passive Reste ($0{,}160$ vs.\ $0{,}031$ f\"ur HP35; $0{,}229$ vs.\ $0{,}096$ f\"ur Protein~G), was best\"atigt, dass spieltheoretische Instabilit\"at bevorzugt an biologisch aktiven Stellen lokalisiert ist. Die moderaten AUC-Werte sind angesichts des Proof-of-Concept-Charakters der Analyse erwartbar: der $\eta$-Parameter bleibt unkalibriert, und das spieltheoretische Potential l\"asst Seitenketten-Wechselwirkungen, L\"osungsmitteleffekte und Elektrostatik au\ss{}er Acht. Diese Ergebnisse sind konsistent mit der Interpretation, dass Nash-Frustration ein komplement\"ares Signal zur energetischen Frustration erfasst---eines, das Koordinationsversagen statt energetischer Suboptimalit\"at reflektiert---aber weitere Kalibrierung erfordert, bevor es als eigenst\"andiger Pr\"adiktor dienen kann.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{results/fst_iii/benchmark/frustration_benchmark_roc.png}
+\includegraphics[width=\textwidth]{benchmark/frustration_benchmark_roc.png}
 \caption{Receiver-Operating-Characteristic (ROC)-Kurven f\"ur Nash-Frustration als bin\"arer Klassifikator funktioneller versus passiver Reste. HP35 (1YRF, AUC\,=\,0{,}62) und Protein~G (1PGA, AUC\,=\,0{,}69) \"ubertreffen beide die Zufallsbasislinie (gestrichelte Diagonale), was best\"atigt, dass spieltheoretische Instabilit\"at bevorzugt an biologisch aktiven Stellen lokalisiert ist. Die moderaten AUC-Werte spiegeln den Proof-of-Concept-Charakter der Analyse wider; Verbesserungen werden bei Einbeziehung von Seitenketten-Wechselwirkungen und L\"osungsmitteleffekten erwartet.}
 \label{fig:frustration-benchmark-roc}
 \end{figure}
@@ -434,7 +456,7 @@ Kauffman argumentierte, dass Netzwerkstabilit\"at von der Konnektivit\"at und de
 \centering
 \caption{Regime Boolescher Netzwerke und ihre biologische Interpretation. Netzwerke am Rand des Chaos weisen maximale Evolvabilit\"at auf.}
 \label{tab:network-regimes}
-\begin{tabular}{lll}
+\begin{tabularx}{\textwidth}{@{}L{0.22\textwidth} L{0.28\textwidth} Y@{}}
 \toprule
 \textbf{Netzwerkregime} & \textbf{Dynamisches Verhalten} & \textbf{Biologische Funktion} \\
 \midrule
@@ -442,7 +464,7 @@ Geordnet & Eingefrorene Zust\"ande, geringe Variabilit\"at & Strukturelle Integr
 Kritisch (Rand des Chaos) & Komplexe Muster, hoher Informationsfluss & Adaptives Verhalten, Differenzierung, Lernen \\
 Chaotisch & Hohe Sensitivit\"at, Instabilit\"at & Pathologische Zust\"ande, Malignit\"at \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 Diese Attraktoren in Genregulationsnetzwerken bilden die materielle Basis f\"ur die spieltheoretischen Strategien auf h\"oheren Ebenen. Eine ESS auf der Makroebene erfordert stabile genetische Attraktoren auf der Mikroebene, die zuverl\"assig die notwendigen ph\"anotypischen Merkmale produzieren \citep{BooleanMicroarray,KauffmanOrigins}.
@@ -505,7 +527,7 @@ Renormalizing Generative Models (RGM) zeigen, dass Prinzipien der freien Energie
 
 \subsection{Das skalenrelative Kernmodell}
 
-Diese Instanziierung wird durch das Skalenrelative Kernmodell beschrieben \citep{ReplicatorOptimization}:
+Diese Instanziierung wird durch skalenrelative Fitnessmodelle der Mehrebenenselektion beschrieben \citep{Okasha2006,Michod1999,ReplicatorOptimization}:
 
 \begin{table}[htbp]
 \centering
@@ -613,7 +635,7 @@ Sobald dissipative Strukturen die Schwelle zur Selbstreplikation \"uberschreiten
 
 \subsection{Phase 3: Kognitive Inferenz}
 
-Organismen entwickeln interne Modelle ihrer Umgebung, um ihre freie Energie zu minimieren. Die Entstehung der Markov-Decke (Abschnitt~\ref{sec:fep}) erlaubt die Trennung von Selbst und Welt und etabliert die FEP-MEPP-Kompatibilit\"at von Conjecture~\ref{conj:fep-mepp}: interner Modellbau (Freie-Energie-Minimierung) erm\"oglicht \"au\ss{}ere dissipative Effizienz (hohe Entropieproduktion).
+Organismen entwickeln interne Modelle ihrer Umgebung, um ihre freie Energie zu minimieren. Die Entstehung der Markov-Decke (Abschnitt~\ref{sec:fep}) erlaubt die Trennung von Selbst und Welt und etabliert die FEP-MEPP-Kompatibilit\"at der Konjektur~\ref{prop:fep-mepp}: interner Modellbau (Freie-Energie-Minimierung) erm\"oglicht \"au\ss{}ere dissipative Effizienz (hohe Entropieproduktion).
 
 Diese dritte Phase markiert einen qualitativen Wandel in der spieltheoretischen Hierarchie. In Phase~2 sind die ``Spieler'' molekulare oder zellul\"are Agenten, deren Strategien durch physikalische Chemie bestimmt werden. In Phase~3 erwerben Agenten \emph{generative Modelle} ihrer Umgebung: die Strategien sind nicht mehr fixierte ph\"anotypische Zust\"ande, sondern Policies---Sequenzen von Aktionen, bedingt auf inferierte Umgebungszust\"ande. Active Inference \citep{FristonFreeEnergy} liefert den Mechanismus: Agenten w\"ahlen Aktionen, die die erwartete freie Energie minimieren (d.\,h.\ sie handeln, um ihre Vorhersagen zu best\"atigen oder Unsicherheit zu reduzieren). Dies konvertiert die statischen Nash-Gleichgewichte von Phase~2 in dynamische Bayessche Nash-Gleichgewichte, bei denen die Strategie jedes Agenten von seinen \"Uberzeugungen \"uber andere abh\"angt. Die verschachtelte Hierarchie der Inferenz---von interozeptiver Hom\"oostase \"uber Wahrnehmung bis zur Planung---spiegelt die Grobk\"ornungslogik von Abschnitt~\ref{sec:renormalization}: jede Inferenzebene integriert \"uber die Freiheitsgrade darunter und produziert ein zunehmend abstraktes Spiel auf h\"oheren zeitlichen und r\"aumlichen Skalen. Der Endpunkt dieser Hierarchie---Bewusstsein, Sprache und Kultur---kann als hochkomprimierte Form der spieltheoretischen Stabilit\"atslogik \emph{interpretiert} werden, wobei die ``Strategien'' symbolische Repr\"asentationen und der ``Payoff'' pr\"adiktive Genauigkeit \"uber beliebig lange Zeithorizonte ist \citep{FristonPDF}. Diese Extrapolation ist spekulativ und geht \"uber das hinaus, was der vorliegende Rahmen formal ableiten kann.
 
@@ -638,7 +660,7 @@ Die Energielandschaft der Proteinfaltung kann durch Nash-Gleichgewichts-Stabilit
 Zelltyp-Attraktoren in Genregulationsnetzwerken k\"onnen aus der Nash-Analyse des TF-DNA-Bindungsspiels vorhergesagt werden.
 \end{hypothesis}
 
-\textbf{Test:} Berechne f\"ur gut charakterisierte GRNs (z.\,B.\ das \textit{Drosophila}-Segmentpolarit\"atsnetzwerk oder das S\"augetier-h\"amatopoietische Differenzierungsnetzwerk) Nash-Gleichgewichte des TF-DNA-Bindungsspiels. Vergleiche Anzahl und Identit\"at der vorhergesagten Attraktorzust\"ande mit experimentell beobachteten Zelltypen. Erfolgskriterium: die vorhergesagte Attraktorzahl sollte mit der bekannten Zelltypzahl innerhalb eines Faktors zwei \"ubereinstimmen.
+\textbf{Test:} Berechne f\"ur gut charakterisierte GRNs Nash-Gleichgewichte des TF-DNA-Bindungsspiels, etwa f\"ur das \textit{Drosophila}-Segmentpolarit\"atsnetzwerk oder f\"ur ein h\"amatopoietisches Differenzierungsnetzwerk von S\"augetieren. Vergleiche Anzahl und Identit\"at der vorhergesagten Attraktorzust\"ande mit experimentell beobachteten Zelltypen. Erfolgskriterium: Die vorhergesagte Attraktorzahl sollte mit der bekannten Zelltypzahl innerhalb eines Faktors zwei \"ubereinstimmen.
 
 \subsection{P3: Krebs und Koalitionsstabilit\"at}
 
@@ -662,7 +684,7 @@ Die Krebsinzidenz korreliert invers mit der multizellul\"aren Koalitionsstabilit
 \"Okosystem-Resilienz kann aus der spektralen L\"ucke der Nash-Stabilit\"atsmatrix des \"okologischen Gleichgewichts vorhergesagt werden.
 \end{hypothesis}
 
-\textbf{Test:} F\"ur gut charakterisierte \"Okosysteme (z.\,B.\ Yellowstone-Nahrungsnetz, Korallenriff-Gemeinschaften), berechne die Jacobi-Eigenwert-L\"ucke am Nash-Gleichgewicht. Sage vorher, dass \"Okosysteme mit gr\"o\ss{}erer spektraler L\"ucke sich schneller von St\"orungen erholen. Vergleiche mit empirischen Resilienzma\ss{}en (Erholungszeit nach St\"orungsereignissen).
+\textbf{Test:} Berechne f\"ur gut charakterisierte \"Okosysteme die Jacobi-Eigenwert-L\"ucke am Nash-Gleichgewicht, etwa f\"ur das Yellowstone-Nahrungsnetz oder f\"ur Korallenriff-Gemeinschaften. Sage vorher, dass \"Okosysteme mit gr\"o\ss{}erer spektraler L\"ucke sich schneller von St\"orungen erholen. Vergleiche dies mit empirischen Resilienzma\ss{}en wie der Erholungszeit nach St\"orungsereignissen.
 
 % ===================================================================
 \section{Diskussion}
@@ -859,18 +881,21 @@ Die zentralen offenen Herausforderungen sind die Kalibrierung der absoluten Nash
 
 \bibitem[Geiger(2026a)]{FSTI}
 Geiger, L. (2026).
-\newblock Functional Stability Theory I: Thermodynamic Stability of Fundamental Parameters.
-\newblock Preprint (FST-I).
+\newblock Functional Stability Theory I: A Game-Theoretic Framework for the Thermodynamic Stability of Fundamental Parameters.
+\newblock \textit{Zenodo preprint}, v1.1.
+\newblock Concept DOI: 10.5281/zenodo.20130544.
 
 \bibitem[Geiger(2026b)]{FSTII}
 Geiger, L. (2026).
 \newblock Functional Stability Theory II: Chemical Stability and Autocatalytic Selection.
-\newblock Preprint (FST-II).
+\newblock \textit{Zenodo preprint}, v1.2.
+\newblock Concept DOI: 10.5281/zenodo.20130563.
 
 \bibitem[Aktipis et al.(2015)]{AktipisCancer}
 Aktipis, C.~A. et al. (2015).
-\newblock Cancer across the tree of life.
+\newblock Cancer across the tree of life: cooperation and cheating in multicellularity.
 \newblock \textit{Phil. Trans. R. Soc. B}, 370, 20140219.
+\newblock DOI: 10.1098/rstb.2014.0219.
 
 \bibitem[Anfinsen(1973)]{Anfinsen1973}
 Anfinsen, C.~B. (1973).
@@ -881,6 +906,7 @@ Anfinsen, C.~B. (1973).
 Graudenzi, A., Serra, R., Villani, M., Damiani, C., Colacci, A. \& Kauffman, S.~A. (2011).
 \newblock Dynamical properties of a Boolean model of gene regulatory network with memory.
 \newblock \textit{Journal of Computational Biology}, 18(10), 1291--1303.
+\newblock DOI: 10.1089/cmb.2010.0069.
 
 \bibitem[M\"ussel et al.(2010)]{BooleanMicroarray}
 M\"ussel, C., Hopfensitz, M. \& Kestler, H.~A. (2010).
@@ -957,6 +983,7 @@ Maynard Smith, J. \& Price, G.~R. (1973).
 Bohl, K., Hummert, S., Werner, S., Basanta, D., Deutsch, A., Schuster, S., Theissen, G. \& Schroeter, A. (2014).
 \newblock Evolutionary game theory: molecules as players.
 \newblock \textit{Molecular BioSystems}, 10(12), 3066--3074.
+\newblock DOI: 10.1039/C3MB70601J.
 
 \bibitem[Maynard Smith(1982)]{MaynardSmith1982}
 Maynard Smith, J.
@@ -973,10 +1000,16 @@ Nash, J.~F. (1950).
 \newblock Equilibrium points in n-person games.
 \newblock \textit{PNAS}, 36(1), 48--49.
 
-\bibitem[Cressman \& Garay(2003)]{PredatorPreyESS}
-Cressman, R. \& Garay, J. (2003).
-\newblock Evolutionary stability in Lotka-Volterra systems.
-\newblock \textit{Journal of Theoretical Biology}, 222(2), 233--245.
+\bibitem[Okasha(2006)]{Okasha2006}
+Okasha, S. (2006).
+\newblock \textit{Evolution and the Levels of Selection}.
+\newblock Oxford University Press.
+\newblock DOI: 10.1093/acprof:oso/9780199267972.001.0001.
+
+\bibitem[Michod(1999)]{Michod1999}
+Michod, R.~E. (1999).
+\newblock \textit{Darwinian Dynamics: Evolutionary Transitions in Fitness and Individuality}.
+\newblock Princeton University Press.
 
 \bibitem[Farzulla(2026)]{ReplicatorOptimization}
 Farzulla, M. (2026).
@@ -987,6 +1020,7 @@ Farzulla, M. (2026).
 Friston, K. et al. (2025).
 \newblock From pixels to planning: scale-free active inference.
 \newblock \textit{Frontiers in Network Physiology}, 5, 1521963.
+\newblock DOI: 10.3389/fnetp.2025.1521963.
 
 \bibitem[Wilson(1975)]{ScaleRGResearch}
 Wilson, K.~G. (1975).
@@ -1008,11 +1042,13 @@ S\'anchez-Ca\~nizares, J. (2021).
 Gallos, L.~K., Makse, H.~A. \& Sigman, M. (2012).
 \newblock A small world of weak ties provides optimal global integration of self-similar modules in functional brain networks.
 \newblock \textit{PNAS}, 109(8), 2825--2830.
+\newblock DOI: 10.1073/pnas.1106612109.
 
 \bibitem[Szathm\'ary \& Maynard Smith(1995)]{SzathmaryMaynardSmith1995}
-Szathm\'ary, E. \& Maynard Smith, J.
+Szathm\'ary, E. \& Maynard Smith, J. (1995).
 \newblock The major evolutionary transitions.
-\newblock \textit{Nature}, 374, 227, 1995.
+\newblock \textit{Nature}, 374, 227--232.
+\newblock DOI: 10.1038/374227a0.
 
 \bibitem[Ferreiro(2007)]{Ferreiro2007}
 Ferreiro, D.U., Hegler, J.A., Komives, E.A. \& Wolynes, P.G.
@@ -1047,18 +1083,21 @@ Brown, J.~H., Gillooly, J.~F., Allen, A.~P., Savage, V.~M. \& West, G.~B. (2004)
 
 \bibitem[Geiger(2026c)]{GeigerRH2026c}
 Geiger, L. (2026).
-\newblock The Riemann Hypothesis Part III: The Analytical Rank-Finite Certificate.
-\newblock \textit{Zenodo preprint}, March 2026.
+\newblock From Landscape to Proof: The Even-Dominance Route to the Riemann Hypothesis.
+\newblock \textit{Zenodo preprint}, v2.1.
+\newblock Concept DOI: 10.5281/zenodo.19035640.
 
 \bibitem[Geiger(2026e)]{GeigerRH2026b}
 Geiger, L. (2026).
-\newblock Even Dominance of the Weil Quadratic Form: Spectral Analysis, Computer-Assisted Proof, and the Resolvent Gap Theorem.
-\newblock \textit{Zenodo preprint}, March 2026.
+\newblock A Conditional Proof of the Riemann Hypothesis via Even Dominance of the Weil Quadratic Form.
+\newblock \textit{Zenodo preprint}, v1.2.
+\newblock Concept DOI: 10.5281/zenodo.19764771.
 
 \bibitem[Geiger(2026d)]{FST-Unified2026}
 Geiger, L. (2026).
-\newblock The Renormalized Free Energy Framework: A Unified Resolution of Structural Bottlenecks.
-\newblock \textit{FST Framework Paper}, 2026.
+\newblock FST Spectrum Duality: The Renormalized Free Energy Principle as Physical Instantiation of Functional Stability Theory.
+\newblock \textit{Zenodo preprint}, v1.7.
+\newblock Concept DOI: 10.5281/zenodo.19036190.
 
 \bibitem[Sawada et al.(2025)]{Toma2025}
 Sawada, Y., Daigaku, Y. \& Toma, K. (2025).
@@ -1076,6 +1115,12 @@ Wagner, A. (2005).
 \newblock \textit{Robustness and Evolvability in Living Systems}.
 \newblock Princeton University Press, Princeton, NJ.
 
+\bibitem[Kjaergaard \& Poulsen(2011)]{KjaergaardPoulsen2011}
+M.~Kjaergaard and F.~M.~Poulsen (2011).
+\newblock Sequence correction of random coil chemical shifts: correlation between neighbor correction factors and changes in the Ramachandran distribution.
+\newblock \textit{Journal of Biomolecular NMR}, 50, 157--165.
+\newblock DOI: 10.1007/s10858-011-9508-2.
+
 \bibitem[Lasry and Lions(2007)]{LasryLions2007}
 J.-M.~Lasry and P.-L.~Lions (2007).
 \newblock Mean Field Games.
@@ -1086,8 +1131,8 @@ J.-M.~Lasry and P.-L.~Lions (2007).
 D.~Vardar, D.~A.~Buckley, B.~S.~Frank, and C.~J.~McKnight (1999).
 \newblock NMR structure of an F-actin-binding ``headpiece'' motif from villin.
 \newblock \textit{Journal of Molecular Biology}, 294, 1299--1310.
-\newblock DOI: 10.1006/jmbi.1999.3363.
-\newblock BMRB entry 4428.
+\newblock DOI: 10.1006/jmbi.1999.3321.
+\newblock BMRB entry 4428; BMRB DOI: 10.13018/BMR4428.
 
 \bibitem[Wishart et al.(1995)]{Wishart1995}
 D.~S.~Wishart, C.~G.~Bigam, A.~Holm, R.~S.~Hodges, and B.~D.~Sykes (1995).
