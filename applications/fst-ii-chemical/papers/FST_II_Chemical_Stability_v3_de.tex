@@ -9,15 +9,20 @@
 % Packages
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage[protrusion=true,expansion=false]{microtype}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{physics}
 \usepackage{graphicx}
-\usepackage{hyperref}
+\usepackage[unicode=true,pdfencoding=auto,psdextra]{hyperref}
 \usepackage{booktabs}
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{natbib}
 \usepackage{cleveref}
 \usepackage{enumitem}
+\usepackage{tabularx}
+
+\setlength{\emergencystretch}{3em}
 
 % Theorem environments
 \newtheorem{proposition}{Proposition}
@@ -32,20 +37,29 @@
 \title{Funktionale Stabilit\"atstheorie II: Chemische Stabilit\"at und autokatalytische Selektion}
 
 \author{Lukas Geiger\\
-\textit{Unabh\"angiger Forscher, Bernau im Schwarzwald, Deutschland}\\
+\textit{Unabh\"angiger Forscher, Bernau, Deutschland}\\
 ORCID: \url{https://orcid.org/0009-0005-7296-1534}}
 
 \date{M\"arz 2026}
+
+\hypersetup{
+    pdftitle={Funktionale Stabilitätstheorie II: Chemische Stabilität und autokatalytische Selektion},
+    pdfauthor={Lukas Geiger},
+    pdfsubject={Präbiotische Chemie, Autokatalyse und Funktionale Stabilitätstheorie},
+    pdfkeywords={Autokatalyse, Hyperzyklus, Spieltheorie, Nash-Gleichgewicht, Chiralität, Ursprung des Lebens, Entropieproduktion, Dynamic Kinetic Stability, Replikator-Dynamik}
+}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-Dieses Paper entwickelt einen spieltheoretischen Rahmen f\"ur die pr\"abiotische Chemie und zeigt, dass autokatalytische Netzwerke, Hyperzyklen und Chiralit\"atsselektion als Nash-Gleichgewichte thermodynamischer Spiele interpretiert werden k\"onnen. Aufbauend auf dem Konzept der Dynamic Kinetic Stability (DKS) und der England-Ungleichung aus der Nicht-Gleichgewichts-Statistischen Mechanik schlagen wir vor, dass das Maximum Entropy Production Principle (MEPP) als Stabilit\"atsfilter dient---der die lebensfähige Mannigfaltigkeit replizierender Systeme abgrenzt---und nicht als kausaler Treiber molekularer Evolution. Wir pr\"asentieren empirische Motivation aus Azoarcus-Ribozym-Experimenten, die zeigen, dass RNA-Replikationsdynamiken auf klassische spieltheoretische Payoff-Matrizen abbilden, einschlie\ss{}lich Kooperation, Dominanz und Gefangenendilemma. Der Rahmen erkl\"art Homochiralit\"at als spontane Symmetriebrechung in einem entarteten Nash-Gleichgewicht, konsistent mit Viedma-Ripening-Experimenten. R\"aumliche Erweiterungen \"uber Reaktions-Diffusions-Systeme zeigen, dass Spiralwellenbildung die Distributed Evolutionarily Stable Strategy (DESS) repr\"asentiert, die Hyperzyklen gegen parasit\"are Invasion sch\"utzt. Eine Resolventenstabilit\"ats-Perspektive wird entwickelt, die strukturelle Selektion zweiter Ordnung als den Mechanismus identifiziert, der persistente Konfigurationen von transienten unterscheidet. Wichtige Einschr\"ankungen umfassen den umstrittenen Status von MEPP als Selektionsprinzip f\"ur fern vom Gleichgewicht befindliche Systeme und die Abh\"angigkeit von einem einzigen experimentellen System (Azoarcus-Ribozyme) als empirische Motivation.
+Dieser Artikel entwickelt einen spieltheoretischen Rahmen f\"ur die pr\"abiotische Chemie und untersucht, wie autokatalytische Netzwerke, Hyperzyklen und Chiralit\"atsselektion als Nash-Gleichgewichts-artige Strukturen thermodynamischer Spiele interpretiert werden k\"onnen. Aufbauend auf Dynamic Kinetic Stability (DKS) und der England-Ungleichung aus der statistischen Mechanik des Nichtgleichgewichts schlagen wir vor, das Maximum Entropy Production Principle (MEPP) als Stabilit\"atsfilter zu lesen, der die lebensf\"ahige Mannigfaltigkeit replizierender Systeme abgrenzt, statt als kausalen Treiber molekularer Evolution. Empirische Motivation liefern Azoarcus-Ribozym-Experimente, in denen sich RNA-Replikationsdynamiken auf klassische spieltheoretische Payoff-Matrizen abbilden lassen, darunter Kooperation, Dominanz und Gefangenendilemma. Der Rahmen modelliert Homochiralit\"at als spontane Symmetriebrechung in einem entarteten Nash-Gleichgewicht, konsistent mit Viedma-Ripening-Experimenten. R\"aumliche Erweiterungen \"uber Reaktions-Diffusions-Systeme legen nahe, dass Spiralwellen als verteilte evolution\"ar stabile Strategie (Distributed Evolutionarily Stable Strategy, DESS) gedeutet werden k\"onnen, die Hyperzyklen gegen parasit\"are Invasion sch\"utzt. Eine Resolventenstabilit\"ats-Perspektive fasst strukturelle Selektion zweiter Ordnung als Kandidatenmechanismus, der persistente von transienten Konfigurationen unterscheidet. Es werden sechs testbare Vorhersagen formuliert. Die Grenzen des Rahmens---insbesondere der umstrittene Status von MEPP fern vom Gleichgewicht und die Beschr\"ankung auf ein einziges experimentelles System---werden ausdr\"ucklich benannt.
 \end{abstract}
 
 \textbf{Schl\"usselw\"orter:} Autokatalyse, Hyperzyklus, Spieltheorie, Nash-Gleichgewicht, Chiralit\"at, Ursprung des Lebens, Entropieproduktion, Dynamic Kinetic Stability, Replikator-Dynamik
+
+\clearpage
 
 % ===================================================================
 \section{Einleitung}
@@ -54,16 +68,16 @@ Dieses Paper entwickelt einen spieltheoretischen Rahmen f\"ur die pr\"abiotische
 
 Der Ursprung des Lebens repr\"asentiert eine der tiefgreifendsten Herausforderungen der modernen Wissenschaft. Traditionelle Ans\"atze zu diesem Problem waren weitgehend deskriptiv und konzentrierten sich auf die Katalogisierung molekularer Bausteine und die Analyse isolierter linearer Reaktionspfade in mutma\ss{}lichen pr\"abiotischen Umgebungen \citep{MillerUrey}. W\"ahrend diese klassischen Ans\"atze grundlegende Evidenz f\"ur die abiotische Synthese organischer Molek\"ule lieferten, konnten sie den entscheidenden qualitativen Sprung nicht erkl\"aren: die spontane Entstehung systemischer Komplexit\"at, Selbstreplikation und evolution\"arer Dynamik aus einer stochastischen Mischung unbelebter Materie.
 
-Der FST-II-Rahmen (Functional Stability Theory II---``Fractal'' in dem Sinne, dass dieselbe Stabilit\"atslogik zweiter Ordnung \"uber physikalische Skalen hinweg wiederkehrt) schl\"agt eine komplement\"are Perspektive vor. Er erweitert den spieltheoretischen Formalismus, der in FST-I \citep{FSTI} eingef\"uhrt wurde, von der Teilchenphysik auf chemische Skalen, aufbauend auf den thermodynamischen Grundlagen von Englands statistischer Physik der Selbstreplikation \citep{England2013}. Er verl\"asst die reduktionistische Ebene reiner molekularer Katalogisierung und modelliert den \"Ubergang von pr\"abiotischer Chemie zu biologischen Systemen als einen statistisch gerichteten Optimierungsprozess, der durch die makroskopischen Gesetze der Nicht-Gleichgewichtsthermodynamik angetrieben und mathematisch durch die evolution\"are Spieltheorie formalisiert wird.
+Der FST-II-Rahmen (Functional Stability Theory II---``Fractal'' in dem Sinne, dass dieselbe Stabilit\"atslogik zweiter Ordnung \"uber physikalische Skalen hinweg wiederkehrt) schl\"agt eine komplement\"are Perspektive vor. Er erweitert den spieltheoretischen Formalismus, der in FST-I \citep{FSTI} eingef\"uhrt wurde, von der Teilchenphysik auf chemische Skalen, aufbauend auf den thermodynamischen Grundlagen von Englands statistischer Physik der Selbstreplikation \citep{England2013}. Er verl\"asst die reduktionistische Ebene reiner molekularer Katalogisierung und modelliert den \"Ubergang von pr\"abiotischer Chemie zu biologischen Systemen als einen m\"oglichen Stabilit\"atsselektionsprozess: Chemische Konfigurationen werden durch Nicht-Gleichgewichtsthermodynamik eingeschr\"ankt, w\"ahrend ihre Persistenz mit dem Vokabular der evolution\"aren Spieltheorie analysiert wird.
 
-Im Kernpostulat von FST-II steht die Pr\"amisse, dass pr\"abiotische Ph\"anomene h\"ochster Ordnung---wie die Etablierung der Autokatalyse, die Entstehung informationstragender Hyperzyklen \citep{Eigen1979} und die globale Symmetriebrechung der biologischen Homochiralit\"at---keine zuf\"alligen historischen Unf\"alle oder statistische Ausrei\ss{}er sind. Vielmehr repr\"asentieren diese Ph\"anomene statistisch robuste makroskopische Attraktoren in einem hochdimensionalen chemischen Phasenraum \citep{ReplicatorEntropy}. Konkret formuliert die Theorie diese Zust\"ande als Nash-Gleichgewichte in einem thermodynamischen Mehrspieler-Spiel, in dem einzelne Molek\"ule, pr\"abiotische Oligomere und ganze Reaktionsnetzwerke als autonome ``Spieler'' agieren, deren ``Strategien'' streng durch molekulare Erkennungsmechanismen, sterische Konformationen und katalytische Affinit\"aten definiert sind \citep{CGT2018,CGTMacmillan}.
+Im Kernpostulat von FST-II steht die Pr\"amisse, dass pr\"abiotische Ph\"anomene h\"oherer Ordnung---wie die Etablierung der Autokatalyse, die Entstehung informationstragender Hyperzyklen \citep{Eigen1979} und die globale Symmetriebrechung der biologischen Homochiralit\"at---nicht ausschlie\ss{}lich als zuf\"allige historische Unf\"alle oder statistische Ausrei\ss{}er behandelt werden m\"ussen. Vielmehr k\"onnen diese Ph\"anomene statistisch robuste makroskopische Attraktoren in einem hochdimensionalen chemischen Phasenraum repr\"asentieren \citep{ReplicatorEntropy}. Konkret formuliert die Theorie diese Zust\"ande als Nash-Gleichgewichts-artige Strukturen in einem thermodynamischen Mehrspieler-Spiel, in dem einzelne Molek\"ule, pr\"abiotische Oligomere und ganze Reaktionsnetzwerke \emph{so modelliert werden, als ob} sie ``Spieler'' w\"aren, deren ``Strategien'' durch molekulare Erkennungsmechanismen, sterische Konformationen und katalytische Affinit\"aten definiert sind \citep{CGT2018,CGTMacmillan}.
 
 % ===================================================================
 \section{Strukturelle Ausrichtung: FST-II als Pattern-A-Instanz}
 \label{sec:structural-alignment}
 % ===================================================================
 
-Der hier entwickelte chemische Stabilit\"atsrahmen (DKS) ist nicht blo\ss{} eine Heuristik, sondern eine Manifestation der \textbf{Pattern-A-Stabilit\"atslogik}, die das FST-\"Okosystem vereinigt (siehe \cite{FST-Unified2026}). Pattern A ist eine wiederkehrende mathematische Struktur \"uber FST hinweg: ein System zeigt Entartung in f\"uhrender Ordnung (viele Konfigurationen sind in erster N\"aherung gleicherma\ss{}en lebensfähig), und die Selektion erfolgt in zweiter Ordnung durch Kopplung zwischen entarteten Unterr\"aumen. Die j\"ungste \textbf{eichtheoretische Reformulierung der Riemannschen Vermutung} (siehe \cite{GeigerRH2026c}) liefert das strukturelle Vorbild f\"ur diese Architektur; dieser Abschnitt bildet dieses Vorbild auf die pr\"abiotische Chemie ab. Leser, die prim\"ar an der chemischen Spieltheorie interessiert sind, k\"onnen ohne Verlust der Kontinuit\"at zu Abschnitt~\ref{sec:thermodynamics} vorspringen.
+Der hier entwickelte chemische Stabilit\"atsrahmen (DKS) ist nicht blo\ss{} eine Heuristik, sondern eine Manifestation der \textbf{Pattern-A-Stabilit\"atslogik}, die das FST-\"Okosystem vereinigt (siehe \cite{FST-Unified2026}). Pattern A ist eine wiederkehrende mathematische Struktur \"uber FST hinweg: ein System zeigt Entartung in f\"uhrender Ordnung (viele Konfigurationen sind in erster N\"aherung gleicherma\ss{}en lebensf\"ahig), und die Selektion erfolgt in zweiter Ordnung durch Kopplung zwischen entarteten Unterr\"aumen. Die j\"ungste \textbf{eichtheoretische Reformulierung der Riemannschen Vermutung} (siehe \cite{GeigerRH2026c}) liefert das strukturelle Vorbild f\"ur diese Architektur; dieser Abschnitt bildet dieses Vorbild auf die pr\"abiotische Chemie ab. Leser, die prim\"ar an der chemischen Spieltheorie interessiert sind, k\"onnen ohne Verlust der Kontinuit\"at zu Abschnitt~\ref{sec:thermodynamics} vorspringen.
 
 In diesem Kontext werden pr\"abiotische autokatalytische Netzwerke wie folgt verstanden:
 \begin{enumerate}[label=\alph*)]
@@ -74,7 +88,7 @@ In diesem Kontext werden pr\"abiotische autokatalytische Netzwerke wie folgt ver
 
 Diese Ausrichtung erhebt FST-II von einer inspirierten Analogie zu einer strukturellen Parallele von ``Funktionale Positivit\"at unter Einschr\"ankung''.
 
-\paragraph{Terminologie.} Im gesamten Paper bezeichnet \emph{resolvent-stabil} einen Fixpunkt, bei dem die linearisierte Dynamik strikt negative Realteil-Eigenwerte in Nicht-Eich-Richtungen aufweist---d.\,h.\ asymptotische Stabilit\"at im ODE-Sinne (Abschnitt~\ref{sec:mepp}). Im chemischen Kontext ist dies \"aquivalent zur Standard-asymptotischen Stabilit\"at, wie sie in der chemischen Kinetik seit Ljapunow (1892) definiert ist. Wir \"ubernehmen das ``Resolvent''-Vokabular als \emph{terminologische Br\"ucke} zum FST-RH-Framework, wo es zus\"atzlichen spektraltheoretischen Gehalt tr\"agt; im vorliegenden chemischen Setting f\"ugt es keinen neuen mathematischen Gehalt \"uber asymptotische Stabilit\"at hinaus, hebt aber die strukturelle Parallele \"uber Skalen hinweg hervor. Man beachte, dass im FST-RH-Framework \citep{GeigerRH2026b} ``Positivit\"at'' sich auf die Hesse-Matrix eines Variationsfunktionals bezieht (positive Eigenwerte $=$ Maximum), w\"ahrend sie sich hier auf die Jacobi-Matrix der Ratengleichungen bezieht (negative Realteile $=$ R\"uckkehr zum Steady State). Beide Konventionen kodieren strukturelle Stabilit\"at; der Vorzeichenunterschied reflektiert den \"Ubergang von einer variationellen zu einer dynamischen Formulierung.
+\paragraph{Terminologie.} Im gesamten Artikel bezeichnet \emph{resolvent-stabil} einen Fixpunkt, bei dem die linearisierte Dynamik strikt negative Realteil-Eigenwerte in Nicht-Eich-Richtungen aufweist---d.\,h.\ asymptotische Stabilit\"at im ODE-Sinne (Abschnitt~\ref{sec:mepp}). Im chemischen Kontext ist dies \"aquivalent zur Standard-asymptotischen Stabilit\"at, wie sie in der chemischen Kinetik seit Ljapunow (1892) definiert ist. Wir \"ubernehmen das ``Resolvent''-Vokabular als \emph{terminologische Br\"ucke} zum FST-RH-Rahmen, wo es zus\"atzlichen spektraltheoretischen Gehalt tr\"agt; im vorliegenden chemischen Rahmen f\"ugt es keinen neuen mathematischen Gehalt \"uber asymptotische Stabilit\"at hinaus, hebt aber die strukturelle Parallele \"uber Skalen hinweg hervor. Man beachte, dass im FST-RH-Rahmen \citep{GeigerRH2026b} ``Positivit\"at'' sich auf die Hesse-Matrix eines Variationsfunktionals bezieht (positive Eigenwerte $=$ Maximum), w\"ahrend sie sich hier auf die Jacobi-Matrix der Ratengleichungen bezieht (negative Realteile $=$ R\"uckkehr in den station\"aren Zustand). Beide Konventionen kodieren strukturelle Stabilit\"at; der Vorzeichenunterschied reflektiert den \"Ubergang von einer variationellen zu einer dynamischen Formulierung.
 
 % ===================================================================
 \section{Thermodynamische Grundlagen: Dynamic Kinetic Stability}
@@ -94,7 +108,7 @@ DKS beschreibt das Verhalten hochenergetischer Systeme, die weit vom thermodynam
 \end{definition}
 
 \begin{center}
-\begin{tabular}{lll}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X}
 \toprule
 \textbf{Dimension} & \textbf{Thermodynamische Stabilit\"at} & \textbf{Dynamic Kinetic Stability} \\
 \midrule
@@ -105,7 +119,7 @@ Erhaltung & Energetische Isolation & Kontinuierlicher metabolischer Umsatz \\
 Evolution\"are Rolle & Endpunkt (W\"armetod) & Ausgangspunkt f\"ur Selektion \\
 Beispiele & Kristallisiertes Salz & Autokatalytische Zyklen, Zellen \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 Pr\"abiotische Replikationssysteme unterliegen den DKS-Prinzipien. Die Aufrechterhaltung eines dynamisch-kinetisch stabilen Zustands erfordert unvermeidlich Arbeit, und Arbeit erzeugt unvermeidlich Entropie, die aus dem System exportiert werden muss.
@@ -121,11 +135,11 @@ FST-II erweitert diesen Ansatz durch die Erkenntnis, dass pr\"abiotische Chemie 
 \label{sec:mepp}
 % ===================================================================
 
-Das Organisationsprinzip, das die Tendenz getriebener Systeme erkl\"art, hochgeordnete DKS-Zust\"ande anzunehmen, wird durch das Maximum Entropy Production Principle (MEPP) quantifiziert und formalisiert \citep{EntropyMEPP,MEPP2006}.
+Ein heuristisches Prinzip, das h\"aufig zur Interpretation hochgeordneter DKS-Zust\"ande herangezogen wird, ist das Maximum Entropy Production Principle (MEPP) \citep{EntropyMEPP,MEPP2006}.
 
 \subsection{Formulierung und historische Entwicklung}
 
-MEPP postuliert, dass komplexe physikalische und chemische Systeme, die weit vom thermodynamischen Gleichgewicht operieren und \"uber ausreichende Freiheitsgrade verf\"ugen, eine intrinsische statistische Tendenz aufweisen, diejenigen dynamischen Pfade und strukturellen Zust\"ande zu besetzen, die die Rate der Entropieproduktion maximieren \citep{ThermodynamicsOrganisms}.
+In seiner starken Form postuliert MEPP, dass komplexe physikalische und chemische Systeme, die weit vom thermodynamischen Gleichgewicht operieren und \"uber ausreichende Freiheitsgrade verf\"ugen, eine statistische Tendenz zu dynamischen Pfaden und strukturellen Zust\"anden mit hoher Entropieproduktion aufweisen \citep{ThermodynamicsOrganisms}. Diese Arbeit setzt die starke Form nicht als allgemein g\"ultig voraus; sie verwendet MEPP als Kandidaten f\"ur einen Stabilit\"atsfilter, dessen chemische Relevanz unabh\"angig getestet werden muss.
 
 Rod Swenson zeigte, dass die Natur geordnete Strukturen nicht trotz, sondern gerade wegen des Zweiten Hauptsatzes produziert \citep{ThermodynamicsLife}. Geordnete Systeme (wie ein Tornado oder eine lebende Zelle) sind bei weitem effizienter darin, Energiegradienten abzubauen, als ungeordnete Systeme. Die Entstehung des Lebens ist unter dieser Sicht ein physikalisch erwarteter Phasen\"ubergang der planet\"aren Geochemie, um den massiven solaren Energiegradienten effizienter abzubauen.
 
@@ -156,27 +170,27 @@ wobei $\Delta F_{\mathrm{int}}$ die interne Freie-Energie-\"Anderung ist, die mi
 
 \paragraph{Spieltheoretische Lesart.} Die Ungleichung schr\"ankt erreichbare Wachstumsvorteile ein: die Erh\"ohung des Payoff-Proxys $\ln(p_{\mathrm{grow}} / p_{\mathrm{decay}})$ erfordert mindestens proportionale dissipierte Arbeit. Die Thermodynamik erzwingt somit eine \emph{Eintrittskostenbeschr\"ankung} auf die Payoff-Region---h\"ohere replikative Fitness verlangt entsprechend h\"ohere Entropieproduktion.
 
-\textbf{Vorsicht bzgl.\ Kausalrichtung:} Eine h\"aufig anzutreffende Fehldarstellung von Englands Ergebnis besagt, dass hohe Entropieproduktion Replikation \emph{antreibt} oder \emph{verursacht}. Dies kehrt die tats\"achliche kausale Struktur um. Englands Ungleichung zeigt, dass \emph{erfolgreiche} Replikatoren (hohe Replikationsrate $1/\tau_{rep}$, lange Lebensdauer $\tau_{decay}$) \emph{notwendigerweise mehr Entropie produzieren}---Entropieproduktion ist eine \emph{Konsequenz} erfolgreicher Replikation, nicht ihre Ursache. Die MEPP-als-Selektionsprinzip-Lesart (hohe Entropieproduktion \emph{selektiert f\"ur} Replikatoren) ist eine zus\"atzliche, umstrittene Inferenz, die \"uber Englands eigene Aussagen hinausgeht \citep{England2013}. England selbst war vorsichtig bez\"uglich starker teleologischer Interpretationen. Dieses Paper verwendet MEPP als heuristisches Organisationsprinzip, w\"ahrend es anerkennt, dass die kausale Richtung von Entropieproduktion zu Selektion noch zu etablieren ist.
+\textbf{Vorsicht bzgl.\ Kausalrichtung:} Eine h\"aufig anzutreffende Fehldarstellung von Englands Ergebnis besagt, dass hohe Entropieproduktion Replikation \emph{antreibt} oder \emph{verursacht}. Dies kehrt die tats\"achliche kausale Struktur um. Englands Ungleichung zeigt, dass \emph{erfolgreiche} Replikatoren (hohe Replikationsrate $1/\tau_{rep}$, lange Lebensdauer $\tau_{decay}$) \emph{notwendigerweise mehr Entropie produzieren}---Entropieproduktion ist eine \emph{Konsequenz} erfolgreicher Replikation, nicht ihre Ursache. Die MEPP-als-Selektionsprinzip-Lesart (hohe Entropieproduktion \emph{selektiert f\"ur} Replikatoren) ist eine zus\"atzliche, umstrittene Inferenz, die \"uber Englands eigene Aussagen hinausgeht \citep{England2013}. England selbst war vorsichtig bez\"uglich starker teleologischer Interpretationen. Diese Arbeit verwendet MEPP als heuristisches Organisationsprinzip, w\"ahrend sie anerkennt, dass die kausale Richtung von Entropieproduktion zu Selektion noch zu etablieren ist.
 
 \begin{remark}[Englands Schranke als Stabilit\"atsfilter]
 \label{rem:england-stability-filter}
-Die Resolventenanalyse aus dem eichtheoretischen Riemannschen-Vermutungs-Programm \citep{GeigerRH2026b} liefert eine strukturelle Kl\"arung von Englands Ungleichung. Die Dissipationsschranke ist kein kausaler Treiber der Replikation, sondern ein \emph{Stabilit\"atsfilter}: replizierende Systeme, die die Schranke verletzen, sind resolventeninstabil und werden durch die Dynamik eliminiert. Unter den vielen molekularen Konfigurationen, die die Schranke in f\"uhrender Ordnung erf\"ullen (die entartete Mannigfaltigkeit), erfolgt die Selektion in zweiter Ordnung durch Kopplung zwischen den replikativen und dissipativen Freiheitsgraden. Diese Resolventenperspektive l\"ost die kausale Ambiguit\"at auf: Englands Ungleichung markiert die \emph{Grenze der lebensfähigen Mannigfaltigkeit}, w\"ahrend MEPP-als-Stabilit\"atsfilter den resolventenstabilen Fixpunkt innerhalb dieser identifiziert. Systeme werden nicht in Richtung hoher Entropieproduktion getrieben; vielmehr persistieren nur diejenigen Konfigurationen, die unter der Dissipationseinschr\"ankung in zweiter Ordnung stabil sind.
+Die Resolventenanalyse aus dem eichtheoretischen Riemannschen-Vermutungs-Programm \citep{GeigerRH2026b} liefert eine strukturelle Kl\"arung von Englands Ungleichung. Die Dissipationsschranke ist kein kausaler Treiber der Replikation, sondern ein \emph{Stabilit\"atsfilter}: replizierende Systeme, die die Schranke verletzen, sind resolventeninstabil und werden durch die Dynamik eliminiert. Unter den vielen molekularen Konfigurationen, die die Schranke in f\"uhrender Ordnung erf\"ullen (die entartete Mannigfaltigkeit), erfolgt die Selektion in zweiter Ordnung durch Kopplung zwischen den replikativen und dissipativen Freiheitsgraden. Diese Resolventenperspektive l\"ost die kausale Ambiguit\"at auf: Englands Ungleichung markiert die \emph{Grenze der lebensf\"ahigen Mannigfaltigkeit}, w\"ahrend MEPP-als-Stabilit\"atsfilter den resolventenstabilen Fixpunkt innerhalb dieser identifiziert. Systeme werden nicht in Richtung hoher Entropieproduktion getrieben; vielmehr persistieren nur diejenigen Konfigurationen, die unter der Dissipationseinschr\"ankung in zweiter Ordnung stabil sind.
 \end{remark}
 
 \subsection{\"Uberwindung der Teleologie}
 
-Diese Einsichten ver\"andern fundamental das Verst\"andnis pr\"abiotischer Evolution \citep{UnbecomingBeing}. Ein physikalisches System, das durch stochastische thermische Fluktuationen zuf\"allig eine Netzwerkarchitektur findet, die mehr Arbeit dissipieren kann, wird statistisch zwangsl\"aufig stabiler und dominanter in seiner Population.
+Diese Einsichten ver\"andern das Verst\"andnis pr\"abiotischer Evolution \citep{UnbecomingBeing}. Ein physikalisches System, das durch stochastische thermische Fluktuationen eine Netzwerkarchitektur erreicht, die Replikation und Dissipation zugleich zul\"asst, kann innerhalb seiner Population statistisch persistenter werden, wenn der entsprechende Fixpunkt dynamisch stabil ist.
 
-Im Geiste der Argumente von Sean Carroll \citep{UnbecomingBeing} und Jeremy England \citep{England2013} reduziert sich der physikalische ``Zweck'' des Lebens auf Metabolismus: ein Organismus oder ein pr\"abiotischer Hyperzyklus ist einfach ein au\ss{}erordentlich effizienter Mechanismus des Universums, Brennstoff zu verbrennen und Materie in h\"ohere entropische Energiezust\"ande umzuwandeln. ``Ein gro\ss{}artiger Weg, mehr Energie zu dissipieren, besteht darin, mehr Kopien von sich selbst zu machen'' \citep{England2013}. Leben strebt nicht aus einem inh\"arenten \"Uberlebensinstinkt nach Reproduktion; Reproduktion ist das thermodynamisch konsistente Ergebnis unter MEPP.
+Im Geiste der Argumente von Sean Carroll \citep{UnbecomingBeing} und Jeremy England \citep{England2013} kann die scheinbare Zielgerichtetheit des Lebens metabolisch umbeschrieben werden: ein Organismus oder ein pr\"abiotischer Hyperzyklus ist eine Struktur, die Replikation mit Energiedissipation koppelt. ``Ein gro\ss{}artiger Weg, mehr Energie zu dissipieren, besteht darin, mehr Kopien von sich selbst zu machen'' \citep{England2013}. Leben muss damit nicht aus einem inh\"arenten \"Uberlebensinstinkt nach Reproduktion streben; Reproduktion kann als thermodynamisch konsistentes Ergebnis behandelt werden, sofern MEPP als eingeschr\"ankte Stabilit\"atsaussage und nicht als aktiver kausaler Treiber gelesen wird.
 
 % ===================================================================
-\section{Chemische Spieltheorie: Molek\"ule als strategische Agenten}
+\section{Chemische Spieltheorie: Molek\"ule als Strategietr\"ager}
 \label{sec:cgt}
 % ===================================================================
 
 Die FST-II-Theorie \"ubersetzt die globalen thermodynamischen Randbedingungen von MEPP in die formale, mikro- und mesoskopische Sprache der Spieltheorie, konkret in das aufstrebende Feld der Chemical Game Theory (CGT) \citep{CGT2018,CGTMacmillan}.
 
-\textbf{Hinweis zur Richtung der CGT-Metapher.} Velegol et al.~\citep{CGT2018} f\"uhrten CGT als Rahmen ein, in dem \emph{menschliche strategische Entscheidungen} mit dem Formalismus chemischer Reaktionen modelliert werden---Spielerentscheidungen werden als metaphorische ``Molek\"ule'' (``Knowlecules'' genannt) behandelt, und Gleichgewichtsergebnisse werden mit chemischer Thermodynamik berechnet. Anders ausgedr\"uckt wendet Velegols CGT Chemie \emph{auf} soziale Spiele an, nicht Spieltheorie \emph{auf} Chemie. Das vorliegende Paper kehrt diese Metaphernrichtung um: wir wenden spieltheoretische Konzepte \emph{auf} tats\"achliche chemische Systeme an und behandeln reale molekulare Spezies als strategische Agenten. Diese Umkehrung ist unabh\"angig motiviert durch die experimentelle Arbeit von Yeates et al.~\citep{AzoarcusPNAS}, die zeigten, dass pr\"abiotische RNA-Replikator-Dynamiken direkt auf klassische $2\times 2$-Payoff-Matrizen abgebildet werden k\"onnen. Wir behalten die Bezeichnung ``CGT'' f\"ur die Kontinuit\"at mit der Literatur bei, aber der Leser sollte sich bewusst sein, dass unsere Anwendung auf die pr\"abiotische Chemie eine Erweiterung von---nicht eine direkte Anwendung von---Velegols originalem Rahmen darstellt.
+\textbf{Hinweis zur Richtung der CGT-Metapher.} Velegol et al.~\citep{CGT2018} f\"uhrten CGT als Rahmen ein, in dem \emph{menschliche strategische Entscheidungen} mit dem Formalismus chemischer Reaktionen modelliert werden---Spielerentscheidungen werden als metaphorische ``Molek\"ule'' (``Knowlecules'' genannt) behandelt, und Gleichgewichtsergebnisse werden mit chemischer Thermodynamik berechnet. Anders ausgedr\"uckt wendet Velegols CGT Chemie \emph{auf} soziale Spiele an, nicht Spieltheorie \emph{auf} Chemie. Der vorliegende Artikel kehrt diese Metaphernrichtung um: wir wenden spieltheoretische Konzepte \emph{auf} tats\"achliche chemische Systeme an und behandeln reale molekulare Spezies als Tr\"ager strategieartiger Freiheitsgrade. Diese Umkehrung ist unabh\"angig motiviert durch die experimentelle Arbeit von Yeates et al.~\citep{AzoarcusPNAS}, die zeigten, dass pr\"abiotische RNA-Replikator-Dynamiken direkt auf klassische $2\times 2$-Payoff-Matrizen abgebildet werden k\"onnen. Wir behalten die Bezeichnung ``CGT'' f\"ur die Kontinuit\"at mit der Literatur bei, aber der Leser sollte sich bewusst sein, dass unsere Anwendung auf die pr\"abiotische Chemie eine Erweiterung von---nicht eine direkte Anwendung von---Velegols originalem Rahmen darstellt.
 
 \subsection{Spieltheoretische Formulierung}
 
@@ -210,16 +224,16 @@ Eine notwendige Bedingung f\"ur ein Nash-Gleichgewicht in diesem biochemischen K
 
 \subsection{Verbindung zu MEPP}
 
-In isothermen isobaren \emph{geschlossenen} Systemen ist die \"Anderung der Gibbs-freien Energie ($\Delta G$) direkt mit der totalen Entropieproduktion ($\Delta S_{total}$) verkn\"upft durch $\Delta G = -T\Delta S_{total}$. Diese Identit\"at gilt streng nur f\"ur geschlossene Systeme bei konstantem Druck und konstanter Temperatur. F\"ur offene NESS-Systeme (Non-Equilibrium Steady State) muss der Gibbs-Freie-Energie-Rahmen um explizite Entropieaustauschterme mit der Umgebung erg\"anzt werden; die Relation gilt n\"aherungsweise, wenn Stofffl\"usse im Vergleich zu Reaktionsraten langsam sind. Ein molekulares System, das $\Delta G$ schnell und stark minimiert, maximiert gleichzeitig die Entropieproduktion. Ein tiefes Nash-Gleichgewicht mit hohem aggregiertem Payoff im chemischen Netzwerk zu finden, ist somit \"aquivalent zur Etablierung einer hocheffizienten ``Dissipationsmaschine'', die MEPP und Englands Ungleichungen gehorcht.
+In isothermen isobaren \emph{geschlossenen} Systemen ist die \"Anderung der Gibbs-freien Energie ($\Delta G$) direkt mit der totalen Entropieproduktion ($\Delta S_{total}$) verkn\"upft durch $\Delta G = -T\Delta S_{total}$. Diese Identit\"at gilt streng nur f\"ur geschlossene Systeme bei konstantem Druck und konstanter Temperatur. F\"ur offene NESS-Systeme (nichtgleichgewichtige station\"are Zust\"ande) muss der Gibbs-Freie-Energie-Ansatz um explizite Entropieaustauschterme mit der Umgebung erg\"anzt werden; die Relation gilt n\"aherungsweise, wenn Stofffl\"usse im Vergleich zu Reaktionsraten langsam sind. In diesem eingeschr\"ankten Setting kann ein molekulares System, das $\Delta G$ schnell und stark minimiert, zugleich die Entropieproduktion erh\"ohen. Ein tiefes Nash-Gleichgewicht mit hohem aggregiertem Payoff im chemischen Netzwerk zu finden, ist daher als Identifikation einer Kandidatenkonfiguration unter MEPP- und England-artigen Randbedingungen zu verstehen, nicht als Beweis daf\"ur, dass Entropieproduktion diese Konfiguration kausal ausw\"ahlt.
 
 \textbf{Zirkularit\"ats-Warnung:} Die Argumentstruktur hier riskiert Zirkularit\"at: (1) MEPP wird als globale Payoff-Funktion verwendet, (2) Nash-Gleichgewichte werden als Maxima dieses MEPP-Payoffs definiert, (3) molekulare Systeme, die Nash-Gleichgewichte erreichen, werden als MEPP-maximierend vorhergesagt. Dies ist eine Definitionsschleife, kein unabh\"angiger empirischer Test. Der Rahmen w\"are nur dann nicht-zirkul\"ar, wenn MEPP und Nash-Gleichgewichte unabh\"angig definiert w\"aren und ihr gemeinsames Auftreten empirisch getestet werden k\"onnte. Abschnitt~\ref{sec:predictions} (P3) liefert einen Test dieser Art---die Messung der Entropieproduktion konkurrierender autokatalytischer Netzwerke unabh\"angig von ihrem spieltheoretischen Status---aber dieser Test wurde noch nicht durchgef\"uhrt. Bis solche Tests berichtet werden, sollte die MEPP-als-Payoff-Funktion-Behauptung als Arbeitshypothese mit heuristischem Wert behandelt werden, nicht als etabliertes Ergebnis.
 
 % ===================================================================
-\section{Empirische Validierung: Azoarcus-Ribozym-Experimente}
+\section{Empirische Validierung am Azoarcus-Ribozym}
 \label{sec:azoarcus}
 % ===================================================================
 
-Die Postulate der Chemical Game Theory werden empirisch motiviert durch die Arbeit an Azoarcus-Ribozymen von Niles Lehman und Kollegen \citep{AzoarcusPNAS,AzoarcusPMC}. Das Azoarcus-System ist ein besonders relevantes Modell, weil es innerhalb der RNA-Welt-Hypothese operiert---dem breit diskutierten Szenario, dass selbstreplizierende RNA-Molek\"ule dem DNA-Protein-Leben vorausgingen \citep{Eigen1979}---und eine der wenigen experimentellen Plattformen bietet, auf denen pr\"abiotische Replikator-Dynamiken direkt beobachtet werden k\"onnen. \textbf{Einschr\"ankung des G\"ultigkeitsbereichs:} Das Azoarcus-System liefert 16 Genotypen (aus einem viel gr\"o\ss{}eren theoretischen Sequenzraum) in einem sorgf\"altig kontrollierten In-vitro-Experiment unter spezifischen Magnesium- und Temperaturbedingungen. Die Extrapolation von diesem einzelnen experimentellen System auf universelle Prinzipien der pr\"abiotischen Chemie ist eine induktive Inferenz, die vorsichtig gemacht werden sollte. Replikation der spieltheoretischen Klassifikation \"uber verschiedene RNA-Systeme, verschiedene Molek\"ulklassen (Peptide, Lipide) und verschiedene Umweltbedingungen ist erforderlich, bevor der Rahmen Allgemeing\"ultigkeit beanspruchen kann.
+Die Postulate der Chemical Game Theory werden empirisch motiviert durch die Arbeit an Azoarcus-Ribozymen von Niles Lehman und Kollegen \citep{AzoarcusPNAS,AzoarcusPMC}. Das Azoarcus-System ist ein besonders relevantes Modell, weil es innerhalb der RNA-Welt-Hypothese operiert---dem breit diskutierten Szenario, dass selbstreplizierende RNA-Molek\"ule dem DNA-Protein-Leben vorausgingen \citep{Gilbert1986,Eigen1979}---und eine der wenigen experimentellen Plattformen bietet, auf denen pr\"abiotische Replikator-Dynamiken direkt beobachtet werden k\"onnen. \textbf{Einschr\"ankung des G\"ultigkeitsbereichs:} Das Azoarcus-System liefert 16 Genotypen (aus einem viel gr\"o\ss{}eren theoretischen Sequenzraum) in einem sorgf\"altig kontrollierten In-vitro-Experiment unter spezifischen Magnesium- und Temperaturbedingungen. Die Extrapolation von diesem einzelnen experimentellen System auf universelle Prinzipien der pr\"abiotischen Chemie ist eine induktive Inferenz, die vorsichtig gemacht werden sollte. Replikation der spieltheoretischen Klassifikation \"uber verschiedene RNA-Systeme, verschiedene Molek\"ulklassen (Peptide, Lipide) und verschiedene Umweltbedingungen ist erforderlich, bevor der Rahmen Allgemeing\"ultigkeit beanspruchen kann.
 
 \subsection{Das experimentelle System}
 
@@ -228,23 +242,24 @@ Das Azoarcus-Ribozym ist ein katalytisch aktives RNA-Molek\"ul von ungef\"ahr 20
 \text{WXY} + \text{Z} + \text{WXYZ} \longrightarrow 2\,\text{WXYZ}
 \end{equation}
 
-Die Spezifit\"at der molekularen Assemblierung wird durch molekulare Erkennung basierend auf 3-Nukleotid-Basenpaarungen zwischen Internal Guide Sequence (IGS) und komplement\"aren ``Tag''-Sequenzen kontrolliert \citep{AzoarcusPNAS}.
+Die Spezifit\"at der molekularen Assemblierung wird durch molekulare Erkennung basierend auf 3-Nukleotid-Basenpaarungen zwischen Internal Guide Sequence (IGS) und komplement\"aren ``Tag''-Sequenzen kontrolliert \citep{AzoarcusPNAS}. Dieses System baut auf fr\"uheren Demonstrationen template-gesteuerter Selbstreplikation in nukleotidbasierten Oligomeren durch Sievers \& von Kiedrowski \citep{SieversKiedrowski1994} auf, die zeigten, dass die kreuzkatalytische Replikation komplement\"arer Templates mit Effizienzen verlaufen kann, die mit autokatalytischer Selbstreplikation vergleichbar sind.
 
 \subsection{Die vier chemischen Spiele}
 
 Durch Mutation des mittleren Nukleotids von IGS und Tag erzeugten die Forscher 16 m\"ogliche molekulare Genotypen. In Konkurrenzszenarien zwischen zwei RNA-Genotypen k\"onnen die Interaktionen auf klassische 2$\times$2-Payoff-Matrizen abgebildet werden \citep{AzoarcusPMC}:
 
 \begin{center}
-\begin{tabular}{llll}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.28\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.12\textwidth}@{}}
 \toprule
 \textbf{Spieltyp} & \textbf{Kinetische Bedingung} & \textbf{Molekulare Dynamik} & \textbf{Beispiel} \\
 \midrule
-Dominanz & $k_{AA} > k_{BA}$, $k_{AB} > k_{BB}$ & Eine Spezies verdrängt alle & CG vs.\ GA \\
+Dominanz & $k_{AA} > k_{BA}$, $k_{AB} > k_{BB}$ & Eine Spezies verdr\"angt alle & CG vs.\ GA \\
 Kooperation & $k_{BA} > k_{AA}$, $k_{AB} > k_{BB}$ & Gegenseitige Kreuzkatalyse dominiert & AC vs.\ UU \\
 Hirschjagd & $k_{AA} > k_{BA}$, $k_{BB} > k_{AB}$, $k_{AA} > k_{BB}$ & Frequenzabh\"angige Bistabilit\"at & AU vs.\ UC \\
-Gefangenendilemma & $k_{BA} > k_{AA} > k_{BB} > k_{AB}$ & Parasit beutet Kooperator aus & CA vs.\ GG \\
+Gefangenen-\\dilemma & $k_{BA} > k_{AA} > k_{BB} > k_{AB}$ & Parasit beutet Kooperator aus & CA vs.\ GG \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 \noindent
@@ -298,11 +313,11 @@ Jedes Nash-Gleichgewicht $\mathbf{x}^*$ des durch Matrix $\mathbf{A}$ definierte
 Die \"Aquivalenz zwischen inneren Ruhepunkten der Replikator-Dynamik und Nash-Gleichgewichten ist klassisch (Hofbauer \& Sigmund 1998, Theorem~7.2.1). Rand-Gleichgewichte jedoch---bei denen eine oder mehrere Spezies ausgestorben sind---m\"ussen nicht Nash-Gleichgewichten entsprechen, und die Umkehrung (dass jedes Nash-Gleichgewicht ein Ruhepunkt ist) gilt nur f\"ur das vollst\"andige Replikatorsystem im Inneren des Simplex. Diese Unterscheidung ist f\"ur die nachfolgenden pr\"abiotischen Anwendungen wichtig, da das Aussterben molekularer Spezies ein physikalisch relevantes Szenario darstellt.
 \end{remark}
 
-Dieses Ergebnis ist ein Eckpfeiler der klassischen evolution\"aren Spieltheorie \citep{Weibull1995}; der Beitrag des vorliegenden Papers ist nicht das Theorem selbst, sondern seine Anwendung auf pr\"abiotische chemische Netzwerke und seine Integration mit der MEPP-Stabilit\"atsfilter-Interpretation. Siehe Hofbauer \& Sigmund (1998, 2003) f\"ur Beweise. Eine Evolutionarily Stable Strategy (ESS) ist eine molekulare Populationsverteilung $\mathbf{x}^*$, die gegen Invasion durch jede seltene ``Mutanten''-Strategie $\mathbf{y}$ resistent ist. Eine ESS ist immer ein Nash-Gleichgewicht und impliziert asymptotische Stabilit\"at in der Replikator-Dynamik \citep{HofbauerSigmund1998}.
+Dieses Ergebnis ist ein Eckpfeiler der klassischen evolution\"aren Spieltheorie \citep{Weibull1995}; der Beitrag des vorliegenden Artikels ist nicht das Theorem selbst, sondern seine Anwendung auf pr\"abiotische chemische Netzwerke und seine Integration mit der MEPP-Stabilit\"atsfilter-Interpretation. Siehe Hofbauer \& Sigmund (1998, 2003) f\"ur Beweise. Eine Evolutionarily Stable Strategy (ESS) ist eine molekulare Populationsverteilung $\mathbf{x}^*$, die gegen Invasion durch jede seltene ``Mutanten''-Strategie $\mathbf{y}$ resistent ist. Eine ESS ist immer ein Nash-Gleichgewicht und impliziert asymptotische Stabilit\"at in der Replikator-Dynamik \citep{HofbauerSigmund1998}.
 
 \begin{remark}[Autokatalytische Stabilit\"at als Resolventenselektion]
 \label{rem:autocatalysis-resolvent}
-Der Resolventenrahmen aus der Riemannschen-Vermutungs-Analyse \citep{GeigerRH2026b} beleuchtet, warum spezifische autokatalytische Netzwerke (Hyperzyklen, Spiralwellen) persistieren, w\"ahrend andere zerfallen. Diese Strukturen sind keine \emph{globalen} MEPP-Maxima---sie maximieren nicht global die Entropieproduktion \"uber alle denkbaren Konfigurationen. Vielmehr sind sie \emph{in zweiter Ordnung resolventenstabilisierte Netzwerke}: lokale Nash-Gleichgewichte, die unter St\"orung stabil sind. In f\"uhrender Ordnung produzieren viele Netzwerktopologien vergleichbare Replikationsraten und erf\"ullen die England-Dissipationsschranke. Parasit\"are Invasion, r\"aumliche Instabilit\"at und Konzentrationskollaps sind Destabilisierungsmechanismen zweiter Ordnung, die alle au\ss{}er der resolventenstabilen Konfiguration eliminieren. Die Replikatorgleichung selektiert somit den resolventenstabilen Fixpunkt, nicht notwendig den produktivsten. Dies kl\"art die Rolle von MEPP im Framework: MEPP dient als notwendige Bedingung (Stabilit\"atsfilter) und nicht als hinreichendes Selektionsprinzip (Maximierung). Reale pr\"abiotische Netzwerke weisen Robustheit auf, weil sie resolventenstabil sind, was mit---aber nicht identisch ist mit---hoher Entropieproduktion korreliert.
+Der Resolventenrahmen aus der Riemannschen-Vermutungs-Analyse \citep{GeigerRH2026b} beleuchtet, warum spezifische autokatalytische Netzwerke (Hyperzyklen, Spiralwellen) persistieren, w\"ahrend andere zerfallen. Diese Strukturen sind keine \emph{globalen} MEPP-Maxima---sie maximieren nicht global die Entropieproduktion \"uber alle denkbaren Konfigurationen. Vielmehr sind sie \emph{in zweiter Ordnung resolventenstabilisierte Netzwerke}: lokale Nash-Gleichgewichte, die unter St\"orung stabil sind. In f\"uhrender Ordnung produzieren viele Netzwerktopologien vergleichbare Replikationsraten und erf\"ullen die England-Dissipationsschranke. Parasit\"are Invasion, r\"aumliche Instabilit\"at und Konzentrationskollaps sind Destabilisierungsmechanismen zweiter Ordnung, die alle au\ss{}er der resolventenstabilen Konfiguration eliminieren. Die Replikatorgleichung selektiert somit den resolventenstabilen Fixpunkt, nicht notwendig den produktivsten. Dies kl\"art die Rolle von MEPP in diesem Rahmen: MEPP dient als notwendige Bedingung (Stabilit\"atsfilter) und nicht als hinreichendes Selektionsprinzip (Maximierung). Reale pr\"abiotische Netzwerke weisen Robustheit auf, weil sie resolventenstabil sind, was mit---aber nicht identisch ist mit---hoher Entropieproduktion korreliert.
 \end{remark}
 
 \subsection{Ljapunow-Funktionen und thermodynamische Analogie}
@@ -346,7 +361,7 @@ Eine r\"aumlich heterogene L\"osung, die diese Fixpunkt-Bedingung erf\"ullt, wir
 
 R\"aumlich verteilte Replikatorsysteme brechen spontan die Homogenit\"at und bilden makroskopische dissipative Strukturen in Form von \textbf{Spiralwellen} \citep{SpiralWaves}. In diesen Spiralwellen rotieren die Populationen autokatalytischer Spezies in konzentrischen Gradienten. Diese raum-zeitliche Selbststrukturierung bewirkt, dass egoistische Parasiten, die das System lokal kollabieren lassen, in der Peripherie isoliert bleiben, wo sie an Ressourcenknappheit zugrunde gehen. Der produktive Kern des Hyperzyklus rotiert ungest\"ort im Zentrum.
 
-Die Entstehung von Spiralwellen ist kein zuf\"alliges Muster, sondern ein physikalisch notwendiges topologisches Ergebnis zur Aufrechterhaltung einer DESS im Einklang mit den dissipativen Randbedingungen von MEPP \citep{HypercycleInfinite}.
+Die Entstehung von Spiralwellen wird hier nicht als zuf\"alliges Muster, sondern als robuste topologische Struktur interpretiert, die eine DESS im Einklang mit den dissipativen Randbedingungen von MEPP aufrechterhalten kann \citep{HypercycleInfinite}.
 
 % ===================================================================
 \section{Homochiralit\"at als Symmetriebrechung}
@@ -355,7 +370,7 @@ Die Entstehung von Spiralwellen ist kein zuf\"alliges Muster, sondern ein physik
 
 Die vorangehenden Abschnitte haben gezeigt, dass autokatalytische Netzwerke und Hyperzyklen als Nash-Gleichgewichte verstanden werden k\"onnen, die durch r\"aumliche Selbstorganisation gegen parasit\"are Invasion stabilisiert werden. Wir wenden uns nun einem komplement\"aren Ph\"anomen zu---der Chiralit\"atsselektion---das derselbe spieltheoretische Rahmen als eine andere Art von Symmetriebrechung erkl\"art: nicht die r\"aumliche Brechung der Translationssymmetrie (Spiralwellen), sondern die Brechung der Spiegelsymmetrie zwischen Enantiomeren.
 
-Eine der st\"arksten erkl\"arenden Leistungen von FST-II ist die elegante L\"osung eines der gr\"o\ss{}ten R\"atsel der Chemie: des Ursprungs der biologischen Homochiralit\"at \citep{Biochirality}.
+Eine der st\"arksten erkl\"arenden Leistungen von FST-II ist die elegante L\"osung eines der gr\"o\ss{}ten R\"atsel der Chemie: des Ursprungs der biologischen Homochiralit\"at \citep{Blackmond2010,Biochirality}.
 
 \subsection{Das Chiralit\"ats-R\"atsel}
 
@@ -381,17 +396,17 @@ In diesem dynamischen Regime wird jede mikroskopische, rein stochastische Konzen
 
 \subsection{Viedma-Ripening: Empirische Unterst\"utzung}
 
-Dass dieser Mechanismus der theoretischen Symmetriebrechung ein experimentelles Analogon hat, wurde durch Viedma-Deracemisierung demonstriert \citep{HomochiralityThermo}. \textbf{Geltungsbereichshinweis:} Viedma-Ripening betrifft Kristallisation unter mechanischem Schleifen, nicht pr\"abiotische autokatalytische Netzwerke. Es liefert empirische Unterst\"utzung f\"ur den \emph{Mechanismus} autokatalytischer Chiralit\"atsverst\"arkung, nicht einen direkten Test des FST-II-Frameworks unter pr\"abiotischen Bedingungen. In Experimenten wurden racemische Suspensionen chiraler Kristalle unter konstantem mechanischem Energieeintrag (Mahlen mit Glasperlen) weit vom thermodynamischen Gleichgewicht im DKS-Regime gehalten.
+Dass dieser Mechanismus der theoretischen Symmetriebrechung ein experimentelles Analogon hat, wurde durch Viedma-Deracemisierung demonstriert \citep{HomochiralityThermo}. \textbf{Geltungsbereichshinweis:} Viedma-Ripening betrifft Kristallisation unter mechanischem Schleifen, nicht pr\"abiotische autokatalytische Netzwerke. Es liefert empirische Unterst\"utzung f\"ur den \emph{Mechanismus} autokatalytischer Chiralit\"atsverst\"arkung, nicht einen direkten Test des FST-II-Rahmens unter pr\"abiotischen Bedingungen. In Experimenten wurden racemische Suspensionen chiraler Kristalle unter konstantem mechanischem Energieeintrag (Mahlen mit Glasperlen) weit vom thermodynamischen Gleichgewicht im DKS-Regime gehalten.
 
-Das \"uberraschende Ergebnis: die Population rechts- und linksh\"andiger Kristalle kann nicht koexistieren. Durch irreversibles autokatalytisches Aufl\"osen und Wachsen verschwindet eine chirale Population unvermeidlich und vollst\"andig, um die andere bis zu vollst\"andiger 100\% optischer Reinheit (reine Strategie) zu n\"ahren \citep{HomochiralityThermo}.
+Das \"uberraschende Ergebnis: die Population rechts- und linksh\"andiger Kristalle koexistiert unter diesen Bedingungen nicht stabil. Durch irreversibles autokatalytisches Aufl\"osen und Wachsen verschwindet eine chirale Population, w\"ahrend die andere sich vollst\"andiger 100\% optischer Reinheit (reine Strategie) ann\"ahert \citep{HomochiralityThermo}.
 
 \subsection{MEPP-Erkl\"arung}
 
-Ein gemischtes, racemisches Polymer- oder Hyperzyklus-Netzwerk leidet unter immenser struktureller Frustration. Falsche Basenpaarungen, sterische Hinderungen und Bildung inaktiver L-D-Heterodimere reduzieren die globale Replikationsrate dramatisch. Die Maximierung der Netzwerk-Replikationsrate (somit des Kehrwerts von $\tau_{rep}$ aus Englands Gleichung) und die Ann\"aherung an die physikalische Grenze der Entropiedissipation erfordert topologische Koordination der chemischen Strategien \citep{Biochirality}.
+Ein gemischtes, racemisches Polymer- oder Hyperzyklus-Netzwerk leidet unter immenser struktureller Frustration. Falsche Basenpaarungen, sterische Hinderungen und Bildung inaktiver L-D-Heterodimere reduzieren die globale Replikationsrate dramatisch. Eine resolventenstabile Netzwerkkonfiguration---eine Konfiguration, in der Destabilisierungskan\"ale zweiter Ordnung zugleich unterdr\"uckt werden---erfordert topologische Koordination der chemischen Strategien \citep{Biochirality}.
 
-Makroskopische Chiralit\"ats-Symmetriebrechung in der pr\"abiotischen Chemie ist somit kein kontingenter Zufall historischen Ursprungs, sondern ein mathematisch und thermodynamisch unvermeidliches Ergebnis \emph{unter den Bedingungen des Frank-Modells} (Autokatalyse mit gegenseitiger Kreuzinhibition). Homochiralit\"at repr\"asentiert das resolventenstabile Gleichgewicht reiner Strategien f\"ur komplexe pr\"abiotische Netzwerke: innerhalb des Frank-Modells mit zwei Spezies ist es die Konfiguration, bei der die Kreuzkopplungen zweiter Ordnung zwischen chiralen Sektoren gleichzeitig stabilisiert sind \citep{Biochirality}. Ob zus\"atzliche resolventenstabile Konfigurationen in komplexeren Multi-Chiralit\"atszentren-Systemen existieren, bleibt eine offene Frage.
+Makroskopische Chiralit\"ats-Symmetriebrechung in der pr\"abiotischen Chemie wird daher nicht als blo\ss{}er historischer Zufall modelliert, sondern als robuste Modellfolge \emph{unter den Bedingungen des Frank-Modells} (Autokatalyse mit gegenseitiger Kreuzinhibition). Homochiralit\"at repr\"asentiert das resolventenstabile Gleichgewicht reiner Strategien f\"ur komplexe pr\"abiotische Netzwerke: innerhalb des Frank-Modells mit zwei Spezies ist es die Konfiguration, bei der die Kreuzkopplungen zweiter Ordnung zwischen chiralen Sektoren gleichzeitig stabilisiert sind \citep{Biochirality}. Ob zus\"atzliche resolventenstabile Konfigurationen in komplexeren Multi-Chiralit\"atszentren-Systemen existieren, bleibt eine offene Frage.
 
-\textbf{Bedingte vs.\ absolute Notwendigkeit.} Die Behauptung der ``Unvermeidlichkeit'' ist bedingt durch die Pr\"amissen des Frank-Modells---autokatalytische Verst\"arkung und Kreuzinhibition. Ob diese Pr\"amissen selbst unvermeidlich in pr\"abiotischen Umgebungen auftreten, ist eine separate und offene Frage, die FST-II nicht l\"ost. Goulds Kontingenzargument~\citep{Gould1989}---dass ein Abspielen des Bandes des Lebens zu radikal anderen Ergebnissen f\"uhren k\"onnte (siehe auch Carroll~\citep{UnbecomingBeing} f\"ur eine moderne Behandlung)---betrifft genau die Frage, ob diese Voraussetzungen universell entstehen. FST-II stellt fest, dass \emph{gegeben} Autokatalyse und Kreuzinhibition, Homochiralit\"at ein notwendiges Ergebnis ist; es stellt nicht fest, dass die Voraussetzungen selbst notwendig sind. Die Unterscheidung zwischen bedingter und absoluter Notwendigkeit sollte durchgehend beachtet werden.
+\textbf{Bedingte vs.\ absolute Notwendigkeit.} Die Behauptung der ``Unvermeidlichkeit'' ist auf die Pr\"amissen des Frank-Modells beschr\"ankt---autokatalytische Verst\"arkung und Kreuzinhibition. Ob diese Pr\"amissen selbst in pr\"abiotischen Umgebungen regelm\"a\ss{}ig auftreten, ist eine separate und offene Frage, die FST-II nicht l\"ost. Goulds Kontingenzargument~\citep{Gould1989}---dass ein Abspielen des Bandes des Lebens zu radikal anderen Ergebnissen f\"uhren k\"onnte (siehe auch Carroll~\citep{UnbecomingBeing} f\"ur eine moderne Behandlung)---betrifft genau die Frage, ob diese Voraussetzungen universell entstehen. FST-II st\"utzt die engere Aussage, dass \emph{gegeben} Autokatalyse und Kreuzinhibition Homochiralit\"at ein robust erwartbares Ergebnis ist; es stellt nicht fest, dass die Voraussetzungen selbst notwendig sind. Die Unterscheidung zwischen bedingter und absoluter Notwendigkeit sollte durchgehend beachtet werden.
 
 \begin{remark}[Homochiralit\"at als Resolventeneffekt zweiter Ordnung]
 \label{rem:chirality-resolvent}
@@ -407,21 +422,21 @@ Die Architektur der pr\"abiotischen Evolution kann innerhalb von FST-II als drei
 
 \subsection{Mikroebene: Thermodynamik der Knoten}
 
-Auf der niedrigsten Ebene agieren Molek\"ule und Enzyme als autonome rationale Akteure. Sie respektieren die klassische Gleichgewichtsthermodynamik, wobei Bindungen genau gem\"a\ss{} lokalen Gradienten zur Gibbs-Freie-Energie-Minimierung gebildet und gebrochen werden \citep{MetabolicNash}. Diese Akteure konvergieren zu eng begrenzten lokalen Optima.
+Auf der niedrigsten Ebene werden Molek\"ule und Enzyme als lokale Reaktionskan\"ale modelliert. Sie folgen der klassischen Gleichgewichtsthermodynamik, wobei Bindungen gem\"a\ss{} lokalen Gradienten zur Gibbs-Freie-Energie-Minimierung gebildet und gebrochen werden \citep{MetabolicNash}. Diese Kan\"ale konvergieren zu eng begrenzten lokalen station\"aren Zust\"anden.
 
 \subsection{Mesoebene: Netzwerktopologie und CGT}
 
-Aus der Interaktion dieser lokal optimierenden Agenten, die um das gleiche begrenzte Ressourceninventar konkurrieren, entsteht ein kompetitives, frequenzabh\"angiges Spielfeld. Die Regeln dieses Spiels gehorchen CGT \citep{AzoarcusPNAS}. Auf dieser Ebene verl\"asst die Chemie den deterministischen Pfad einfacher konzentrationsgetriebener Kinetik und tritt in ein hochkomplexes Regime bedingter Wahrscheinlichkeiten, reaktiver Strategien und Ljapunow-Stabilit\"at ein.
+Aus der Wechselwirkung lokal gekoppelter Reaktionskan\"ale, die um dasselbe begrenzte Ressourceninventar konkurrieren, entsteht ein kompetitives, frequenzabh\"angiges Spielfeld. Die Regeln dieses Spiels k\"onnen mit CGT beschrieben werden \citep{AzoarcusPNAS}. Auf dieser Ebene bleibt konzentrationsgetriebene Kinetik das Basismodell, muss aber durch bedingte Wahrscheinlichkeiten, Netzwerktopologie und Ljapunow-Stabilit\"at erg\"anzt werden, wenn nicht nur die Anfangsrate, sondern langfristige Persistenz erkl\"art werden soll.
 
-\subsection{Makroebene: MEPP als globaler Attraktor}
+\subsection{Makroebene: MEPP als Stabilit\"atsrandbedingung}
 
-Als \"ubergeordnete Instanz schr\"ankt das Makroregime der Nicht-Gleichgewichtsthermodynamik---formalisiert durch MEPP und Englands Modifikation des Zweiten Hauptsatzes---ein, welche lokalen Nash-Gleichgewichte global und langfristig persistieren. Unter der MEPP-Hypothese (Abschnitt~\ref{sec:mepp}) wird ein lokal stabiles Nash-Gleichgewicht mit schwachem Energieumsatz statistisch durch dynamischere, r\"aumlich verteilte Netzwerke (wie DESS-Spiralwellen) verdr\"angt, die planet\"are Energiegradienten effizienter in Entropie umwandeln \citep{EntropyMEPP}. Diese Makro-Selektionsbehauptung unterliegt den in Abschnitt~\ref{sec:cgt} genannten Einschr\"ankungen: sie bleibt eine Arbeitshypothese bis zu den experimentellen Tests aus Abschnitt~\ref{sec:predictions} (P3).
+Auf der Makroebene beschr\"ankt das Regime der Nicht-Gleichgewichtsthermodynamik---formalisiert durch MEPP und Englands Modifikation des Zweiten Hauptsatzes---welche lokalen Nash-Gleichgewichte global und langfristig persistieren k\"onnen. Unter der schwachen MEPP-Lesart dieser Arbeit (Abschnitt~\ref{sec:mepp}) muss ein lokal stabiles Netzwerk mit dissipativen Randbedingungen kompatibel sein; ob h\"ohere Entropieproduktion \emph{zwischen} ansonsten lebensf\"ahigen Netzwerken selektiert, ist eine separate empirische Frage. Dieser makroskopische Selektionsclaim \"ubernimmt die in Abschnitt~\ref{sec:cgt} genannten Einschr\"ankungen: Er bleibt eine Arbeitshypothese bis zu den experimentellen Tests aus Abschnitt~\ref{sec:predictions} (P3).
 
 \subsection{\"Uberwindung biologischer Teleologie}
 
-Eine bemerkenswerte Implikation von FST-II ist die potenzielle Eliminierung teleologischer Argumente bei der Betrachtung biologischer Evolution \citep{UnbecomingBeing}. Wenn England argumentiert, dass ``der beste Weg, mehr Energie zu dissipieren, einfach darin besteht, mehr Kopien von sich selbst zu machen'', entlarvt dies Reproduktion und ``nat\"urliche Selektion'' nicht als inh\"arenten \"Uberlebensinstinkt der DNA, sondern als einen elementaren, rein dissipativen Mechanismus physikalischer Gesetze.
+Eine Implikation von FST-II ist die M\"oglichkeit, teleologische Sprache in der Beschreibung biologischer Evolution zu reduzieren \citep{UnbecomingBeing}. Wenn England argumentiert, dass ``der beste Weg, mehr Energie zu dissipieren, einfach darin besteht, mehr Kopien von sich selbst zu machen'', k\"onnen Reproduktion und ``nat\"urliche Selektion'' nicht als inh\"arenter \"Uberlebensinstinkt der DNA, sondern als dissipativ kompatible Prozessbeschreibung gelesen werden.
 
-Leben, mit all seiner faszinierenden makroskopischen Komplexit\"at, seiner strikten molekularen Homochiralit\"at und seinen hochvernetzten metabolischen Hyperzyklen, kann aus der FST-II-Perspektive als ein \emph{thermodynamisch plausibler} Weg verstanden werden, auf dem Materie in offenen, fern vom Gleichgewicht befindlichen Systemen gro\ss{}e thermische Gradienten dissipiert \citep{Bioenergetics}. Ob dieser Weg \emph{der} wahrscheinlichste oder unvermeidliche ist, bleibt eine offene empirische Frage; der Rahmen legt ihn als nat\"urlichen Attraktor unter MEPP-Bedingungen nahe, beweist aber weder Einzigartigkeit noch Unvermeidlichkeit.
+Leben, mit all seiner makroskopischen Komplexit\"at, seiner molekularen Homochiralit\"at und seinen vernetzten metabolischen Hyperzyklen, kann aus der FST-II-Perspektive als ein \emph{thermodynamisch plausibler} Weg verstanden werden, auf dem Materie in offenen, fern vom Gleichgewicht befindlichen Systemen gro\ss{}e thermische Gradienten dissipiert \citep{Bioenergetics}. Ob dieser Weg \emph{der} wahrscheinlichste oder unvermeidliche ist, bleibt eine offene empirische Frage; der Rahmen beschreibt ihn als Kandidatenattraktor unter MEPP-kompatiblen Bedingungen, beweist aber weder Einzigartigkeit noch Unvermeidlichkeit.
 
 % ===================================================================
 \section{Testbare Vorhersagen}
@@ -498,11 +513,11 @@ Ein direkter experimenteller Test, der die spieltheoretische Vorhersage von der 
 
 \subsection{Beziehung zu Kauffmans autokatalytischen Mengen}
 
-Kauffman \citep{Kauffman1993} schlug vor, dass Leben aus kollektiv autokatalytischen Mengen entstand. FST-II ist kompatibel, f\"ugt aber formale spieltheoretische Struktur hinzu (Nash-Gleichgewichts-Bedingungen), eine thermodynamische Payoff-Funktion (MEPP) und Verbindungen zu Symmetriebrechung und Phasen\"uberg\"angen.
+Kauffman \citep{Kauffman1993} schlug vor, dass Leben aus kollektiv autokatalytischen Mengen entstand. FST-II ist kompatibel, f\"ugt aber formale spieltheoretische Struktur hinzu (Nash-Gleichgewichts-Bedingungen), eine thermodynamische Stabilit\"atsrandbedingung (MEPP) und Verbindungen zu Symmetriebrechung und Phasen\"uberg\"angen.
 
 \subsection{Beziehung zu Pross' Dynamic Kinetic Stability}
 
-Pross \citep{Pross2012} f\"uhrte DKS als Persistenzkriterium f\"ur replizierende Systeme ein. Unser MEPP-Rahmen liefert ein thermodynamisches Fundament: Systeme sind dynamisch stabil, weil sie das Resolvent-Stabilit\"atskriterium unter dissipativen Randbedingungen erf\"ullen, was mit Replikationseffizienz korreliert.
+Pross \citep{Pross2012} f\"uhrte DKS als Persistenzkriterium f\"ur replizierende Systeme ein. Der hier vorgeschlagene Rahmen liefert eine thermodynamische Interpretation: Systeme sind dynamisch stabil, wenn sie das Resolvent-Stabilit\"atskriterium unter dissipativen Randbedingungen erf\"ullen, was in geeigneten chemischen Regimen mit Replikationseffizienz korrelieren kann.
 
 \subsection{Die MEPP-Kontroverse und Geltungsbereich}
 
@@ -511,8 +526,8 @@ Die Verwendung von MEPP als globale Payoff-Funktion erfordert die explizite Aner
 \begin{itemize}
 \item Grinstein \& Linsker \citep{GrinsteinLinsker2007} zeigten, dass Dewars informationstheoretische Herleitung von MEPP Fehler enth\"alt und MEPP in diskreten stochastischen Systemen versagt.
 \item Martyushev \citep{Martyushev2010} identifizierte zwei notwendige Bedingungen f\"ur die Anwendbarkeit von MEPP: (i) lokales thermodynamisches Gleichgewicht und (ii) bilineare Entropieproduktion ($\sigma = \sum_i X_i J_i$). F\"ur die fern vom Gleichgewicht befindlichen autokatalytischen Systeme im Zentrum von FST-II ist Bedingung (ii) in der Regel nicht erf\"ullt.
-\item Die in diesem Paper entwickelte Resolvent-Perspektive (Abschnitt~\ref{sec:discussion}) adressiert diese Einschr\"ankung: MEPP wird nicht als kausaler Treiber, sondern als \emph{Stabilit\"atsfilter} verwendet, der resolvent-stabile Konfigurationen innerhalb einer degenerierten Mannigfaltigkeit identifiziert. Dieser schw\"achere Anspruch erfordert nicht die volle G\"ultigkeit von MEPP als Selektionsgesetz.
-\item Ein aktueller Review von Sawada, Daigaku \& Toma~\citep{Toma2025} best\"atigt, dass MEPP makroskopische evolution\"are Trends---von der Entstehung selbstreplizierender Systeme bis zur sp\"aten gesellschaftlichen Evolution---gut beschreibt, eine rigorose Herleitung aus First Principles fern vom Gleichgewicht jedoch unvollst\"andig bleibt. Dies st\"utzt die Positionierung von MEPP als heuristisches Organisationsprinzip in diesem Paper.
+\item Die in dieser Arbeit entwickelte Resolvent-Perspektive (Abschnitt~\ref{sec:discussion}) adressiert diese Einschr\"ankung: MEPP wird nicht als kausaler Treiber, sondern als \emph{Stabilit\"atsfilter} verwendet, der resolvent-stabile Konfigurationen innerhalb einer degenerierten Mannigfaltigkeit identifiziert. Dieser schw\"achere Anspruch erfordert nicht die volle G\"ultigkeit von MEPP als Selektionsgesetz.
+\item Ein aktueller Review von Sawada, Daigaku \& Toma~\citep{Toma2025} best\"atigt, dass MEPP makroskopische evolution\"are Trends---von der Entstehung selbstreplizierender Systeme bis zur sp\"aten gesellschaftlichen Evolution---gut beschreibt, eine rigorose Herleitung aus ersten Prinzipien fern vom Gleichgewicht jedoch unvollst\"andig bleibt. Dies st\"utzt die Positionierung von MEPP als heuristisches Organisationsprinzip in dieser Arbeit.
 \end{itemize}
 
 \noindent
@@ -524,14 +539,16 @@ Eine begriffliche Kl\"arung ist angebracht. Prigogines Prinzip der \emph{minimal
     \item \textbf{Formale Synthese:} Vereinigung der chemischen Gibbs-Gleichgewicht--Nash-Gleichgewicht-Analogie \citep{MetabolicNash} mit der England-Dissipationsschranke \citep{England2013} und der Eigen-Schuster-Replikator-Dynamik \citep{Eigen1979} in einen einzigen koh\"arenten Rahmen---keine dieser Verbindungen wurde zuvor zusammengef\"uhrt
     \item \textbf{MEPP-Neuinterpretation:} Die Resolvent-Stabilit\"atsfilter-Lesart von MEPP, die die kausale Ambiguit\"at in der Entropieproduktions-Literatur aufl\"ost
     \item \textbf{Spieltheoretische Chiralit\"at:} Neuinterpretation von Franks Symmetriebrechung \citep{Frank1953} als \"Ubergang vom gemischten zum reinen Nash-Gleichgewicht, was ein Vokabular f\"ur quantitative Vorhersagen (P2) liefert
-    \item \textbf{Skalen\"ubergreifende Architektur:} Integration in das FST-Framework, das Teilchenphysik (FST-I), Chemie (FST-II) und Biologie (FST-III) durch eine wiederkehrende Pattern-A-Stabilit\"atslogik verbindet---diese skalen\"ubergreifende strukturelle Korrespondenz ist der prim\"are originelle Beitrag
+    \item \textbf{Skalen\"ubergreifende Architektur:} Integration in den FST-Rahmen, der Teilchenphysik (FST-I), Chemie (FST-II) und Biologie (FST-III) durch eine wiederkehrende Pattern-A-Stabilit\"atslogik verbindet---diese skalen\"ubergreifende strukturelle Korrespondenz ist der prim\"are originelle Beitrag
 \end{enumerate}
+
+Diese Liste ist bewusst begrenzt. FST-II beansprucht nicht, Autokatalyse, Hyperzyklen, Viedma-Ripening, Frank-artige Chiralit\"atsverst\"arkung, Replikator-Dynamik oder die Standardgesetze chemischer Raten neu zu entdecken. Diese Mechanismen stammen aus der etablierten Literatur. Der vorgeschlagene Beitrag liegt in der dar\"ubergelegten Ordnungsschicht: einer spieltheoretischen Darstellung von Netzwerkkonkurrenz, einer Stabilit\"atsfilter-Lesart dissipativer Randbedingungen und experimentell trennbaren Vorhersagen (insbesondere P3 und P6), die scheitern k\"onnen, falls Standardkinetik allein die langfristig dominierenden Netzwerke erkl\"art.
 
 Die mathematische Verbindung zwischen Eigen-Schuster-Stabilit\"at und Nash-Stabilit\"at ist im folgenden eingeschr\"ankten Sinne exakt: \emph{an Fixpunktl\"osungen der Replikatorgleichung} ist jedes Nash-Gleichgewicht der Payoff-Matrix $\mathbf{A}$ ein station\"arer Punkt, und jeder asymptotisch stabile station\"are Punkt ist ein Nash-Gleichgewicht (Theorem~\ref{thm:replicator-nash}). Diese Korrespondenz ist gut etabliert \citep{HofbauerSigmund2003}.
 
 \subsection{Stabilit\"at vs.\ Maximierung: Die Resolventenperspektive}
 
-Das FST-Framework beschreibt \emph{Stabilit\"atsprinzipien}, keine Maximierungsprinzipien. Die Dynamik f\"uhrender Ordnung ist entartet: viele Konfigurationen pr\"abiotischer Netzwerke sind in erster Ordnung gleicherma\ss{}en lebensfähig. Die Selektion erfolgt in zweiter Ordnung \"uber resolventenartige Kopplung zwischen entarteten und komplement\"aren Unterr\"aumen. MEPP wirkt als Stabilit\"atsfilter, der den einzigen resolventenstabilen Fixpunkt innerhalb der entarteten Mannigfaltigkeit identifiziert. Diese strukturelle Logik---als strukturelle Analogie in der eichtheoretischen Reformulierung der Riemannschen Vermutung entwickelt \citep{GeigerRH2026b}---adressiert gleichzeitig die MEPP-Kontroverse (das Prinzip selektiert f\"ur Stabilit\"at, nicht f\"ur maximale Dissipation), das Problem der kausalen Richtung von Englands Ungleichung (Dissipationsschranken markieren die lebensfähige Mannigfaltigkeit; Resolventenstabilit\"at selektiert innerhalb dieser) und das Chiralit\"atsr\"atsel (Homochiralit\"at ist der resolventenstabile Fixpunkt eines in f\"uhrender Ordnung entarteten Gleichgewichts). \"Uber alle drei FST-Papers hinweg gilt die gleiche Selektionslogik zweiter Ordnung: Nash-Gleichgewichte sind keine Optima, sondern resolventenstabile Fixpunkte.
+Der FST-Rahmen beschreibt \emph{Stabilit\"atsprinzipien}, keine Maximierungsprinzipien. Die Dynamik f\"uhrender Ordnung ist entartet: viele Konfigurationen pr\"abiotischer Netzwerke sind in erster Ordnung gleicherma\ss{}en lebensf\"ahig. Die Selektion erfolgt in zweiter Ordnung \"uber resolventenartige Kopplung zwischen entarteten und komplement\"aren Unterr\"aumen. MEPP wirkt als Stabilit\"atsfilter, der den einzigen resolventenstabilen Fixpunkt innerhalb der entarteten Mannigfaltigkeit identifiziert. Diese strukturelle Logik---als strukturelle Analogie in der eichtheoretischen Reformulierung der Riemannschen Vermutung entwickelt \citep{GeigerRH2026b}---adressiert gleichzeitig die MEPP-Kontroverse (das Prinzip selektiert f\"ur Stabilit\"at, nicht f\"ur maximale Dissipation), das Problem der kausalen Richtung von Englands Ungleichung (Dissipationsschranken markieren die lebensf\"ahige Mannigfaltigkeit; Resolventenstabilit\"at selektiert innerhalb dieser) und das Chiralit\"atsr\"atsel (Homochiralit\"at ist der resolventenstabile Fixpunkt eines in f\"uhrender Ordnung entarteten Gleichgewichts). \"Uber alle drei FST-Arbeiten hinweg gilt die gleiche Selektionslogik zweiter Ordnung: Nash-Gleichgewichte sind keine Optima, sondern resolventenstabile Fixpunkte.
 
 Im vorliegenden Kontext veranschaulicht das Racemat diese Architektur: in f\"uhrender Ordnung haben L- und D-Enantiomere identische thermodynamische Payoffs (die entartete Mannigfaltigkeit). MEPP selektiert den homochiralen Zustand nicht, weil er mehr Entropie produziert---in erster Ordnung dissipiert ein Racemat vergleichbar. Vielmehr destabilisiert die Kopplung zweiter Ordnung durch autokatalytische Verst\"arkung und Kreuzinhibition die racemische Konfiguration und selektiert den homochiralen Zustand als den einzigen resolventenstabilen Fixpunkt.
 
@@ -553,16 +570,16 @@ Spektralradius~$\rho(A)$ \"uber Umgebungsparameter \"andert und so die Grenze de
 resolvent-stabilen Region im Parameterraum kartieren.
 
 In diesem Bild markiert Englands Dissipationsschranke~\citep{England2013} die
-\emph{lebensfähige Mannigfaltigkeit}: Nur Netzwerke, deren Entropieproduktion
+\emph{lebensf\"ahige Mannigfaltigkeit}: Nur Netzwerke, deren Entropieproduktion
 das thermodynamische Minimum \"ubersteigt, k\"onnen \"uberhaupt persistieren
 (Lemma~\ref{lem:england}).  Die Selektion zweiter Ordnung wirkt dann
 \emph{innerhalb} dieser Mannigfaltigkeit.  Parasitenresistenz, r\"aumliche
 Struktur (Spiralwellen in Hyperzyklen) und Ressourcenfluss-Topologie bestimmen,
-\emph{welches} der lebensfähigen Netzwerke resolvent-stabil ist und daher die
+\emph{welches} der lebensf\"ahigen Netzwerke resolvent-stabil ist und daher die
 Langzeitdynamik dominiert.
-Diese Zwei-Stufen-Architektur -- Lebensfähigkeitsfilter erster Ordnung plus
+Diese Zwei-Stufen-Architektur -- Lebensf\"ahigkeitsfilter erster Ordnung plus
 Resolventenselektion zweiter Ordnung -- verbindet die formale Stabilit\"atstheorie
-des FST-RH-Frameworks~\citep{GeigerRH2026b} mit Gr\"o\ss{}en, die direkt im
+des FST-RH-Rahmens~\citep{GeigerRH2026b} mit Gr\"o\ss{}en, die direkt im
 chemischen Labor messbar sind.
 
 \textbf{Die behauptete strukturelle Korrespondenz zwischen Gibbs-Minimierung und Nash-Gleichgewichten bedarf jedoch der Qualifizierung.} Gibbs-Freie-Energie-Minimierung (Abschnitt 3.2) ist ein konvexes Optimierungsproblem mit einem einzigen globalen Minimum im thermodynamischen Limes. Nash-Gleichgewichte m\"ussen hingegen nicht einzigartig sein, k\"onnen nicht-konvex sein und Sattelpunkte einschlie\ss{}en. Die Behauptung, dass ``ein formales Nash-Gleichgewicht genau dann erreicht wird, wenn kein Reaktionspfad seine Gibbs-Energie weiter minimieren kann'', verwechselt lokale Optimalit\"atsbedingungen (Stationarit\"at erster Ordnung) mit Nash-Gleichgewicht im spieltheoretischen Sinne. Was tats\"achlich gezeigt wird, ist, dass \emph{die station\"aren Punkte des eingeschr\"ankten Gibbs-Minimierungsproblems die notwendigen Bedingungen f\"ur ein Nash-Gleichgewicht erf\"ullen}---dies ist eine formale Analogie, kein vollst\"andiger Isomorphismus. Die globale Eindeutigkeit des thermodynamischen Gleichgewichts \"ubertr\"agt sich nicht auf die spieltheoretische Situation, wo mehrere Nash-Gleichgewichte koexistieren k\"onnen.
@@ -589,7 +606,7 @@ Dieses Design adressiert direkt Einschr\"ankung (L3) und liefert den von Vorhers
 \subsection{\"Uber Azoarcus hinaus: Kandidatensysteme f\"ur FST-II-Tests}
 \label{sec:beyond-azoarcus}
 
-Die empirische Basis von FST-II beruht prim\"ar auf dem Azoarcus-Ribozym-System. Um Allgemeing\"ultigkeit zu etablieren, eignen sich mindestens drei weitere molekulare Plattformen zum Testen der Framework-Vorhersagen:
+Die empirische Basis von FST-II beruht prim\"ar auf dem Azoarcus-Ribozym-System. Um Allgemeing\"ultigkeit zu etablieren, eignen sich mindestens drei weitere molekulare Plattformen zum Testen der Vorhersagen dieses Rahmens:
 
 \begin{itemize}
     \item \textbf{Autokatalytische Peptidnetzwerke.} Die Ashkenasy-Gruppe hat selbstreplizierende Peptidnetzwerke demonstriert, die kooperative und kompetitive Dynamiken analog zu den vier Azoarcus-Spielen zeigen \citep{Ashkenasy2004}. Peptidsysteme bieten den Vorteil einstellbarer Interaktionsst\"arken \"uber Sequenzmutation, was eine systematische Variation der Payoff-Matrix-Eintr\"age erm\"oglicht.
@@ -618,12 +635,13 @@ Diese nicht-idealen Effekte verkn\"upfen sich mit der Aktivit\"atskoeffizienten-
 
 Zur numerischen Illustration des Zusammenhangs zwischen Resolventenstabilit\"at und Entropieproduktion analysieren wir einen minimalen autokatalytischen Drei-Spezies-Zyklus auf dem Konzentrationssimplex $\Delta^2$.
 Die Reaktionen lauten $\mathrm{A}+\mathrm{B}\xrightarrow{k_1}2\mathrm{B}$ ($k_1=1{,}0$), $\mathrm{B}+\mathrm{C}\xrightarrow{k_2}2\mathrm{C}$ ($k_2=0{,}8$), $\mathrm{C}\xrightarrow{k_3}\mathrm{A}$ ($k_3=0{,}5$).
+Dabei ist $\mathrm{C}\to\mathrm{A}$ kein autokatalytischer Schritt, sondern ein Rezyklierungs- bzw.\ Abbauschritt erster Ordnung; er schlie\ss{}t den Zyklus, indem er das Substrat~A regeneriert, und verhindert damit den trivialen absorbierenden Zustand $x_C=1$. Die Asymmetrie zwischen den autokatalytischen Schritten ($\mathrm{A}+\mathrm{B}\to 2\mathrm{B}$, $\mathrm{B}+\mathrm{C}\to 2\mathrm{C}$) und diesem Abbauschritt ist beabsichtigt: Sie modelliert die biologisch verbreitete Situation, dass in einem zyklischen Netzwerk nicht alle Schritte katalytisch sind.
 Das System besitzt einen eindeutigen inneren Fixpunkt $\mathbf{x}^*=(0{,}167;\,0{,}625;\,0{,}208)$, der die Nash-Gleichgewichtsbedingung des assoziierten Replikatorspiels erf\"ullt, mit Gibbs-Freier-Energie $G(\mathbf{x}^*)=-0{,}711$ (in dimensionslosen Einheiten).
 
-Die lineare Stabilit\"atsanalyse der Jacobi-Matrix bei $\mathbf{x}^*$ ergibt einen Spektralradius $\rho(J)=0{,}433$, was asymptotische Stabilit\"at best\"atigt.
-Die Schnakenberg-Entropieproduktionsrate am Fixpunkt betr\"agt $\dot{S}=1{,}439$.
+Die lineare Stabilit\"atsanalyse der Jacobi-Matrix bei $\mathbf{x}^*$ zeigt, dass alle Eigenwerte negative Realteile besitzen und damit asymptotische Stabilit\"at best\"atigen; der Spektralradius $\rho(J)=0{,}433$ quantifiziert den Abstand zur Stabilit\"atsgrenze.
+Die Schnakenberg-Entropieproduktionsrate am Fixpunkt betr\"agt $\dot{S}=1{,}439$ \citep{Schnakenberg1976}.
 Um die Beziehung zwischen Resolventenstabilit\"at und Dissipation zu untersuchen, wurde $k_1$ \"uber 20 Werte variiert und $\rho(J)$ sowie $\dot{S}$ am jeweiligen Fixpunkt berechnet.
-Die Pearson-Korrelation betr\"agt $r=0{,}801$ ($p=2{,}2\times 10^{-5}$) und zeigt eine starke positive Assoziation: schnellerer autokatalytischer Umsatz erh\"oht simultan sowohl den Spektralradius (d.h.\ das System n\"ahert sich der Stabilit\"atsgrenze) als auch die Entropieproduktionsrate.
+Die Pearson-Korrelation betr\"agt $r=0{,}801$ und zeigt eine positive Assoziation zwischen Spektralradius und Entropieproduktionsrate. \textbf{Hinweis:} Da sowohl $\rho(J)$ als auch $\dot{S}$ deterministische Funktionen des einzigen variierten Parameters~$k_1$ sind, ist diese Korrelation eine mathematische Konsequenz der parametrischen Abh\"angigkeit und kein unabh\"angiger statistischer Befund. Der $p$-Wert eines Pearson-Tests ist in diesem Ein-Parameter-Kontext epistemisch nicht aussagekr\"aftig. Die Korrelation illustriert den \emph{Mechanismus} des Stabilit\"ats--Dissipations-Zielkonflikts, stellt aber keine Evidenz f\"ur seine Universalit\"at \"uber strukturell verschiedene Netzwerke hinweg dar (siehe Hinweis unten).
 
 \begin{table}[htbp]
 \centering
@@ -637,26 +655,29 @@ Die Pearson-Korrelation betr\"agt $r=0{,}801$ ($p=2{,}2\times 10^{-5}$) und zeig
 $x^*_A,\; x^*_B,\; x^*_C$ & $0{,}167;\; 0{,}625;\; 0{,}208$ \\
 $\rho(J)$ & $0{,}433$ \\
 $\dot{S}$ & $1{,}439$ \\
-Pearson $r(\rho,\dot{S})$ & $0{,}801\;(p = 2{,}2\times10^{-5})$ \\
+Pearson $r(\rho,\dot{S})$ & $0{,}801$ (Ein-Parameter-Scan; siehe Text) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Diese Proof-of-Concept-Berechnung stellt keinen allgemeinen Beweis dar, liefert aber konkreten numerischen Beleg daf\"ur, dass die zentrale FST-II-Konjektur~-- Resolventenstabilit\"at und Entropieproduktion sind in autokatalytischen Netzwerken positiv korreliert~-- in einem analytisch handhabbaren Modellsystem gilt.
-Die starke Korrelation ($r>0{,}8$) bei hoher statistischer Signifikanz ($p<10^{-4}$) motiviert die systematische Untersuchung gr\"o\ss{}erer Netzwerke und experimentelle Validierung gem\"a\ss{} Abschnitt~\ref{sec:predictions}.
+Diese Machbarkeitsrechnung liefert keinen allgemeinen Beweis, macht aber einen strukturellen Zielkonflikt sichtbar, der im Zentrum der FST-II-Architektur steht: schnellerer autokatalytischer Umsatz erh\"oht zugleich die Entropieproduktionsrate und r\"uckt das System n\"aher an die Stabilit\"atsgrenze (h\"oheres $\rho(J)$).
+Die starke parametrische Korrelation ($r>0{,}8$) ist mit dem im FST-II-Rahmen vorhergesagten Zielkonflikt vereinbar und rechtfertigt eine systematische Untersuchung gr\"o\ss{}erer und strukturell vielf\"altiger Netzwerke, bei der nicht nur eine einzelne Ratenkonstante, sondern die Netzwerktopologie variiert wird, wie in Abschnitt~\ref{sec:predictions} skizziert.
 
-Die Pearson-Korrelation $r = 0{,}801$ ($p = 2{,}2 \times 10^{-5}$) zwischen Spektralradius und Entropieproduktionsrate liefert die erste quantitative St\"utzung f\"ur Vorhersage~P1 (Abschnitt~\ref{sec:predictions}): Systeme, die st\"arker zur Stabilit\"atsgrenze getrieben werden, produzieren gleichzeitig mehr Entropie, konsistent mit der FST-II-Konjektur, dass Resolventenstabilit\"at und MEPP in autokatalytischen Netzwerken positiv gekoppelt sind.
+\textbf{Hinweis zur kausalen Interpretation.} Die berichtete Korrelation entsteht durch die Variation eines einzigen Parameters~($k_1$); sowohl $\rho(J)$ als auch $\dot{S}$ sind Funktionen von~$k_1$, sodass eine hohe Korrelation aus rein mathematischen Gr\"unden zu erwarten ist und f\"ur sich genommen keine physikalische Beziehung zwischen Stabilit\"at und Dissipation belegt. Ein strengerer Test m\"usste die \emph{Netzwerktopologie} (Anzahl der Spezies, Konnektivit\"at, relative Gr\"o\ss{}en aller Ratenkonstanten) variieren und pr\"ufen, ob der $\rho$--$\dot{S}$-Zielkonflikt auch \"uber strukturell verschiedene Netzwerke hinweg bestehen bleibt. Der vorliegende Ein-Parameter-Scan sollte daher als Illustration des Zielkonfliktmechanismus gelesen werden, nicht als Evidenz f\"ur seine Universalit\"at.
+
+Der beobachtete Zielkonflikt ist mit dem FST-II-Rahmen vereinbar: Englands Dissipationsschranke markiert die lebensf\"ahige Mannigfaltigkeit, und eine an MEPP orientierte Stabilit\"atsfilterung wird innerhalb der resolvent-stabilen Region hypothetisch angesetzt. Die positive Korrelation zwischen $\rho(J)$ und $\dot{S}$ ist mit einem Arbeitspunkt vereinbar, der Dissipation und asymptotische Stabilit\"at balanciert; sie belegt f\"ur sich allein aber keinen kausalen Druck zu h\"oherer Entropieproduktion. Der st\"arkere Selektionsclaim erfordert Topologie-Tests \"uber verschiedene Netzwerke hinweg, wie sie in Vorhersage~P1 und im nicht-zirkul\"aren Protokoll von Abschnitt~\ref{sec:noncircular-test} spezifiziert sind.
 
 \subsection{Status der Behauptungen}
 
-Tabelle~\ref{tab:status-claims} klassifiziert die zentralen Behauptungen dieses Papers nach epistemischem Status.
+Tabelle~\ref{tab:status-claims} klassifiziert die zentralen Behauptungen dieses Artikels nach epistemischem Status.
 
 \begin{table}[htbp]
 \centering
-\caption{Status der Behauptungen. \textsc{Etabliert}: bewiesene oder weithin akzeptierte Ergebnisse, die hier zitiert werden; \textsc{Konjektur}: neue, aber testbare Behauptungen; \textsc{Spekulativ}: Framework-Vorschl\"age ohne direkten empirischen Test.}
+\caption{Status der Behauptungen. \textsc{Etabliert}: bewiesene oder weithin akzeptierte Ergebnisse, die hier zitiert werden; \textsc{Konjektur}: neue, aber testbare Behauptungen; \textsc{Spekulativ}: Rahmenvorschl\"age ohne direkten empirischen Test.}
 \label{tab:status-claims}
 \small
-\begin{tabular}{p{4.8cm}lp{5.2cm}}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.29\textwidth}>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
 \textbf{Behauptung} & \textbf{Status} & \textbf{Evidenz / Referenz} \\
 \midrule
@@ -673,7 +694,7 @@ Spiralwellen als verteilte ESS & \textsc{Konjektur} & Abschn.~\ref{sec:hypercycl
 Kompartimentierungs-Schwellenwert (P4) & \textsc{Konjektur} & Testbar; noch keine experimentellen Daten \\
 Hierarchische Mikro/Meso/Makro-Kaskade & \textsc{Spekulativ} & Abschn.~\ref{sec:synthesis}; konzeptuelle Architektur \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 % ===================================================================
@@ -681,21 +702,21 @@ Hierarchische Mikro/Meso/Makro-Kaskade & \textsc{Spekulativ} & Abschn.~\ref{sec:
 \label{sec:conclusion}
 % ===================================================================
 
-Der FST-II-Rahmen liefert ein umfassendes und formal fundiertes Modell der pr\"abiotischen chemischen Evolution. Durch die mathematische Verbindung der Ljapunow-Metrik differentieller Replikatorgleichungen mit thermodynamischer Entropieproduktion \citep{ReplicatorEntropy} legt er nahe, dass die Entstehung des Lebens als Konsequenz dissipationsgetriebener Stabilit\"atsselektion in offenen materiellen Systemen verstanden werden kann.
+Der FST-II-Rahmen liefert ein strukturiertes Interpretationsmodell der pr\"abiotischen chemischen Evolution. Durch die mathematische Verbindung der Ljapunow-Metrik differentieller Replikatorgleichungen mit thermodynamischer Entropieproduktion \citep{ReplicatorEntropy} legt er nahe, dass die Entstehung des Lebens als m\"ogliche Folge von Stabilit\"atsselektion unter dissipativen Randbedingungen in offenen materiellen Systemen untersucht werden kann.
 
-Pr\"abiologische Reaktionen sind keine isolierten stochastischen Kollisionen, sondern komplexe thermodynamische Mehrspieler-Spiele. Der zentrale ``Payoff'' in diesen molekularen Spielen ist die stabilit\"atsselektierte Dissipation. Ph\"anomene wie Homochiralit\"at und autokatalytische Hyperzyklen k\"onnen als Nash-Gleichgewichts-Strategien innerhalb dieser energetischen Wettbewerbe interpretiert werden.
+Pr\"abiologische Reaktionen sind keine isolierten stochastischen Kollisionen allein, sondern vernetzte Prozesse, die als thermodynamische Mehrspieler-Spiele repr\"asentiert werden k\"onnen. Der zentrale ``Payoff'' in diesen molekularen Spielen ist ein Kandidatenma\ss{} f\"ur stabilit\"atsselektierte Dissipation. Ph\"anomene wie Homochiralit\"at und autokatalytische Hyperzyklen k\"onnen als Nash-Gleichgewichts-artige Strukturen innerhalb dieser energetischen Wettbewerbe interpretiert werden.
 
 Mehrere wichtige Einschr\"ankungen sind zu beachten:
 \begin{enumerate}[label=(L\arabic*)]
     \item \textbf{MEPP-Status:} MEPP wird als heuristischer Stabilit\"atsfilter verwendet, nicht als bewiesenes kausales Prinzip. Die Bedingungen, unter denen MEPP auf fern vom Gleichgewicht befindliche autokatalytische Systeme anwendbar ist, m\"ussen noch rigoros etabliert werden (Abschnitt~\ref{sec:discussion}).
     \item \textbf{Empirischer Geltungsbereich:} Die empirische Basis beruht prim\"ar auf dem Azoarcus-Ribozym-System (16 Genotypen, spezifische In-vitro-Bedingungen). Verallgemeinerung auf andere Molek\"ulklassen (Peptide, Lipide) und Umweltbedingungen erfordert unabh\"angige experimentelle Validierung.
     \item \textbf{Zirkularit\"atsrisiko:} Die Identifikation von MEPP als Payoff-Funktion, die Nash-Gleichgewichte definiert, erzeugt eine Definitionsschleife (Abschnitt~\ref{sec:cgt}). Unabh\"angige Messung von Entropieproduktion und spieltheoretischem Status (P3) ist erforderlich, um diese Zirkularit\"at aufzubrechen.
-    \item \textbf{Resolvententerminologie:} Das Resolventenstabilit\"ats-Vokabular wird als strukturelle Analogie zum FST-RH-Framework verwendet; eine dom\"anenspezifische mathematische Formulierung f\"ur chemische Systeme bleibt zu entwickeln.
-    \item \textbf{Idealit\"atsannahme:} Die Gibbs-Freie-Energie-Formulierung nimmt ideale Mischung an (Abschnitt~\ref{sec:cgt}); reale pr\"abiotische Systeme erfordern Aktivit\"atskoeffizienten-Korrekturen.
+    \item \textbf{Resolvententerminologie:} Das Resolventenstabilit\"ats-Vokabular wird als strukturelle Analogie zum FST-RH-Rahmen verwendet; eine dom\"anenspezifische mathematische Formulierung f\"ur chemische Systeme bleibt zu entwickeln.
+    \item \textbf{Idealit\"atsannahme:} Die Gibbs-Freie-Energie-Formulierung nimmt ideale Mischung an (Abschnitt~\ref{sec:cgt}); reale pr\"abiotische Systeme erfordern Korrekturen der Aktivit\"atskoeffizienten.
 \end{enumerate}
-Die sechs testbaren Vorhersagen (P1--P6) liefern ein konkretes experimentelles Programm, um diesen Rahmen von einer blo\ss{}en Umformulierung bekannter Ergebnisse zu unterscheiden.
+Als Framework-Artikel pr\"asentiert FST-II keine neuen experimentellen Daten und keine neuen mathematischen Beweise; sein Beitrag ist die Synthese etablierter Ergebnisse zu einer koh\"arenten Architektur, die testbare Vorhersagen erzeugt. Die sechs testbaren Vorhersagen (P1--P6) liefern ein konkretes experimentelles Programm, um diesen Rahmen von einer blo\ss{}en Umformulierung bekannter Ergebnisse zu unterscheiden. Der Wert des Rahmens wird letztlich daran zu messen sein, ob diese Vorhersagen durch k\"unftige Experimente best\"atigt, pr\"azisiert oder widerlegt werden.
 
-Trotz dieser Einschr\"ankungen er\"offnet FST-II pr\"adiktive M\"oglichkeiten zur Vorhersage exobiologischer Systemarchitekturen auf anderen Planeten und als Leitfaden f\"ur das rationale Design k\"unstlicher dissipativer Netzwerke in der modernen synthetischen Systemchemie.
+Trotz dieser Einschr\"ankungen er\"offnet FST-II vorsichtige, bislang ungetestete M\"oglichkeiten, erwartbare exobiologische Systemarchitekturen auf anderen Planeten einzugrenzen und als konzeptioneller Leitfaden f\"ur das rationale Design k\"unstlicher dissipativer Netzwerke in der modernen synthetischen Systemchemie zu dienen.
 
 % ===================================================================
 % Literaturverzeichnis
@@ -706,8 +727,9 @@ Trotz dieser Einschr\"ankungen er\"offnet FST-II pr\"adiktive M\"oglichkeiten zu
 
 \bibitem[Geiger(2026a)]{FSTI}
 Geiger, L. (2026).
-\newblock Functional Stability Theory I: Thermodynamic Stability of Fundamental Parameters.
-\newblock Preprint (FST-I).
+\newblock Functional Stability Theory I: A Game-Theoretic Framework for the Thermodynamic Stability of Fundamental Parameters.
+\newblock \textit{Zenodo preprint}, Version 1.1, 2026.
+\newblock DOI: 10.5281/zenodo.20130955.
 
 \bibitem[Frank(1953)]{Frank1953}
 Frank, F.~C. (1953).
@@ -734,6 +756,7 @@ Yeates, J.~A.~M., Hilbe, C., Zwick, M., Nowak, M.~A. \& Lehman, N. (2016).
 Vaidya, N., Manapat, M.~L., Chen, I.~A., Xulvi-Brunet, R., Hayden, E.~J. \& Lehman, N. (2012).
 \newblock Spontaneous network formation among cooperative RNA replicators.
 \newblock \textit{Nature}, 491, 72--77.
+\newblock DOI: 10.1038/nature11549.
 
 \bibitem[Dyakin \& Uversky(2022)]{Biochirality}
 Dyakin, V.~V. \& Uversky, V.~N. (2022).
@@ -749,6 +772,7 @@ Nicolis, G. \& Prigogine, I. (1977).
 Velegol, D., Suhey, P., Connolly, J., Morrissey, N. \& Cook, L. (2018).
 \newblock Chemical game theory.
 \newblock \textit{Industrial \& Engineering Chemistry Research}, 57(41), 13593--13607.
+\newblock DOI: 10.1021/acs.iecr.8b03835.
 
 \bibitem[Nowak(2006)]{CGTMacmillan}
 Nowak, M.~A. (2006).
@@ -839,7 +863,6 @@ Hutson, V.~C.~L. \& Vickers, G.~T. (1992).
 Harper, M. (2009).
 \newblock The replicator equation as an inference dynamic.
 \newblock arXiv:0911.1763.
-\newblock (See also: \textit{Journal of Theoretical Biology}, 2011.)
 
 \bibitem[Boerlijst \& Hogeweg(1995)]{SpiralWaves}
 Boerlijst, M.~C. \& Hogeweg, P. (1995).
@@ -890,18 +913,21 @@ Crooks, G.~E. (1999).
 
 \bibitem[Geiger(2026c)]{GeigerRH2026c}
 Geiger, L. (2026).
-\newblock The Riemann Hypothesis Part III: The Analytical Rank-Finite Certificate.
-\newblock \textit{Zenodo preprint}, March 2026.
+\newblock From Landscape to Proof: The Even-Dominance Route to the Riemann Hypothesis.
+\newblock \textit{Zenodo preprint}, Version 2.1, 2026.
+\newblock DOI: 10.5281/zenodo.19546593.
 
-\bibitem[Geiger(2026e)]{GeigerRH2026b}
+\bibitem[Geiger(2026b)]{GeigerRH2026b}
 Geiger, L. (2026).
-\newblock Even Dominance of the Weil Quadratic Form: Spectral Analysis, Computer-Assisted Proof, and the Resolvent Gap Theorem.
-\newblock \textit{Zenodo preprint}, March 2026.
+\newblock A Proof of the Riemann Hypothesis via Even Dominance of the Weil Quadratic Form.
+\newblock \textit{Zenodo preprint}, Version 2.0, 2026.
+\newblock DOI: 10.5281/zenodo.19536076.
 
 \bibitem[Geiger(2026d)]{FST-Unified2026}
 Geiger, L. (2026).
-\newblock The Renormalized Free Energy Framework: A Unified Resolution of Structural Bottlenecks.
-\newblock \textit{FST Framework Paper}, 2026.
+\newblock FST Spectrum Duality: The Renormalized Free Energy Principle as Physical Instantiation of Functional Stability Theory.
+\newblock \textit{Zenodo preprint}, Version 1.7, 2026.
+\newblock DOI: 10.5281/zenodo.19162705.
 
 \bibitem[Ziegler(1963)]{Ziegler1963}
 Ziegler, H. (1963).
@@ -922,13 +948,14 @@ Sawada, Y., Daigaku, Y. \& Toma, K. (2025).
 \bibitem[Anton \& Stirnemann(2026)]{AntonStirnemann2026}
 Anton, O. \& Stirnemann, G. (2026).
 \newblock Computational studies of prebiotic chemistry at the age of machine learning: From recent breakthroughs to future revolutions.
-\newblock \textit{ChemSystemsChem}, e202500057.
+\newblock \textit{ChemSystemsChem}, 8(1), e00057.
 \newblock DOI: 10.1002/syst.202500057.
 
 \bibitem[Ashkenasy et al.(2004)]{Ashkenasy2004}
 Ashkenasy, G., Jagasia, R., Yadav, M. \& Ghadiri, M.~R. (2004).
 \newblock Design of a directed molecular network.
 \newblock \textit{Proceedings of the National Academy of Sciences}, 101(30), 10872--10877.
+\newblock DOI: 10.1073/pnas.0402674101.
 
 \bibitem[Szostak et al.(2001)]{Szostak2001}
 Szostak, J.~W., Bartel, D.~P. \& Luisi, P.~L. (2001).
@@ -939,11 +966,34 @@ Szostak, J.~W., Bartel, D.~P. \& Luisi, P.~L. (2001).
 Rogers, J. \& Joyce, G.~F. (2001).
 \newblock The effect of cytidine on the structure and function of an RNA ligase ribozyme.
 \newblock \textit{RNA}, 7(3), 395--404.
+\newblock DOI: 10.1017/S135583820100228X.
 
 \bibitem[Prody et al.(1986)]{Hammerhead1986}
 Prody, G.~A., Bakos, J.~T., Buzayan, J.~M., Schneider, I.~R. \& Bruening, G. (1986).
 \newblock Autolytic processing of dimeric plant virus satellite RNA.
 \newblock \textit{Science}, 231(4745), 1577--1580.
+
+\bibitem[Gilbert(1986)]{Gilbert1986}
+Gilbert, W. (1986).
+\newblock Origin of life: The RNA world.
+\newblock \textit{Nature}, 319, 618.
+
+\bibitem[Sievers \& von Kiedrowski(1994)]{SieversKiedrowski1994}
+Sievers, D. \& von Kiedrowski, G. (1994).
+\newblock Self-replication of complementary nucleotide-based oligomers.
+\newblock \textit{Nature}, 369, 221--224.
+
+\bibitem[Blackmond(2010)]{Blackmond2010}
+Blackmond, D.~G. (2010).
+\newblock The origin of biological homochirality.
+\newblock \textit{Cold Spring Harbor Perspectives in Biology}, 2(5), a002147.
+\newblock DOI: 10.1101/cshperspect.a002147.
+
+\bibitem[Schnakenberg(1976)]{Schnakenberg1976}
+Schnakenberg, J. (1976).
+\newblock Network theory of microscopic and macroscopic behavior of master equation systems.
+\newblock \textit{Reviews of Modern Physics}, 48(4), 571--585.
+\newblock DOI: 10.1103/RevModPhys.48.571.
 
 \end{thebibliography}
 
