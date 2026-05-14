@@ -7,9 +7,9 @@ Zenodo concept DOI: <https://doi.org/10.5281/zenodo.19087433>
 
 ## Status
 
-This folder contains the public v2.2 paper files synchronized from the local
+This folder contains the public v2.3 paper files synchronized from the local
 Post-Zookeeper/RFEP and adversarial-review working state. The latest Zenodo
-release is v2.2: <https://doi.org/10.5281/zenodo.20077322>. The continuum
+release before publication is v2.2: <https://doi.org/10.5281/zenodo.20077322>. The continuum
 mass-gap step remains conditional on the analytical renormalization-group
 contraction input.
 
@@ -17,9 +17,9 @@ contraction input.
 
 | File | Purpose |
 |------|---------|
-| `FST-YM_YangMills_Skeleton_v1_en.tex` / `FST-YM_YangMills_Skeleton_v1_en.pdf` | English paper source and PDF |
-| `FST-YM_YangMills_Skeleton_v1_de.tex` / `FST-YM_YangMills_Skeleton_v1_de.pdf` | German paper source and PDF |
-| `FST-YM_YangMills_Skeleton_v1_kombi.pdf` | Combined bilingual PDF |
+| `FST-YM_YangMills_MassGap_en.tex` / `FST-YM_YangMills_MassGap_en.pdf` | English paper source and PDF |
+| `FST-YM_YangMills_MassGap_de.tex` / `FST-YM_YangMills_MassGap_de.pdf` | German paper source and PDF |
+| `FST-YM_YangMills_MassGap_kombi.pdf` | Combined bilingual PDF |
 | `../../scripts/yang-mills/compute_dobrushin_su2.py` | SU(2) lattice Dobrushin influence scan |
 | `../../scripts/yang-mills/compute_birkhoff_rg.py` | Birkhoff contraction scan for hierarchical RG steps |
 | `../../scripts/yang-mills/compute_dobrushin_su2.png` | Generated Dobrushin result plot |

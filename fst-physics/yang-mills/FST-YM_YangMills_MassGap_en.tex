@@ -9,6 +9,7 @@
 \usepackage{geometry}
 \geometry{a4paper, margin=2.5cm}
 \usepackage{array,booktabs,tabularx}
+\usepackage{float}
 \usepackage{microtype}
 \usepackage[unicode=true,hyperfootnotes=false]{hyperref}
 
@@ -729,7 +730,7 @@ positive physical mass gap.
 
 \subsection*{Proof status summary}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \small
 \caption{Proof status summary}
@@ -1209,11 +1210,14 @@ The Gap Transport problem admits a precise formulation as a \emph{threshold conj
 Let $\mathcal{R}_k$ denote the block-spin RG transformation (Definition~\ref{def:block-rg}) at scale $k$, and let $\kappa_k$ denote the Poincar\'e constant of the effective theory $S_k$ on lattice $\Lambda_k$ with spacing $2^k a$. The \textbf{Gap Transport Conjecture} demands:
 \begin{enumerate}
 \item[(GT1)] \textbf{Scale coercivity:} $\kappa_k \geq 0$ for all $k$, with $\kappa_k = 0$ only for gauge zero modes.
-\item[(GT2)] \textbf{Controlled transport:} There exists $c > 0$ independent of $k$ and $\beta$ such that
+\item[(GT2)] \textbf{Controlled transport:} There exists a defect sequence
+$0 \leq \varepsilon_k \leq 1/2$ such that
 \begin{equation}\label{eq:gap-transport}
-  \kappa_{k+1} \geq c\, \kappa_k - \varepsilon_k, \qquad \text{with } \sum_{k=0}^{\infty} \varepsilon_k < \infty.
+  \kappa_{k+1} \geq \kappa_k(1-\varepsilon_k),
+  \qquad \text{with } \sum_{k=0}^{\infty} \varepsilon_k < \infty.
 \end{equation}
-\item[(GT3)] \textbf{Continuum stability:} The constants $c$ and $\sum \varepsilon_k$ remain uniform as $\beta \to \infty$.
+\item[(GT3)] \textbf{Continuum stability:} The summable defect budget
+$\sum \varepsilon_k$ remains uniform as $\beta \to \infty$.
 \end{enumerate}
 \end{conjecture}
 
@@ -1244,7 +1248,15 @@ To locate where gap transport breaks, scan for three types of budget erosion:
 \end{remark}
 
 \begin{remark}[Defective transport as intermediate target]\label{rem:defective-transport}
-If the strict transport GT2 fails, the defective version~\eqref{eq:gap-transport} with summable error $\sum \varepsilon_k < \infty$ suffices for a mass gap: the accumulated defect $\prod_k (1 - \varepsilon_k / \kappa_k)$ converges if $\varepsilon_k$ decays faster than $\kappa_k$. Corollary~\ref{cor:kingman-gap} gives the corresponding Birkhoff-form criterion through $\sum_k\tau_B(R_k)^2<\infty$. Numerically (Remark~\ref{rem:birkhoff-numerics}), individual $\tau_B(R_k)$ may approach $1$ at the coarsest scale while $\lambda < 0$ on the tested grid; this motivates, but does not prove, the required summability.
+If uniform gap transport is unavailable, the multiplicative defective
+version~\eqref{eq:gap-transport} with summable degradation
+$\sum \varepsilon_k < \infty$ suffices for a mass gap: the accumulated
+product $\prod_k (1-\varepsilon_k)$ converges to a strictly positive
+number. Corollary~\ref{cor:kingman-gap} gives the corresponding
+Birkhoff-form criterion through $\sum_k\tau_B(R_k)^2<\infty$. Numerically
+(Remark~\ref{rem:birkhoff-numerics}), individual $\tau_B(R_k)$ may
+approach $1$ at the coarsest scale while $\lambda < 0$ on the tested grid;
+this motivates, but does not prove, the required summability.
 \end{remark}
 
 \begin{remark}[No-go mechanisms]\label{rem:gt-nogo}
@@ -1260,7 +1272,8 @@ For SU(2) in the strong-coupling regime, none of these mechanisms is operative (
 \begin{lemma}[GT-YM implies mass gap]\label{lem:gt-massgap}
 If Conjecture~\ref{ax:gt-ym} holds, then the physical mass gap satisfies
 \begin{equation}
-  m_{\mathrm{phys}} \geq m_0 \cdot \exp\!\left(-C' \sum_{k=0}^{K} \varepsilon_k / \kappa_k\right) > 0
+  m_{\mathrm{phys}} \geq m_0 \prod_{k=0}^{\infty}(1-\varepsilon_k)
+  \geq m_0 \exp\!\left(-2\sum_{k=0}^{\infty}\varepsilon_k\right) > 0
 \end{equation}
 for an explicit constant $m_0 > 0$ depending only on the strong-coupling Poincar\'e constant $\kappa_0$ (Theorem~\ref{thm:conditional-gap}).
 \end{lemma}
@@ -1590,7 +1603,7 @@ The physically relevant quantity is not $\tau_B(R_k)$ at any single scale, but t
 \begin{equation}\label{eq:lyapunov-rg}
   \lambda := \limsup_{n \to \infty} \frac{1}{n} \sum_{k=1}^{n} \log \tau_B(R_k).
 \end{equation}
-Mass gap $\Leftrightarrow$ $\lambda < 0$.
+A negative value of $\lambda$ is a diagnostic for average contraction of the composed RG kernels. It is not equivalent to a mass gap by itself. A positive limiting gap additionally requires a summable defect estimate such as Corollary~\ref{cor:kingman-gap} or the GT2 condition in Conjecture~\ref{ax:gt-ym}.
 
 \subsubsection*{Step 2: Subadditive structure}
 
@@ -1598,7 +1611,7 @@ The key observation is subadditivity:
 \begin{equation}\label{eq:subadditive}
   \log \tau_B(R_n \circ \cdots \circ R_1) \;\leq\; \sum_{k=1}^{n} \log \tau_B(R_k).
 \end{equation}
-This is precisely the setting of Kingman's subadditive ergodic theorem \cite{Kingman1968}: if the RG steps form a stationary ergodic sequence, then a \emph{negative mean contraction} along the RG flow suffices. Individual RG steps may have $\tau_B(R_k)$ close to~$1$, as long as they are not systematically bad.
+This is precisely the setting of Kingman's subadditive ergodic theorem \cite{Kingman1968}: if the RG steps form a stationary ergodic sequence, the theorem can produce a \emph{negative mean contraction} diagnostic along the RG flow. Individual RG steps may have $\tau_B(R_k)$ close to~$1$, but preserving a positive lower Poincar\'e/LSI constant still requires the induced defects to be summable.
 
 \subsubsection*{Step 3: $\Gamma$-convergence of the effective functional}
 
@@ -1610,7 +1623,7 @@ where $L$ is the block size. For $L \to \infty$:
 \[
   G_L \;\xrightarrow{\;\Gamma\;}\; G_\infty,
 \]
-where $G_\infty$ is a \emph{deterministic} RG free-energy functional. The mass gap is then $m \sim \exp(-G_\infty)$. Crucially, the $\Gamma$-limit exists even when individual $\tau_B(R_k)$ are close to~$1$.
+where $G_\infty$ is a \emph{deterministic} RG free-energy functional. The sign of this limiting functional records average contraction; it becomes mass-gap information only after one proves that the associated Poincar\'e/LSI defects are summable and the limiting coercivity stays positive.
 
 \subsubsection*{Step 4: EDP structure -- why errors do not accumulate}
 
@@ -1622,14 +1635,14 @@ This dissipation provides an energy-dissipation inequality:
 \begin{equation}\label{eq:edp-rg}
   G_{k+1} - G_k \;\leq\; -D(R_k),
 \end{equation}
-which prevents contraction errors from accumulating coherently. This replaces the missing uniform bound with a \emph{structural impossibility of systematic degradation}.
+which can prevent contraction errors from accumulating coherently if it yields a summable dissipation/defect budget. Thus the EDP structure is a candidate mechanism for replacing a uniform bound, not a replacement by itself.
 
 \subsubsection*{Step 5: Gribov copies as integrable defects}
 
-Singularities (Gribov copies) appear as local defects in the RG flow. Sturm-type Bakry--\'Emery results on singular manifolds \cite{Sturm2025} show that local curvature defects are admissible as long as their \emph{integrated effect} along the flow is controlled. This is precisely the condition $\lambda < 0$.
+Singularities (Gribov copies) appear as local defects in the RG flow. Sturm-type Bakry--\'Emery results on singular manifolds \cite{Sturm2025} show that local curvature defects can be admissible if their \emph{integrated effect} along the flow is controlled. In the present framework this points to a summability condition on the induced curvature/transport defects, not merely to $\lambda < 0$.
 
 \begin{remark}[No hidden mass-gap proof]\label{rem:no-hidden-proof}
-This reformulation does not claim uniform control for all~$\beta$. The strong-coupling regime provides only the \emph{starting point} of the RG flow; the physical information (mass gap) emerges in the limit process. This completely circumvents the documented No-Go.
+This reformulation does not claim uniform control for all~$\beta$. The strong-coupling regime provides only the \emph{starting point} of the RG flow, and the missing theorem is the positivity of limiting coercivity under a summable defect budget. The documented No-Go is therefore not circumvented; it is restated as the precise defect-summability problem.
 \end{remark}
 
 \begin{remark}[Cross-problem structure]\label{rem:cross-edp-ym}
@@ -1642,30 +1655,38 @@ This $\Gamma$/EDP mechanism is structurally identical to:
 All share the principle: \emph{local control $+$ dissipation $\Rightarrow$ global selection in the limit}.
 \end{remark}
 
-\begin{lemma}[RG-Gronwall: polynomial degradation preserves spectral gap]\label{lem:rg-gronwall}
-Suppose the LSI constant at scale $a_k$ satisfies $\kappa(a_k) \geq \kappa_0 (\xi(a_k)/a_k)^\alpha$ for some $\alpha > 0$ and $\kappa_0 > 0$ (condition CL2'). If the correlation length contracts under RG as $\xi(a_{k+1}) \leq \gamma \cdot \xi(a_k)$ with $\gamma < 1$, then the accumulated degradation is bounded:
+\begin{lemma}[RG-Gronwall: summable degradation preserves spectral gap]\label{lem:rg-gronwall}
+Suppose the transported Poincar\'e/LSI constants satisfy
 \begin{equation}\label{eq:rg-gronwall}
-  \prod_{k=1}^{N} \bigl(1 + \kappa(a_k)^{-1}\bigr) \;\leq\; \exp\Bigl(\sum_{k=1}^{N} \kappa(a_k)^{-1}\Bigr) \;\leq\; \exp\Bigl(\frac{\kappa_0^{-1}}{1 - \gamma^\alpha}\Bigr) \;<\; \infty.
+  \kappa_{k+1} \;\geq\; \kappa_k(1-\varepsilon_k),
+  \qquad 0 \leq \varepsilon_k \leq \frac12,
+  \qquad \sum_{k=1}^{\infty}\varepsilon_k < \infty .
 \end{equation}
-In particular, the global spectral gap satisfies
+Then the limiting gap remains positive:
 \[
-  \Delta_{\mathrm{global}} \;\geq\; \Delta_{\mathrm{local}} \cdot \exp\Bigl(-\frac{\kappa_0^{-1}}{1 - \gamma^\alpha}\Bigr) \;>\; 0.
+  \inf_{N}\kappa_N \;\geq\; \kappa_0
+  \prod_{k=1}^{\infty}(1-\varepsilon_k)
+  \;\geq\; \kappa_0\exp\!\Bigl(-2\sum_{k=1}^{\infty}\varepsilon_k\Bigr) \;>\; 0.
 \]
 \end{lemma}
 
-\begin{proof}[Proof sketch]
-Since $\xi(a_k) \leq \gamma^k \xi(a_0)$ and $a_k = L^k a_0$, we have $\xi(a_k)/a_k \leq (\gamma/L)^k \cdot \xi_0/a_0$. For $\gamma < L$ (which holds in the strong-coupling regime where $\xi \ll a$), $\kappa(a_k)^{-1} \leq \kappa_0^{-1} (\gamma/L)^{-\alpha k}$, and the sum $\sum_k \kappa(a_k)^{-1}$ is a convergent geometric series.
+\begin{proof}
+Iterating \eqref{eq:rg-gronwall} gives
+$\kappa_N \geq \kappa_0\prod_{k<N}(1-\varepsilon_k)$.
+For $0 \leq \varepsilon \leq 1/2$, $\log(1-\varepsilon)\geq -2\varepsilon$.
+The assumed summability therefore gives a strictly positive infinite product.
+This is the deterministic form of the GT2/summable-defect condition, not a consequence of $\lambda<0$ alone.
 \end{proof}
 
 \begin{remark}[Connection to subadditive RG]\label{rem:gronwall-kingman}
-Lemma~\ref{lem:rg-gronwall} provides the deterministic counterpart to the Kingman subadditive approach (Section~\ref{sec:gamma-rg}): polynomial degradation CL2' plus correlation-length contraction implies a convergent error product. In the Lyapunov formulation \eqref{eq:lyapunov-rg}, a negative exponent is the diagnostic signal, while summability of the induced defects is the sufficient condition. The Kingman approach is more general (allows fluctuating $\kappa$), while the Gronwall approach gives explicit constants.
+Lemma~\ref{lem:rg-gronwall} provides the deterministic counterpart to the Kingman subadditive approach (Section~\ref{sec:gamma-rg}): a negative Lyapunov exponent is the diagnostic signal, while summability of the induced defects is the sufficient condition. The Kingman approach is more general because it detects average contraction; the Gronwall form records exactly which extra estimate turns that diagnostic into a positive limiting gap.
 \end{remark}
 
 \begin{remark}[Spectral robustness at Gribov copies (Sturm)]
 \label{rem:sturm-gribov}
 The gauge-field configuration space $\mathcal{A}/\mathcal{G}$ possesses conical singularities at Gribov copies --- points where the gauge orbit intersects the Gribov horizon. Sturm~\cite{Sturm2025} has shown that Bakry--\'Emery curvature conditions and spectral gap estimates on manifolds with conical singularities remain valid, with generalised Hardy inequalities replacing the standard curvature-dimension conditions near the singular points.
 
-This result provides theoretical support for the stability of the lattice mass gap in the presence of Gribov copies: the Poincar\'e constant $\kappa$ does not degrade at the singularities of the orbit space, because the conical structure is precisely the geometry for which Sturm's estimates apply. Combined with the BBD programme (Remark~\ref{rem:bbd-polchinski}), this suggests that the mass gap is robust against both scale transformations (BBD) and topological defects (Sturm).
+This result provides theoretical support for a possible stability route in the presence of Gribov copies: one may hope to prove that the Poincar\'e constant $\kappa$ does not degrade at conical orbit-space singularities if the gauge-orbit geometry satisfies the hypotheses of the available singular-space estimates. Combined with the BBD programme (Remark~\ref{rem:bbd-polchinski}), this is evidence for a robustness strategy, not a proof that the continuum mass gap is stable under all topological defects.
 \end{remark}
 
 \begin{center}
