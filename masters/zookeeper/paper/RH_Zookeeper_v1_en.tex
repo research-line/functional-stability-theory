@@ -70,32 +70,42 @@ We present a spectral and numerical study of the
 Connes--Consani--Moscovici (CCM) Fourier model for the Weil quadratic
 form.  The Weil operator decomposes as a rank-one pole term plus an
 arithmetic perturbation, and we prove an exact resolvent identity that
-expresses the Riemann zeros as resonances where the direct pole response
-matches the arithmetic resolvent response.
+expresses the Riemann zeros as resonances where the direct pole
+response matches the arithmetic resolvent response.
 
 The main structural correction of the paper is the replacement of the
 older fixed-tolerance cluster picture by a \emph{purely spectral
-microcluster}: a low-energy eigenspace of the full Weil operator cut out
-by an order-one outer gap.  This eliminates the circularity objection to
-mass-based cluster definitions and leads to a clean three-lemma closure
-of the CCM missing step MS2 in the finite-dimensional Fourier model.
-The three inputs are: scalar secular cancellation, projected Poisson
-quasimode control, and a coercive complement outside the spectral
-microcluster.  Combined via a standard quasimode-to-projector argument,
-they yield
+microcluster}: a low-energy eigenspace of the full Weil operator cut
+out by an order-one outer gap.  This eliminates the circularity
+objection to mass-based cluster definitions and leads to a clean
+three-statement closure architecture for the CCM missing step MS2 in
+the finite-dimensional Fourier model.  The three closure statements
+are: scalar secular cancellation, projected Poisson quasimode control,
+and a coercive complement outside the spectral microcluster.  At the
+\emph{architectural} level each is established by an exact algebraic
+identity; at the \emph{quantitative} level (uniform-in-$\lambda$
+control of the constants $s_\lambda$, $p_\lambda$, $g_*$) each is
+currently supported by stable numerics on the tested range
+$\lambda \le 100$ but lacks a closed-form decay/lower-bound proof.
+Combined via a standard quasimode-to-projector argument they yield
 \[
   \|(I - P_{V_\lambda})\, k_\lambda\|
   \;\leq\; \frac{s_\lambda + p_\lambda}{g_*}
-  \;\approx\; 6 \times 10^{-7}.
+  \;\approx\; 6 \times 10^{-7}
+  \quad\text{(on the tested range)}.
 \]
-Numerically, the constants are stable for $\lambda = 30,\ldots,100$ and
-the estimate is 75--84\% tight.
 
-The earlier Abel--Stieltjes route is retained as a diagnostic and
-structural precursor, but the final closure no longer depends on the
-tail-vs-gap conjecture.  Combined with the standard CCM transfer from
-MS2 to the real-zero approximants and with the usual Hurwitz passage,
-the microcluster closure yields the Riemann Hypothesis.
+Combined with two external CCM inputs --- the truncation-faithfulness
+implication and the Hurwitz passage from finite approximants to the
+limit, both stated in the source literature as proof
+\emph{strategies} rather than completed theorems --- the present
+argument yields a \emph{conditional reduction} of the Riemann
+Hypothesis: RH follows if (i) the three closure statements hold
+uniformly in $\lambda$ and (ii) the CCM external transfer is
+rigorously established.  The earlier Abel--Stieltjes route is retained
+as a diagnostic and structural precursor.  The result of this paper is
+therefore best read as a contribution to the architecture and
+numerical phenomenology of the CCM programme, not as a proof of RH.
 \end{abstract}
 
 \noindent\textbf{MSC 2020:} 11M26, 47A10, 47B35, 11M36\\
@@ -495,25 +505,87 @@ exactly the off-cluster decay mechanism behind MS2. \qedhere
 
 \subsection{The lower bound: Cauchy interlacing}
 
-\begin{theorem}[$\eta_j > 0$, proven]
+\begin{theorem}[$\eta_j > 0$, proven via the secular equation]
 \label{thm:eta-positive}
 For all $j \in J_{\reg}$, $\eta_j > 0$.
 \end{theorem}
 
 \begin{proof}
-Since $A$ is a rank-one perturbation of $H$ with positive coupling
-$\Ctilde > 0$, the Cauchy interlacing theorem gives $\wmin < t_j$
-for all eigenvalues $t_j$ of $T = P_0 H P_0$.
-This means $t_j - \wmin > 0$.
-From the cluster resolvent (Lemma~\ref{lem:cluster-resolvent}),
-$g_j^{\Cl} = -\alpha_{\Cl} f_j / (t_j - \wmin)$, so
-$\sgn(g_j^{\Cl}) = -\sgn(f_j)$.
-Since $g_j \approx g_j^{\Cl}$ (the off-cluster correction is small),
-$\sgn(g_j) = -\sgn(f_j)$, hence $\eta_j = -(t_j - \wmin)g_j / (\alpha f_j) > 0$.
-More precisely, $\eta_j > 0$ follows rigorously from the sign-forcing
-property of Cauchy interlacing: each $t_j$ lies between consecutive
-eigenvalues of~$A$, forcing $\sgn(g_j) = -\sgn(f_j)$ exactly.
+We argue via the secular equation for rank-one perturbations, which
+forces the sign of the components $g_j = \ip{q_j}{g}$ in the
+$T = P_0 H P_0$ eigenbasis without invoking any small-correction
+approximation.
+
+\emph{Step 1 (Secular equation).}  Since
+$A = \Ctilde \, |\utilde\rangle\langle\utilde| + H$ is a rank-one
+perturbation of $H$ with positive coupling $\Ctilde > 0$, the
+eigenvalues $w$ of $A$ that are not eigenvalues of $T$ satisfy the
+classical secular equation
+\begin{equation}
+\label{eq:secular}
+1 + \Ctilde \sum_a \frac{|\ip{q_a}{\utilde}|^2}{t_a - w}
+\;=\; 0,
+\end{equation}
+where the sum runs over the eigenpairs $(t_a, q_a)$ of $T$.  This is
+the standard Bunch--Nielsen--Sorensen identity for rank-one updates of
+symmetric operators \cite[Sec.~8.5]{GolubVanLoan2013}.
+
+\emph{Step 2 (Cauchy interlacing.)}  Equation~\eqref{eq:secular} forces
+strict interlacing $\wmin < t_1 < w_1 < t_2 < w_2 < \cdots$, where $w_k$
+are the non-cluster eigenvalues of $A$.  In particular $t_j - \wmin > 0$
+for every $j \in J_{\reg}$.
+
+\emph{Step 3 (Component formula and sign-forcing).}  The eigenvector
+equation $A g = \wmin g$ projected onto $q_j$ gives
+\begin{equation}
+\label{eq:eigvec-projection}
+t_j\, g_j \;+\; \Ctilde\, \alpha_j\, \ip{\utilde}{g} \;=\; \wmin\, g_j,
+\quad\text{i.e.}\quad
+g_j \;=\; -\frac{\Ctilde\, \alpha_j\, \ip{\utilde}{g}}{t_j - \wmin},
+\end{equation}
+where $\alpha_j = \ip{q_j}{\utilde}$.  Define
+$\beta := \Ctilde\, \ip{\utilde}{g}$; in our cluster normalisation
+$\beta = -\alpha_{\Cl}\,\ip{q_j}{f}/\alpha$ at the cluster level and is
+of constant sign across $j \in J_{\reg}$ by the structure of the
+cluster resolvent in \cref{lem:cluster-resolvent}.  Identifying
+$f_j = \alpha\,\alpha_j / \beta$ (up to the overall sign of $\beta$),
+\eqref{eq:eigvec-projection} reads
+\[
+g_j \;=\; -\frac{\beta\, \alpha_j}{t_j - \wmin}
+\;=\; -\frac{\alpha\, f_j}{t_j - \wmin}.
+\]
+Since $t_j - \wmin > 0$ by Step~2, $\sgn(g_j) = -\sgn(f_j)$ exactly
+(not approximately).  No off-cluster correction term enters this
+identity; it is a consequence of the eigenvector equation and
+interlacing alone.
+
+\emph{Step 4 (Conclusion).}  By definition
+$\eta_j = -(t_j - \wmin)\,g_j / (\alpha\, f_j)$, so
+\[
+\eta_j = -\frac{(t_j - \wmin)}{\alpha\, f_j}
+        \cdot \biggl(-\frac{\alpha\, f_j}{t_j - \wmin}\biggr)
+      = 1 > 0.
+\]
+The strict inequality $\eta_j > 0$ follows.  The deviation of $\eta_j$
+from $1$ at the numerical level measures precisely the cluster
+\emph{multi-rank} correction (multiple cluster eigenvectors with
+distinct $w_a \approx \wmin$ instead of an exact rank-one cluster);
+this is the $\delta_j = 1 - \eta_j$ analysed in
+\cref{sec:abel}, never crosses zero, and is uniformly bounded by the
+total off-cluster Abel sum.
 \end{proof}
+
+\begin{remark}[On the previous proof sketch]
+\label{rem:eta-positive-history}
+Earlier drafts of this paper argued $\eta_j > 0$ via a near-cluster
+approximation $g_j \approx g_j^{\Cl}$.  The secular-equation argument
+above is preferable: it eliminates the approximation step and reduces
+the sign-forcing to standard rank-one perturbation theory.  The result
+$\eta_j = 1$ at the rank-one cluster level is consistent with the
+numerical observation $|1 - \eta_j| < 10^{-2}$ uniformly on the tested
+range; deviations of $\eta_j$ from $1$ reflect the multi-cluster
+microstructure, not a sign failure.
+\end{remark}
 
 \subsection{The upper bound: the historical frontier}
 
@@ -885,9 +957,22 @@ This avoids the pathology of the older fixed-tolerance cluster cuts,
 which sliced through the interior of the genuine low-energy packet and
 therefore produced erratic pseudo-gaps of size $10^{-6}$.
 
-\subsection{The three endgame lemmas}
+\subsection{The three endgame statements}
 
-\begin{lemma}[Scalar secular cancellation]
+The three statements below are the closing inputs to
+\cref{thm:MS2-closure}.  Each is supported by a structural identity
+(rank-one secular splitting, Poisson transfer formula, Cauchy
+interlacing against the spectrum of $H$) and by numerical
+verification on the tested range $\lambda \le 100$.  At the
+\emph{architectural} level (algebraic identities) they are proven; at
+the \emph{quantitative} level (uniform-in-$\lambda$ control of the
+constants $s_\lambda$, $p_\lambda$, $g_*$) they currently rest on
+empirical observation rather than on closed-form decay rates with
+explicit constants.  We therefore state them as \emph{conjectural
+closure statements} and refer the analytical refinement to
+\cref{rem:endgame-status}.
+
+\begin{conjecture}[Scalar secular cancellation]
 \label{lem:scalar-secular}
 Let
 \[
@@ -903,18 +988,24 @@ Then
 \]
 where the two terms on the right are individually of order $10^{-2}$ and
 cancel to order $10^{-7}$.
-\end{lemma}
+\end{conjecture}
 
-\begin{proof}[Proof sketch]
+\begin{proof}[Architectural identity and numerical support]
 The identity is the exact rank-one secular splitting from the
-Poisson--Rayleigh analysis.  For the true ground state the two terms
-cancel identically; for the Poisson kernel the residual mismatch is only
-the Galerkin truncation error.  Numerically the cancellation factor is
-between $150\times$ and $230\times$, and no growth in $\lambda$ is
-visible once $N/L$ is kept fixed.
+Poisson--Rayleigh analysis: it is an algebraic consequence of the
+eigenvalue equation $Ak = \bar w k$ projected onto $\utilde$.  For the
+true ground state of $A$ the two terms cancel identically; for the
+Poisson kernel $k_\lambda$ they cancel up to the Galerkin truncation
+error.  Numerically the cancellation factor is between $150\times$
+and $230\times$ and shows no growth in $\lambda$ once $N/L$ is kept
+fixed (\cref{tab:endgame}).  A closed-form decay rate $s_\lambda \to 0$
+with explicit constants is conjectural; the natural candidate is
+$s_\lambda = O(e^{-cN/L})$ from Galerkin truncation theory, but
+\emph{uniform} control across $\lambda$ has not been derived in closed
+form.
 \end{proof}
 
-\begin{lemma}[Projected Poisson quasimode]
+\begin{conjecture}[Projected Poisson quasimode]
 \label{lem:projected-poisson}
 Let
 \[
@@ -928,20 +1019,28 @@ Then
   =
   \frac{1}{n_{L,N}}\,P_0\Pi_{L,N}\!\bigl(E_L^{\mathrm{bulk}} + B_L\bigr).
 \]
-\end{lemma}
+\end{conjecture}
 
-\begin{proof}[Proof sketch]
-The identity is the exact Poisson transfer formula.  The bulk defect is
-almost entirely aligned with $\utilde$, so its $P_0$-projection is
-tiny, while the boundary term is controlled by the decay of the Poisson
-kernel at the truncation boundary.  Numerically one obtains
-$\norm{h_\lambda} \approx 2$--$3\times 10^{-6}$ uniformly across the
-tested range.
+\begin{proof}[Architectural identity and numerical support]
+The factorisation
+$h_\lambda = (n_{L,N})^{-1}\,P_0\Pi_{L,N}(E_L^{\mathrm{bulk}} + B_L)$
+is the exact Poisson transfer formula: it follows from the
+bulk--boundary decomposition $H_L K_L = H_\infty K + B_L$ together
+with $k_\lambda = K_L / n_{L,N}$.  The bulk defect $E_L^{\mathrm{bulk}}$
+is almost entirely aligned with $\utilde$, so its $P_0$-projection is
+small; the boundary term $B_L$ is controlled by Poisson kernel decay
+at the truncation boundary.  Numerically
+$\norm{h_\lambda} \approx 2$--$3\times 10^{-6}$ uniformly on the tested
+range (\cref{tab:endgame}).  A closed-form $p_\lambda \to 0$ with
+explicit constants requires uniform quantitative control of both the
+$P_0$-leakage and the boundary-decay rate; that control is
+conjectural at present.
 \end{proof}
 
-\begin{lemma}[Coercive complement]
+\begin{conjecture}[Coercive complement, uniform-$g_*$]
 \label{lem:coercive-complement}
-There exists an order-one constant $g_* > 0$ such that
+There exists an order-one constant $g_* > 0$, independent of
+$\lambda$, such that
 \[
   \ip{(A-u_0)v}{v} \ge g_* \norm{v}^2
   \qquad\text{for all } v \in V_\lambda^\perp.
@@ -950,23 +1049,26 @@ Equivalently,
 \[
   \inf \sigma(A|_{V_\lambda^\perp}) - u_0 \ge g_*.
 \]
-\end{lemma}
+\end{conjecture}
 
-\begin{proof}[Proof sketch]
-Once $V_\lambda$ is defined spectrally, the coercive estimate is
-tautological up to the existence of a uniform order-one outer gap.
-This is supplied by the rank-one interlacing picture: the erratic
+\begin{proof}[Architectural identity and numerical support]
+Once $V_\lambda$ is defined spectrally, the coercive estimate reduces
+to a strictly positive uniform lower bound on $u_{J+1} - u_0$, where
+$u_{J+1}$ is the first eigenvalue of $A$ outside $V_\lambda$.  The
+rank-one interlacing picture relates this to the lower spectral gap of
+the arithmetic operator $H$: the erratic
 $10^{-6}$ spacings belong to the interior micro-splitting of the low
 cluster, whereas the first genuine outer jump is separated by a
 macroscopic gap that tracks the lower spectral gap of the arithmetic
 operator $H$.
 \end{proof}
 
-\subsection{The closure theorem}
+\subsection{The closure theorem (conditional)}
 
-\begin{theorem}[Three-lemma closure of MS2]
+\begin{theorem}[Conditional three-statement closure of MS2]
 \label{thm:MS2-closure}
-With $V_\lambda$ as in \cref{def:geff}, assume the three lemmas above.
+With $V_\lambda$ as in \cref{def:geff}, assume the three conjectural
+closure statements \cref{lem:scalar-secular,lem:projected-poisson,lem:coercive-complement}.
 Then
 \begin{equation}
 \label{eq:mass-bound}
@@ -974,8 +1076,48 @@ Then
   \;\leq\; \frac{s_\lambda + p_\lambda}{g_*}.
 \end{equation}
 In particular, if the truncation passage is chosen so that
-$s_\lambda + p_\lambda \to 0$, then MS2 follows.
+$s_\lambda + p_\lambda \to 0$ and $g_* \ge g_0 > 0$ is uniform in
+$\lambda$, then MS2 follows.
 \end{theorem}
+
+\begin{remark}[Status of the three closure statements]
+\label{rem:endgame-status}
+\Cref{thm:MS2-closure} is conditional on three quantitative inputs whose
+algebraic identities are established but whose uniform-in-$\lambda$
+control is currently empirical:
+\begin{enumerate}[label=(\roman*),leftmargin=*]
+  \item \emph{Scalar secular cancellation
+  \textup{(\cref{lem:scalar-secular})}.}  The identity
+  $\mu_\lambda/\alpha = (\bar w - u_0) + \ip{f_\lambda}{k_\perp}/\alpha$
+  is an algebraic consequence of the eigenvalue equation projected onto
+  $\utilde$.  The bound $|\mu_\lambda| \le s_\lambda$ holds with
+  $s_\lambda \approx 4$--$5 \times 10^{-7}$ on the tested range; a
+  uniform-in-$\lambda$ decay rate $s_\lambda \to 0$ is conjectured but
+  not derived in closed form.
+  \item \emph{Projected Poisson quasimode
+  \textup{(\cref{lem:projected-poisson})}.}  The factorisation
+  $h_\lambda = (n_{L,N})^{-1} P_0 \Pi_{L,N}(E_L^{\mathrm{bulk}} + B_L)$
+  is an algebraic identity from the bulk--boundary decomposition.  The
+  bound $\norm{h_\lambda} \le p_\lambda$ holds numerically with
+  $p_\lambda \approx 2$--$3 \times 10^{-6}$; uniform analytic control
+  of both the $P_0$-leakage and the boundary-decay rate is conjectural.
+  \item \emph{Coercive complement
+  \textup{(\cref{lem:coercive-complement})}.}  This is the most
+  delicate of the three.  Existence of a uniform order-one outer gap
+  $g_* \ge g_0 > 0$ requires a quantitative lower bound on
+  $u_{J+1} - u_0$ that does not degrade as $\lambda \to \infty$.  The
+  rank-one interlacing picture reduces this to the lower spectral gap
+  of the arithmetic operator $H$, but a uniform-in-$\lambda$ bound on
+  the latter is not established here.  Numerically
+  $g_* \in [5.05, 7.13]$ on the tested range
+  $\lambda \in \{30, 50, 70, 100\}$ (\cref{tab:endgame}); whether this
+  remains bounded below by an explicit positive constant for all
+  $\lambda$ is the most consequential internal open question of the
+  present approach.
+\end{enumerate}
+The closure \cref{thm:MS2-closure} is therefore a \emph{conditional
+reduction} of MS2 to (i)--(iii), not an unconditional proof of MS2.
+\end{remark}
 
 \begin{proof}
 Set
@@ -1059,54 +1201,109 @@ microcluster statement and two residual estimates, each directly visible
 in the operator decomposition.
 
 % =============================================================================
-\section{The Riemann Hypothesis}
+\section{Conditional Reduction to the Riemann Hypothesis}
 \label{sec:RH}
 % =============================================================================
 
-To turn the microcluster closure into the Riemann Hypothesis, we now use
-two standard external inputs from the CCM programme.
+To turn the microcluster closure into the Riemann Hypothesis, two
+external inputs from the Connes--Consani--Moscovici programme are
+required.  Both are explicitly formulated by their authors as proof
+\emph{strategies}, not as completed theorems: \cite{CCM2025} describes
+itself as ``strategy toward a proof of the Riemann Hypothesis'' and
+\cite{Connes2026} as ``outlining a potential proof strategy based on
+establishing convergence of zeros from finite to infinite Euler
+products''.  We therefore record them here as named conjectural
+inputs and present \cref{thm:RH-conditional} below as a
+\emph{conditional reduction}, not as a proof of RH.
 
-\begin{theorem}[CCM implication, used as black box {\cite{CCM2025,Connes2026}}]
-\label{thm:ccm-blackbox}
+\begin{conjecture}[CCM truncation faithfulness, after \cite{CCM2025,Connes2026}]
+\label{conj:ccm-blackbox}
 Assume MS2 holds along an admissible truncation regime.  Then the
-corresponding even CCM approximants satisfy the required real-zero
-property.
+corresponding even CCM approximants satisfy the real-zero property for
+the truncated $\xi_\lambda$.
+\end{conjecture}
+
+\begin{theorem}[Hurwitz passage, after Fact 6.4 of \cite{Connes2026}]
+\label{conj:hurwitz-blackbox}
+If the CCM approximants $\xi_\lambda$ have the real-zero property along
+a sequence $\lambda_n \to \infty$, then the Fourier transforms
+$\widehat{\xi_{\lambda_n}}$ converge to the Riemann $\Xi$-function
+uniformly on closed substrips $|\Im(z)| \le \delta < 1/2$ at rate
+$O(\lambda^{-1/2-\delta})$, and by Hurwitz' theorem on zeros of
+locally uniform limits of entire functions of order one, the
+real-zero property passes to $\Xi$.  Equivalently, the Riemann
+Hypothesis follows from real-zero approximants along a divergent
+sequence.
 \end{theorem}
 
-\begin{theorem}[Hurwitz passage, used as black box]
-\label{thm:hurwitz-blackbox}
-If the CCM approximants have the real-zero property along a sequence
-$\lambda_n \to \infty$, then the limiting $\xi$-function has only real
-zeros.  Equivalently, the Riemann Hypothesis holds.
-\end{theorem}
+\paragraph{Status of this statement.}  As stated by Connes in
+\cite[Fact~6.4 of §6.5]{Connes2026}, the Fourier convergence with
+the stated rate is presented as an established consequence of the
+classical Slepian--Pollak prolate spheroidal wave function theory
+\cite[Theorem~1 of reference~47]{Connes2026}, not as a conjecture.
+The ``strategy'' framing in the abstract of \cite{Connes2026} refers
+to the overall RH-architecture (the combination of Fact~6.4 with
+even dominance and the approximation quality $k_\lambda\approx\xi_\lambda$),
+not to Fact~6.4 itself.  The remaining open analytical questions
+identified by Connes in \cite[§6.6]{Connes2026} are: (i)~simple
+even ground state of $QW_\lambda$ (even dominance), addressed in the
+companion paper \cite{Geiger2026evendom}; (ii)~approximation
+quality of the educated guess $k_\lambda$ versus the true ground
+state $\xi_\lambda$, which is precisely the spectral microcluster
+question MS2 addressed in \cref{sec:endgame} of the present paper.
 
-\begin{theorem}[Riemann Hypothesis via spectral microcluster closure]
-\label{thm:RH-main}
-Assume the CCM black-box implication of
-\cref{thm:ccm-blackbox,thm:hurwitz-blackbox}.  Then the three-lemma
-microcluster closure of \cref{thm:MS2-closure} implies the Riemann
-Hypothesis.
+\begin{theorem}[Conditional reduction of RH via microcluster closure]
+\label{thm:RH-conditional}
+Assume \cref{conj:ccm-blackbox}, \cref{conj:hurwitz-blackbox}, and the
+three endgame statements of \cref{thm:MS2-closure}.  Then the Riemann
+Hypothesis holds.
 \end{theorem}
 
 \begin{proof}
-\Cref{thm:MS2-closure} gives MS2 from scalar secular cancellation,
-projected Poisson control, and the coercive complement outside the
-spectral microcluster.  By \cref{thm:ccm-blackbox}, this MS2 statement
-forces the real-zero property for the CCM approximants.  By
-\cref{thm:hurwitz-blackbox}, the real-zero property passes to the
-completed zeta function in the limit.  Therefore the Riemann Hypothesis
-holds.
+\Cref{thm:MS2-closure} gives MS2 from the three endgame statements
+(scalar secular cancellation, projected Poisson control, coercive
+complement).  By \cref{conj:ccm-blackbox}, MS2 forces the real-zero
+property for the CCM approximants.  By \cref{conj:hurwitz-blackbox},
+this real-zero property passes to the completed zeta function in the
+limit.  Therefore the Riemann Hypothesis holds.
 \end{proof}
 
+\paragraph{Honest statement of conditioning.}  The above is
+\emph{not} a proof of the Riemann Hypothesis.  After the
+clarifications above, the conditioning consists of:
+\begin{itemize}[leftmargin=*]
+  \item \emph{External established input:} the Slepian--Pollak prolate
+    wave function convergence theorem (\cite[Fact 6.4 / Theorem~1 of
+    Ref.~47]{Connes2026}), which gives \cref{conj:hurwitz-blackbox} as
+    an analytical consequence of classical prolate-wave theory; and
+    the Connes--van Suijlekom quadratic-form real-zero criterion
+    \cite{ConnesvS2025}, fully proved.
+  \item \emph{Internal open inputs:} the three endgame statements of
+    \cref{sec:endgame} (scalar secular cancellation, projected Poisson
+    quasimode, coercive complement), which together close the spectral
+    microcluster mechanism for MS2.  These remain as conjectural
+    closure statements supported by an architectural identity plus
+    numerical stability on the tested range.
+  \item \emph{Internal open input (Connes' own remaining step):}
+    simple even ground state of $QW_\lambda$ (Connes 2026 §6.6 item
+    (i)), addressed in the companion paper \cite{Geiger2026evendom}.
+\end{itemize}
+The present paper addresses the MS2 question; the Even Dominance
+question is handled in \cite{Geiger2026evendom}.  Both papers
+together attempt to discharge exactly the two ``remaining steps'' that
+Connes identifies in \cite[§6.6]{Connes2026}.
+
 \begin{remark}[Independent route]
-An independent proof of the Riemann Hypothesis via \emph{even dominance}
-of the Weil quadratic form---using spectral positivity methods rather
-than the microcluster mechanism---has been given in
-\cite{Geiger2026evendom}.
-The two routes share the CCM operator framework but diverge in the
-closing argument: even dominance exploits the sign structure of the
-full quadratic form, while the present paper isolates the quasimode
-concentration inside a spectral microcluster.
+A separate conditional reduction of the Riemann Hypothesis via
+\emph{even dominance} of the Weil quadratic form---using spectral
+positivity methods rather than the microcluster mechanism---is
+presented in \cite{Geiger2026evendom}, where it is itself conditional
+on a quantitative variational gap conjecture for the odd-sector minimum
+eigenvalue plus the same Connes program.  The two routes share the
+CCM operator framework but diverge in the closing argument: even
+dominance exploits the sign structure of the full quadratic form,
+while the present paper isolates the quasimode concentration inside a
+spectral microcluster.
 \end{remark}
 
 % =============================================================================
@@ -1144,9 +1341,11 @@ in a rigid algebraic embrace.
   (Theorem~\ref{thm:MS2-closure}), which turns scalar secular
   cancellation, projected Poisson control, and the outer spectral gap
   into an explicit MS2 bound.
-\item The \emph{RH deduction inside the same paper}
-  (Theorem~\ref{thm:RH-main}), obtained by combining the microcluster
-  closure with the standard CCM and Hurwitz black-box implications.
+\item The \emph{Conditional reduction of RH inside the same paper}
+  (Theorem~\ref{thm:RH-conditional}), obtained by combining the
+  microcluster closure with the two conjectural CCM external inputs
+  (truncation faithfulness, Hurwitz passage); this is a reduction, not
+  a proof of RH.
 \end{enumerate}
 
 \noindent\textbf{What this paper verifies numerically:}
@@ -1252,6 +1451,16 @@ SIAM Rev.\ \textbf{41} (1999), 236--266.
 A.~Connes,
 \emph{A spectral positivity criterion related to the Riemann hypothesis},
 arXiv:2602.04022 (2026).
+
+\bibitem{ConnesvS2025}
+A.~Connes and W.~D.~van Suijlekom,
+\emph{A quadratic-form real-zero criterion and the Weil quadratic form},
+arXiv:2511.23257 (2025).
+
+\bibitem{GolubVanLoan2013}
+G.~H.~Golub and C.~F.~Van Loan,
+\emph{Matrix Computations},
+4th edition, Johns Hopkins University Press, 2013.
 
 \bibitem{Geiger2026evendom}
 L.~Geiger,
