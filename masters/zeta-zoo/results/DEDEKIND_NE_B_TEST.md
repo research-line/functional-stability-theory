@@ -1,7 +1,7 @@
 # Dedekind NE-B Analog Test (SGE Probe)
 
 **Datum:** 2026-04-16
-**Skript:** `scripts/zeta-zoo/dedekind_ne_b_test.py`
+**Skript:** `_scripts/dedekind_ne_b_test.py`
 **Motivation:** Test der SGE-Hypothese an Q(sqrt(-5)) als erste Nicht-Q-Familie. SGE sagt HP-BL = NO voraus (Semigruppe der Primideale).
 
 ## Parameter

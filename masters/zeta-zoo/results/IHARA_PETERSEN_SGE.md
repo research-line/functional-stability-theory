@@ -1,7 +1,7 @@
 # Ihara-Zeta SGE YES-side Test: Petersen Graph
 
 **Datum:** 2026-04-16
-**Skript:** `scripts/zeta-zoo/ihara_petersen_sge_test.py`
+**Skript:** `_scripts/ihara_petersen_sge_test.py`
 **Motivation:** SGE-Hypothese auf der YES-Seite testen. Petersen ist 3-regulär, 10 Knoten, Ramanujan-Graph, Aut(G) = S_5. Vorhersage: HP-BL(zeta_Petersen) = YES.
 
 ## Graph-Parameter

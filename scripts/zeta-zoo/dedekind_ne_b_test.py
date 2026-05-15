@@ -26,8 +26,8 @@ Test setup:
      system on the sym(N) = N(N+1)/2 degrees of freedom.
 
 Outputs:
-  masters/zeta-zoo/results/DEDEKIND_NE_B_TEST.json
-  masters/zeta-zoo/results/DEDEKIND_NE_B_TEST.md
+  _results/DEDEKIND_NE_B_TEST.json
+  _results/DEDEKIND_NE_B_TEST.md
 
 Three comparisons:
   (A) Q-primes (control, known NE-B = scalar centraliser)
@@ -44,9 +44,8 @@ import numpy as np
 from scipy.integrate import quad
 
 HERE = Path(__file__).resolve().parent
-REPO_ROOT = HERE.parents[1]
-PROJECT_ROOT = REPO_ROOT / "masters" / "zeta-zoo"
-RES = PROJECT_ROOT / "results"
+NE_B_ROOT = HERE.parent
+RES = NE_B_ROOT / "_results"
 RES.mkdir(exist_ok=True)
 
 
@@ -301,7 +300,7 @@ def main():
     with md.open("w", encoding="utf-8") as f:
         f.write("# Dedekind NE-B Analog Test (SGE Probe)\n\n")
         f.write("**Datum:** 2026-04-16\n")
-        f.write("**Skript:** `scripts/zeta-zoo/dedekind_ne_b_test.py`\n")
+        f.write("**Skript:** `_scripts/dedekind_ne_b_test.py`\n")
         f.write("**Motivation:** Test der SGE-Hypothese an Q(sqrt(-5)) als erste "
                 "Nicht-Q-Familie. SGE sagt HP-BL = NO voraus (Semigruppe der Primideale).\n\n")
         f.write("## Parameter\n\n")

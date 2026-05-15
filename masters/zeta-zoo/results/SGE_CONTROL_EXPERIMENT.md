@@ -1,7 +1,7 @@
 # SGE Control Experiment --- Discriminating Test
 
-**Datum:** 2026-05-01T13:11:39.951391Z
-**Skript:** `scripts/zeta-zoo/sge_control_experiment.py`
+**Datum:** 2026-04-17T02:57:51.623091Z
+**Skript:** `_scripts/sge_control_experiment.py`
 **Motivation:** Widerleger W4 des Math-Master 7-Phasen-Reviews (2026-04-17) stellt fest, dass der urspruengliche Dedekind-Test nicht zwischen SGE-YES und SGE-NO diskriminiert, weil kein SGE-YES-Kontrollfall vorhanden ist. Dieses Experiment ergaenzt zwei SGE-YES-Kontrollfaelle (zyklische Gruppe Z/N, elementar-abelsche Gruppe (Z/2)^k) und vergleicht mit Random-Baseline.
 
 ## Test D: Zyklische Gruppe Z/N (SGE-YES)

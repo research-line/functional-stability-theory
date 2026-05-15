@@ -34,8 +34,8 @@ If dim(Z) scales with the group size in (D)/(E) and dim(Z) = 1 in
 for Dedekind is structurally informative (SGE-NO), not generic.
 
 Outputs:
-  masters/zeta-zoo/results/SGE_CONTROL_EXPERIMENT.json
-  masters/zeta-zoo/results/SGE_CONTROL_EXPERIMENT.md
+  _results/SGE_CONTROL_EXPERIMENT.json
+  _results/SGE_CONTROL_EXPERIMENT.md
 
 Author: L.G., 2026-04-17 (Session 10, Phase 3 review-fix M2)
 """
@@ -45,21 +45,15 @@ import math
 import os
 import sys
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime
 
 import numpy as np
 
 
 HERE = Path(__file__).resolve().parent
-REPO_ROOT = HERE.parents[1]
-PROJECT_ROOT = REPO_ROOT / "masters" / "zeta-zoo"
-RES = PROJECT_ROOT / "results"
+ROOT = HERE.parent
+RES = ROOT / "_results"
 RES.mkdir(exist_ok=True)
-
-
-def utc_stamp():
-    """Return a compact UTC timestamp with a trailing Z."""
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 # ----------------------------------------------------------------------
@@ -228,7 +222,7 @@ def run_random_baseline(N_list, n_matrices=50, seed=42):
 # Main
 # ----------------------------------------------------------------------
 def main():
-    started = utc_stamp()
+    started = datetime.utcnow().isoformat() + "Z"
     print(f"[setup] SGE Control Experiment, started {started}")
     print("[setup] Discriminating test: do SGE-YES cases produce dim(Z) >> 1,")
     print("        while SGE-NO / null cases produce dim(Z) = 1?")
@@ -247,7 +241,7 @@ def main():
     res_random = run_random_baseline(N_list_rand)
 
     # Summary
-    finished = utc_stamp()
+    finished = datetime.utcnow().isoformat() + "Z"
     summary = {
         "experiment": "SGE Control Experiment",
         "motivation": "Discriminating test for SGE-YES vs. SGE-NO (W4 fix).",
@@ -267,7 +261,7 @@ def main():
     with md.open("w", encoding="utf-8") as f:
         f.write("# SGE Control Experiment --- Discriminating Test\n\n")
         f.write(f"**Datum:** {finished}\n")
-        f.write("**Skript:** `scripts/zeta-zoo/sge_control_experiment.py`\n")
+        f.write("**Skript:** `_scripts/sge_control_experiment.py`\n")
         f.write("**Motivation:** Widerleger W4 des Math-Master 7-Phasen-Reviews")
         f.write(" (2026-04-17) stellt fest, dass der urspruengliche Dedekind-Test")
         f.write(" nicht zwischen SGE-YES und SGE-NO diskriminiert, weil kein")

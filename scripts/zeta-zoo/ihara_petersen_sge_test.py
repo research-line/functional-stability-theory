@@ -30,8 +30,8 @@ three concrete verifications:
     For Petersen: at least two non-scalar commuting operators exist.
 
 Output:
-  masters/zeta-zoo/results/IHARA_PETERSEN_SGE.json
-  masters/zeta-zoo/results/IHARA_PETERSEN_SGE.md
+  _results/IHARA_PETERSEN_SGE.json
+  _results/IHARA_PETERSEN_SGE.md
 """
 import json
 import math
@@ -40,9 +40,8 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-REPO_ROOT = HERE.parents[1]
-PROJECT_ROOT = REPO_ROOT / "masters" / "zeta-zoo"
-RES = PROJECT_ROOT / "results"
+NE_B_ROOT = HERE.parent
+RES = NE_B_ROOT / "_results"
 RES.mkdir(exist_ok=True)
 
 
@@ -366,7 +365,7 @@ def main():
     with md.open("w", encoding="utf-8") as f:
         f.write("# Ihara-Zeta SGE YES-side Test: Petersen Graph\n\n")
         f.write("**Datum:** 2026-04-16\n")
-        f.write("**Skript:** `scripts/zeta-zoo/ihara_petersen_sge_test.py`\n")
+        f.write("**Skript:** `_scripts/ihara_petersen_sge_test.py`\n")
         f.write("**Motivation:** SGE-Hypothese auf der YES-Seite testen. "
                 "Petersen ist 3-regulär, 10 Knoten, Ramanujan-Graph, "
                 "Aut(G) = S_5. Vorhersage: HP-BL(zeta_Petersen) = YES.\n\n")
