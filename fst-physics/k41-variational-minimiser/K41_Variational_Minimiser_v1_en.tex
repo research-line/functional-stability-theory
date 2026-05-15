@@ -18,7 +18,8 @@
 \setlength{\emergencystretch}{3em}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,calc}
-\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage[unicode=true]{hyperref}
 \hypersetup{
   colorlinks=true,
   linkcolor=blue!70!black,
@@ -29,6 +30,7 @@
   pdfsubject={Variational characterisation of the Kolmogorov K41 energy spectrum},
   pdfkeywords={K41 spectrum, turbulence, variational principle, free energy, Kolmogorov scaling}
 }
+\providecommand*{\HyperDestNameFilter}[1]{en.#1}
 \Urlmuskip=0mu plus 2mu\relax
 
 \theoremstyle{definition}
@@ -59,18 +61,21 @@ ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}%
 
 % ===================================================================
 \begin{abstract}
-We establish a variational principle that characterises the Kolmogorov
-$k^{-5/3}$ energy spectrum as the unique global minimiser of a
-scale-resolved free-energy functional.  Starting from a
+We establish a reference-normalised variational principle that characterises
+the Kolmogorov $k^{-5/3}$ energy spectrum as the unique energy-profile
+minimiser of a scale-resolved free-energy functional within the stated
+K41-normalised admissible class.  Starting from a
 Littlewood--Paley decomposition of the velocity field, we define a
 free-energy functional $\mathcal{F}[\mathbf{E}]$ based on the
 Kullback--Leibler divergence between the shell-energy distribution and a
-reference equilibrium.  We introduce the class of admissible
-energy-flux operators---all local, dimensionally consistent, monotone
-closures satisfying axioms (A1) and (A3)---and prove that the K41
-distribution is the unique minimiser of $\mathcal{F}[\mathbf{E}]$ under
-the joint minimisation over energy profiles and closures, subject to
-constant scale-to-scale energy flux (Theorem~\ref{thm:K41}).  The
+K41 reference equilibrium.  We introduce the K41-normalised class of
+admissible energy-flux operators---local, dimensionally consistent,
+monotone closures satisfying axioms (A1) and (A3) together with the
+normalisation condition in Definition~\ref{def:admissible}---and prove
+that the K41 distribution is the unique minimiser of
+$\mathcal{F}[\mathbf{E}]$ over the joint feasible set of energy profiles
+and closures, subject to constant scale-to-scale energy flux
+(Theorem~\ref{thm:K41}).  The
 minimiser is non-degenerate: the Hessian of $\mathcal{F}$ at
 $\mathbf{E}^*$ is diagonal with entries $1/E_j^* > 0$, providing
   scale-dependent stiffness that grows as $k^{5/3}$.  We also record two
@@ -78,16 +83,19 @@ $\mathbf{E}^*$ is diagonal with entries $1/E_j^* > 0$, providing
   robustness theorem unless the exact K41 profile is excluded or the
   objective is changed, and the minimax formulation is only a formal
   decoupled penalty representation, not a dynamical two-player theorem.
-Intermittency corrections of Kolmogorov--Obukhov (K62) type arise
-naturally as Hessian fluctuations around the variational minimum.  The
-result is unconditional: no hypothesis on the Navier--Stokes dynamics is
-required.  Anomalous dissipation under additional hypotheses on the
+Under additional Gaussian/log-normal fluctuation assumptions, Hessian
+fluctuations around the variational minimum reproduce the
+Kolmogorov--Obukhov (K62) exponent formula.  The result is unconditional
+as a static finite/inertial-range variational statement inside the stated
+K41-normalised class; it is not a dynamical Navier--Stokes selection
+theorem.  Anomalous dissipation under additional hypotheses on the
 nonlinear cascade will be treated in a companion paper~\cite{Geiger2026b}.
 \end{abstract}
 
 \begin{center}
-\small\emph{Preprint note. This is Paper A in the turbulence split. It isolates the unconditional K41 variational-minimiser theorem. The companion Paper B treats anomalous dissipation and the Downhill Flux Condition as a conditional cascade route.}
+\small\emph{Preprint note. This is Paper A in the turbulence split. It isolates the static, reference-normalised K41 variational-minimiser theorem. The companion Paper B treats anomalous dissipation and the Downhill Flux Condition as a conditional cascade route.}
 \end{center}
+\clearpage
 
 % ===================================================================
 \section{Introduction}\label{sec:intro}
@@ -115,19 +123,22 @@ Reynolds numbers~\cite{Frisch95,Pope00}.
 
 In this paper we take a different approach.  Rather than deriving the
 K41 spectrum from dimensional analysis alone, we show that it is the
-\emph{thermodynamically preferred} distribution of energy across scales.
+\emph{free-energy preferred} distribution inside a K41-normalised
+constant-flux comparison class.
 We introduce a free-energy functional~$\mathcal{F}$ on the space of
 scale-resolved energy distributions and prove:
 \begin{enumerate}
   \item The K41 spectrum is the \emph{unique} minimiser of $\mathcal{F}$
         under the constraint of constant energy flux, where the minimisation
-        runs jointly over all admissible local flux operators and energy
-        profiles (Theorem~\ref{thm:K41}).  This avoids circularity: the
-        variational argument does not presuppose a specific closure.
+        runs jointly over K41-normalised admissible local flux operators and
+        energy profiles (Theorem~\ref{thm:K41}).  The argument does not
+        presuppose a single fixed closure, but it remains explicitly
+        reference-normalised.
   \item The minimiser is non-degenerate, with the Hessian providing
         scale-dependent stiffness $1/E_j^* \propto k_j^{5/3}$ that
         penalises small-scale perturbations more severely than large-scale
-        ones---the variational origin of the forward cascade.
+        ones---a static convex signature compatible with downscale cascade
+        bias.
   \item Relaxed flux constraints and the minimax notation are recorded as
         scope guardrails: if the exact K41 profile remains feasible, the
         relaxed problem is trivial, and the minimax form is a decoupled
@@ -279,8 +290,8 @@ $\mathcal{F}[\mathbf{E}] \ge 0$ with equality if and only if $\mathbf{E}
 \caption{The free-energy density $f(E_j) = E_j \ln(E_j / E_j^*) - E_j + E_j^*$
 as a function of the shell energy ratio $E_j / E_j^*$. The unique global minimum
 at $E_j = E_j^*$ (K41 spectrum) is marked. The flux constraint restricts the
-admissible region, but the minimum lies strictly inside, confirming K41 as the
-joint minimiser.}
+admissible region, but the minimum lies inside for the K41-normalised
+comparison class, illustrating K41 as the joint energy minimiser.}
 \label{fig:FE-landscape}
 \end{figure}
 
@@ -324,6 +335,16 @@ A family of flux operators $\bigl(\Pi_j[\mathbf{E}]\bigr)_{j \in
 We denote the set of all admissible families by $\mathscr{A}$.
 \end{definition}
 
+\begin{remark}[Reference-normalised admissible class]\label{rem:reference-normalised-class}
+The condition $\Phi_j(r^*_{-},r^*_{+})=\alpha$ normalises the admissible
+class at the K41 reference profile.  The theorem below is therefore a
+relative selection theorem inside this stated K41-normalised class.  It
+does not assert that every fixed local monotone closure selects K41, nor
+does it exclude alternative closure families normalised around a different
+reference profile.  Such alternatives would require additional
+scale-invariance, universality, or empirical admissibility assumptions.
+\end{remark}
+
 \begin{proposition}[Dimensional derivation of the flux prefactor]\label{prop:A2-derived}
 Axiom~\textup{(A2)} is not an independent assumption but a consequence of locality~\textup{(A1)} and dimensional analysis. Specifically, the form $\Pi_j = k_j\,E_j^{3/2}\,\Phi_j(\cdot)$ is the \emph{unique} dimensionally consistent local flux expression.
 \end{proposition}
@@ -342,7 +363,7 @@ Hence $\Pi_j = k_j\,E_j^{3/2}\,\Phi_j$, and by~(A1) the dimensionless function $
 
 \begin{remark}
 The classical Kolmogorov--Heisenberg closure $\Pi_j = \alpha\,k_j\,E_j^{3/2}$
-corresponds to the special case $\Phi_j \equiv \alpha$.  Definition~\ref{def:admissible}
+corresponds to the special case $\Phi_j \equiv \alpha$~\cite{MY75}.  Definition~\ref{def:admissible}
 enlarges the model class to include all physically reasonable local closures:
 EDQNM-type closures, Leith's diffusion model, and truncated triad
 interactions all satisfy (A1)--(A3).  The family $\mathscr{A}$ is therefore
@@ -350,9 +371,10 @@ a broad, physically motivated class rather than a single algebraic relation.
 Proposition~\ref{prop:A2-derived} shows that (A2) is not an extraneous modelling choice but a necessary consequence of dimensional analysis, thereby further reducing the axiom set to two independent assumptions: locality~(A1) and monotonicity~(A3).
 \end{remark}
 
-\begin{theorem}[Uniqueness of K41 scaling]\label{thm:K41}
+\begin{theorem}[Relative uniqueness in the K41-normalised admissible class]\label{thm:K41}
 Let $\varepsilon > 0$ be given and let $\mathscr{A}$ be the class of
-admissible flux families (Definition~\ref{def:admissible}).
+admissible flux families (Definition~\ref{def:admissible}), including its
+K41 normalisation condition.
 Consider the \emph{joint} minimisation problem
 \begin{equation}\label{eq:min}
   \min_{\substack{\mathbf{E} > 0,\\ \Pi \in \mathscr{A}}}
@@ -364,17 +386,19 @@ Consider the \emph{joint} minimisation problem
 Then:
 \begin{enumerate}
   \item[\textup{(i)}]
-    For any admissible flux family $\Pi \in \mathscr{A}$ for which the
-    constant-flux constraint $\Pi_j[\mathbf{E}] = \varepsilon$ admits a
-    stationary profile $\mathbf{E}^{(\Pi)}$, the K41 distribution
+    In the joint feasible set
+    $\{(\mathbf{E},\Pi):\Pi\in\mathscr{A},\;
+    \Pi_j[\mathbf{E}]=\varepsilon\;\text{for all }j\}$, the K41
+    distribution
     $E_j^* = C_K\,\varepsilon^{2/3}\,k_j^{-5/3}\,\Delta k_j$
-    is the unique global minimiser of~$\mathcal{F}$, and it is realised
+    is the unique minimiser of~$\mathcal{F}$ in the energy variable, and
+    the minimum is realised
     by the Kolmogorov--Heisenberg member $\Phi_j \equiv \alpha$ with
     $C_K = \bigl(\alpha\,(\ln 2)^{3/2}\bigr)^{-2/3}$.
   \item[\textup{(ii)}]
-    The minimiser is non-degenerate: the Hessian
+    The energy minimiser is non-degenerate: the Hessian
     $D^2\mathcal{F}|_{\mathbf{E}^*}$ restricted to the tangent space of
-    the constraint manifold (for any admissible $\Pi$) is strictly positive
+    the joint feasible set in the energy directions is strictly positive
     definite. (This is a direct consequence of the strict convexity of
     the KL divergence; its content is the scale-dependent stiffness
     $1/E_j^* \propto k_j^{5/3}$, see Step~5b below.)
@@ -382,25 +406,23 @@ Then:
 \end{theorem}
 
 \begin{proof}
-\textbf{Step 1: Feasible stationary profiles.}\;
-Fix an admissible $\Pi \in \mathscr{A}$ and restrict attention to the
-feasible case in which the coupled constant-flux system
-$\Pi_j[\mathbf{E}] = \varepsilon$ has a positive stationary profile
-$\mathbf{E}^{(\Pi)}$.  Local monotonicity in $E_j$ is not, by itself, a
-global existence theorem for the coupled shell system; existence for a
-specific closure is therefore treated as a feasibility condition.  This is
-the only scope needed below, because the joint problem compares profiles
-that already satisfy the flux constraint.
+\textbf{Step 1: Joint feasible profiles.}\;
+We restrict attention to pairs $(\mathbf{E},\Pi)$ in the joint feasible set
+for which $\Pi\in\mathscr{A}$ and $\Pi_j[\mathbf{E}]=\varepsilon$ for all
+$j$.  Local monotonicity in $E_j$ is not, by itself, a global existence
+theorem for the coupled shell system; existence for a specific fixed
+closure is therefore treated only as a feasibility issue.  The theorem
+does not claim that every fixed closure selects K41.
 
 \textbf{Step 2: Lower bound via convexity.}\;
 Since each summand $f(E_j) = E_j\ln(E_j/E_j^*) - E_j + E_j^*$ is
 strictly convex with global minimum $f(E_j^*) = 0$, we have
 \begin{equation}\label{eq:F_lower}
-  \mathcal{F}[\mathbf{E}^{(\Pi)}]
+  \mathcal{F}[\mathbf{E}]
   \;\ge\; 0
   \;=\; \mathcal{F}[\mathbf{E}^*],
 \end{equation}
-with equality if and only if $E_j^{(\Pi)} = E_j^*$ for all~$j$.
+with equality if and only if $E_j = E_j^*$ for all~$j$.
 
 \textbf{Step 3: Attainability.}\;
 We verify that $\mathbf{E}^*$ is indeed a stationary profile for
@@ -421,23 +443,23 @@ parameter~$\alpha$.)  Hence the lower bound~\eqref{eq:F_lower} is
 attained.
 
 \textbf{Step 4: Uniqueness.}\;
-Suppose $\Pi' \in \mathscr{A}$ and $\mathbf{E}' \ne \mathbf{E}^*$ satisfies
-$\Pi'_j[\mathbf{E}'] = \varepsilon$.  Then strict convexity gives
+Suppose $\Pi' \in \mathscr{A}$ and $\mathbf{E}' \ne \mathbf{E}^*$ form a
+joint feasible pair, i.e.\ $\Pi'_j[\mathbf{E}'] = \varepsilon$.  Then strict convexity gives
 $\mathcal{F}[\mathbf{E}'] > 0 = \mathcal{F}[\mathbf{E}^*]$, so $\mathbf{E}'$
 cannot be a minimiser of~\eqref{eq:min}.  Hence $\mathbf{E}^*$ is the
-\emph{unique} solution of the joint problem.
+\emph{unique energy profile} solving the joint problem.
 
 \smallskip\noindent
 \textbf{Note on the logical structure.}\;
 The uniqueness in Step~4 follows from the strict positivity of the KL
 divergence away from the reference, which holds for \emph{any} choice
 of~$\mathbf{E}^*$. The physically non-trivial content resides in
-Step~3 (attainability): it is the existence of an admissible closure
-realising $\Pi_j[\mathbf{E}^*] = \varepsilon$ that singles out K41
-among all possible reference spectra. Replacing $\mathbf{E}^*$ by
-$k^{-3}$, for instance, would yield no admissible closure satisfying
-the constant-flux constraint at the purported minimiser (see
-Remark~\ref{rem:circularity}).
+Step~3 (attainability): within the K41-normalised class, there exists an
+admissible closure realising $\Pi_j[\mathbf{E}^*] = \varepsilon$.
+References such as $k^{-3}$ are not excluded by KL convexity alone; they
+would require a different normalisation or stronger scale-invariance and
+uniformity assumptions on the closure family (see
+Remarks~\ref{rem:reference-normalised-class} and~\ref{rem:circularity}).
 
 \textbf{Step 5: Non-degeneracy.}\;
 The Hessian $\partial^2 \mathcal{F}/\partial E_j\,\partial E_\ell
@@ -461,9 +483,9 @@ definite (diagonal entries $1/E_j^* > 0$), hence its restriction to
 The diagonal entries $1/E_j^* \propto k_j^{5/3}$ of the Hessian grow with
 wavenumber, so that small-scale perturbations of the K41 profile are
 penalised more severely than large-scale ones.  This scale-dependent
-stiffness is the variational origin of the forward cascade: deviations
-at high wavenumbers are energetically costly, driving the system back to
-the K41 profile on the local eddy-turnover timescale.  The one-parameter
+stiffness is a static convex signature compatible with downscale cascade
+bias; by itself it does not define a time evolution, a return mechanism,
+or a Navier--Stokes spectral gap.  The one-parameter
 freedom in the Kolmogorov--Heisenberg closure ($\Phi_j \equiv \alpha$)
 corresponds to a single flat direction in the $\Pi$-fibre of the
 extended space $(\mathbf{E}, \Pi)$, which does not affect the strict
@@ -508,10 +530,11 @@ therefore not that $\mathcal{F}$ achieves its minimum at $\mathbf{E}^*$
   Kolmogorov--Heisenberg closure: the constant-flux relation
   $\Pi_j=\alpha k_j E_j^{3/2}=\varepsilon$ fixes the shell energy scaling
   $E_j\propto k_j^{-2/3}$, equivalently the spectral density
-  $E(k)\propto k^{-5/3}$.  Broader closure families can be designed around
-  other references; the theorem is therefore a selection statement inside
-  the stated normalised admissible class, not a proof that no other
-  modelling convention can be written down.
+  $E(k)\propto k^{-5/3}$.  Broader or differently normalised closure
+  families can be designed around other references; the theorem is
+  therefore a selection statement inside the stated K41-normalised
+  admissible class, not a proof that no other modelling convention can be
+  written down.
 \end{enumerate}
 In summary, the physical input is the constant-flux constraint; the KL
 functional provides the selection mechanism among its solution set.
@@ -529,13 +552,13 @@ the variational reference, not an independent derivation of all turbulent
 statistics.
 \end{remark}
 
-\begin{remark}[Cascade as reaction chain and Nash equilibrium]\label{rem:nash}
-The variational structure of Theorem~\ref{thm:K41} admits an illuminating
-game-theoretic interpretation.  Regard the inertial range as a
-hierarchical \emph{reaction chain}: large eddies at scale $k_j$ transfer
-energy to eddies at scale $k_{j+1}$, each scale acting as a ``species''
-whose fitness is governed by its energy share.  The associated replicator
-dynamics on the simplex of normalised shell energies
+\begin{remark}[Heuristic reaction-chain analogy]\label{rem:nash}
+The variational structure of Theorem~\ref{thm:K41} admits a useful
+heuristic analogy with reaction-chain and game-theoretic language.  Regard
+the inertial range as a hierarchical \emph{reaction chain}: large eddies at
+scale $k_j$ transfer energy to eddies at scale $k_{j+1}$, each scale acting
+as a ``species'' whose fitness is governed by its energy share.  A possible
+replicator model on the simplex of normalised shell energies
 $p_j = E_j / \sum_\ell E_\ell$ takes the form
 \[
   \dot{p}_j
@@ -543,14 +566,12 @@ $p_j = E_j / \sum_\ell E_\ell$ takes the form
   p_j\,\bigl(g_j(\mathbf{p}) - \bar{g}(\mathbf{p})\bigr),
 \]
 where $g_j$ is the net energy gain rate at scale $j$ and $\bar{g}$ the
-population average.  The K41 profile $\mathbf{p}^*$ is a \emph{Nash
-equilibrium} of this dynamics: no single scale can increase its energy share
-by unilateral deviation.  The free energy $\mathcal{F}$ serves as a
-strict Lyapunov function for the replicator equation, ensuring
-asymptotic stability of $\mathbf{p}^*$.
-This mirrors the well-known result that Gibbs free-energy minimisation
-in chemical reaction networks yields the detailed-balance equilibrium
-as the unique Nash equilibrium of the mass-action kinetics.
+population average.  With a separately specified payoff compatible with
+the KL functional, the K41 profile can be represented as a Nash-type
+stationary point and $\mathcal{F}$ can serve as a candidate Lyapunov
+function.  This is not part of Theorem~\ref{thm:K41}: no replicator
+dynamics, asymptotic stability theorem, or Navier--Stokes return mechanism
+is proved here.
 \end{remark}
 
 % ===================================================================
@@ -787,7 +808,7 @@ problem reduces to the constrained minimisation~\eqref{eq:min}, and
 the saddle point converges to the K41 minimiser of
 Theorem~\ref{thm:K41}.  The equivalence of the penalty and
 hard-constraint formulations follows from classical convex duality
-theory~\cite{Rockafellar70}.
+theory~\cite{Rockafellar70,BonnansShapiro00}.
 \end{proof}
 
 \begin{remark}
@@ -871,9 +892,9 @@ a signature of \emph{intermittency}.
 
 \subsection{Fluctuations around the variational minimum}
 
-In our framework, intermittency arises from fluctuations of the shell
-energies $\mathbf{E}$ around the K41 minimiser $\mathbf{E}^*$.  Expanding
-$\mathcal{F}$ to second order:
+In this variational framework, intermittency can be modelled by adding
+fluctuations of the shell energies $\mathbf{E}$ around the K41 minimiser
+$\mathbf{E}^*$.  Expanding $\mathcal{F}$ to second order:
 \begin{equation}\label{eq:F_expand}
   \mathcal{F}[\mathbf{E}^* + \delta\mathbf{E}]
   \;=\;
@@ -883,14 +904,17 @@ $\mathcal{F}$ to second order:
     \frac{(\delta E_j)^2}{E_j^*}
   \;+\; O(|\delta\mathbf{E}|^3).
 \end{equation}
-The Hessian $H_{jj} = 1/E_j^*$ implies that fluctuations at small scales
-(large $j$, small $E_j^*$) are suppressed more strongly than fluctuations
-at large scales.  This asymmetry is the variational origin of
-intermittency.
+The Hessian $H_{jj} = 1/E_j^*$ implies, at the level of the static
+quadratic approximation, that fluctuations at small scales (large $j$,
+small $E_j^*$) are penalised more strongly than fluctuations at large
+scales.  This asymmetry supplies a variational modelling route for
+intermittency; it is not a derivation of intermittency from the
+Navier--Stokes dynamics.
 
 \subsection{Connection to the K62 log-normal model}
 
-If we model the fluctuations $\delta E_j$ as Gaussian in the variable
+If, as an additional modelling ansatz, we model the fluctuations
+$\delta E_j$ as Gaussian in the variable
 $\ln(E_j/E_j^*)$, and further assume that phase correlations between
 Littlewood--Paley blocks are negligible (so that shell-energy
 fluctuations translate directly into structure-function scaling), the
@@ -902,8 +926,9 @@ resulting structure function exponents are
   \;-\;
   \frac{\mu}{18}\,p(p-3),
 \end{equation}
-which is exactly the K62 (Kolmogorov--Obukhov) refined similarity
-hypothesis with intermittency parameter $\mu$~\cite{K62,Frisch95}.  The
+which reproduce the K62 (Kolmogorov--Obukhov) refined similarity
+hypothesis with intermittency parameter $\mu$~\cite{K62,Frisch95}.  Under
+this ansatz, the
 parameter $\mu$ is determined by the variance of $\ln(E_j/E_j^*)$ under
 the Gibbs measure $\exp(-\mathcal{F}/\Theta)$, where the effective
 temperature $\Theta > 0$ parametrises the strength of turbulent
@@ -941,11 +966,11 @@ detail there.
 % ===================================================================
 \section{Numerical Evidence}\label{sec:numerics}
 
-\begin{remark}[Numerical verification of Theorem~\ref{thm:K41}]\label{rem:numerical-F}
-A numerical evaluation of $\mathcal{F}[\mathbf{E}]$ over six synthetic energy spectra confirms that the K41 spectrum is the unique minimiser: $\mathcal{F}[\mathbf{E}_{\mathrm{K41}}] = 0$ exactly, while $\mathcal{F}[\mathbf{E}_{\mathrm{K62}}] = 2.0 \times 10^{-4}$ (intermittency correction), $\mathcal{F}[\mathbf{E}_{k^{-2}}] = 1.74$ (steep), $\mathcal{F}[\mathbf{E}_{k^{-4/3}}] = 5.94$ (shallow), and $\mathcal{F}[\mathbf{E}_{\mathrm{thermal}}] = 7.55$ (equipartition). A perturbation test ($300$ random perturbations $\delta \mathbf{E}$ at three noise levels $\|\delta \mathbf{E}\|/\|\mathbf{E}^*\| \in \{0.01, 0.1, 1.0\}$) yields $\mathcal{F}[\mathbf{E}^* + \delta \mathbf{E}] > 0$ for \emph{all} $300$ samples, confirming strict convexity numerically. Numerical scripts: \texttt{compute\_F\_spectrum.py}.
+\begin{remark}[Numerical illustration of the KL landscape]\label{rem:numerical-F}
+A numerical evaluation of $\mathcal{F}[\mathbf{E}]$ over six synthetic energy spectra illustrates the reference-centred KL landscape: $\mathcal{F}[\mathbf{E}_{\mathrm{K41}}] = 0$ exactly, while $\mathcal{F}[\mathbf{E}_{\mathrm{K62}}] = 2.0 \times 10^{-4}$ (intermittency correction), $\mathcal{F}[\mathbf{E}_{k^{-2}}] = 1.74$ (steep), $\mathcal{F}[\mathbf{E}_{k^{-4/3}}] = 5.94$ (shallow), and $\mathcal{F}[\mathbf{E}_{\mathrm{thermal}}] = 7.55$ (equipartition). A perturbation test ($300$ random perturbations $\delta \mathbf{E}$ at three noise levels $\|\delta \mathbf{E}\|/\|\mathbf{E}^*\| \in \{0.01, 0.1, 1.0\}$) yields $\mathcal{F}[\mathbf{E}^* + \delta \mathbf{E}] > 0$ for \emph{all} $300$ samples, illustrating strict convexity numerically. Numerical scripts: \texttt{compute\_F\_spectrum.py}.
 \end{remark}
 
-We propose the following reproducible test protocol for DNS verification:
+We propose the following reproducible diagnostic protocol for DNS testing:
 \begin{enumerate}
 \item Compute the Littlewood--Paley shell energies $E_j$ from
   a statistically stationary DNS at $R_\lambda \ge 200$.
@@ -957,7 +982,7 @@ We propose the following reproducible test protocol for DNS verification:
     \nu\,\bigl\langle\|\nabla u\|_{L^2}^2\bigr\rangle_t
   \]
   is the time-averaged viscous dissipation rate from the same DNS run.
-\item Verify that $\mathcal{F}$ decreases with increasing $R_\lambda$
+\item Test whether $\mathcal{F}$ decreases with increasing $R_\lambda$
   and that the compensated ratio $\varphi_j = \ln(E_j/E_j^*)$ is
   non-increasing in $j$ across the inertial range.
 \end{enumerate}
@@ -977,15 +1002,16 @@ confidence intervals.
 % ===================================================================
 \section{Discussion}\label{sec:discussion}
 
-The joint minimisation over all admissible closures is not a tautological restatement of K41: Kolmogorov's original derivation relies on dimensional analysis, while our Theorem shows K41 is the unique minimiser of a well-defined variational problem, providing a structural explanation for universality.
+The joint minimisation over the K41-normalised admissible class is not merely the statement that a KL divergence is minimised at its reference: Kolmogorov's original derivation relies on dimensional analysis, while Theorem~\ref{thm:K41} records that the same profile is attainable under the normalised constant-flux closure and is the unique energy minimiser in the resulting joint feasible set.  This is a structural consistency and selection statement, not a fully intrinsic derivation of K41.
 
 \subsection{The role of the closure family}
 
 The reformulation of Theorem~\ref{thm:K41} via the admissible flux
 family (Definition~\ref{def:admissible}) significantly weakens the
 dependence on any specific closure model.  The K41 spectrum is selected
-not by a single algebraic relation but as the unique minimiser across
-\emph{all} local, dimensionally consistent, monotone flux operators.
+not by a single algebraic relation but as the unique energy minimiser in
+the joint feasible set of the K41-normalised local, dimensionally
+consistent, monotone flux class.
 Nevertheless, axiom~(A2) still imposes a structural constraint---the
 $k_j\,E_j^{3/2}$ scaling prefactor---that ultimately encodes the
 Kolmogorov dimensional argument.  Deriving this prefactor from the
@@ -1042,7 +1068,7 @@ We collect the principal limitations of the present work:
   is qualitative.  Rigorous derivation of intermittency exponents from
   the Hessian fluctuations remains open.
 \item \textbf{Uniqueness of the reference.}\; While Remark~\ref{rem:circularity}
-  argues that $\mathbf{E}^*$ is the only physically consistent reference,
+  identifies $\mathbf{E}^*$ as the natural reference for the K41-normalised class,
   a fully intrinsic characterisation of $\mathbf{E}^*$ (without
   \emph{a priori} appeal to K41) would strengthen the argument.
   Remark~\ref{rem:khm-intrinsic} provides a step in this direction.
@@ -1083,13 +1109,13 @@ Under the updated CORE status, the transfer is only RFEP v1.8
 normal-form discipline: Zookeeper closes Riemann $C^{(2)}$/MS2 in the
 CCM/Fourier branch, but no automatic turbulence statement follows from
 that closure.  The present theorem therefore remains exactly the clean
-K41 variational theorem.
+K41-normalised variational selection theorem.
 
 Those questions belong to a separate Paper B.  There the relevant objects
 are the dual/windowed DFC flux defect, the anomalous-dissipation measure,
 weighted shell-averaged forms of the $4/5$ law, and stress tests from convex-integration and
 vanishing-viscosity constructions.  Keeping this boundary explicit is a
-strength: the unconditional result in the present paper remains clean,
+strength: the static variational result in the present paper remains clean,
 while the conditional defect theory has its own natural follow-up.
 
 \subsection*{Result classification}
@@ -1101,10 +1127,10 @@ while the conditional defect theory has its own natural follow-up.
 \textbf{Result} & \textbf{Type} & \textbf{Reference} \\
 \hline
 \hline
-\multicolumn{3}{|l|}{\textit{Theorems (rigorous, unconditional):}} \\
+\multicolumn{3}{|l|}{\textit{Theorems (rigorous static variational statements):}} \\
 \hline
 $\mathcal{F}[\mathbf{E}] \geq 0$, $= 0$ iff $\mathbf{E} = \mathbf{E}^*$ & Theorem & Thm.~\ref{thm:K41} \\
-K41 unique joint minimiser & Theorem & Thm.~\ref{thm:K41} \\
+K41 relative joint minimiser in the K41-normalised class & Theorem & Thm.~\ref{thm:K41} \\
 (A2) from (A1) + dimensional analysis & Proposition & Prop.~\ref{prop:A2-derived} \\
 \hline
 \multicolumn{3}{|l|}{\textit{Scope guardrails and formal rewrites:}} \\
@@ -1112,14 +1138,14 @@ K41 unique joint minimiser & Theorem & Thm.~\ref{thm:K41} \\
 Relaxed-flux slack is trivial unless $E^*$ is excluded/perturbed & Guardrail & Prop.~\ref{prop:dfc-slack} \\
 K41 as decoupled penalty saddle point & Formal representation & Prop.~\ref{prop:minimax} \\
 \hline
-\multicolumn{3}{|l|}{\textit{Numerically confirmed:}} \\
+\multicolumn{3}{|l|}{\textit{Numerically illustrated:}} \\
 \hline
 $\mathcal{F}[\mathbf{E}_{\mathrm{K41}}] = 0$ (minimiser) & Exact & Rem.~\ref{rem:numerical-F} \\
-$\mathcal{F} > 0$ for all 300 perturbations & Numerical & Rem.~\ref{rem:numerical-F} \\
+$\mathcal{F} > 0$ for all 300 sampled perturbations & Numerical illustration & Rem.~\ref{rem:numerical-F} \\
 \hline
-\multicolumn{3}{|l|}{\textit{DNS-falsifiable predictions:}} \\
+\multicolumn{3}{|l|}{\textit{DNS-falsifiable diagnostics:}} \\
 \hline
-$\mathcal{F}[\mathbf{E}_{\mathrm{DNS}}] \to 0$ as $R_\lambda \to \infty$ & Prediction & Sec.~\ref{sec:numerics} \\
+$\mathcal{F}[\mathbf{E}_{\mathrm{DNS}}] \to 0$ as $R_\lambda \to \infty$ & Diagnostic prediction & Sec.~\ref{sec:numerics} \\
 \hline
 \end{tabular}
 \end{center}
@@ -1140,59 +1166,73 @@ rest solely with the author.
 % ===================================================================
 \begin{thebibliography}{99}
 
+\bibitem{BonnansShapiro00}
+J.\,F.~Bonnans and A.~Shapiro,
+\emph{Perturbation Analysis of Optimization Problems},
+Springer Series in Operations Research, Springer, New York, 2000.
+\href{https://doi.org/10.1007/978-1-4612-1394-9}{doi:10.1007/978-1-4612-1394-9}.
+
+\bibitem{Frisch95}
+U.~Frisch,
+\emph{Turbulence: The Legacy of A.\,N.\ Kolmogorov},
+Cambridge University Press, 1995.
+\href{https://doi.org/10.1017/CBO9781139170666}{doi:10.1017/CBO9781139170666}.
+
+\bibitem{FST-Unified2026}
+L.~Geiger, \emph{FST Spectrum Duality: The Renormalized Free Energy Principle as Physical Instantiation of Functional Stability Theory},
+Zenodo, 2026.
+\href{https://doi.org/10.5281/zenodo.19036190}{doi:10.5281/zenodo.19036190}.
+
+\bibitem{Geiger2026b}
+L.~Geiger,
+\emph{Anomalous Dissipation and the Turbulent Cascade: A Variational Free-Energy Characterisation of Kolmogorov Scaling},
+Zenodo, 2026.
+\href{https://doi.org/10.5281/zenodo.19056813}{doi:10.5281/zenodo.19056813}.
+
 \bibitem{K41a}
 A.\,N.~Kolmogorov,
 \emph{The local structure of turbulence in incompressible viscous fluid
 for very large Reynolds numbers},
 Doklady Akad.\ Nauk SSSR \textbf{30} (1941), 299--303.
 Reprinted in Proc.\ R.\ Soc.\ Lond.\ A \textbf{434} (1991), 9--13.
+\href{https://doi.org/10.1098/rspa.1991.0075}{doi:10.1098/rspa.1991.0075}.
 
 \bibitem{K41b}
 A.\,N.~Kolmogorov,
 \emph{Dissipation of energy in the locally isotropic turbulence},
 Doklady Akad.\ Nauk SSSR \textbf{32} (1941), 16--18.
 Reprinted in Proc.\ R.\ Soc.\ Lond.\ A \textbf{434} (1991), 15--17.
+\href{https://doi.org/10.1098/rspa.1991.0076}{doi:10.1098/rspa.1991.0076}.
 
 \bibitem{K62}
 A.\,N.~Kolmogorov,
 \emph{A refinement of previous hypotheses concerning the local structure
 of turbulence in a viscous incompressible fluid at high Reynolds number},
 J.~Fluid Mech.\ \textbf{13} (1962), 82--85.
-
-\bibitem{SL94}
-Z.-S.~She and E.~L\'ev\^eque,
-\emph{Universal scaling laws in fully developed turbulence},
-Phys.\ Rev.\ Lett.\ \textbf{72} (1994), 336--339.
-
-\bibitem{Frisch95}
-U.~Frisch,
-\emph{Turbulence: The Legacy of A.\,N.\ Kolmogorov},
-Cambridge University Press, 1995.
+\href{https://doi.org/10.1017/S0022112062000518}{doi:10.1017/S0022112062000518}.
 
 \bibitem{Kraichnan67}
 R.\,H.~Kraichnan,
 \emph{Inertial ranges in two-dimensional turbulence},
 Phys.\ Fluids \textbf{10} (1967), 1417--1423.
+\href{https://doi.org/10.1063/1.1762301}{doi:10.1063/1.1762301}.
 
 \bibitem{MY75}
 A.\,S.~Monin and A.\,M.~Yaglom,
 \emph{Statistical Fluid Mechanics}, Vols.~1--2,
 MIT Press, 1971--1975.
 
+\bibitem{OttoVillani2000}
+F.~Otto and C.~Villani,
+\emph{Generalization of an inequality by Talagrand and links with the logarithmic Sobolev inequality},
+J.\ Funct.\ Anal.~\textbf{173} (2000), 361--400.
+\href{https://doi.org/10.1006/jfan.1999.3557}{doi:10.1006/jfan.1999.3557}.
+
 \bibitem{Pope00}
 S.\,B.~Pope,
 \emph{Turbulent Flows},
 Cambridge University Press, 2000.
-
-\bibitem{FST-Unified2026}
-L.~Geiger, \emph{The Renormalized Free Energy Framework: A Unified Resolution of Structural Bottlenecks},
-Zenodo, March 2026.
-\href{https://doi.org/10.5281/zenodo.19036190}{doi:10.5281/zenodo.19036190}.
-
-\bibitem{BonnansShapiro00}
-J.\,F.~Bonnans and A.~Shapiro,
-\emph{Perturbation Analysis of Optimization Problems},
-Springer Series in Operations Research, Springer, New York, 2000.
+\href{https://doi.org/10.1017/CBO9780511840531}{doi:10.1017/CBO9780511840531}.
 
 \bibitem{Rockafellar70}
 R.\,T.~Rockafellar,
@@ -1200,16 +1240,11 @@ R.\,T.~Rockafellar,
 Princeton Mathematical Series, vol.~28,
 Princeton University Press, 1970.
 
-\bibitem{Geiger2026b}
-L.~Geiger,
-\emph{Anomalous Dissipation and the Turbulent Cascade: A Variational Free-Energy Derivation of Kolmogorov Scaling},
-Zenodo, 2026.
-\href{https://doi.org/10.5281/zenodo.19056813}{doi:10.5281/zenodo.19056813}.
-
-\bibitem{OttoVillani2000}
-F.~Otto and C.~Villani,
-\emph{Generalization of an inequality by Talagrand and links with the logarithmic Sobolev inequality},
-J.\ Funct.\ Anal.~\textbf{173} (2000), 361--400.
+\bibitem{SL94}
+Z.-S.~She and E.~L\'ev\^eque,
+\emph{Universal scaling laws in fully developed turbulence},
+Phys.\ Rev.\ Lett.\ \textbf{72} (1994), 336--339.
+\href{https://doi.org/10.1103/PhysRevLett.72.336}{doi:10.1103/PhysRevLett.72.336}.
 
 \end{thebibliography}
 
