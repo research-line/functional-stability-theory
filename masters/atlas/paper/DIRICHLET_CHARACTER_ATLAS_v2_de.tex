@@ -6,9 +6,9 @@
 %  Entwurf v2 — überarbeitet nach N=600-Serveranalyse
 %  Status: Finaler Entwurf
 % ============================================================================
-\documentclass[10pt,twocolumn]{article}
+\documentclass[a4paper,10pt,twocolumn]{article}
 
-\usepackage[letterpaper,top=2.0cm,bottom=2.5cm,left=1.8cm,right=1.8cm,columnsep=0.6cm]{geometry}
+\usepackage[a4paper,top=2.0cm,bottom=2.5cm,left=1.8cm,right=1.8cm,columnsep=0.6cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
@@ -17,7 +17,8 @@
 \usepackage{amsmath,amssymb,amsfonts,mathtools,bm}
 \usepackage{graphicx,float,booktabs,array,multirow}
 \usepackage{xcolor}
-\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+\usepackage{xurl}
+\usepackage[unicode=true,colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
 \usepackage[numbers,square,sort&compress]{natbib}
 \bibliographystyle{unsrtnat}
 
@@ -45,21 +46,29 @@
 \newcommand{\archdiff}{\operatorname{arch\_diff}}
 \newcommand{\primediff}{\operatorname{prime\_diff}_{\mathrm{matrix}}}
 \DeclareMathOperator{\sgn}{sgn}
+\providecommand*{\HyperDestNameFilter}[1]{de.#1}
 
 % ============================================================================
 \title{Der Dirichlet-Charakter-Atlas\\
-  \large --- Ein Weil-Kern-Zahlenatlas für Dirichlet $L$-Funktions-Sektor-Gaps\\
+  \large --- Ein Weil-Kern-Zahlenatlas für Sektor-Gaps von Dirichlet-$L$-Funktionen\\
   \normalsize Galerkin-Diagnostik und die Grenzen der Theorie führender Ordnung}
 \author{Lukas Geiger\\\small Independent Researcher, Bernau}
 \date{\today}
+
+\hypersetup{
+  pdftitle={Der Dirichlet-Charakter-Atlas},
+  pdfauthor={Lukas Geiger},
+  pdfsubject={Weil-Kern-Zahlenatlas für Sektor-Gaps von Dirichlet-L-Funktionen},
+  pdfkeywords={Dirichlet-L-Funktionen, Weilsche quadratische Form, Sektor-Gaps, Galerkin-Diagnostik, Hilbert-P\'olya}
+}
 
 \begin{document}
 \twocolumn[
 \maketitle
 \begin{abstract}
 \noindent
-Dieses Paper ist eine Instanziierung der Funktionalen Stabilitätstheorie
-(Functional Stability Theory, FST) im mathematischen Bereich: Es erweitert die
+Diese Arbeit ist eine Instanziierung der Funktionalen Stabilitätstheorie
+(Functional Stability Theory, FST) im mathematischen Bereich: Sie erweitert die
 Dreikomponenten-Zerlegung $\mathrm{RH}(X) = \mathrm{GBC}(X) + C^{(2)}(X) + \mathrm{Hurwitz}(X)$
 (siehe Math-Master~\cite{MathMaster}, \S2.4) auf
 getwistete $L$-Funktionen, wobei der Sektor-Gap (sector gap) die quantitative
@@ -69,8 +78,8 @@ die Trinität aus UCU + SGE + Weil-Form-Transversalität; der Physics-Master
 \cite{RFEPFramework} entwickelt die physikalische Begleitformulierung
 über das Renormierte Prinzip der Freien Energie (Renormalized Free Energy Principle).
 
-Wir entwickeln einen numerischen Weil-Kern-Atlas (Weil-kernel numerical atlas) von Sektor-Gaps für Dirichlet
-$L$-Funktionen, die zu zehn reellen Low-Conductor-Charakteren
+Wir entwickeln einen numerischen Weil-Kern-Atlas von Sektor-Gaps für Dirichlet
+$L$-Funktionen, die zu zehn reellen Charakteren mit kleinem Führer
 $\chi_D$, $D\in\{5,8,12,13,17,21,24,29,33,60\}$, assoziiert sind, bei Galerkin-Trunkierungen
 $N\in\{200,400,600\}$ und einem Cut-off von $\lambda=20000$. Innerhalb der
 Dreikomponenten-Zerlegung ist der Sektor-Gap die quantitative
@@ -94,19 +103,20 @@ wenn die Analyse bei $N=600$ wiederholt wird. Drittens
 durchläuft der $\chi_{21}$-Gap einen Vorzeichenwechsel zwischen $N=200$ und $N=600$
 ($+0.282\to-0.004$), was veranschaulicht, dass selbst der Galerkin-Operator
 unterhalb seiner Konvergenzskala nicht informativ ist. Wir katalogisieren die
-zehn Charaktere entlang zwei \emph{Filter-Konstanten} (Parität und Wurzelzahl,
-beide gleich $+1$ im gesamten Sample) und zwei \emph{informativen Achsen}
+zehn Charaktere anhand zweier \emph{konstanter Filtermerkmale} (Parität und Wurzelzahl,
+beide im gesamten Sample gleich $+1$) und zweier \emph{informativer Achsen}
 (archimedisches Gewichtsverhältnis und Gap-Signatur), zeigen die systematische
 Siegel-Walfisz-Kompression bei
 $N=600$ und positionieren das Ergebnis als präzise Diagnose, warum
 numerische Galerkin-Routen für sich genommen
 $C^{(2)}_{\chifn}$ nicht auflösen können. Eine echte prädiktive Formulierung würde eine
 asymptotische Paley-Wiener-Kontrolle der Sektor-Grundzustände erfordern,
-die die Galerkin-Trunkierung umgeht; wir schließen mit einer Roadmap hin zu
-einem solchen Branch-lokalen Hilbert-P\'olya-Framework (branch-local Hilbert-P\'olya framework).
+die die Galerkin-Trunkierung umgeht; wir schließen mit einem Fahrplan hin zu
+einem solchen branch-lokalen Hilbert-P\'olya-Rahmen (branch-local Hilbert-P\'olya framework).
 \end{abstract}
 \vspace{1em}
 ]
+\clearpage
 
 \section{Einführung}
 \label{sec:intro}
@@ -138,9 +148,9 @@ wobei $\mathrm{GBC}_X$ die Galerkin-Brücke zu einem selbstadjungierten
 Operator erfasst, $\mathrm{Hurwitz}_X$ den Realität-der-Nullstellen-Transfer, und
 $C^{(2)}_X$ die Operator-Identifikation im Connes-Stil, welche das Herzstück des
 Hilbert-P\'olya-Programms bildet. Für den trivialen Charakter
-wird $C^{(2)}_{X=\zeta}$ durch das Theorem der geraden Dominanz (even-dominance theorem)
-aus \cite{RH_II} unbedingt (unconditionally) geschlossen; für nicht-triviale $\chi$ ist $C^{(2)}_{\chifn}$ die
-harte Residualkomponente. Die vorliegende Arbeit ist ein Atlas dessen, was
+wird $C^{(2)}_{X=\zeta}$ durch das Theorem der geraden Dominanz
+aus \cite{RH_II} unbedingt geschlossen; für nicht-triviale $\chi$ ist $C^{(2)}_{\chifn}$ die
+harte Residualkomponente. Die vorliegende Arbeit kartiert, was
 Galerkin-numerische Techniken über dieses Residuum aussagen können und, noch wichtiger, was
 sie nicht aussagen können.
 
@@ -182,11 +192,11 @@ Unser Beitrag ist bewusst diagnostischer Natur. Die wichtigsten Erkenntnisse sin
 \item[(F1)] \textbf{Falsifizierung der Reduktion führender Ordnung.}
   Unter der Approximation
   $\phi^+_{\chifn}\approx\phi^-_{\chifn}\approx\phi_\infty$, die in
-  \cite{RH_II} für den trivialen Charakter verwendet wird, reduziert sich der primzahlseitige
-  Prädiktor (prime-side predictor) auf ein universelles Autokorrelations-Integral. Ein systematischer Test
-  von 16 Fenster-Modellen (window models, einschließlich des empirischen Einzelsektor-Grundzustands)
+  \cite{RH_II} für den trivialen Charakter verwendet wird, reduziert sich der Primzahl-Prädiktor
+  auf ein universelles Autokorrelations-Integral. Ein systematischer Test
+  von 16 Fenstermodellen, einschließlich des empirischen Einzelsektor-Grundzustands,
   erreicht bestenfalls eine Vorzeichengenauigkeit von $6/10$ und ein $R^2=0.15$.
-  Die Reduktion führender Ordnung (leading-order reduction) ist für nicht-triviale $\chi$ falsch.
+  Die Reduktion führender Ordnung ist für nicht-triviale $\chi$ falsch.
 \item[(F2)] \textbf{Matrixzerlegungs-Tautologie.}
   Wenn \emph{beide} Sektor-Grundzustände aus derselben
   Galerkin-Diagonalisierung entnommen werden, ist die Identität
@@ -194,15 +204,15 @@ Unser Beitrag ist bewusst diagnostischer Natur. Die wichtigsten Erkenntnisse sin
   keine Vorhersage, sondern eine Folge der Linearität der
   Erwartung auf $W=W_{\mathrm{arch}}+W_{\mathrm{prime}}$. Eine scheinbare
   $9/9$ Vorzeichengenauigkeit bei $N=200$ (abzüglich des bekannten $N$-Oszillators
-  $\chi_{21}$) löst sich unter einer Server-Level-Validierung bei $N=600$ auf: Der
+  $\chi_{21}$) löst sich bei der Validierung auf Serverebene für $N=600$ auf: Der
   Prädiktor $S_{\chifn}+\archdiff_{\chifn}$ fällt auf $8/10$ aufgrund
   zweier Vorzeichenfehler: $\chi_{21}$ ($N$-Oszillator,
   vgl. (F3) und \S\ref{sec:chi21}) sowie $\chi_{29}$ (numerisches
-  Interpolationsartefakt an einem Near-Zero-Gap).
+  Interpolationsartefakt an einem Gap nahe null).
 \item[(F3)] \textbf{$\chi_{21}$ als ein $N$-Oszillator.}
   Bei $N=200$ hat man $\gap_{\mathrm{gal}}=+0.282$; bei $N=600$ hat man
   $\gap_{\mathrm{gal}}=-0.004$. Der Vorzeichenwechsel ist kein Formelfehler,
-  sondern ein Galerkin-Trunkierungseffekt für zusammengesetzte Leiter (composite conductors), der sich erst
+  sondern ein Galerkin-Trunkierungseffekt für zusammengesetzte Führer, der sich erst
   oberhalb von $N\sim 500$ stabilisiert. Dies zeigt einerseits, dass der Galerkin-Operator
   selbst nicht-trivial $N$-abhängig ist, und erklärt andererseits, warum ein
   $9/9$ bei $N=200$ nach Ausschluss von $\chi_{21}$ nicht überraschend war:
@@ -220,14 +230,15 @@ Unser Beitrag ist bewusst diagnostischer Natur. Die wichtigsten Erkenntnisse sin
 
 Zusammengenommen liefern diese Erkenntnisse eine präzise Diagnose: Die
 $C^{(2)}_{\chifn}$-Komponente von \eqref{eq:three-component} ist für
-nicht-triviale $\chi$ einer Galerkin-numerischen Schließung (Galerkin-numerical closure)
+nicht-triviale $\chi$ einer Galerkin-numerischen Schließung
 nicht zugänglich, da das relevante Signal in der Differenz
-$\phi^+_{\chifn}-\phi^-_{\chifn}$ lebt; dies ist eine Feinstruktur (fine structure), die in
+$\phi^+_{\chifn}-\phi^-_{\chifn}$ lebt; dies ist eine Feinstruktur, die in
 jeder natürlichen Approximation führender Ordnung verloren geht, und überdies ist der volle
 Galerkin-Operator relativ zu seinen eigenen Eigenvektoren tautologisch.
 Eine echte prädiktive Formulierung muss
-$\Deltachi$ analytisch identifizieren, z.\,B.\ durch Paley-Wiener-Asymptotik,
-angepasst aus \cite{RH_II} auf das charakter-getwistete Setting.
+$\Deltachi$ analytisch identifizieren, z.\,B.\ durch Paley-Wiener-Asymptotik
+\cite{PaleyWiener}, angepasst aus \cite{RH_II} auf das
+charakter-getwistete Setting.
 
 \subsection{Organisation}
 
@@ -240,13 +251,13 @@ Charaktere entlang vier Achsen. Abschnitt~\ref{sec:tautology} formuliert
 und beweist die Tautologie. Abschnitt~\ref{sec:chi21} behandelt die
 $\chi_{21}$ $N$-Oszillation im Detail. Abschnitt~\ref{sec:discussion}
 diskutiert Implikationen für \eqref{eq:three-component}. Abschnitt~\ref{sec:outlook}
-skizziert die Paley-Wiener-Roadmap und das Branch-lokale
+skizziert den Paley-Wiener-Fahrplan und das branch-lokale
 Hilbert-P\'olya-Programm als den angezeigten nächsten Schritt.
 
-\section{Setup: Weilsche quadratische Form und Sektor-Kerne}
+\section{Grundlagen: Weilsche quadratische Form und Sektor-Kerne}
 \label{sec:setup}
 
-Wir fassen das durchgehend verwendete strukturelle Framework zusammen; die vollständigen
+Wir fassen den durchgehend verwendeten strukturellen Rahmen zusammen; die vollständigen
 Herleitungen sind in \cite{AnalyticKernel} gegeben.
 
 \subsection{\texorpdfstring{Dirichlet $L$-Funktionen}{Dirichlet L-Funktionen} und die Weil-Formel}
@@ -266,18 +277,18 @@ ist $\bar\chifn=\chifn$ und $\epsilon_{\chifn}=+1$; wir arbeiten in diesem Atlas
 mit den zehn reellen Charakteren $\chifn_D$ mit $D\in\{5,8,12,13,17,21,
 24,29,33,60\}$. Die nicht-trivialen Nullstellen
 $\rho=\halfline+i\gamma$ werden durchgehend auf der kritischen Gerade angenommen
-(GRH für die getesteten Führer). Für die Führer
-$D\in\{5,8,12,13,17,21,24,29,33,60\}$ dieses Atlas liefert
-\cite{LMFDB} alle nicht-trivialen Nullstellen unterhalb Höhe
-$T\sim 10^4$, numerisch auf der kritischen Geraden verifiziert; die
-Testfunktions-Bandbreite $2L\approx 19.8$ bei $\lambda=20000$ erfasst
-Nullstellen unterhalb $T\sim 10^4$, sodass die GRH-Annahme im
-relevanten Nullstellenhöhen-Bereich empirisch gestützt ist. Ein
-theoretischer Beweis von GRH für $L(s,\chifn_D)$ für irgendeinen
-spezifischen $D$ in der Stichprobe steht selbstverständlich aus.
+(GRH für die getesteten Führer). Die Datenbankseiten von \cite{LMFDB}
+liefern berechnete niedrig liegende Nullstellen auf der kritischen
+Geraden für die entsprechenden Dirichlet-$L$-Funktionen. Wir verwenden
+diese Einträge nur als endliche numerische Konsistenzdaten; sie sind
+kein Zertifikat dafür, dass alle Nullstellen unterhalb einer bestimmten
+Höhe auf der kritischen Geraden verifiziert wären. Ein theoretischer
+Beweis von GRH für $L(s,\chifn_D)$ für irgendeinen spezifischen $D$ in
+der Stichprobe steht selbstverständlich aus.
 
 Für eine gerade Testfunktion $h\in C_c^\infty(\mathbb{R})$ mit kompaktem Träger
-lautet die explizite Weilsche Formel (Weil explicit formula) \cite{IwaniecKowalski}:
+lautet die explizite Weilsche Formel (Weil explicit formula)
+\cite{Weil1952,IwaniecKowalski}:
 \begin{equation}
 \label{eq:weil}
   \sum_{\gamma}h(\gamma)
@@ -634,7 +645,7 @@ Signal. Abschnitt~\ref{sec:tautology} widmet sich den Konsequenzen.
 \section{Numerische Validierung}
 \label{sec:validation}
 
-\subsection{Setup der Berechnung}
+\subsection{Berechnungsaufbau}
 \label{sec:validation-setup}
 
 Für jeden der zehn reellen Charaktere $\chifn_D$,
@@ -758,18 +769,18 @@ Realisierung (R2) abweicht).
 \begin{remark}[Siegel-Walfisz-Kompression bei $N=600$]
 \label{rem:sw-compression}
 Der Vergleich der $\gap_{\mathrm{gal}}$-Spalten bei $N=200$ und $N=600$
-offenbart einen systematischen Kompressionseffekt: Für den stark-positiven (strong-positive)
+offenbart einen systematischen Kompressionseffekt: Für den stark-positiven
 Charakter $\chifn_{12}$ fällt $\gap_{\mathrm{gal}}$ von
 $+0.0325$ auf $+0.0115$ (Faktor $0.35$); für $\chifn_{17}$,
 $\chifn_{24}$, $\chifn_{29}$, $\chifn_{60}$ gilt derselbe
-Schrumpfungsfaktor (shrinkage factor) bis auf $\pm 0.1$. Die stark-negativen
+Schrumpfungsfaktor bis auf $\pm 0.1$. Die stark-negativen
 Charaktere $\chifn_8$, $\chifn_{13}$, $\chifn_{33}$ sind
 qualitativ stabil zwischen $N=200$ und $N=600$ (relative Änderung
-$\lesssim 10\%$). Diese Dichotomie ist qualitativ an die obere
-Siegel-Walfisz-Schranke (Siegel-Walfisz upper bound)
-$|\sum_{p\leq x}\chifn(p)\log p|=o(\sqrt{x})$ angewandt auf das
-Large-Prime-Tail erinnernd --- Charaktere mit einem echten
-Low-Conductor-Signal erscheinen weitgehend bereits bei $N=200$ bestimmt,
+$\lesssim 10\%$). Diese Dichotomie erinnert qualitativ an die obere
+Siegel-Walfisz-Schranke
+$|\sum_{p\leq x}\chifn(p)\log p|=o(\sqrt{x})$, angewandt auf den
+Schwanz der großen Primzahlen --- Charaktere mit einem echten
+Signal bei kleinem Führer erscheinen weitgehend bereits bei $N=200$ bestimmt,
 während schwach signalisierende Charaktere ihre bei $N=200$ ermittelten
 Schätzungen bei $N=600$ um einen Faktor von etwa $0.35$ komprimiert sehen
 --- aber es wird hier keine theoretische Herleitung angeboten, die den
@@ -781,7 +792,7 @@ Siegel-Walfisz-Kompression.
 
 \begin{table*}[t]
 \caption{$N$-Konvergenz des Galerkin-Gaps und des Weil-Kern-Prädiktors
-  bei $\lambda=20000$ für zehn reelle Low-Conductor-Charaktere. Beachte, dass
+  bei $\lambda=20000$ für zehn reelle Charaktere mit kleinem Führer. Beachte, dass
   die $\gap_{\mathrm{gal}}^{(\mathrm{ref})}$-Einträge bei $N=600$ identisch mit
   $\gap_{\mathrm{gal}}^{(N=600)}$ übereinstimmen, da die empirischen Referenzwerte
   selbst Ausgaben derselben Galerkin-Diagonalisierung bei $N=600$ sind;
@@ -826,7 +837,7 @@ Aussagekraft.
 
 Die Parität $\chifn(-1)\in\{+1,-1\}$ entscheidet über den archimedischen Faktor von
 $\Lambda(s,\chifn)$: Gerade Charaktere verwenden $\Gamma(s/2)$, ungerade
-Charaktere verwenden $\Gamma((s+1)/2)$. In diesem Paper sind alle zehn Charaktere
+Charaktere verwenden $\Gamma((s+1)/2)$. In dieser Arbeit sind alle zehn Charaktere
 Kronecker-Charaktere $\chifn_D$ mit positiver Diskriminante $D$, und
 daher alle gerade. Dies ist Absicht: Die durchgehend verwendete Sektor-Zerlegung
 $H_L=H_L^+\oplus H_L^-$ setzt eine gerade Parität voraus, welche
@@ -842,7 +853,7 @@ für die drei nachfolgenden, feineren Klassifikationen.
 \label{sec:rootnumber}
 
 Für jeden reellen Dirichlet-Charakter ist die Wurzelzahl $W(\chifn):=
-\epsilon_{\chifn}$ durch die klassische Gaußsche Summenformel (Gauss-sum formula)
+\epsilon_{\chifn}$ durch die klassische Gaußsche Summenformel
 $\tau(\chifn)=\sqrt{q}$ für primitive reelle gerade Charaktere \cite{IwaniecKowalski}
 gleich $+1$. Alle zehn Charaktere in unserem Atlas teilen somit
 dieselbe Wurzelzahl $W=+1$, und die Wurzelzahl ist über die gesamte Tabelle
@@ -865,7 +876,7 @@ Tabelle~\ref{tab:archratio} dokumentiert diese Werte.
 \caption{Archimedisches Gewichtsverhältnis (Archimedean weight ratio)
   $r_{\chifn}=|\archdiff|/|S|$ bei $N=200$, $\lambda=20000$.}
 \label{tab:archratio}
-\centering\small
+\centering\scriptsize
 \begin{tabular}{@{}lcccc@{}}
 \toprule
 $\chifn_D$ & $|S_{\chifn}|$ & $|\archdiff_{\chifn}|$ & $r_{\chifn}$ & Klasse \\
@@ -978,7 +989,7 @@ $N=600$ kippen (Fall von $\chifn_{29}$, Realisierung (R1); vgl.\
 Schranke der zuverlässigen numerischen Vorzeichenauflösung für unsere aktuellen
 Methoden.
 
-\paragraph{Arch-dominierter Near-Zero-Fall.}
+\paragraph{Arch-dominierter Fast-null-Fall.}
 $\chifn_{60}$ hat $\gap_{\mathrm{gal}}^{(\mathrm{ref})}=+0.005$ mit
 $r_{\chifn_{60}}=356\%$ (s.o.). Der Prädiktor $S+\archdiff$ besitzt bei $N=600$ zufällig
 das korrekte Vorzeichen, aber nicht aufgrund
@@ -994,7 +1005,7 @@ Verhalten zeigt, und wir behandeln ihn detailliert in \S\ref{sec:chi21}.
 
 \smallskip
 
-Die obige Vier-Achsen-Kartografie ist der deskriptive Ertrag des Papers:
+Die obige Vier-Achsen-Kartografie ist der deskriptive Ertrag dieser Arbeit:
 Sie gruppiert die zehn Charaktere in qualitativ unterschiedliche Regime, und
 zwar bevor und unabhängig von jeder prädiktiven Formel. Insbesondere
 zeigen die Trichotomie prim-dominiert/gemischt/arch-dominiert
@@ -1176,10 +1187,10 @@ ohne das Plateau bei $N=200,400$ passieren zu müssen.
 
 Die Dreikomponenten-Zerlegung \eqref{eq:three-component} teilt
 jedes RH-artige Problem in die Galerkin-Brücke $\mathrm{GBC}$, die
-Connes-Stil Operator-Identifikationskomponente $C^{(2)}$, und den
-Hurwitz Realität-der-Nullstellen-Transfer auf. Für den trivialen Charakter
-schließt das Theorem der geraden Dominanz (even-dominance theorem) aus \cite{RH_II} $C^{(2)}_{X=\zeta}$
-unbedingt (unconditionally) über die $\sqrt{\lambda}$-Trennung der Sektoren ab.
+Connes-Stil-Operatoridentifikationskomponente $C^{(2)}$, und den
+Hurwitz-Realität-der-Nullstellen-Transfer auf. Für den trivialen Charakter
+schließt das Theorem der geraden Dominanz aus \cite{RH_II} $C^{(2)}_{X=\zeta}$
+über die $\sqrt{\lambda}$-Trennung der Sektoren unbedingt ab.
 Für nicht-triviale reelle $\chifn$ mit kleinem Führer belegt unser Atlas
 drei strukturelle Tatsachen über $C^{(2)}_{\chifn}$:
 
@@ -1199,9 +1210,9 @@ drei strukturelle Tatsachen über $C^{(2)}_{\chifn}$:
     konsistent mit $O(1)$-Wachstum (\cite{AsymptoticScan},
     Begleitmaterial), aber ein systematischer $\lambda$-Scan über alle
     zehn Charaktere ist offen. Die grobe
-    „Universaltransfer"-Hypothese (universal transfer hypothesis)
+    Hypothese eines „Universaltransfers“, also der Aussage
     „Gerade Dominanz $\Rightarrow$ gerader Sektor gewinnt für alle
-    $\chifn$" ist bei $\lambda=20000$ widerlegt (da sechs von zehn
+    $\chifn$“ ist bei $\lambda=20000$ widerlegt (da sechs von zehn
     Charakteren negative oder fast-null Gaps haben); die
     $\lambda$-asymptotische Widerlegung erfordert den oben genannten
     dedizierten $\lambda$-Scan. (Eine vollständige $\lambda$-Asymptotik
@@ -1212,7 +1223,7 @@ drei strukturelle Tatsachen über $C^{(2)}_{\chifn}$:
     selbst, nicht bloß ihrer Eigenwerte. Die Galerkin-Diagonalisierung
     liefert die Eigenwerte, produziert aber aufgrund der Tautologie
     von Proposition~\ref{prop:tautology} keine prädiktiven
-    Informationen, die nicht ohnehin als Input in die Berechnung eingehen.
+    Informationen, die nicht ohnehin als Eingang in die Berechnung eingehen.
 \end{itemize}
 
 In der Sprache des Meta-Programms von \cite{MetaGalerkinBridge}: Für
@@ -1223,14 +1234,14 @@ analytische Architektur ist hier bereit, einen solchen Abschluss aufzunehmen; wa
 fehlt, ist die $\chifn$-spezifische asymptotische Analyse von
 $\phi^\pm_{\chifn}$.
 
-Nach dem Zookeeper-Paper \cite{Zookeeper2026} kann diese fehlende
+Nach der Zookeeper-Arbeit \cite{Zookeeper2026} kann diese fehlende
 Komponente in der CCM-Sprache noch schärfer gefasst werden. Die Riemann-Zelle
-besitzt nun ein unabhängiges Zookeeper-Kernpaket (Zookeeper kernel package)---Rang-eins-Zerlegung (rank-one decomposition),
-Cauchy Interlacing und Drei-Lemma-Schließung (three-lemma closure)---neben
-dem v2.1 Paket der geraden Dominanz. Der natürliche Dirichlet-Rücktransfer (back-transfer)
+besitzt nun ein unabhängiges Zookeeper-Kernpaket --- Rang-eins-Zerlegung,
+Cauchy-Interlacing und Drei-Lemma-Schließung --- neben
+dem v2.1-Paket der geraden Dominanz. Der natürliche Dirichlet-Rücktransfer
 ist daher Route~D: Konstruiere einen $\chifn$-getwisteten CCM-Operator mit
-einem Führer-Rang-eins-Term (conductor rank-one term) und einer $\chifn$-gewichteten arithmetischen
-Störung (perturbation), und vergleiche dann dessen Defektnorm (defect norm) mit den Atlas-Kontrollgrößen.
+einem Führer-Rang-eins-Term und einer $\chifn$-gewichteten arithmetischen
+Störung, und vergleiche dann dessen Defektnorm mit den Atlas-Kontrollgrößen.
 In dieser Lesart sind die Paley-Wiener-Fehlschläge oben keine
 Sackgasse; sie identifizieren den ersten konkreten Stresstest für die
 $\chifn$-getwistete CCM-Route.
@@ -1256,7 +1267,7 @@ Invariante der Formel.
 
 Ein echtes theoretisches Analogon der Steigung wäre die
 sub-führende $N$-Abhängigkeit der Galerkin-Grundzustände
-$\phi^\pm_{\chifn,N}$, kontrolliert durch die Paley-Wiener Roadmap aus
+$\phi^\pm_{\chifn,N}$, kontrolliert durch den Paley-Wiener-Fahrplan aus
 \cite{RH_II} adaptiert für Dirichlet $L$-Funktionen (vgl.\
 \cite{AnalyticGroundstate}, \S3, und die REG-$\lambda$-konditionierte
 Rate aus \cite{RH_II}, \S6). Wir markieren dies als eine offene quantitative
@@ -1352,17 +1363,17 @@ konsistent mit der Connes-Operator-Konvention.
 \section{Ausblick}
 \label{sec:outlook}
 
-Der Atlas liefert eine präzise Diagnose: Eine prädiktive Schließung (predictive closure) von
+Der Atlas liefert eine präzise Diagnose: Eine prädiktive Schließung von
 $C^{(2)}_{\chifn}$ über Galerkin-Numerik ist strukturell
 unmöglich, und der Weg vorwärts besteht in einer analytischen Kontrolle der
 Grundzustands-Differenz, welche Galerkin komplett umgeht. Sechs
 konkrete nächste Schritte bieten sich an.
 
 \begin{enumerate}
-  \item \textbf{Route~D: $\chifn$-getwisteter CCM Transfer.}
-    Die erste Post-Zookeeper Aufgabe ist die Konstruktion des Dirichlet-Analogons
-    zum CCM/Zookeeper-Operator: Eine $\chifn$-getwistete
-    Epstein--Mellin-Transformation, ein Führer-Rang-eins-Term (conductor rank-one term) und eine
+  \item \textbf{Route~D: $\chifn$-getwisteter CCM-Transfer.}
+    Die erste Aufgabe nach Zookeeper ist die Konstruktion des Dirichlet-Analogons
+    zum CCM/Zookeeper-Operator: eine $\chifn$-getwistete
+    Epstein--Mellin-Transformation, ein Führer-Rang-eins-Term und eine
     $\chifn$-gewichtete arithmetische Perturbation. Die Atlas-Größen
     $G_{\chifn}$, $R_{\chifn}$ und $\eta^\pm_{\chifn}$ sollten dann
     als Diagnostiken für die entsprechende Defektnorm umgelesen werden,
@@ -1373,40 +1384,40 @@ konkrete nächste Schritte bieten sich an.
     $\phi_\infty$ aus der Paley-Wiener-Maschinerie von \cite{RH_II} (\S5--\S6)
     unter der REG-$\lambda$-Regularitätsannahme explizit bekannt.
     Die Adaption für Dirichlet $L$-Funktionen läuft darauf hinaus, das
-    $\chifn$-getwistete Analogon der relevanten Fourier-Multiplikator-Schranke (Fourier-multiplier bound)
+    $\chifn$-getwistete Analogon der relevanten Fourier-Multiplikator-Schranke
     und die rationale Funktionskontur zu identifizieren, auf die der
     Residuensatz angewandt wird. Drei der fünf notwendigen Schritte
     lassen sich mechanisch übertragen (vgl.\ \cite{AnalyticGroundstate},
     Thm.~3.1); die verbleibenden zwei erfordern eine charakter-spezifische
     Behandlung von $L'/L(s,\chifn)$ im kritischen Streifen. Dies ist
     die einzelne technische Aufgabe mit der größten Hebelwirkung.
-  \item \textbf{Branch-lokales Hilbert-P\'olya Framework (,,NE-B
+  \item \textbf{Branch-lokaler Hilbert-P\'olya-Rahmen (,,NE-B
     Boundary``).}
     Aufbauend auf \cite{RH_II} (\S4 NE-A, \S5 NE-B) und auf dem
-    Selberg-Analogon ist das nächste große Projekt im Meta-Programm
-    ein strukturelles Theorem, welches identifiziert, \emph{welche Zweige (branches) des
+    Selberg-Analogon \cite{Selberg1956} ist das nächste große Projekt im Meta-Programm
+    ein strukturelles Theorem, das identifiziert, \emph{welche Zweige des
     Zeta-Funktions-Baums eine Hilbert-P\'olya Interpretation zulassen,
     und welche nicht.} Der vorliegende Atlas liefert die erste
-    quantitative Evidenz dafür, dass Low-Conductor-Dirichlet-Charaktere
-    die zweite Klasse (keine Branch-lokale Hilbert-P\'olya-Struktur
-    bei endlichem $\lambda$) bevölkern, womit das Randtheorem (boundary theorem)
+    quantitative Evidenz dafür, dass Dirichlet-Charaktere kleinen Führers
+    die zweite Klasse (keine branch-lokale Hilbert-P\'olya-Struktur
+    bei endlichem $\lambda$) bevölkern, womit das Randtheorem
     geschärft wird, das den Baum ordnen wird.
-  \item \textbf{Führer-Erweiterung (Conductor extension) $D\leq 100$.}
+  \item \textbf{Führer-Erweiterung $D\leq 100$.}
     Zehn Charaktere stellen einen kleinen Atlas dar. Die Erweiterung auf alle primitiven
     reellen Charaktere mit $D\leq 100$ ($\approx 30$ zusätzliche
-    Charaktere, inklusive einiger komplex-konjugierter, die in
-    Paired Spaces gruppiert sind) würde statistische Tests der
+    Charaktere, inklusive einiger komplex-konjugierter, die in Paired Spaces
+    gruppiert sind) würde statistische Tests der
     Paritäts-/Wurzelzahl-/archimedischen Klassifikation gegen eine
     Verteilung der beobachteten Gap-Vorzeichen ermöglichen. Die Galerkin-Kosten liegen bei
     $\mathcal{O}(D\cdot N^3)$; bei $N=600$ bedeutet dies $\sim 10$ Stunden
-    CCX13 Compute pro zehn Charaktere, ein Ein-Wochenend-Job.
-  \item \textbf{Paired-Space Formalismus für komplexe Charaktere.}
+    CCX13-Rechenzeit pro zehn Charaktere, also einen Wochenend-Lauf.
+  \item \textbf{Paired-Space-Formalismus für komplexe Charaktere.}
     Komplexe Dirichlet-Charaktere treten in konjugierten Paaren auf:
     $\chifn\oplus\bar\chifn$; die Weilsche quadratische Form auf
     $L^2[-L,L]\otimes\mathbb{C}^2$ ist hermitesch, aber nicht
-    selbstadjungiert. Das analytische Framework aus \S\ref{sec:setup}
+    selbstadjungiert. Der analytische Rahmen aus \S\ref{sec:setup}
     lässt sich verallgemeinern, aber der Sektor-Kern
-    (Theorem~\ref{thm:sector-diff}) erhält eine Gaußsummen-Phase (Gauss-sum phase)
+    (Theorem~\ref{thm:sector-diff}) erhält eine Gaußsummenphase
     (\cite{AnalyticKernel}, Prop.~5.2). Eine saubere Darstellung ist
     die Voraussetzung, um die Wurzelzahl-Achse
     (\S\ref{sec:rootnumber}) gegen nicht-triviale Werte $W\in
@@ -1473,7 +1484,7 @@ für $\chifn_{29}$ und $\chifn_{60}$, die in
 \S\ref{sec:validation} dokumentiert sind.
 
 \subsection{Skripte}
-Alle Daten in diesem Paper wurden erzeugt durch
+Alle Daten in dieser Arbeit wurden erzeugt durch
 \texttt{arch\_term\_analysis.py} (für $N=200$ lokal),
 \texttt{server\_n600\_full\_analysis.py} (für $N=600$ Server-Lauf,
 1.95\,h auf Hetzner CCX13), und
@@ -1545,32 +1556,31 @@ L.~Geiger,
 Stability Theory: Branch-Local Hilbert--P\'olya via the Trinity of
 UCU, SGE, and Weil-Form Transversality},
 Preprint, Zenodo (2026), DOI:
-\href{https://doi.org/10.5281/zenodo.19673227}{10.5281/zenodo.19673227}.
+\href{https://doi.org/10.5281/zenodo.19673226}{10.5281/zenodo.19673226}.
 Dreikomponenten-Zerlegung von $\mathrm{RH}$ in \S2.4; UCU in \S7;
 CRM-V Klassifikations-Bemerkung in \S6.5.
 
 \bibitem{RFEPFramework}
 L.~Geiger,
-\textit{Functional Stability Theory --- Physical Instantiation via
-the Renormalized Free Energy Principle},
+\textit{FST Spectrum Duality: The Renormalized Free Energy Principle
+as Physical Instantiation of Functional Stability Theory},
 Preprint, Zenodo (2026), DOI:
-\href{https://doi.org/10.5281/zenodo.19162705}{10.5281/zenodo.19162705}
-(v1.7; v1.8 Aktualisierung in Vorbereitung).
+\href{https://doi.org/10.5281/zenodo.19036190}{10.5281/zenodo.19036190}.
 
 \bibitem{Zookeeper2026}
 L.~Geiger,
 \textit{The Spectral Zookeeper: The Riemann Hypothesis via Spectral
 Microcluster Closure in the Connes--Consani--Moscovici Framework},
 Preprint (2026), Zenodo DOI
-\href{https://doi.org/10.5281/zenodo.19673127}{10.5281/zenodo.19673127}.
+\href{https://doi.org/10.5281/zenodo.19673126}{10.5281/zenodo.19673126}.
 
 % ----- Interne Projektreferenzen (Preprints / Ergänzungsnotizen) -----
 
 \bibitem{RH_II}
 L.~Geiger,
-\textit{Riemann Hypothesis via Direct Frontier Dominance (Paper II:
-Even Dominance)},
-Preprint (2026), Zenodo DOI \href{https://doi.org/10.5281/zenodo.19546593}{10.5281/zenodo.19546593}.
+\textit{From Landscape to Proof: The Even-Dominance Route to the
+Riemann Hypothesis},
+Preprint (2026), Zenodo DOI \href{https://doi.org/10.5281/zenodo.19035640}{10.5281/zenodo.19035640}.
 Begleitdokument: \path{01_RH_TRILOGY/paper/RH_II_Even_Dominance.tex}.
 
 \bibitem{MetaGalerkinBridge}
@@ -1617,7 +1627,7 @@ across Three Orders of Magnitude in $\lambda$},
 Ergänzungsnotiz (2026-04-15),
 \path{CORE/zoo-mapping/_results/ASYMPTOTIC_SCAN_2026-04-15.md}.
 
-% ----- Externe Referenzen (überprüft 2026-04-16) -----
+% ----- Externe Referenzen (überprüft 2026-05-15) -----
 
 \bibitem{IwaniecKowalski}
 H.~Iwaniec und E.~Kowalski,
@@ -1654,7 +1664,7 @@ AMS, Providence, RI (1934).
 \bibitem{LMFDB}
 The LMFDB Collaboration,
 \textit{The L-Functions and Modular Forms Database},
-\url{https://www.lmfdb.org/}. Abgerufen am 16.04.2026.
+\url{https://www.lmfdb.org/}. L-Funktionsseiten abgerufen am 16.05.2026.
 
 \end{thebibliography}
 

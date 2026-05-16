@@ -7,7 +7,8 @@ The Atlas is the *micro-cartography* companion of the Zeta Zoo: where the Zeta Z
 ## DOI
 
 - **Concept-DOI (always latest):** [10.5281/zenodo.19960809](https://doi.org/10.5281/zenodo.19960809)
-- **v1 (current):** [10.5281/zenodo.19960810](https://doi.org/10.5281/zenodo.19960810)
+- **v2 (current):** [10.5281/zenodo.20241612](https://doi.org/10.5281/zenodo.20241612)
+- **v1:** [10.5281/zenodo.19960810](https://doi.org/10.5281/zenodo.19960810)
 
 ## Status
 
@@ -15,7 +16,7 @@ The Atlas is the *micro-cartography* companion of the Zeta Zoo: where the Zeta Z
 |---|---|
 | Status | DRAFT preprint (negative-result atlas + structural diagnosis) |
 | Review | 7-phase review chain completed 2026-04-29 (score 9.5/10) |
-| Version | v1 |
+| Version | v2 |
 | Pages (EN / DE / Kombi) | 13 / 14 / 27 |
 | Resolution | N ∈ {200, 400, 600} |
 | Real Dirichlet characters covered | D ∈ {5, 8, 12, 13, 17, 21, 24, 29, 33, 60} |
@@ -31,11 +32,15 @@ The Atlas is the *micro-cartography* companion of the Zeta Zoo: where the Zeta Z
 
 | File | Purpose |
 |---|---|
-| `paper/DIRICHLET_CHARACTER_ATLAS_v1_en.pdf` | English version (13 p.) |
-| `paper/DIRICHLET_CHARACTER_ATLAS_v1_de.pdf` | German version (14 p.) |
-| `paper/DIRICHLET_CHARACTER_ATLAS_v1_kombi.pdf` | Combined EN+DE (27 p.) |
+| `paper/DIRICHLET_CHARACTER_ATLAS_v2_en.pdf` | English version (13 p.) |
+| `paper/DIRICHLET_CHARACTER_ATLAS_v2_de.pdf` | German version (14 p.) |
+| `paper/DIRICHLET_CHARACTER_ATLAS_v2_kombi.pdf` | Combined EN+DE (27 p.) |
 | `scripts/` | Galerkin computation pipeline (Python; basis, kappa grid, asymptotic scans, χ-specific tests) |
 | `results/` | Numerical results (JSON) and analysis reports (Markdown) |
+
+## v2 change note
+
+Version v2 is a source-correction release. The LMFDB passage was narrowed from a broad zero-certificate claim to computed low-lying zeros as finite consistency data; EN/DE/Kombi PDFs were rebuilt and PDF metadata was normalized before upload.
 
 ## Reproducibility
 
