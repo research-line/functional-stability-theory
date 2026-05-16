@@ -803,12 +803,12 @@ P vs NP & $K^t(w|x)$ high & Uniformity bridge \\
 \subsection{The Uniformity Bridge: lemma targets}
 \label{sec:uniformity-bridge}
 
-The central open problem of this paper is the \emph{Uniformity Bridge}: transferring the entropy separation from unbounded Kolmogorov complexity $K$ (where barrier immunity holds) to resource-bounded complexity $K^t$ (where computational relevance lies). We identify three concrete lemma targets, any one of which would close the bridge.
+The central open problem of this paper is the \emph{Uniformity Bridge}: transferring the entropy separation from unbounded Kolmogorov complexity $K$ (where barrier immunity holds) to resource-bounded complexity $K^t$ (where computational relevance lies). We identify three concrete lemma targets. In a sufficiently strong and uniform form, any one of them would amount to a conditional closure of the bridge; as stated here they are targets and diagnostics, not established reductions.
 
 \paragraph*{Bridge Target 1: instance compression.}
 \emph{Statement:} If no polynomial-time algorithm can compress satisfying assignments of $\varphi_n$ below $|\varphi_n|^{1-\varepsilon}$ bits, then $K^{n^c}(w | \varphi_n) \geq |\varphi_n|^{1-\varepsilon}$, or in the strongest unique-witness form $K^{n^c}(w | \varphi_n) \geq |w| - O(\log n)$, for every valid witness $w$.
 
-\emph{Why it suffices:} Instance compression hardness is a well-studied notion in parameterized complexity~\cite{FortnowSanthanam2011,DellMelkebeek2014}. The connection to $K^t$ lower bounds would follow from a simulation argument: if a short program could compute $w$ from $\varphi_n$ in time $n^c$, it would constitute a compression of $\varphi_n$ via the witness.
+\emph{Why it suffices:} Instance compression hardness is a well-studied notion in parameterized complexity~\cite{FortnowSanthanam2011,DellMelkebeek2014}. The missing step is a genuine witness-to-compression transfer lemma: a short program that computes $w$ from $\varphi_n$ must be converted into a short, verifier-independent representation in the precise sense used by kernelisation or OR-compression lower bounds. Such a transfer is not automatic from the mere existence of a witness selector; it is the content of this bridge target.
 
 \paragraph*{Bridge Target 2: proof complexity.}
 \emph{Statement:} For any propositional proof system $P$ and tautology $\tau_n$ encoding the unsatisfiability of $\bar{\varphi}_n$, the proof $\pi$ satisfies $K(\pi | \tau_n) \geq |\pi|^{1-\varepsilon}$.
@@ -822,7 +822,7 @@ The central open problem of this paper is the \emph{Uniformity Bridge}: transfer
 
 \begin{remark}[Minimal sufficient bridge]
 \label{rem:minimal-bridge}
-Any \emph{one} of the three targets suffices to upgrade the Entropic Separation Conjecture from an equivalence (reformulation of P $\neq$ NP) to a conditional proof (P $\neq$ NP under a concrete, falsifiable hypothesis). All three targets are themselves major open problems: Target~3 reduces to the existence of secure PRGs (conditional on standard cryptographic \emph{assumptions}, which are unproven). Target~1 connects to instance compression~\cite{Drucker2015}, where existing results are conditional on the non-collapse of the polynomial hierarchy. Target~2 would require superpolynomial Extended Frege lower bounds, which are widely open. None of these targets should be considered ``accessible'' in the sense of being within current proof technology; they represent \emph{concrete formulations} of the uniformity gap rather than tractable problems.
+Any \emph{one} of the three targets suffices only if it is proved in the strong form stated above. All three targets are themselves major open problems: Target~3 reduces to the existence of secure PRGs (conditional on standard cryptographic \emph{assumptions}, which are unproven). Target~1 needs a new witness-to-compression transfer lemma before existing instance-compression lower bounds~\cite{Drucker2015} can be applied. Target~2 would require superpolynomial Extended Frege lower bounds, which are widely open. None of these targets should be considered ``accessible'' in the sense of being within current proof technology; they represent \emph{concrete formulations} of the uniformity gap rather than tractable problems.
 \end{remark}
 
 \begin{remark}[Instance compression as the primary bridge strategy]
@@ -831,16 +831,16 @@ We elaborate on Bridge Target~1 as the most promising route, following the ``no 
 
 The argument proceeds in three steps:
 
-\textbf{Step A: Witness-finder $\Rightarrow$ compressor.}
-If a polynomial-time algorithm $A$ produces a valid witness $w = A(x)$ for $x \in \mathrm{SAT}$, then $A$ implicitly defines a \emph{compression}: from $x$, one can produce a shorter representation $y = C(x)$ (via the witness) such that a decompressor $D$ recovers enough structure to decide SAT-membership. Concretely, $|y| \leq |A| + O(\log|x|)$ since $A$ is a fixed program. The key point is that this compression is \emph{non-trivial}: it maps a family of $2^{|\varphi_n|}$ possible instances to $O(1)$ bits of advice (the program $A$), which constitutes an exponential compression.
+\textbf{Step A: Witness-finder $\Rightarrow$ low conditional description.}
+If a polynomial-time algorithm $A$ produces a valid witness $w=A(x)$ for $x\in\mathrm{SAT}$, then the selected witness has low conditional description relative to $x$: $K^{q_A}(w\mid x)\leq |A|+O(\log |x|)$. This is the already-proved easy direction of the witness-entropy characterisation. It is \emph{not yet} an instance compression of $x$ in the Fortnow--Santhanam or Dell--van~Melkebeek sense. To obtain such a compression one would need an additional map that turns the solver trace, witness information, or verifier certificate into a shorter instance or kernel whose decompressor is independent of the original instance except through the encoded object.
 
 \textbf{Step B: Compression no-go $\Rightarrow$ uniformity.}
-The known instance compression impossibility results~\cite{FortnowSanthanam2011,DellMelkebeek2014,Drucker2015} show: if SAT instances of length $n$ can be compressed to $n^{1-\varepsilon}$ bits, then the polynomial hierarchy collapses (NP $\subseteq$ coNP/poly). Applying this to Step~A: if $A$ exists as a polynomial-time witness-finder for \emph{all} instances, then the resulting compression contradicts PH non-collapse. This is precisely the ``positivity no-go'' pattern of FST: not ``we construct hard instances'' but ``every global simplification has catastrophic structural consequences.''
+The known instance compression impossibility results~\cite{FortnowSanthanam2011,DellMelkebeek2014,Drucker2015} show: if SAT instances of length $n$ can be compressed to $n^{1-\varepsilon}$ bits in the appropriate kernelisation/OR-compression sense, then the polynomial hierarchy collapses (NP $\subseteq$ coNP/poly). These results can be invoked here only after Step~A has been strengthened to a genuine compression-transfer lemma. Without that strengthening, a witness selector is merely a solver, and using the compression lower-bound theorem would conflate decision compression with witness generation.
 
 \textbf{Step C: Translation to $K^t$.}
-If compression is impossible (under PH non-collapse), then for infinitely many instances $x$, every polynomial-time witness production must fail in the logarithmic-description regime; an additional quantitative argument would be needed to upgrade this to $K^{n^c}(w | x) \geq |w| - O(\log n)$ for all witnesses $w$. This quantitative upgrade is the near-maximal bridge, not a consequence of the basic reformulation.
+If such a compression-transfer lemma were proved and the corresponding compression were impossible (under PH non-collapse), then for infinitely many instances $x$ every polynomial-time witness production would fail in the logarithmic-description regime. An additional quantitative argument would still be needed to upgrade this to $K^{n^c}(w | x) \geq |w| - O(\log n)$ for all witnesses $w$. This quantitative upgrade is the near-maximal bridge, not a consequence of the basic reformulation.
 
-The remaining gap is the quantifier order: Step~B gives ``for each $A$, there exist hard instances'' (non-uniform), while the Uniformity Bridge needs ``there exist instances hard for all $A$'' (uniform). Closing this gap requires either (i) a \emph{universal} compression impossibility (not just for each compressor individually), or (ii) a diagonalisation argument that uniformises over all polynomial-time algorithms simultaneously.
+The remaining gaps are therefore twofold: first the witness-to-compression transfer itself, and then the quantifier order. Even a successful Step~B would typically give ``for each $A$, there exist hard instances'' (non-uniform), while the Uniformity Bridge needs ``there exist instances hard for all $A$'' (uniform). Closing this gap requires either (i) a \emph{universal} compression impossibility (not just for each compressor individually), or (ii) a diagonalisation argument that uniformises over all polynomial-time algorithms simultaneously.
 \end{remark}
 
 \begin{remark}[The Uniformity Bridge as a mixing obstruction]
@@ -849,9 +849,9 @@ The Uniformity Bridge admits a reformulation in the language of statistical mech
 \[
 \pi_x(w) \;\propto\; \mathbf{1}\{V(x,w) = 1\} \cdot e^{-\beta H_x(w)},
 \]
-where $H_x$ is any energy function on the witness space (e.g., $H_x \equiv 0$ for the uniform measure over valid witnesses). A polynomial-time search algorithm corresponds to a \emph{local Markov dynamics} (Glauber/heat-bath type) on the witness space that mixes rapidly---i.e., reaches a low-entropy region of $\pi_x$ in $\mathrm{poly}(|x|)$ steps.
+where $H_x$ is any energy function on the witness space (e.g., $H_x \equiv 0$ for the uniform measure over valid witnesses). Restricted local, random-walk, flip, or DPLL-state algorithms can sometimes be modelled as a \emph{local Markov dynamics} (Glauber/heat-bath type) on a witness-shadow space. A general polynomial-time algorithm need not have such a representation; making it visible as one would itself be a form of the Uniformity Bridge.
 
-The Entropic Separation Conjecture (ESC) can then be restated:
+For these restricted dynamics one can state the following diagnostic target:
 \begin{quote}
 \emph{For every NP-complete language $L$ and every local Markov dynamics on witnesses, there exist instance families $\{x_n\}$ for which the mixing time to the witness support is $\geq \exp(\Omega(n))$.}
 \end{quote}
@@ -871,7 +871,7 @@ measures the ``free-energy distance'' to the witness distribution. ADC asserts t
 \label{rem:ogp-connection}
 The mixing obstruction of Remark~\ref{rem:mixing-obstruction} has a precise counterpart in the combinatorial optimization literature: the \emph{Overlap Gap Property} (OGP), introduced by Gamarnik and Sudan~\cite{GamarnikSudan2017} and developed into a systematic theory of algorithmic barriers~\cite{Gamarnik2021}.
 
-The OGP asserts that for random constraint satisfaction problems near the satisfiability threshold, the solution space exhibits \emph{topological disconnectivity}: the overlap (normalised Hamming distance) between any two near-optimal solutions is either very small or very large, with no intermediate values. This is precisely the geometric content of the Dobrushin obstruction $\rho(C) \geq 1$ from Remark~\ref{rem:mixing-obstruction}: the Gibbs measure over witnesses fragments into exponentially many well-separated clusters (the \emph{shattering transition} of Achlioptas and Coja-Oghlan~\cite{AchlioptasCO2008}), and no local Markov dynamics can mix between them in polynomial time.
+The OGP asserts that for random constraint satisfaction problems near the satisfiability threshold, the solution space exhibits \emph{topological disconnectivity}: the overlap (normalised Hamming distance) between any two near-optimal solutions is either very small or very large, with no intermediate values. This is a geometric analogue of the Dobrushin obstruction $\rho(C) \geq 1$ from Remark~\ref{rem:mixing-obstruction}: the Gibbs measure over witnesses may fragment into exponentially many well-separated clusters (the \emph{shattering transition} of Achlioptas and Coja-Oghlan~\cite{AchlioptasCO2008}), obstructing broad classes of stable or local dynamics.
 
 The chain of implications is:
 \[
@@ -882,9 +882,9 @@ The chain of implications is:
 &\stackrel{?}{\Rightarrow} \text{high } K^t(w \mid x).
 \end{aligned}
 \]
-The first two arrows are established: Gamarnik, Jagannath, and Wein~\cite{GamarnikJW2020} prove that OGP implies failure of low-degree polynomials, Boolean circuits, and Langevin dynamics; Bresler and Huang~\cite{BreslerHuang2022} establish sharp algorithmic phase transitions for random $k$-SAT using the overlap gap property.
+The first two arrows are established only for restricted algorithmic models: Gamarnik, Jagannath, and Wein~\cite{GamarnikJW2020} prove OGP barriers for low-degree polynomials, low-depth/stable Boolean models, and Langevin-type dynamics; Bresler and Huang~\cite{BreslerHuang2022} establish sharp phase-transition results for local and message-passing style algorithms on random $k$-SAT using the overlap gap property.
 
-The third arrow---\textbf{OGP $\Rightarrow$ high conditional Kolmogorov complexity $K^t(w|x)$}---is the \emph{central open bridge target} of this paper. A proof would proceed: if the solution space has OGP, then any short program extracting a witness $w$ from $x$ must ``cross'' a free-energy barrier between clusters, requiring either superpolynomial time or superlogarithmic description length. This would convert the geometric obstruction (OGP) into an information-theoretic obstruction (high $K^t$), closing the Uniformity Bridge.
+The third arrow---\textbf{OGP $\Rightarrow$ high conditional Kolmogorov complexity $K^t(w|x)$}---is therefore not a theorem and probably false in this direct generality. The viable target is narrower: show that every algorithm in a pre-registered visible class (stable, local, low-degree, DPLL-state, or front-filtration based) must cross an OGP bottleneck, and then measure the residual description length after the class template and allowed advice have been subtracted. Extending this from restricted visible classes to arbitrary uniform polynomial-time witness producers is the separate \emph{front-shadow} or \emph{flow-shadow} lemma; that lemma is the real Uniformity Bridge.
 \end{remark}
 
 \subsubsection*{Threshold axiom and diagnostic framework}
@@ -989,6 +989,36 @@ This is only a restricted-model obstruction.  The genuinely hard
 witness producer for the chosen SAT family admits such a canonical flow
 representation without superpolynomial loss.  That flow-shadow lemma is
 another precise form of the Uniformity Bridge.
+\end{remark}
+
+\begin{remark}[Capillary-front filtration]\label{rem:capillary-front}
+The advice and flow diagnostics can be combined into a stricter front-based
+ledger.  For an algorithm $A$, instance $x$, and advice $a_n$, consider a
+pre-registered sequence
+\[
+F_0(A,x,a_n)\leq F_1(A,x,a_n)\leq\cdots\leq F_T(A,x,a_n)
+\]
+of low-complexity visible fronts in a witness-shadow space: partial
+assignments, DPLL-state classes, cluster certificates, resolution-width
+bands, or bounded proof-family templates.  A capillary hit is an isolated
+path to a witness; a front is a low-complexity structure that reaches
+positive witness mass.  A useful residual diagnostic is
+\[
+\begin{aligned}
+R_{\mathrm{front}}(x,t)
+  = H_{\mathrm{res}}(W\mid x,F_t)
+    &-K(\mathrm{BPF})\\
+    &-K(\mathrm{template})-|a_n|.
+\end{aligned}
+\]
+For a restricted class $\mathcal{C}$, a possible lemma would say: if every
+allowed front in $\poly(n)$ time either meets only $o(1)$ mass of $S_x$ or
+leaves $R_{\mathrm{front}}\geq n^\varepsilon$, then $\mathcal{C}$ cannot
+solve the family with constant success probability.  This is still a
+restricted-model statement.  To use it against all polynomial-time
+algorithms one would have to prove a front-shadow lemma showing that every
+uniform witness producer induces such a low-complexity visible front without
+superpolynomial loss.
 \end{remark}
 
 \begin{lemma}[UB implies separation]\label{lem:ub-separation}
@@ -1172,6 +1202,7 @@ Resolution-width conjecture & Conjecture & Conj.~\ref{conj:resolution-width} \\
 MCSP internalisation route & Remark & Rem.~\ref{rem:mcsp-internalisation} \\
 Advice-erosion curve & Bridge target & Rem.~\ref{rem:advice-erosion} \\
 Search-flow conductance & Bridge target & Rem.~\ref{rem:search-flow-conductance} \\
+Capillary-front filtration & Bridge target & Rem.~\ref{rem:capillary-front} \\
 \midrule
 \multicolumn{3}{@{}l}{\textit{Exploratory numerics (not constituting evidence):}} \\
 Phase transition structure observed & Illustrative & Rem.~\ref{rem:sat-entropy} \\

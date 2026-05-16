@@ -791,12 +791,12 @@ P vs NP & $K^t(w|x)$ hoch & Uniformitätsbrücke \\
 \subsection{Die Uniformitätsbrücke: Lemma-Ziele}
 \label{sec:uniformity-bridge}
 
-Das zentrale offene Problem dieser Arbeit ist die \emph{Uniformitätsbrücke}: die Übertragung der Entropieseparation von unbeschränkter Kolmogorov-Komplexität $K$ (wo Barrierenimmunität gilt) auf ressourcenbeschränkte Komplexität $K^t$ (wo die berechnungstheoretische Relevanz liegt). Wir identifizieren drei konkrete Lemma-Ziele, von denen jedes einzelne genügen würde, um die Brücke zu schließen.
+Das zentrale offene Problem dieser Arbeit ist die \emph{Uniformitätsbrücke}: die Übertragung der Entropieseparation von unbeschränkter Kolmogorov-Komplexität $K$ (wo Barrierenimmunität gilt) auf ressourcenbeschränkte Komplexität $K^t$ (wo die berechnungstheoretische Relevanz liegt). Wir identifizieren drei konkrete Lemma-Ziele. In einer hinreichend starken und uniformen Form würde jedes einzelne einer bedingten Brückenschließung gleichkommen; in der hier formulierten Form sind es Ziele und Diagnosebegriffe, keine bewiesenen Reduktionen.
 
 \paragraph*{Brückenziel 1: Instanzkompression.}
 \emph{Aussage:} Wenn kein Polynomialzeit-Algorithmus erfüllende Belegungen von $\varphi_n$ auf weniger als $|\varphi_n|^{1-\varepsilon}$ Bits komprimieren kann, dann gilt $K^{n^c}(w | \varphi_n) \geq |\varphi_n|^{1-\varepsilon}$, oder in der stärksten Eindeutig-Zeugen-Form $K^{n^c}(w | \varphi_n) \geq |w| - O(\log n)$, für jeden gültigen Zeugen $w$.
 
-\emph{Warum dies genügt:} Instanzkompressionshärte ist ein gut untersuchter Begriff in der parametrisierten Komplexitätstheorie~\cite{FortnowSanthanam2011,DellMelkebeek2014}. Die Verbindung zu $K^t$-unteren-Schranken würde aus einem Simulationsargument folgen: wenn ein kurzes Programm $w$ aus $\varphi_n$ in Zeit $n^c$ berechnen könnte, würde dies eine Kompression von $\varphi_n$ über den Zeugen darstellen.
+\emph{Warum dies genügt:} Instanzkompressionshärte ist ein gut untersuchter Begriff in der parametrisierten Komplexitätstheorie~\cite{FortnowSanthanam2011,DellMelkebeek2014}. Der fehlende Schritt ist ein echtes Zeugen-zu-Kompression-Transferlemma: Ein kurzes Programm, das $w$ aus $\varphi_n$ berechnet, müsste in eine kurze, vom Verifizierer unabhängige Darstellung im präzisen Sinn von Kernelisierung oder OR-Kompressionsuntergrenzen übersetzt werden. Ein solcher Transfer folgt nicht automatisch aus der bloßen Existenz eines Zeugen-Selektors; er ist der Inhalt dieses Brückenziels.
 
 \paragraph*{Brückenziel 2: Beweiskomplexität.}
 \emph{Aussage:} Für jedes propositionslogische Beweissystem $P$ und jede Tautologie $\tau_n$, die die Unerfüllbarkeit von $\bar{\varphi}_n$ kodiert, erfüllt der Beweis $\pi$ die Bedingung $K(\pi | \tau_n) \geq |\pi|^{1-\varepsilon}$.
@@ -810,7 +810,7 @@ Das zentrale offene Problem dieser Arbeit ist die \emph{Uniformitätsbrücke}: d
 
 \begin{remark}[Minimale hinreichende Brücke]
 \label{rem:minimal-bridge}
-Jedes \emph{einzelne} der drei Ziele genügt, um die Entropische Separationsvermutung von einer Äquivalenz (Umformulierung von P $\neq$ NP) zu einem bedingten Beweis aufzuwerten (P $\neq$ NP unter einer konkreten, falsifizierbaren Hypothese). Ziel~3 ist wohl das zugänglichste, da es auf kryptographische Standardannahmen reduziert. Ziel~1 schließt an das aktive Forschungsprogramm zur Instanzkompression an~\cite{Drucker2015}. Ziel~2 ist das ambitionierteste, würde aber gleichzeitig Fragen in der Beweiskomplexität lösen.
+Jedes \emph{einzelne} der drei Ziele genügt nur dann, wenn es in der oben starken Form bewiesen wird. Ziel~3 reduziert auf kryptographische Standardannahmen, die selbst unbewiesen sind. Ziel~1 braucht ein neues Zeugen-zu-Kompression-Transferlemma, bevor vorhandene Instanzkompressionsuntergrenzen~\cite{Drucker2015} anwendbar werden. Ziel~2 ist das ambitionierteste und würde zugleich weit offene Fragen der Beweiskomplexität lösen.
 \end{remark}
 
 \begin{remark}[Instanzkompression als primäre Brückenstrategie]
@@ -819,16 +819,16 @@ Wir vertiefen Brückenziel~1 als vielversprechendste Route, dem ,,No sparsificat
 
 Das Argument verläuft in drei Schritten:
 
-\textbf{Schritt A: Zeugenfinder $\Rightarrow$ Kompressor.}
-Wenn ein Polynomialzeit-Algorithmus $A$ einen gültigen Zeugen $w = A(x)$ für $x \in \mathrm{SAT}$ erzeugt, definiert $A$ implizit eine \emph{Kompression}: aus $x$ kann man eine kürzere Darstellung $y = C(x)$ (über den Zeugen) erzeugen, sodass ein Dekompressor $D$ genügend Struktur rekonstruiert, um SAT-Zugehörigkeit zu entscheiden. Konkret gilt $|y| \leq |A| + O(\log|x|)$, da $A$ ein festes Programm ist. Der Schlüssel ist, dass diese Kompression \emph{nichttrivial} ist: sie bildet eine Familie von $2^{|\varphi_n|}$ möglichen Instanzen auf $O(1)$ Bits Rat (das Programm $A$) ab, was einer exponentiellen Kompression entspricht.
+\textbf{Schritt A: Zeugenfinder $\Rightarrow$ niedrige bedingte Beschreibung.}
+Wenn ein Polynomialzeit-Algorithmus $A$ einen gültigen Zeugen $w=A(x)$ für $x\in\mathrm{SAT}$ erzeugt, dann hat der ausgewählte Zeuge relativ zu $x$ eine niedrige bedingte Beschreibung: $K^{q_A}(w\mid x)\leq |A|+O(\log |x|)$. Das ist die bereits bewiesene einfache Richtung der Zeugen-Entropie-Charakterisierung. Es ist \emph{noch keine} Instanzkompression von $x$ im Sinn von Fortnow--Santhanam oder Dell--van~Melkebeek. Dafür bräuchte man zusätzlich eine Abbildung, die Solver-Spur, Zeugeninformation oder Verifiziererzertifikat in eine kürzere Instanz oder einen Kernel übersetzt, dessen Dekompressor außer durch das kodierte Objekt nicht von der ursprünglichen Instanz abhängt.
 
 \textbf{Schritt B: Kompressions-No-Go $\Rightarrow$ Uniformität.}
-Die bekannten Instanzkompressionsunmöglichkeitsresultate~\cite{FortnowSanthanam2011,DellMelkebeek2014,Drucker2015} zeigen: wenn SAT-Instanzen der Länge $n$ auf $n^{1-\varepsilon}$ Bits komprimiert werden können, kollabiert die Polynomhierarchie (NP $\subseteq$ coNP/poly). Angewendet auf Schritt~A: wenn $A$ als Polynomialzeit-Zeugenfinder für \emph{alle} Instanzen existiert, widerspricht die resultierende Kompression dem PH-Nichtkollaps. Dies ist präzise das ,,Positivitäts-No-Go''-Muster der FST: nicht ,,wir konstruieren schwere Instanzen'', sondern ,,jede globale Vereinfachung hat katastrophale strukturelle Konsequenzen.''
+Die bekannten Instanzkompressionsunmöglichkeitsresultate~\cite{FortnowSanthanam2011,DellMelkebeek2014,Drucker2015} zeigen: wenn SAT-Instanzen der Länge $n$ im passenden Kernelisierungs- oder OR-Kompressionssinn auf $n^{1-\varepsilon}$ Bits komprimiert werden können, kollabiert die Polynomhierarchie (NP $\subseteq$ coNP/poly). Diese Resultate dürfen hier erst eingesetzt werden, wenn Schritt~A zu einem echten Kompressionstransferlemma verstärkt wurde. Ohne diese Verstärkung ist ein Zeugen-Selektor nur ein Solver; die Kompressionsuntergrenze würde sonst Entscheidungs-Kompression mit Zeugenproduktion vermengen.
 
 \textbf{Schritt C: Übersetzung nach $K^t$.}
-Wenn Kompression unmöglich ist (unter PH-Nichtkollaps), dann muss für unendlich viele Instanzen $x$ jede Polynomialzeit-Zeugenproduktion im logarithmischen Beschreibungsregime scheitern; ein zusätzliches quantitatives Argument wäre nötig, um dies zu $K^{n^c}(w | x) \geq |w| - O(\log n)$ für alle Zeugen $w$ zu verstärken. Diese quantitative Verstärkung ist die Nahe-Maximal-Brücke, keine Folgerung aus der Basisumformulierung.
+Wenn ein solches Kompressionstransferlemma bewiesen wäre und die zugehörige Kompression unmöglich ist (unter PH-Nichtkollaps), dann müsste für unendlich viele Instanzen $x$ jede Polynomialzeit-Zeugenproduktion im logarithmischen Beschreibungsregime scheitern. Ein zusätzliches quantitatives Argument wäre weiterhin nötig, um dies zu $K^{n^c}(w | x) \geq |w| - O(\log n)$ für alle Zeugen $w$ zu verstärken. Diese quantitative Verstärkung ist die Nahe-Maximal-Brücke, keine Folgerung aus der Basisumformulierung.
 
-Die verbleibende Lücke betrifft die Quantorenreihenfolge: Schritt~B liefert ,,für jeden $A$ existieren schwere Instanzen'' (nicht-uniform), während die Uniformitätsbrücke ,,es existieren Instanzen, die für alle $A$ schwer sind'' (uniform) benötigt. Das Schließen dieser Lücke erfordert entweder (i) eine \emph{universelle} Kompressionsunmöglichkeit (nicht nur für jeden Kompressor einzeln), oder (ii) ein Diagonalisierungsargument, das über alle Polynomialzeit-Algorithmen gleichzeitig uniformisiert.
+Die verbleibenden Lücken sind also zweifach: zuerst der Zeugen-zu-Kompression-Transfer selbst, danach die Quantorenreihenfolge. Selbst ein erfolgreicher Schritt~B gäbe typischerweise ,,für jeden $A$ existieren schwere Instanzen'' (nicht-uniform), während die Uniformitätsbrücke ,,es existieren Instanzen, die für alle $A$ schwer sind'' (uniform) benötigt. Das Schließen dieser Lücke erfordert entweder (i) eine \emph{universelle} Kompressionsunmöglichkeit (nicht nur für jeden Kompressor einzeln), oder (ii) ein Diagonalisierungsargument, das über alle Polynomialzeit-Algorithmen gleichzeitig uniformisiert.
 \end{remark}
 
 \begin{remark}[Die Uniformitätsbrücke als Mischungs-Obstruktion]
@@ -837,9 +837,9 @@ Die Uniformitätsbrücke lässt eine Umformulierung in der Sprache der statistis
 \[
 \pi_x(w) \;\propto\; \mathbf{1}\{V(x,w) = 1\} \cdot e^{-\beta H_x(w)},
 \]
-wobei $H_x$ eine beliebige Energiefunktion auf dem Zeugenraum ist (z.B.\ $H_x \equiv 0$ für das Gleichverteilungsmass über gültige Zeugen). Ein Polynomialzeit-Suchalgorithmus entspricht einer \emph{lokalen Markov-Dynamik} (Glauber-/Heat-Bath-Typ) auf dem Zeugenraum, die schnell mischt -- d.h., eine Region niedriger Entropie von $\pi_x$ in $\mathrm{poly}(|x|)$ Schritten erreicht.
+wobei $H_x$ eine beliebige Energiefunktion auf dem Zeugenraum ist (z.B.\ $H_x \equiv 0$ für das Gleichverteilungsmaß über gültige Zeugen). Eingeschränkte lokale, Random-Walk-, Flip- oder DPLL-Zustandsalgorithmen lassen sich manchmal als \emph{lokale Markov-Dynamik} (Glauber-/Heat-Bath-Typ) auf einem Zeugen-Schattenraum modellieren. Ein allgemeiner Polynomialzeit-Algorithmus muss keine solche Darstellung besitzen; ihn als solche sichtbar zu machen, wäre selbst eine Form der Uniformitätsbrücke.
 
-Die Entropische Separationsvermutung (ESC) lässt sich dann umformulieren:
+Für diese eingeschränkten Dynamiken kann man folgendes Diagnoseziel formulieren:
 \begin{quote}
 \emph{Für jede NP-vollständige Sprache $L$ und jede lokale Markov-Dynamik auf Zeugen existieren Instanzfamilien $\{x_n\}$, für die die Mischungszeit zum Zeugenträger $\geq \exp(\Omega(n))$ beträgt.}
 \end{quote}
@@ -859,7 +859,7 @@ misst die ,,Freie-Energie-Distanz'' zur Zeugenverteilung. Die ADC besagt, dass $
 \label{rem:ogp-connection}
 Die Mischungs-Obstruktion aus Bemerkung~\ref{rem:mixing-obstruction} hat ein präzises Gegenstück in der Literatur zur kombinatorischen Optimierung: die \emph{Overlap Gap Property} (OGP), eingeführt von Gamarnik und Sudan~\cite{GamarnikSudan2017} und zu einer systematischen Theorie algorithmischer Barrieren entwickelt~\cite{Gamarnik2021}.
 
-Die OGP besagt, dass für zufällige Constraint-Satisfaction-Probleme nahe der Erfüllbarkeitsschwelle der Lösungsraum \emph{topologische Diskonnektivität} aufweist: Der Overlap (normierte Hamming-Distanz) zwischen zwei beliebigen nahezu optimalen Lösungen ist entweder sehr klein oder sehr groß, ohne Zwischenwerte. Dies ist präzise der geometrische Gehalt der Dobrushin-Obstruktion $\rho(C) \geq 1$ aus Bemerkung~\ref{rem:mixing-obstruction}: Das Gibbs-Maß über Zeugen fragmentiert in exponentiell viele wohlseparierte Cluster (der \emph{Shattering-Übergang} von Achlioptas und Coja-Oghlan~\cite{AchlioptasCO2008}), und keine lokale Markov-Dynamik kann in Polynomialzeit zwischen ihnen mischen.
+Die OGP besagt, dass für zufällige Constraint-Satisfaction-Probleme nahe der Erfüllbarkeitsschwelle der Lösungsraum \emph{topologische Diskonnektivität} aufweist: Der Overlap (normierte Hamming-Distanz) zwischen zwei beliebigen nahezu optimalen Lösungen ist entweder sehr klein oder sehr groß, ohne Zwischenwerte. Dies ist ein geometrisches Analogon der Dobrushin-Obstruktion $\rho(C) \geq 1$ aus Bemerkung~\ref{rem:mixing-obstruction}: Das Gibbs-Maß über Zeugen kann in exponentiell viele wohlseparierte Cluster fragmentieren (der \emph{Shattering-Übergang} von Achlioptas und Coja-Oghlan~\cite{AchlioptasCO2008}) und breite Klassen stabiler oder lokaler Dynamiken blockieren.
 
 Die Implikationskette lautet:
 \[
@@ -870,9 +870,9 @@ Die Implikationskette lautet:
 &\stackrel{?}{\Rightarrow} \text{hohes } K^t(w \mid x).
 \end{aligned}
 \]
-Die ersten beiden Pfeile sind etabliert: Gamarnik, Jagannath und Wein~\cite{GamarnikJW2020} beweisen, dass OGP das Versagen von niedriggradigen Polynomen, Booleschen Schaltkreisen und Langevin-Dynamik impliziert; Bresler und Huang~\cite{BreslerHuang2022} etablieren scharfe algorithmische Phasenübergänge für zufälliges $k$-SAT mithilfe der Overlap Gap Property.
+Die ersten beiden Pfeile sind nur für eingeschränkte Algorithmenmodelle etabliert: Gamarnik, Jagannath und Wein~\cite{GamarnikJW2020} beweisen OGP-Barrieren für niedriggradige Polynome, niedrigstufige/stabile boolesche Modelle und Langevin-artige Dynamiken; Bresler und Huang~\cite{BreslerHuang2022} etablieren mithilfe der Overlap Gap Property scharfe Phasenübergänge für lokale und Message-Passing-artige Algorithmen auf zufälligem $k$-SAT.
 
-Der dritte Pfeil -- \textbf{OGP $\Rightarrow$ hohe bedingte Kolmogorov-Komplexität $K^t(w|x)$} -- ist das \emph{zentrale offene Brückenziel} dieses Papers. Ein Beweis würde wie folgt vorgehen: Wenn der Lösungsraum OGP hat, dann muss jedes kurze Programm, das einen Zeugen $w$ aus $x$ extrahiert, eine Freie-Energie-Barriere zwischen Clustern ,,überqueren'', was entweder superpolynomielle Zeit oder superlogarithmische Beschreibungslänge erfordert. Dies würde die geometrische Obstruktion (OGP) in eine informationstheoretische Obstruktion (hohes $K^t$) umwandeln und die Uniformitätsbrücke schließen.
+Der dritte Pfeil -- \textbf{OGP $\Rightarrow$ hohe bedingte Kolmogorov-Komplexität $K^t(w|x)$} -- ist daher kein Theorem und in dieser direkten Allgemeinheit vermutlich falsch. Tragfähig ist ein engeres Ziel: Zeige, dass jeder Algorithmus einer vorregistrierten sichtbaren Klasse (stabil, lokal, niedriggradig, DPLL-Zustand oder Front-Filtration) einen OGP-Flaschenhals überqueren muss, und miss danach die residuale Beschreibungslänge nach Abzug von Klassentemplate und erlaubtem Rat. Der Übergang von solchen eingeschränkten sichtbaren Klassen zu beliebigen uniformen Polynomialzeit-Zeugenproduzenten ist das separate \emph{Front-Shadow}- oder \emph{Flow-Shadow}-Lemma; dieses Lemma ist die eigentliche Uniformitätsbrücke.
 \end{remark}
 
 \subsubsection*{Schwellen-Axiom und diagnostisches Framework}
@@ -979,6 +979,37 @@ polynomialzeitliche Zeugenproduzent für die gewählte SAT-Familie ohne
 superpolynomialen Verlust eine solche kanonische Flussdarstellung besitzt.
 Dieses Flow-Shadow-Lemma ist eine weitere präzise Form der
 Uniformitätsbrücke.
+\end{remark}
+
+\begin{remark}[Capillary-Front-Filtration]\label{rem:capillary-front}
+Die Advice- und Flow-Diagnosen lassen sich zu einem strengeren
+Front-Ledger verbinden.  Für einen Algorithmus $A$, eine Instanz $x$ und
+Rat $a_n$ betrachte man eine vorregistrierte Folge
+\[
+F_0(A,x,a_n)\leq F_1(A,x,a_n)\leq\cdots\leq F_T(A,x,a_n)
+\]
+niedrig komplexer sichtbarer Fronten in einem Zeugen-Schattenraum:
+partielle Belegungen, DPLL-Zustandsklassen, Clusterzertifikate,
+Resolution-Breitenbänder oder Bounded-Proof-Family-Templates.  Ein
+Kapillartreffer ist ein isolierter Pfad zu einem Zeugen; eine Front ist
+eine niedrig komplexe Struktur, die positive Zeugenmasse erreicht.  Eine
+nützliche Residualdiagnose ist
+\[
+\begin{aligned}
+R_{\mathrm{front}}(x,t)
+  = H_{\mathrm{res}}(W\mid x,F_t)
+    &-K(\mathrm{BPF})\\
+    &-K(\mathrm{Template})-|a_n|.
+\end{aligned}
+\]
+Für eine eingeschränkte Klasse $\mathcal{C}$ könnte ein Lemma lauten: Wenn
+jede erlaubte Front in $\poly(n)$ Zeit entweder nur $o(1)$ Masse von $S_x$
+trifft oder $R_{\mathrm{front}}\geq n^\varepsilon$ übrig lässt, dann kann
+$\mathcal{C}$ die Familie nicht mit konstanter Erfolgswahrscheinlichkeit
+lösen.  Dies bleibt eine Aussage über eingeschränkte Modelle.  Um sie gegen
+alle Polynomialzeit-Algorithmen zu verwenden, müsste ein Front-Shadow-Lemma
+zeigen, dass jeder uniforme Zeugenproduzent ohne superpolynomialen Verlust
+eine solche niedrig komplexe sichtbare Front induziert.
 \end{remark}
 
 \begin{lemma}[UB impliziert Trennung]\label{lem:ub-separation}
@@ -1165,6 +1196,7 @@ Resolutionsbreite-Vermutung & Vermutung & Verm.~\ref{conj:resolution-width} \\
 MCSP-Internalisierungsroute & Bemerkung & Bem.~\ref{rem:mcsp-internalisation} \\
 Advice-Erosion-Kurve & Brückenziel & Bem.~\ref{rem:advice-erosion} \\
 Search-Flow-Conductance & Brückenziel & Bem.~\ref{rem:search-flow-conductance} \\
+Capillary-Front-Filtration & Brückenziel & Bem.~\ref{rem:capillary-front} \\
 \midrule
 \multicolumn{3}{@{}l}{\textit{Explorative Numerik (keine Evidenz im Beweissinn):}} \\
 Phasenübergangsstruktur beobachtet & illustrativ & Bem.~\ref{rem:sat-entropy} \\
