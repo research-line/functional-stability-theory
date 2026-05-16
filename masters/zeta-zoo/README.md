@@ -14,18 +14,18 @@ The Zeta Zoo is the mathematical classification paper of the FST programme. It d
 - **SGE**: Semigroup-Group Equivalence as a HP-BL classification axis.
 - **Weil-form transversality**: gap positivity across both sides of the SGE dichotomy.
 
-Version 2.0 is a source-audit release. It updates internal Zenodo references to stable Concept-DOIs, removes a plaintext email from the paper, and publishes English, German, and combined PDFs as the current public file set.
+Version 2.1 is a guardrail release. It sharpens the HP-BL status language after strict review, separates self-adjoint YES cases from resonance YES cases, and keeps Riemann/Direct-Frontier claims tied to their companion programme rather than treating them as standalone consequences of this classification paper.
 
 ## Zoo Population
 
 | Family | HP-BL class | Mechanism |
 |---|---|---|
-| Riemann zeta | NO (classical) | NE-A + NE-B obstructions |
-| Selberg zeta | YES | Casimir / Laplace-Beltrami |
+| Riemann zeta | NO_prime-shift^cond | NE-A plus finite NE-B evidence; companion-program closure remains separated |
+| Selberg zeta | YES_sa | Casimir / Laplace-Beltrami self-adjoint operator |
 | Prime-Hub | OPEN | OP5 construction under documented obstructions |
-| CRM flow-zeta | YES | Ruelle-type / Lie group flow |
-| Dedekind Q(sqrt(-5)) | NO | Prime-ideal semigroup |
-| Ihara-Petersen | YES | Bass-Hashimoto matrix |
+| CRM flow-zeta | YES_res | Ruelle-type / Lie group flow with resonance analogue |
+| Dedekind Q(sqrt(-5)) | SGE-predicted NO | Finite prime-ideal semigroup evidence |
+| Ihara-Petersen | YES_sa | Bass-Hashimoto matrix / finite graph certificate |
 
 ## Companion Papers
 
