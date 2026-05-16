@@ -10,13 +10,16 @@ Companion K41 Paper-A concept DOI: <https://doi.org/10.5281/zenodo.20131305>
 ## Status
 
 This folder contains the public Skeleton/anomalous-dissipation companion paper
-files synchronized from the Zenodo v1.5 release. The latest Zenodo record is
-<https://doi.org/10.5281/zenodo.20173281>. The DFC hierarchy is the conditional
-input.
+files synchronized from the Zenodo v1.6 release. The latest Zenodo record is
+<https://doi.org/10.5281/zenodo.20245559>. The DFC hierarchy is the conditional
+input. Version 1.6 applies the 2026-05-16 proof/paper-math hotfix for the
+shell-energy Hessian scaling, feasible-closure scope, uniform-energy-input
+condition, and DNS falsification test.
 
 The unconditional K41 variational-minimizer theorem is now separated into
 `../k41-variational-minimiser/` and published under concept DOI
-<https://doi.org/10.5281/zenodo.20131305>.
+<https://doi.org/10.5281/zenodo.20131305> (latest v1.2:
+<https://doi.org/10.5281/zenodo.20234096>).
 
 ## Files
 
