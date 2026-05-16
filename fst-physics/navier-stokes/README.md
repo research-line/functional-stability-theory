@@ -8,16 +8,15 @@ NS-LDI concept DOI: <https://doi.org/10.5281/zenodo.19056807>
 
 ## Status
 
-This folder contains the public Navier-Stokes v2.2 paper files and
+This folder contains the public Navier-Stokes v2.4 paper files and
 the NS-LDI v1.4 paper files. The latest Navier-Stokes Zenodo release is
-v2.2 (record DOI <https://doi.org/10.5281/zenodo.20078143>), and the
+v2.4 (record DOI <https://doi.org/10.5281/zenodo.20230439>), and the
 latest NS-LDI Zenodo release is v1.4 (record DOI
 <https://doi.org/10.5281/zenodo.20178115>). The main regularity result remains conditional on Assumption G2
 (projection regularity); the NS-LDI package remains a proof-of-life and
 diagnostic bridge, not an unconditional 3D Navier-Stokes proof.
-The local research workspace already contains a stricter v2.3 candidate, but
-this public repository intentionally stays on the latest DOI-backed Zenodo
-release until the next upload is complete.
+Version 2.4 carries the v2.3 source/Concept-DOI corrections plus a German
+PDF design fix for localized frontmatter and bibliography labels.
 
 ## Files
 
@@ -58,7 +57,6 @@ The scripts write PNG and JSON outputs next to the scripts or under
 Internal proof notes, review chains, planning files, Zenodo credentials,
 revision notes, and private comparison notes are intentionally not part of this
 public package. The repository contains the current public reproducibility
-scripts and result artifacts for the Zenodo-backed Navier-Stokes v2.2 release
-and the DOI-backed NS-LDI v1.4 package only. Local working notes and the
-stricter Navier-Stokes v2.3 candidate remain local-only until the next release
-gate is cleared.
+scripts and result artifacts for the Zenodo-backed Navier-Stokes v2.4 release
+and the DOI-backed NS-LDI v1.4 package only. Local working notes remain
+private unless a later release gate explicitly includes them.
