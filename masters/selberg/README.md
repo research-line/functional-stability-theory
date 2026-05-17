@@ -16,7 +16,8 @@ The Selberg paper is the *positive method-validation* of the v2.0 framework: it 
 |---|---|
 | Status | DRAFT preprint (method-validation, JST-submission candidate) |
 | Review | 7-phase review chain completed 2026-04-29 (score 7.5–8.0/10), all B-Rec integrated |
-| Version | v0.3 |
+| GitHub artifact level | local v0.4 guardrail candidate |
+| Zenodo latest | v0.3 |
 | Pages (EN / DE / Kombi) | 22 / 24 / 46 |
 | Target journal | Journal of Spectral Theory (JST) |
 
@@ -33,9 +34,17 @@ The **Weil quadratic form** is the universal structure; the operator is *optiona
 
 | File | Purpose |
 |---|---|
-| `paper/RH_v2_for_Selberg_en.pdf` | English version (21 p.) |
+| `paper/RH_v2_for_Selberg_en.pdf` | English version (22 p.) |
 | `paper/RH_v2_for_Selberg_ger.pdf` | German version (24 p.) |
-| `paper/RH_v2_for_Selberg_kombi.pdf` | Combined EN+DE (~45 p.) |
+| `paper/RH_v2_for_Selberg_kombi.pdf` | Combined EN+DE (46 p.) |
+
+## Public scope
+
+This repository path intentionally publishes only the current paper sources and
+paper PDFs. There are no standalone public scripts for this positive-control
+paper at the moment. Internal proof notes, planning files, review chains, idea
+notes, design-check images, and local check artefacts remain private and are
+blocked via `.gitignore`.
 
 ## Position in the FST programme
 
