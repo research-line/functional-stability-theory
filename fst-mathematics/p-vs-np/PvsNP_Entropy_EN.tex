@@ -393,7 +393,7 @@ These properties are motivated by the structure of $\NP$-complete problems but a
 \label{conj:entropic}
 No NP-complete language is algorithmically positive. That is: for every NP-complete language $L$ and every polynomial-time witness-producing function $W$, there exist infinitely many yes-instances $x \in L$ such that $W$ fails to produce a valid witness for $x$ (i.e., $V(x, W(x)) = 0$), or $K^{q(|x|)}(W(x) \mid x) \geq \omega(\log|x|)$ for all polynomials $q$.
 
-An equivalent formulation in terms of truth-table complexity (see Theorem~\ref{thm:slice_nogo}): for some NP-complete language $L$, for every polynomial $q$, infinitely many $n$ satisfy $K^{q(2^n)}(L_n) \geq n$. (Both formulations are equivalent to $\PP \neq \NP$; their mutual equivalence follows transitively.)
+A stronger parallel truth-table bridge target (see Theorem~\ref{thm:slice_nogo}) is: for some NP-complete language $L$, for every polynomial $q$, infinitely many $n$ satisfy $K^{q(2^n)}(L_n) \geq n$. This truth-table statement is not claimed to be equivalent to ESC as stated here; Theorem~\ref{thm:slice_nogo} shows that it is a sufficient route to $\PP\neq\NP$ and a circuit-lower-bound-style bridge target.
 \end{conjecture}
 
 \begin{proposition}
@@ -407,7 +407,7 @@ If $\PP = \NP$, then for every NP-complete language $L$, the search version is s
 
 \begin{remark}[ESC is equivalent to $\PP \neq \NP$]
 \label{rem:esc-equivalence}
-The converse of Proposition~\ref{prop:equiv} also holds: $\PP \neq \NP$ implies ESC. Indeed, if $\PP = \NP$, then every NP-complete language $L$ has a polynomial-time algorithm, giving $K^{\mathrm{poly}(2^n)}(L_n) = O(\log n)$ by Lemma~\ref{lem:p_low_entropy}, which violates the ESC condition $K^{q(2^n)}(L_n) \geq n$. Thus ESC $\Leftrightarrow$ $\PP \neq \NP$: the Entropic Separation Conjecture is a \textit{reformulation} of the P vs NP problem in information-theoretic language, not an independent strengthening.
+The converse of Proposition~\ref{prop:equiv} also holds: $\PP \neq \NP$ implies ESC. Equivalently, argue by contraposition: if ESC fails, then some NP-complete language has a polynomial-time witness-producing function satisfying (AP1) and (AP2). This is already a polynomial-time search procedure for an NP-complete language, and the standard search-to-decision reduction yields $\PP=\NP$. Thus ESC $\Leftrightarrow$ $\PP \neq \NP$: the Entropic Separation Conjecture is a \textit{reformulation} of the P vs NP problem in information-theoretic language, not an independent strengthening. The truth-table version below is a stronger sufficient bridge target using Lemma~\ref{lem:p_low_entropy}.
 
 \textit{Priority note:} This equivalence is a reformulation of the known equivalence between P $\neq$ NP and unbounded time-bounded instance complexity of SAT, established by Fortnow~\cite{Fortnow2000} building on the instance complexity framework of Orponen et al.~\cite{OrponenKoSchoeningWatanabe1994}. Our contribution is the specific formulation in terms of conditional witness entropy $K^t(w \mid x)$ rather than instance complexity $\mathrm{ic}_t(x : \mathrm{SAT})$.
 \end{remark}
@@ -527,7 +527,7 @@ Immediate from Lemma~\ref{lem:p_low_entropy}: $L \in \PP$ would give $K^{\poly(2
 \begin{remark}
 The Entropy Hardness Hypothesis (EH) is a concrete, well-defined conjecture about a specific NP-complete language (e.g., SAT). It asserts that the truth table of SAT on $n$-bit formulas cannot be compressed to fewer than $n$ bits, even when the compression algorithm is allowed $\poly(2^n)$ time.
 
-This is the \textit{cleanest} No-Go formulation: the ``easy direction'' ($L \in \PP \Rightarrow$ low entropy) is a theorem; the ``hard direction'' (EH for SAT) is the entire content of $\PP \neq \NP$.
+This is a clean sufficient No-Go formulation: the ``easy direction'' ($L \in \PP \Rightarrow$ low entropy) is a theorem; the ``hard direction'' (EH for SAT) is a stronger truth-table/circuit-lower-bound route to $\PP \neq \NP$, not a consequence of $\PP \neq \NP$ alone.
 
 Note that the threshold $n$ in EH is much smaller than the truth table length $2^n$: a random string of length $2^n$ has $K \approx 2^n$. The threshold $n$ is chosen because Lemma~\ref{lem:p_low_entropy} gives $K^{\poly(2^n)}(L_n) = O(\log n)$ for $L \in \PP$; any threshold $\omega(\log n)$ would suffice to separate from P, and $n$ provides a clean, moderate lower bound that is already superpolynomial in the input length.
 \end{remark}
@@ -561,7 +561,7 @@ The truth table $\SAT_n$ has length $2^n$ and describes the satisfiability of al
 
 \item \textbf{No known compression.} Despite decades of SAT-solver research, no method compresses $\SAT_n$ to $o(2^n)$ bits in $\poly(2^n)$ time. The best algorithms (CDCL solvers) run in time $2^{\Theta(n)}$ in the worst case.
 
-\item \textbf{Cryptographic evidence.} If (EH) fails, then efficient PRGs from one-way functions would not exist \cite{ImpagliazzoWigderson1997}, collapsing much of modern cryptography.
+\item \textbf{Hardness-vs-randomness evidence.} Explicit truth-table incompressibility is closely tied to circuit lower bounds and derandomisation \cite{ImpagliazzoWigderson1997}. Thus EH is a natural strengthening to test in the same ecosystem as PRG and MCSP routes, but its failure would only close this particular truth-table route, not refute $\PP\neq\NP$.
 \end{enumerate}
 
 
@@ -739,7 +739,7 @@ Santhanam~\cite{Santhanam2023} proposed an algorithmic approach to uniform lower
 Hirahara~\cite{Hirahara2018} showed that the NP-hardness of MCSP under certain reductions would imply new circuit lower bounds, providing a concrete path from $K^t$-based hardness to P vs NP separations. The chain ``hardness of MCSP $\Rightarrow$ circuit lower bounds $\Rightarrow$ truth-table incompressibility $\Rightarrow$ EH'' motivates our bridge strategy B4.
 
 \textbf{Natural proofs and pseudorandomness.}
-The natural proofs barrier~\cite{RazborovRudich1997} is closely connected to the non-computability of $K$: a ``natural'' property must be efficiently computable, but high Kolmogorov complexity is not. Our approach exploits this connection systematically. Impagliazzo and Wigderson~\cite{ImpagliazzoWigderson1997} showed that strong circuit lower bounds imply derandomization ($\mathrm{P} = \mathrm{BPP}$), which in Impagliazzo's ``Five Worlds'' framework~\cite{Impagliazzo1995} corresponds to Heuristica or beyond. The failure of EH would place us in Algorithmica (where P = NP), which is widely believed to be false.
+The natural proofs barrier~\cite{RazborovRudich1997} is closely connected to the non-computability of $K$: a ``natural'' property must be efficiently computable, but high Kolmogorov complexity is not. Our approach exploits this connection systematically. Impagliazzo and Wigderson~\cite{ImpagliazzoWigderson1997} showed that strong circuit lower bounds imply derandomization ($\mathrm{P} = \mathrm{BPP}$), which in Impagliazzo's ``Five Worlds'' framework~\cite{Impagliazzo1995} corresponds to Heuristica or beyond. EH should therefore be read as a strong truth-table bridge target in the hardness-vs-randomness ecosystem; failure of EH would not by itself place us in Algorithmica.
 
 \textbf{One-way functions and $K^t$.}
 Liu and Pass~\cite{LiuPass2020} proved the landmark result that one-way functions exist if and only if $K^t$ is average-case hard (for $t(n) \geq (1+\varepsilon)n$). This is the precise connection between resource-bounded Kolmogorov complexity and cryptographic assumptions that underlies our Bridge Target~3 and the MCSP internalisation route (Remark~\ref{rem:mcsp-internalisation}).
@@ -1002,32 +1002,52 @@ of low-complexity visible fronts in a witness-shadow space: partial
 assignments, DPLL-state classes, cluster certificates, resolution-width
 bands, or bounded proof-family templates.  A capillary hit is an isolated
 path to a witness; a front is a low-complexity structure that reaches
-positive witness mass.  A useful residual diagnostic is
+positive witness mass.
+
+Two diagnostics must remain separate.  The Shannon proxy is
+\[
+H_{\mathrm{front}}(x,t)=H_{\mathrm{res}}(W\mid x,F_t),
+\]
+whereas the actual resource-bounded/MDL residual for a witness $w$ is
 \[
 \begin{aligned}
-R_{\mathrm{front}}(x,t)
-  = H_{\mathrm{res}}(W\mid x,F_t)
-    &-K(\mathrm{BPF})\\
-    &-K(\mathrm{template})-|a_n|.
+K_{\mathrm{front}}^t(x,w,t)
+  &=K^t(w\mid x)-K(\mathrm{BPF})\\
+  &\quad -K(\mathrm{template})-|a_n|-K(r\mid x),
 \end{aligned}
 \]
+where $r$ denotes any permitted specialisation parameter of the visible
+front.  The first quantity is experimental evidence only; a uniformity
+obstruction requires the second quantity to remain large after the template,
+advice, and specialisation bits have been debited.
+
 For a restricted class $\mathcal{C}$, a possible lemma would say: if every
 allowed front in $\poly(n)$ time either meets only $o(1)$ mass of $S_x$ or
-leaves $R_{\mathrm{front}}\geq n^\varepsilon$, then $\mathcal{C}$ cannot
-solve the family with constant success probability.  This is still a
-restricted-model statement.  To use it against all polynomial-time
-algorithms one would have to prove a front-shadow lemma showing that every
-uniform witness producer induces such a low-complexity visible front without
-superpolynomial loss.
+leaves $K_{\mathrm{front}}^t(x,w,t)\geq n^\varepsilon$ on the residual
+witnesses, then $\mathcal{C}$ cannot solve the family with constant success
+probability.  This is still a restricted-model statement.  To use it against
+all polynomial-time algorithms one would have to prove a front-shadow lemma
+showing that every uniform witness producer induces such a low-complexity
+visible front without superpolynomial loss.
 \end{remark}
 
 \begin{lemma}[UB implies separation]\label{lem:ub-separation}
-If UB-PvNP (Axiom~\ref{ax:ub-pvnp}) holds, then:
+If UB-PvNP (Axiom~\ref{ax:ub-pvnp}) holds with a time bound dominating any
+fixed polynomial-time witness selector, then:
 \begin{enumerate}
 \item[(a)] P $\neq$ NP (immediate from the existence of uniform hard instances).
-\item[(b)] One-way functions exist (via Impagliazzo--Wigderson~\cite{ImpagliazzoWigderson1997}: uniform circuit lower bounds imply PRGs, which imply OWFs).
-\item[(c)] The entropy gap $H_{\mathrm{slice}}(\mathrm{SAT}_n) \geq c \cdot 2^{n^\varepsilon}$ holds uniformly.
+\item[(b)] the explicit family produced by $\mathcal{U}$ has the advertised
+uniform witness-entropy obstruction:
+\[
+  K^t(w\mid \varphi_n)\geq n^\varepsilon
+\]
+for all witnesses of $\varphi_n$ on infinitely many $n$.
 \end{enumerate}
+UB-PvNP alone does not prove one-way functions or a global slice-entropy
+lower bound for SAT truth tables.  Those are separate bridge targets: OWFs
+require an additional PRG/average-case-$K^t$ route (for example via
+Liu--Pass or suitable hardness-vs-randomness hypotheses), while slice-entropy
+lower bounds require a truth-table or circuit-lower-bound transfer.
 Conversely, P $\neq$ NP implies UB-PvNP if and only if the hard instances can be made \emph{explicit}---which is exactly the content of the Uniformity Bridge.
 \end{lemma}
 
@@ -1208,9 +1228,9 @@ Capillary-front filtration & Bridge target & Rem.~\ref{rem:capillary-front} \\
 Phase transition structure observed & Illustrative & Rem.~\ref{rem:sat-entropy} \\
 $H_{\mathrm{slice}}$ growth trend ($n \leq 16$, 5 points) & Illustrative & Rem.~\ref{rem:sat-entropy} \\
 \midrule
-\multicolumn{3}{@{}l}{\textit{Open (equivalent to P\,$\neq$\,NP):}} \\
+\multicolumn{3}{@{}l}{\textit{Open bridge targets:}} \\
 Uniformity Bridge & Open problem & Sec.~\ref{sec:uniformity-bridge} \\
-Entropy Hardness (EH) & Conjecture & Sec.~\ref{sec:slices} \\
+Entropy Hardness (EH) & Strong sufficient conjecture & Sec.~\ref{sec:slices} \\
 \bottomrule
 \end{tabular}
 }
