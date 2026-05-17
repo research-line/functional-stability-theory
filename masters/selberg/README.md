@@ -7,7 +7,8 @@ The Selberg paper is the *positive method-validation* of the v2.0 framework: it 
 ## DOI
 
 - **Concept-DOI (always latest):** [10.5281/zenodo.19962588](https://doi.org/10.5281/zenodo.19962588)
-- **v0.2 (current):** [10.5281/zenodo.19962589](https://doi.org/10.5281/zenodo.19962589)
+- **v0.3 (current):** [10.5281/zenodo.20249329](https://doi.org/10.5281/zenodo.20249329)
+- **v0.2:** [10.5281/zenodo.19962589](https://doi.org/10.5281/zenodo.19962589)
 
 ## Status
 
@@ -15,8 +16,8 @@ The Selberg paper is the *positive method-validation* of the v2.0 framework: it 
 |---|---|
 | Status | DRAFT preprint (method-validation, JST-submission candidate) |
 | Review | 7-phase review chain completed 2026-04-29 (score 7.5–8.0/10), all B-Rec integrated |
-| Version | v0.2 |
-| Pages (EN / DE / Kombi) | 21 / 24 / ~45 |
+| Version | v0.3 |
+| Pages (EN / DE / Kombi) | 22 / 24 / 46 |
 | Target journal | Journal of Spectral Theory (JST) |
 
 ## Main result (in one sentence)
