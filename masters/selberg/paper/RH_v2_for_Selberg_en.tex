@@ -1,13 +1,17 @@
 \documentclass[12pt,a4paper]{article}
 
+\usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
-\usepackage[colorlinks=true,linkcolor=blue,citecolor=red,urlcolor=blue]{hyperref}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=red,urlcolor=blue,unicode=true]{hyperref}
 \usepackage{geometry}
 \geometry{margin=2.5cm}
 \usepackage{enumitem}
+\usepackage{array}
 \usepackage{booktabs}
+\usepackage{tabularx}
 \usepackage[capitalise,noabbrev]{cleveref}
 
 \newtheorem{theorem}{Theorem}[section]
@@ -28,6 +32,8 @@
 \newcommand{\QW}{\mathrm{QW}}
 \newcommand{\Sel}{Z_{\Gamma}}
 \newcommand{\Delop}{\Delta_{\Gamma}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 
 \title{NE-B Failure as Hilbert--P\'olya Detection:\\
 Universality of the v2.0 Weil Quadratic Form on the Selberg Zeta Function}
@@ -36,8 +42,19 @@ Universality of the v2.0 Weil Quadratic Form on the Selberg Zeta Function}
 \small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}}
 \date{\today}
 
+\hypersetup{
+  pdftitle={NE-B Failure as Hilbert-Polya Detection: Universality of the v2.0 Weil Quadratic Form on the Selberg Zeta Function},
+  pdfauthor={Lukas Geiger},
+  pdfsubject={Selberg zeta function transfer paper for the v2.0 Weil quadratic form framework},
+  pdfkeywords={Selberg zeta function, Weil quadratic form, Shift Parity Lemma, Hilbert-Polya, hyperbolic surface, Laplace operator, NE-B}
+}
+\makeatletter
+\renewcommand*{\HyperDestNameFilter}[1]{en.#1}
+\makeatother
+
 \begin{document}
 \overfullrule=0pt
+\setlength{\emergencystretch}{2.5em}
 \maketitle
 
 \begin{abstract}
@@ -59,9 +76,11 @@ exponential density of primitive closed geodesics $\pi_\Gamma(T) \sim e^T/T$
 in place of $\pi(x) \sim x/\log x$.
 \item An analogue $\QW^\Gamma_\lambda$ of the Weil quadratic form is
 well defined via the geometric side of the Selberg trace formula.
-\item \emph{Even dominance of $\QW^\Gamma_\lambda$} furnishes a second,
-independent proof of the Selberg Riemann Hypothesis, redundant in view of
-Selberg's spectral proof via the Laplacian $\Delop$.
+\item \emph{Even dominance of $\QW^\Gamma_\lambda$}, together with the
+no-exceptional-eigenvalue condition $\lambda_1(\Delop)\ge 1/4$, gives a
+conditional v2.0 reduction of the strict Selberg critical-line statement;
+this is a consistency test against the classical spectral description rather
+than a new unconditional proof.
 \item \emph{NE-B fails in the Selberg setting.} The Laplacian $\Delop$ on
 $\Gamma\backslash\HH$ commutes with all geodesic shift operators and hence
 is a universal commutant. The Hilbert--P\'olya program is realized here by
@@ -126,9 +145,9 @@ $M = \Gamma\backslash\HH$, where:
 \item the geometric explicit formula (Selberg trace formula \cite{Selberg1956})
 plays the role of the Weil explicit formula \cite{Weil1952};
 \item the lengths of primitive closed geodesics play the role of primes;
-\item the Selberg Riemann Hypothesis (all non-trivial zeros on the critical
-line $\mathrm{Re}(s) = 1/2$) is a theorem, via the self-adjointness of the
-Laplacian $\Delop$.
+\item the spectral zero description is a theorem via the self-adjointness of
+the Laplacian $\Delop$; the strict critical-line form additionally requires
+the no-exceptional-eigenvalue condition $\lambda_1(\Delop)\ge 1/4$.
 \end{itemize}
 
 Thus we ask two concrete questions:
@@ -184,12 +203,13 @@ details.
 \label{thm:main-informal}
 Let $M = \Gamma\backslash\HH$ be a compact hyperbolic surface and
 $\Sel(s)$ its Selberg zeta function. The v2.0 methodology applies to the
-Selberg quadratic form $\QW^\Gamma_\lambda$ and yields a proof of the
-Selberg Riemann Hypothesis by even dominance. The analogue of NE-A holds,
+Selberg quadratic form $\QW^\Gamma_\lambda$ and conditionally reduces the
+strict Selberg critical-line statement to even dominance plus
+$\lambda_1(\Delop)\ge 1/4$. The analogue of NE-A holds,
 but NE-B \emph{fails}: the Laplace--Beltrami operator $\Delop$ is a
 universal commutant for the family of geodesic shift operators. The resulting
-proof of Selberg-RH is therefore redundant (a second proof), and this
-redundancy exposes a meta-principle: the Weil quadratic form is universal,
+route is therefore a conditional consistency test, and this exposes a
+meta-principle: the Weil quadratic form is universal,
 whereas a Hilbert--P\'olya operator exists if and only if NE-B fails.
 \end{theorem}
 
@@ -199,8 +219,8 @@ Section~\ref{sec:v2-recollect} recalls the v2.0 ingredients.
 Section~\ref{sec:selberg-setting} sets up the Selberg trace formula and the
 geodesic analogue of the explicit formula.
 Section~\ref{sec:v2-to-selberg} carries out the transfer of the Shift Parity
-Lemma, frontier dominance, and constructs $\QW^\Gamma_\lambda$; a second proof
-of Selberg-RH is derived.
+Lemma, frontier dominance, and constructs $\QW^\Gamma_\lambda$; a conditional
+critical-line reduction is derived.
 Section~\ref{sec:ne-b-fails} proves the NE-B failure and constructs
 the universal commutant $\Delop$ explicitly in the transfer-operator
 formalism.
@@ -224,15 +244,20 @@ full treatment is in \cite{Geiger2026partII}.
 Set $L = \log\lambda$. On $L^2([-L,L])$, define
 \begin{equation}
 \label{eq:QW-riemann}
-\langle A_\lambda f\mid f\rangle = (\log 4\pi + \gamma)\|f\|^2
-+ \int_0^\infty \Big[\langle T_u f + T_{-u} f, f\rangle - 2e^{-u/2}\|f\|^2\Big]\frac{e^{u/2}}{2\sinh u}\,du
-+ \sum_p\sum_{m\ge 1}\frac{\log p}{p^{m/2}}\langle T_{m\log p} f + T_{-m\log p} f, f\rangle,
+\begin{split}
+\langle A_\lambda f\mid f\rangle
+&= (\log 4\pi + \gamma)\|f\|^2 \\
+&\quad + \int_0^\infty \Big[\langle T_u f + T_{-u} f, f\rangle - 2e^{-u/2}\|f\|^2\Big]
+\frac{e^{u/2}}{2\sinh u}\,du \\
+&\quad + \sum_p\sum_{m\ge 1}\frac{\log p}{p^{m/2}}
+\langle T_{m\log p} f + T_{-m\log p} f, f\rangle,
+\end{split}
 \end{equation}
 where $T_s$ is the shift operator $(T_s f)(t) = f(t-s)\mathbf{1}_{[-L,L]}(t-s)$
 and $\gamma$ is the Euler--Mascheroni constant. The quadratic form $\QW_\lambda$
 is the quadratic form of $A_\lambda$.  The key algebraic tool is
 Theorem~6.1 of \cite{Connes2026} (proved jointly with van Suijlekom,
-building on \cite{ConnesMoscovici2023}):
+building on \cite{ConnesMoscovici2022}):
 
 \begin{theorem}[{\cite[Theorem~6.1]{Connes2026}}]
 \label{thm:connes}
@@ -269,8 +294,10 @@ Theorem~\ref{thm:connes} is drawn from Connes' 2026 preprint \cite{Connes2026};
 the convergence of the construction to the Weil distribution is noted as still open
 \cite[§6.6]{Connes2026}.  In the Selberg application
 (Section~\ref{sec:v2-to-selberg}), this open step is \emph{immaterial}: the
-conclusion (Selberg-RH) is independently secured by Selberg's classical
-spectral proof via the Laplacian $\Delop$ \cite{Selberg1956}.
+spectral parametrisation of the zeros is independently secured by Selberg's
+classical theory via the Laplacian $\Delop$ \cite{Selberg1956}; the strict
+critical-line form additionally requires the no-exceptional-eigenvalue
+condition $\lambda_1(\Delop)\ge 1/4$.
 Theorem~\ref{thm:connes} plays a structural consistency role, not a logically
 necessary one.  The broader programme of encoding $L$-functions via spectral
 quadratic forms is additionally supported by Connes' 1999 noncommutative
@@ -402,9 +429,15 @@ Laplace eigenvalue $\lambda_j = 1/4 + r_j^2 > 0$.
 \item A zero at $s = 1$ (from $\lambda_0 = 0$).
 \end{itemize}
 
-\begin{theorem}[Selberg Riemann Hypothesis, \cite{Selberg1956}]
+\begin{theorem}[Selberg spectral zero description and strict-line criterion, \cite{Selberg1956}]
 \label{thm:Sel-RH}
-All non-trivial zeros of $\Sel(s)$ lie on the line $\mathrm{Re}(s) = 1/2$.
+The non-trivial spectral zeros of $\Sel(s)$ attached to Laplace eigenvalues
+$\lambda_j=1/4+r_j^2$ occur at $s=1/2\pm ir_j$. Hence eigenvalues
+$\lambda_j\ge 1/4$ give zeros on the line $\mathrm{Re}(s)=1/2$, whereas
+exceptional eigenvalues $0<\lambda_j<1/4$ give real zeros
+$s=1/2\pm\delta_j$ in the critical strip. In particular, the strict
+critical-line statement holds under the spectral gap condition
+$\lambda_1(\Delop)\ge 1/4$.
 \end{theorem}
 
 This follows from the non-negativity of $\Delop$: $\lambda_j \ge 0$ implies
@@ -612,7 +645,7 @@ frontier-dominance estimate:
 for a positive constant $c_\Gamma > 0$ depending on the surface $M$ (via
 $\mathrm{Area}(M)$ and the Selberg zeta function near $s=1$).
 
-\begin{lemma}[Frontier dominance constant --- lower bound]
+\begin{lemma}
 \label{lem:frontier-constant}
 For every compact hyperbolic surface $M$ there exists $\lambda_0 = \lambda_0(M) > 0$
 such that the frontier dominance constant in \eqref{eq:frontier-bound-Sel} satisfies
@@ -635,9 +668,13 @@ Under the sharp bound, $c_\Gamma \to (1-e^{-1})$ asymptotically.
 \end{remark}
 
 \begin{proof}[Proof sketch]
-The frontier band $[L-1,L]$ contains
-$(1-e^{-1})\,e^L/L\,(1+o(1)) = (1-e^{-1})\,\lambda/\log\lambda\,(1+o(1))$
-primitive geodesics by \eqref{eq:frontier-count-Sel}. Each contributes weight
+By \eqref{eq:frontier-count-Sel}, the frontier band $[L-1,L]$ contains
+\[
+(1-e^{-1})\,\frac{e^L}{L}\,(1+o(1))
+=
+(1-e^{-1})\,\frac{\lambda}{\log\lambda}\,(1+o(1))
+\]
+primitive geodesics. Each contributes weight
 $w^\Gamma_\gamma = L/(2\sinh(L/2)) \sim \log\lambda\cdot\lambda^{-1/2}$ by
 \eqref{eq:frontier-weight-Sel}. By \cite[Lem.~A.3]{Geiger2026partII},
 each frontier summand is negative with magnitude at least
@@ -728,15 +765,18 @@ ingredient~(ii) is non-trivial; it is the content of v2.1
 Proposition~A6 \cite{Geiger2026partII}. Applying Connes reduction with
 $\QW^\Gamma_\lambda$ in place of $\QW_\lambda$, the zeros of the Selberg
 zeta function are real (on the critical line under the substitution
-$s = 1/2 + ir$). This is Selberg-RH.
+$s = 1/2 + ir$). This gives the strict Selberg critical-line statement under
+the theorem's explicit hypotheses.
 \end{proof}
 
 \begin{remark}[Conditionality and consistency]
 Theorem~\ref{thm:v2-Sel-RH} is a conditional reduction: \emph{given} even
-dominance, Selberg-RH follows by the v2.0 argument.  Since Selberg-RH is
-already known unconditionally via Theorem~\ref{thm:Sel-RH}, the classical
-proof simultaneously verifies the conclusion.  The value of the conditional
-reduction lies in \emph{certifying the universality of the v2.0 method}: it
+dominance and the no-exceptional-eigenvalue condition, the strict
+critical-line statement follows by the v2.0 argument.  Since the classical
+Selberg theory already gives the spectral zero description and ties the
+strict line statement to the gap $\lambda_1(\Delop)\ge 1/4$, it verifies the
+framework's conclusion independently at the correct hypothesis level.  The
+value of the conditional reduction lies in \emph{certifying the universality of the v2.0 method}: it
 applies in a case where a Hilbert--P\'olya operator already exists, and the
 two routes reach the same conclusion by independent means.  This agreement
 is evidence of consistency.
@@ -774,9 +814,11 @@ By the Hadamard product representation of the Selberg zeta function on a
 compact hyperbolic surface (\cite[Ch.~10]{Iwaniec2002}), one has
 \begin{equation}
 \label{eq:hadamard-Sel}
-\frac{\Sel'}{\Sel}(s) = b_\Gamma + \sum_{\rho}\Big[\frac{1}{s-\rho}
-  + \frac{1}{\rho}\Big] + (\text{contributions from trivial zeros and
-  the topological factor}),
+\begin{aligned}
+\frac{\Sel'}{\Sel}(s)
+&= b_\Gamma + \sum_{\rho}\Big[\frac{1}{s-\rho} + \frac{1}{\rho}\Big] \\
+&\quad + (\text{contributions from trivial zeros and the topological factor}),
+\end{aligned}
 \end{equation}
 where $\rho$ runs over the non-trivial zeros (on $\mathrm{Re}(s)=1/2$ under
 Theorem~\ref{thm:Sel-RH}) and $b_\Gamma \in \RR$ is a constant depending on~$\Gamma$.
@@ -812,7 +854,7 @@ or geometric origin.
 
 
 % =============================================================================
-\section{NE-B Fails for Selberg: The Universal Commutant $\Delop$}
+\section[NE-B Fails for Selberg: The Delta-Gamma Commutant]{NE-B Fails for Selberg: The \texorpdfstring{$\Delop$}{Delta-Gamma} Commutant}
 \label{sec:ne-b-fails}
 % =============================================================================
 
@@ -835,7 +877,7 @@ universal non-trivial commutant. The Selberg analogue of NE-B
 (Theorem~\ref{thm:NEB-riemann}) is false.
 \end{theorem}
 
-\subsection{The geodesic shift operator on $L^2(M)$}
+\subsection[The geodesic shift operator on L2(M)]{The geodesic shift operator on \texorpdfstring{$L^2(M)$}{L2(M)}}
 
 The objects that v2.0 manipulates are shifts on the \emph{logarithmic variable}
 $t \in [-L, L]$. In the Riemann setting, the variable $t$ corresponds to
@@ -990,14 +1032,16 @@ quadratic form directly.
 
 \subsection{Selberg as validation: the operator exists but is not required}
 
-Theorem~\ref{thm:v2-Sel-RH} shows that v2.0 conditionally reduces Selberg-RH
-to even dominance of $\QW^\Gamma_\lambda$.  In this case, a Hilbert--P\'olya
+Theorem~\ref{thm:v2-Sel-RH} shows that v2.0 conditionally reduces the strict
+Selberg critical-line statement to even dominance of $\QW^\Gamma_\lambda$
+and $\lambda_1(\Delop)\ge 1/4$.  In this case, a Hilbert--P\'olya
 operator $\Delop$ also exists (Theorem~\ref{thm:NEB-fail}), and its spectral
 positivity independently confirms the conclusion.  The two routes coexist:
 \begin{itemize}
-\item Selberg's original proof (spectral: $\Delop \ge 0$, unconditional).
+\item Selberg's original spectral theory (unconditional spectral
+  parametrisation; strict critical line under $\lambda_1(\Delop)\ge 1/4$).
 \item The v2.0 reduction (quadratic: even dominance of $\QW^\Gamma_\lambda$
-  implies Selberg-RH, conditional on even dominance).
+  implies the strict critical-line statement under the stated gap hypothesis).
 \end{itemize}
 Both arrive at the same conclusion by different routes. The v2.0 method
 \emph{subsumes} the operator-based route: it applies whether or not a
@@ -1173,7 +1217,9 @@ reason as in the Selberg case.
 The three-way comparison axis in the Zookeeper framework is:
 
 \begin{center}
-\begin{tabular}{llll}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}L{2.2cm}L{2.1cm}Y L{1.8cm}@{}}
 \toprule
 \textbf{Zeta function} & \textbf{Type} & \textbf{Commutant} & \textbf{v2.0 class} \\
 \midrule
@@ -1181,7 +1227,7 @@ Selberg $Z_\Gamma(s)$ & continuous, geometric & $\Delta_\Gamma$ (Laplace--Beltra
 Ihara $\zeta_\Gamma(s)$ & discrete, combinatorial & $L = (q{+}1)I - A$ (graph Laplacian) & SGE-YES \\
 Riemann $\zeta(s)$ & arithmetic & none (NE-B holds) & SGE-NO \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 \medskip\noindent
@@ -1221,11 +1267,13 @@ their occupants in the Selberg and Riemann settings.
 
 \begin{table}[ht]
 \centering
+\footnotesize
+\setlength{\tabcolsep}{5pt}
 \caption{The five SGE-YES transfer slots for Selberg vs.\ Riemann.
   A tick (\checkmark) indicates the slot is classically occupied;
   ``v2.0'' indicates it is established by the v2.0 framework.}
 \label{tab:transfer-slots}
-\begin{tabular}{p{2.2cm}p{5.0cm}p{5.0cm}}
+\begin{tabularx}{\textwidth}{@{}p{2.4cm}YY@{}}
 \toprule
 \textbf{Slot} & \textbf{Selberg (SGE-YES)} & \textbf{Riemann} \\
 \midrule
@@ -1245,7 +1293,7 @@ Limit
   & Full Selberg trace formula \cite{Selberg1956} \checkmark
   & Full Weil explicit formula \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \begin{remark}[Galerkin vs.\ spectral truncation]
@@ -1275,14 +1323,15 @@ and not evidence that the Prime-Hub/OP5 graph problem has been solved.
 The v2.0 framework correctly classifies the Selberg zeta function
 $\Sel(s)$ as an SGE-YES system.  Specifically:
 \begin{enumerate}[label=(\roman*)]
-  \item Even dominance of $\QW^\Gamma_\lambda$ implies the Selberg Riemann
-    Hypothesis (Theorem~\ref{thm:v2-Sel-RH}).
+  \item Even dominance of $\QW^\Gamma_\lambda$, together with
+    $\lambda_1(\Delop)\ge 1/4$, implies the strict Selberg critical-line
+    statement (Theorem~\ref{thm:v2-Sel-RH}).
   \item The Laplace--Beltrami operator $\Delop$ is a universal commutant,
     so NE-B fails for Selberg (Theorem~\ref{thm:NEB-fail}).
   \item All five Zookeeper transfer slots are occupied
     (Table~\ref{tab:transfer-slots}).
-  \item The v2.0 classification is consistent with and independently
-    verifies Selberg's classical spectral proof via $\Delop$.
+  \item The v2.0 classification is consistent with Selberg's classical
+    spectral theory via $\Delop$ at the same hypothesis level.
 \end{enumerate}
 \end{proposition}
 
@@ -1294,8 +1343,10 @@ We have tested the v2.0 methodology on the Selberg zeta function. The
 Shift Parity Lemma, frontier dominance, the Weil quadratic form, and NE-A
 all transfer to the Selberg setting with modest modifications (mostly
 constants and density regimes). Even dominance of the Selberg Weil
-quadratic form $\QW^\Gamma_\lambda$ yields a second proof of the Selberg
-Riemann Hypothesis, redundant in view of Selberg's spectral proof.
+quadratic form $\QW^\Gamma_\lambda$, together with
+$\lambda_1(\Delop)\ge 1/4$, yields a conditional v2.0 reduction of the
+strict Selberg critical-line statement, consistent with the classical
+spectral description.
 
 The decisive structural finding is that \emph{NE-B fails for Selberg}:
 the Laplace--Beltrami operator $\Delop$ is a universal commutant for the
@@ -1339,6 +1390,7 @@ C. Deninger,
 \emph{Motivic $L$-functions and regularized determinants},
 in \emph{Motives} (Seattle, WA, 1991),
 Proc. Sympos. Pure Math. \textbf{55}, Part~1, Amer. Math. Soc., Providence, RI, 1994, pp.~707--743.
+\href{https://doi.org/10.1090/pspum/055.1/1265547}{doi:10.1090/pspum/055.1/1265547}.
 
 \bibitem{RudnickSarnak1996}
 Z. Rudnick and P. Sarnak,
@@ -1361,11 +1413,13 @@ SIAM Review \textbf{41} (1999), 236--266.
 O. Bohigas, M.-J. Giannoni, and C. Schmit,
 \emph{Characterization of chaotic quantum spectra and universality of level fluctuation laws},
 Phys. Rev. Lett. \textbf{52} (1984), 1--4.
+\href{https://doi.org/10.1103/PhysRevLett.52.1}{doi:10.1103/PhysRevLett.52.1}.
 
 \bibitem{Connes1999}
 A. Connes,
 \emph{Trace formula in noncommutative geometry and the zeros of the Riemann zeta function},
 Selecta Math. (N.S.) \textbf{5} (1999), 29--106.
+\href{https://doi.org/10.1007/s000290050042}{doi:10.1007/s000290050042}.
 
 \bibitem{Connes2026}
 A. Connes,
@@ -1373,10 +1427,10 @@ A. Connes,
 arXiv:2602.04022 (February 2026).
 \href{https://arxiv.org/abs/2602.04022}{arXiv:2602.04022}.
 
-\bibitem{ConnesMoscovici2023}
+\bibitem{ConnesMoscovici2022}
 A. Connes and H. Moscovici,
-\emph{Prolate spheroidal operator and Zeta},
-Proc. Natl. Acad. Sci. USA \textbf{119} (2022), no.~28, e2123174119.
+\emph{The UV prolate spectrum matches the zeros of zeta},
+Proc. Natl. Acad. Sci. USA \textbf{119} (2022), no.~22, e2123174119.
 \href{https://doi.org/10.1073/pnas.2123174119}{doi:10.1073/pnas.2123174119}.
 Also: arXiv:2112.05500.
 
@@ -1384,19 +1438,17 @@ Also: arXiv:2112.05500.
 D. Dolgopyat,
 \emph{On decay of correlations in Anosov flows},
 Ann. of Math. (2) \textbf{147} (1998), 357--390.
+\href{https://doi.org/10.2307/121012}{doi:10.2307/121012}.
 
 \bibitem{Geiger2026partII}
 L. Geiger,
-\emph{The Riemann Hypothesis: Even Dominance of the Weil Quadratic Form},
-Zenodo preprint (2026). DOI: 10.5281/zenodo.19546593 (v2.1).
+\emph{From Landscape to Proof: The Even-Dominance Route to the Riemann Hypothesis},
+Zenodo preprint (2026), v2.3. \href{https://doi.org/10.5281/zenodo.20193056}{doi:10.5281/zenodo.20193056}.
 
 \bibitem{GeigerMeta2026}
 L. Geiger,
 \emph{The Meta-Galerkin Bridge: Explicit Formula Principle and the Three-Component Decomposition of Riemann-Hypothesis-Type Statements},
 companion paper (2026, in preparation).
-
-% Hartnoll2026: Reference unverified — no preprint found with this title.
-% Removed cite in text; entry kept here as a placeholder for future verification.
 
 \bibitem{Hejhal1976}
 D. A. Hejhal,
@@ -1407,6 +1459,7 @@ Lecture Notes in Mathematics \textbf{548}, Springer-Verlag, 1976.
 H. Huber,
 \emph{Zur analytischen Theorie hyperbolischer Raumformen und Bewegungsgruppen},
 Math. Ann. \textbf{138} (1959), 1--26.
+\href{https://doi.org/10.1007/BF01369663}{doi:10.1007/BF01369663}.
 
 \bibitem{Iwaniec2002}
 H. Iwaniec,
@@ -1417,6 +1470,7 @@ H. Iwaniec,
 P. Sarnak,
 \emph{Asymptotic behavior of periodic orbits of the horocycle flow and Eisenstein series},
 Comm. Pure Appl. Math. \textbf{34} (1981), 719--739.
+\href{https://doi.org/10.1002/cpa.3160340602}{doi:10.1002/cpa.3160340602}.
 
 \bibitem{Selberg1956}
 A. Selberg,
@@ -1431,23 +1485,27 @@ Proc. Sympos. Pure Math. \textbf{VIII}, Amer. Math. Soc., Providence, RI, 1965, 
 \bibitem{Ihara1966}
 Y. Ihara,
 \emph{On discrete subgroups of the two by two projective linear group over $p$-adic fields},
-J. Math. Soc. Japan \textbf{18} (1966), no.~2, 219--235.
+J. Math. Soc. Japan \textbf{18} (1966), no.~3, 219--235.
+\href{https://doi.org/10.2969/jmsj/01830219}{doi:10.2969/jmsj/01830219}.
 
 \bibitem{Hashimoto1989}
 K.\ Hashimoto,
 \emph{Zeta functions of finite graphs and representations of $p$-adic groups},
 in \emph{Automorphic Forms and Geometry of Arithmetic Varieties},
 Adv.\ Stud.\ Pure Math.\ \textbf{15}, Academic Press, 1989, pp.~211--280.
+\href{https://doi.org/10.1016/B978-0-12-330580-0.50015-X}{doi:10.1016/B978-0-12-330580-0.50015-X}.
 
 \bibitem{Bass1992}
 H.\ Bass,
 \emph{The Ihara--Selberg zeta function of a tree lattice},
 Int.\ J.\ Math.\ \textbf{3} (1992), no.~6, 717--797.
+\href{https://doi.org/10.1142/S0129167X92000357}{doi:10.1142/S0129167X92000357}.
 
 \bibitem{LPS1988}
 A. Lubotzky, R. Phillips, and P. Sarnak,
 \emph{Ramanujan graphs},
 Combinatorica \textbf{8} (1988), no.~3, 261--277.
+\href{https://doi.org/10.1007/BF02126799}{doi:10.1007/BF02126799}.
 
 \end{thebibliography}
 

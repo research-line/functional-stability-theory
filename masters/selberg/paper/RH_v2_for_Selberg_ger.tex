@@ -4,11 +4,14 @@
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
-\usepackage[colorlinks=true,linkcolor=blue,citecolor=red,urlcolor=blue]{hyperref}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=red,urlcolor=blue,unicode=true]{hyperref}
 \usepackage{geometry}
 \geometry{margin=2.5cm}
 \usepackage{enumitem}
+\usepackage{array}
 \usepackage{booktabs}
+\usepackage{tabularx}
 \usepackage[capitalise,noabbrev]{cleveref}
 
 \newtheorem{theorem}{Theorem}[section]
@@ -29,6 +32,8 @@
 \newcommand{\QW}{\mathrm{QW}}
 \newcommand{\Sel}{Z_{\Gamma}}
 \newcommand{\Delop}{\Delta_{\Gamma}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 
 \title{Das Scheitern von NE-B als Hilbert--P\'olya-Detektion:\\
 Universalit\"at der Weilschen quadratischen Form v2.0 auf die Selbergsche Zetafunktion}
@@ -37,8 +42,19 @@ Universalit\"at der Weilschen quadratischen Form v2.0 auf die Selbergsche Zetafu
 \small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}}
 \date{\today}
 
+\hypersetup{
+  pdftitle={Das Scheitern von NE-B als Hilbert-Pólya-Detektion: Universalität der Weilschen quadratischen Form v2.0 auf die Selbergsche Zetafunktion},
+  pdfauthor={Lukas Geiger},
+  pdfsubject={Selberg v2.0 Transferpapier zur Weilschen quadratischen Form},
+  pdfkeywords={Selbergsche Zetafunktion, Weilsche quadratische Form, Verschiebungs-Paritäts-Lemma, Hilbert-Pólya, hyperbolische Fläche, Laplace-Operator, NE-B}
+}
+\makeatletter
+\renewcommand*{\HyperDestNameFilter}[1]{de.#1}
+\makeatother
+
 \begin{document}
 \overfullrule=0pt
+\setlength{\emergencystretch}{3em}
 \maketitle
 
 \begin{abstract}
@@ -60,9 +76,11 @@ exponentiellen Dichte primitiver geschlossener Geod\"aten $\pi_\Gamma(T) \sim e^
 anstelle von $\pi(x) \sim x/\log x$ Rechnung tr\"agt.
 \item Ein Analogon $\QW^\Gamma_\lambda$ der Weilschen quadratischen Form ist
 \"uber die geometrische Seite der Selbergschen Spurformel wohldefiniert.
-\item \emph{Die gerade Dominanz von $\QW^\Gamma_\lambda$} liefert einen zweiten,
-unabh\"angigen Beweis der Selbergschen Riemannschen Vermutung, der angesichts von
-Selbergs Spektralbeweis \"uber den Laplace-Operator $\Delop$ redundant ist.
+\item \emph{Die gerade Dominanz von $\QW^\Gamma_\lambda$} liefert zusammen mit
+der Bedingung ohne Ausnahmeeigenwerte $\lambda_1(\Delop)\ge 1/4$ eine bedingte
+v2.0-Reduktion der strengen Selberg-Aussage zur kritischen Linie; dies ist ein
+Konsistenztest gegen die klassische spektrale Beschreibung, kein neuer
+unbedingter Beweis.
 \item \emph{NE-B scheitert im Selberg-Setting.} Der Laplace-Operator $\Delop$ auf
 $\Gamma\backslash\HH$ kommutiert mit allen Geod\"aten-Verschiebungs-Operatoren und
 ist somit ein universeller Kommutant. Das Hilbert--P\'olya-Programm wird hier durch
@@ -126,36 +144,42 @@ $M = \Gamma\backslash\HH$, wobei:
 \item die geometrische explizite Formel (Selbergsche Spurformel \cite{Selberg1956})
 die Rolle der Weilschen expliziten Formel \cite{Weil1952} \"ubernimmt;
 \item die L\"angen primitiver geschlossener Geod\"aten die Rolle der Primzahlen spielen;
-\item die Selbergsche Riemannsche Vermutung (alle nicht-trivialen Nullstellen auf der kritischen
-Linie $\mathrm{Re}(s) = 1/2$) ein Theorem ist, durch die Selbstadjungiertheit des
-Laplace-Operators $\Delop$.
+\item die spektrale Nullstellenbeschreibung durch die Selbstadjungiertheit des
+Laplace-Operators $\Delop$ ein Theorem ist; die strenge kritische-Linien-Form
+erfordert zus\"atzlich die Bedingung ohne Ausnahmeeigenwerte
+$\lambda_1(\Delop)\ge 1/4$.
 \end{itemize}
 
 Wir stellen also zwei konkrete Fragen:
 
 \medskip
-\noindent\textbf{F1.} \emph{\"Ubertragen sich die v2.0-Bestandteile (Verschiebungs-Parit\"ats-Lemma,
-Frontier-Dominanz, Weilsche quadratische Form, NE-A, NE-B) alle auf das
-Selberg-Setting?}
+\noindent\textbf{F1.}\\
+\emph{\"Ubertragen sich die v2.0-Bestandteile
+(Verschiebungs-Parit\"ats-Lemma, Frontier-Dominanz,
+Weilsche quadratische Form, NE-A, NE-B)
+alle auf das Selberg-Setting?}
 
 \medskip
-\noindent\textbf{F2.} \emph{Wenn eines von ihnen sich nicht \"ubertragen l\"asst, was ist der
-strukturelle Grund daf\"ur?}
+\noindent\textbf{F2.}\\
+\emph{Wenn eines von ihnen sich nicht \"ubertragen l\"asst,
+was ist der strukturelle Grund daf\"ur?}
 
 \medskip
 Unsere Antworten in K\"urze:
 
 \begin{itemize}
 \item Verschiebungs-Parit\"ats-Lemma: \textbf{\"ubertr\"agt sich unver\"andert} (algebraisch).
-\item Frontier-Dominanz: \textbf{\"ubertr\"agt sich mit modifizierten Konstanten},
+\item Frontier-Dominanz: \textbf{\"ubertr\"agt sich}
+mit modifizierten Konstanten,
 was $\pi_\Gamma(T) \sim e^T/T$ widerspiegelt.
 \item Weilsche quadratische Form: \textbf{nat\"urliches Analogon $\QW^\Gamma_\lambda$} \"uber
 die geometrische Seite der Spurformel.
 \item NE-A: \textbf{\"ubertr\"agt sich} -- der Multiplikator im Selberg-Analogon ist ebenfalls
 oszillatorisch (jede nicht-triviale Nullstelle von $\Sel$ liefert einen negativen Ausschlag).
-\item NE-B: \textbf{scheitert}. Der Laplace-Operator $\Delop$ kommutiert mit jedem
-Geod\"aten-Verschiebungs-Operator: ein universeller Kommutant existiert, gem\"a\ss{} der Definition
-der hyperbolischen Fl\"achengeometrie.
+\item NE-B: \textbf{scheitert}. Ein universeller Kommutant existiert:
+der Laplace-Operator $\Delop$ kommutiert mit allen
+Geod\"aten-Verschiebungs-Operatoren, wie es die hyperbolische
+Fl\"achengeometrie vorgibt.
 \end{itemize}
 
 Das Scheitern von NE-B ist das wissenschaftlich interessante Ergebnis. Es ist kein
@@ -184,12 +208,13 @@ Details.
 \label{thm:main-informal}
 Sei $M = \Gamma\backslash\HH$ eine kompakte hyperbolische Fl\"ache und
 $\Sel(s)$ ihre Selbergsche Zetafunktion. Die v2.0-Methodik ist auf die
-Selbergsche quadratische Form $\QW^\Gamma_\lambda$ anwendbar und liefert einen Beweis der
-Selbergschen Riemannschen Vermutung durch gerade Dominanz. Das Analogon von NE-A gilt,
+Selbergsche quadratische Form $\QW^\Gamma_\lambda$ anwendbar und reduziert die
+strenge Selberg-Aussage zur kritischen Linie bedingt auf gerade Dominanz plus
+$\lambda_1(\Delop)\ge 1/4$. Das Analogon von NE-A gilt,
 aber NE-B \emph{scheitert}: der Laplace--Beltrami-Operator $\Delop$ ist ein
 universeller Kommutant f\"ur die Familie der Geod\"aten-Verschiebungs-Operatoren. Der resultierende
-Beweis der Selberg-RH ist daher redundant (ein zweiter Beweis), und diese
-Redundanz offenbart ein Meta-Prinzip: die Weilsche quadratische Form ist universell,
+Weg ist daher ein bedingter Konsistenztest, und dies offenbart ein
+Meta-Prinzip: die Weilsche quadratische Form ist universell,
 w\"ahrend ein Hilbert--P\'olya-Operator genau dann existiert, wenn NE-B scheitert.
 \end{theorem}
 
@@ -199,8 +224,8 @@ Abschnitt~\ref{sec:v2-recollect} ruft die v2.0-Bestandteile in Erinnerung.
 Abschnitt~\ref{sec:selberg-setting} f\"uhrt die Selbergsche Spurformel und das
 geod\"atische Analogon der expliziten Formel ein.
 Abschnitt~\ref{sec:v2-to-selberg} f\"uhrt den Transfer des Verschiebungs-Parit\"ats-Lemmas und der
-Frontier-Dominanz durch und konstruiert $\QW^\Gamma_\lambda$; ein zweiter Beweis
-der Selberg-RH wird abgeleitet.
+Frontier-Dominanz durch und konstruiert $\QW^\Gamma_\lambda$; eine bedingte
+Reduktion der kritischen-Linien-Aussage wird abgeleitet.
 Abschnitt~\ref{sec:ne-b-fails} beweist das Scheitern von NE-B und konstruiert
 den universellen Kommutanten $\Delop$ explizit im Transferoperator-Formalismus.
 Abschnitt~\ref{sec:meta} leitet das Meta-Prinzip ab: Hilbert--P\'olya ist ein
@@ -223,15 +248,20 @@ ausf\"uhrliche Behandlung findet sich in \cite{Geiger2026partII}.
 Setze $L = \log\lambda$. Auf $L^2([-L,L])$ definieren wir
 \begin{equation}
 \label{eq:QW-riemann}
-\langle A_\lambda f\mid f\rangle = (\log 4\pi + \gamma)\|f\|^2
-+ \int_0^\infty \Big[\langle T_u f + T_{-u} f, f\rangle - 2e^{-u/2}\|f\|^2\Big]\frac{e^{u/2}}{2\sinh u}\,du
-+ \sum_p\sum_{m\ge 1}\frac{\log p}{p^{m/2}}\langle T_{m\log p} f + T_{-m\log p} f, f\rangle,
+\begin{split}
+\langle A_\lambda f\mid f\rangle
+&= (\log 4\pi + \gamma)\|f\|^2 \\
+&\quad + \int_0^\infty \Big[\langle T_u f + T_{-u} f, f\rangle - 2e^{-u/2}\|f\|^2\Big]
+\frac{e^{u/2}}{2\sinh u}\,du \\
+&\quad + \sum_p\sum_{m\ge 1}\frac{\log p}{p^{m/2}}
+\langle T_{m\log p} f + T_{-m\log p} f, f\rangle,
+\end{split}
 \end{equation}
 wobei $T_s$ der Verschiebungs-Operator $(T_s f)(t) = f(t-s)\mathbf{1}_{[-L,L]}(t-s)$
 ist und $\gamma$ die Euler--Mascheroni-Konstante ist. Die quadratische Form $\QW_\lambda$
 ist die quadratische Form von $A_\lambda$.  Das wesentliche algebraische Werkzeug ist
 Theorem~6.1 von \cite{Connes2026} (gemeinsam mit van Suijlekom bewiesen,
-aufbauend auf \cite{ConnesMoscovici2023}):
+aufbauend auf \cite{ConnesMoscovici2022}):
 
 \begin{theorem}[{\cite[Theorem~6.1]{Connes2026}}]
 \label{thm:connes}
@@ -268,8 +298,10 @@ Theorem~\ref{thm:connes} stammt aus Connes' 2026 Preprint \cite{Connes2026};
 die Konvergenz der Konstruktion gegen die Weilsche Distribution wird als noch offen angemerkt
 \cite[\S6.6]{Connes2026}.  In der Selberg-Anwendung
 (Abschnitt~\ref{sec:v2-to-selberg}) ist dieser offene Schritt \emph{unbedeutend}: die
-Schlussfolgerung (Selberg-RH) ist unabh\"angig durch Selbergs klassischen
-Spektralbeweis \"uber den Laplace-Operator $\Delop$ gesichert \cite{Selberg1956}.
+spektrale Parametrisierung der Nullstellen ist unabh\"angig durch Selbergs
+klassische Theorie \"uber den Laplace-Operator $\Delop$ gesichert
+\cite{Selberg1956}; die strenge kritische-Linien-Form erfordert zus\"atzlich
+die Bedingung ohne Ausnahmeeigenwerte $\lambda_1(\Delop)\ge 1/4$.
 Theorem~\ref{thm:connes} spielt eine strukturelle Konsistenzrolle, keine logisch
 notwendige.  Das breitere Programm der Codierung von $L$-Funktionen \"uber spektrale
 quadratische Formen wird zus\"atzlich durch Connes' 1999 Ansatz der nichtkommutativen
@@ -401,9 +433,15 @@ Laplace-Eigenwert $\lambda_j = 1/4 + r_j^2 > 0$.
 \item Einer Nullstelle bei $s = 1$ (von $\lambda_0 = 0$).
 \end{itemize}
 
-\begin{theorem}[Selbergsche Riemannsche Vermutung, \cite{Selberg1956}]
+\begin{theorem}[Selbergsche spektrale Nullstellenbeschreibung und strenges Linienkriterium, \cite{Selberg1956}]
 \label{thm:Sel-RH}
-Alle nicht-trivialen Nullstellen von $\Sel(s)$ liegen auf der Geraden $\mathrm{Re}(s) = 1/2$.
+Die nicht-trivialen spektralen Nullstellen von $\Sel(s)$, die zu
+Laplace-Eigenwerten $\lambda_j=1/4+r_j^2$ geh\"oren, liegen bei
+$s=1/2\pm ir_j$. Daher liefern Eigenwerte $\lambda_j\ge 1/4$ Nullstellen auf
+der Geraden $\mathrm{Re}(s)=1/2$, w\"ahrend Ausnahmeeigenwerte
+$0<\lambda_j<1/4$ reelle Nullstellen $s=1/2\pm\delta_j$ im kritischen Streifen
+erzeugen. Insbesondere gilt die strenge kritische-Linien-Aussage unter der
+Spektrall\"uckenbedingung $\lambda_1(\Delop)\ge 1/4$.
 \end{theorem}
 
 Dies folgt aus der Nicht-Negativit\"at von $\Delop$: $\lambda_j \ge 0$ impliziert
@@ -454,7 +492,7 @@ spektrale Parameter $r_j$.
 \label{sec:v2-to-selberg}
 % =============================================================================
 
-\subsection{Selberg-Geod\"aten-Verschiebungen und Verschiebungs-Parit\"ats-Lemma}
+\subsection[Selberg-Geod\"aten-Verschiebungen]{Selberg-Geod\"aten-Verschiebungen und\\ Verschiebungs-Parit\"ats-Lemma}
 
 Setze $L = \log\lambda$. Auf $L^2([-L, L])$ definieren wir den Selberg-Primzahl-Verschiebungs-Operator
 \begin{equation}
@@ -472,7 +510,7 @@ Dies ist \emph{dieselbe Matrix} $D_N(r)$ wie im Riemann-Setting: sie h\"angt
 nur von der normierten Verschiebung $r$ ab, nicht von der Quelle der Verschiebung (Primzahl-L\"ange
 oder Geod\"aten-L\"ange). Folglich gilt:
 
-\begin{proposition}[Transfer der Verschiebungsparität]
+\begin{proposition}
 \label{prop:SPL-transfer}
 Das Verschiebungs-Parit\"ats-Lemma (Theorem~\ref{thm:SPL}) gilt w\"ortlich im Selberg-Setting:
 f\"ur jedes $N \ge 3$, jedes $r \in (0,2)$ gilt
@@ -548,8 +586,11 @@ beschr\"ankt ist (vgl.\ \cite[Kap.~6]{Hejhal1976}).  Hierbei ist
 \kappa^\Gamma(u) := \frac{1}{4\pi}\,\frac{d}{du}\!\Big[\frac{1}{\sinh(u/2)}\Big],\qquad u > 0,
 \end{equation}
 der Plancherel-Kern der Selberg-Transformation \cite[Gl.~(1.40)]{Iwaniec2002}.
-Man beachte, dass $\kappa^\Gamma(u) < 0$ f\"ur alle $u > 0$ ist, da
-$\tfrac{d}{du}[\sinh(u/2)^{-1}] = -\tfrac{\cosh(u/2)}{2\sinh^2(u/2)} < 0$.
+Man beachte: f\"ur alle $u > 0$ gilt $\kappa^\Gamma(u) < 0$, denn
+\[
+\frac{d}{du}\bigl[\sinh(u/2)^{-1}\bigr]
+= -\frac{\cosh(u/2)}{2\sinh^2(u/2)} < 0.
+\]
 Dies ist konsistent mit der Positivit\"atsstruktur von $K_\mathrm{arch}^\Gamma$:
 die Klammer in \eqref{eq:arch-Sel} ist negativ, wenn $c_\Gamma^{\mathrm{id}}(u)$ den
 Identit\"atsoperator normiert, und das Produkt zweier negativer Gr\"o\ss{}en ist positiv.
@@ -722,15 +763,19 @@ dem Lie-Ursprungs-Zweig.) F\"ur Riemann ist
 Bestandteil (ii) nicht-trivial; er ist der Inhalt der v2.1
 Proposition~A6 \cite{Geiger2026partII}. Wendet man die Connes-Reduktion mit
 $\QW^\Gamma_\lambda$ anstelle von $\QW_\lambda$ an, so sind die Nullstellen der Selbergschen
-Zetafunktion reell (auf der kritischen Linie unter der Substitution $s = 1/2 + ir$). Dies ist die Selberg-RH.
+Zetafunktion reell (auf der kritischen Linie unter der Substitution $s = 1/2 + ir$).
+Dies ergibt die strenge Selberg-Aussage zur kritischen Linie unter den
+expliziten Hypothesen des Theorems.
 \end{proof}
 
 \begin{remark}[Bedingtheit und Konsistenz]
 Theorem~\ref{thm:v2-Sel-RH} ist eine bedingte Reduktion: \emph{gegeben} die gerade
-Dominanz, folgt die Selberg-RH durch das v2.0-Argument.  Da die Selberg-RH bereits
-unbedingt durch Theorem~\ref{thm:Sel-RH} bekannt ist, verifiziert der klassische
-Beweis gleichzeitig die Schlussfolgerung.  Der Wert der bedingten Reduktion
-liegt in der \emph{Zertifizierung der Universalit\"at der v2.0-Methode}: sie
+Dominanz und die Bedingung ohne Ausnahmeeigenwerte, folgt die strenge
+kritische-Linien-Aussage durch das v2.0-Argument.  Da die klassische
+Selberg-Theorie bereits die spektrale Nullstellenbeschreibung liefert und die
+strenge Linienform an die L\"ucke $\lambda_1(\Delop)\ge 1/4$ bindet, verifiziert
+sie die Schlussfolgerung auf der richtigen Hypothesenebene unabh\"angig.  Der
+Wert der bedingten Reduktion liegt in der \emph{Zertifizierung der Universalit\"at der v2.0-Methode}: sie
 gilt in einem Fall, in dem ein Hilbert--P\'olya-Operator bereits existiert, und die
 beiden Routen gelangen mit unabh\"angigen Mitteln zur selben Schlussfolgerung.  Diese \"Ubereinstimmung
 ist ein Beweis f\"ur Konsistenz.
@@ -768,9 +813,11 @@ Aus der Hadamard-Produkt-Darstellung der Selbergschen Zetafunktion auf einer
 kompakten hyperbolischen Fl\"ache (\cite[Kap.~10]{Iwaniec2002}) ergibt sich
 \begin{equation}
 \label{eq:hadamard-Sel}
-\frac{\Sel'}{\Sel}(s) = b_\Gamma + \sum_{\rho}\Big[\frac{1}{s-\rho}
-  + \frac{1}{\rho}\Big] + (\text{Beitr\"age von trivialen Nullstellen und
-  dem topologischen Faktor}),
+\begin{aligned}
+\frac{\Sel'}{\Sel}(s)
+&= b_\Gamma + \sum_{\rho}\Big[\frac{1}{s-\rho}+\frac{1}{\rho}\Big] \\
+&\quad + (\text{Beitr\"age von trivialen Nullstellen und dem topologischen Faktor}),
+\end{aligned}
 \end{equation}
 wobei $\rho$ \"uber die nicht-trivialen Nullstellen l\"auft (auf $\mathrm{Re}(s)=1/2$ nach
 Theorem~\ref{thm:Sel-RH}) und $b_\Gamma \in \RR$ eine Konstante ist, die von $\Gamma$ abh\"angt.
@@ -782,8 +829,8 @@ $\rho_j = 1/2 + ir_j$ einen Beitrag
 \mathrm{Re}\Big[\frac{1}{i(\xi-r_j)}+\frac{1}{1/2+ir_j}\Big]
   = \frac{1/2}{1/4+r_j^2} > 0.
 \end{equation}
-Somit erzeugen die nicht-trivialen Nullstellen einen \emph{positiven konstanten} Beitrag
-zu $\mathrm{Re}[\Sel'/\Sel(1/2+i\xi)]$; sie verursachen keine Vorzeichenoszillationen
+Somit erzeugen die nicht-trivialen Nullstellen einen
+\emph{positiven konstanten} Beitrag; sie verursachen keine Vorzeichenoszillationen
 in $M^\Gamma(\xi)$.
 
 Die Vorzeichenoszillationen entstehen durch die trivialen Nullstellen (bei $s = -k$, $k \ge 0$)
@@ -805,7 +852,7 @@ logarithmischen Ableitung bei, unabh\"angig davon, ob diese Nullstellen arithmet
 oder geometrischen Ursprungs sind.
 
 % =============================================================================
-\section{NE-B scheitert f\"ur Selberg: Der universelle Kommutant $\Delop$}
+\section[NE-B scheitert für Selberg: Der Delta-Gamma-Kommutant]{NE-B scheitert für Selberg: Der \texorpdfstring{$\Delop$}{Delta-Gamma}-Kommutant}
 \label{sec:ne-b-fails}
 % =============================================================================
 
@@ -828,7 +875,7 @@ universellen nichttrivialen Kommutanten zu. Das Selberg-Analogon von NE-B
 (Theorem~\ref{thm:NEB-riemann}) ist falsch.
 \end{theorem}
 
-\subsection{Der Geod\"aten-Verschiebungs-Operator auf $L^2(M)$}
+\subsection[Der Geodäten-Verschiebungs-Operator auf L2(M)]{Der Geodäten-Verschiebungs-Operator auf \texorpdfstring{$L^2(M)$}{L2(M)}}
 
 Die Objekte, die v2.0 manipuliert, sind Verschiebungen in der \emph{logarithmischen Variablen}
 $t \in [-L, L]$. Im Riemann-Setting entspricht die Variable $t$
@@ -958,10 +1005,10 @@ Operator, sofern er existiert, w\"urde die RH als unmittelbares Korollar liefern
 (Selbstadjungiertheit $\Rightarrow$ reelle Eigenwerte $\Rightarrow$ Nullstellen auf
 der kritischen Linie).
 
-Einhundert Jahre der Bem\"uhungen haben Kandidaten-Operatoren hervorgebracht (Berry--Keating
-$H = xp$ \cite{BerryKeating1999}, Connes' adelischer Dirac-Operator
-\cite{Connes1999} und andere), aber keinen, der nachweislich das Riemannsche
-Spektrum realisiert.
+Einhundert Jahre der Bem\"uhungen haben Kandidaten-Operatoren hervorgebracht:
+Berry--Keatings $H = xp$ \cite{BerryKeating1999}, Connes' adelischen
+Dirac-Operator \cite{Connes1999} und weitere Ans\"atze.
+Doch keiner davon realisiert nachweislich das Riemannsche Spektrum.
 
 \subsection{Die v2.0-Alternative}
 
@@ -980,14 +1027,17 @@ quadratische Form.
 
 \subsection{Selberg als Best\"atigung: Der Operator existiert, ist aber nicht erforderlich}
 
-Theorem~\ref{thm:v2-Sel-RH} zeigt, dass v2.0 die Selberg-RH bedingt
-auf die gerade Dominanz von $\QW^\Gamma_\lambda$ reduziert.  In diesem Fall existiert
+Theorem~\ref{thm:v2-Sel-RH} zeigt, dass v2.0 die strenge Selberg-Aussage zur
+kritischen Linie bedingt auf die gerade Dominanz von $\QW^\Gamma_\lambda$ und
+$\lambda_1(\Delop)\ge 1/4$ reduziert.  In diesem Fall existiert
 ebenfalls ein Hilbert--P\'olya-Operator $\Delop$ (Theorem~\ref{thm:NEB-fail}), und seine spektrale
 Positivit\"at best\"atigt unabh\"angig die Schlussfolgerung.  Die beiden Routen koexistieren:
 \begin{itemize}
-\item Selbergs Originalbeweis (spektral: $\Delop \ge 0$, unbedingt).
+\item Selbergs urspr\"ungliche Spektraltheorie (unbedingte spektrale
+  Parametrisierung; strenge kritische Linie unter $\lambda_1(\Delop)\ge 1/4$).
 \item Die v2.0-Reduktion (quadratisch: gerade Dominanz von $\QW^\Gamma_\lambda$
-  impliziert Selberg-RH, bedingt auf gerade Dominanz).
+  impliziert die strenge kritische-Linien-Aussage unter der genannten
+  L\"uckenhypothese).
 \end{itemize}
 Beide gelangen auf unterschiedlichen Wegen zum selben Schluss. Die v2.0-Methode
 \emph{subsumiert} die operator-basierte Route: sie ist anwendbar unabh\"angig davon, ob ein
@@ -1042,10 +1092,14 @@ In dieser Terminologie sind die Punkte (iii)--(iv) unseres informellen Theorems~
 die Aussage, dass $C2_X$ im Lie-Ursprungs-Zweig trivialisiert wird und
 im arithmetischen Zweig offen (\"aquivalent zum klassischen Hilbert--P\'olya) ist.
 Der feinere Aspekt, der in \cite{GeigerMeta2026} hervorgehoben wird,
-ist, dass $C2_X$ selbst in einen \emph{Parit\"ats-Teilschritt}
-$C2_X^{\mathrm{parity}}$ (einfacher Grundzustand mit geradem Eigenvektor) und einen
-\emph{Eigenvektor-Realisierungs-Teilschritt} $C2_X^{\mathrm{eigenvec}}$
-(Konvergenz der Hermite-Prolate-Approximation) zerf\"allt. Im aktuellen CORE-Status
+ist die Zerlegung von $C2_X$ in zwei Teilschritte:
+\[
+C2_X^{\mathrm{parity}}
+\quad\text{und}\quad
+C2_X^{\mathrm{eigenvec}}.
+\]
+Der erste bezeichnet den einfachen Grundzustand mit geradem Eigenvektor,
+der zweite die Konvergenz der Hermite-Prolate-Approximation. Im aktuellen CORE-Status
 ist der Riemannsche $C2/MS2$-Block im CCM/Fourier-Zweig durch die Drei-Lemma-Mikrocluster-Schlie\ss{}ung
 des Zookeepers geschlossen. Dies \"andert nichts an der
 Beweisverpflichtung f\"ur Selberg: bei Selberg werden beide C2-Teilschritte
@@ -1160,12 +1214,14 @@ Kommutant, der NE-B f\"ur Ihara aus exakt demselben strukturellen Grund wie im S
 Die drei-Wege-Vergleichsachse im Zookeeper-Rahmen lautet:
 
 \begin{center}
-\begin{tabular}{llll}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}L{2.0cm}L{1.7cm}L{5.2cm}L{2.0cm}@{}}
 \toprule
-\textbf{Zetafunktion} & \textbf{Typ} & \textbf{Kommutant} & \textbf{v2.0 Klasse} \\
+\shortstack[l]{\textbf{Zeta-}\\\textbf{funktion}} & \textbf{Typ} & \textbf{Kommutant} & \shortstack[l]{\textbf{v2.0-}\\\textbf{Klasse}} \\
 \midrule
-Selberg $Z_\Gamma(s)$ & kontinuierlich, geom. & $\Delta_\Gamma$ (Laplace--Beltrami) & SGE-YES \\
-Ihara $\zeta_\Gamma(s)$ & diskret, komb. & $L = (q{+}1)I - A$ (Graph-Laplace) & SGE-YES \\
+\shortstack[l]{Selberg\\$Z_\Gamma(s)$} & \shortstack[l]{kont.\\geom.} & \shortstack[l]{$\Delta_\Gamma$\\(Laplace--Beltrami)} & SGE-YES \\
+Ihara $\zeta_\Gamma(s)$ & \shortstack[l]{diskret,\\ komb.} & $L = (q{+}1)I - A$ (Graph-Laplace) & SGE-YES \\
 Riemann $\zeta(s)$ & arithmetisch & keiner (NE-B gilt) & SGE-NO \\
 \bottomrule
 \end{tabular}
@@ -1207,11 +1263,13 @@ ihre Belegungen in den Selberg- und Riemann-Settings.
 
 \begin{table}[ht]
 \centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
 \caption{Die f\"unf SGE-YES Transfer-Slots f\"ur Selberg vs.\ Riemann.
   Ein H\"akchen (\checkmark) zeigt an, dass der Slot klassisch besetzt ist;
   ``v2.0'' zeigt an, dass er durch das v2.0-Rahmenwerk etabliert wird.}
 \label{tab:transfer-slots}
-\begin{tabular}{p{2.2cm}p{5.0cm}p{5.0cm}}
+\begin{tabularx}{\textwidth}{@{}L{2.3cm}L{4.95cm}L{4.85cm}@{}}
 \toprule
 \textbf{Slot} & \textbf{Selberg (SGE-YES)} & \textbf{Riemann} \\
 \midrule
@@ -1231,7 +1289,7 @@ Grenzwert
   & Volle Selberg-Spurformel \cite{Selberg1956} \checkmark
   & Volle Weilsche explizite Formel \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \begin{remark}[Galerkin vs.\ spektrale Trunkierung]
@@ -1261,14 +1319,15 @@ und kein Beweis daf\"ur, dass das Prime-Hub/OP5-Graphenproblem gel\"ost wurde.
 Das v2.0-Rahmenwerk klassifiziert die Selbergsche Zetafunktion
 $\Sel(s)$ korrekt als ein SGE-YES-System.  Spezifisch:
 \begin{enumerate}[label=(\roman*)]
-  \item Gerade Dominanz von $\QW^\Gamma_\lambda$ impliziert die Selbergsche Riemannsche
-    Vermutung (Theorem~\ref{thm:v2-Sel-RH}).
+  \item Gerade Dominanz von $\QW^\Gamma_\lambda$ impliziert zusammen mit
+    $\lambda_1(\Delop)\ge 1/4$ die strenge Selberg-Aussage zur kritischen Linie
+    (Theorem~\ref{thm:v2-Sel-RH}).
   \item Der Laplace--Beltrami-Operator $\Delop$ ist ein universeller Kommutant,
     weshalb NE-B f\"ur Selberg scheitert (Theorem~\ref{thm:NEB-fail}).
   \item Alle f\"unf Zookeeper-Transfer-Slots sind besetzt
     (Tabelle~\ref{tab:transfer-slots}).
-  \item Die v2.0-Klassifizierung ist konsistent mit Selbergs klassischem spektralen Beweis \"uber $\Delop$ und
-    verifiziert diesen unabh\"angig.
+  \item Die v2.0-Klassifizierung ist mit Selbergs klassischer Spektraltheorie
+    \"uber $\Delop$ auf derselben Hypothesenebene konsistent.
 \end{enumerate}
 \end{proposition}
 
@@ -1277,15 +1336,17 @@ $\Sel(s)$ korrekt als ein SGE-YES-System.  Spezifisch:
 % =============================================================================
 
 Wir haben die v2.0-Methodik an der Selbergschen Zetafunktion getestet. Das
-Verschiebungs-Parit\"ats-Lemma, die Frontier-Dominanz, die Weilsche quadratische Form und NE-A
-\"ubertragen sich alle auf das Selberg-Setting mit bescheidenen Modifikationen (haupts\"achlich
-Konstanten und Dichteregime). Gerade Dominanz der Selberg--Weilschen
-quadratischen Form $\QW^\Gamma_\lambda$ liefert einen zweiten Beweis der Selbergschen
-Riemannschen Vermutung, der in Anbetracht von Selbergs Spektralbeweis redundant ist.
+Verschiebungs-Parit\"ats-Lemma, die Frontier-Dominanz, die Weilsche quadratische Form
+und NE-A \"ubertragen sich auf das Selberg-Setting mit bescheidenen Modifikationen
+(haupts\"achlich Konstanten und Dichteregime). Gerade Dominanz der Selberg--Weilschen
+quadratischen Form $\QW^\Gamma_\lambda$ liefert zusammen mit
+$\lambda_1(\Delop)\ge 1/4$ eine bedingte v2.0-Reduktion der strengen
+Selberg-Aussage zur kritischen Linie, konsistent mit der klassischen
+spektralen Beschreibung.
 
 Die entscheidende strukturelle Erkenntnis ist, dass \emph{NE-B f\"ur Selberg scheitert}:
-der Laplace--Beltrami-Operator $\Delop$ ist ein universeller Kommutant f\"ur die
-Familie der Geod\"aten-Verschiebungs-Operatoren. Dies ist das Kennzeichen eines echten
+Der Laplace--Beltrami-Operator $\Delop$ ist ein universeller Kommutant
+f\"ur die Familie der Geod\"aten-Verschiebungs-Operatoren. Dies ist das Kennzeichen eines echten
 Hilbert--P\'olya-Systems --- und der v2.0-Kommutator-Test, ausgef\"uhrt auf einem
 solchen System, w\"urde es erkennen.
 
@@ -1325,6 +1386,7 @@ C. Deninger,
 \emph{Motivic $L$-functions and regularized determinants},
 in \emph{Motives} (Seattle, WA, 1991),
 Proc. Sympos. Pure Math. \textbf{55}, Part~1, Amer. Math. Soc., Providence, RI, 1994, pp.~707--743.
+\href{https://doi.org/10.1090/pspum/055.1/1265547}{doi:10.1090/pspum/055.1/1265547}.
 
 \bibitem{RudnickSarnak1996}
 Z. Rudnick und P. Sarnak,
@@ -1347,11 +1409,13 @@ SIAM Review \textbf{41} (1999), 236--266.
 O. Bohigas, M.-J. Giannoni und C. Schmit,
 \emph{Characterization of chaotic quantum spectra and universality of level fluctuation laws},
 Phys. Rev. Lett. \textbf{52} (1984), 1--4.
+\href{https://doi.org/10.1103/PhysRevLett.52.1}{doi:10.1103/PhysRevLett.52.1}.
 
 \bibitem{Connes1999}
 A. Connes,
 \emph{Trace formula in noncommutative geometry and the zeros of the Riemann zeta function},
 Selecta Math. (N.S.) \textbf{5} (1999), 29--106.
+\href{https://doi.org/10.1007/s000290050042}{doi:10.1007/s000290050042}.
 
 \bibitem{Connes2026}
 A. Connes,
@@ -1359,10 +1423,10 @@ A. Connes,
 arXiv:2602.04022 (Februar 2026).
 \href{https://arxiv.org/abs/2602.04022}{arXiv:2602.04022}.
 
-\bibitem{ConnesMoscovici2023}
+\bibitem{ConnesMoscovici2022}
 A. Connes und H. Moscovici,
-\emph{Prolate spheroidal operator and Zeta},
-Proc. Natl. Acad. Sci. USA \textbf{119} (2022), no.~28, e2123174119.
+\emph{The UV prolate spectrum matches the zeros of zeta},
+Proc. Natl. Acad. Sci. USA \textbf{119} (2022), no.~22, e2123174119.
 \href{https://doi.org/10.1073/pnas.2123174119}{doi:10.1073/pnas.2123174119}.
 Auch: arXiv:2112.05500.
 
@@ -1370,11 +1434,12 @@ Auch: arXiv:2112.05500.
 D. Dolgopyat,
 \emph{On decay of correlations in Anosov flows},
 Ann. of Math. (2) \textbf{147} (1998), 357--390.
+\href{https://doi.org/10.2307/121012}{doi:10.2307/121012}.
 
 \bibitem{Geiger2026partII}
 L. Geiger,
-\emph{The Riemann Hypothesis: Even Dominance of the Weil Quadratic Form},
-Zenodo preprint (2026). DOI: 10.5281/zenodo.19546593 (v2.1).
+\emph{From Landscape to Proof: The Even-Dominance Route to the Riemann Hypothesis},
+Zenodo-Preprint (2026), v2.3. \href{https://doi.org/10.5281/zenodo.20193056}{doi:10.5281/zenodo.20193056}.
 
 \bibitem{GeigerMeta2026}
 L. Geiger,
@@ -1390,6 +1455,7 @@ Lecture Notes in Mathematics \textbf{548}, Springer-Verlag, 1976.
 H. Huber,
 \emph{Zur analytischen Theorie hyperbolischer Raumformen und Bewegungsgruppen},
 Math. Ann. \textbf{138} (1959), 1--26.
+\href{https://doi.org/10.1007/BF01369663}{doi:10.1007/BF01369663}.
 
 \bibitem{Iwaniec2002}
 H. Iwaniec,
@@ -1400,6 +1466,7 @@ H. Iwaniec,
 P. Sarnak,
 \emph{Asymptotic behavior of periodic orbits of the horocycle flow and Eisenstein series},
 Comm. Pure Appl. Math. \textbf{34} (1981), 719--739.
+\href{https://doi.org/10.1002/cpa.3160340602}{doi:10.1002/cpa.3160340602}.
 
 \bibitem{Selberg1956}
 A. Selberg,
@@ -1414,23 +1481,27 @@ Proc. Sympos. Pure Math. \textbf{VIII}, Amer. Math. Soc., Providence, RI, 1965, 
 \bibitem{Ihara1966}
 Y. Ihara,
 \emph{On discrete subgroups of the two by two projective linear group over $p$-adic fields},
-J. Math. Soc. Japan \textbf{18} (1966), no.~2, 219--235.
+J. Math. Soc. Japan \textbf{18} (1966), no.~3, 219--235.
+\href{https://doi.org/10.2969/jmsj/01830219}{doi:10.2969/jmsj/01830219}.
 
 \bibitem{Hashimoto1989}
 K.\ Hashimoto,
 \emph{Zeta functions of finite graphs and representations of $p$-adic groups},
 in \emph{Automorphic Forms and Geometry of Arithmetic Varieties},
 Adv.\ Stud.\ Pure Math.\ \textbf{15}, Academic Press, 1989, pp.~211--280.
+\href{https://doi.org/10.1016/B978-0-12-330580-0.50015-X}{doi:10.1016/B978-0-12-330580-0.50015-X}.
 
 \bibitem{Bass1992}
 H.\ Bass,
 \emph{The Ihara--Selberg zeta function of a tree lattice},
 Int.\ J.\ Math.\ \textbf{3} (1992), no.~6, 717--797.
+\href{https://doi.org/10.1142/S0129167X92000357}{doi:10.1142/S0129167X92000357}.
 
 \bibitem{LPS1988}
 A. Lubotzky, R. Phillips und P. Sarnak,
 \emph{Ramanujan graphs},
 Combinatorica \textbf{8} (1988), no.~3, 261--277.
+\href{https://doi.org/10.1007/BF02126799}{doi:10.1007/BF02126799}.
 
 \end{thebibliography}
 
