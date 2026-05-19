@@ -6,7 +6,7 @@ Zenodo concept DOI: <https://doi.org/10.5281/zenodo.19087443>
 
 ## Status
 
-This folder contains the public v1.2 paper files released on Zenodo as record <https://doi.org/10.5281/zenodo.20270874>. Version 1.2 adds the Post-Zookeeper module framing, corrects the Szpiro/Tamagawa bridge, and incorporates the 2026-05-18 source-metadata cleanup. The paper remains a structural reformulation: rank <= 1 is verified through the Gross-Zagier/Kolyvagin regime, while the rank >= 2 Higher Gross-Zagier bridge remains open.
+This folder contains the public v1.3 paper files released on Zenodo as record <https://doi.org/10.5281/zenodo.20282070>. Version 1.3 is a maintenance release: it publishes the post-v1.2 disclosure/style hotfix, keeps AI use only in a neutral disclosure section, updates the IUT companion reference to the stable Concept DOI, and adds the advanced-draft note directly to the Zenodo description. The paper remains a structural reformulation: rank <= 1 is verified through the Gross-Zagier/Kolyvagin regime, while the rank >= 2 Higher Gross-Zagier bridge remains open.
 
 ## Files
 
@@ -14,7 +14,7 @@ This folder contains the public v1.2 paper files released on Zenodo as record <h
 |------|---------|
 | `BSD_Positivity_EN.tex` / `BSD_Positivity_EN.pdf` | English paper source and PDF |
 | `BSD_Positivity_DE.tex` / `BSD_Positivity_DE.pdf` | German paper source and PDF |
-| `BSD_Positivity_kombi.pdf` | Combined EN+DE PDF released with v1.2 |
+| `BSD_Positivity_kombi.pdf` | Combined EN+DE PDF released with v1.3 |
 | `../../scripts/bsd/compute_bsd_verification.py` | BSD formula sanity checks for selected LMFDB curves |
 | `../../scripts/bsd/compute_height_saturation.py` | Rank-1 identity and quadratic-twist heuristic plot |
 | `../../scripts/bsd/compute_rank2_lmfdb.py` | Rank-2 regulator positivity sample and plot |
