@@ -4,18 +4,19 @@ Public reproducibility package for Paper A in the turbulence split of the
 Functional Stability Theory program.
 
 Zenodo concept DOI: <https://doi.org/10.5281/zenodo.20131305>  
-Latest v1.0 DOI: <https://doi.org/10.5281/zenodo.20131306>
+Latest v1.2 DOI: <https://doi.org/10.5281/zenodo.20234096>
 
 Companion Turbulence/DFC Paper-B concept DOI:
 <https://doi.org/10.5281/zenodo.19056813>
 
 ## Status
 
-This folder contains the unconditional K41 variational-minimizer paper:
+This folder contains the current public K41 variational-minimizer paper package:
 the Kolmogorov spectrum is isolated as the unique global minimizer of a
 scale-resolved free-energy functional under the stated joint minimization
-problem. The conditional anomalous-dissipation and Downhill Flux route lives in
-the companion folder `../turbulence/`.
+problem. The latest live maintenance release is Zenodo v1.2. The conditional
+anomalous-dissipation and Downhill Flux route lives in the companion folder
+`../turbulence/`.
 
 ## Files
 
