@@ -4,11 +4,11 @@ Application-scale companions of the **Functional Stability Theory** programme, s
 
 | Slot | Scale | Title | Concept-DOI | Latest |
 |---|---|---|---|---|
-| **FST-I** | Particles / Thermodynamics | Game-Theoretic Framework for the Thermodynamic Stability of Fundamental Parameters | [10.5281/zenodo.20130544](https://doi.org/10.5281/zenodo.20130544) | v1.1 |
-| **FST-II** | Chemistry / Autocatalysis | Chemical Stability and Autocatalytic Selection | [10.5281/zenodo.20130563](https://doi.org/10.5281/zenodo.20130563) | v1.1 |
-| **FST-III** | Biology / Protein folding | Biological Stability and Nash Frustration | [10.5281/zenodo.20130573](https://doi.org/10.5281/zenodo.20130573) | v1.1 |
-| **FST-IV** | Cosmology (collector slot) | Cosmological Stability — Collector for CRM, Saturation, QG-CRM and Dark Energy | *(in preparation, v0 skeleton)* | v0.1 (local) |
-| ↳ FST-DE | sub: Dark Energy | Dark Energy as Residual Vacuum Free Energy | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) | v1.8 |
+| **FST-I** | Particles / Thermodynamics | Game-Theoretic Framework for the Thermodynamic Stability of Fundamental Parameters | [10.5281/zenodo.20130544](https://doi.org/10.5281/zenodo.20130544) | v1.2 live / local v1.3 guardrail |
+| **FST-II** | Chemistry / Autocatalysis | Chemical Stability and Autocatalytic Selection | [10.5281/zenodo.20130563](https://doi.org/10.5281/zenodo.20130563) | v1.3 |
+| **FST-III** | Biology / Protein folding | Biological Stability and Nash Frustration | [10.5281/zenodo.20130573](https://doi.org/10.5281/zenodo.20130573) | v1.2 live / local v1.3 guardrail |
+| **FST-IV** | Cosmology (collector slot) | Cosmological Stability — Collector for CRM, Saturation, QG-CRM and Dark Energy | *(in preparation, v0 skeleton)* | v0.2 (local) |
+| ↳ FST-DE | sub: Dark Energy | Dark Energy as Residual Vacuum Free Energy | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) | v1.9 |
 | **Hub** | Programme umbrella | FST — A Programmatic Hub: Universal Convexity-Uniqueness Across Scales | [10.5281/zenodo.20130499](https://doi.org/10.5281/zenodo.20130499) | v1.4 |
 
 All papers are published on Zenodo with persistent DOIs (except the FST-IV Cosmology collector which is currently a v0 skeleton and not yet on Zenodo). This repository holds the LaTeX sources and compiled PDFs.
@@ -20,12 +20,14 @@ The **FST-DE** paper lives under `../fst-cosmology/dark-energy/` (cosmology doma
 ## Honest status
 
 - **Hub:** v1.4, programmatic survey with FST Series + FST Foundations tables.
-- **FST-I:** ~8.5/10 readiness; future v1.2+ items: Polettini 2013 MEPP-critique reference, DE-EN sync, design polish.
-- **FST-II:** ~8.5/10 readiness (referee minor-revision); future v1.2+ items: MEPP-controversy framing, England-causal weakening, additional experimental tests.
-- **FST-III:** ~7.5/10 readiness (referee moderate-revision); future v1.2+ items: η-calibration, cosmology section relocation, TP53 mutational analysis, quantitative falsifiable predictions.
-- **FST-IV Cosmology collector:** KONZEPT + v0 skeleton; LaTeX body to be filled with the CRM-series / FST-DE / CRM-VI synthesis and the Flow-Zeta math reformulation.
+- **FST-I:** v1.2 is live on Zenodo; the current public repo package mirrors the local v1.3 guardrail candidate. The open gate is whether that guardrail revision should become Zenodo v1.3.
+- **FST-II:** v1.3 is live; the chemistry line remains the nearest journal-submission candidate and already mirrors its current public reproducibility package.
+- **FST-III:** v1.2 is live on Zenodo; the repo contains the tightened local v1.3 guardrail package, while the protein-folding code/data expansion continues in the private companion workflow.
+- **FST-IV Cosmology collector:** KONZEPT + v0.2 skeleton; LaTeX body to be filled with the CRM-series / FST-DE / CRM-VI synthesis and the Flow-Zeta math reformulation.
 
 ## Scripts &amp; results
 
+- FST-I public artefacts are mirrored under `fst-i-thermodynamic/papers/`, `fst-i-thermodynamic/scripts/` and `fst-i-thermodynamic/results/`, including the entropy scan outputs and the 2D log-Hessian pilot JSON. A dedicated scripted reproducer for the Hessian pilot is still future work.
 - FST-II reproducibility artefacts are mirrored under `fst-ii-chemical/scripts/` and `fst-ii-chemical/results/`.
-- Computational artefacts for FST-I, FST-III and FST-IV are still tracked locally and will be mirrored as the next public application revisions stabilize.
+- FST-III public paper artefacts are mirrored under `fst-iii-biological/papers/`; the larger protein-folding code/data workflow remains in the private companion repo `research-line/fst-nash`.
+- FST-IV computational artefacts are still primarily tracked locally and will be mirrored as the collector paper stabilizes.
