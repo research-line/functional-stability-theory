@@ -248,11 +248,23 @@ The transfer operator $\hat{T}: \mathcal{H}_{\mathrm{phys}} \to \mathcal{H}_{\ma
 where $K(U_+, U_-)$ is the transfer kernel obtained by integrating out temporal links connecting two adjacent time slices. The Hamiltonian is defined by $H = -\log \hat{T}$ (in lattice units $a = 1$).
 \end{definition}
 
-The mass gap in the lattice theory is
+For a local gauge-invariant observable $\mathcal{O}$ whose connected
+two-point function has nonzero overlap with the first excited channel, set
+\[
+  C_{\mathcal{O}}(t)
+  :=
+  \langle \mathcal{O}(t)\mathcal{O}(0)\rangle_{\mu_\Lambda}
+  - \langle \mathcal{O}\rangle_{\mu_\Lambda}^{2}.
+\]
+The mass gap in the lattice theory can then be read from the exponential
+decay of the connected correlator,
 \begin{equation}
-    \Delta_\Lambda = -\lim_{t \to \infty} \frac{1}{t} \log \frac{\langle \mathcal{O}(t) \mathcal{O}(0) \rangle_{\mu_\Lambda}}{\langle \mathcal{O} \rangle_{\mu_\Lambda}^2}
+    \Delta_\Lambda
+    =
+    -\lim_{t \to \infty} \frac{1}{t}\log |C_{\mathcal{O}}(t)|,
 \end{equation}
-for any gauge-invariant observable $\mathcal{O}$ with $\langle \mathcal{O} \rangle_{\mu_\Lambda} \neq 0$. Equivalently, $\Delta_\Lambda$ is the gap between the two largest eigenvalues of $\hat{T}$:
+when this observable realizes the lowest non-vacuum channel. Equivalently,
+$\Delta_\Lambda$ is the gap between the two largest eigenvalues of $\hat{T}$:
 \begin{equation}\label{eq:lattice-gap}
     \Delta_\Lambda = \log \frac{\lambda_0(\hat{T})}{\lambda_1(\hat{T})},
 \end{equation}
@@ -261,7 +273,13 @@ where $\lambda_0 > \lambda_1 \geq \lambda_2 \geq \cdots$ are the eigenvalues of 
 \subsection{Reflection positivity under weak coupling}
 \label{sec:rp-weak}
 
-Lemma~\ref{lem:reflection-positivity} establishes reflection positivity (RP) for the lattice Yang--Mills measure in the strong-coupling regime. Extending RP to the weak-coupling regime $\beta > \beta_0$ is essential for the Osterwalder--Schrader reconstruction.
+Lemma~\ref{lem:reflection-positivity} establishes finite-lattice reflection
+positivity (RP) for the Wilson and heat-kernel lattice weights considered
+here whenever the Peter--Weyl coefficients are nonnegative; for the Wilson
+weights this is not restricted to the strong-coupling window. The weak-coupling
+issue in this paper is therefore not finite-lattice RP itself, but the
+preservation of RP through block-spin RG and the Osterwalder--Schrader
+continuum limit.
 
 \begin{proposition}[RP preservation under block-spin RG]
 \label{prop:rp-preservation}
@@ -273,11 +291,18 @@ RP states that $\langle \Theta f, f \rangle_{\mu} \geq 0$ for all functions $f$ 
 \[
 \langle \Theta(\mathcal{R} f), \mathcal{R} f \rangle_{\mu'} = \langle \mathcal{R}(\Theta f), \mathcal{R} f \rangle_{\mu'} = \langle f, \mathcal{R}^* \Theta \mathcal{R} f \rangle_{\mu} \geq 0,
 \]
-where the last inequality holds because $\Theta \geq 0$ (RP of $\mu$) and $\mathcal{R}$ is a positive linear operator, so $\mathcal{R}^* \Theta \mathcal{R} \geq 0$ as a quadratic form. (Note: $\mathcal{R}$ is \emph{not} an isometry; the argument uses positivity of the composed operator, not norm preservation.) The key condition is that $\mathcal{R}$ respects the lattice symmetries, which holds for standard block-spin transformations (Balaban, 1984~\cite{Balaban1985b}).
+where the last inequality holds if $\mathcal{R}$ maps one-sided observables to one-sided observables and is positive in the OS inner product. (Note: $\mathcal{R}$ is \emph{not} an isometry; the argument uses positivity of the composed operator, not norm preservation.) The key condition is therefore not finite-lattice RP itself, but verified compatibility of the chosen RG kernel with reflection support and the OS-positive cone; symmetric block-spin kernels are natural candidates, but this compatibility is an assumption to be checked in the continuum programme.
 \end{proof}
 
 \begin{remark}[RP preservation programme for the continuum limit]
-The proposition reduces the RP problem to verifying two conditions: (1) RP holds at the initial (strong-coupling) scale, which is Lemma~\ref{lem:reflection-positivity}; (2) the block-spin kernel commutes with reflections, which is a symmetry property of the RG scheme. Together with the gap transport conjecture (Conjecture~\ref{conj:gap-transport}), this gives a concrete checklist for a reflection-positive continuum measure with a mass gap, but the continuum construction itself remains conditional on the RG and OS inputs stated below.
+The proposition reduces the RP-continuum problem to verifying two conditions:
+(1) RP holds at every finite lattice scale used in the RG scheme, as supplied
+by Lemma~\ref{lem:reflection-positivity} for the Wilson/heat-kernel weights;
+(2) the block-spin kernel commutes with reflections. Together with the gap
+transport conjecture (Conjecture~\ref{conj:gap-transport}), this gives a
+concrete checklist for a reflection-positive continuum measure with a mass
+gap, but the continuum construction itself remains conditional on the RG and
+OS inputs stated below.
 \end{remark}
 
 % ======================================================================
@@ -286,9 +311,21 @@ The proposition reduces the RP problem to verifying two conditions: (1) RP holds
 
 We now state the lattice gap result. Strict convexity of the free-energy functional motivates the variational setup, while the quantitative lower bound is obtained from the Poincar\'e--Dobrushin machinery.
 
-\begin{theorem}[Spectral gap from free-energy convexity]
+\begin{theorem}[Strong-coupling lattice spectral gap]
 \label{thm:lattice-gap}
-Let $G$ be a compact simple Lie group and $\beta < \beta_0(d,G) := 1/C(d,G)$ (strong-coupling regime). The transfer operator $\hat{T}$ of the Wilson lattice gauge theory on $\Lambda$ has a spectral gap: in the gauge-invariant sector of $\mathcal{H}_{\mathrm{phys}}$,
+Let $G$ be a compact simple Lie group and let $d_\ell=2(d-1)$ be the
+number of plaquettes incident to a link in the hypercubic lattice. Assume the
+Dobrushin smallness condition
+\[
+  \eta(\beta) \le d_\ell\,\tanh\!\bigl(\beta C(G)/2\bigr)<1,
+\]
+equivalently, for $C(G)>0$,
+\[
+  \beta < \beta_0(d,G):=\frac{2}{C(G)}\,\mathrm{artanh}\!\left(\frac{1}{d_\ell}\right)
+\]
+(strong-coupling regime). The transfer operator $\hat{T}$ of the Wilson lattice
+gauge theory on $\Lambda$ has a spectral gap: in the gauge-invariant sector of
+$\mathcal{H}_{\mathrm{phys}}$,
 \begin{equation}
     \Delta_\Lambda = \log \frac{\lambda_0}{\lambda_1} \geq \kappa(\beta, G) > 0,
 \end{equation}
@@ -326,7 +363,13 @@ where $C(G) \leq 1$ is the normalised character bound. (The conditional log-dens
 \begin{equation}
     \eta(\beta) := \sup_\ell \sum_{\ell'} c_{\ell,\ell'} \leq d_\ell \cdot \tanh\!\bigl(\beta\,C(G)/2\bigr).
 \end{equation}
-The Dobrushin uniqueness condition $\eta(\beta) < 1$ holds for $\beta < \beta_0 := 2\,\mathrm{artanh}(1/d_\ell\,C(G))$, and the Zegarlinski criterion~\cite{Zegarlinski1990} yields a volume-independent Poincar\'e inequality:
+The Dobrushin uniqueness condition $\eta(\beta) < 1$ holds for
+\[
+  \beta < \beta_0(d,G):=\frac{2}{C(G)}\,\mathrm{artanh}\!\left(\frac{1}{d_\ell}\right),
+\]
+with the evident interpretation in the normalized $SU(N)$ case $C(G)=1$.
+The Zegarlinski criterion~\cite{Zegarlinski1990} then yields a
+volume-independent Poincar\'e inequality:
 \begin{equation}
     \kappa(\Lambda) \geq (1 - \eta(\beta))\,\kappa_{\mathrm{link}}(\beta, G) =: \kappa_* > 0,
 \end{equation}
@@ -344,9 +387,14 @@ c_{ij} = \sup_{\omega, \omega': \omega_k = \omega'_k \forall k \neq j} \| \mu_i(
 \]
 quantifies the influence of site $j$ on the conditional distribution at site $i$. For lattice Yang--Mills theory, $c_{ij} = 0$ unless $i$ and $j$ share a plaquette, giving a sparse matrix with spectral radius
 \[
-\rho(C) \leq d_l \cdot \sup_{l} c_{l, \mathrm{nbr}} \leq 6 \cdot \tanh(\beta/2).
+\rho(C) \leq d_\ell \cdot \sup_{\ell} c_{\ell, \mathrm{nbr}}
+       \leq 6 \cdot \tanh(\beta C(G)/2).
 \]
-The Dobrushin uniqueness condition $\rho(C) < 1$ holds for $\beta < 2\,\mathrm{artanh}(1/6) \approx 0.336$; this is the threshold used in the main theorem above. (A na\"ive linearisation $\tanh(x) \leq x$ would give the weaker threshold $\beta_0 \approx 1/36 \approx 0.028$.)
+For the fundamental $SU(N)$ normalization $C(G)=1$, the Dobrushin uniqueness
+condition $\rho(C) < 1$ holds for
+$\beta < 2\,\mathrm{artanh}(1/6) \approx 0.336$; this is the threshold used in
+the main theorem above. (A na\"ive linearisation $\tanh(x) \leq x$ would give
+the weaker sufficient threshold $\beta_0 \approx 1/36 \approx 0.028$.)
 
 On the block level (after one RG step), the effective influence matrix $C'$ has entries bounded by $\rho(C)^{2^d}$ (geometric decay of correlations across blocks), yielding $\rho(C') \leq \rho(C)^{16}$ in 4D. This exponential improvement per RG step is the mechanism behind Gap Transport.
 \end{remark}
@@ -757,9 +805,23 @@ Kingman $\lambda < 0$ (tested $\beta$ grid) & Transfer matrix diagnostic & Rem.~
 \multicolumn{3}{@{}l}{\textit{Open:}} \\
 Summable RG defect analytically for $\beta \to \infty$ & Conjecture & Sec.~\ref{sec:gamma-rg} \\
 Gap transport (all $\beta$) & Conjecture & Conj.~\ref{conj:gap-transport} \\
+Warm-corridor/OS-dangerous defect capacity and scale-degree ledger & Future-work guardrail & Rem.~\ref{rem:warm-corridor-guardrail} \\
 \bottomrule
 \end{tabularx}
 \end{table}
+
+\begin{remark}[Defect-capacity guardrail]\label{rem:warm-corridor-guardrail}
+The current proof ledger refines the open GT2/summable-defect condition by a
+``warm-corridor'' diagnostic. A negative Kingman exponent
+$\lambda<0$ remains only an average-contraction signal: it can miss a coherent
+family of OS-dangerous bad-scale corridors. Future checks should therefore
+track, on the same RG scale axis, good-scale density, OS-safe multiplicative
+degradation, OS-dangerous corridor capacity, and the target continuum gap. In
+particular, an RG sequence with $\lambda<0$ but non-summable OS-dangerous
+corridor capacity is a false-positive channel, not a mass-gap transfer. This
+remark adds no new theorem; it records the sharper guardrail for the open
+continuum/RG step.
+\end{remark}
 
 % ======================================================================
 \section{Discussion}
@@ -773,9 +835,17 @@ To put the strong-coupling threshold in perspective: for $SU(2)$ in $d=4$, the $
 
 \subsection{The Role of Strict Convexity}
 
-The strict convexity of $\mathcal{F}$ plays the role that coercivity of the Hamiltonian plays in conventional approaches. The key insight is that massless excitations---if they existed---would correspond to flat directions in $\mathcal{F}$, i.e., perturbations $\delta\mu$ with $\delta^2 \mathcal{F}[\mu_\Lambda](\delta\mu, \delta\mu) = 0$. But the entropy term in $\mathcal{F}$ ensures that no such flat directions exist among gauge-invariant perturbations.
+The strict convexity of $\mathcal{F}$ motivates the variational setup, but it
+should not be read as a stand-alone proof of the operator mass gap. At finite
+volume the KL term rules out literal flat directions in the measure-level
+free-energy functional, yet the quantitative spectral statement comes from the
+Poincar\'e--Dobrushin estimate and its transfer-operator translation in
+Theorem~\ref{thm:lattice-gap}. The Hessian identity is therefore a diagnostic
+and organising principle, not an alternative to the Poincar\'e inequality.
 
-This mechanism is analogous to the generation of a mass gap in the $(\nabla\varphi)^4$ scalar field theory by the entropy of fluctuations, where the perturbative masslessness is an artifact of ignoring the full non-perturbative measure.
+This is analogous in spirit to entropy-stabilised scalar-field mechanisms, but
+the Yang--Mills gap claim here is exactly the lattice spectral gap established
+above and the conditional RG/OS transport programme beyond strong coupling.
 
 \begin{remark}[Formal FST convexity and transport caveat]
 \label{rem:fst-convexity-talagrand}
@@ -810,7 +880,14 @@ where each $\mu_\alpha$ is concentrated near a local minimum of the Wilson actio
 \]
 where $\Delta_\alpha$ is the within-well Poincar\'e constant (computable via Bakry--\'Emery curvature on the orbit space $\mathcal{A}/\mathcal{G}$) and $\Delta_{\mathrm{mix}}$ is the between-well mixing rate (controlled by the Eyring--Kramers formula for barrier crossing).
 
-For SU(2) in 4D, the within-well curvature is bounded below by the Ricci curvature of $S^3$, giving $\Delta_\alpha \geq 3 - O(\beta^{-1})$. The between-well mixing rate depends on the instanton action: $\Delta_{\mathrm{mix}} \sim e^{-8\pi^2/g^2}$ (instanton tunnelling), which is exponentially small but strictly positive for any finite lattice.
+In a toy single-link well model for $SU(2)$, the Ricci curvature of $S^3$ would
+suggest a local scale comparable to $3-O(\beta^{-1})$. For the full lattice
+Yang--Mills measure this is only a heuristic target: one would still need a
+gauge-fixed metastable decomposition, control of gauge-orbit singularities, and
+a summable inter-well mixing estimate. The between-well mixing rate is
+physically related to instanton barriers of order $e^{-8\pi^2/g^2}$, but no
+finite-volume tunnelling estimate in this remark is used as a proof of the
+continuum mass gap.
 \end{remark}
 
 \subsection{Limitations and Open Problems}
@@ -1070,7 +1147,7 @@ where $\mu_k^{(\cdot)}$ denotes the conditional measure at scale $k$ given the c
 
 \begin{remark}[Connection to CL1--CL3]
 \label{rem:hierarchical-cl}
-The scale-resolved decomposition provides a concrete realisation of the abstract continuum limit conditions CL1--CL3. Specifically: CL1 (thermodynamic limit) follows from the telescoping bound; CL2' (uniform Poincar\'e in physical units, see Remark~\ref{rem:cl2-relaxation}) is equivalent to Gap Transport (Conjecture~\ref{conj:gap-transport}); CL3 (Osterwalder--Schrader) requires reflection positivity at each RG scale, which is guaranteed by Lemma~\ref{lem:reflection-positivity} since the block-spin map preserves the nonnegative Peter--Weyl structure of the plaquette weight.
+The scale-resolved decomposition provides a concrete realisation of the abstract continuum limit conditions CL1--CL3. Specifically: CL1 (thermodynamic limit) follows from the telescoping bound; CL2' (uniform Poincar\'e in physical units, see Remark~\ref{rem:cl2-relaxation}) is equivalent to Gap Transport (Conjecture~\ref{conj:gap-transport}); CL3 (Osterwalder--Schrader) requires reflection positivity at each RG scale. Lemma~\ref{lem:reflection-positivity} establishes the finite Wilson/heat-kernel input, but preservation through the chosen block-spin map remains an additional compatibility condition, not a consequence of the lemma alone.
 \end{remark}
 
 \begin{proposition}[Polynomial LSI scaling via projective contraction]
@@ -1265,7 +1342,7 @@ GT-YM fails if and only if one of the following obstructions produces \emph{quas
 \begin{enumerate}
 \item \textbf{Entropy defeats energy:} The RG step generates so many effective degrees of freedom that local coercivity is ``washed out'' globally---gap collapse by combinatorial explosion. This is the strong-to-weak coupling transition.
 \item \textbf{Topological quasi-zero modes:} Instantons, center vortices, or monopoles create nearly invariant directions that become denser in the continuum limit---gap erosion as a mechanism, not mysticism.
-\item \textbf{Gauge-fixing artefacts:} If transport works only after gauge fixing, the transported quantity may be an artefact, not the physical gap. Reflection positivity (Lemma~\ref{lem:reflection-positivity}) guards against this: it holds in all gauges and all $\beta$.
+\item \textbf{Gauge-fixing artefacts:} If transport works only after gauge fixing, the transported quantity may be an artefact, not the physical gap. Finite-lattice reflection positivity (Lemma~\ref{lem:reflection-positivity}) supplies a gauge-invariant OS test, but the RG construction must still show that this positivity survives the chosen transport.
 \end{enumerate}
 For SU(2) in the strong-coupling regime, none of these mechanisms is operative (Theorem~\ref{thm:conditional-gap}). For $\beta \to \infty$, mechanism~(1) is the primary suspect: the Holley--Stroock constant degrades as $e^{-O(\beta)}$, and only the typical-set improvement ($e^{-O(\sqrt{\beta})}$, Remark~\ref{rem:restricted-significance}) or hierarchical RG (Proposition~\ref{prop:polynomial-lsi}) can compensate.
 \end{remark}
@@ -1722,7 +1799,7 @@ We observe that the lattice mass gap result (Theorem~\ref{thm:lattice-gap}) fits
 \begin{enumerate}[label=\alph*)]
     \item \textbf{Analytical Rank-Finiteness (Null-Tail):} Just as the arithmetical kernel in the Riemann Hypothesis is rank-finite \cite{GeigerRH2026c}, the spectral instability of the Yang-Mills transfer operator is confined to a finite-dimensional gauge-variant subspace. The high-frequency (UV) tail is strictly controlled by the entropy-driven convexity of the free-energy functional.
     \item \textbf{Gauge-Invariance as Stability-Constraint:} The "finite negativity" (massless modes) associated with gauge-variant configurations is neutralized by identifying the \emph{physical test class} of gauge-invariant perturbations.
-    \item \textbf{Constrained Positivity (Mass Gap):} The strict convexity of the functional on the physical class acts as a gauge-shift, ensuring a finite spectral gap $\Delta > 0$. 
+    \item \textbf{Constrained Positivity (Mass Gap):} Strict convexity on the physical class is the variational stability signal; the finite spectral gap $\Delta > 0$ is obtained only after the Poincar\'e--Dobrushin and transfer-operator estimates are in place.
 \end{enumerate}
 
 In this picture, the mass gap reflects the confinement of spectral instabilities to the gauge-variant sector, while the physical (gauge-invariant) sector retains a positive spectral gap.
@@ -1813,7 +1890,7 @@ i.e., the following three conditions hold:
         the Gibbs measure satisfies uniform exponential decay of
         correlations under all boundary conditions, with a rate uniform
         in the volume $|\Lambda|$. (For the Wilson action, the Peter--Weyl coefficients
-        $a_\pi(\beta) \geq 0$ are guaranteed by Lemma~\ref{lem:reflection-positivity};
+        $a_\pi(\beta) \geq 0$ are supplied by the Osterwalder--Seiler input used in Lemma~\ref{lem:reflection-positivity};
         the content of~\textup{(K1)} is the Dobrushin--Shlosman condition on the
         \emph{measure}, not the plaquette weight.)
     \item \textbf{$O(a^2)$ anisotropy bound}: The lattice Schwinger functions
@@ -1969,15 +2046,15 @@ A.~Guionnet and B.~Zegar\-li\'nski, \emph{Lectures on logarithmic Sobolev inequa
 
 \bibitem{Kirk2026}
 H.~Kirk, \emph{From Lattice Mass Gap to Continuum SU(2) Yang--Mills Theory: O(4) Restoration and Osterwalder--Schrader Reconstruction}, Zenodo preprint, 2026.
-\href{https://doi.org/10.5281/zenodo.18824739}{doi:10.5281/zenodo.18824739}.
+\href{https://doi.org/10.5281/zenodo.18824738}{doi:10.5281/zenodo.18824738}.
 
 \bibitem{GeigerRH2026c}
-L.~Geiger, \emph{The Riemann Hypothesis Part III: The Analytical Rank-Finite Certificate}, Zenodo preprint, March 2026.
-\href{https://doi.org/10.5281/zenodo.19035845}{doi:10.5281/zenodo.19035845}.
+L.~Geiger, \emph{From Landscape to Proof: The Even-Dominance Route to the Riemann Hypothesis}, Zenodo preprint, 2026.
+\href{https://doi.org/10.5281/zenodo.19035640}{doi:10.5281/zenodo.19035640}.
 
 \bibitem{FST-Unified2026}
-L.~Geiger, \emph{The Renormalized Free Energy Framework: A Unified Resolution of Structural Bottlenecks}, Zenodo preprint, 2026.
-\href{https://doi.org/10.5281/zenodo.19036191}{doi:10.5281/zenodo.19036191}.
+L.~Geiger, \emph{FST Spectrum Duality: The Renormalized Free Energy Principle as Physical Instantiation of Functional Stability Theory}, Zenodo preprint, 2026.
+\href{https://doi.org/10.5281/zenodo.19036190}{doi:10.5281/zenodo.19036190}.
 
 \bibitem{DobrushinShlosman1985}
 R.~L.~Dobrushin and S.~B.~Shlosman, \emph{Constructive criterion for the
@@ -2028,22 +2105,27 @@ K.-T.~Sturm, \emph{Bakry--\'Emery, Hardy, and spectral gap estimates on manifold
 J.~F.~C.~Kingman, \textit{The ergodic theory of subadditive stochastic processes}, J.~Roy.\ Statist.\ Soc.\ Ser.~B, \textbf{30} (1968), 499--510.
 
 \bibitem{FST-NS2026}
-L.~Geiger, \emph{Navier--Stokes Existence and Smoothness via Renormalized Free Energy and BV Selection}, Zenodo preprint, 2026.
+L.~Geiger, \emph{A Thermodynamic Obstruction to Finite-Time Blow-Up in the 3D Navier--Stokes Equations}, Zenodo preprint, 2026.
+\href{https://doi.org/10.5281/zenodo.19087449}{doi:10.5281/zenodo.19087449}.
 
 \bibitem{Geiger2026-DE}
 L.~Geiger, \emph{Dark Energy as Residual Vacuum Free Energy: A Thermodynamic Bound on the Cosmological Constant}, Zenodo preprint, 2026.
+\href{https://doi.org/10.5281/zenodo.19036235}{doi:10.5281/zenodo.19036235}.
 
 \bibitem{Geiger2026-BSD}
-L.~Geiger, \emph{The BSD Conjecture as a Positivity Normal-Form Theorem: Height Saturation and the Impossibility of Rank-Order Discrepancy}, Zenodo preprint, 2026.
+L.~Geiger, \emph{The BSD Conjecture as a Positivity Normal-Form Theorem}, Zenodo preprint, 2026.
+\href{https://doi.org/10.5281/zenodo.19087443}{doi:10.5281/zenodo.19087443}.
 
 \bibitem{BougerolLacroix1985}
 P.~Bougerol \& J.~Lacroix, \emph{Products of Random Matrices with Applications to Schr\"odinger Operators}, Birkh\"auser, 1985.
 
 \bibitem[Geiger(2026d)]{Geiger2026-TU}
-L.~Geiger, \emph{Functional Stability Theory: Turbulence and the K41 Spectrum as Free-Energy Minimum}, Preprint (FST-TU), 2026.
+L.~Geiger, \emph{Anomalous Dissipation and the Turbulent Cascade: A Variational Free-Energy Characterisation of Kolmogorov Scaling}, Zenodo preprint, 2026.
+\href{https://doi.org/10.5281/zenodo.19056813}{doi:10.5281/zenodo.19056813}.
 
 \bibitem[Geiger(2026e)]{Geiger2026-PvsNP}
-L.~Geiger, \emph{Functional Stability Theory: P vs NP and the Entropic Separation Conjecture}, Preprint (FST-PvsNP), 2026.
+L.~Geiger, \emph{An Entropic Perspective on P vs NP: Reformulation via Kolmogorov Complexity}, Zenodo preprint, 2026.
+\href{https://doi.org/10.5281/zenodo.19056809}{doi:10.5281/zenodo.19056809}.
 
 \bibitem[Shenfeld(2024)]{Shenfeld2024}
 S.~Shenfeld, \emph{Exact renormalization group and functional inequalities via Lipschitz transport}, arXiv:2205.01642v3, 2024.
