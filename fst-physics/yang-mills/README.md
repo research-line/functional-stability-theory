@@ -8,10 +8,10 @@ Zenodo concept DOI: <https://doi.org/10.5281/zenodo.19087433>
 ## Status
 
 This folder contains the public v2.5 paper files synchronized from the local
-source-checked Post-Zookeeper/RFEP and adversarial-review working state. Use
-the Zenodo concept DOI above for the latest released record. The continuum
-mass-gap step remains conditional on the analytical renormalization-group
-contraction input.
+source-checked Post-Zookeeper/RFEP and adversarial-review working state. The
+latest released Zenodo record is v2.5: <https://doi.org/10.5281/zenodo.20315811>.
+The continuum mass-gap step remains conditional on the analytical
+renormalization-group contraction input.
 
 ## Files
 
