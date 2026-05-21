@@ -46,7 +46,7 @@ The cosmological branch of FST. The Dark Energy paper instantiates Pattern A on 
 
 | Paper | Version | Status | Open Problem | Concept-DOI |
 |-------|---------|--------|--------------|-------------|
-| [**Dark Energy**](fst-cosmology/dark-energy/) | v1.6 | Framework Note | Hu–Sawicki parameters quantitatively open | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
+| [**Dark Energy**](fst-cosmology/dark-energy/) | v1.9 candidate | Framework Note | Hu–Sawicki thin-shell + RG matching quantitatively open | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
 
 ### FST-Biology
 
