@@ -8,13 +8,13 @@ Lukas Geiger (2026)
 
 ## Summary
 
-The Zeta Zoo is the mathematical classification paper of the FST programme. It develops the branch-local Hilbert-Polya taxonomy around three organizing principles:
+The Zeta Zoo is the mathematical classification paper of the FST programme. Zenodo latest is **v2.1**; the GitHub file set tracks the newer post-v2.1 citation and proof/paper-math guardrail candidate. It develops the branch-local Hilbert-Polya taxonomy around three organizing principles:
 
 - **UCU**: Universal Convexity Uniqueness.
 - **SGE**: Semigroup-Group Equivalence as a HP-BL classification axis.
 - **Weil-form transversality**: gap positivity across both sides of the SGE dichotomy.
 
-Version 2.1 is a guardrail release. It sharpens the HP-BL status language after strict review, separates self-adjoint YES cases from resonance YES cases, and keeps Riemann/Direct-Frontier claims tied to their companion programme rather than treating them as standalone consequences of this classification paper.
+The current GitHub candidate keeps the public file set reproducible while tightening the claim levels after the later citation and proof/paper-math checks: the RH companion route is cited only as a conditional reduction/diagnostic path, Prime-Hub remains explicitly `OPEN(C1-C4)`, and the finite Dedekind/Ihara controls are marked as finite evidence rather than global closure.
 
 ## Zoo Population
 
@@ -22,10 +22,10 @@ Version 2.1 is a guardrail release. It sharpens the HP-BL status language after 
 |---|---|---|
 | Riemann zeta | NO_prime-shift^cond | NE-A plus finite NE-B evidence; companion-program closure remains separated |
 | Selberg zeta | YES_sa | Casimir / Laplace-Beltrami self-adjoint operator |
-| Prime-Hub | OPEN | OP5 construction under documented obstructions |
+| Prime-Hub | OPEN(C1-C4) | OP5 construction under documented obstructions |
 | CRM flow-zeta | YES_res | Ruelle-type / Lie group flow with resonance analogue |
-| Dedekind Q(sqrt(-5)) | SGE-predicted NO | Finite prime-ideal semigroup evidence |
-| Ihara-Petersen | YES_sa | Bass-Hashimoto matrix / finite graph certificate |
+| Dedekind Q(sqrt(-5)) | SGE-predicted NO + finite evidence | Finite prime-ideal semigroup evidence |
+| Ihara-Petersen | YES_sa finite certificate | Bass-Hashimoto matrix / finite graph certificate |
 
 ## Companion Papers
 
@@ -41,6 +41,8 @@ Version 2.1 is a guardrail release. It sharpens the HP-BL status language after 
 - [`paper/NE_B_BOUNDARY_v2_de.tex`](paper/NE_B_BOUNDARY_v2_de.tex)
 - [`paper/NE_B_BOUNDARY_v2_de.pdf`](paper/NE_B_BOUNDARY_v2_de.pdf)
 - [`paper/NE_B_BOUNDARY_v2_kombi.pdf`](paper/NE_B_BOUNDARY_v2_kombi.pdf)
+
+Zenodo still serves the published v2.1 record. The GitHub paper files above are the newer public guardrail candidate prepared after the post-v2.1 citation and proof/paper-math checks.
 
 ## Reproducibility
 
