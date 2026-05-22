@@ -7,11 +7,13 @@ Zenodo concept DOI: <https://doi.org/10.5281/zenodo.19087433>
 
 ## Status
 
-This folder contains the public v2.5 paper files synchronized from the local
-source-checked Post-Zookeeper/RFEP and adversarial-review working state. The
-latest released Zenodo record is v2.5: <https://doi.org/10.5281/zenodo.20315811>.
-The continuum mass-gap step remains conditional on the analytical
-renormalization-group contraction input.
+This folder contains the public post-v2.5 guardrail candidate synchronized
+from the local strict-review, design-check, and citation-checked working
+state. The latest released Zenodo record remains v2.5:
+<https://doi.org/10.5281/zenodo.20315811>. The GitHub tree is therefore
+slightly ahead of Zenodo in claim-boundary wording and supporting public
+artifacts, while the continuum mass-gap step remains conditional on the
+analytical renormalization-group contraction input.
 
 ## Files
 
@@ -39,6 +41,7 @@ The scripts write their PNG outputs next to the scripts in
 
 ## Publication Gate
 
-Internal proof notes, review chains, planning files, Zenodo credentials, and
-private comparison notes are intentionally not part of this public package.
-They remain local-only until the project reaches the required completion gate.
+Internal proof notes, `_results/`, design-check directories, extracted text
+artefacts, review chains, planning files, Zenodo credentials, and private
+comparison notes are intentionally not part of this public package. They remain
+local-only until the project reaches the required completion gate.

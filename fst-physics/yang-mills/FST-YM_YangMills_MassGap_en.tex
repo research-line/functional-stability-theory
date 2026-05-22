@@ -3,6 +3,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
+\input{glyphtounicode}
+\pdfgentounicode=1
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[shortlabels]{enumitem}
 \usepackage{xcolor}
@@ -24,10 +26,10 @@
     citecolor=green!50!black,
     urlcolor=blue!70!black,
     bookmarksnumbered=true,
-    pdftitle={Volume-Independent Spectral Gap for Strong-Coupling Lattice Gauge Theory via Poincare-Dobrushin Machinery},
+    pdftitle={Volume-Independent Spectral Gap for Strong-Coupling Lattice Gauge Theory via Poincaré-Dobrushin Machinery},
     pdfauthor={Lukas Geiger},
     pdfsubject={Yang-Mills mass gap and lattice gauge theory},
-    pdfkeywords={Yang-Mills, mass gap, Poincare inequality, Dobrushin uniqueness, lattice gauge theory, reflection positivity}
+    pdfkeywords={Yang-Mills, mass gap, Poincaré inequality, Dobrushin uniqueness, lattice gauge theory, reflection positivity}
 }
 \renewcommand*{\HyperDestNameFilter}[1]{en.#1}
 
@@ -46,8 +48,7 @@
 \title{\textbf{Volume-Independent Spectral Gap for Strong-Coupling Lattice Gauge Theory\\ via Poincar\'e--Dobrushin Machinery}}
 \author{Lukas Geiger\\
 \small Independent Researcher, Bernau, Germany\\
-\small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}%
-\thanks{AI tools (Claude by Anthropic) were used for mathematical formalization, literature verification, and editorial refinement. All mathematical content was developed, verified, and approved by the author.}}
+\small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}}
 \date{May 2026}
 
 \begin{document}
@@ -85,7 +86,7 @@ In this paper, we pursue a variational strategy. Rather than attempting to bound
 \begin{enumerate}
     \item $\mathcal{F}$ is strictly convex, with a unique minimizer $\mu_*$ (the lattice vacuum state).
     \item A Poincar\'e inequality for the lattice gauge measure $\mu_*$ holds with a volume-independent constant $\kappa > 0$: $\mathrm{Var}_{\mu_*}(f) \leq \kappa^{-1} \mathcal{E}(f,f)$ for all gauge-invariant~$f$.
-    \item Via the transfer operator and reflection positivity, this Poincar\'e inequality yields exponential clustering and a mass gap $\Delta \geq \kappa > 0$ in the physical Hilbert space.
+    \item Via the transfer operator and reflection positivity, this Poincar\'e inequality yields exponential clustering and a mass gap $\Delta \geq \kappa > 0$ in the finite-lattice OS Hilbert space; the continuum Hilbert-space statement remains subject to the OS/continuum assumptions stated below.
 \end{enumerate}
 
 This paper is largely self-contained, relying on standard tools from functional analysis and probability theory (Holley--Stroock, Dobrushin--Zegarlinski, Martinelli, Guionnet--Zegarlinski) whose precise statements are recalled where needed. Connections to the broader FST programme are cited for context but are not logically required.
@@ -283,24 +284,25 @@ continuum limit.
 
 \begin{proposition}[RP preservation under block-spin RG]
 \label{prop:rp-preservation}
-Let $\mu_\Lambda$ be a lattice Yang--Mills measure satisfying RP with respect to a hyperplane $\Pi$. If the block-spin kernel $\mathcal{R}$ preserves the reflection symmetry (i.e., $\mathcal{R} \circ \Theta = \Theta \circ \mathcal{R}$ where $\Theta$ is the reflection), then the blocked measure $\mu_{\Lambda'} = \mathcal{R}_* \mu_\Lambda$ also satisfies RP.
+Let $\mu_\Lambda$ be a lattice Yang--Mills measure satisfying RP with respect to a hyperplane $\Pi$. Assume that the block-spin kernel $\mathcal{R}$ (i) commutes with the reflection $\Theta$, (ii) maps one-sided observables to one-sided observables for the blocked hyperplane, and (iii) has $\mathcal{R}^*\Theta\mathcal{R}$ non-negative on the OS-positive cone. Then the blocked measure $\mu_{\Lambda'} = \mathcal{R}_* \mu_\Lambda$ also satisfies RP.
 \end{proposition}
 
 \begin{proof}[Proof sketch]
-RP states that $\langle \Theta f, f \rangle_{\mu} \geq 0$ for all functions $f$ supported on one side of $\Pi$. Since $\mathcal{R}$ commutes with $\Theta$, the blocked function $\mathcal{R} f$ is supported on the corresponding side of the blocked hyperplane. The RP of $\mu'$ follows from:
+RP states that $\langle \Theta f, f \rangle_{\mu} \geq 0$ for all functions $f$ supported on one side of $\Pi$. By assumptions (i)--(ii), the blocked observable has the correct reflected support. The RP of $\mu'$ follows from:
 \[
 \langle \Theta(\mathcal{R} f), \mathcal{R} f \rangle_{\mu'} = \langle \mathcal{R}(\Theta f), \mathcal{R} f \rangle_{\mu'} = \langle f, \mathcal{R}^* \Theta \mathcal{R} f \rangle_{\mu} \geq 0,
 \]
-where the last inequality holds if $\mathcal{R}$ maps one-sided observables to one-sided observables and is positive in the OS inner product. (Note: $\mathcal{R}$ is \emph{not} an isometry; the argument uses positivity of the composed operator, not norm preservation.) The key condition is therefore not finite-lattice RP itself, but verified compatibility of the chosen RG kernel with reflection support and the OS-positive cone; symmetric block-spin kernels are natural candidates, but this compatibility is an assumption to be checked in the continuum programme.
+where the last inequality is precisely assumption~(iii). (Note: $\mathcal{R}$ is \emph{not} an isometry; the argument uses positivity of the composed operator, not norm preservation.) The key condition is therefore not finite-lattice RP itself, but verified compatibility of the chosen RG kernel with reflection support and the OS-positive cone; symmetric block-spin kernels are natural candidates, but this compatibility is an assumption to be checked in the continuum programme.
 \end{proof}
 
 \begin{remark}[RP preservation programme for the continuum limit]
-The proposition reduces the RP-continuum problem to verifying two conditions:
+The proposition reduces the RP-continuum problem to verifying three conditions:
 (1) RP holds at every finite lattice scale used in the RG scheme, as supplied
 by Lemma~\ref{lem:reflection-positivity} for the Wilson/heat-kernel weights;
-(2) the block-spin kernel commutes with reflections. Together with the gap
-transport conjecture (Conjecture~\ref{conj:gap-transport}), this gives a
-concrete checklist for a reflection-positive continuum measure with a mass
+(2) the block-spin kernel commutes with reflections and preserves one-sided
+support; (3) the induced operator is positive on the OS cone. Together with
+the gap transport conjecture (Conjecture~\ref{conj:gap-transport}), this gives
+a concrete checklist for a reflection-positive continuum measure with a mass
 gap, but the continuum construction itself remains conditional on the RG and
 OS inputs stated below.
 \end{remark}
@@ -650,9 +652,9 @@ Assume the following:
     \end{equation}
     where $|x|_{\mathrm{phys}} = a_n\,|x|_{\mathrm{lat}}$ is the physical distance.
 
-\begin{remark}[Relaxation of CL2]
+\begin{remark}[Gap-level relaxation of CL2]
 \label{rem:cl2-relaxation}
-Assumption CL2 (uniform log-Sobolev inequality) can be replaced by the structurally weaker condition:
+Assumption CL2 can be operationally replaced by the following Poincar\'e-scale condition:
 \begin{itemize}
 \item[\textbf{CL2'.}] \emph{Uniform Poincar\'e inequality in physical distance scale:} There exists $C > 0$ such that for all lattice spacings $a > 0$,
 \[
@@ -660,7 +662,7 @@ Assumption CL2 (uniform log-Sobolev inequality) can be replaced by the structura
 \]
 where $\xi(a)$ is the correlation length and $\mathcal{E}_\Lambda$ is the Dirichlet form. This is equivalent to requiring that the mass gap in physical units, $m_{\mathrm{phys}} = 1/\xi(a)$, remains bounded below: $m_{\mathrm{phys}} \geq m_0 > 0$.
 \end{itemize}
-CL2' is strictly weaker than CL2 because it allows the lattice Poincar\'e constant $\kappa(a)$ to degrade as $\kappa(a) \sim a^2/\xi(a)^2$, provided $\xi(a)$ grows at most polynomially in $1/a$. This is consistent with asymptotic freedom, where $\xi(a) \sim a^{-1} e^{-c/g(a)^2}$ with $g(a) \to 0$ logarithmically.
+CL2' is weaker than a uniform LSI input, but it is still a gap-level assumption rather than an independent proof of the mass gap. Its purpose is to isolate the exact physical-distance coercivity that a separate RG/continuum argument must establish.
 \end{remark}
 
     \item[\textup{(CL3)}] \textbf{Uniform normalisation.}  The renormalised observables satisfy $\|\mathcal{O}_i\|_{L^2(\mu_{a_n,\Lambda_n})} \leq C$ uniformly in~$n$, so that $A$ in \eqref{eq:uniform-clustering} does not diverge.
@@ -718,19 +720,20 @@ For $G = SU(N)$ with $N \geq 2$, if assumptions (CL1)--(CL3) are satisfied, the 
 % Conditional Mass Gap Theorem (under tail bounds)
 % ======================================================================
 
-\begin{theorem}[Conditional mass gap]
+\begin{theorem}[Conditional gap-transfer criterion]
 \label{thm:conditional-gap}
 Let $G$ be a compact simple Lie group and let $\mu_{\Lambda,\beta}$ denote the lattice Yang--Mills measure on a finite lattice $\Lambda \subset a\mathbb{Z}^4$ at coupling $\beta$. Assume:
 \begin{enumerate}
+\item[\textup{(T0)}] \emph{OS-positive continuum wrapper:} Along the RG sequence under consideration, CL1 and CL3 of Lemma~\ref{thm:continuum-gap} hold for a dense class of gauge-invariant local observables.
 \item[\textup{(T1)}] \emph{Tail bound:} There exists $C, \alpha > 0$ such that $\mu_{\Lambda,\beta}(\|U_l - \mathbf{1}\| > t) \leq C e^{-\alpha t^2 \beta}$ uniformly in $\Lambda$ and $l \in \Lambda$.
 \item[\textup{(T2)}] \emph{Gap transport:} The Poincar\'e constant satisfies $\kappa(2a) \geq c \cdot \kappa(a)$ for a universal $c > 0$ (Conjecture~\ref{conj:gap-transport}).
-\item[\textup{(T3)}] \emph{Reflection symmetry:} The block-spin kernel commutes with lattice reflections.
+\item[\textup{(T3)}] \emph{RP-compatible blocking:} The block-spin kernel satisfies the reflection, one-sided-support, and OS-cone positivity hypotheses of Proposition~\ref{prop:rp-preservation}.
 \end{enumerate}
-Then the continuum Yang--Mills theory on $\mathbb{R}^4$ (constructed via the thermodynamic and continuum limits) has a mass gap $m > 0$, satisfies the Osterwalder--Schrader axioms, and the vacuum is unique.
+Then the reconstructed continuum theory on $\mathbb{R}^4$, if the OS-positive limit in (T0) exists, has a mass gap $m > 0$. This is a transfer criterion: it does not independently construct the continuum Yang--Mills measure and does not add a separate vacuum-uniqueness theorem beyond the hypotheses of the OS reconstruction.
 \end{theorem}
 
 \begin{proof}[Proof sketch]
-Under (T1), the single-link measure is sub-Gaussian, which implies the Typical-Set Poincar\'e bound (Proposition~\ref{prop:restricted-poincare}) with improved scaling $e^{-O(\sqrt{\beta})}$. Under (T2), this bound propagates through the RG hierarchy (Proposition~\ref{prop:scale-resolved}), yielding a uniform mass gap in physical units. Under (T3), the RP preservation (Proposition~\ref{prop:rp-preservation}) ensures the Osterwalder--Schrader reconstruction theorem applies.
+Under (T0), the limiting Schwinger functions and normalization needed for OS reconstruction are assumed rather than proved here. Under (T1), the single-link measure is sub-Gaussian, which implies the Typical-Set Poincar\'e bound (Proposition~\ref{prop:restricted-poincare}) with improved scaling $e^{-O(\sqrt{\beta})}$. Under (T2), this bound propagates through the RG hierarchy (Proposition~\ref{prop:scale-resolved}), yielding the uniform physical-distance clustering condition CL2 in Lemma~\ref{thm:continuum-gap}. Under (T3), RP is preserved along the blocking scheme. Lemma~\ref{thm:continuum-gap} then yields the claimed mass gap.
 \end{proof}
 
 % ======================================================================
@@ -1226,9 +1229,9 @@ The structural parallel to our framework is:
     \item \textbf{Equivalence:} Both conditions prevent the functional inequality constant from degenerating under the RG flow. The Birkhoff contraction controls convergence in the Hilbert projective metric; the BBD criterion controls convergence in Wasserstein/transport metrics. For scalar field theories, the BBD criterion is verified~\cite{BBD-Phi4-2024}.
 \end{enumerate}
 
-For lattice Yang--Mills, the extension is non-trivial because the Polchinski equation is not available in standard form for $\mathrm{SU}(N)$-valued link variables. However, recent work on heat-kernel lattice Yang--Mills in $d=4$ establishes volume- and spacing-uniform Poincar\'e and log-Sobolev inequalities via two independent routes: (A)~a Bakry--\'Emery curvature bound on Uhlenbeck slices, and (B)~a high-temperature Dobrushin criterion with explicit constants. This suggests that a gauge-covariant Polchinski flow on $\mathrm{SU}(N)$-bundles---combining the BBD multiscale criterion with the gauge-theoretic Bakry--\'Emery curvature---could provide a rigorous path to resolving the uniform contraction condition (SP4) for the continuum limit.
+For lattice Yang--Mills, the extension is non-trivial because the Polchinski equation is not available in standard form for $\mathrm{SU}(N)$-valued link variables. Existing rigorous strong-coupling work supports volume-uniform Poincar\'e and log-Sobolev inequalities in fixed-lattice or infinite-volume regimes, while the vanishing-spacing continuum problem remains a separate step. Recent heat-kernel Yang--Mills preprints suggest possible volume- and spacing-uniform routes via (A)~a Bakry--\'Emery curvature bound on Uhlenbeck slices and (B)~a high-temperature Dobrushin criterion with explicit constants; in the present paper these claims are treated as external evidence and future targets, not as inputs. If such bounds are established in a form compatible with gauge-covariant blocking, a Polchinski-type flow on $\mathrm{SU}(N)$-bundles could provide a rigorous path to resolving the uniform contraction condition (SP4) for the continuum limit.
 
-In the BBD framework, the key quantity controlling the LSI constant is the susceptibility $\chi = \sum_x \langle \sigma_0 \sigma_x \rangle_c$, which is precisely the inverse of the mass gap. Thus the BBD programme confirms the structural expectation of this paper: \emph{the uniform LSI problem and the mass gap problem are two faces of the same coin}.
+In the BBD framework, the key quantity controlling the LSI constant is the susceptibility $\chi = \sum_x \langle \sigma_0 \sigma_x \rangle_c$, which plays a role closely related to inverse correlation length and spectral-gap control in the scalar settings where the criterion is proved. Thus the BBD programme supports the structural expectation of this paper: \emph{uniform functional inequalities and mass-gap control are tightly coupled problems}.
 \end{remark}
 
 \begin{corollary}[Mean contraction diagnostic and summable-defect gap criterion]\label{cor:kingman-gap}
@@ -1805,7 +1808,7 @@ We observe that the lattice mass gap result (Theorem~\ref{thm:lattice-gap}) fits
 In this picture, the mass gap reflects the confinement of spectral instabilities to the gauge-variant sector, while the physical (gauge-invariant) sector retains a positive spectral gap.
 
 \begin{remark}[Broader applications of the variational method]
-The Poincar\'e--Dobrushin--transfer-operator chain employed here is not specific to gauge theories. The same architecture applies to any lattice model with: (i)~compact local state space, (ii)~finite-range interaction, and (iii)~reflection-positive weight function. Specific instances include $O(N)$ sigma models on the lattice (where the mass gap is proven for $N \geq 3$ in 2D by asymptotic freedom \cite{Polyakov1975}; for $N = 2$ (XY model), the Berezinskii--Kosterlitz--Thouless transition yields algebraic decay without a mass gap, and for $N = 1$ (Ising), the mass gap vanishes only at the critical point $T = T_c$, with exponential clustering holding for all $T \neq T_c$), lattice Higgs models (where the gap corresponds to the Higgs mass), and lattice QCD with fermions (where additional Grassmann integration modifies the Holley--Stroock bounds but preserves the overall structure). The free-energy variational framework of Section~2 thus provides a \emph{template} for spectral gap proofs in a broad class of lattice systems.
+The Poincar\'e--Dobrushin--transfer-operator chain employed here is not specific to gauge theories. The same architecture can be attempted for lattice models with: (i)~compact local state space, (ii)~finite-range interaction, and (iii)~reflection-positive weight function, provided the corresponding Dobrushin, transfer, and OS hypotheses are verified in the model at hand. Specific comparison cases include $O(N)$ sigma models on the lattice (where asymptotic-freedom heuristics~\cite{Polyakov1975} and rigorous results depend on the precise model and regime; for $N = 2$ (XY model), the Berezinskii--Kosterlitz--Thouless transition yields algebraic decay without a mass gap, and for $N = 1$ (Ising), the mass gap vanishes only at the critical point $T = T_c$, with exponential clustering holding for all $T \neq T_c$), lattice Higgs models, and lattice QCD with fermions. The free-energy variational framework of Section~2 thus provides a \emph{candidate template} for spectral-gap arguments rather than an automatic proof scheme.
 \end{remark}
 
 \begin{remark}[Structural parallels within the FST programme]\label{rem:fst-parallels}
@@ -1954,11 +1957,12 @@ The complete analyticity for SU(3) would then follow from the Dobrushin--Shlosma
 % AI Disclosure
 % ===================================================================
 \subsection*{AI Disclosure}
-AI-assisted tools (Claude, Anthropic) were used in a supporting capacity during the
-preparation of this manuscript, particularly for literature research,
-text structuring, and formulation assistance. The conceptual design,
-scientific argumentation, and responsibility for the entire content
-rest solely with the author.
+AI-assisted tools (including Claude by Anthropic and OpenAI Codex/GPT tools)
+were used in a supporting capacity during the preparation of this manuscript,
+particularly for literature organization, consistency checks, translation
+support, text structuring, and formulation assistance. The conceptual design,
+scientific argumentation, and responsibility for the entire content rest solely
+with the author.
 
 \subsection*{Appendix: Constants and norms}
 \label{app:constants}
@@ -2076,6 +2080,7 @@ and concentration}, Invent.\ Math.\ \textbf{177} (2009), 1--43.
 A.~M.~Polyakov, \emph{Interaction of Goldstone particles in two dimensions.
 Applications to ferromagnets and massive Yang--Mills fields},
 Phys.\ Lett.\ B \textbf{59} (1975), 79--81.
+\texttt{doi:10.1016/0370-2693(75)90161-6}.
 
 \bibitem{GrossWilczek1973}
 D.~J.~Gross and F.~Wilczek, \emph{Ultraviolet behavior of non-abelian gauge theories},
