@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
 """
-FST-II: Replicator Dynamics and Entropy Production for Autocatalytic Networks
-=============================================================================
+FST-II: Replicator Dynamics Toy Proxy for Autocatalytic Networks
+================================================================
 
-Implements the quantitative test P3 from FST-II paper:
-Three competing autocatalytic networks (Azoarcus-type ribozymes) modeled as
-replicator dynamics. Tests whether the observed winner (cooperative network)
-maximizes entropy production rate.
+Legacy exploratory model for the P3 idea in the FST-II paper:
+three competing autocatalytic-network types are modeled as replicator dynamics.
+This script does not measure thermodynamic entropy production. It reports a
+fitness-dispersion / throughput proxy and must not be cited as P3 evidence.
 
 Physics:
   - Replicator equation: dx_i/dt = x_i * (f_i(x) - <f>(x))
   - Fitness from catalytic rate constants (Vaidya et al. 2012)
-  - Entropy production: sigma = sum_i x_i * f_i * ln(f_i / <f>)
+  - Toy proxy: sigma_proxy = sum_i x_i * f_i * ln(f_i / <f>)
   - Nash equilibrium: interior ESS where no species can improve unilaterally
 
-Key predictions:
-  1. Cooperative network reaches Nash equilibrium (ESS)
-  2. At ESS, entropy production rate is maximized among stable fixed points
-  3. Selfish replicators are dynamically unstable (higher eigenvalues)
+Guardrail:
+  P3 requires independent observables for game status and dissipation
+  (for example sequencing plus calorimetry). This script only illustrates
+  candidate game dynamics and cannot confirm or falsify thermodynamic P3.
 
 References:
   Vaidya et al. (2012) Nature 491, 72-77 [Azoarcus cooperative RNA]
@@ -99,10 +99,13 @@ def replicator_rhs(t, x, A, coop_bonus):
     return x * (f - f_mean)
 
 
-def entropy_production_rate(x, A, coop_bonus):
+def entropy_proxy_rate(x, A, coop_bonus):
     """
-    Entropy production rate sigma = sum_i x_i * f_i * ln(f_i / <f>).
-    KL divergence of fitness from mean, weighted by population and fitness.
+    Fitness-dispersion proxy sigma_proxy = sum_i x_i * f_i * ln(f_i / <f>).
+
+    This is a game/throughput proxy, not a thermodynamic entropy-production
+    rate. It can be useful for toy-model ranking, but P3 requires an
+    independent physical dissipation observable.
     """
     x = np.maximum(x, 1e-15)
     f = effective_fitness(x, A, coop_bonus)
@@ -134,6 +137,8 @@ def find_fixed_points(A, coop_bonus, n_random=500):
     """Find fixed points of replicator dynamics by simulation from random starts."""
     n = A.shape[0]
     fixed_points = []
+    support_tol = 1e-6
+    stability_tol = 1e-6
 
     for trial in range(n_random):
         x0 = np.random.dirichlet(np.ones(n))
@@ -167,24 +172,46 @@ def find_fixed_points(A, coop_bonus, n_random=500):
         f = effective_fitness(x, A, coop_bonus)
         f_mean = float(x @ f)
 
-        fp["sigma"] = entropy_production_rate(x, A, coop_bonus)
+        fp["sigma_proxy"] = entropy_proxy_rate(x, A, coop_bonus)
+        fp["sigma"] = fp["sigma_proxy"]
         fp["f_mean"] = f_mean
         fp["f"] = f.tolist()
 
         J = compute_jacobian(x, A, coop_bonus)
         eigs = np.linalg.eigvals(J)
         eigs_sorted = sorted(eigs.real)
+        max_real = float(max(eigs.real))
+        support = x > support_tol
+        invasion_channels = []
+        neutral_invasion_channels = []
+        for idx, gap in enumerate(f - f_mean):
+            if support[idx]:
+                continue
+            gap = float(gap)
+            if gap > stability_tol:
+                invasion_channels.append({"species": idx, "fitness_gap": gap})
+            elif abs(gap) <= stability_tol:
+                neutral_invasion_channels.append({"species": idx, "fitness_gap": gap})
+
         fp["eigenvalues"] = [float(e) for e in eigs_sorted]
-        fp["max_eigenvalue"] = float(max(eigs.real))
-        fp["stable"] = all(e.real < 1e-6 for e in eigs)
-        fp["n_positive_eigs"] = sum(1 for e in eigs if e.real > 1e-6)
+        fp["max_eigenvalue"] = max_real
+        fp["n_positive_eigs"] = sum(1 for e in eigs if e.real > stability_tol)
+        fp["invasion_channels"] = invasion_channels
+        fp["neutral_invasion_channels"] = neutral_invasion_channels
+        if max_real > stability_tol or invasion_channels:
+            fp["stability_status"] = "unstable"
+        elif abs(max_real) <= stability_tol or neutral_invasion_channels:
+            fp["stability_status"] = "neutral_boundary"
+        else:
+            fp["stability_status"] = "asymptotically_stable"
+        fp["stable"] = fp["stability_status"] == "asymptotically_stable"
         fp["dominant"] = int(np.argmax(x))
 
     return fixed_points
 
 
 def run_dynamics(A, coop_bonus, names, x0=None, t_max=200):
-    """Run replicator dynamics and track entropy production."""
+    """Run replicator dynamics and track the fitness/throughput proxy."""
     n = A.shape[0]
     if x0 is None:
         x0 = np.ones(n) / n
@@ -203,7 +230,7 @@ def run_dynamics(A, coop_bonus, names, x0=None, t_max=200):
         x = sol.y[:, i]
         x = np.maximum(x, 1e-15)
         x = x / x.sum()
-        sigmas.append(entropy_production_rate(x, A, coop_bonus))
+        sigmas.append(entropy_proxy_rate(x, A, coop_bonus))
 
     return {
         "t": sol.t.tolist(),
@@ -222,7 +249,10 @@ def main():
     parser.add_argument("--out", default=None, help="Output JSON file")
     parser.add_argument("--n-random", type=int, default=500,
                         help="Number of random starts for fixed point search")
+    parser.add_argument("--seed", type=int, default=20260522,
+                        help="Random seed for reproducible exploratory scans")
     args = parser.parse_args()
+    np.random.seed(args.seed)
 
     scenario = FITNESS_MATRICES[args.scenario]
     A = scenario["A"]
@@ -250,15 +280,26 @@ def main():
     print("\nFound %d distinct fixed points:" % len(fps))
     for i, fp in enumerate(fps):
         dom = names[fp["dominant"]]
-        stab = "STABLE" if fp["stable"] else "UNSTABLE"
+        status_labels = {
+            "asymptotically_stable": "ASYMPTOTICALLY STABLE",
+            "neutral_boundary": "NEUTRAL BOUNDARY",
+            "unstable": "UNSTABLE",
+        }
+        stab = status_labels.get(fp["stability_status"], "UNCLASSIFIED")
         print("\n  FP-%d (%s, found %dx):" % (i + 1, stab, fp["count"]))
         for j in range(n):
             print("    %12s: x=%.6f, f=%.4f" % (names[j], fp["x"][j], fp["f"][j]))
-        print("    Entropy production: sigma = %.6f" % fp["sigma"])
+        print("    Fitness/throughput proxy: sigma_proxy = %.6f" % fp["sigma_proxy"])
         print("    Mean fitness: <f> = %.4f" % fp["f_mean"])
         print("    Dominant: %s" % dom)
         print("    Eigenvalues: %s" % [round(e, 4) for e in fp["eigenvalues"]])
         print("    Positive eigenvalues: %d" % fp["n_positive_eigs"])
+        if fp["neutral_invasion_channels"]:
+            neutral_names = [names[item["species"]] for item in fp["neutral_invasion_channels"]]
+            print("    Neutral boundary channels: %s" % neutral_names)
+        if fp["invasion_channels"]:
+            invasion_names = [names[item["species"]] for item in fp["invasion_channels"]]
+            print("    Invasion channels: %s" % invasion_names)
 
     # Phase 2: Dynamics from uniform start
     print("\n" + "=" * 60)
@@ -269,34 +310,33 @@ def main():
     print("\nFinal state (t=%.0f):" % dyn["t"][-1])
     for name in names:
         print("  %12s: %.6f" % (name, dyn["x"][name][-1]))
-    print("  Entropy production: %.6f" % dyn["sigma_final"])
+    print("  Fitness/throughput proxy: %.6f" % dyn["sigma_final"])
 
     # Phase 3: P3 Test
     print("\n" + "=" * 60)
-    print("PHASE 3: P3 TEST -- Does the ESS maximize entropy production?")
+    print("PHASE 3: P3 GUARDRAIL -- toy proxy only, no thermodynamic confirmation")
     print("=" * 60)
 
     stable_fps = [fp for fp in fps if fp["stable"]]
-    unstable_fps = [fp for fp in fps if not fp["stable"]]
+    neutral_fps = [fp for fp in fps if fp.get("stability_status") == "neutral_boundary"]
+    unstable_fps = [fp for fp in fps if fp.get("stability_status") == "unstable"]
+    nonstable_fps = neutral_fps + unstable_fps
 
     if stable_fps:
         max_sigma_stable = max(fp["sigma"] for fp in stable_fps)
         best_stable = max(stable_fps, key=lambda fp: fp["sigma"])
-        print("\nBest stable FP: %s (sigma = %.6f)" % (names[best_stable["dominant"]], best_stable["sigma"]))
+        print("\nBest stable FP by proxy: %s (sigma_proxy = %.6f)" % (names[best_stable["dominant"]], best_stable["sigma_proxy"]))
 
-        if unstable_fps:
-            best_unstable = max(unstable_fps, key=lambda fp: fp["sigma"])
-            print("Best unstable FP: %s (sigma = %.6f)" % (names[best_unstable["dominant"]], best_unstable["sigma"]))
+        if nonstable_fps:
+            best_nonstable = max(nonstable_fps, key=lambda fp: fp["sigma"])
+            print("Best non-asymptotically-stable FP by proxy: %s (sigma_proxy = %.6f)" % (names[best_nonstable["dominant"]], best_nonstable["sigma_proxy"]))
 
         coop_fps = [fp for fp in stable_fps if fp["dominant"] == 0]
         if coop_fps:
             coop_sigma = max(fp["sigma"] for fp in coop_fps)
-            print("\nP3 Result: Cooperative ESS sigma = %.6f" % coop_sigma)
-            print("           Max stable sigma      = %.6f" % max_sigma_stable)
-            if abs(coop_sigma - max_sigma_stable) < 1e-6:
-                print("  => P3 CONFIRMED: Cooperative ESS maximizes entropy production among stable states!")
-            else:
-                print("  => P3 FAILED: Another stable state has higher entropy production")
+            print("\nToy proxy result: Cooperative ESS sigma_proxy = %.6f" % coop_sigma)
+            print("                  Max stable sigma_proxy      = %.6f" % max_sigma_stable)
+            print("  => P3 STATUS: NOT TESTED. This proxy is not independent calorimetric entropy production.")
         else:
             print("\nNo cooperative-dominated stable FP found.")
     else:
@@ -322,6 +362,11 @@ def main():
     results = {
         "scenario": args.scenario,
         "description": scenario["description"],
+        "random_seed": args.seed,
+        "guardrail": (
+            "sigma_proxy is a fitness/throughput proxy, not thermodynamic entropy production; "
+            "this script is not P3 evidence."
+        ),
         "species": names,
         "fixed_points": fps,
         "dynamics": {
@@ -331,7 +376,9 @@ def main():
             "t_subsample": dyn["t"][::20],
         },
         "p3_test": {
+            "claim_status": "not_tested_toy_proxy_only",
             "n_stable": len(stable_fps),
+            "n_neutral_boundary": sum(1 for fp in fps if fp.get("stability_status") == "neutral_boundary"),
             "n_unstable": len(unstable_fps),
             "cooperative_dominates": any(fp["dominant"] == 0 for fp in stable_fps),
             "max_sigma_stable": max(fp["sigma"] for fp in stable_fps) if stable_fps else None,

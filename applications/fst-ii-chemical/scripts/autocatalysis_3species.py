@@ -14,7 +14,7 @@ Totalmasse konserviert: x_A + x_B + x_C = 1 (Simplex).
 Berechnet:
     - Fixpunkt x* via ODE-Integration
     - Nash-Gleichgewicht-Pruefung
-    - Stabilitaet (Jacobian, Eigenwerte, Spektralradius)
+    - Stabilitaet (Jacobian, volle Eigenwerte, Tangentialraum-Eigenwerte)
     - Gibbs-Funktion G(x)
     - Entropieproduktion S_dot
     - Korrelationsanalyse rho(J) vs. S_dot ueber k1-Variation
@@ -198,20 +198,48 @@ def jacobian_analytical(x_star, k1, k2, k3):
     return J
 
 
+def tangent_restriction_simplex(J):
+    """
+    Restrict a 3x3 Jacobian to the tangent space sum_i dx_i = 0.
+
+    The full concentration dynamics conserves total mass, so a neutral
+    conservation mode is expected in the unreduced Jacobian. Physical
+    asymptotic stability is tested on the simplex tangent space.
+    """
+    basis = np.array([
+        [1.0, 0.0],
+        [0.0, 1.0],
+        [-1.0, -1.0],
+    ])
+    gram_inv = np.linalg.inv(basis.T @ basis)
+    return gram_inv @ basis.T @ J @ basis
+
+
 def stability_analysis(x_star, k1, k2, k3):
-    """Eigenwerte, Spektralradius, Stabilitaet."""
+    """Eigenwerte, Spektralradius, Tangentialraum-Stabilitaet."""
     J = jacobian_analytical(x_star, k1, k2, k3)
     eigenvalues = np.linalg.eigvals(J)
+    J_tangent = tangent_restriction_simplex(J)
+    tangent_eigenvalues = np.linalg.eigvals(J_tangent)
     spectral_radius = np.max(np.abs(eigenvalues))
+    tangent_spectral_radius = np.max(np.abs(tangent_eigenvalues))
     max_real = np.max(np.real(eigenvalues))
-    is_stable = max_real < 0
+    tangent_max_real = np.max(np.real(tangent_eigenvalues))
+    is_full_stable = max_real < -1e-10
+    is_tangent_stable = tangent_max_real < -1e-10
 
     return {
         "jacobian": J,
         "eigenvalues": eigenvalues,
+        "tangent_jacobian": J_tangent,
+        "tangent_eigenvalues": tangent_eigenvalues,
         "spectral_radius": float(spectral_radius),
+        "tangent_spectral_radius": float(tangent_spectral_radius),
         "max_real_eigenvalue": float(max_real),
-        "is_stable": bool(is_stable),
+        "tangent_max_real_eigenvalue": float(tangent_max_real),
+        "is_full_stable": bool(is_full_stable),
+        "is_tangent_stable": bool(is_tangent_stable),
+        "is_stable": bool(is_tangent_stable),
     }
 
 
@@ -260,7 +288,11 @@ def correlation_scan(k1_values, k2, k3):
                 "k1": float(k1),
                 "x_star": x_star.tolist(),
                 "spectral_radius": stab["spectral_radius"],
+                "tangent_spectral_radius": stab["tangent_spectral_radius"],
                 "max_real_eigenvalue": stab["max_real_eigenvalue"],
+                "tangent_max_real_eigenvalue": stab["tangent_max_real_eigenvalue"],
+                "is_full_stable": stab["is_full_stable"],
+                "is_tangent_stable": stab["is_tangent_stable"],
                 "is_stable": stab["is_stable"],
                 "S_dot": s_dot,
                 "fluxes": fluxes,
@@ -359,9 +391,13 @@ def main():
     stab = stability_analysis(x_star, k1, k2, k3)
     print(f"  Jacobian:\n{stab['jacobian']}")
     print(f"  Eigenwerte: {stab['eigenvalues']}")
+    print(f"  Tangentialraum-Jacobian:\n{stab['tangent_jacobian']}")
+    print(f"  Tangentialraum-Eigenwerte: {stab['tangent_eigenvalues']}")
     print(f"  Spektralradius rho(J) = {stab['spectral_radius']:.8f}")
     print(f"  Max. Realteil = {stab['max_real_eigenvalue']:.8f}")
-    print(f"  => Stabil: {'JA' if stab['is_stable'] else 'NEIN'}")
+    print(f"  Tangentiale Spektralabszisse = {stab['tangent_max_real_eigenvalue']:.8f}")
+    print(f"  => Stabil im vollen Raum: {'JA' if stab['is_full_stable'] else 'NEIN (neutraler Erhaltungsmodus)'}")
+    print(f"  => Stabil im Simplex-Tangentialraum: {'JA' if stab['is_tangent_stable'] else 'NEIN'}")
 
     # --- Entropieproduktion ---
     print("\n--- Entropieproduktion ---")
@@ -420,9 +456,19 @@ def main():
         "stability": {
             "eigenvalues_real": np.real(stab["eigenvalues"]).tolist(),
             "eigenvalues_imag": np.imag(stab["eigenvalues"]).tolist(),
+            "tangent_eigenvalues_real": np.real(stab["tangent_eigenvalues"]).tolist(),
+            "tangent_eigenvalues_imag": np.imag(stab["tangent_eigenvalues"]).tolist(),
             "spectral_radius": stab["spectral_radius"],
+            "tangent_spectral_radius": stab["tangent_spectral_radius"],
             "max_real_eigenvalue": stab["max_real_eigenvalue"],
+            "tangent_max_real_eigenvalue": stab["tangent_max_real_eigenvalue"],
+            "is_full_stable": stab["is_full_stable"],
+            "is_tangent_stable": stab["is_tangent_stable"],
             "is_stable": stab["is_stable"],
+            "stability_interpretation": (
+                "Full-space stability is false because total concentration is conserved; "
+                "physical stability is tested on the simplex tangent space."
+            ),
         },
         "entropy_production": {
             "S_dot": s_dot,
@@ -449,8 +495,9 @@ def main():
     print("=" * 70)
     print(f"  Fixpunkt x*:        [{x_star[0]:.6f}, {x_star[1]:.6f}, {x_star[2]:.6f}]")
     print(f"  Nash-GG:            {'JA' if is_nash else 'NEIN'}")
-    print(f"  Stabil:             {'JA' if stab['is_stable'] else 'NEIN'}")
+    print(f"  Stabil (Tangential): {'JA' if stab['is_tangent_stable'] else 'NEIN'}")
     print(f"  Spektralradius:     {stab['spectral_radius']:.6f}")
+    print(f"  Spektralabszisse T: {stab['tangent_max_real_eigenvalue']:.6f}")
     print(f"  Entropieproduktion: {s_dot:.6f}")
     print(f"  Korrelation r:      {corr:.6f} ({corr_desc})")
     print(f"  p-Wert:             {p_value:.2e}")
