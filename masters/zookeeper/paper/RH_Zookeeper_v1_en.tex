@@ -1,13 +1,17 @@
 \documentclass[12pt,a4paper]{article}
 
+\input{glyphtounicode}
+\pdfgentounicode=1
+\usepackage{cmap}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=red,urlcolor=blue]{hyperref}
 \hypersetup{
-  pdftitle={The Spectral Zookeeper: The Riemann Hypothesis via Spectral Microcluster Closure in the Connes--Consani--Moscovici Framework},
+  pdftitle={The Spectral Zookeeper: A Conditional Reduction toward the Riemann Hypothesis via Spectral Microcluster Closure in the Connes--Consani--Moscovici Framework},
   pdfauthor={Lukas Geiger},
-  pdfsubject={Preprint on the Riemann Hypothesis via spectral microcluster closure},
+  pdfsubject={Preprint on a conditional reduction toward the Riemann Hypothesis via spectral microcluster closure},
   pdfkeywords={Riemann Hypothesis, Weil explicit formula, noncommutative geometry, spectral approximation, Abel summation, Cauchy interlacing}
 }
 \usepackage{geometry}
@@ -48,14 +52,14 @@
 \newcommand{\wmin}{w_{\min}}
 
 \title{The Spectral Zookeeper:\\[4pt]
-{\large The Riemann Hypothesis via Spectral Microcluster Closure}\\[2pt]
+{\large A Conditional Reduction toward the Riemann Hypothesis via Spectral Microcluster Closure}\\[2pt]
 {\large in the Connes--Consani--Moscovici Framework}}
 
 \author{Lukas Geiger\\
 \small Independent Researcher, Bernau, Germany\\
 \small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}}
 
-\date{\today}
+\date{Preprint v1.2, 23 May 2026}
 
 \begin{document}
 \overfullrule=0pt
@@ -160,8 +164,8 @@ in the cluster eigenspace of the Weil operator $QW$.
 This paper enters the zookeeper's enclosure.
 We implement the CCM framework computationally, using arbitrary-precision
 arithmetic (50~decimal digits) to build the Weil operator in dimensions
-up to~$121$ ($N = 120$ Fourier modes), and we verify its predictions
-numerically for the Riemann zeta function.
+up to~$121$ ($N = 120$ Fourier modes), and we test its predicted
+diagnostics numerically for the Riemann zeta function.
 Our main contributions are:
 
 \begin{enumerate}[label=(\roman*)]
@@ -170,8 +174,10 @@ Our main contributions are:
   (Analytically proved.)
 \item The \textbf{$\eta$-parametrisation} (Theorem~\ref{thm:eta-equiv}),
   which reduces the Riemann Hypothesis to the spectral inequality
-  $0 < \eta_j < 2$ for each regular mode, with $\eta_j > 0$ proven
-  analytically and $\eta_j < 2$ verified numerically.
+  $0 < \eta_j < 2$ for each regular mode.  The rank-one sign forcing
+  behind $\eta_j>0$ is proved analytically; the finite microcluster
+  correction and the upper bound $\eta_j<2$ are supported numerically and
+  folded into the conditional endgame estimates below.
 \item The \textbf{Abel--Stieltjes cancellation technique}
   (\cref{sec:abel}), an intermediate result that transforms the sign
   problem in the Cauchy sum into positive difference kernels and
@@ -192,7 +198,8 @@ $\eta$-parametrisation.
 \Cref{sec:abel} introduces the Abel--Stieltjes technique.
 \Cref{sec:numerics} presents the numerical evidence.
 \Cref{sec:endgame} develops the spectral-microcluster endgame that
-closes MS2 inside the finite-dimensional CCM model.
+reduces MS2 inside the finite-dimensional CCM model to three explicit
+quantitative closure inputs.
 \Cref{sec:RH} draws the consequence for the Riemann Hypothesis via
 the standard CCM transfer and Hurwitz passage.
 \Cref{sec:conclusion} concludes.
@@ -259,6 +266,71 @@ where:
 The rank-one term carries the ``counting'' information (the pole of
 $\zeta$ at $s = 1$, encoding the density of integers), while $H$ carries
 the ``coding'' information (the primes, encoding multiplicative structure).
+
+% added 2026-05-23: Foundation-Lock identity for the true minimal eigenvector
+\begin{proposition}[Foundation-Lock: canonical form of the true minimal eigenvector]
+\label{prop:foundation-lock}
+Let $L := 2\log\lambda$ be the support length of the CCM interval
+$[-L/2, L/2]$, and let $F(z) = \sum_{j} \xi_j / (z - 2\pi j / L)$ be the
+rational function associated to the true minimal eigenvector $\xi = (\xi_j)$
+of $QW_{\mathrm{even}}$ at bandwidth~$\lambda$ (CCM Eq.~5.25).  Define
+\begin{equation}
+\label{eq:xihat-def}
+  \hat{\xi}(z) := \frac{2}{\sqrt{L}} \sin\!\bigl(\tfrac{zL}{2}\bigr)\, F(z).
+\end{equation}
+Then:
+\begin{enumerate}[label=(\alph*)]
+  \item $\hat{\xi}$ is an \emph{entire} function: the apparent poles of $F$ at
+    $z = 2\pi k/L$ are cancelled by the zeros of $\sin(zL/2)$.
+  \item The lattice evaluations satisfy
+    $\hat{\xi}(2\pi k/L) = \sqrt{L}\,(-1)^k\,\xi_k$ for all $k$.
+  \item $\hat{\xi}$ is even: $\hat{\xi}(-z) = \hat{\xi}(z)$.
+\end{enumerate}
+In particular, $\hat{\xi}$ and $F$ share the same non-trivial zeros
+(with opposite parities: $F$ is odd, $\hat{\xi}$ is even).
+\end{proposition}
+
+\begin{proof}
+\textit{Parts~(a) and~(b).}
+Near $z_0 = 2\pi k / L$ the rational function $F$ has the Laurent expansion
+\[
+  F(z) = \frac{\xi_k}{z - z_0} + O(1),
+\]
+i.e.\ a simple pole with residue $\xi_k$.  For the sine factor, substituting
+$z = z_0 + \varepsilon$ gives
+\begin{align*}
+  \sin\!\bigl(\tfrac{zL}{2}\bigr)
+  &= \sin\!\bigl(\pi k + \tfrac{\varepsilon L}{2}\bigr)
+   = (-1)^k \sin\!\bigl(\tfrac{\varepsilon L}{2}\bigr)
+   = (-1)^k \tfrac{L}{2}\,\varepsilon + O(\varepsilon^3).
+\end{align*}
+Multiplying by the prefactor $(2/\sqrt{L})$:
+\begin{align*}
+  \hat{\xi}(z_0 + \varepsilon)
+  &= \frac{2}{\sqrt{L}}\,(-1)^k\,\frac{L}{2}\,\varepsilon
+     \cdot \frac{\xi_k}{\varepsilon} + O(\varepsilon)
+   = \sqrt{L}\,(-1)^k\,\xi_k + O(\varepsilon).
+\end{align*}
+Since the $1/\varepsilon$ singularity cancels exactly, $\hat{\xi}$ extends
+analytically to $z_0$---proving~(a).  Taking $\varepsilon \to 0$ yields
+$\hat{\xi}(2\pi k/L) = \sqrt{L}\,(-1)^k\,\xi_k$---proving~(b).
+
+\textit{Part~(c).}
+$\sin((-z)L/2) = -\sin(zL/2)$ and $F(-z) = -F(z)$ (both are odd); their
+product $\hat{\xi}(-z) = \hat{\xi}(z)$ is therefore even.
+\end{proof}
+
+\begin{remark}[Relation to the educated guess $k_\lambda$]
+\label{rem:xihat-vs-klambda}
+The Proposition concerns $\hat{\xi}$, the Fourier transform of the
+\emph{true} minimal eigenvector $\xi$, not the educated guess $k_\lambda$
+used throughout the remainder of this paper.  Whether $k_\lambda\approx\xi$
+(i.e.\ whether MS2 holds) is the central question; the Foundation-Lock
+identity \eqref{eq:xihat-def} gives $\hat{\xi}$ a canonical representation that is
+independent of this approximation.  The identity has been verified
+numerically at $\lambda=5, 7$ at \texttt{dps}$=50$, with maximum
+deviation $\approx 10^{-52}$.
+\end{remark}
 
 \subsection{The Poisson kernel and MS2}
 
@@ -433,9 +505,11 @@ $\alpha_{\Cl}/\alpha \to 1$.
 \subsection{From \texorpdfstring{$\eta$}{eta}-positivity to MS2}
 
 The remaining bridge from the modewise inequality to MS2 can be written
-entirely inside the present paper.
+as a Stieltjes route inside the present paper.  The algebraic sign
+statement is exact; the actual MS2 conclusion still requires the uniform
+off-cluster decay estimates isolated later in the endgame section.
 
-\begin{proposition}[From $\eta$-positivity to MS2]
+\begin{proposition}[From $\eta$-positivity to Stieltjes control]
 \label{prop:eta-to-ms2}
 Assume $\eta_j \in (0,2)$ for every $j \in J_{\reg}$, and write
 \[
@@ -465,15 +539,19 @@ is a negative discrete Stieltjes transform.  In particular:
   \sum_{j\in J_{\reg}}
   \frac{\mu_{\lambda,j}}{|t_j-w|\,|t_j-w_\ast|};
 \]
-\item the off-cluster coefficients $c_a = \beta_a\delta_a$ inherit the
-weighted flatness bound needed for MS2, so that
+\item if the same control is available uniformly in the off-cluster
+  pole-free regime, then the off-cluster coefficients
+  $c_a = \beta_a\delta_a$ inherit the weighted flatness bound needed for
+  MS2, so that
 \[
   \sum_{a\notin \Cl} |c_a|^2 \to 0
   \quad\Longrightarrow\quad
   \norm{P_\perp k_\lambda}^2 \to 0.
 \]
 \end{enumerate}
-Consequently, the $\eta$-bound implies MS2.
+Consequently, the $\eta$-bound identifies a sufficient Stieltjes route to
+MS2; the remaining quantitative content is the uniform off-cluster decay
+estimate, supplied only conditionally in \cref{sec:endgame}.
 \end{proposition}
 
 \begin{proof}
@@ -496,18 +574,26 @@ The flatness estimate is the elementary identity
   =
   \frac{w-w_\ast}{(t_j-w)(t_j-w_\ast)}
 \]
-summed against the positive weights $\mu_{\lambda,j}$.  Evaluating this
-regular Stieltjes control at off-cluster eigenvalues produces the
-weighted flatness estimate for $\delta_a := \alpha_\lambda-m_\lambda(w_a)$,
-and hence for the coefficients $c_a = \beta_a\delta_a$.  This is
-exactly the off-cluster decay mechanism behind MS2. \qedhere
+summed against the positive weights $\mu_{\lambda,j}$.  Under the
+uniform separation and summability hypotheses stated later as the
+endgame inputs, evaluating this regular Stieltjes control at
+off-cluster eigenvalues produces the weighted flatness estimate for
+$\delta_a := \alpha_\lambda-m_\lambda(w_a)$, and hence for the
+coefficients $c_a = \beta_a\delta_a$.  This is the off-cluster decay
+mechanism behind MS2; the uniform estimate itself is not proved in this
+subsection. \qedhere
 \end{proof}
 
 \subsection{The lower bound: Cauchy interlacing}
 
-\begin{theorem}[$\eta_j > 0$, proven via the secular equation]
+\begin{theorem}[Rank-one sign forcing for $\eta$]
 \label{thm:eta-positive}
-For all $j \in J_{\reg}$, $\eta_j > 0$.
+At the rank-one cluster level, $\eta_j=1$ for all
+$j\in J_{\reg}$.  In the finite microcluster model, $\eta_j>0$ follows
+whenever the multi-rank correction
+$\delta_j:=1-\eta_j$ satisfies $|\delta_j|<1$.  This correction is
+numerically small on the tested range and is one of the quantities
+controlled conditionally by the Abel--Stieltjes and endgame bounds.
 \end{theorem}
 
 \begin{proof}
@@ -559,20 +645,20 @@ Since $t_j - \wmin > 0$ by Step~2, $\sgn(g_j) = -\sgn(f_j)$ exactly
 identity; it is a consequence of the eigenvector equation and
 interlacing alone.
 
-\emph{Step 4 (Conclusion).}  By definition
+\emph{Step 4 (Rank-one conclusion).}  By definition
 $\eta_j = -(t_j - \wmin)\,g_j / (\alpha\, f_j)$, so
 \[
 \eta_j = -\frac{(t_j - \wmin)}{\alpha\, f_j}
         \cdot \biggl(-\frac{\alpha\, f_j}{t_j - \wmin}\biggr)
       = 1 > 0.
 \]
-The strict inequality $\eta_j > 0$ follows.  The deviation of $\eta_j$
-from $1$ at the numerical level measures precisely the cluster
+This proves the rank-one sign-forcing claim.  In the finite microcluster
+model the deviation of $\eta_j$ from $1$ measures precisely the cluster
 \emph{multi-rank} correction (multiple cluster eigenvectors with
-distinct $w_a \approx \wmin$ instead of an exact rank-one cluster);
-this is the $\delta_j = 1 - \eta_j$ analysed in
-\cref{sec:abel}, never crosses zero, and is uniformly bounded by the
-total off-cluster Abel sum.
+distinct $w_a \approx \wmin$ instead of an exact rank-one cluster).  It
+is the $\delta_j = 1 - \eta_j$ analysed in \cref{sec:abel}; positivity
+of the finite $\eta_j$ follows once $|\delta_j|<1$, while the uniform
+control of this correction belongs to the conditional endgame estimates.
 \end{proof}
 
 \begin{remark}[On the previous proof sketch]
@@ -853,8 +939,9 @@ $\lambda$ & $N$ & cluster/dim & leakage $\varepsilon$ &
 \end{tabular}
 \end{table}
 
-The leakage scales as $\varepsilon \sim \lambda^{-3.7}$,
-confirming MS2 numerically.
+The leakage scales as $\varepsilon \sim \lambda^{-3.7}$ on this finite
+test range, providing numerical support for the MS2 concentration
+diagnostic.
 The cluster projection gives $|F_{\Cl}(\gamma_1)| \approx 10^{-18}$---even
 better than the full Poisson kernel.
 
@@ -930,20 +1017,25 @@ three separate lemmas.
 
 \begin{definition}[Spectral microcluster]
 \label{def:geff}
-Fix an order-one constant $g_* > 0$.  The resonant microcluster is
+Fix a pre-registered order-one waterline $g_0 > 0$.  The resonant
+microcluster is
 \[
-  V_\lambda := \operatorname{span}\{q_j : u_j < u_0 + g_*\},
+  V_\lambda(g_0) := \operatorname{span}\{q_j : u_j < u_0 + g_0\},
 \]
 where $u_0 \le u_1 \le \cdots$ are the eigenvalues of the full Weil
-operator $A$ and $q_j$ the corresponding eigenvectors.
+operator $A$ and $q_j$ the corresponding eigenvectors.  When $g_0$ is
+fixed, we write $V_\lambda:=V_\lambda(g_0)$.
 \end{definition}
 
 \begin{remark}[Non-circularity]
-This definition is purely spectral: $V_\lambda$ is determined by the
+This definition is purely spectral: $V_\lambda(g_0)$ is determined by the
 spectrum of $A$ alone and does not refer to the Poisson kernel $k_\lambda$
 or to its spectral mass distribution.  The statement that
-$k_\lambda$ is almost contained in $V_\lambda$ is the conclusion of the
-endgame, not part of the definition.
+$k_\lambda$ is almost contained in a uniformly chosen waterline subspace is
+the conclusion of the endgame, not part of the definition.  The
+nontrivial closure question is whether such a waterline can be chosen
+uniformly in $\lambda$ while the low-waterline modes and the exterior gap
+remain controlled.
 \end{remark}
 
 \subsection{Truncation stability}
@@ -1190,12 +1282,74 @@ table exposes the decisive structural fact: the true outer gap is not a
 microscopic spacing but an order-one constant, while the residual is
 already of size $10^{-6}$.
 
+% added 2026-05-23: §E.18 converged empirics from EvenDom companion
+\subsection{Supporting evidence from the EvenDom companion: converged criterion-object norms}
+\label{subsec:evendom-empirics}
+
+The Even-Dominance companion paper \cite{Geiger2026evendom} studies the
+true minimal eigenvector $\xi_\lambda$ and its canonical form $\hat{\xi}$
+(see \cref{prop:foundation-lock}) via high-precision diagonalisation.
+A subtle convergence issue arises: owing to the near-degeneracy of the
+even/odd eigenvalue split (even/odd gap $\sim 10^{-65}$--$10^{-84}$,
+super-exponentially small), accurate eigenvector computation requires
+$\mathtt{dps}_{\min}(\lambda) \approx 30$--$50 \cdot \lambda$ decimal
+places.  The main Zookeeper computations at $\mathtt{dps}=50$ remain
+valid for $\lambda \le 100$ (since those computations target $k_\lambda$,
+not $\xi_\lambda$), but any direct computation of $\hat{\xi}_\lambda$ at
+larger $\lambda$ requires higher precision.
+
+The following table reports converged values (from \cite{Geiger2026evendom}~§E.18)
+for the sup-norm and $L^2$-norm proxies that enter the (ii-a) condition:
+\begin{equation}
+  A_\lambda(\sigma) := \sup_{t\in\mathbb{R}} |\hat{\xi}_\lambda(\sigma+it)|
+  / |\hat{\xi}_\lambda(0)|,
+  \qquad
+  B_\lambda(\sigma) := \|\hat{\xi}_\lambda(\sigma+i\,\cdot\,)\|_{L^2(\mathbb{R})}
+  / |\hat{\xi}_\lambda(0)|.
+\end{equation}
+
+\begin{table}[h]
+\centering
+\caption{Converged criterion-object norms at $\sigma=0.4$
+  (from \cite{Geiger2026evendom}~§E.18; dps\,$=250$--$420$).
+  $A_\lambda(0.4)\approx 1.004$ flat across $\lambda$: the sup-form of
+  (ii-a) is empirically satisfied.  $B_\lambda(0.4)/\lambda^{0.4}
+  \approx 0.68$ plateau: $L^2$-growth is sub-generic.}
+\label{tab:evendom-norms}
+\begin{tabular}{ccccc}
+\toprule
+$\lambda$ & dps & $A_\lambda(0.4)$ & $B_\lambda(0.4)$ &
+  $B_\lambda(0.4)/\lambda^{0.4}$ \\
+\midrule
+3  & 250 & 1.0033 & 1.151 & 0.74 \\
+5  & 300 & 1.0037 & 1.340 & 0.70 \\
+7  & 350 & 1.0038 & 1.505 & 0.69 \\
+9  & 420 & 1.0039 & 1.649 & 0.68 \\
+11 & 440 & 1.0039 & 1.778 & 0.68 \\
+13 & 540 & 1.0039 & 1.895 & 0.68 \\
+15 & 640 & 1.0039 & 2.003 & 0.68 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The flatness of $A_\lambda(0.4)$ across $\lambda = 3, 5, 7, 9, 11, 13, 15$ is the
+numerical fingerprint that the a-priori strip bound (ii-a) is satisfied:
+the sup-form remains $O(1)$ with no visible $\lambda$-growth.  The
+$B_\lambda/\lambda^{0.4}$ plateau near $0.68$ indicates that the $L^2$
+mass is sub-generic (generic growth would be $\sim\lambda^{1/2}$).
+These results complement and are consistent with the internal Zookeeper
+numerics: the Poisson-kernel results at $\mathtt{dps}=50$ and the true
+eigenvector results at $\mathtt{dps}\ge 250$ are sampling different objects
+($k_\lambda$ vs.\ $\xi_\lambda$) but both point toward the same
+a-priori-boundedness structure.
+
 \subsection{Relationship to earlier routes}
 
 The Abel--Stieltjes analysis of \cref{sec:abel} remains valuable as a
 mechanism finder: it reveals why triangle inequalities fail and why the
 off-cluster cancellation is highly structured.  But the final closure no
-longer depends on the tail-vs-gap conjecture.  The Three-Lemma route is
+longer depends on the tail-vs-gap conjecture as its single bottleneck.
+The conditional Three-Lemma route is
 strictly sharper: it replaces one monolithic conjecture by a spectral
 microcluster statement and two residual estimates, each directly visible
 in the operator decomposition.
@@ -1223,7 +1377,7 @@ corresponding even CCM approximants satisfy the real-zero property for
 the truncated $\xi_\lambda$.
 \end{conjecture}
 
-\begin{theorem}[Hurwitz passage, after Fact 6.4 of \cite{Connes2026}]
+\begin{hypothesis}[External Hurwitz/prolate-wave input, after Fact 6.4 of \cite{Connes2026}]
 \label{conj:hurwitz-blackbox}
 If the CCM approximants $\xi_\lambda$ have the real-zero property along
 a sequence $\lambda_n \to \infty$, then the Fourier transforms
@@ -1234,7 +1388,7 @@ locally uniform limits of entire functions of order one, the
 real-zero property passes to $\Xi$.  Equivalently, the Riemann
 Hypothesis follows from real-zero approximants along a divergent
 sequence.
-\end{theorem}
+\end{hypothesis}
 
 \paragraph{Status of this statement.}  As stated by Connes in
 \cite[Fact~6.4 of §6.5]{Connes2026}, the Fourier convergence with
@@ -1251,6 +1405,65 @@ companion paper \cite{Geiger2026evendom}; (ii)~approximation
 quality of the educated guess $k_\lambda$ versus the true ground
 state $\xi_\lambda$, which is precisely the spectral microcluster
 question MS2 addressed in \cref{sec:endgame} of the present paper.
+
+% added 2026-05-23: §E.14 reduction of limit identification (ii-c) into the a-priori bound (ii-a)
+\subsection{Reduction of limit identification to the a-priori strip bound}
+\label{subsec:iic-to-iia}
+
+The Hurwitz passage (\cref{conj:hurwitz-blackbox}) requires condition~(ii)
+in Connes' programme: $\hat{\xi}_\lambda \to \Xi$ locally uniformly on a
+strip.  Following the Normal-Family framework of \cite{Geiger2026evendom},
+condition~(ii) decomposes into two parts:
+\begin{itemize}
+  \item[(ii-a)] The family $\{\hat{\xi}_\lambda\}$ is locally bounded
+    in the strip $|\Im(z)| < 1/2$ (a priori bound, needed for Montel
+    compactness).
+  \item[(ii-c)] Every subsequential limit of $\{\hat{\xi}_\lambda\}$ in
+    the strip equals $\Xi$ (limit identification).
+\end{itemize}
+A standard Montel--Vitali argument gives (ii-a)$+$(ii-c)$\Rightarrow$(ii).
+
+\begin{proposition}[Limit identification under zero-multiset coincidence and normalization]
+\label{prop:iic-absorbed}
+Assume (ii-a), and assume \textup{(Z+)}: every subsequential locally
+uniform limit $G$ has the same full zero multiset as $\Xi$,
+with the same normalization $G(0)=\Xi(0)$.  Then that subsequential
+limit is $\Xi$.  Thus, once the zero multiset and normalization are
+already controlled, the only remaining freedom is the exponential-factor
+growth control supplied by the a-priori bound.
+\end{proposition}
+
+\begin{proof}[Proof sketch (five steps, from \cite{Geiger2026evendom} §E.14)]
+\emph{Step~1.}  Because $\hat{\xi}_\lambda$ is even by
+\cref{prop:foundation-lock}(c), any subsequential locally uniform limit
+$G$ inherits parity $G(-z)=G(z)$---without using~(Z+).
+
+\emph{Step~2.}  Under~(Z+) and local uniform convergence, the full zero
+multiset of $G$ equals that of $\Xi$.  Since both functions are entire of
+order~$1$, the Hadamard product gives
+$G(z) = \Xi(z)\,e^{h(z)}$ for some entire $h$.
+
+\emph{Step~3.}  Parity of both $G$ and $\Xi$ forces $h(-z)=h(z)$, i.e.\
+$h$ is even; the real-axis restriction forces $h$ real-valued on~$\mathbb{R}$.
+
+\emph{Step~4.}  The order-one growth bound inherited from the CCM setup
+(with (ii-a) on the strip) forces $h$ to be a polynomial of degree
+$\le 1$; combined with evenness, $h$ is a constant $h(z) = c_0$.
+
+\emph{Step~5.}  The normalization $G(0)=\Xi(0)$ fixes $c_0 = 0$.
+Hence $G = \Xi$.
+\end{proof}
+
+\begin{remark}[Status]
+Assumption~(Z+) is itself a strong part of the limiting problem.  The
+Proposition therefore does not eliminate Connes' condition~(ii); it only
+records that, after zero-multiset coincidence and normalization have
+already been supplied by another argument, the residual ambiguity is the
+standard exponential factor, which is killed by order and normalization
+control.  The open analytic target remains a rigorous a-priori strip
+bound from $QW_N$-coercivity together with a non-circular source of
+zero-multiset control.
+\end{remark}
 
 \begin{theorem}[Conditional reduction of RH via microcluster closure]
 \label{thm:RH-conditional}
@@ -1272,12 +1485,12 @@ limit.  Therefore the Riemann Hypothesis holds.
 \emph{not} a proof of the Riemann Hypothesis.  After the
 clarifications above, the conditioning consists of:
 \begin{itemize}[leftmargin=*]
-  \item \emph{External established input:} the Slepian--Pollak prolate
-    wave function convergence theorem (\cite[Fact 6.4 / Theorem~1 of
-    Ref.~47]{Connes2026}), which gives \cref{conj:hurwitz-blackbox} as
-    an analytical consequence of classical prolate-wave theory; and
+  \item \emph{External imported input:} the Slepian--Pollak prolate
+    wave convergence statement used in \cite[Fact 6.4 / Theorem~1 of
+    Ref.~47]{Connes2026}, recorded here as
+    \cref{conj:hurwitz-blackbox} and not reproved in this paper; and
     the Connes--van Suijlekom quadratic-form real-zero criterion
-    \cite{ConnesvS2025}, fully proved.
+    \cite{ConnesvS2025}.
   \item \emph{Internal open inputs:} the three endgame statements of
     \cref{sec:endgame} (scalar secular cancellation, projected Poisson
     quasimode, coercive complement), which together close the spectral
@@ -1306,6 +1519,33 @@ while the present paper isolates the quasimode concentration inside a
 spectral microcluster.
 \end{remark}
 
+% added 2026-05-23: err-collapse criterion from EvenDom companion
+\begin{remark}[err-collapse criterion from the companion paper]
+\label{rem:err-collapse}
+The companion paper \cite{Geiger2026evendom} formulates a second
+reduction criterion, proved there under its stated metric and
+normalization assumptions.  Define
+$\mathrm{err}_\lambda := \sup_j |z_j^{(\lambda)} - \gamma_j|$ where
+$z_j^{(\lambda)}$ are the non-trivial zeros of $F_{\xi_\lambda}$ (the
+rational function of the true minimal eigenvector, CCM~Eq.~5.25) and
+$\gamma_j$ the Riemann zeros.  Then:
+\begin{enumerate}[label=(\alph*)]
+  \item \textbf{(Criterion)} \emph{err-collapse equivalence:}
+    $\mathrm{err}_\lambda \to 0$ if and only if conditions (i)$+$(ii)
+    of Connes \cite[§6.6]{Connes2026} hold.  (Proved via the triangle
+    inequality for Fourier-analytic distance.)
+  \item \textbf{(Rigorous at every finite $N$)} \emph{Condition~(i):}
+    real zeros of $\hat{\xi}_\lambda$ hold by the Connes--van Suijlekom
+    Theorem~5.6 \cite{ConnesvS2025} at every finite~$N$, as long as the
+    even/odd eigenvalue split is non-zero.
+  \item \textbf{(Empirical)} At dps$\,= 250$--$350$, $\mathrm{err}_\lambda
+    \sim 10^{-25\lambda}$ for the first 15 Riemann zeros, $\lambda=3,\ldots,9$.
+\end{enumerate}
+The remaining analytic open step is therefore identical to (ii-a): a
+rigorous a-priori strip bound on $\hat{\xi}_\lambda$ from $QW_N$-coercivity,
+as isolated in \cref{prop:iic-absorbed}.
+\end{remark}
+
 % =============================================================================
 \section{Conclusion: The Zookeeper's Legacy}
 \label{sec:conclusion}
@@ -1317,9 +1557,8 @@ framework in which the low-energy mechanism behind the zeta zeros can be
 tested mode by mode and eigenvalue by eigenvalue with arbitrary
 precision.
 
-We have verified this framework comprehensively and found that every
-prediction it makes is confirmed numerically, with margins that range
-from comfortable to enormous.
+Across the tested diagnostics, the framework shows a consistent
+numerical pattern, with margins that range from comfortable to enormous.
 The $15$-digit cancellation at Riemann zeros, the resolvent identity
 $\alpha = R$, the Poisson kernel's near-perfect cluster localisation,
 the sign coherence of the spectral multiplier, the $\eta \approx 1$
@@ -1328,24 +1567,26 @@ fact: the rank-one pole term and the arithmetic perturbation are locked
 in a rigid algebraic embrace.
 
 \medskip
-\noindent\textbf{What this paper proves analytically:}
+\noindent\textbf{What this paper proves analytically or conditionally reduces:}
 \begin{enumerate}[label=(\roman*)]
 \item The \emph{resolvent identity} (Theorem~\ref{thm:resolvent}):
   Riemann zeros are resonances $\alpha(\gamma) = R(\gamma, \wmin)$.
 \item The \emph{$\eta$-parametrisation} (Theorem~\ref{thm:eta-equiv}):
   the local modewise inequality is equivalent to $\eta_j \in (0,2)$ for
   all regular modes.
-\item The \emph{lower bound} $\eta_j > 0$
-  (Theorem~\ref{thm:eta-positive}), via Cauchy interlacing.
-\item The \emph{Three-Lemma microcluster closure}
+\item The \emph{rank-one sign forcing} behind $\eta_j > 0$
+  (Theorem~\ref{thm:eta-positive}), via the secular equation and Cauchy
+  interlacing, with the finite multi-rank correction left to the
+  conditional estimates.
+\item The \emph{conditional three-statement microcluster closure}
   (Theorem~\ref{thm:MS2-closure}), which turns scalar secular
   cancellation, projected Poisson control, and the outer spectral gap
-  into an explicit MS2 bound.
-\item The \emph{Conditional reduction of RH inside the same paper}
+  into an explicit MS2 bound, assuming the three quantitative closure
+  statements.
+\item The \emph{Conditional reduction from microcluster closure to RH}
   (Theorem~\ref{thm:RH-conditional}), obtained by combining the
-  microcluster closure with the two conjectural CCM external inputs
-  (truncation faithfulness, Hurwitz passage); this is a reduction, not
-  a proof of RH.
+  conditional microcluster closure with the CCM transfer assumptions;
+  this is a reduction, not a proof of RH.
 \end{enumerate}
 
 \noindent\textbf{What this paper verifies numerically:}
@@ -1353,12 +1594,16 @@ in a rigid algebraic embrace.
 \item The upper bound $\eta_j < 2$ with margin $\geq 0.99$ (all 117+ modes).
 \item The Abel--Stieltjes Tail-vs-Gap bound $< 1$ (all 117 modes).
 \item The endgame constants $s_\lambda$, $p_\lambda$, and $g_*$ for
-  $\lambda = 3, \ldots, 100$ ($N$ up to~$120$), with the closure bound
-  75--84\% tight.
+  $\lambda = 3, \ldots, 100$ ($N$ up to~$120$) in the tested range,
+  with the closure bound 75--84\% tight.
 \end{enumerate}
 
 \noindent\textbf{What remains external to the internal closure argument:}
 \begin{enumerate}[label=(O\arabic*)]
+\item \textbf{Uniform C2ca constants:} the algebraic identities behind
+  $s_\lambda$, $p_\lambda$, and $g_*$ are established or numerically very
+  stable; the uniform $\lambda$-limit needed for MS2 remains a quantitative
+  closure assumption.
 \item \textbf{Truncation faithfulness and limit passage:} the present
   paper works inside the finite-dimensional CCM Fourier model.  To pass
   from the model to the full Weil positivity statement one still needs
@@ -1367,12 +1612,6 @@ in a rigid algebraic embrace.
 \item \textbf{MS1 / simple-even input:} the simplicity and even-sector
   properties used in the broader CCM programme are not reproved here.
 \end{enumerate}
-
-The zookeeper built the enclosure.
-We have now isolated the resonant cage, replaced the old ad hoc fence by
-a spectral one, shown how the Poisson kernel is forced into it by a
-three-lemma argument, and included the final RH deduction in the same
-manuscript.
 
 \bigskip
 
@@ -1385,9 +1624,6 @@ The author thanks Alain Connes, Caterina Consani, and Henri Moscovici
 for creating the framework that made this investigation possible.
 The numerical computations were performed using \texttt{mpmath}
 \cite{mpmath} at 50-digit precision.
-Portions of the proof architecture were developed in collaboration
-with AI assistants (Claude, ChatGPT), whose contributions are
-documented in the project's computational notebooks.
 
 \subsection*{Data availability}
 
@@ -1396,12 +1632,12 @@ All computational scripts and numerical logs are available at
 
 \subsection*{AI disclosure}
 
-This work involved substantial use of AI assistants (Anthropic Claude
-and OpenAI ChatGPT) for numerical computation, algebraic verification,
-proof strategy development, and manuscript preparation.
-The AI contributions are documented in detail in the supplementary
-materials.
-All mathematical claims have been independently verified by the author.
+AI tools (Anthropic Claude and OpenAI ChatGPT) were used for numerical
+computation checks, algebraic verification support, proof-strategy
+exploration, and manuscript preparation.  The tool-assisted steps are
+documented in the supplementary materials.
+The author retained final responsibility for the mathematical content and
+the final editorial form.
 
 % =============================================================================
 % REFERENCES
@@ -1464,9 +1700,9 @@ G.~H.~Golub and C.~F.~Van Loan,
 
 \bibitem{Geiger2026evendom}
 L.~Geiger,
-\emph{A Proof of the Riemann Hypothesis via Even Dominance of the Weil
+\emph{A Conditional Proof of the Riemann Hypothesis via Even Dominance of the Weil
 Quadratic Form},
-Zenodo (2026), DOI:~10.5281/zenodo.19546593.
+Zenodo (2026), Concept DOI:~10.5281/zenodo.19764771.
 
 \bibitem{mpmath}
 F.~Johansson et al.,
