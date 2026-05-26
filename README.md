@@ -50,7 +50,7 @@ The cosmological branch of FST. The Dark Energy paper instantiates Pattern A on 
 
 ### FST-Biology
 
-In development. See [`fst-biology/`](fst-biology/) and the private companion repo [`research-line/fst-nash`](https://github.com/research-line/fst-nash) (protein folding via Nash equilibrium).
+The standalone chaperone game-theory paper is published: **FST-Nash** — *Game-Theoretic Diagnostics for Chaperone Systems* ([DOI: 10.5281/zenodo.20402751](https://doi.org/10.5281/zenodo.20402751)). Code and results: [`research-line/fst-nash`](https://github.com/research-line/fst-nash). The overview paper FST-III Biological Stability is in [`applications/fst-iii-biological/`](applications/fst-iii-biological/).
 
 ### FST-Chemistry
 
@@ -232,7 +232,7 @@ functional-stability-theory/
 
 - [rh-even-dominance](https://github.com/research-line/rh-even-dominance) — Riemann Hypothesis: Even-dominance proof (foundation)
 - [crm-cosmology](https://github.com/research-line/crm-cosmology) — Cooperative Renormalization Model (foundation)
-- [fst-nash](https://github.com/research-line/fst-nash) — Protein folding via Nash equilibrium (FST-Biology, private)
+- [fst-nash](https://github.com/research-line/fst-nash) — Game-theoretic diagnostics for chaperone systems (FST-Biology; [DOI: 10.5281/zenodo.20402751](https://doi.org/10.5281/zenodo.20402751))
 
 ## Author
 
