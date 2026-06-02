@@ -42,11 +42,11 @@ Derive Pattern A + DS1–DS3 from Spectrum Duality. These instantiate the Dissip
 
 ### FST-Cosmology
 
-The cosmological branch of FST. The Dark Energy paper instantiates Pattern A on cosmological screening mechanisms (Hu–Sawicki f(R) gravity).
+The cosmological branch of FST. The Dark Energy paper instantiates Pattern B on cosmological screening mechanisms (Hu–Sawicki f(R) gravity).
 
 | Paper | Version | Status | Open Problem | Concept-DOI |
 |-------|---------|--------|--------------|-------------|
-| [**Dark Energy**](fst-cosmology/dark-energy/) | v1.9 candidate | Framework Note | Hu–Sawicki thin-shell + RG matching quantitatively open | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
+| [**Dark Energy**](fst-cosmology/dark-energy/) | v1.10 candidate | Framework Note | Hu–Sawicki thin-shell + RG matching quantitatively open | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
 
 ### FST-Biology
 
