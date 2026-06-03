@@ -128,12 +128,12 @@ By tracking the evolution of this functional, we establish an exact dissipation 
 
 \begin{lemma}[Energy-Dissipation Divergence Bound]
 \label{lem:entropy-bound}
-Let $u \in L^\infty_t H^1_x(\Omega)$ be a divergence-free Leray--Hopf solution to the Navier-Stokes equations with smooth forcing $f$, and let $v \in L^\infty_t H^1_x(\Omega)$ be a divergence-free field (not necessarily an NS solution) with $\partial_t v$ locally integrable in time. Define the residual $\mathcal{R}_v := \partial_t v + (v\cdot\nabla)v - \nu\Delta v - f$, which vanishes when $v$ is itself an NS solution. The time evolution of $E_{v}(t) = \frac{1}{2}\| u - v \|_{L^2}^2$ is bounded by:
+Let $u \in L^\infty_t H^1_x(\Omega)$ be a divergence-free Leray--Hopf solution to the Navier-Stokes equations with smooth forcing $f$, and let $v \in L^\infty_t H^1_x(\Omega)$ be a divergence-free field (not necessarily an NS solution) with $\partial_t v$ locally integrable in time. The time evolution of $E_{v}(t) = \frac{1}{2}\| u - v \|_{L^2}^2$ is bounded by:
 \begin{equation}
     \frac{d}{dt} E_{v}(t) \le - \frac{\nu}{2} \|\nabla u\|_{L^2}^2 + C_1(t) E_{v}(t) + C_2(t),
 \end{equation}
-where $C_1(t) = 2\|\nabla v\|_{L^\infty} + 1$ and $C_2(t) = \frac{1}{2}\|(v \cdot \nabla)v\|_{L^2}^2 + \frac{1}{2}\|f - \partial_t v + \mathcal{R}_v\|_{L^2}^2 + \frac{\nu}{2}\|\nabla v\|_{L^2}^2$.
-When $v$ is an NS solution, $\mathcal{R}_v = 0$ and $C_2$ simplifies to $\frac{1}{2}\|(v \cdot \nabla)v\|_{L^2}^2 + \frac{1}{2}\|f - \partial_t v\|_{L^2}^2 + \frac{\nu}{2}\|\nabla v\|_{L^2}^2$. When $v(t)$ is the time-varying attractor minimiser (Remark~\ref{rem:minimiser-trajectory}), the term $\partial_t v$ must be interpreted as the total rate of change of the selection, and $\mathcal{R}_v \neq 0$ in general; the BV modification in the proof of Theorem~\ref{thm:main} (equation~\eqref{eq:stieltjes-bound}) handles this case.
+where $C_1(t) = 2\|\nabla v\|_{L^\infty} + 1$ and $C_2(t) = \frac{1}{2}\|(v \cdot \nabla)v\|_{L^2}^2 + \frac{1}{2}\|f - \partial_t v\|_{L^2}^2 + \frac{\nu}{2}\|\nabla v\|_{L^2}^2$. If $v$ is itself an NS solution, the pressure contribution is harmless in the pairing with the divergence-free field $w=u-v$; no separate unprojected residual term is needed.
+When $v(t)$ is the time-varying attractor minimiser (Remark~\ref{rem:minimiser-trajectory}), the term $\partial_t v$ must be interpreted as the total rate of change of the selection; the BV modification in the proof of Theorem~\ref{thm:main} (equation~\eqref{eq:stieltjes-bound}) handles this case.
 \end{lemma}
 
 \begin{proof}
@@ -158,7 +158,7 @@ These terms are bounded as:
 \begin{equation}
     |-I| \le \|w\|_{L^2} \|(v \cdot \nabla)v\|_{L^2} + \|\nabla v\|_{L^\infty} \|w\|_{L^2}^2.
 \end{equation}
-Substituting these bounds back into the time derivative equation and applying Young's inequality to the residual linear terms $\|w\|_{L^2} \|f - \partial_t v\|_{L^2}$ and $\|w\|_{L^2} \|(v \cdot \nabla)v\|_{L^2}$ yields the stated result.
+Substituting these bounds back into the time derivative equation and applying Young's inequality to the remaining linear terms $\|w\|_{L^2} \|f - \partial_t v\|_{L^2}$ and $\|w\|_{L^2} \|(v \cdot \nabla)v\|_{L^2}$ yields the stated result.
 \end{proof}
 
 Under Axiom~\ref{prop:attractor-regularity}, the uniform bounds $\sup_{v \in \mathcal{A}} C_1(t) < \infty$ and $\sup_{v \in \mathcal{A}} C_2(t) < \infty$ hold for the reference fields used in the distance functional. Taking the infimum over $\mathcal{A}$ transitions the individual energy bound into an absolute stability limit for the flow divergence $H(u \mid \mathcal{A})$.
@@ -1347,6 +1347,34 @@ then there is no finite blow-up time $T^* < \infty$.  In particular,
 $u(t)$ is globally smooth.
 \end{theorem}
 
+For orientation, Table~\ref{tab:conditional-input-ledger} separates the
+formal status of the inputs from their role in the proof.
+
+\begin{table}[htbp]
+\small
+\centering
+\begin{tabularx}{\textwidth}{@{}p{0.25\textwidth}YY@{}}
+\hline
+\textbf{Input} & \textbf{Status in this paper} & \textbf{Role in the argument} \\
+\hline
+Attractor-regularity package &
+  A standing axiom for classical 3D Navier--Stokes; available only after assuming the reference attractor has the stated compactness and smoothness bounds. &
+  Provides the uniform constants and compactness needed in the $H(u\mid\mathcal{A})$ estimates. \\
+Assumption~G/G$'$ &
+  Open geometric-selection input; the paper records sufficient routes via positive reach, tracking, or BV selections. &
+  Transfers the fixed-reference estimate to the time-dependent minimising attractor element and controls the Stieltjes correction. \\
+Condition~D &
+  Substantive analytic dominance assumption, not derived from Leray energy or BKM alone. &
+  Makes the right-hand side of the integrated $H$-bound negative, producing the contradiction $H(T)<0$. \\
+$H^1$ lift &
+  Programmatic extension motivated by the $L^2$ budget limitation. &
+  Moves the obstruction to a Sobolev level where enstrophy dissipation has no a priori upper budget, but new Bihari-type dominance remains open. \\
+\hline
+\end{tabularx}
+\caption{Conditional-input ledger for Theorem~\ref{thm:main}.}
+\label{tab:conditional-input-ledger}
+\end{table}
+
 \begin{remark}[The dissipation gap and the tautology concern]\label{rem:diss-gap}
 Condition~\eqref{eq:diss-dom} is the genuine obstruction that
 separates the present conditional framework from an unconditional
@@ -2320,7 +2348,7 @@ The limit selection $v$ satisfies:
 \item $\mathrm{TV}(v) \leq C \int_0^T \|\partial_t u\| \, dt$ (from the energy-dissipation balance of NS),
 \item $v$ minimises $\mathcal{F}_0[a] = \int_0^T \|u - a\|^2\,dt$ over all BV selections on $\overline{\mathcal{A}}$.
 \end{enumerate}
-Property (2) is \emph{precisely} the BV selection bound required by Assumption~G. It arises not from ``dividing by $\varepsilon$'' (which is invalid in the unrescaled setting) but from the Mielke--Rossi--Savar\'e EDP-convergence framework \cite{MielkeRossiSavare2016}: the energy-dissipation balance propagates through the $\Gamma$-limit via lower semicontinuity and chain-rule arguments, as in balanced-viscosity solutions \cite{MielkeRossiSavare2016}.
+Property (2) is \emph{precisely} the BV selection bound required by Assumption~G. It arises not from ``dividing by $\varepsilon$'' (which is invalid in the unrescaled setting) but from the Mielke--Rossi--Savar\'e EDP-convergence framework \cite{MielkeRossiSavare2016} and its relaxed wiggly-energy variant \cite{DondlFrenzelMielke2019}: the energy-dissipation balance propagates through the $\Gamma$-limit via lower semicontinuity and chain-rule arguments, as in balanced-viscosity solutions \cite{MielkeRossiSavare2016}.
 
 \subsubsection*{Step 5: Balanced-viscosity formulation}
 
@@ -2391,12 +2419,12 @@ This EDP mechanism is structurally identical to chameleon screening as $\Gamma$-
 
 \begin{remark}[Balanced viscosity on the Lorenz attractor]
 \label{rem:bv-lorenz}
-The balanced-viscosity selection $v_\varepsilon$ from Definition~\ref{def:bv-selection} was tested on the Lorenz attractor ($\sigma=10$, $\rho=28$, $\beta=8/3$) using a time-averaged Moreau--Yosida projection. Five tests confirm the theoretical predictions: (i)~Simon BV compactness: $\mathrm{TV}(v_\varepsilon)$ remains bounded as $\varepsilon \to 0$ (variation $< 7\%$ for window $W=50$); (ii)~Balanced viscosity convergence: successive differences $\|v_{\varepsilon_1} - v_{\varepsilon_2}\|_{L^2}$ form a Cauchy sequence ($0.171, 0.171, 0.034, 0.004$); (iii)~Aubin--Lions regularity: $\|v_\varepsilon\|_{L^2}$ and $\|v_\varepsilon'\|_{L^2}$ bounded; (iv)~Condition~D: dissipation integral finite ($\approx 7 \times 10^5$). Script: \texttt{compute\_bv\_selection.py}.
+The balanced-viscosity selection $v_\varepsilon$ from Definition~\ref{def:bv-selection} was tested on the Lorenz attractor ($\sigma=10$, $\rho=28$, $\beta=8/3$) using a time-averaged Moreau--Yosida projection. Four diagnostics support the theoretical predictions: (i)~Simon BV compactness: $\mathrm{TV}(v_\varepsilon)$ remains bounded as $\varepsilon \to 0$ (variation $< 7\%$ for window $W=50$); (ii)~Balanced viscosity convergence: successive differences $\|v_{\varepsilon_1} - v_{\varepsilon_2}\|_{L^2}$ form a Cauchy sequence ($0.171, 0.171, 0.034, 0.004$); (iii)~Aubin--Lions regularity: $\|v_\varepsilon\|_{L^2}$ and $\|v_\varepsilon'\|_{L^2}$ bounded; (iv)~bounded-dissipation sanity check: the finite-dimensional dissipation integral is finite ($\approx 7 \times 10^5$). This is not a verification of Condition~D for Navier--Stokes, which is a dominance condition against Gronwall/Bihari costs near blow-up. Script: \texttt{compute\_bv\_selection.py}.
 \end{remark}
 
 \begin{remark}[Multi-attractor validation]
 \label{rem:multi-attractor}
-The balanced-viscosity selection was tested on three chaotic attractors: Lorenz ($\sigma=10$, $\rho=28$), R\"ossler ($a=0.2$, $c=5.7$), and Chen ($a=35$, $c=28$). All three pass the Simon BV boundedness test ($\mathrm{TV}(v_\varepsilon)$ bounded as $\varepsilon \to 0$), exhibit Cauchy convergence in $L^2$ (geometric decay of successive differences), and have finite dissipation integrals (Condition~D). The R\"ossler attractor shows the fastest convergence (differences $0.057 \to 0.001$), while the Chen attractor has the highest dissipation ($\approx 1.4 \times 10^6$) but converges nonetheless. This confirms that the BV selection mechanism is robust across different attractor topologies. Script: \texttt{compute\_bv\_multi\_attractor.py}.
+The balanced-viscosity selection was tested on three chaotic attractors: Lorenz ($\sigma=10$, $\rho=28$), R\"ossler ($a=0.2$, $c=5.7$), and Chen ($a=35$, $c=28$). All three pass the Simon BV boundedness test ($\mathrm{TV}(v_\varepsilon)$ bounded as $\varepsilon \to 0$), exhibit Cauchy convergence in $L^2$ (geometric decay of successive differences), and have finite bounded-dissipation diagnostic integrals. These finite-dimensional diagnostics support the BV selection mechanism across different attractor topologies; they do not establish Condition~D for Navier--Stokes. The R\"ossler attractor shows the fastest convergence (differences $0.057 \to 0.001$), while the Chen attractor has the highest diagnostic dissipation ($\approx 1.4 \times 10^6$) but converges nonetheless. Script: \texttt{compute\_bv\_multi\_attractor.py}.
 \end{remark}
 
 % ==================================================================
@@ -2651,9 +2679,10 @@ $\int\langle (u\cdot\nabla)u, \Delta u\rangle$ can grow without
 bound (it involves $\|u\|_{H^1}\,\|\Delta u\|$), the balance
 between the three terms on the right is \emph{not} controlled
 a priori.  In particular, $\int_0^{T^*}\|\Delta u\|^2\,dt$ may
-diverge---and if it does, the $H^{(1)}$-functional is driven below
-zero by exactly the same budget argument as in Theorem~\ref{thm:main},
-but now with a \emph{genuinely divergent} dissipation term.
+diverge; if it also dominates the Bihari/projection costs, the
+$H^{(1)}$-functional is driven below zero by the same budget argument
+as in Theorem~\ref{thm:main}, but now with a \emph{genuinely divergent}
+dissipation term.
 
 % ------------------------------------------------------------------
 \subsection{Conditional \texorpdfstring{$H^1$}{H1}-theorem (sketch)}
@@ -2887,7 +2916,7 @@ $H^1$-lift (Prop.~\ref{thm:H1-main}) & Conditional proof sketch; needs Bihari do
 \hline
 BV selection on Lorenz/R\"ossler/Chen & 3/3 passed (finite-dim.) \\
 Balanced viscosity convergence & Cauchy sequence (finite-dim.) \\
-Condition D (dissipation bounded) & 3/3 passed (finite-dim.) \\
+Bounded-dissipation diagnostics (not Condition D) & 3/3 passed (finite-dim.) \\
 \hline
 \multicolumn{2}{|l|}{\textit{Open (the core problems):}} \\
 \hline
@@ -3176,12 +3205,6 @@ L.~Geiger,
 \emph{Volume-Independent Spectral Gap for Strong-Coupling Lattice Gauge Theory via Poincar\'e--Dobrushin Machinery},
 Zenodo, 2026.
 \href{https://doi.org/10.5281/zenodo.19087433}{doi:10.5281/zenodo.19087433}.
-
-\bibitem{Geiger2026-BSD}
-L.~Geiger,
-\emph{The BSD Conjecture as a Positivity Normal-Form Theorem},
-Zenodo, 2026.
-\href{https://doi.org/10.5281/zenodo.19087443}{doi:10.5281/zenodo.19087443}.
 
 \bibitem{ChepyzhovVishik2002}
 V.~V.~Chepyzhov and M.~I.~Vishik, \textit{Attractors for Equations of Mathematical Physics}, Amer.\ Math.\ Soc., Providence, 2002.
