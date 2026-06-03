@@ -260,6 +260,26 @@ Quellcode: \texttt{protein\_fold\_nash\_pdb.py} (Python~3, BioPython, SciPy, Num
 Erweiterte Drei-Proteine-Analyse (LaTeX-Tabellenerzeugung, Konvergenzdiagnostik): \texttt{run\_extended\_analysis.py}.
 \end{remark}
 
+Tabelle~\ref{tab:nash-validierungsgates} trennt die empirischen und rechnerischen Evidenzblöcke von den jeweils nächsten Validierungsgates. Diese Trennung ist wichtig, weil der aktuelle Datensatz eine lokale, selbstparametrisierte Konsistenzprüfung stützt, während prädiktive Nutzung unabhängige Kontrollen und absolute Skalenkalibrierung verlangt.
+
+\begin{table}[htbp]
+\centering
+\caption{Validierungs-Gate-Ledger für die Nash-Frustrations-Evidenz. Die Tabelle trennt aktuelle Observablen vom Mindestgate, das vor stärkeren prädiktiven Behauptungen nötig ist.}
+\label{tab:nash-validierungsgates}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{0.21\textwidth} L{0.25\textwidth} L{0.22\textwidth} Y@{}}
+\toprule
+\textbf{Evidenzblock} & \textbf{Aktuelle Observable} & \textbf{Derzeitiger Status} & \textbf{Nächstes Gate} \\
+\midrule
+HP35/CSP-Rangprüfung & Aus BMRB 4428 abgeleitete CSP auf HP35 abgebildet; $\rho_S=0{,}44$, $p=0{,}033$, $n=24$ & Einzelprotein-Konsistenzsignal; kein extern kalibrierter Prädiktor & Replikation an weiteren Proteinen mit vorregistrierter Residuenabbildung und fester Skalenkonvention \\
+$\eta$-Scan & Sieben Werte in $\{0{,}001,\ldots,0{,}1\}$; Variation des normalisierten Rankings $<10^{-6}$ & Lokale Ranginvarianz bei unveränderter instabiler aktiver Modenmenge & Absolute Scores und $\rho(J)$-Schwellen out-of-sample kalibrieren; aktive-Moden-Wechsel und positive Krümmungsüberschüsse verfolgen \\
+Proteinübergreifende Konvergenz & HP35-gelernte Parameter auf 1PGA und 2XWR angewendet; alle Läufe konvergieren, aber $\phi_{\text{rms}}\approx1{,}25$--$1{,}30$ rad für Testproteine & Nur Konvergenzdiagnostik; kein Anspruch auf Strukturvorhersagegenauigkeit & 2XWR-Provenienz fixieren und reichere Potentiale mit Seitenketten-, Lösungsmittel- und Elektrostatiktermen prüfen \\
+Benchmark funktioneller Reste & AUC 0{,}616 für HP35 und 0{,}688 für Protein~G & Schwaches bis moderates Signal über Zufall; unterhalb eigenständiger Diagnosestärke & Direkter Vergleich mit Ferreiro-Frustration, B-Faktoren/NMA, pLDDT und gematchten Sequenz-/Strukturkontrollen \\
+Prospektive molekulare Tests & HDX-Schutzfaktoren, $\phi$-Werte, allosterische/Interface-Annotationen, Helix-Schmelzreihenfolge & Falsifizierbare Agenda spezifiziert; noch nicht ausgeführt & Multi-Protein-Tests mit vorregistrierten Schwellen durchführen und Negativkontrollen neben positiven Korrelationen berichten \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \begin{table}[htbp]
 \centering
 \caption{Vergleich von energetischer Frustration (Ferreiro et al.) und Nash-Frustration (diese Arbeit). Die beiden Ma\ss{}e erfassen komplement\"are Aspekte der Proteinstabilit\"at.}
@@ -783,7 +803,7 @@ Replikator--Nash-\"Aquivalenz & \textsc{Etabliert} & Hofbauer \& Sigmund (1998) 
 ESS als Nash-Verfeinerung & \textsc{Etabliert} & Maynard Smith (1982) \\
 MEPP-Literatur als heuristischer thermodynamischer Rahmen & \textsc{Etabliert} & \citet{Martyushev2010}; \citet{Toma2025}; \citet{EcosystemMEPP} \\
 FST-Interpretation von MEPP als Stabilit\"atsfilter & \textsc{Konjektur} & Abschn.~\ref{sec:discussion}; keine First-Principles-Herleitung \\
-Nash-Frustration als Stabilit\"atspr\"adiktor (P1) & \textsc{Konjektur} & Testbar \"uber $\phi$-Wert-Korrelation \\
+Nash-Frustration als Stabilit\"atspr\"adiktor (P1) & \textsc{Konjektur} & Nur vorläufige HP35/CSP- und Benchmark-Signale; Validierungsgates in Tabelle~\ref{tab:nash-validierungsgates} \\
 FEP--MEPP-Kompatibilit\"at \"uber Markov-Blanket & \textsc{Konjektur} & Konjektur~\ref{prop:fep-mepp}; kein formaler Beweis \\
 Hierarchische Spielstruktur \"uber Skalen & \textsc{Konjektur} & Abschn.~\ref{sec:renormalization}; nur qualitativ \\
 Boolesche Netzwerk-Attraktoren als Nash-Gleichgewichte & \textsc{Konjektur} & Abschn.~\ref{sec:boolean}; formale Umformulierung, empirischer Test ausstehend \\
