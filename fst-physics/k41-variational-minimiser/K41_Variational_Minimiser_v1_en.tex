@@ -12,6 +12,7 @@
 \usepackage{amsmath,amssymb,amsthm,mathrsfs}
 \usepackage{mathtools}
 \usepackage{enumitem}
+\usepackage{array}
 \usepackage{xcolor}
 \usepackage{geometry}
 \geometry{a4paper, margin=2.5cm}
@@ -32,6 +33,7 @@
 }
 \providecommand*{\HyperDestNameFilter}[1]{en.#1}
 \Urlmuskip=0mu plus 2mu\relax
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
@@ -51,8 +53,7 @@ of a Scale-Resolved Free Energy}
 
 \author{Lukas Geiger\\
 \textit{Independent Researcher, Bernau, Germany}\\
-ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}%
-\thanks{AI tools (Claude by Anthropic and OpenAI Codex) were used for mathematical formalization, literature checks, and editorial refinement. The author remains responsible for all mathematical claims and final editorial decisions.}}
+ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}}
 
 \date{May 2026}
 
@@ -164,6 +165,37 @@ hierarchy is discussed in Section~\ref{sec:resolvent-cascade}.
 This paper is self-contained; all main results depend only on definitions
 and proofs within this document. Connections to the broader FST programme
 are cited for context but are not logically required.
+
+For orientation, Table~\ref{tab:claim-status-ledger} separates the
+paper's theorem-level content from its diagnostic and open bridge
+components.  This is the intended reading order: the variational theorem is
+closed inside the stated class, while the numerical, intermittency and DNS
+items remain support layers or future gates.
+
+\begin{table}[ht]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|L{0.21\textwidth}|L{0.35\textwidth}|L{0.33\textwidth}|}
+\hline
+\textbf{Component} & \textbf{Evidence or presentation layer} & \textbf{Current status and caveat} \\
+\hline
+Static variational core & KL functional, admissible flux family and joint feasible-set proof. & Proved within the K41-normalised inertial shell class; not an intrinsic DNS or Navier--Stokes selection theorem. \\
+\hline
+Local stiffness & Diagonal Hessian at $\mathbf{E}^*$ with shell-energy scale $1/E_j^* \propto k_j^{2/3}$. & Proved as local convexity; it supplies static stiffness, not return dynamics. \\
+\hline
+Guardrail branches & Relaxed-flux and minimax propositions. & Scope controls only; they do not add a positive robustness theorem or a dynamical game. \\
+\hline
+Synthetic numerics & Six model spectra and $300$ random perturbation tests from \texttt{compute\_F\_spectrum.py}. & Illustration and audit check; not independent empirical validation. \\
+\hline
+K62 / intermittency link & Gaussian/log-normal fluctuation route around the Hessian scale. & Formal model route; a cascade measure and structure-function bridge are still required. \\
+\hline
+DNS and Paper-B bridge & Proposed DNS protocol and companion cascade paper. & Future or conditional layer; depends on DFC and nonlinear-cascade hypotheses outside this paper. \\
+\hline
+\end{tabular}
+\caption{Claim-status ledger for the K41 variational-minimiser paper.}
+\label{tab:claim-status-ledger}
+\end{table}
 
 % ===================================================================
 % Figure 1: Proof chain overview
@@ -347,11 +379,21 @@ scale-invariance, universality, or empirical admissibility assumptions.
 \end{remark}
 
 \begin{proposition}[Dimensional derivation of the flux prefactor]\label{prop:A2-derived}
-Axiom~\textup{(A2)} is not an independent assumption but a consequence of locality~\textup{(A1)} and dimensional analysis. Specifically, the form $\Pi_j = k_j\,E_j^{3/2}\,\Phi_j(\cdot)$ is the \emph{unique} dimensionally consistent local flux expression.
+Within the reduced scale-local inertial shell ansatz in which the only
+dimensional variables admitted at shell~$j$ are $k_j$ and $E_j$, the
+prefactor in Axiom~\textup{(A2)} follows from dimensional analysis:
+$\Pi_j = k_j\,E_j^{3/2}\,\Phi_j(\cdot)$.  Thus (A2) is the canonical
+prefactor inside this stipulated ansatz, not a theorem excluding richer
+closure classes with additional dimensional or dimensionless parameters.
 \end{proposition}
 
 \begin{proof}
-By Buckingham's $\Pi$-theorem, the flux $\Pi_j$ must be a product of powers of the available dimensional quantities $k_j$ and~$E_j$, multiplied by a dimensionless function of dimensionless ratios. Write $\Pi_j = k_j^{a}\,E_j^{b}\,\Phi_j(\ldots)$ with $[\Pi_j] = [L^2\,T^{-3}]$ (energy flux per unit mass), $[k_j] = [L^{-1}]$, and $[E_j] = [L^2\,T^{-2}]$.
+Inside this reduced ansatz, Buckingham's $\Pi$-theorem forces the flux
+$\Pi_j$ to be a product of powers of the admitted dimensional quantities
+$k_j$ and~$E_j$, multiplied by a dimensionless function of dimensionless
+ratios. Write $\Pi_j = k_j^{a}\,E_j^{b}\,\Phi_j(\ldots)$ with
+$[\Pi_j] = [L^2\,T^{-3}]$ (energy flux per unit mass),
+$[k_j] = [L^{-1}]$, and $[E_j] = [L^2\,T^{-2}]$.
 
 Dimensional matching: $[k_j^a\,E_j^b] = L^{-a}\,L^{2b}\,T^{-2b} = L^{2b-a}\,T^{-2b}$.
 
@@ -359,7 +401,13 @@ Setting equal to $L^2\,T^{-3}$:
 \[
 2b - a = 2, \qquad 2b = 3 \quad\Longrightarrow\quad b = \tfrac{3}{2},\;\; a = 1.
 \]
-Hence $\Pi_j = k_j\,E_j^{3/2}\,\Phi_j$, and by~(A1) the dimensionless function $\Phi_j$ can depend only on the local ratios $E_{j-1}/E_j$ and $E_{j+1}/E_j$. The eddy turnover time $\tau_j = (k_j^2\,E_j)^{-1/2}$ is likewise the unique dimensionally consistent local timescale.
+Hence $\Pi_j = k_j\,E_j^{3/2}\,\Phi_j$, and by~(A1) the dimensionless
+function $\Phi_j$ can depend only on the local ratios $E_{j-1}/E_j$ and
+$E_{j+1}/E_j$. The eddy turnover time
+$\tau_j = (k_j^2\,E_j)^{-1/2}$ is likewise the canonical local timescale
+inside the same restricted set of dimensional variables.  Closures that
+retain viscosity, forcing scales, intermittency variables, or further
+dimensionless shell parameters lie outside this particular reduction.
 \end{proof}
 
 \begin{remark}
@@ -371,7 +419,11 @@ Leith-type diffusion models, and truncated triad interactions when they
 are expressed in the shell variables of Definition~\ref{def:admissible}.
 The family $\mathscr{A}$ is therefore a structured local comparison class
 rather than a single closure model.
-Proposition~\ref{prop:A2-derived} shows that (A2) is not an extraneous modelling choice but a necessary consequence of dimensional analysis, thereby further reducing the axiom set to two independent assumptions: locality~(A1) and monotonicity~(A3).
+Proposition~\ref{prop:A2-derived} separates the reduced inertial
+dimensional ansatz from the genuinely variable assumptions of locality
+and monotonicity.  It therefore clarifies the modelling content of (A2)
+rather than removing all independent modelling content from the flux
+prefactor.
 \end{remark}
 
 \begin{theorem}[Relative uniqueness in the K41-normalised admissible class]\label{thm:K41}
@@ -418,7 +470,7 @@ closure is therefore treated only as a feasibility issue.  The theorem
 does not claim that every fixed closure selects K41.
 
 \textbf{Step 2: Lower bound via convexity.}\;
-Since each summand $f(E_j) = E_j\ln(E_j/E_j^*) - E_j + E_j^*$ is
+Since, in the standard terminology of convex analysis and perturbation theory~\cite{Rockafellar70,BonnansShapiro00}, each summand $f(E_j) = E_j\ln(E_j/E_j^*) - E_j + E_j^*$ is
 strictly convex with global minimum $f(E_j^*) = 0$, we have
 \begin{equation}\label{eq:F_lower}
   \mathcal{F}[\mathbf{E}]
@@ -804,18 +856,20 @@ Similarly, strict concavity forces
 $\tilde{\boldsymbol{\Pi}} = \boldsymbol{\Pi}^\dagger$.
 
 \smallskip\noindent
-\textbf{Step 6: Equivalence with the hard-constraint formulation.}\;
-The penalty formulation~\eqref{eq:minimax} is the augmented Lagrangian
-relaxation of the hard-constraint problem $\Pi_j = \varepsilon$ in
-Theorem~\ref{thm:K41}.  As $\lambda \to \infty$, any saddle point
-of~\eqref{eq:minimax} must satisfy $\Pi_j \to \varepsilon$ (otherwise
-the penalty term $-\lambda(\Pi_j - \varepsilon)^2 \to -\infty$ would
-violate the saddle-point inequality).  In the limit, the minimax
-problem reduces to the constrained minimisation~\eqref{eq:min}, and
-the saddle point converges to the K41 minimiser of
-Theorem~\ref{thm:K41}.  The equivalence of the penalty and
-hard-constraint formulations follows from classical convex duality
-theory~\cite{Rockafellar70,BonnansShapiro00}.
+\textbf{Step 6: Scope of the penalty representation.}\;
+The penalty formulation~\eqref{eq:minimax} is a decoupled bookkeeping
+device for the constant-flux condition $\Pi_j=\varepsilon$.  For fixed
+finite shell vectors, the term $-\lambda(\Pi_j-\varepsilon)^2$ forces any
+maximising flux variable toward $\varepsilon$ as $\lambda\to\infty$; in
+that limit the formal saddle point has the same KL minimiser as the
+constant-flux constrained problem in Theorem~\ref{thm:K41}.
+
+This is not an equivalence with a closure-coupled hard problem
+$\Pi_j[\mathbf{E}]=\varepsilon$ for arbitrary fixed closures.  Such a
+claim would require compactness, constraint qualification, and existence
+statements for the chosen closure family.  The present minimax statement
+is only the finite-dimensional constant-flux penalty bookkeeping lemma
+used by this paper.
 \end{proof}
 
 \begin{remark}
@@ -934,17 +988,21 @@ resulting structure function exponents are
   \frac{\mu}{18}\,p(p-3),
 \end{equation}
 which have the K62 (Kolmogorov--Obukhov) refined-similarity form with
-intermittency parameter $\mu$~\cite{K62,Frisch95}.  Under
-this ansatz, the
-parameter $\mu$ is determined by the variance of $\ln(E_j/E_j^*)$ under
-the Gibbs measure $\exp(-\mathcal{F}/\Theta)$, where the effective
-temperature $\Theta > 0$ parametrises the strength of turbulent
-fluctuations around the K41 equilibrium (analogous to the temperature
-in a canonical ensemble).  In the limit $\Theta \to 0$, the Gibbs
-measure concentrates on the K41 minimiser and $\mu \to 0$ (no
-intermittency); for finite $\Theta$, the log-normal variance scales as
-$\mu \propto \Theta\,E_j^*$, connecting the intermittency parameter
-to the intensity of the cascade fluctuations.
+intermittency parameter $\mu$~\cite{K62,Frisch95}.  In the formal Gibbs
+model $\exp(-\mathcal{F}/\Theta)$, the effective temperature
+$\Theta > 0$ parametrises the strength of fluctuations around the K41
+equilibrium.  If $x_j=\ln(E_j/E_j^*)$, then locally
+\[
+  \mathcal{F}[\mathbf{E}]
+  \;=\;
+  \frac{1}{2}\sum_j E_j^* x_j^2 + O(|x|^3),
+\]
+so the quadratic Gibbs approximation gives log-energy variances of order
+$\Theta/E_j^*$.  Thus $\Theta\to0$ suppresses intermittency in this
+model.  Identifying these shellwise variances with a universal K62
+parameter $\mu$, however, requires an additional cascade-measure,
+refined-similarity, and structure-function bridge; the Hessian scale by
+itself does not determine a scale-independent $\mu$.
 
 \begin{remark}
 The She--L\'ev\^eque model~\cite{SL94} proposes the alternative
@@ -988,6 +1046,37 @@ $\mathcal{F}[\mathbf{E}^* + \delta \mathbf{E}] > 0$ for all sampled
 perturbations, as expected from strict convexity.  Numerical scripts:
 \texttt{compute\_F\_spectrum.py}.
 \end{remark}
+
+The audit view in Table~\ref{tab:numerical-diagnostics} makes the
+diagnostic role of the synthetic spectra explicit.  The bottleneck profile
+is close in $\mathcal{F}$ but fails the strict K41-slope gate, while the
+thermal and warm-boundary directions are outside the K41 diagnostic
+waterline.
+
+\begin{table}[ht]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|L{0.22\textwidth}|L{0.13\textwidth}|L{0.23\textwidth}|L{0.30\textwidth}|}
+\hline
+\textbf{Synthetic spectrum} & \textbf{$\mathcal{F}[E]$} & \textbf{Gate status} & \textbf{Diagnostic reading} \\
+\hline
+K41 reference & $0.000000$ & DFC1 yes; weak and K41 slope yes & Exact reference minimiser. \\
+\hline
+K62, $\mu=0.03$ & $0.000197$ & DFC1 yes; weak and K41 slope yes & Near-K41 intermittency control. \\
+\hline
+Bottleneck & $0.011850$ & DFC1 yes; weak yes; K41 slope no & Stress control: small KL drift, strict slope gate fails. \\
+\hline
+Steep $k^{-2}$ & $1.736741$ & DFC1 yes; slope gates no & Non-K41 steep control. \\
+\hline
+Shallow $k^{-4/3}$ & $5.941487$ & DFC1 yes; slope gates no & Non-K41 shallow control. \\
+\hline
+Thermal flat & $7.552260$ & DFC1 no; slope gates no & Non-cascade boundary case. \\
+\hline
+\end{tabular}
+\caption{Synthetic free-energy and gate diagnostics generated by \texttt{compute\_F\_spectrum.py}.}
+\label{tab:numerical-diagnostics}
+\end{table}
 
 This suggests the following reproducible diagnostic protocol for DNS data:
 \begin{enumerate}
@@ -1157,12 +1246,12 @@ separate from the conditional defect theory developed in the follow-up.
 \hline
 $\mathcal{F}[\mathbf{E}] \geq 0$, $= 0$ iff $\mathbf{E} = \mathbf{E}^*$ & Theorem & Thm.~\ref{thm:K41} \\
 K41 relative joint minimiser in the K41-normalised class & Theorem & Thm.~\ref{thm:K41} \\
-(A2) from (A1) + dimensional analysis & Proposition & Prop.~\ref{prop:A2-derived} \\
+Canonical flux prefactor inside reduced inertial shell ansatz & Proposition & Prop.~\ref{prop:A2-derived} \\
 \hline
 \multicolumn{3}{|l|}{\textit{Scope guardrails and formal rewrites:}} \\
 \hline
 Relaxed-flux slack is trivial unless $E^*$ is excluded/perturbed & Guardrail & Prop.~\ref{prop:dfc-slack} \\
-K41 as decoupled penalty saddle point & Formal representation & Prop.~\ref{prop:minimax} \\
+Formal constant-flux penalty bookkeeping & Formal representation & Prop.~\ref{prop:minimax} \\
 \hline
 \multicolumn{3}{|l|}{\textit{Numerically illustrated:}} \\
 \hline
@@ -1175,12 +1264,6 @@ $\mathcal{F}[\mathbf{E}_{\mathrm{DNS}}] \to 0$ as $R_\lambda \to \infty$ & Diagn
 \hline
 \end{tabular}
 \end{center}
-
-% ===================================================================
-\section*{Acknowledgements}
-
-The author thanks AI-assisted systems for support with literature review,
-technical cross-checks, and manuscript preparation.
 
 % ===================================================================
 \section*{AI Disclosure}
@@ -1206,7 +1289,7 @@ Cambridge University Press, 1995.
 \href{https://doi.org/10.1017/CBO9781139170666}{doi:10.1017/CBO9781139170666}.
 
 \bibitem{FST-Unified2026}
-L.~Geiger, \emph{FST Spectrum Duality: The Renormalized Free Energy Principle as Physical Instantiation of Functional Stability Theory},
+L.~Geiger, \emph{Functional Stability Theory---Physical Instantiation via the Renormalized Free Energy Principle},
 Zenodo, 2026.
 \href{https://doi.org/10.5281/zenodo.19036190}{doi:10.5281/zenodo.19036190}.
 
@@ -1266,6 +1349,7 @@ R.\,T.~Rockafellar,
 \emph{Convex Analysis},
 Princeton Mathematical Series, vol.~28,
 Princeton University Press, 1970.
+\href{https://doi.org/10.1515/9781400873173}{doi:10.1515/9781400873173}.
 
 \bibitem{SL94}
 Z.-S.~She and E.~L\'ev\^eque,
