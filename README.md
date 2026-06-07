@@ -2,6 +2,18 @@
 
 **Functional Stability Theory** is a unified mathematical programme that identifies a single structural challenge — *Functional Positivity under Gauge Constraint* (Pattern A) — as the common substrate of open problems in number theory, mathematical physics, and cosmology.
 
+## Start Here
+
+| If you are looking for... | Start with | Why |
+|---------------------------|------------|-----|
+| the programme map | [Five Masters](#the-five-masters) | Core foundation papers and their latest Zenodo Concept-DOIs |
+| the mathematical classification layer | [`masters/zeta-zoo/`](masters/zeta-zoo/) | SGE taxonomy, UCU, and zeta-family status boundaries |
+| the RFEP / Pattern A foundation | [`masters/spectrum-duality/`](masters/spectrum-duality/) | Renormalized Free-Energy Principle, DS1-DS3, and physical normal form |
+| numerical reproducibility assets | [Numerical Validation Scripts](#numerical-validation-scripts) | Script index for CCM, K41, Yang-Mills, Navier-Stokes, dark-energy, BSD, Hodge, and SAT diagnostics |
+| machine-readable repository context | [`llms.txt`](llms.txt) | Search phrases, scope boundaries, DOI anchors, and disambiguation notes |
+
+This is a research-source repository, not an installable software package. Claim levels vary by paper and folder: some entries are published Zenodo records, some are public guardrail candidates ahead of Zenodo, and several domain supplements remain explicitly conditional or open at the named bridge step.
+
 ## The Five Masters
 
 The programme rests on five CoreCore foundation papers. All DOIs below are **Concept-DOIs** that always resolve to the latest version on Zenodo.
