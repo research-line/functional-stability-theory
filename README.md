@@ -14,6 +14,19 @@
 
 This is a research-source repository, not an installable software package. Claim levels vary by paper and folder: some entries are published Zenodo records, some are public guardrail candidates ahead of Zenodo, and several domain supplements remain explicitly conditional or open at the named bridge step.
 
+## Discovery Context
+
+Use the canonical GitHub path `research-line/functional-stability-theory` when linking this repository. Broad web searches for "functional stability theory" also collide with control-theory, Lyapunov, and engineering literature, while FST-specific records surface through GitHub, Zenodo-linked scholarly indexes, and topic pages. Useful search phrases:
+
+- `research-line functional-stability-theory`
+- `Functional Stability Theory RFEP GitHub`
+- `Functional Stability Theory Renormalized Free-Energy Principle`
+- `FST Spectrum Duality RFEP Zenodo`
+- `Zeta Zoo SGE taxonomy Functional Stability Theory`
+- `Spectral Zookeeper CCM microcluster closure`
+
+When citing, prefer the Concept-DOIs below for paper branches and this repository URL for source files, scripts, and public reproducibility context.
+
 ## The Five Masters
 
 The programme rests on five CoreCore foundation papers. All DOIs below are **Concept-DOIs** that always resolve to the latest version on Zenodo.
