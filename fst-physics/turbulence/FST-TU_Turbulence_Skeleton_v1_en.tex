@@ -1723,6 +1723,7 @@ DFC1$^\vee$ (dual forward cascade) & Empirical/projection bridge & Def.~\ref{def
 $\mathcal{F}[E_{K41}] = 0$ (minimiser) & Exact & \texttt{compute\_F\_spectrum.py} \\
 DFC2 (Sabra shell model) & Shell model & Rem.~\ref{rem:sabra-dfc} \\
 $\mathcal{F} > 0$ for 500/500 snapshots & Shell model & Rem.~\ref{rem:sabra-dfc} \\
+Initial DFC1$^\vee$ ledger controls & Ledger/toy controls & Table~\ref{tab:dual-dfc-ledger} \\
 \hline
 \multicolumn{3}{|l|}{\textit{DNS-falsifiable predictions:}} \\
 \hline
@@ -1744,7 +1745,7 @@ dissipation follows from the global energy balance plus the stated
 \(\nu\)-uniform energy-input assumption. The variational contribution is
 the conditional route from DFC1$^\vee$--DFC2--DFC3 to entropy-compatible
 cascade structure and K41 selection. This is complementary to the
-convex-integration programme~\cite{Isett18,BV19}, but it is not an
+convex-integration programme~\cite{Isett18,BV19,AlbrittonBrueColombo2022}, but it is not an
 unconditional selection theorem for all Navier--Stokes weak solutions.
 
 \subsection{The role of the closure family}
@@ -1805,7 +1806,9 @@ We collect the principal limitations of the present work:
 Direct numerical simulations (DNS) at Taylor-microscale Reynolds numbers
 $R_\lambda \sim 200$--$1000$ consistently produce energy spectra close to
 $k^{-5/3}$ in the inertial range, with a Kolmogorov constant
-$C_K \approx 1.5$~\cite{ES06,Frisch95,MY75}.  We propose the following
+$C_K \approx 1.5$~\cite{ES06,Frisch95,MY75}; high-Reynolds
+boundary-layer benchmarks are consistent with local-isotropy
+diagnostics~\cite{SaddoughiVeeravalli94}.  We propose the following
 reproducible test protocol:
 \begin{enumerate}
 \item Compute the Littlewood--Paley shell energies $E_j$ from
@@ -1886,8 +1889,28 @@ A numerical evaluation of $\mathcal{F}[E]$ over six synthetic energy spectra con
 
 \begin{remark}[Sabra shell model validation of DFC]
 \label{rem:sabra-dfc}
-Pointwise DFC1 and DFC2 were tested on the Sabra shell model~\cite{Lvov98} with $N=22$ shells, $\nu = 10^{-7}$, using an IMEX integrator (500 snapshots). DFC2 (spectral steepness) is strongly confirmed: inertial-range slopes are $-0.663$, $-0.675$, $-0.661$, $-0.699$, $-0.700$ for shells $n=5,\ldots,9$ (K41 prediction: $-2/3 \approx -0.667$, deviation $< 2\%$). The free energy satisfies $\mathcal{F}[E] > 0$ for all 500 snapshots (100\%), with $\mathcal{F}[\langle E \rangle] = 0.198$, confirming the K41 spectrum as approximate minimizer. The pointwise flux $\Pi_n$ is sign-alternating, a known feature of shell models; this motivates testing DFC1$^\vee$ by the weighted Abel pairing instead of by pointwise positivity. Existing script: \texttt{compute\_goy\_shell\_dfc.py}; planned dual test: \texttt{compute\_dual\_dfc.py}.
+Pointwise DFC1 and DFC2 were tested on the Sabra shell model~\cite{Lvov98} with $N=22$ shells, $\nu = 10^{-7}$, using an IMEX integrator (500 snapshots). DFC2 (spectral steepness) is strongly confirmed: inertial-range slopes are $-0.663$, $-0.675$, $-0.661$, $-0.699$, $-0.700$ for shells $n=5,\ldots,9$ (K41 prediction: $-2/3 \approx -0.667$, deviation $< 2\%$). The free energy satisfies $\mathcal{F}[E] > 0$ for all 500 snapshots (100\%), with $\mathcal{F}[\langle E \rangle] = 0.198$, confirming the K41 spectrum as approximate minimizer. The pointwise flux $\Pi_n$ is sign-alternating, a known feature of shell models; this motivates testing DFC1$^\vee$ by the weighted Abel pairing instead of by pointwise positivity. Existing scripts: \texttt{compute\_goy\_shell\_dfc.py} and the initial Dual-DFC1 ledger \texttt{compute\_dual\_dfc.py}. The ledger is summarised in Table~\ref{tab:dual-dfc-ledger}; it keeps the proof status unchanged because DFC1$^\vee$ remains an empirical/projection bridge, but it makes the positive and negative controls explicit.
 \end{remark}
+
+\begin{table}[ht]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.6cm} >{\centering\arraybackslash}p{1.0cm} >{\centering\arraybackslash}p{1.05cm} >{\centering\arraybackslash}p{1.25cm} >{\centering\arraybackslash}p{1.15cm} Y}
+\hline
+Scenario & DFC2 & DFC1 pt. & DFC1$^\vee$ & Ratio & Interpretation \\
+\hline
+K41 reference & pass & pass & pass & $1.000$ & vacuous K41 reference control \\
+Smooth forward & pass & pass & pass & $1.128$ & smooth forward-cascade positive control \\
+Alternating tolerated & pass & fail & pass & $1.020$ & pointwise backscatter tolerated by the Abel pairing \\
+Bad corridor & pass & fail & fail & $0.635$ & Abel-weighted backscatter corridor rejected \\
+Same-mean shuffle & fail & fail & fail & $0.493$ & same-mean shuffle exposes reference-risk failure \\
+\hline
+\end{tabularx}
+\caption{Initial Dual-DFC1 ledger produced by \texttt{compute\_dual\_dfc.py}. The ratio column is the Abel-weighted flux divided by the scenario target. The table separates positive controls from backscatter-corridor controls; it is a bookkeeping test, not a DNS proof. Full output: \texttt{\_results/DUAL\_DFC\_LEDGER\_2026-05-27.md}.}
+\label{tab:dual-dfc-ledger}
+\end{table}
 
 \subsection{Extensions}
 
@@ -2000,7 +2023,8 @@ The defective-monotonicity formulation makes the DFC \emph{numerically testable}
 
 \begin{remark}[Penalty viewpoint on inertial reductions]
 \label{rem:minimax-inertial}
-If an inertial-manifold or finite-mode reduction is available, the KL
+If an inertial-manifold or finite-mode reduction~\cite{FoiasSellTemam88}
+is available, the KL
 free-energy penalty can be tested in that reduced system with explicit
 closure errors. Such a reduction may provide a controlled setting for a
 future coupled game formulation, but the present paper only proves the
@@ -2033,12 +2057,6 @@ additional cascade-operator analysis left open above.
 \end{remark}
 
 % ===================================================================
-\section*{Acknowledgements}
-
-The author thanks the Claude and Gemini AI systems for assistance with literature review, mathematical verification, and manuscript preparation.
-
-% ===================================================================
-% ===================================================================
 % AI Disclosure
 % ===================================================================
 \section*{AI Disclosure}
@@ -2056,65 +2074,77 @@ A.\,N.~Kolmogorov,
 for very large Reynolds numbers},
 Doklady Akad.\ Nauk SSSR \textbf{30} (1941), 299--303.
 Reprinted in Proc.\ R.\ Soc.\ Lond.\ A \textbf{434} (1991), 9--13.
+\href{https://doi.org/10.1098/rspa.1991.0075}{doi:10.1098/rspa.1991.0075}.
 
 \bibitem{K41b}
 A.\,N.~Kolmogorov,
 \emph{Dissipation of energy in the locally isotropic turbulence},
 Doklady Akad.\ Nauk SSSR \textbf{32} (1941), 16--18.
 Reprinted in Proc.\ R.\ Soc.\ Lond.\ A \textbf{434} (1991), 15--17.
+\href{https://doi.org/10.1098/rspa.1991.0076}{doi:10.1098/rspa.1991.0076}.
 
 \bibitem{K62}
 A.\,N.~Kolmogorov,
 \emph{A refinement of previous hypotheses concerning the local structure
 of turbulence in a viscous incompressible fluid at high Reynolds number},
 J.~Fluid Mech.\ \textbf{13} (1962), 82--85.
+\href{https://doi.org/10.1017/S0022112062000518}{doi:10.1017/S0022112062000518}.
 
 \bibitem{Onsager49}
 L.~Onsager,
 \emph{Statistical hydrodynamics},
 Nuovo Cimento Suppl.\ \textbf{6} (1949), 279--287.
+\href{https://doi.org/10.1007/BF02780991}{doi:10.1007/BF02780991}.
 
 \bibitem{CET94}
 P.~Constantin, W.~E, and E.\,S.~Titi,
 \emph{Onsager's conjecture on the energy conservation for solutions of
 Euler's equation},
 Comm.\ Math.\ Phys.\ \textbf{165} (1994), 207--209.
+\href{https://doi.org/10.1007/BF02099744}{doi:10.1007/BF02099744}.
 
 \bibitem{DR00}
 J.~Duchon and R.~Robert,
 \emph{Inertial energy dissipation for weak solutions of incompressible
 Euler and Navier--Stokes equations},
 Nonlinearity \textbf{13} (2000), 249--255.
+\href{https://doi.org/10.1088/0951-7715/13/1/312}{doi:10.1088/0951-7715/13/1/312}.
 
 \bibitem{Isett18}
 P.~Isett,
 \emph{A proof of Onsager's conjecture},
 Ann.\ of Math.\ \textbf{188} (2018), 871--963.
+\href{https://doi.org/10.4007/annals.2018.188.3.4}{doi:10.4007/annals.2018.188.3.4}.
 
 \bibitem{SL94}
 Z.-S.~She and E.~L\'ev\^eque,
 \emph{Universal scaling laws in fully developed turbulence},
 Phys.\ Rev.\ Lett.\ \textbf{72} (1994), 336--339.
+\href{https://doi.org/10.1103/PhysRevLett.72.336}{doi:10.1103/PhysRevLett.72.336}.
 
 \bibitem{ES06}
 G.\,L.~Eyink and K.\,R.~Sreenivasan,
 \emph{Onsager and the theory of hydrodynamic turbulence},
 Rev.\ Mod.\ Phys.\ \textbf{78} (2006), 87--135.
+\href{https://doi.org/10.1103/RevModPhys.78.87}{doi:10.1103/RevModPhys.78.87}.
 
 \bibitem{Frisch95}
 U.~Frisch,
 \emph{Turbulence: The Legacy of A.\,N.\ Kolmogorov},
 Cambridge University Press, 1995.
+\href{https://doi.org/10.1017/CBO9781139170666}{doi:10.1017/CBO9781139170666}.
 
 \bibitem{Eyink03}
 G.\,L.~Eyink,
 \emph{Local $4/5$-law and energy dissipation anomaly in turbulence},
 Nonlinearity \textbf{16} (2003), 137--145.
+\href{https://doi.org/10.1088/0951-7715/16/1/309}{doi:10.1088/0951-7715/16/1/309}.
 
 \bibitem{Kraichnan67}
 R.\,H.~Kraichnan,
 \emph{Inertial ranges in two-dimensional turbulence},
 Phys.\ Fluids \textbf{10} (1967), 1417--1423.
+\href{https://doi.org/10.1063/1.1762301}{doi:10.1063/1.1762301}.
 
 \bibitem{MY75}
 A.\,S.~Monin and A.\,M.~Yaglom,
@@ -2126,97 +2156,88 @@ Y.~Kaneda, T.~Ishihara, M.~Yokokawa, K.~Itakura, and A.~Uno,
 \emph{Energy dissipation rate and energy spectrum in high resolution
 direct numerical simulations of turbulence in a periodic box},
 Phys.\ Fluids \textbf{15} (2003), L21--L24.
+\href{https://doi.org/10.1063/1.1539855}{doi:10.1063/1.1539855}.
 
 \bibitem{Gotoh02}
 T.~Gotoh, D.~Fukayama, and T.~Nakano,
 \emph{Velocity field statistics in homogeneous steady turbulence
 obtained using a high-resolution direct numerical simulation},
 Phys.\ Fluids \textbf{14} (2002), 1065--1081.
+\href{https://doi.org/10.1063/1.1448296}{doi:10.1063/1.1448296}.
 
 \bibitem{Pope00}
 S.\,B.~Pope,
 \emph{Turbulent Flows},
 Cambridge University Press, 2000.
+\href{https://doi.org/10.1017/CBO9780511840531}{doi:10.1017/CBO9780511840531}.
 
 \bibitem{FST-Unified2026}
 L.~Geiger, \emph{The Renormalized Free Energy Framework: A Unified Resolution of Structural Bottlenecks},
 Zenodo, March 2026.
 \href{https://doi.org/10.5281/zenodo.19036190}{doi:10.5281/zenodo.19036190}.
 
-\bibitem{BonnansShapiro00}
-J.\,F.~Bonnans and A.~Shapiro,
-\emph{Perturbation Analysis of Optimization Problems},
-Springer Series in Operations Research, Springer, New York, 2000.
-
-\bibitem{Rockafellar70}
-R.\,T.~Rockafellar,
-\emph{Convex Analysis},
-Princeton Mathematical Series, vol.~28,
-Princeton University Press, 1970.
-
 \bibitem{FoiasSellTemam88}
 C.~Foias, G.\,R.~Sell, and R.~Temam,
 \emph{Inertial manifolds for nonlinear evolutionary equations},
 J.~Differential Equations \textbf{73} (1988), 309--353.
-
-\bibitem{Moffatt69}
-H.\,K.~Moffatt,
-\emph{The degree of knottedness of tangled vortex lines},
-J.~Fluid Mech.\ \textbf{35} (1969), 117--129.
-
-\bibitem{ArnoldKhesin98}
-V.\,I.~Arnold and B.\,A.~Khesin,
-\emph{Topological Methods in Hydrodynamics},
-Applied Mathematical Sciences, vol.~125,
-Springer, New York, 1998.
+\href{https://doi.org/10.1016/0022-0396(88)90110-6}{doi:10.1016/0022-0396(88)90110-6}.
 
 \bibitem{Drivas2019cascade}
 T.\,D.~Drivas,
 \emph{Turbulent cascade direction and Lagrangian time-asymmetry},
 J.~Nonlinear Sci.\ \textbf{29} (2019), 65--88.
+\href{https://doi.org/10.1007/s00332-018-9476-8}{doi:10.1007/s00332-018-9476-8};
 \href{https://arxiv.org/abs/1802.02289}{arXiv:1802.02289}.
 
 \bibitem{DeRosaDrivasInversi2024}
 L.~De~Rosa, T.\,D.~Drivas, and M.~Inversi,
 \emph{On the support of anomalous dissipation measures},
 J.~Math.\ Fluid Mech.\ \textbf{26} (2024), Art.~56.
+\href{https://doi.org/10.1007/s00021-024-00894-z}{doi:10.1007/s00021-024-00894-z};
 \href{https://arxiv.org/abs/2301.09603}{arXiv:2301.09603}.
 
 \bibitem{AlbrittonBrueColombo2022}
 D.~Albritton, E.~Bru\'e, and M.~Colombo,
 \emph{Non-uniqueness of Leray solutions of the forced Navier--Stokes equations},
 Ann.\ of Math.\ \textbf{196} (2022), 415--455.
+\href{https://doi.org/10.4007/annals.2022.196.1.3}{doi:10.4007/annals.2022.196.1.3}.
 
 \bibitem{Geiger2026-YM}
 L.~Geiger, \textit{Volume-Independent Spectral Gap for Strong-Coupling Lattice Gauge Theory via Poincar\'e-Dobrushin Machinery}, Preprint, 2026.
+\href{https://doi.org/10.5281/zenodo.19087433}{doi:10.5281/zenodo.19087433}.
 
 \bibitem{SaddoughiVeeravalli94}
 S.\,G.~Saddoughi and S.\,V.~Veeravalli,
 \emph{Local isotropy in turbulent boundary layers at high Reynolds number},
 J.~Fluid Mech.\ \textbf{268} (1994), 333--372.
+\href{https://doi.org/10.1017/S0022112094001370}{doi:10.1017/S0022112094001370}.
 
 \bibitem{JHTDB08}
 Y.~Li, E.~Perlman, M.~Wan, Y.~Yang, C.~Meneveau, R.~Burns, S.~Chen,
 A.~Szalay, and G.~Eyink,
 \emph{A public turbulence database cluster and applications to study
 Lagrangian evolution of velocity increments in turbulence},
-J.~Turbulence \textbf{9} (2008), No.~31.
+J.~Turbulence \textbf{9} (2008), N31.
+\href{https://doi.org/10.1080/14685240802376389}{doi:10.1080/14685240802376389}.
 
 \bibitem{Lvov98}
 V.\,S.~L'vov, E.~Podivilov, A.~Pomyalov, I.~Procaccia,
 and D.~Vandembroucq,
 \emph{Improved shell model of turbulence},
 Phys.\ Rev.\ E \textbf{58} (1998), 1811--1822.
+\href{https://doi.org/10.1103/PhysRevE.58.1811}{doi:10.1103/PhysRevE.58.1811}.
 
 \bibitem{BV19}
 T.~Buckmaster and V.~Vicol,
 \emph{Nonuniqueness of weak solutions to the Navier--Stokes equation},
 Ann.\ of Math.\ \textbf{189} (2019), 101--144.
+\href{https://doi.org/10.4007/annals.2019.189.1.3}{doi:10.4007/annals.2019.189.1.3}.
 
 \bibitem{England2015}
 J.\,L.~England,
 \emph{Dissipative adaptation in driven self-assembly},
 Nature Nanotechnology \textbf{10} (2015), 919--923.
+\href{https://doi.org/10.1038/nnano.2015.250}{doi:10.1038/nnano.2015.250}.
 
 \end{thebibliography}
 
