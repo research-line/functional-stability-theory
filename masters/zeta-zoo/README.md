@@ -8,13 +8,13 @@ Lukas Geiger (2026)
 
 ## Summary
 
-The Zeta Zoo is the mathematical classification paper of the FST programme. Zenodo latest is **v2.1**; the GitHub file set tracks the newer post-v2.1 citation and proof/paper-math guardrail candidate. It develops the branch-local Hilbert-Polya taxonomy around three organizing principles:
+The Zeta Zoo is the mathematical classification paper of the FST programme. Zenodo latest is **v2.2**: [10.5281/zenodo.20673176](https://doi.org/10.5281/zenodo.20673176). It develops the branch-local Hilbert-Polya taxonomy around three organizing principles:
 
 - **UCU**: Universal Convexity Uniqueness.
 - **SGE**: Semigroup-Group Equivalence as a HP-BL classification axis.
 - **Weil-form transversality**: gap positivity across both sides of the SGE dichotomy.
 
-The current GitHub candidate keeps the public file set reproducible while tightening the claim levels after the later citation and proof/paper-math checks: the RH companion route is cited only as a conditional reduction/diagnostic path, Prime-Hub remains explicitly `OPEN(C1-C4)`, and the finite Dedekind/Ihara controls are marked as finite evidence rather than global closure.
+The current public file set keeps the claim levels tightened after the post-v2.1 proof/paper-math and strict-review guardrail passes: the RH companion route is cited only as a conditional reduction/diagnostic path, Prime-Hub remains explicitly `OPEN(C1-C4)`, and the finite Dedekind/Ihara controls are marked as finite evidence rather than global closure.
 
 ## Zoo Population
 
@@ -42,7 +42,7 @@ The current GitHub candidate keeps the public file set reproducible while tighte
 - [`paper/NE_B_BOUNDARY_v2_de.pdf`](paper/NE_B_BOUNDARY_v2_de.pdf)
 - [`paper/NE_B_BOUNDARY_v2_kombi.pdf`](paper/NE_B_BOUNDARY_v2_kombi.pdf)
 
-Zenodo still serves the published v2.1 record. The GitHub paper files above are the newer public guardrail candidate prepared after the post-v2.1 citation and proof/paper-math checks.
+Zenodo v2.2 serves the same public guardrail file set listed above.
 
 ## Reproducibility
 
