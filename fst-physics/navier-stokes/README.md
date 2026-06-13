@@ -10,8 +10,8 @@ NS-LDI concept DOI: <https://doi.org/10.5281/zenodo.19056807>
 
 This folder contains the public Navier-Stokes v2.6 maintenance paper files and
 the NS-LDI v1.5 paper files. The latest Navier-Stokes Zenodo release is
-v2.5 (record DOI <https://doi.org/10.5281/zenodo.20532811>) while the v2.6
-record DOI is being published, and the latest NS-LDI Zenodo release is v1.5 (record DOI
+v2.6 (record DOI <https://doi.org/10.5281/zenodo.20674952>), and the latest
+NS-LDI Zenodo release is v1.5 (record DOI
 <https://doi.org/10.5281/zenodo.20257390>). The main regularity result remains conditional on Assumption G2
 (projection regularity); the NS-LDI package remains a proof-of-life and
 diagnostic bridge, not an unconditional 3D Navier-Stokes proof.
