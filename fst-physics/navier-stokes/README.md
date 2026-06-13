@@ -8,15 +8,16 @@ NS-LDI concept DOI: <https://doi.org/10.5281/zenodo.19056807>
 
 ## Status
 
-This folder contains the public Navier-Stokes v2.5 maintenance paper files and
+This folder contains the public Navier-Stokes v2.6 maintenance paper files and
 the NS-LDI v1.5 paper files. The latest Navier-Stokes Zenodo release is
-v2.5 (record DOI <https://doi.org/10.5281/zenodo.20532811>), and the
-latest NS-LDI Zenodo release is v1.5 (record DOI
+v2.5 (record DOI <https://doi.org/10.5281/zenodo.20532811>) while the v2.6
+record DOI is being published, and the latest NS-LDI Zenodo release is v1.5 (record DOI
 <https://doi.org/10.5281/zenodo.20257390>). The main regularity result remains conditional on Assumption G2
 (projection regularity); the NS-LDI package remains a proof-of-life and
 diagnostic bridge, not an unconditional 3D Navier-Stokes proof.
-Version 2.5 carries the local post-v2.4 proof/paper synchronization,
-bibliography synchronization, and Conditional-Input-Ledger maintenance update.
+Version 2.6 carries the post-v2.5 strict-review tightening of limsup,
+G-NS/TLL, EDP, Condition-D-window, H1-route, Pattern-A, mean-field-game, and
+Talagrand-transfer wording while preserving the conditional theorem status.
 NS-LDI v1.5 carries the May 2026 source-metadata correction for Bae-Cannone,
 Ilyin-Kalantarov-Zelik, Romanov, the NS-Skeleton self-citation, and Lytchak.
 
@@ -59,6 +60,6 @@ The scripts write PNG and JSON outputs next to the scripts or under
 Internal proof notes, review chains, planning files, Zenodo credentials,
 revision notes, and private comparison notes are intentionally not part of this
 public package. The repository contains the current public reproducibility
-scripts and result artifacts for the Zenodo-backed Navier-Stokes v2.5 release
+scripts and result artifacts for the Zenodo-backed Navier-Stokes v2.6 release
 and the DOI-backed NS-LDI v1.5 package only. Local working notes remain
 private unless a later release gate explicitly includes them.
