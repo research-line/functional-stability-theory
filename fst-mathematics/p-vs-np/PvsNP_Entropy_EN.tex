@@ -539,12 +539,12 @@ The Entropy Hardness Hypothesis depends on the encoding of SAT instances as bina
 
 \begin{remark}[Connection to circuit lower bounds]
 \label{rem:circuit-connection}
-The Entropy Hardness Hypothesis is closely related to circuit lower bounds. A Boolean function $f_n$ computed by a circuit of size $s$ has truth table describable in $O(s \log s)$ bits, so $K^{O(s \cdot 2^n)}(f_n) \leq O(s \log s) + O(\log n)$. Thus:
+The Entropy Hardness Hypothesis is related to circuit descriptions, but the threshold $n$ is too weak to imply standard non-uniform lower bounds by itself. A Boolean function $f_n$ computed by a circuit of size $s$ has truth table describable in $O(s \log s)$ bits, so $K^{O(s \cdot 2^n)}(f_n) \leq O(s \log s) + O(\log n)$. Thus:
 \begin{itemize}
-\item EH with threshold $n$ implies $\SAT_n$ requires circuits of size $s \geq 2^{\Omega(n / \log n)}$, i.e., $\NP \not\subseteq \mathrm{SIZE}(2^{o(n)})$.
-\item In particular, EH implies $\NP \not\subseteq \PP/\poly$ (since polynomial-size circuits give $K^{\poly(2^n)}(f_n) \leq O(n^c \log n)$, which is $o(n)$ for large $n$).
+\item EH with threshold $n$ only rules out circuit descriptions shorter than $n$ bits. Quantitatively, for circuits used as direct descriptions of $\SAT_n$, it implies $s\log s=\Omega(n)$, hence only $s=\Omega(n/\log n)$ up to constants.
+\item EH does \emph{not} imply $\NP \not\subseteq \PP/\poly$ or $\NP \not\subseteq \mathrm{SIZE}(2^{o(n)})$. Such conclusions would require much stronger truth-table incompressibility, or an additional theorem converting uniform SAT-slice compression into non-uniform circuit lower bounds.
 \end{itemize}
-This shows that the entropy framework and the circuit complexity approach are two perspectives on the same underlying separation.
+This keeps the entropy framework aligned with circuit complexity without overstating what the moderate EH threshold proves.
 \end{remark}
 
 \begin{remark}[SAT slice entropy at the phase transition -- exploratory numerics]
@@ -633,7 +633,7 @@ We identify four concrete research directions for closing the uniformity gap:
 
 \textbf{(B3) Resource-bounded Kolmogorov lower bounds on slices.} Prove that for SAT (or another NP-complete language), the resource-bounded complexity satisfies $K^{\poly(2^n)}(\SAT_n) \geq 2^{n-o(n)}$ for infinitely many $n$. This is a \textit{uniform} statement about the truth table and directly implies $\PP \neq \NP$ via the Slice Entropy No-Go (Theorem~\ref{thm:slice_nogo}). The strategy connects to proof complexity: if every short proof of an instance's satisfiability has high Kolmogorov complexity, then no polynomial-time algorithm can systematically produce such proofs.
 
-\textbf{(B4) The Minimum Circuit Size Problem (MCSP).} Recent work connects resource-bounded Kolmogorov complexity to circuit complexity via the \textit{Minimum Circuit Size Problem} ($\mathrm{MCSP}$): given a truth table $t \in \{0,1\}^{2^n}$ and a parameter $s$, decide whether there exists a circuit of size $\leq s$ computing $t$. Allender et al.~\cite{Allender2006} established deep connections between $\mathrm{MCSP}$ and $K^t$. While $\mathrm{MCSP} \in \NP$, its complexity status is open: it is not known to be $\NP$-complete, yet proving $\mathrm{MCSP} \in \PP$ would have strong derandomisation consequences. If $\mathrm{MCSP}$ is hard for some complexity class (e.g., $\mathrm{MCSP} \notin \PP/\mathrm{poly}$), this would yield circuit lower bounds that imply the Entropy Hardness Hypothesis. The chain is indirect but concrete: \textit{hardness of MCSP $\Rightarrow$ circuit lower bounds $\Rightarrow$ truth-table incompressibility $\Rightarrow$ EH}.
+\textbf{(B4) The Minimum Circuit Size Problem (MCSP).} Recent work connects resource-bounded Kolmogorov complexity to circuit complexity via the \textit{Minimum Circuit Size Problem} ($\mathrm{MCSP}$): given a truth table $t \in \{0,1\}^{2^n}$ and a parameter $s$, decide whether there exists a circuit of size $\leq s$ computing $t$. Allender et al.~\cite{Allender2006} established deep connections between $\mathrm{MCSP}$ and $K^t$. While $\mathrm{MCSP} \in \NP$, its complexity status is open: it is not known to be $\NP$-complete, yet proving $\mathrm{MCSP} \in \PP$ would have strong derandomisation consequences. Strong MCSP lower bounds or hardness results may feed into circuit-lower-bound programs; they imply the Entropy Hardness Hypothesis only after an additional step that yields sufficiently strong SAT-slice truth-table incompressibility. The chain is therefore conditional rather than automatic: \textit{MCSP hardness $\Rightarrow$ circuit lower bounds $\Rightarrow$ truth-table incompressibility $\Rightarrow$ EH}, with quantitative losses at each arrow.
 
 
 % ===================================================================
@@ -915,7 +915,7 @@ Non-uniformity is ``hidden advice'': the hard instances $\varphi_n$ exist but th
 The following are candidate formulations and neighbouring targets for the Uniformity Bridge:
 \begin{enumerate}
 \item[(i)] \textbf{Uniform witness construction:} There exists a polynomial-time $\mathcal{U}$ producing high-entropy instances $\varphi_n = \mathcal{U}(1^n)$ for all $n$.
-\item[(ii)] \textbf{Uniform circuit lower bounds:} There exists an explicit Boolean function family $(f_n)_{n \geq 1}$, constructible in $\mathrm{P}$, with $K^t(f_n) \geq n^\varepsilon$ (i.e., no small circuits).
+\item[(ii)] \textbf{Uniform truth-table/circuit lower bounds:} There exists an explicit Boolean function family $(f_n)_{n \geq 1}$, constructible in $\mathrm{P}$, with $K^t(f_n) \geq n^\varepsilon$; in the direct-description accounting this rules out circuit descriptions shorter than $n^\varepsilon$ bits, i.e. circuits of size $o(n^\varepsilon/\log n)$ up to encoding constants.
 \item[(iii)] \textbf{Uniform pseudorandom generators:} There exists a PRG $G: \{0,1\}^{n^\delta} \to \{0,1\}^n$ computable in $\mathrm{P}$ that fools all polynomial-size circuits.
 \item[(iv)] \textbf{Parameter-uniform separation:} The constants in the entropy gap $K^t(w \mid \varphi_n) \geq n^\varepsilon$ can be chosen \emph{independently} of $n$: no $n$-dependent thresholds, case distinctions, or lookup tables.
 \end{enumerate}
@@ -1029,6 +1029,19 @@ probability.  This is still a restricted-model statement.  To use it against
 all polynomial-time algorithms one would have to prove a front-shadow lemma
 showing that every uniform witness producer induces such a low-complexity
 visible front without superpolynomial loss.
+
+The leakage ledger must also record where the front came from.  A front
+extracted from the same solver run whose witness mass it explains is not an
+external uniformity signal unless the extraction rule is fully debited as
+template or advice length.  Safe accounting gives the elementary bound
+\[
+K^{q_T}(w\mid x)\leq K(\mathcal{C}_n)+|a_n|+K(r\mid x)+O(\log n),
+\]
+for any pre-registered visible producer class $\mathcal{C}_n$ with advice
+$a_n$, specialisation parameter $r$, and runtime $T(n)$.  A positive
+$K^t$-residue therefore excludes only the debited visible class until a
+separate front-shadow or flow-shadow lemma transfers the accounting to
+arbitrary uniform polynomial-time witness producers.
 \end{remark}
 
 \begin{lemma}[UB implies separation]\label{lem:ub-separation}
@@ -1140,7 +1153,7 @@ A heuristic perspective on why closing the uniformity bridge is hard: for any fi
 Two concrete targets for unconditional progress:
 \begin{enumerate}
 \item \emph{Extended Frege:} If superpolynomial lower bounds on Extended Frege proof length can be established for tautologies encoding the unsatisfiability of ESC-hard instances, then the proof objects themselves have high entropy ($K(\pi | \tau) \geq |\pi|^{1-\varepsilon}$), realising Bridge Target~2.
-\item \emph{MCSP $\notin$ P/poly:} The Minimum Circuit Size Problem (Allender--Hirahara~\cite{AllenderHirahara2019}) is the natural decision version of Kolmogorov complexity for circuits. Proving MCSP $\notin$ P/poly would imply uniform entropy hardness (EH) and, via our framework, P $\neq$ NP. This is considered one of the most accessible unconditional targets in complexity theory.
+\item \emph{MCSP and non-uniformity:} The Minimum Circuit Size Problem (Allender--Hirahara~\cite{AllenderHirahara2019}) is the natural decision version of Kolmogorov complexity for circuits. MCSP lower bounds are a neighbouring route for converting compression statements into circuit lower bounds, but $\mathrm{MCSP}\notin\PP/\poly$ would not by itself imply EH without an additional reduction from small SAT-slice descriptions to small MCSP circuits, or a comparable uniform compression-to-circuit theorem.
 \end{enumerate}
 \end{remark}
 

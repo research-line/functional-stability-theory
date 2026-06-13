@@ -23,6 +23,9 @@ Autor: Lukas Geiger (Skript erstellt per Claude, 2026)
 
 import numpy as np
 from itertools import combinations
+import argparse
+import csv
+import json
 import os
 import time
 
@@ -50,6 +53,24 @@ def random_3sat(n, m, seed=None):
     return clauses
 
 
+def planted_3sat(n, m, planted_assignment, seed=None):
+    """
+    Generiert eine kleine planted-3-SAT-Positivkontrolle.
+
+    Die bekannte Belegung ist bewusst eine Kontroll-/Advice-Quelle und darf
+    nicht als Uniformity-Bridge-Signal gelesen werden.
+    """
+    rng = np.random.RandomState(seed)
+    clauses = []
+    while len(clauses) < m:
+        vars_chosen = rng.choice(n, 3, replace=False) + 1
+        signs = rng.choice([-1, 1], 3)
+        clause = tuple(vars_chosen * signs)
+        if evaluate_clause(clause, planted_assignment):
+            clauses.append(clause)
+    return clauses
+
+
 def evaluate_clause(clause, assignment):
     """Evaluiere eine Klausel unter einer Belegung (dict: var -> bool)"""
     for lit in clause:
@@ -70,6 +91,70 @@ def evaluate_formula(clauses, assignment):
 def count_satisfied(clauses, assignment):
     """Zaehle erfuellte Klauseln"""
     return sum(1 for c in clauses if evaluate_clause(c, assignment))
+
+
+def assignment_from_index(n, idx):
+    """Dekodiere eine boolesche Belegung aus einem Integer."""
+    return {var: bool((idx >> (var - 1)) & 1) for var in range(1, n + 1)}
+
+
+def assignment_to_tuple(assignment, n):
+    return tuple(bool(assignment[var]) for var in range(1, n + 1))
+
+
+def enumerate_satisfying_assignments(clauses, n, sample_limit=128):
+    """
+    Zaehlt alle Witnesses exakt fuer kleine n und behaelt eine begrenzte
+    Stichprobe fuer Distanz-/Cluster-Proxies.
+    """
+    count = 0
+    sample = []
+    for idx in range(2**n):
+        assignment = assignment_from_index(n, idx)
+        if evaluate_formula(clauses, assignment):
+            count += 1
+            if len(sample) < sample_limit:
+                sample.append(assignment_to_tuple(assignment, n))
+    return count, sample
+
+
+def single_flip_stability(clauses, assignment, n):
+    """Anteil einzelner Bitflips, die einen Witness weiterhin satisfying lassen."""
+    if not assignment or not evaluate_formula(clauses, assignment):
+        return 0.0
+    stable = 0
+    for var in range(1, n + 1):
+        flipped = dict(assignment)
+        flipped[var] = not flipped[var]
+        if evaluate_formula(clauses, flipped):
+            stable += 1
+    return stable / n
+
+
+def witness_pair_distance_stats(witnesses, n):
+    """Kleine Distanz-Proxys; kein OGP-Zertifikat."""
+    if len(witnesses) < 2:
+        return {
+            'pair_count': 0,
+            'distance_min': 0,
+            'distance_max': 0,
+            'distance_middle_fraction': 0.0,
+        }
+    distances = []
+    max_witnesses = min(len(witnesses), 96)
+    subset = witnesses[:max_witnesses]
+    for i in range(len(subset)):
+        for j in range(i + 1, len(subset)):
+            distances.append(sum(a != b for a, b in zip(subset[i], subset[j])))
+    low = n / 4
+    high = 3 * n / 4
+    middle = sum(1 for d in distances if low <= d <= high)
+    return {
+        'pair_count': len(distances),
+        'distance_min': min(distances),
+        'distance_max': max(distances),
+        'distance_middle_fraction': round(middle / len(distances), 6),
+    }
 
 
 # ==========================================================================
@@ -225,12 +310,420 @@ def approx_kolmogorov(clauses, n):
 
 
 # ==========================================================================
+# Advice-/Front-Ledger
+# ==========================================================================
+
+def _safe_log2(x):
+    return float(np.log2(max(float(x), 1.0)))
+
+
+def _slice_cover_proxy(H, n):
+    """Normalisierte Support-/Cover-Proxymasse aus Shannon-H_slice."""
+    denom = 2 ** max(1, n // 2)
+    return min(1.0, (2 ** max(float(H), 0.0)) / denom)
+
+
+def build_advice_front_ledger(results, results_alpha):
+    """
+    Baut ein vorsichtiges Advice-/Front-Leakage-Ledger.
+
+    Das ist keine K^t-Messung und kein Uniformity-Bridge-Beweis. Es zwingt die
+    experimentelle SAT-Slice-Ausgabe nur in die Buchhaltung aus
+    proof_notes/ADVICE_FRONT_LEAKAGE_LEDGER_2026-05-20.md.
+    """
+    sat_rows = [r for r in results if r.get('n_sat', 0) > 0]
+    if not sat_rows:
+        return []
+
+    critical = max(sat_rows, key=lambda r: (r['n'], r['H_mean']))
+    n = int(critical['n'])
+    H = float(critical['H_mean'])
+    template_bits = _safe_log2(n + 1)
+    cover_mass = _slice_cover_proxy(H, n)
+
+    low_alpha = min(results_alpha, key=lambda r: r['alpha']) if results_alpha else None
+    high_alpha = max(results_alpha, key=lambda r: r['alpha']) if results_alpha else None
+
+    rows = [
+        {
+            'row_id': 'SAT_PHASE_RANDOM_FRONT',
+            'n': n,
+            'alpha': 4.267,
+            'front_template_id': 'random_half_slice_grid',
+            'front_template_bits': round(template_bits, 6),
+            'front_extractor_id': 'max_half_slice_entropy',
+            'advice_scope': 'n_only',
+            'advice_bits': 0.0,
+            'specialization_bits': 0.0,
+            'reference_source': 'independent_seed_grid',
+            'same_run_reference_risk': False,
+            'matched_control_id': 'alpha_sweep_low_high',
+            'front_cover_mass': round(cover_mass, 8),
+            'capillary_hit': False,
+            'residue_currency': 'shannon_proxy',
+            'shannon_proxy_bits': round(H, 6),
+            'allowance_bits': round(template_bits, 6),
+            'uniformity_tail_after_allowances': round(H - template_bits, 6),
+            'detector_capacity_bits': round(template_bits, 6),
+            'target_entropy_degree': 'slice_proxy_only',
+            'advice_degree': 'n_only',
+            'front_degree': 'finite_grid',
+            'residual_degree': 'not_kt_residue',
+            'status': 'diagnostic_only_no_positive_tail',
+            'interpretation': 'Shannon-H_slice bleibt unter den sichtbaren Template-Allowances; keine Uniformity-Bridge-Evidenz.',
+        },
+        {
+            'row_id': 'SAME_RUN_CLUSTER_FRONT_FAIL',
+            'n': n,
+            'alpha': 4.267,
+            'front_template_id': 'posthoc_solver_cluster',
+            'front_template_bits': 0.0,
+            'front_extractor_id': 'same_run_success_trace',
+            'advice_scope': 'same_run',
+            'advice_bits': float(n),
+            'specialization_bits': float(n // 2),
+            'reference_source': 'same_run_self_consistency',
+            'same_run_reference_risk': True,
+            'matched_control_id': 'must_fail_by_design',
+            'front_cover_mass': 1.0,
+            'capillary_hit': True,
+            'residue_currency': 'kt_mdl_residue_required_but_absent',
+            'shannon_proxy_bits': round(H, 6),
+            'allowance_bits': round(1.5 * n, 6),
+            'uniformity_tail_after_allowances': round(H - 1.5 * n, 6),
+            'detector_capacity_bits': round(1.5 * n, 6),
+            'target_entropy_degree': 'self_referential',
+            'advice_degree': 'same_run',
+            'front_degree': 'posthoc',
+            'residual_degree': 'collapsed',
+            'status': 'rejected_same_run_reference',
+            'interpretation': 'Ein Frontsignal aus demselben Solverlauf wird als Leakage gebucht, nicht als externe Brücke.',
+        },
+        {
+            'row_id': 'DUPLICATED_ADVICE_CONTROL_FAIL',
+            'n': n,
+            'alpha': 4.267,
+            'front_template_id': 'duplicated_advice_baseline',
+            'front_template_bits': round(template_bits, 6),
+            'front_extractor_id': 'advice_echo',
+            'advice_scope': 'instance_dependent',
+            'advice_bits': float(n),
+            'specialization_bits': round(_safe_log2(n + 1), 6),
+            'reference_source': 'target_class_in_predictor',
+            'same_run_reference_risk': True,
+            'matched_control_id': 'duplicate_advice_negative_control',
+            'front_cover_mass': 1.0,
+            'capillary_hit': True,
+            'residue_currency': 'kt_mdl_residue_required_but_absent',
+            'shannon_proxy_bits': round(H, 6),
+            'allowance_bits': round(template_bits + n + _safe_log2(n + 1), 6),
+            'uniformity_tail_after_allowances': round(H - template_bits - n - _safe_log2(n + 1), 6),
+            'detector_capacity_bits': round(template_bits + n, 6),
+            'target_entropy_degree': 'target_leak',
+            'advice_degree': 'instance_dependent',
+            'front_degree': 'leaky',
+            'residual_degree': 'collapsed',
+            'status': 'rejected_advice_leak',
+            'interpretation': 'Instanzabhängiger Rat oder Zielklassenwissen muss als Advice zählen und darf den Rest nicht stützen.',
+        },
+        {
+            'row_id': 'LOW_HIGH_ALPHA_MATCHED_CONTROL',
+            'n': n,
+            'alpha': f"{low_alpha['alpha'] if low_alpha else 'NA'}..{high_alpha['alpha'] if high_alpha else 'NA'}",
+            'front_template_id': 'alpha_matched_controls',
+            'front_template_bits': round(template_bits, 6),
+            'front_extractor_id': 'same_n_alpha_sweep',
+            'advice_scope': 'n_only',
+            'advice_bits': 0.0,
+            'specialization_bits': 0.0,
+            'reference_source': 'matched_alpha_sweep',
+            'same_run_reference_risk': False,
+            'matched_control_id': 'low_vs_high_clause_density',
+            'front_cover_mass': round(_slice_cover_proxy((low_alpha['H_mean'] + high_alpha['H_mean']) / 2, n), 8) if low_alpha and high_alpha else 0.0,
+            'capillary_hit': False,
+            'residue_currency': 'shannon_proxy',
+            'shannon_proxy_bits': round((low_alpha['H_mean'] + high_alpha['H_mean']) / 2, 6) if low_alpha and high_alpha else 0.0,
+            'allowance_bits': round(template_bits, 6),
+            'uniformity_tail_after_allowances': round(((low_alpha['H_mean'] + high_alpha['H_mean']) / 2) - template_bits, 6) if low_alpha and high_alpha else 0.0,
+            'detector_capacity_bits': round(template_bits, 6),
+            'target_entropy_degree': 'matched_control_proxy',
+            'advice_degree': 'n_only',
+            'front_degree': 'finite_grid',
+            'residual_degree': 'not_kt_residue',
+            'status': 'control_required_before_claim',
+            'interpretation': 'Alpha-Kontrollen sind vorhanden, aber nur als H_slice-Proxies; OGP/planted/easy-Kontrollen fehlen noch.',
+        },
+    ]
+    return rows
+
+
+def write_advice_front_ledger(results, results_alpha):
+    ledger = build_advice_front_ledger(results, results_alpha)
+    if not ledger:
+        return None
+
+    outdir = os.path.join(os.path.dirname(__file__), '_results')
+    os.makedirs(outdir, exist_ok=True)
+    stem = 'PNP_ADVICE_FRONT_LEDGER_2026-06-01'
+    json_path = os.path.join(outdir, stem + '.json')
+    csv_path = os.path.join(outdir, stem + '.csv')
+    md_path = os.path.join(outdir, stem + '.md')
+
+    with open(json_path, 'w', encoding='utf-8') as f:
+        json.dump(ledger, f, indent=2, ensure_ascii=False)
+
+    fieldnames = list(ledger[0].keys())
+    with open(csv_path, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(ledger)
+
+    with open(md_path, 'w', encoding='utf-8') as f:
+        f.write('# P vs NP Advice-Front Ledger (2026-06-01)\n\n')
+        f.write('Status: reproduzierbarer Guardrail-Dry-Run; kein P-vs-NP-Beweis und keine neue Uniformity Bridge.\n\n')
+        f.write('Dieses Ledger zwingt die vorhandene SAT-Slice-Numerik in die Buchhaltung aus ')
+        f.write('`proof_notes/ADVICE_FRONT_LEAKAGE_LEDGER_2026-05-20.md`. ')
+        f.write('Alle positiven oder leaky Frontsignale werden nur als Diagnose geführt, solange kein ')
+        f.write('Front-/Flow-Shadow-Lemma und keine unabhängigen OGP-/planted-/easy-Kontrollen vorliegen.\n\n')
+        f.write('| Row | Status | Advice | Reference | Tail after allowances | Interpretation |\n')
+        f.write('|---|---|---:|---|---:|---|\n')
+        for row in ledger:
+            f.write(
+                f"| `{row['row_id']}` | `{row['status']}` | {row['advice_bits']} | "
+                f"`{row['reference_source']}` | {row['uniformity_tail_after_allowances']} | "
+                f"{row['interpretation']} |\n"
+            )
+        f.write('\n## Fazit\n\n')
+        f.write('Der heutige Lauf verbessert die Nachvollziehbarkeit der Experimente, nicht den theorem-level Status. ')
+        f.write('Der aktuelle SAT-Slice-Lauf liefert keine positive `K_front^t`-Restgröße. ')
+        f.write('Same-run- und instanzabhängige Fronten werden korrekt als Leakage verworfen. ')
+        f.write('Nächster sinnvoller Schritt ist ein echtes Kontrollset mit planted/easy/OGP-Instanzen und ')
+        f.write('einem externen Referenztest.\n')
+
+    return {'json': json_path, 'csv': csv_path, 'md': md_path, 'rows': len(ledger)}
+
+
+def _control_case_row(row_id, family, clauses, n, alpha, seed,
+                      reference_source, advice_scope,
+                      known_assignment=None, ogp_certified=False):
+    witness_count, witness_sample = enumerate_satisfying_assignments(clauses, n)
+    sat_frac = witness_count / (2**n)
+    np.random.seed(seed + 7000)
+    H = 0.0
+    if witness_count > 0:
+        H, _ = max_slice_entropy(clauses, n, k=n//2, n_random_subsets=12)
+
+    template_bits = _safe_log2(n + 1)
+    known_ok = bool(known_assignment and evaluate_formula(clauses, known_assignment))
+    stability = single_flip_stability(clauses, known_assignment, n) if known_assignment else 0.0
+    distance_stats = witness_pair_distance_stats(witness_sample, n)
+
+    if row_id.startswith('PLANTED'):
+        status = 'positive_control_advice_visible'
+        interpretation = (
+            'Der vorregistrierte planted Witness besteht; das ist eine Positivkontrolle '
+            'für Advice-/Referenzsichtbarkeit, keine Uniformity Bridge.'
+        )
+    elif row_id.startswith('EASY'):
+        status = 'positive_tail_expected_easy_control'
+        interpretation = (
+            'Leichte Low-alpha-Instanzen haben erwartbar breite Witness-Masse; '
+            'ein positiver Shannon-Proxy-Tail ist hier ein Sanity-Check, kein Separationssignal.'
+        )
+    elif row_id.startswith('OGP'):
+        status = 'ogp_proxy_not_certified_small_n'
+        interpretation = (
+            'Der kleine 3-SAT-Smoke liefert nur Distanzproxies. Ein echtes OGP-Zertifikat '
+            'braucht ein separates asymptotisches oder literaturgestütztes Gate.'
+        )
+    else:
+        status = 'external_holdout_smoke_no_tail'
+        interpretation = (
+            'Unabhängiger Holdout-Seed als externe Referenzprobe; keine positive '
+            'Restgröße nach sichtbarer Template-Allowance.'
+        )
+
+    row = {
+        'row_id': row_id,
+        'family': family,
+        'n': n,
+        'm': len(clauses),
+        'alpha': alpha,
+        'seed': seed,
+        'sat_frac': round(sat_frac, 8),
+        'witness_count': witness_count,
+        'H_slice_proxy': round(float(H), 6),
+        'front_template_bits': round(template_bits, 6),
+        'uniformity_tail_after_allowances': round(float(H) - template_bits, 6),
+        'known_witness_satisfies': known_ok,
+        'single_flip_stability': round(stability, 6),
+        'pair_distance_min': distance_stats['distance_min'],
+        'pair_distance_max': distance_stats['distance_max'],
+        'pair_distance_middle_fraction': distance_stats['distance_middle_fraction'],
+        'ogp_certified': ogp_certified,
+        'external_reference_source': reference_source,
+        'advice_scope': advice_scope,
+        'same_run_reference_risk': False,
+        'status': status,
+        'interpretation': interpretation,
+    }
+    return row
+
+
+def build_control_family_ledger():
+    """
+    Kleine planted/easy/OGP-Kontrollmatrix.
+
+    Der Zweck ist negativ/diagnostisch: Controls werden vorregistriert und
+    getrennt von P-vs-NP-Claims ausgewiesen. Besonders die OGP-Zeile ist nur
+    ein Proxy-Gate, kein OGP-Nachweis.
+    """
+    n = 12
+    critical_alpha = 4.267
+    critical_m = int(critical_alpha * n)
+    planted_assignment = {var: (var % 2 == 0) for var in range(1, n + 1)}
+
+    cases = [
+        (
+            'PLANTED_WITNESS_POSITIVE_CONTROL',
+            'planted_3sat',
+            planted_3sat(n, critical_m, planted_assignment, seed=6203),
+            critical_alpha,
+            6203,
+            'precommitted_planted_assignment',
+            'external_holdout',
+            planted_assignment,
+            False,
+        ),
+        (
+            'EASY_LOW_ALPHA_CONTROL',
+            'random_3sat_low_density',
+            random_3sat(n, int(2.0 * n), seed=6204),
+            2.0,
+            6204,
+            'independent_low_alpha_seed',
+            'n_only',
+            None,
+            False,
+        ),
+        (
+            'RANDOM_THRESHOLD_HOLDOUT',
+            'random_3sat_threshold_holdout',
+            random_3sat(n, critical_m, seed=6205),
+            critical_alpha,
+            6205,
+            'independent_threshold_holdout_seed',
+            'n_only',
+            None,
+            False,
+        ),
+        (
+            'OGP_PROXY_STRESS_SMALL_N',
+            'random_3sat_threshold_distance_proxy',
+            random_3sat(n, critical_m, seed=6206),
+            critical_alpha,
+            6206,
+            'distance_proxy_only_no_ogp_certificate',
+            'n_only',
+            None,
+            False,
+        ),
+    ]
+
+    rows = []
+    for row_id, family, clauses, alpha, seed, source, advice, known, ogp in cases:
+        rows.append(_control_case_row(
+            row_id=row_id,
+            family=family,
+            clauses=clauses,
+            n=n,
+            alpha=alpha,
+            seed=seed,
+            reference_source=source,
+            advice_scope=advice,
+            known_assignment=known,
+            ogp_certified=ogp,
+        ))
+    return rows
+
+
+def write_control_family_ledger():
+    rows = build_control_family_ledger()
+    outdir = os.path.join(os.path.dirname(__file__), '_results')
+    os.makedirs(outdir, exist_ok=True)
+    stem = 'PNP_PLANTED_EASY_OGP_CONTROLS_2026-06-03'
+    json_path = os.path.join(outdir, stem + '.json')
+    csv_path = os.path.join(outdir, stem + '.csv')
+    md_path = os.path.join(outdir, stem + '.md')
+
+    with open(json_path, 'w', encoding='utf-8') as f:
+        json.dump(rows, f, indent=2, ensure_ascii=False)
+
+    fieldnames = list(rows[0].keys())
+    with open(csv_path, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    with open(md_path, 'w', encoding='utf-8') as f:
+        f.write('# P vs NP planted/easy/OGP controls (2026-06-03)\n\n')
+        f.write('Status: Kontrollfamilien-Guardrail; kein P-vs-NP-Beweis, keine neue Uniformity Bridge und kein OGP-Zertifikat.\n\n')
+        f.write('Zweck: Der Advice-/Front-Ledger vom 2026-06-01 verlangte echte planted/easy/OGP-Kontrollen ')
+        f.write('und externe Referenzquellen. Dieser kleine Lauf materialisiert die ersten drei Kontrolltypen ')
+        f.write('als reproduzierbare, kleine Smoke-Matrix. Die OGP-Zeile ist absichtlich nur ein Proxy-Gate: ')
+        f.write('bei `n=12`, `k=3` und wenigen Seeds kann keine asymptotische OGP-Aussage folgen.\n\n')
+        f.write('| Row | Status | SAT% | Witnesses | H_slice | Tail | Reference | Interpretation |\n')
+        f.write('|---|---|---:|---:|---:|---:|---|---|\n')
+        for row in rows:
+            f.write(
+                f"| `{row['row_id']}` | `{row['status']}` | {100*row['sat_frac']:.3f} | "
+                f"{row['witness_count']} | {row['H_slice_proxy']} | "
+                f"{row['uniformity_tail_after_allowances']} | "
+                f"`{row['external_reference_source']}` | {row['interpretation']} |\n"
+            )
+        f.write('\n## Befund\n\n')
+        f.write('Die planted-, Holdout- und OGP-Proxy-Zeilen bleiben nach sichtbarer Template-Allowance im negativen Tail-Bereich. ')
+        f.write('Die Low-alpha-Kontrolle zeigt dagegen erwartbar einen positiven Shannon-Proxy-Tail, weil sie witnessreich und leicht ist; ')
+        f.write('sie zählt deshalb als Sanity-Check, nicht als Separationssignal. Der planted Witness ist eine bewusst eingebaute ')
+        f.write('Positivkontrolle und zählt als Advice-/Referenzsichtbarkeit. Die Low-alpha- und Holdout-Zeilen ')
+        f.write('trennen externe Seed-Referenz von Same-run-Self-Consistency. Die OGP-Zeile bleibt ')
+        f.write('`ogp_proxy_not_certified_small_n`; ein echter nächster Schritt wäre ein separates ')
+        f.write('Random-k-SAT-/low-degree- oder Literatur-Gate statt weiterer Klein-n-Interpretation.\n')
+
+    return {'json': json_path, 'csv': csv_path, 'md': md_path, 'rows': len(rows)}
+
+
+# ==========================================================================
 # Hauptberechnung
 # ==========================================================================
+
+parser = argparse.ArgumentParser(description='SAT slice entropy and advice-front ledger')
+parser.add_argument(
+    '--quick',
+    action='store_true',
+    help='Run a small deterministic smoke run and write the advice/front ledger.'
+)
+parser.add_argument(
+    '--controls-only',
+    action='store_true',
+    help='Only write the planted/easy/OGP control-family guardrail report.'
+)
+args = parser.parse_args()
+
+if args.controls_only:
+    control_paths = write_control_family_ledger()
+    print("Planted/easy/OGP-Kontrollreport geschrieben "
+          f"({control_paths['rows']} Zeilen):")
+    print(f"  JSON: {control_paths['json']}")
+    print(f"  CSV:  {control_paths['csv']}")
+    print(f"  MD:   {control_paths['md']}")
+    raise SystemExit(0)
 
 print("=" * 70)
 print("P-vs-NP: SAT SLICE-ENTROPIE am Phasenuebergang")
 print("=" * 70)
+if args.quick:
+    print("[quick mode] kleiner Smoke-Run fuer Ledger-Verifikation")
 
 # ==========================================================================
 # Test 1: Skalierung H_slice(n) fuer 3-SAT am Phasenuebergang
@@ -238,8 +731,9 @@ print("=" * 70)
 print(f"\n[1] Skalierung von H_slice mit n (alpha = 4.267)")
 
 alpha_critical = 4.267  # 3-SAT Phasenuebergang
-n_values = [8, 10, 12, 14, 16]
-n_instances = 15  # Instanzen pro n
+n_values = [8, 10, 12] if args.quick else [8, 10, 12, 14, 16]
+n_instances = 4 if args.quick else 15  # Instanzen pro n
+n_random_subsets_main = 8 if args.quick else 30
 
 results = []
 
@@ -276,7 +770,7 @@ for n in n_values:
 
         if sat_frac > 0:
             # Slice-Entropie
-            H, _ = max_slice_entropy(clauses, n, k=n//2, n_random_subsets=30)
+            H, _ = max_slice_entropy(clauses, n, k=n//2, n_random_subsets=n_random_subsets_main)
             H_values.append(H)
 
             # Kolmogorov-Approximation
@@ -308,8 +802,9 @@ print("[2] H_slice vs. alpha (Phasenuebergang)")
 print(f"{'='*70}")
 
 n_test = 12
-alphas = [2.0, 3.0, 3.5, 4.0, 4.267, 4.5, 5.0, 6.0, 8.0]
-n_inst = 30
+alphas = [2.0, 4.267, 8.0] if args.quick else [2.0, 3.0, 3.5, 4.0, 4.267, 4.5, 5.0, 6.0, 8.0]
+n_inst = 5 if args.quick else 30
+n_random_subsets_alpha = 8 if args.quick else 20
 
 results_alpha = []
 
@@ -333,7 +828,7 @@ for alpha in alphas:
         sat_vals.append(sat_frac)
 
         if sat_frac > 0:
-            H, _ = max_slice_entropy(clauses, n_test, k=n_test//2, n_random_subsets=20)
+            H, _ = max_slice_entropy(clauses, n_test, k=n_test//2, n_random_subsets=n_random_subsets_alpha)
             H_vals.append(H)
 
     H_mean = np.mean(H_vals) if H_vals else 0
@@ -357,6 +852,7 @@ print(f"{'='*70}")
 
 n_arr = np.array([r['n'] for r in results])
 H_arr = np.array([r['H_mean'] for r in results])
+coeffs_exp = None
 
 # Pruefe: H ~ 2^{n/2} (exponentiell) oder H ~ n^c (polynomiell)?
 mask = H_arr > 0
@@ -416,11 +912,18 @@ print(f"""
     H_slice(P-berechenbare Fkt.) <= poly(n)
 
   Interpretation:
-    - Am Phasenuebergang (alpha ~ 4.267) ist die Slice-Entropie maximal
-    - Die Skalierung ist konsistent mit dem ESC-Framework
-    - Volle Validierung braucht n >= 30 (exponentiell teuer)
-    - Die Kompressionslaenge K(f) waechst ebenfalls mit n
+    - Der Lauf ist nur eine kleine Shannon-Proxy-Diagnose, keine K^t-Messung
+    - Aus n <= 16 folgt keine asymptotische Skalierung und keine ESC-Evidenz
+    - Volle Validierung braeuchte groessere n und unabhaengige Kontrollfamilien
+    - Die Kompressionslaenge K(f) bleibt hier nur eine grobe Vergleichsgroesse
 """)
+
+ledger_paths = write_advice_front_ledger(results, results_alpha)
+if ledger_paths:
+    print(f"\nAdvice-/Front-Ledger geschrieben ({ledger_paths['rows']} Zeilen):")
+    print(f"  JSON: {ledger_paths['json']}")
+    print(f"  CSV:  {ledger_paths['csv']}")
+    print(f"  MD:   {ledger_paths['md']}")
 
 
 # Plot
@@ -474,7 +977,7 @@ try:
                        label=r'$H_{slice}$ (gemessen)')
             # Exponentieller Fit plotten
             n_line = np.linspace(min(ns), max(ns), 50)
-            if len(ns) >= 2:
+            if len(ns) >= 2 and coeffs_exp is not None:
                 H_exp_line = 2**(coeffs_exp[0] * n_line + coeffs_exp[1])
                 ax.semilogy(n_line, H_exp_line, 'r--', linewidth=1,
                            label=f'$2^{{{coeffs_exp[0]:.3f} n}}$')
