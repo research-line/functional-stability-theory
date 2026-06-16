@@ -4,14 +4,15 @@ Public reproducibility package for the Yang-Mills domain supplement in the
 Functional Stability Theory program.
 
 Zenodo concept DOI: <https://doi.org/10.5281/zenodo.19087433>
+Latest Zenodo v2.6 record DOI: <https://doi.org/10.5281/zenodo.20716608>
 
 ## Status
 
 This folder contains the public v2.6 release package synchronized from the
 local strict-review, design-check, and citation-checked working state. The
-Zenodo v2.6 upload is prepared under the concept DOI above. The continuum
-mass-gap step remains conditional on the analytical renormalization-group
-contraction input.
+Zenodo v2.6 record is live under the record DOI above. The continuum mass-gap
+step remains conditional on the analytical renormalization-group contraction
+input.
 
 ## Files
 

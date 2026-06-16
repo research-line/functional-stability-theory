@@ -61,7 +61,7 @@ Derive Pattern A + DS1–DS3 from Spectrum Duality. These instantiate the Dissip
 |-------|---------|--------|--------------|-------------|
 | [**K41 Variational Minimiser**](fst-physics/k41-variational-minimiser/) | v1.0 | Preprint live | Unconditional variational theorem | [10.5281/zenodo.20131305](https://doi.org/10.5281/zenodo.20131305) |
 | [**Turbulence / DFC Cascade**](fst-physics/turbulence/) | v1.4 candidate | Conditional companion | DFC projection bridge | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
-| [**Yang–Mills**](fst-physics/yang-mills/) | v2.6 candidate | Conditional | Volume-independent local transfer gap; continuum transfer conditional | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
+| [**Yang–Mills**](fst-physics/yang-mills/) | v2.6 | Conditional | Volume-independent local transfer gap; continuum transfer conditional | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
 | [**Navier–Stokes**](fst-physics/navier-stokes/) | v2.2 candidate | Conditional | Assumption G2 (projection regularity) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
 | [**NS Log-Distance**](fst-physics/navier-stokes/) | v1.3 | Proof of Life | TLL for 3D NS analytically open | [10.5281/zenodo.19056807](https://doi.org/10.5281/zenodo.19056807) |
 
