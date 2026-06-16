@@ -7,13 +7,11 @@ Zenodo concept DOI: <https://doi.org/10.5281/zenodo.19087433>
 
 ## Status
 
-This folder contains the public post-v2.5 guardrail candidate synchronized
-from the local strict-review, design-check, and citation-checked working
-state. The latest released Zenodo record remains v2.5:
-<https://doi.org/10.5281/zenodo.20315811>. The GitHub tree is therefore
-slightly ahead of Zenodo in claim-boundary wording and supporting public
-artifacts, while the continuum mass-gap step remains conditional on the
-analytical renormalization-group contraction input.
+This folder contains the public v2.6 release package synchronized from the
+local strict-review, design-check, and citation-checked working state. The
+Zenodo v2.6 upload is prepared under the concept DOI above. The continuum
+mass-gap step remains conditional on the analytical renormalization-group
+contraction input.
 
 ## Files
 
@@ -24,6 +22,7 @@ analytical renormalization-group contraction input.
 | `FST-YM_YangMills_MassGap_kombi.pdf` | Combined bilingual PDF |
 | `../../scripts/yang-mills/compute_dobrushin_su2.py` | SU(2) lattice Dobrushin influence scan |
 | `../../scripts/yang-mills/compute_birkhoff_rg.py` | Birkhoff contraction scan for hierarchical RG steps |
+| `../../scripts/yang-mills/compute_os_capacity_ledger.py` | OS-danger capacity ledger and negative-control diagnostic |
 | `../../scripts/yang-mills/compute_dobrushin_su2.png` | Generated Dobrushin result plot |
 | `../../scripts/yang-mills/compute_birkhoff_rg.png` | Generated Birkhoff/RG result plot |
 
@@ -34,10 +33,13 @@ From the repository root:
 ```bash
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_dobrushin_su2.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_birkhoff_rg.py
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_os_capacity_ledger.py
 ```
 
-The scripts write their PNG outputs next to the scripts in
-`scripts/yang-mills/`.
+The plotting scripts write their PNG outputs next to the scripts in
+`scripts/yang-mills/`. The ledger script writes local `_data/` and `_results/`
+folders under `scripts/yang-mills/`; those generated working outputs are not
+versioned here.
 
 ## Publication Gate
 

@@ -61,7 +61,7 @@ Derive Pattern A + DS1–DS3 from Spectrum Duality. These instantiate the Dissip
 |-------|---------|--------|--------------|-------------|
 | [**K41 Variational Minimiser**](fst-physics/k41-variational-minimiser/) | v1.0 | Preprint live | Unconditional variational theorem | [10.5281/zenodo.20131305](https://doi.org/10.5281/zenodo.20131305) |
 | [**Turbulence / DFC Cascade**](fst-physics/turbulence/) | v1.4 candidate | Conditional companion | DFC projection bridge | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
-| [**Yang–Mills**](fst-physics/yang-mills/) | v2.2 | Conditional | Strong-coupling lattice gap; continuum transfer conditional | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
+| [**Yang–Mills**](fst-physics/yang-mills/) | v2.6 candidate | Conditional | Volume-independent local transfer gap; continuum transfer conditional | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
 | [**Navier–Stokes**](fst-physics/navier-stokes/) | v2.2 candidate | Conditional | Assumption G2 (projection regularity) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
 | [**NS Log-Distance**](fst-physics/navier-stokes/) | v1.3 | Proof of Life | TLL for 3D NS analytically open | [10.5281/zenodo.19056807](https://doi.org/10.5281/zenodo.19056807) |
 
@@ -207,6 +207,7 @@ These stand independently of FST. The RFEP was abstracted from them; they are no
 | `scripts/turbulence/compute_goy_shell_dfc.py` | Turbulence / DFC Cascade | Sabra/GOY shell-model DFC1/DFC2 verification and result plot |
 | `scripts/yang-mills/compute_dobrushin_su2.py` | Yang-Mills | SU(2) lattice Dobrushin influence scan and gap plot |
 | `scripts/yang-mills/compute_birkhoff_rg.py` | Yang-Mills | Birkhoff contraction scan for hierarchical RG steps |
+| `scripts/yang-mills/compute_os_capacity_ledger.py` | Yang-Mills | OS-danger capacity ledger and negative-control diagnostic |
 | `scripts/navier-stokes/compute_ds3_lorenz.py` | Navier-Stokes | DS3 stress test on Lorenz attractor; TV saturation |
 | `scripts/navier-stokes/compute_bv_selection.py` | Navier-Stokes | Balanced-viscosity selection test on the Lorenz attractor |
 | `scripts/navier-stokes/compute_bv_multi_attractor.py` | Navier-Stokes | BV-selection stress test on Lorenz, Roessler, and Chen attractors |
