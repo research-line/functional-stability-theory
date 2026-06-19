@@ -1,8 +1,8 @@
-# Physics-Master — RFEP v1.8
+# Physics-Master — RFEP v1.9
 
 **Rolle:** Ebene 2 der FST-Hierarchie — physikalische Instantiation von Functional Stability Theory via Renormalized Free Energy Principle.
 
-**Status:** v1.8 ist seit 2026-05-30 auf Zenodo live: Record `20467623`, DOI `10.5281/zenodo.20467623`, Concept-DOI `10.5281/zenodo.19036190`. Der aktive lokale Dateisatz ist weiter die quellengeprüfte Manuskriptfassung v0.9, wurde aber nach dem Live-v1.8-Upload am 2026-06-04/12 erneut gebaut. EN/DE/Kombi weichen daher am 2026-06-18 per MD5 vom Live-Record ab und sind nur ein v1.9-Vorbereitungskandidat, nicht der Live-Dateisatz.
+**Status:** v1.9 ist seit 2026-06-19 auf Zenodo live: Record `20758955`, DOI `10.5281/zenodo.20758955`, Concept-DOI `10.5281/zenodo.19036190`. Der öffentliche GitHub-Pfad `masters/spectrum-duality` ist auf den v1.9-Dateisatz synchronisiert; Dateisatz-Commit `6149350`, README-/DOI-Nachzug nach dem Publish separat synchronisiert.
 
 RFEP ist nicht nur ein Begleitpaper, sondern die Übersetzungsschicht des Physikstamms des Zeta-Zoo: Operatorgewinne aus Zookeeper, Prime-Hub und Zoo-Mapping werden hier in eine Sprache übertragen, die für Yang-Mills, Navier-Stokes, NS-LDI, Turbulenz und Cosmology nutzbar ist.
 
@@ -46,10 +46,9 @@ v0.8 auf v0.9 angehoben. Korrigiert wurden Connes 2026, CCM 2024,
 RH-Landscape/Even-Dominance, Cornelissen--Marcolli 2010 sowie fehlende
 DOI-Metadaten; der v0.8-Dateisatz liegt archiviert in
 `_archive/quellencheck_2026-05-26_v0-8_pre-sourcecheck/`. Dieser v0.9-Dateisatz
-ist seit dem Zenodo-v1.8-Upload live; die Live-Dateinamen enthalten das harmlose
-Tool-Rename-Artefakt `FST_SPECTRUM_DUALITY-9_*`. Die späteren lokalen
-post-v1.8-PDFs sind neuer als live und brauchen vor Veröffentlichung eine echte
-v1.9-New-Version plus GitHub-Sync und finales lokales Upload-Gate.
+ist seit dem Zenodo-v1.9-Upload live; die öffentlichen Zenodo-Dateien heißen
+`FST_SPECTRUM_DUALITY_en.pdf`, `FST_SPECTRUM_DUALITY_de.pdf` und
+`FST_SPECTRUM_DUALITY_kombi.pdf`.
 
 Der Zookeeper-Gewinn wird in RFEP als wiederverwendbares Spektralpaket aufgenommen:
 
