@@ -1,8 +1,12 @@
-# Physics-Master — RFEP v1.9
+# Physics-Master — RFEP v1.10 candidate
 
 **Rolle:** Ebene 2 der FST-Hierarchie — physikalische Instantiation von Functional Stability Theory via Renormalized Free Energy Principle.
 
-**Status:** v1.9 ist seit 2026-06-19 auf Zenodo live: Record `20758955`, DOI `10.5281/zenodo.20758955`, Concept-DOI `10.5281/zenodo.19036190`. Der öffentliche GitHub-Pfad `masters/spectrum-duality` ist auf den v1.9-Dateisatz synchronisiert; Dateisatz-Commit `6149350`, README-/DOI-Nachzug nach dem Publish separat synchronisiert.
+**Status:** v1.9 ist seit 2026-06-19 auf Zenodo live: Record `20758955`, DOI `10.5281/zenodo.20758955`, Concept-DOI `10.5281/zenodo.19036190`. Der öffentliche GitHub-Pfad `masters/spectrum-duality` ist auf den lokalen v1.10-Kandidaten vorbereitet; Zenodo v1.10 ist noch nicht veröffentlicht und wartet auf bewusste Freigabe.
+
+**Lokaler Nachzug 2026-06-23:** Der Tangential-Provenance-Ledger vom 2026-06-13 ist jetzt als lokale Guardrail-Revision in EN/DE eingearbeitet. Das ist kein zusätzlicher öffentlicher v1.9-Claim; falls diese Fassung zitierbar werden soll, braucht sie neue PDFs und eine neue Zenodo-Version.
+
+**GitHub-Vorbereitung 2026-07-02:** Der öffentliche Pfad wird auf den v1.10-Kandidaten nach Tangential-Certificate-Ledger-Guardrail und erweiterter RFEP-Transfer-Ledger-Datenoberfläche synchronisiert. Diese Vorbereitung ist kein Zenodo-Publish und kein Claim-Upgrade.
 
 RFEP ist nicht nur ein Begleitpaper, sondern die Übersetzungsschicht des Physikstamms des Zeta-Zoo: Operatorgewinne aus Zookeeper, Prime-Hub und Zoo-Mapping werden hier in eine Sprache übertragen, die für Yang-Mills, Navier-Stokes, NS-LDI, Turbulenz und Cosmology nutzbar ist.
 
