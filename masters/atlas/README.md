@@ -7,7 +7,8 @@ The Atlas is the *micro-cartography* companion of the Zeta Zoo: where the Zeta Z
 ## DOI
 
 - **Concept-DOI (always latest):** [10.5281/zenodo.19960809](https://doi.org/10.5281/zenodo.19960809)
-- **v2.2 (current):** [10.5281/zenodo.20784029](https://doi.org/10.5281/zenodo.20784029)
+- **v2.3 (current):** [10.5281/zenodo.21154474](https://doi.org/10.5281/zenodo.21154474)
+- **v2.2:** [10.5281/zenodo.20784029](https://doi.org/10.5281/zenodo.20784029)
 - **v2.1:** [10.5281/zenodo.20739128](https://doi.org/10.5281/zenodo.20739128)
 - **v2:** [10.5281/zenodo.20241612](https://doi.org/10.5281/zenodo.20241612)
 - **v1:** [10.5281/zenodo.19960810](https://doi.org/10.5281/zenodo.19960810)
@@ -18,7 +19,7 @@ The Atlas is the *micro-cartography* companion of the Zeta Zoo: where the Zeta Z
 |---|---|
 | Status | Advanced preprint (negative-result atlas + structural diagnosis) |
 | Review | 7-phase review chain completed 2026-04-29 (score 9.5/10) |
-| Version | v2.2 |
+| Version | v2.3 |
 | Pages (EN / DE / Kombi) | 13 / 14 / 27 |
 | Resolution | N ∈ {200, 400, 600} |
 | Real Dirichlet characters covered | D ∈ {5, 8, 12, 13, 17, 21, 24, 29, 33, 60} |
@@ -39,6 +40,10 @@ The Atlas is the *micro-cartography* companion of the Zeta Zoo: where the Zeta Z
 | `paper/DIRICHLET_CHARACTER_ATLAS_v2_kombi.pdf` | Combined EN+DE (27 p.) |
 | `scripts/` | Galerkin computation pipeline (Python; basis, kappa grid, asymptotic scans, χ-specific tests) |
 | `results/` | Numerical results (JSON) and analysis reports (Markdown) |
+
+## v2.3 change note
+
+Version v2.3 is a bibliographic maintenance release after a source re-check. The RH Even Dominance companion reference keeps the stable concept DOI, but the explicitly checked record was updated to v2.0 / 10.5281/zenodo.20687544. It does not change the mathematical claim status.
 
 ## v2.2 change note
 
