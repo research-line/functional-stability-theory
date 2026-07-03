@@ -759,7 +759,7 @@ used inside this paper from the operational ledger that remains a companion-
 level audit rather than a theorem-level closure.  The no-exceptional-eigenvalue
 assumption is shown as a separate SG/NoExc gate; it is not part of C2b.
 
-\begin{table}[ht]
+\begin{table}[htp]
 \centering
 \small
 \setlength{\tabcolsep}{3pt}
@@ -795,8 +795,9 @@ SG/NoExc: spectral-line input
 C2c: minimizer/window identification
   & Target window \(I\), target source, center \(\nu\), outer gap, residual,
     off-window mass, and negative control.
-  & Open ledger; it must be filled before the v2.0 minimizer is identified with a
-    Selberg spectral factor.
+  & Operational ledger now calibrated on real spectral data
+    (\Cref{sec:c2c-real-ledger}); the Connes-minimizer identification itself
+    remains open, so C2c stays a companion/audit gate.
   & The candidate has the right Rayleigh center but wrong tail or off-window mass
     (\texttt{same\_rayleigh\_}\allowbreak\texttt{wrong\_tail}). \\
 Decision layer
@@ -893,6 +894,137 @@ provides only the conditional frontier input. For Selberg, the structural
 expectation is additionally supported by the
 independent operator-theoretic proof (Theorem~\ref{thm:Sel-RH}), which
 confirms the conclusion without using even dominance at all.
+\end{remark}
+
+\subsection{C2c window ledger with real spectral data}
+\label{sec:c2c-real-ledger}
+
+The C2c gate of Table~\ref{tab:c2-minimizer-ledger} asks for an operational
+window certificate. For a candidate vector $\psi$, a spectral window $I$
+with center $\nu$, and the relevant self-adjoint operator $D$ (here
+$D=\Delop$, resp.\ its cuspidal restriction), the spectral theorem gives
+\begin{equation}
+\label{eq:window-certificate}
+\|(\mathrm{Id}-P_I)\psi\| \;\le\;
+\frac{\|(D-\nu)\psi\|}{\operatorname{dist}\bigl(\nu,\,\sigma(D)\setminus I\bigr)},
+\qquad P_I = \mathbf{1}_I(D).
+\end{equation}
+This subsection reports a calibration of this certificate on \emph{real,
+independently computed} spectra, replacing the internal toy spectrum of the
+earlier project audit. Two positive-control surfaces are used:
+\begin{itemize}
+\item the \emph{Bolza surface} (compact, genus $2$): the first ten positive
+Laplace eigenvalues with multiplicities from the certified computation of
+Strohmaier--Uski \cite{StrohmaierUski2013}. Compactness makes this the
+lemma-conformal main case; the method of \cite{StrohmaierUski2013} finds
+\emph{all} eigenvalues below the cutoff, so the finite list is complete below
+$\lambda_{\max}\approx 30.83$;
+\item the \emph{modular surface} $\mathrm{PSL}(2,\ZZ)\backslash\HH$
+(level $1$): the first eight cuspidal spectral parameters $r$
+($\lambda = 1/4 + r^2$) from the rigorous Maass-form computations of
+Seymour-Howell \cite{SeymourHowell2022} and the rigorous database described
+in \cite{LowryDuda2025}. This surface is \emph{not} compact: all
+corresponding rows refer exclusively to the self-adjoint restriction
+$\Delta_{\mathrm{cusp}}$ on $L^2_{\mathrm{cusp}}$, and the continuous
+Eisenstein spectrum $[1/4,\infty)$ of the full Laplacian lies outside the
+ledger scope.
+\end{itemize}
+
+The certificate \eqref{eq:window-certificate} is evaluated as a
+\emph{finite-spectrum proxy with an explicit tail budget}. For multiplier
+candidates $h(D)\psi_0$, the spectral mass above the data cutoff $\Lambda$
+is bounded by numerically integrated tail budgets
+$T_0 \ge \sum_{\lambda>\Lambda}\mathrm{mult}\cdot|h(\lambda)|^2$ and
+$T_2 \ge \sum_{\lambda>\Lambda}\mathrm{mult}\cdot|h(\lambda)|^2(\lambda-\nu)^2$,
+using a documented counting-density assumption above the cutoff (twice the
+Weyl main term $\mathrm{Area}/4\pi$: $\rho=2$ for Bolza, $\rho=1/6$ for the
+cuspidal modular case). The reported residual/gap and off-window columns
+(both norm quantities, matching the norm form of the certificate) are
+worst-case adjusted by these budgets, and a bracketing check verifies
+$\Lambda-\nu > \operatorname{dist}(\nu,\sigma(D)\setminus I)$ for every
+window, so eigenvalues above the cutoff cannot shrink the reported gap. The
+audit thresholds (\texttt{pass} $\le 0.25$, \texttt{ambiguous} $\le 0.5$) are
+a fixed convention of the audit, not part of the spectral-theorem bound.
+
+Candidates are grouped into four control classes: \emph{positive} controls
+(window eigenvectors and tuned window multipliers $h(D)$), \emph{radial
+miscandidates} (genuine functions of $D$ --- hence exactly commuting --- but
+miscentred or badly tuned), \emph{mathematical negatives} (adversarial
+spectral distributions, including the mandatory
+\texttt{same\_rayleigh\_}\allowbreak\texttt{wrong\_tail} class), and
+\emph{bookkeeping ablations} (structure breakers such as permuted spectral
+bookkeeping, which test the implementation rather than the mathematical
+claim). For candidates of the form $h(D)$ the commutator leakage term
+vanishes identically by functional calculus; this is a \emph{class}
+statement, not a verified property of any external minimizer candidate.
+
+\begin{table}[htp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+{\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\textwidth}{@{}L{2.5cm}L{4.1cm}L{1.9cm}rrl@{}}
+\toprule
+\textbf{Window} & \textbf{Candidate} & \textbf{Class} &
+\textbf{Res./gap} & \textbf{Off-win.} & \textbf{Decision} \\
+\midrule
+Bolza $\lambda_1$ (mult.\ $3$)
+  & window eigenspace & positive & 0.000 & 0.000 & pass \\
+  & tuned Gaussian multiplier & positive & 0.002 & 0.002 & pass \\
+  & untuned heat kernel $e^{-\Delop}$ & miscand. & 2.533 & 0.999 & fail \\
+  & heat kernel on $L^2_0$ & positive & 0.248 & 0.246 & pass \\
+  & wide Gaussian ($\sigma{=}5$) & miscand. & 1.123 & 0.758 & fail \\
+  & miscentred bandpass (at $10$) & miscand. & 2.912 & 1.000 & fail \\
+  & same-Rayleigh wrong-tail & negative & 1.592 & 1.000 & fail \\
+  & false centre & negative & 1.000 & 1.000 & fail \\
+  & broken radial commutation & ablation & 7.188 & 1.000 & fail \\
+  & permuted spectrum & ablation & 16.003 & 1.000 & fail \\
+\midrule
+Bolza $\lambda_8$ (isolated)
+  & window eigenspace & positive & 0.000 & 0.000 & pass \\
+  & tuned Gaussian multiplier & positive & 0.003 & 0.003 & pass \\
+  & same-Rayleigh wrong-tail & negative & 1.398 & 1.000 & fail \\
+\midrule
+Modular $\lambda_2$ (cuspidal)
+  & window eigenvector & positive & 0.000 & 0.000 & pass \\
+  & tuned Gaussian multiplier & positive & 0.000 & 0.000 & pass \\
+  & same-Rayleigh wrong-tail & negative & 1.172 & 1.000 & fail \\
+\bottomrule
+\end{tabularx}}
+\caption{C2c window ledger on real spectra (Rev.~2; residual/gap and
+off-window norm values are tail-adjusted). Windows: Bolza $\lambda_1$
+(multiplicity $3$), Bolza $\lambda_8$ (isolated), modular surface
+$\lambda_2$ (cuspidal; $\Delta_{\mathrm{cusp}}$ scope).}
+\label{tab:c2c-real-ledger}
+\end{table}
+
+The outcome is exactly the calibration pattern required by the C2c row of
+Table~\ref{tab:c2-minimizer-ledger}: all positive controls pass also after
+tail adjustment (the tuned Gaussian budgets are numerically negligible; the
+heat kernel restricted to $L^2_0$ --- admissible since $L^2_0$ is
+$\Delop$-invariant --- remains a borderline pass at ratio $0.248$); the
+\emph{untuned} heat kernel $e^{-\Delop}$ fails because it concentrates on
+the constant ground state $\lambda_0=0$ rather than on the target window (a
+correct diagnosis, not a false alarm); the two genuine-but-mistuned $h(D)$
+candidates fail \emph{inside} the commuting class, so commutation alone does
+not rescue a badly built window; and the mandatory negative class
+\texttt{same\_rayleigh\_}\allowbreak\texttt{wrong\_tail} fails on real data
+despite matching the Rayleigh centre exactly. The ledger script and the full
+result files (including the $T_0/T_2$ tail columns and the bracketing check)
+are available in the project
+repository.\footnote{\url{https://github.com/research-line/functional-stability-theory/tree/main/masters/selberg}}
+
+\begin{remark}[No claim upgrade]
+\label{rem:ledger-no-upgrade}
+This ledger operationalizes and calibrates the C2c \emph{certificate} on
+real spectra; it does not close the C2c \emph{gate}. What remains open is
+the core identification: constructing the Connes minimizer
+$\eta_{\lambda,\Gamma}$ itself as a vector, verifying that it lies in the
+$h(\Delop)$ class (so that the class statement on commutator leakage applies
+to it), and passing it through this ledger. Until then C2c retains
+companion/audit status, the counting-density bound above the cutoff remains
+a documented assumption (twice the Weyl main term) rather than a cited
+remainder bound, and no conclusion of this paper is upgraded.
 \end{remark}
 
 \subsection{NE-A for Selberg}
@@ -1322,7 +1454,7 @@ assertion from scratch.
 Table~\ref{tab:transfer-slots} records the five transfer slots and
 their occupants in the Selberg and Riemann settings.
 
-\begin{table}[ht]
+\begin{table}[htp]
 \centering
 \footnotesize
 \setlength{\tabcolsep}{5pt}
@@ -1443,6 +1575,89 @@ exists, is its geometric by-product.
 
 
 % =============================================================================
+\section*{AI Disclosure}
+\addcontentsline{toc}{section}{AI Disclosure}
+% =============================================================================
+
+\noindent\textbf{Statement on the Use of AI Tools}
+
+\smallskip
+\small
+
+\begin{sloppypar}
+\noindent
+This manuscript was prepared with extensive assistance from AI-based
+language models (Claude, Anthropic; Gemini, Google; ChatGPT, OpenAI).
+AI tools were used across multiple stages of the research and writing
+process, including conceptual discussion, literature search, structuring,
+drafting support, suggestions for analysis and synthesis, critical
+counter-checking, language revision, translation, citation and source work,
+technical formatting, \LaTeX{} typesetting, and compilation support.
+\end{sloppypar}
+
+\medskip
+
+\noindent
+For the computational components of this work --- in particular the C2c
+window-ledger scripts and their evaluation runs
+(\Cref{sec:c2c-real-ledger}) --- AI tools were also used to create, adapt,
+rewrite, document, and check Python scripts, and to support the planning,
+execution, and supervision of computational runs. This included the further
+development of existing scripts, the preparation of traceable outputs, the
+evaluation of intermediate results, reanalyses, and the documentation of
+tests, procedures, and results.
+
+\medskip
+
+\noindent
+As part of quality assurance, several complementary procedures were used:
+model cross-checks, multi-stage review pipelines, explicitly
+falsification-oriented reviews, source and citation checks, linguistic
+cross-reading, reanalyses, reproducible scripts, stored result files, test
+runs, hash comparisons, repeated executions, and a folder-based research
+pipeline with project guidelines, predefined workflows, documentation
+rules, and documented correction steps.
+
+\medskip
+
+\noindent\textit{Model and Workflow Assignment.}
+
+\medskip
+
+\begin{sloppypar}
+\noindent
+In the research work to date, simpler tasks were typically handled with
+Claude Opus/Sonnet~4.x, GPT-5.4, and Gemini~3.x~Pro; Gemini was also used in
+particular for translation work. More demanding tasks were carried out with
+Claude Opus~4.6/4.7, Claude Fable~5, and GPT-5.5. Claude Opus was often used
+as a dialogic research partner for developing and advancing the research
+process, whereas GPT-5.5 (via the Codex toolchain) was used prominently for
+reviews, audits, counter-checks, and critical reanalyses --- including the
+adversarial counter-review of the real-data window ledger reported in
+\Cref{sec:c2c-real-ledger}. The real-data ledger run and its integration
+into the present version were carried out with Claude Fable~5. Where
+applicable, all listed model families were also used for \LaTeX{}
+typesetting, technical formatting, compilation, and error diagnosis.
+Methodologically, the work involved iterative loops, model cross-checks,
+inter-chat exchanges between Claude-, Gemini-, and GPT-based systems, and a
+multi-stage seven-step review procedure with an explicit falsification agent
+followed by a repair or reconstruction attempt. The human author served as
+the memory, connective and driving element, reflective instance, and
+orchestrator of the overall process; he also often contributed solutions
+through the attempt to understand the open problems himself.
+\end{sloppypar}
+
+\medskip
+
+\noindent
+The author determined the research question, methodological direction,
+central claims, evaluation of sources, disciplinary interpretation, and
+conclusions. Full scholarly and substantive responsibility for this article
+rests with the author, Lukas Geiger.
+
+\normalsize
+
+% =============================================================================
 % Bibliography
 % =============================================================================
 
@@ -1551,6 +1766,12 @@ H. Iwaniec,
 \emph{Spectral Methods of Automorphic Forms},
 2nd ed., Graduate Studies in Mathematics \textbf{53}, Amer. Math. Soc., 2002.
 
+\bibitem{LowryDuda2025}
+D. Lowry-Duda,
+\emph{A database of rigorous Maass forms},
+arXiv:2502.01442 (2025).
+\href{https://arxiv.org/abs/2502.01442}{arXiv:2502.01442}.
+
 \bibitem{LPS1988}
 A. Lubotzky, R. Phillips, and P. Sarnak,
 \emph{Ramanujan graphs},
@@ -1578,6 +1799,18 @@ J. Indian Math. Soc. \textbf{20} (1956), 47--87.
 A. Selberg,
 \emph{On the estimation of Fourier coefficients of modular forms},
 Proc. Sympos. Pure Math. \textbf{VIII}, Amer. Math. Soc., Providence, RI, 1965, pp.~1--15.
+
+\bibitem{SeymourHowell2022}
+A. Seymour-Howell,
+\emph{Rigorous computation of Maass cusp forms of squarefree level},
+Res. Number Theory \textbf{8} (2022), no.~4, Paper No.~83.
+\href{https://doi.org/10.1007/s40993-022-00393-y}{doi:10.1007/s40993-022-00393-y}.
+
+\bibitem{StrohmaierUski2013}
+A. Strohmaier and V. Uski,
+\emph{An algorithm for the computation of eigenvalues, spectral zeta functions and zeta-determinants on hyperbolic surfaces},
+Comm. Math. Phys. \textbf{317} (2013), 827--869.
+\href{https://doi.org/10.1007/s00220-012-1557-1}{doi:10.1007/s00220-012-1557-1}.
 
 \bibitem{Weil1952}
 A. Weil,
