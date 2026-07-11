@@ -4,7 +4,7 @@ Application-scale companions of the **Functional Stability Theory** programme, s
 
 | Slot | Scale | Title | Concept-DOI | Latest |
 |---|---|---|---|---|
-| **FST-I** | Particles / Thermodynamics | Game-Theoretic Framework for the Thermodynamic Stability of Fundamental Parameters | [10.5281/zenodo.20130544](https://doi.org/10.5281/zenodo.20130544) | v1.2 live / local v1.3 guardrail |
+| **FST-I** | Particles / Thermodynamics | Game-Theoretic Framework for the Thermodynamic Stability of Fundamental Parameters | [10.5281/zenodo.20130544](https://doi.org/10.5281/zenodo.20130544) | v1.5 live |
 | **FST-II** | Chemistry / Autocatalysis | Chemical Stability and Autocatalytic Selection | [10.5281/zenodo.20130563](https://doi.org/10.5281/zenodo.20130563) | v1.3 live / local post-v1.3 guardrail |
 | **FST-III** | Biology / Protein folding | Biological Stability and Nash Frustration | [10.5281/zenodo.20130573](https://doi.org/10.5281/zenodo.20130573) | v1.2 live / local v1.3 guardrail |
 | **FST-IV** | Cosmology (collector slot) | Cosmological Stability — Collector for CRM, Saturation, QG-CRM and Dark Energy | *(in preparation, v0 skeleton)* | v0.2 (local) |
@@ -20,7 +20,7 @@ The **FST-DE** paper lives under `../fst-cosmology/dark-energy/` (cosmology doma
 ## Honest status
 
 - **Hub:** v1.4, programmatic survey with FST Series + FST Foundations tables.
-- **FST-I:** v1.2 is live on Zenodo; the current public repo package mirrors the local v1.3 guardrail candidate. The open gate is whether that guardrail revision should become Zenodo v1.3.
+- **FST-I:** v1.5 is live on Zenodo ([record DOI 10.5281/zenodo.21304460](https://doi.org/10.5281/zenodo.21304460)); the public repo package mirrors the July 2026 bibliographic-maintenance paper set. No further Zenodo upload is open without a new file or metadata change.
 - **FST-II:** v1.3 is live on Zenodo; the public repo mirrors the local post-v1.3 proof/paper-math plus citation guardrail package, while an optional v1.4 maintenance upload remains a separate decision.
 - **FST-III:** v1.2 is live on Zenodo; the repo contains the tightened local v1.3 guardrail package, while the protein-folding code/data expansion continues in the private companion workflow.
 - **FST-IV Cosmology collector:** KONZEPT + v0.2 skeleton; LaTeX body to be filled with the CRM-series / FST-DE / CRM-VI synthesis and the Flow-Zeta math reformulation.
