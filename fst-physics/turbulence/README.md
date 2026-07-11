@@ -10,12 +10,15 @@ Companion K41 Paper-A concept DOI: <https://doi.org/10.5281/zenodo.20131305>
 ## Status
 
 This folder contains the public Skeleton/anomalous-dissipation companion paper
-files synchronized for the published v1.7 maintenance release:
-<https://doi.org/10.5281/zenodo.20670703>. The DFC hierarchy is the
-conditional input. Version 1.7 adds the synchronized bibliography/disclosure
-maintenance, the initial Dual-DFC1 ledger, and the Shell-DFC waterline guardrail
-while keeping DFC1^vee as an empirical/projection bridge rather than a proved
-Navier-Stokes consequence.
+files synchronized for the published v1.8 maintenance release:
+<https://doi.org/10.5281/zenodo.21312807>. The DFC hierarchy is the
+conditional input. Version 1.8 updates source metadata, the official JHTDB
+forced-isotropic Reynolds-number reference, and the England/K41 scope language
+without upgrading any theorem, numerical result, or DFC claim. Version 1.7
+added the synchronized bibliography/disclosure maintenance, the initial
+Dual-DFC1 ledger, and the Shell-DFC waterline guardrail while keeping DFC1^vee
+as an empirical/projection bridge rather than a proved Navier-Stokes
+consequence.
 
 The unconditional K41 variational-minimizer theorem is now separated into
 `../k41-variational-minimiser/` and published under concept DOI
