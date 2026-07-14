@@ -8,13 +8,13 @@ Lukas Geiger (2026)
 
 ## Summary
 
-The Zeta Zoo is the mathematical classification paper of the FST programme. Zenodo latest is **v2.3**: [10.5281/zenodo.21161667](https://doi.org/10.5281/zenodo.21161667). It develops the branch-local Hilbert-Polya taxonomy around three organizing principles:
+The Zeta Zoo is the mathematical classification paper of the FST programme. Zenodo latest is **v2.3**: [10.5281/zenodo.21161667](https://doi.org/10.5281/zenodo.21161667). The public repository file set is synced to the **v2.4 maintenance candidate** for the next approved Zenodo version. The paper develops the branch-local Hilbert-Polya taxonomy around three organizing principles:
 
 - **UCU**: Universal Convexity Uniqueness.
 - **SGE**: Semigroup-Group Equivalence as a HP-BL classification axis.
 - **Weil-form transversality**: gap positivity across both sides of the SGE dichotomy.
 
-The current public file set keeps the claim levels tightened after the post-v2.2 strict-review guardrail pass: SGE is framed as a conjectural audit heuristic, ordinary positive trace-formula / prime-shift candidates are separated from broader NE-A language, and the Waisen/Ihara plus Sturmian gates are marked as boundary-taxonomy guardrails rather than global closure.
+The v2.4 candidate file set keeps the claim levels tightened after the post-v2.2 strict-review guardrail pass: SGE is framed as a conjectural audit heuristic, ordinary positive trace-formula / prime-shift candidates are separated from broader NE-A language, and the Waisen/Ihara plus Sturmian gates are marked as boundary-taxonomy guardrails rather than global closure.
 
 ## Zoo Population
 
@@ -42,7 +42,7 @@ The current public file set keeps the claim levels tightened after the post-v2.2
 - [`paper/NE_B_BOUNDARY_v2_de.pdf`](paper/NE_B_BOUNDARY_v2_de.pdf)
 - [`paper/NE_B_BOUNDARY_v2_kombi.pdf`](paper/NE_B_BOUNDARY_v2_kombi.pdf)
 
-Zenodo v2.3 serves the same public guardrail file set listed above.
+Zenodo v2.3 remains the live archival record until the next approved version upload.
 
 ## Reproducibility
 
