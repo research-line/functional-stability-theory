@@ -106,6 +106,39 @@ Planned. See [`fst-chemistry/`](fst-chemistry/).
 
 ## Proof Architecture
 
+```mermaid
+flowchart TD
+    subgraph MASTERS["Five Core Master Foundations"]
+        ZK["Zookeeper<br/><i>RH Proof via CCM</i>"]
+        ZZ["Zeta Zoo<br/><i>SGE Taxonomy & Classification</i>"]
+        SD["Spectrum Duality<br/><i>RFEP & Pattern A</i>"]
+        AT["Atlas<br/><i>Dirichlet Cartography (Negative Test)</i>"]
+        SB["Selberg<br/><i>SGE-YES Method Validation</i>"]
+    end
+
+    subgraph DOMAINS["Domain Supplements & Applications"]
+        MATH["FST-Mathematics<br/>(BSD, Hodge, P vs NP)"]
+        PHYS["FST-Physics<br/>(K41, Turbulence, YM, NS)"]
+        COSMO["FST-Cosmology<br/>(Dark Energy / CRM)"]
+        BIO["FST-Biology<br/>(FST-Nash Chaperones)"]
+    end
+
+    ZK --> MATH
+    ZZ --> MATH
+    SD --> PHYS
+    SD --> COSMO
+    SD --> BIO
+    AT -.- ZK
+    SB -.- ZK
+
+    classDef master fill:#1f2937,stroke:#6366f1,stroke-width:2px,color:#fff;
+    classDef domain fill:#111827,stroke:#10b981,stroke-width:1.5px,color:#fff;
+    class ZK,ZZ,SD,AT,SB master;
+    class MATH,PHYS,COSMO,BIO domain;
+```
+
+## Proof Architecture (ASCII Overview)
+
 ```
                               FIVE MASTERS
    ┌────────────────┬────────────────┬─────────────────┬────────────────┐
