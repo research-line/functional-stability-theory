@@ -79,7 +79,7 @@ The cosmological branch of FST. The Dark Energy paper instantiates Pattern B on 
 
 | Paper | Version | Status | Open Problem | Concept-DOI |
 |-------|---------|--------|--------------|-------------|
-| [**Dark Energy**](fst-cosmology/dark-energy/) | v1.10 candidate | Framework Note | Hu–Sawicki thin-shell + RG matching quantitatively open | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
+| [**Dark Energy**](fst-cosmology/dark-energy/) | v1.11 | Framework Note (corrective audit) | RG matching, stable scalar history, source-bound Hu–Sawicki profile, official likelihood all open | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
 
 ### FST-Biology
 
@@ -289,7 +289,7 @@ functional-stability-theory/
 │   ├── yang-mills/               Mass gap (conditional)
 │   └── navier-stokes/            Regularity + NS-LDI (conditional)
 ├── fst-cosmology/                Domain supplements — Cosmology
-│   └── dark-energy/              CRM screening (validated)
+│   └── dark-energy/              CRM screening (conditional, not Cassini-verified)
 ├── fst-biology/                  Domain supplements — Biology (in development)
 ├── fst-chemistry/                Domain supplements — Chemistry (planned)
 └── scripts/                      Numerical validation (per-paper subdirectories)
