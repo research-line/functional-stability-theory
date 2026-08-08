@@ -61,7 +61,7 @@ Classified by the SGE taxonomy from the Zeta Zoo. These instantiate Pattern A on
 
 | Paper | Version | Status | Open Problem | Concept-DOI |
 |-------|---------|--------|--------------|-------------|
-| [**BSD**](fst-mathematics/bsd/) | v1.2 candidate | Reformulation; rank ≤ 1 verified | Higher Gross–Zagier (rank ≥ 2) | [10.5281/zenodo.19087443](https://doi.org/10.5281/zenodo.19087443) |
+| [**BSD**](fst-mathematics/bsd/README.md) | v1.4 | Maintenance release; rank ≤ 1 verified; no new proof claim | Higher Gross–Zagier (rank ≥ 2) | [10.5281/zenodo.19087443](https://doi.org/10.5281/zenodo.19087443) |
 | [**Hodge**](fst-mathematics/hodge/) | v1.3 candidate | Easy Direction + AP=AbsHodge | Hard Direction beyond Deligne | [10.5281/zenodo.19087439](https://doi.org/10.5281/zenodo.19087439) |
 | [**P vs NP**](fst-mathematics/p-vs-np/) | v1.5 | Reformulation | Uniformity Bridge | [10.5281/zenodo.19056809](https://doi.org/10.5281/zenodo.19056809) |
 
@@ -71,11 +71,11 @@ Derive Pattern A + DS1–DS3 from Spectrum Duality. These instantiate the Dissip
 
 | Paper | Version | Status | Open Problem | Concept-DOI |
 |-------|---------|--------|--------------|-------------|
-| [**K41 Variational Minimiser**](fst-physics/k41-variational-minimiser/) | v1.0 | Preprint live | Unconditional variational theorem | [10.5281/zenodo.20131305](https://doi.org/10.5281/zenodo.20131305) |
-| [**Turbulence / DFC Cascade**](fst-physics/turbulence/) | v1.4 candidate | Conditional companion | DFC projection bridge | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
-| [**Yang–Mills**](fst-physics/yang-mills/) | v2.6 | Conditional | Volume-independent local transfer gap; continuum transfer conditional | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
-| [**Navier–Stokes**](fst-physics/navier-stokes/) | v2.2 candidate | Conditional | Assumption G2 (projection regularity) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
-| [**NS Log-Distance**](fst-physics/navier-stokes/) | v1.3 | Proof of Life | TLL for 3D NS analytically open | [10.5281/zenodo.19056807](https://doi.org/10.5281/zenodo.19056807) |
+| [**K41 Variational Minimiser**](fst-physics/k41-variational-minimiser/README.md) | v1.3 | Latest live; unique global minimizer under the stated joint problem | Scope beyond the stated minimization assumptions | [10.5281/zenodo.20131305](https://doi.org/10.5281/zenodo.20131305) |
+| [**Turbulence / DFC Cascade**](fst-physics/turbulence/README.md) | v1.8 | Conditional companion; DFC hierarchy is input | DFC projection bridge | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
+| [**Yang–Mills**](fst-physics/yang-mills/README.md) | v2.6 | Conditional; continuum mass-gap step remains conditional | Volume-independent local transfer gap; analytical RG contraction | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
+| [**Navier–Stokes**](fst-physics/navier-stokes/README.md) | v2.6 | Conditional; strict-review wording retained | Assumption G2 (projection regularity) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
+| [**NS Log-Distance**](fst-physics/navier-stokes/README.md) | v1.6 | Proof of life / diagnostic bridge | TLL for 3D NS analytically open | [10.5281/zenodo.19056807](https://doi.org/10.5281/zenodo.19056807) |
 
 ### FST-Cosmology
 
@@ -84,6 +84,8 @@ The cosmological branch of FST. The Dark Energy paper instantiates Pattern B on 
 | Paper | Version | Status | Open Problem | Concept-DOI |
 |-------|---------|--------|--------------|-------------|
 | [**Dark Energy**](fst-cosmology/dark-energy/) | v1.11 | Framework Note (corrective audit) | RG matching, stable scalar history, source-bound Hu–Sawicki profile, official likelihood all open | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
+
+> **Status provenance (local package index, 2026-08-08).** The version, status, and open-problem labels above are read from the linked public package READMEs where they exist: [BSD v1.4](fst-mathematics/bsd/README.md) (record [10.5281/zenodo.20671962](https://doi.org/10.5281/zenodo.20671962)), [K41 v1.3](fst-physics/k41-variational-minimiser/README.md) (record [10.5281/zenodo.20562341](https://doi.org/10.5281/zenodo.20562341)), [Turbulence v1.8](fst-physics/turbulence/README.md) (record [10.5281/zenodo.21312807](https://doi.org/10.5281/zenodo.21312807)), [Yang–Mills v2.6](fst-physics/yang-mills/README.md) (record [10.5281/zenodo.20716608](https://doi.org/10.5281/zenodo.20716608)), and [Navier–Stokes v2.6 / NS-LDI v1.6](fst-physics/navier-stokes/README.md) (records [10.5281/zenodo.20674952](https://doi.org/10.5281/zenodo.20674952) / [10.5281/zenodo.20773609](https://doi.org/10.5281/zenodo.20773609)). [Spectrum Duality](masters/spectrum-duality/README.md) remains v1.9 live with a local v1.10 candidate, not a v1.10 release. The Dark Energy row follows the synchronized 16 July 2026 corrective-audit status in the [EN source](fst-cosmology/dark-energy/FST-DE_DarkEnergy_Skeleton_v1_en.tex) and local commit `e132d30`; the source filename is not treated as a release marker. Hodge and P vs NP remain at the candidate/reformulation boundaries shown above because no newer local release marker was found.
 
 ### FST-Biology
 

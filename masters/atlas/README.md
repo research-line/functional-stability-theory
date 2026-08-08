@@ -24,6 +24,17 @@ The Atlas is the *micro-cartography* companion of the Zeta Zoo: where the Zeta Z
 | Resolution | N ∈ {200, 400, 600} |
 | Real Dirichlet characters covered | D ∈ {5, 8, 12, 13, 17, 21, 24, 29, 33, 60} |
 
+## Current result revision
+
+The public result baseline is the [N=600 server analysis](results/ARCH_TERM_N600_ANALYSIS.md).
+It supersedes the [historical Session-7 N=200 snapshot](results/ARCH_TERM_ANALYSIS.md),
+which is retained only as an explicitly labelled archive. At N=600 the full
+Galerkin decomposition is identified as a matrix-decomposition tautology,
+`S_with_arch` falls to 8/10, and an independent `C2_χ` predictor remains open
+along the Paley-Wiener/asymptotic route. The Atlas therefore remains a
+negative-result and structural-diagnosis package; no closure or predictive
+upgrade is inferred from the older N=200 observation.
+
 ## Main results
 
 1. **Falsification** of the leading-order approximation φ⁺ ≈ φ⁻ (empirical, from Session-6 data).

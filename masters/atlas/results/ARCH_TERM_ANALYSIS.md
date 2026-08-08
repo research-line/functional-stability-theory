@@ -1,11 +1,21 @@
-# Arch-Term-Integration — Session 7 Woche 1 Option 1 — CLOSURE REACHED
+# Arch-Term-Integration — Session 7 Woche 1 Option 1 — historische N=200-Auswertung (überholt)
+
+> **Archivhinweis:** Dieser Bericht bewahrt die damalige N=200-Auswertung. Die
+> damalige 9/9-Beobachtung ist kein aktueller Beweis und kein prädiktiver
+> Abschluss. Sie ist durch die [N=600-Serveranalyse](ARCH_TERM_N600_ANALYSIS.md)
+> überholt: Die vollständige Galerkin-Zerlegung ist dort als Tautologie
+> identifiziert, `S_with_arch` erreicht nur 8/10, und der echte
+> `C2_χ`-Predictor bleibt zusammen mit dem Paley-Wiener-Weg offen.
 
 **Datum:** 2026-04-16
 **Parameter:** lambda = 20000, N_Galerkin = 200
 
-## Hauptresultat
+## Historisches Hauptresultat (N=200)
 
-Erfolgskriterium aus Session-6-Handoff §4.2 (sign_ok ≥ 9/10, R² ≥ 0.8) **ERREICHT**, wenn χ_21 als N-Truncation-Artefakt dokumentiert wird.
+Das Erfolgskriterium aus Session-6-Handoff §4.2 (sign_ok ≥ 9/10, R² ≥ 0.8)
+wurde in dieser N=200-Auswertung für die damals als stabil eingeordneten
+Charaktere beobachtet. Die spätere N=600-Auswertung ersetzt diese Einordnung;
+die Tabelle ist daher nur als historische Messaufnahme zu lesen.
 
 | Predictor | Alle 10 Charaktere | Ohne χ_21 (9 stabile) |
 |-----------|---|---|
@@ -45,28 +55,50 @@ Die Konsistenz-Check-Differenzen zwischen S_exact (via Autokorrelation) und prim
 - gap_galerkin = **+0.28163** (N=200) — dreht Vorzeichen ggü. Target!
 - gap_gal liegt eine Größenordnung über |gap_emp|
 
-Dies ist **kein Formel-Fehler, sondern bekannte N-Oszillation**. In Session 6 Teil 5 dokumentiert: χ_21 hat bei N=400 gap=+0.28, bei N=600 gap=−0.004. Die Galerkin-Basis bei N=200 liegt vor der Konvergenz auf das N→∞ Resultat. Alle übrigen 9 Charaktere haben stabile Vorzeichen-Vorhersagen.
+Dies wurde damals als **bekannte N-Oszillation** interpretiert. Die spätere
+N=600-Analyse zeigt jedoch zusätzlich einen χ_29-Vorzeichenwechsel und eine
+strukturelle Tautologie der vollständigen Galerkin-Zerlegung. Die damaligen
+neun stabilen Vorzeichen sind deshalb keine Konvergenz- oder
+Vorhersagegarantie.
 
 ## Interpretation
 
-**Die Weil-Kern-Gap-Formel (ANALYTIC_KERNEL Thm 4.1 + ANALYTIC_GROUNDSTATE Thm 4.1) trifft mit 9/9 Vorzeichen und R² = 0.80 bei N=200 für stabile Charaktere.** Die Formel ist strukturell korrekt und quantitativ gültig modulo relativer Fehler ~30%. Der Slope in der Regression gap_emp = 0.72 · S_with_arch − 0.014 zeigt: die Formel liefert den Predictor auf einer festen Skala, der N=200-Galerkin-Truncation-Faktor 1.4 herauskorrigiert.
+Die damalige Interpretation lautete, dass die Weil-Kern-Gap-Formel
+(ANALYTIC_KERNEL Thm 4.1 + ANALYTIC_GROUNDSTATE Thm 4.1) bei N=200 für die
+damals als stabil eingeordneten Charaktere 9/9 Vorzeichen und R² = 0.80
+erreiche. Das ist eine historische numerische Beobachtung, keine bestätigte
+Formel und keine aktuelle Vorhersage. Die N=600-Befunde im verlinkten Bericht
+setzen die Claim-Grenze auf eine negative/strukturelle Diagnose zurück.
 
-**Session-6-Falsifikation war zu pessimistisch.** Nur die Reduktion φ⁺ ≈ φ⁻ war falsch; die unreduzierte Formel mit beiden Sektor-Grundzuständen + Arch-Term erreicht das Erfolgskriterium.
+Die damalige Aussage, die Session-6-Falsifikation sei zu pessimistisch gewesen,
+ist ebenfalls überholt. Die führende Approximation φ⁺ ≈ φ⁻ bleibt falsifiziert;
+die unreduzierte Zerlegung liefert ohne unabhängige `C2_χ`-Auswertung keinen
+prädiktiven Abschluss.
 
 ## Offene Punkte
 
-1. **χ_21 Verifikation:** Galerkin-Run bei N=400 oder N=600 sollte zeigen, dass gap_gal dort mit gap_emp konvergiert. Server-Run auf ellmos-services.
-2. **Vorzeichen-Revision der Formel:** ANALYTIC_KERNEL Cor. 4.4 und ANALYTIC_GROUNDSTATE Cor. 6.1 benötigen Änderung coeff +2 → −2.
-3. **Quantitative Fein-Justierung:** Slope 0.72 muss theoretisch erklärt werden — vermutlich N⁻¹-Korrekturen aus der Galerkin-Truncation (nach Paley-Wiener-Roadmap).
+1. **`C2_χ`-Predictor:** Eine unabhängige analytische Auswertung bleibt offen;
+   der Paley-Wiener-/Asymptotik-Weg ist ausdrücklich noch nicht geschlossen.
+2. **N-Konvergenz:** χ_21 und der bei N=600 sichtbare χ_29-Flip benötigen
+   getrennte numerische Ursachenanalyse; sie legitimieren keine 9/9-Claim.
+3. **Formel- und Skalierungsfragen:** Die historische Koeffizienten- und
+   Slope-Diskussion bleibt Arbeitsmaterial, nicht ein belegter Claim.
 
 ## Paper-Status
 
-Dieses Resultat verwandelt das geplante Plan-B-Paper von "Failure-Paper" zu **Closure-Paper** (Victory-Story). Die Dirichlet-Character-Atlas-Struktur aus der GPT-4.5-Analyse bleibt; die Kern-Message ist jetzt:
+Der damalige Plan, aus dieser Messaufnahme ein Abschluss-Paper zu machen, ist
+überholt. Die Dirichlet-Character-Atlas-Struktur bleibt; die aktuelle
+öffentliche Kernbotschaft ist der negative/strukturelle Befund aus der
+[N=600-Analyse](ARCH_TERM_N600_ANALYSIS.md):
 
-> **"Weil-Kernel Closure for Dirichlet L-Function Sector Gaps: A Cartography of 10 Real Characters with 9/9 Sign Accuracy and R² = 0.80"**
+> **"A Weil-Kernel Numerical Atlas for Dirichlet L-Function Sector Gaps:
+> Galerkin Diagnostics and the Boundaries of Leading-Order Theory"**
 
-**Paper-Claim (Kurzform):**
+**Historische Paper-Claim-Aufzeichnung (nicht aktuell):**
 Für reelle Dirichlet-Charaktere mit kleinem Leiter (D ∈ {5, 8, 12, 13, 17, 24, 29, 33, 60}) gibt die explizite Weil-Kern-Gap-Formel
 $$ \mathrm{gap}_\chi = -2 \sum_{p,m} \chi(p)^m \frac{\log p}{p^{m/2}} \Delta_\chi(m \log p) + \mathrm{arch\_diff}_\chi + O(N^{-1}) $$
 mit $\Delta_\chi(t) = (\phi^+_\chi * \phi^+_\chi)(t) - (\phi^-_\chi * \phi^-_\chi)(t)$
-quantitative Vorhersagen mit 9/9 Vorzeichenrichtigkeit und $R^2 = 0.80$ bei N=200 Galerkin-Basis. Der isolierte Ausreißer χ_21 ist durch N-Oszillation in der Galerkin-Konvergenz erklärt, nicht durch die Formel.
+bei N=200 die damals beobachteten 9/9 Vorzeichen und $R^2 = 0.80$ für eine
+ausgeschlossene χ_21-Menge. Diese Zahlen sind kein Beweis und keine
+Vorhersage; nach N=600 bleibt `C2_χ` offen und die vollständige Zerlegung ist
+tautologisch.

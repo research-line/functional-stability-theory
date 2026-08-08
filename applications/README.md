@@ -25,6 +25,23 @@ The **FST-DE** paper lives under `../fst-cosmology/dark-energy/` (cosmology doma
 - **FST-III:** v1.2 is live on Zenodo; the repo contains the tightened local v1.3 guardrail package, while the protein-folding code/data expansion continues in the private companion workflow.
 - **FST-IV Cosmology collector:** KONZEPT + v0.2 skeleton; LaTeX body to be filled with the CRM-series / FST-DE / CRM-VI synthesis and the Flow-Zeta math reformulation.
 
+## FST-II source of truth
+
+There is exactly one canonical public FST-II release line: [`fst-ii-chemical/`](fst-ii-chemical/),
+with the public v1.3 concept DOI shown in the table above and the direct
+[English](fst-ii-chemical/papers/FST_II_Chemical_Stability_v3_en.tex) and
+[German](fst-ii-chemical/papers/FST_II_Chemical_Stability_v3_de.tex) paper sources
+(and their PDFs). The 2026-08-08 local synchronization at commit `a6b3664`
+refreshes this paper set as a guardrail/source update only; it is not evidence
+of a new v1.7 or v2.0 Zenodo release.
+
+The separate `fst-ii-chemistry/` path is a historical/conceptual integrated v2.0
+source line. It has no own public release, PDF, or DOI and is not a release
+link. Its sources retain the explicit circularity warning and
+the open, not-yet-tested P3 network-competition experiment. Those claim
+boundaries also remain in the canonical `fst-ii-chemical` paper line; no
+scientific or empirical upgrade is implied by the local synchronization.
+
 ## Scripts &amp; results
 
 - FST-I public artefacts are mirrored under `fst-i-thermodynamic/papers/`, `fst-i-thermodynamic/scripts/` and `fst-i-thermodynamic/results/`, including the entropy scan outputs and the 2D log-Hessian pilot JSON. A dedicated scripted reproducer for the Hessian pilot is still future work.
