@@ -4,6 +4,8 @@
 % Author: Lukas Geiger, 2026
 
 \documentclass[12pt,a4paper]{article}
+\input{glyphtounicode}
+\pdfgentounicode=1
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
@@ -100,6 +102,9 @@ Begleitarbeit behandelt~\cite{Geiger2026b}.
 \end{center}
 \clearpage
 
+\tableofcontents
+\clearpage
+
 % ===================================================================
 \section{Einleitung}\label{sec:intro}
 
@@ -142,17 +147,19 @@ skalenaufgelösten Energieverteilungen ein und beweisen:
         $1/E_j^* \propto k_j^{2/3}$ liefert, die
         kleinskalige Störungen stärker bestraft als großskalige --- ein
         statisches konvexes Signal, das mit einer abwärtsgerichteten
-        Kaskaden-Tendenz vereinbar ist.
+        Kaskadentendenz vereinbar ist.
   \item Relaxierte Flussbedingungen und die Minimax-Notation werden als
-        Geltungsbereich-Leitplanken festgehalten: Solange das exakte
+        Leitplanken des Geltungsbereichs festgehalten: Solange das exakte
         K41-Profil zulässig bleibt, ist das relaxierte Problem trivial, und
         die Minimax-Form ist eine entkoppelte Penalty-Darstellung statt ein
         dynamischer Zwei-Spieler-Satz
         (Propositionen~\ref{prop:dfc-slack}--\ref{prop:minimax}).
 \end{enumerate}
-Die dynamischen Konsequenzen der Freie-Energie-Struktur, einschließlich
+Die dynamischen Konsequenzen der Variationsstruktur, einschließlich
 anomaler Dissipation unter zusätzlichen Hypothesen zur nichtlinearen
 Kaskade, werden in einem Begleitpapier entwickelt~\cite{Geiger2026b}.
+
+Unsere Variationsperspektive schließt an neuere Entwicklungen in der Informationsthermodynamik und der variationellen Strömungsmechanik an und ergänzt diese. Insbesondere etablierte Tanogami~\cite{Tanogami2023,Tanogami2025} eine informationsthermodynamische Schranke für Energiekaskaden unter Verwendung der Kullback--Leibler-Divergenz und wies die Skalenlokalität des Informationsflusses in Schalenmodellen nach. Darüber hinaus unterstreichen moderne Variationsprinzipien für die Kolmogorov-Skalierung --- wie das stochastische Schrödinger--Bridge-Framework von Sanchis-Agudo und Vinuesa~\cite{SanchisAgudoVinuesa2025}, die adaptive fraktionale Operator-Formulierung von L\'opez~\cite{Lopez2026}, Onsagers $L^2$-Dissipationsprinzip bei Said~\cite{Said2025} sowie das spektrale Cutoff-Dissipationsmodell von Mishra~\cite{Mishra2026} --- die zentrale Bedeutung variationeller Extremalprinzipien in der Turbulenztheorie. Zudem verdeutlichen Polarisations-Geometrie-Frameworks von Skalidis~\cite{Skalidis2026}, wie geometrische Zustandsübergänge die spektrale Skalierung in turbulenten Kaskaden steuern. Mathematisch ist die Einschränkung auf zulässige Vergleichsklassen essenziell, um unphysikalische Zustände auszuschließen, wie sie in Nichteindeutigkeitstheorien schwacher Navier--Stokes-Lösungen auftreten~\cite{BuckmasterVicol2019,Isett2018}.
 
 \subsection{Strukturelle Klassifizierung}
 
@@ -170,11 +177,11 @@ und Beweise innerhalb dieses Dokuments. Verbindungen zum umfassenderen FST-Progr
 werden als Kontext zitiert, sind aber logisch nicht zwingend erforderlich.
 
 Zur Orientierung trennt Tabelle~\ref{tab:claim-status-ledger} die
-satzförmige Kernaussage des Papers von diagnostischen und offenen
+satzförmige Kernaussage des Beitrags von diagnostischen und offenen
 Brückenbausteinen. Das ist die beabsichtigte Lesereihenfolge: Der
 Variationssatz ist innerhalb der angegebenen Klasse geschlossen, während
-Numerik, Intermittenz und DNS nur Stützschichten oder zukünftige
-Prüfgates sind.
+Numerik, Intermittenz und DNS nur unterstützende Ebenen oder zukünftige
+Prüfkriterien sind.
 
 \begin{table}[ht]
 \centering
@@ -184,20 +191,20 @@ Prüfgates sind.
 \hline
 \textbf{Baustein} & \textbf{Evidenz- oder Darstellungsebene} & \textbf{Aktueller Status und Einschränkung} \\
 \hline
-Statischer Variationskern & KL-Funktional, zulässige Flussfamilie und Beweis über die gemeinsame zulässige Menge. & Bewiesen innerhalb der K41-normalisierten inertialen Schalenklasse; kein intrinsischer DNS- oder Navier--Stokes-Selektionssatz. \\
+Statischer Variationskern & KL-Funktional, zulässige Flussfamilie und Beweis über die gemeinsame zulässige Menge. & Bewiesen innerhalb der K41-normalisierten Schalenklasse des Trägheitsbereichs; kein intrinsischer DNS- oder Navier--Stokes-Selektionssatz. \\
 \hline
 Lokale Steifigkeit & Diagonale Hesse-Matrix bei $\mathbf{E}^*$ mit Schalenenergie-Skala $1/E_j^* \propto k_j^{2/3}$. & Bewiesen als lokale Konvexität; liefert statische Steifigkeit, keine Rückkehrdynamik. \\
 \hline
 Leitplanken-Zweige & Propositionen zu relaxiertem Fluss und Minimax-Form. & Nur Geltungsbereichskontrollen; kein positiver Robustheitssatz und kein dynamisches Spiel. \\
 \hline
-Synthetische Numerik & Sechs Modellspektren und $300$ zufällige Perturbationstests aus \texttt{compute\_F\_spectrum.py}. & Illustration und Audit-Check; keine unabhängige empirische Validierung. \\
+Synthetische Numerik & Sechs Modellspektren und $300$ zufällige Perturbationstests aus \texttt{compute\_F\_spectrum.py}. & Illustration und Prüfspur; keine unabhängige empirische Validierung. \\
 \hline
-K62- und Intermittenzbrücke & Gauß-/Lognormal-Fluktuationsroute um die Hesse-Skala. & Formale Modellroute; ein Kaskadenmaß und eine Strukturfunktionen-Brücke bleiben nötig. \\
+K62- und Intermittenzbrücke & Gauß-/Lognormal-Fluktuationsroute um die Hesse-Skala. & Formale Modellroute; ein Kaskadenmaß und eine Strukturfunktionenbrücke bleiben nötig. \\
 \hline
-DNS- und Paper-B-Brücke & Vorgeschlagenes DNS-Protokoll und Begleitpaper zur Kaskadenroute. & Zukünftige oder konditionale Ebene; hängt an DFC- und Nichtlinearitäts-Hypothesen außerhalb dieses Papers. \\
+DNS- und Paper-B-Brücke & Vorgeschlagenes DNS-Protokoll und Begleitbeitrag zur Kaskadenroute. & Zukünftige oder konditionale Ebene; hängt an DFC- und Nichtlinearitäts-Hypothesen außerhalb dieses Beitrags. \\
 \hline
 \end{tabular}
-\caption{Claim-Status-Ledger für das K41-Variationsminimierer-Paper.}
+\caption{Claim-Status-Ledger für den K41-Variationsminimierer-Beitrag.}
 \label{tab:claim-status-ledger}
 \end{table}
 
@@ -238,7 +245,7 @@ $\mathcal{F}[\mathbf{E}]$ wird aus der Littlewood--Paley-Zerlegung und
 der zulässigen Flussfamilie (Axiome A1, A3) konstruiert.
 Theorem~\ref{thm:K41} (K41-Eindeutigkeit) folgt aus der gemeinsamen Minimierung.
 Die relaxierte Flussbedingung und die Minimax-Verzweigung halten
-Geltungsbereich-Leitplanken und eine formale Penalty-Darstellung fest, nicht
+Leitplanken des Geltungsbereichs und eine formale Penalty-Darstellung fest, nicht
 zusätzliche dynamische Theoreme.}
 \label{fig:proof-chain}
 \end{figure}
@@ -301,7 +308,7 @@ Kullback--Leibler-Divergenz (relative Entropie) des Paares $(E_j, E_j^*)$,
 wenn sie als unnormalisierte Maße auf einem Einzelpunktraum betrachtet werden. Er erfüllt
 $f(E_j) \ge 0$ mit Gleichheit genau dann, wenn $E_j = E_j^*$. Somit
 gilt $\mathcal{F}[\mathbf{E}] \ge 0$ mit Gleichheit genau dann, wenn $\mathbf{E}
-= \mathbf{E}^*$.
+= \mathbf{E}^*$. Die Verwendung der relativen Entropie zur Quantifizierung von Kaskadenabweichungen zwischen den Skalen ist durch Tanogami~\cite{Tanogami2023,Tanogami2025} informationsthermodynamisch begründet.
 \end{remark}
 
 \begin{figure}[ht]
@@ -385,7 +392,7 @@ Zulässigkeitsannahmen benötigen.
 \end{remark}
 
 \begin{proposition}[Dimensionale Ableitung des Fluss-Vorfaktors]\label{prop:A2-derived}
-Innerhalb des reduzierten skalenlokalen inertialen Schalenansatzes, in dem
+Innerhalb des reduzierten skalenlokalen Schalenansatzes für den Trägheitsbereich, in dem
 bei Schale~$j$ nur $k_j$ und $E_j$ als dimensionale Größen zugelassen sind,
 folgt der Vorfaktor in Axiom~\textup{(A2)} aus Dimensionsanalyse:
 $\Pi_j = k_j\,E_j^{3/2}\,\Phi_j(\cdot)$.  (A2) ist damit der kanonische
@@ -427,8 +434,9 @@ Leith-artige Diffusionsmodelle und trunkierte Triaden-Interaktionen abdecken,
 wenn sie in den Schalenvariablen von Definition~\ref{def:admissible} ausgedrückt werden.
 Die Familie $\mathscr{A}$ ist somit eine strukturierte lokale Vergleichsklasse
 und keine einzelne Schließung.
-Proposition~\ref{prop:A2-derived} trennt den reduzierten inertialen
-Dimensionsansatz von den wirklich variablen Annahmen Lokalität und
+Proposition~\ref{prop:A2-derived} trennt den reduzierten
+Schalenansatz für den Trägheitsbereich als Dimensionsansatz von den
+wirklich variablen Annahmen Lokalität und
 Monotonie. Sie präzisiert damit den Modellierungsgehalt von (A2), statt
 allen unabhängigen Modellierungsgehalt aus dem Flussvorschlag zu entfernen.
 \end{remark}
@@ -550,7 +558,7 @@ wachsen die diagonalen Einträge $1/E_j^* \propto k_j^{2/3}$ der
 Hesse-Matrix mit der Wellenzahl. Damit werden kleinskalige Störungen des
 K41-Schalenenergieprofils strenger bestraft als großskalige. Diese skalenabhängige
 Steifigkeit ist ein statisches konvexes Signal, das mit einer
-abwärtsgerichteten Kaskaden-Tendenz vereinbar ist; für sich allein definiert
+abwärtsgerichteten Kaskadentendenz vereinbar ist; für sich allein definiert
 sie aber keine Zeitentwicklung, keinen Rückkehrmechanismus und keine
 Spektrallücke der Navier--Stokes-Dynamik. Der Ein-Parameter-Freiheitsgrad in der Kolmogorov--Heisenberg-Schließung ($\Phi_j \equiv \alpha$)
 entspricht einer einzelnen flachen Richtung in der $\Pi$-Faser des
@@ -885,7 +893,7 @@ $\Pi_j[\mathbf{E}]=\varepsilon$ für beliebige feste Schließungen. Eine
 solche Aussage würde Kompaktheit, Constraint-Qualification und
 Existenzsätze für die gewählte Schließungsfamilie erfordern. Die
 vorliegende Minimax-Aussage ist nur das endlichdimensionale
-Konstantfluss-Penalty-Buchhaltungslemma, das dieses Paper verwendet.
+Konstantfluss-Penalty-Buchhaltungslemma, das dieser Beitrag verwendet.
 \end{proof}
 
 \begin{remark}
@@ -1051,10 +1059,10 @@ von~$\mathcal{F}$ wählt K41 als eindeutigen Minimierer. Dieses Muster --- in~\c
 Eine numerische Auswertung von $\mathcal{F}[\mathbf{E}]$ über sechs synthetische Energiespektren illustriert die referenzzentrierte KL-Landschaft: $\mathcal{F}[\mathbf{E}_{\mathrm{K41}}] = 0$ exakt, während $\mathcal{F}[\mathbf{E}_{\mathrm{K62}}] = 2{,}0 \times 10^{-4}$ (Intermittenzkorrektur), $\mathcal{F}[\mathbf{E}_{k^{-2}}] = 1{,}74$ (steil), $\mathcal{F}[\mathbf{E}_{k^{-4/3}}] = 5{,}94$ (flach) und $\mathcal{F}[\mathbf{E}_{\mathrm{thermal}}] = 7{,}55$ (Gleichverteilung). Ein Perturbationstest ($300$ zufällige Störungen $\delta \mathbf{E}$ bei drei Rauschleveln $\|\delta \mathbf{E}\|/\|\mathbf{E}^*\| \in \{0{,}01,\, 0{,}1,\, 1{,}0\}$) liefert $\mathcal{F}[\mathbf{E}^* + \delta \mathbf{E}] > 0$ für \emph{alle} $300$ Stichproben, was die strikte Konvexität numerisch illustriert. Numerische Skripte: \texttt{compute\_F\_spectrum.py}.
 \end{remark}
 
-Die Audit-Ansicht in Tabelle~\ref{tab:numerical-diagnostics} macht die
+Die Prüfansicht in Tabelle~\ref{tab:numerical-diagnostics} macht die
 diagnostische Rolle der synthetischen Spektren explizit. Das
 Bottleneck-Profil liegt in $\mathcal{F}$ nahe an K41, scheitert aber am
-strikten K41-Steigungsgate; thermische und warme Randrichtungen liegen
+strikten K41-Steigungskriterium; thermische und warme Randrichtungen liegen
 außerhalb der K41-Diagnose-Wasserlinie.
 
 \begin{table}[ht]
@@ -1063,22 +1071,22 @@ außerhalb der K41-Diagnose-Wasserlinie.
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{|L{0.22\textwidth}|L{0.13\textwidth}|L{0.23\textwidth}|L{0.30\textwidth}|}
 \hline
-\textbf{Synthetisches Spektrum} & \textbf{$\mathcal{F}[E]$} & \textbf{Gate-Status} & \textbf{Diagnostische Lesart} \\
+\textbf{Synthetisches Spektrum} & \textbf{$\mathcal{F}[E]$} & \textbf{Prüfstatus} & \textbf{Diagnostische Lesart} \\
 \hline
 K41-Referenz & $0{,}000000$ & DFC1 ja; schwache und K41-Steigung ja & Exakter Referenzminimierer. \\
 \hline
 K62, $\mu=0{,}03$ & $0{,}000197$ & DFC1 ja; schwache und K41-Steigung ja & K41-nahe Intermittenzkontrolle. \\
 \hline
-Bottleneck & $0{,}011850$ & DFC1 ja; schwach ja; K41-Steigung nein & Stresskontrolle: kleine KL-Abweichung, striktes Steigungsgate scheitert. \\
+Bottleneck & $0{,}011850$ & DFC1 ja; schwach ja; K41-Steigung nein & Stresskontrolle: kleine KL-Abweichung, striktes Steigungskriterium scheitert. \\
 \hline
-Steil $k^{-2}$ & $1{,}736741$ & DFC1 ja; Steigungsgates nein & Nicht-K41-Steilkontrolle. \\
+Steil $k^{-2}$ & $1{,}736741$ & DFC1 ja; Steigungskriterien nein & Nicht-K41-Steilkontrolle. \\
 \hline
-Flach $k^{-4/3}$ & $5{,}941487$ & DFC1 ja; Steigungsgates nein & Nicht-K41-Flachkontrolle. \\
+Flach $k^{-4/3}$ & $5{,}941487$ & DFC1 ja; Steigungskriterien nein & Nicht-K41-Flachkontrolle. \\
 \hline
-Thermisch flach & $7{,}552260$ & DFC1 nein; Steigungsgates nein & Nicht-Kaskaden-Randfall. \\
+Thermisch flach & $7{,}552260$ & DFC1 nein; Steigungskriterien nein & Nicht-Kaskaden-Randfall. \\
 \hline
 \end{tabular}
-\caption{Synthetische Freie-Energie- und Gate-Diagnostik aus \texttt{compute\_F\_spectrum.py}.}
+\caption{Synthetische Freie-Energie- und Prüfdiagnostik aus \texttt{compute\_F\_spectrum.py}.}
 \label{tab:numerical-diagnostics}
 \end{table}
 
@@ -1141,7 +1149,7 @@ Das Variationsprinzip in Theorem~\ref{thm:K41} wählt das K41-Spektrum \emph{inn
 
 Wir fassen die hauptsächlichen Einschränkungen der vorliegenden Arbeit zusammen:
 \begin{enumerate}
-\item \textbf{Statische Auswahl.}\; Theorem~\ref{thm:K41} etabliert K41 als eindeutigen variationellen Minimierer, adressiert jedoch nicht die dynamische Frage, ob die Navier--Stokes-Entwicklung das Spektrum auf diesen Minimierer zutreibt. Die dynamischen Aspekte --- einschließlich $\mathcal{F}$-Monotonie entlang Trajektorien und anomaler Dissipation --- erfordern zusätzliche Hypothesen zur nichtlinearen Kaskade und werden im Begleitpaper~\cite{Geiger2026b} behandelt.
+\item \textbf{Statische Auswahl.}\; Theorem~\ref{thm:K41} etabliert K41 als eindeutigen variationellen Minimierer, adressiert jedoch nicht die dynamische Frage, ob die Navier--Stokes-Entwicklung das Spektrum auf diesen Minimierer zutreibt. Die dynamischen Aspekte --- einschließlich $\mathcal{F}$-Monotonie entlang Trajektorien und anomaler Dissipation --- erfordern zusätzliche Hypothesen zur nichtlinearen Kaskade und werden im Begleitbeitrag~\cite{Geiger2026b} behandelt.
 \item \textbf{Trägheitsbereich-Idealisierung.}\; Das Funktional $\mathcal{F}$ ist über den Trägheitsbereich $\mathcal{J}$ definiert und ignoriert die Antriebs- und Dissipationsbereiche. Randeffekte bei $j_{\mathrm{in}}$ und $j_{\mathrm{dis}}$ (insbesondere der Bottleneck) werden in Konstanten absorbiert, aber nicht quantitativ kontrolliert.
 \item \textbf{Intermittenz.}\; Die K62-Verbindung (Abschnitt~\ref{sec:intermittency}) ist qualitativ. Eine rigorose Herleitung der Intermittenzexponenten aus den Hesse-Fluktuationen bleibt offen.
 \item \textbf{Eindeutigkeit der Referenz.}\; Während Bemerkung~\ref{rem:circularity} $\mathbf{E}^*$ als natürliche Referenz der K41-normalisierten Klasse identifiziert, würde eine vollkommen intrinsische Charakterisierung von $\mathbf{E}^*$ (ohne \emph{a priori} Rückgriff auf K41) die Argumentation stärken. Bemerkung~\ref{rem:khm-intrinsic} stellt einen Schritt in diese Richtung dar.
@@ -1171,7 +1179,7 @@ Wir fassen die hauptsächlichen Einschränkungen der vorliegenden Arbeit zusamme
 \subsection{Post-Zookeeper-Grenze des Geltungsbereichs}
 \label{subsec:zookeeper-k41-scope}
 
-Der Zookeeper-Transfer verdeutlicht, was diese Arbeit beanspruchen sollte und was nicht. Diese Arbeit ist Paper A in der Turbulenz-Aufspaltung: Sie beweist die variationelle Auswahl des K41-Spektrums innerhalb der angegebenen zulässigen Flussfamilie. Sie beweist keine anomale Dissipation für Navier--Stokes, löst nicht das Onsager-Selektionsproblem und behauptet nicht, dass alle schwachen oder Viskositäts-verschwindenden (vanishing-viscosity) Limites K41 auswählen.
+Der Zookeeper-Transfer verdeutlicht, was diese Arbeit beanspruchen sollte und was nicht. Diese Arbeit ist Paper A in der Turbulenz-Aufspaltung: Sie beweist die variationelle Auswahl des K41-Spektrums innerhalb der angegebenen zulässigen Flussfamilie. Sie beweist keine anomale Dissipation für Navier--Stokes, löst nicht das Onsager-Selektionsproblem und behauptet nicht, dass alle schwachen oder Grenzprozesse verschwindender Viskosität (vanishing viscosity) K41 auswählen.
 
 Unter dem aktualisierten CORE-Status ist der Transfer lediglich RFEP v1.8
 Normalform-Disziplin: Zookeeper schließt Riemann $C^{(2)}$/MS2 im
@@ -1189,7 +1197,7 @@ während die konditionale Defekttheorie ihre eigene natürliche Fortsetzung hat.
 
 \begin{center}
 \small
-\begin{tabular}{|p{0.52\textwidth}|p{0.20\textwidth}|p{0.20\textwidth}|}
+\begin{tabular}{|p{0.48\textwidth}|p{0.20\textwidth}|p{0.20\textwidth}|}
 \hline
 \textbf{Resultat} & \textbf{Typ} & \textbf{Referenz} \\
 \hline
@@ -1198,9 +1206,9 @@ während die konditionale Defekttheorie ihre eigene natürliche Fortsetzung hat.
 \hline
 $\mathcal{F}[\mathbf{E}] \geq 0$, $= 0$ gdw.\ $\mathbf{E} = \mathbf{E}^*$ & Theorem & Thm.~\ref{thm:K41} \\
 K41 relativer gemeinsamer Minimierer in der K41-normalisierten Klasse & Theorem & Thm.~\ref{thm:K41} \\
-Kanonischer Flussvorfaktor im reduzierten inertialen Schalenansatz & Proposition & Prop.~\ref{prop:A2-derived} \\
+Kanonischer Flussvorfaktor im reduzierten Schalenansatz für den Trägheitsbereich & Proposition & Prop.~\ref{prop:A2-derived} \\
 \hline
-\multicolumn{3}{|l|}{\textit{Geltungsbereich-Leitplanken und formale Umschreibungen:}} \\
+\multicolumn{3}{|l|}{\textit{Leitplanken des Geltungsbereichs und formale Umschreibungen:}} \\
 \hline
 Relaxierter Flussspielraum ist trivial, solange $E^*$ nicht ausgeschlossen oder perturbiert wird & Leitplanke & Prop.~\ref{prop:dfc-slack} \\
 Formale Konstantfluss-Penalty-Buchhaltung & Formale Darstellung & Prop.~\ref{prop:minimax} \\
@@ -1230,6 +1238,12 @@ J.\,F.~Bonnans and A.~Shapiro,
 Springer Series in Operations Research, Springer, New York, 2000.
 \href{https://doi.org/10.1007/978-1-4612-1394-9}{doi:10.1007/978-1-4612-1394-9}.
 
+\bibitem{BuckmasterVicol2019}
+T.~Buckmaster and V.~Vicol,
+\emph{Nonuniqueness of weak solutions to the Navier--Stokes equation},
+Ann.\ Math.\ \textbf{189} (2019), 101--144.
+\href{https://doi.org/10.4007/annals.2019.189.1.3}{doi:10.4007/annals.2019.189.1.3}.
+
 \bibitem{Frisch95}
 U.~Frisch,
 \emph{Turbulence: The Legacy of A.\,N.\ Kolmogorov},
@@ -1246,6 +1260,12 @@ L.~Geiger,
 \emph{Anomalous Dissipation and the Turbulent Cascade: A Variational Free-Energy Characterisation of Kolmogorov Scaling},
 Zenodo, 2026.
 \href{https://doi.org/10.5281/zenodo.19056813}{doi:10.5281/zenodo.19056813}.
+
+\bibitem{Isett2018}
+P.~Isett,
+\emph{A proof of Onsager's conjecture},
+Ann.\ Math.\ \textbf{188} (2018), 871--963.
+\href{https://doi.org/10.4007/annals.2018.188.3.4}{doi:10.4007/annals.2018.188.3.4}.
 
 \bibitem{K41a}
 A.\,N.~Kolmogorov,
@@ -1275,6 +1295,18 @@ R.\,H.~Kraichnan,
 Phys.\ Fluids \textbf{10} (1967), 1417--1423.
 \href{https://doi.org/10.1063/1.1762301}{doi:10.1063/1.1762301}.
 
+\bibitem{Lopez2026}
+J.\,I.\,H.~L\'opez,
+\emph{Critical Reynolds Number as a Topological Phase Transition in Adaptive Fractional Hydrodynamics},
+preprint arXiv:2602.10912 (2026).
+\href{https://doi.org/10.48550/arXiv.2602.10912}{doi:10.48550/arXiv.2602.10912}.
+
+\bibitem{Mishra2026}
+R.~Mishra,
+\emph{Spectral Reconstruction for Under-Resolved Turbulence Measurements Using a Variational Cutoff Dissipation Model},
+AIAA J.\ (2026), preprint arXiv:2512.20676.
+\href{https://doi.org/10.48550/arXiv.2512.20676}{doi:10.48550/arXiv.2512.20676}.
+
 \bibitem{MY75}
 A.\,S.~Monin and A.\,M.~Yaglom,
 \emph{Statistical Fluid Mechanics}, Vols.~1--2,
@@ -1299,11 +1331,41 @@ Princeton Mathematical Series, vol.~28,
 Princeton University Press, 1970.
 \href{https://doi.org/10.1515/9781400873173}{doi:10.1515/9781400873173}.
 
+\bibitem{Said2025}
+H.\,A.~Said,
+\emph{Application of Onsager's Variational Principle to the Navier-Stokes Equations},
+preprint arXiv:2509.24033 (2025).
+\href{https://doi.org/10.48550/arXiv.2509.24033}{doi:10.48550/arXiv.2509.24033}.
+
+\bibitem{SanchisAgudoVinuesa2025}
+M.~Sanchis-Agudo and R.~Vinuesa,
+\emph{A Geometric Foundation for the Universal Laws of Turbulence},
+preprint arXiv:2512.00068 (2025).
+\href{https://doi.org/10.48550/arXiv.2512.00068}{doi:10.48550/arXiv.2512.00068}.
+
 \bibitem{SL94}
 Z.-S.~She and E.~L\'ev\^eque,
 \emph{Universal scaling laws in fully developed turbulence},
 Phys.\ Rev.\ Lett.\ \textbf{72} (1994), 336--339.
 \href{https://doi.org/10.1103/PhysRevLett.72.336}{doi:10.1103/PhysRevLett.72.336}.
+
+\bibitem{Skalidis2026}
+R.~Skalidis,
+\emph{Polarization geometry of magnetohydrodynamic turbulence},
+preprint arXiv:2607.15347 (2026).
+\href{https://doi.org/10.48550/arXiv.2607.15347}{doi:10.48550/arXiv.2607.15347}.
+
+\bibitem{Tanogami2023}
+T.~Tanogami,
+\emph{Information-Thermodynamic Bound on Information Flow in Turbulent Cascade},
+Phys.\ Rev.\ Lett.\ \textbf{130} (2023), 064001.
+\href{https://doi.org/10.1103/PhysRevLett.130.064001}{doi:10.1103/PhysRevLett.130.064001}.
+
+\bibitem{Tanogami2025}
+T.~Tanogami,
+\emph{Scale locality of information flow in shell models of turbulence},
+J.\ Stat.\ Mech.\ (2025), 093201.
+\href{https://doi.org/10.1088/1742-5468/ad6e7c}{doi:10.1088/1742-5468/ad6e7c}.
 
 \end{thebibliography}
 
