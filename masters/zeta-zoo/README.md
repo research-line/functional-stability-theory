@@ -34,6 +34,16 @@ The v2.4 candidate file set keeps the claim levels tightened after the post-v2.2
 - [Dirichlet Character Atlas](../atlas/) -- negative method validation, Concept DOI: `10.5281/zenodo.19960809`.
 - [Selberg](../selberg/) -- SGE-YES validation, Concept DOI: `10.5281/zenodo.19962588`.
 
+### RFEP reference status
+
+The v2.4 maintenance candidate points to the RFEP companion at
+[`../spectrum-duality/`](../spectrum-duality/): v1.9 is the current live Zenodo
+release (Record DOI `10.5281/zenodo.20758955`, Concept DOI
+`10.5281/zenodo.19036190`), while the public repository contains a local v1.10
+candidate that is not published. In the English and German paper bibliography,
+“RFEP v1.8” is retained only as the historical/internal terminology and
+update-plan label in the source tree; it is not a separate Zenodo release.
+
 ## Paper Files
 
 - [`paper/NE_B_BOUNDARY_v2_en.tex`](paper/NE_B_BOUNDARY_v2_en.tex)

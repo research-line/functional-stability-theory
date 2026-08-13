@@ -44,7 +44,13 @@ scientific or empirical upgrade is implied by the local synchronization.
 
 ## Scripts &amp; results
 
-- FST-I public artefacts are mirrored under `fst-i-thermodynamic/papers/`, `fst-i-thermodynamic/scripts/` and `fst-i-thermodynamic/results/`, including the entropy scan outputs and the 2D log-Hessian pilot JSON. A dedicated scripted reproducer for the Hessian pilot is still future work.
+- FST-I public artefacts are mirrored under `fst-i-thermodynamic/papers/`, `fst-i-thermodynamic/scripts/` and `fst-i-thermodynamic/results/`, including the entropy scan outputs and the 2D log-Hessian pilot JSON. The canonical, dependency-free verification wrapper is [`fst-i-thermodynamic/scripts/reproduce_log_hessian_pilot.py`](fst-i-thermodynamic/scripts/reproduce_log_hessian_pilot.py). It reads the published JSON, checks the 2x2 log-Hessian, recomputes its eigenvalues, audits the recorded step-size convergence and preserves the pilot warning; it does not claim to rerun the underlying stellar model.
+
+  ```text
+  python applications/fst-i-thermodynamic/scripts/reproduce_log_hessian_pilot.py --output <temporary-output>.json
+  ```
+
+  With no `--input`, the wrapper uses the fixed published input at `fst-i-thermodynamic/results/stellar/log_hessian_alpha_me_2026-05-18.json`. The deterministic report is written to `--output` (or stdout when omitted), so no generated result is silently added to the public artefact set.
 - FST-II reproducibility artefacts are mirrored under `fst-ii-chemical/scripts/` and `fst-ii-chemical/results/`.
 - FST-III public artefacts are mirrored under `fst-iii-biological/papers/`, `scripts/fst_iii/` and `results/fst_iii/`. Curated JSON/plot outputs are public; raw per-protein work directories and server logs remain local-only. The chaperone game-theory companion paper **FST-Nash** is published separately ([DOI: 10.5281/zenodo.20402751](https://doi.org/10.5281/zenodo.20402751)) with its own public repository [`research-line/fst-nash`](https://github.com/research-line/fst-nash).
 - FST-IV computational artefacts are still primarily tracked locally and will be mirrored as the collector paper stabilizes.
