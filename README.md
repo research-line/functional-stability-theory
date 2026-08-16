@@ -3,6 +3,8 @@
 English | [Deutsch](README_de.md)
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Test Suite](https://img.shields.io/badge/Tests-8%2F8%20Passed-brightgreen.svg)](tests/)
+[![Python: >=3.10](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](pyproject.toml)
 [![ORCID: Lukas Geiger](https://img.shields.io/badge/ORCID-0009--0005--7296--1534-green.svg)](https://orcid.org/0009-0005-7296-1534)
 [![Zenodo Spectrum Duality](https://img.shields.io/badge/Zenodo-10.5281%2Fzenodo.19036190-blue.svg)](https://doi.org/10.5281/zenodo.19036190)
 [![Ecosystem: research-line](https://img.shields.io/badge/Ecosystem-research--line-blue.svg)](https://github.com/research-line)
@@ -301,11 +303,22 @@ functional-stability-theory/
 └── scripts/                      Numerical validation (per-paper subdirectories)
 ```
 
-## Related Repositories
+## Ecosystem & Sibling Research Repositories
 
-- [rh-even-dominance](https://github.com/research-line/rh-even-dominance) — Riemann Hypothesis: Even-dominance proof (foundation)
-- [crm-cosmology](https://github.com/research-line/crm-cosmology) — Cooperative Renormalization Model (foundation)
-- [fst-nash](https://github.com/research-line/fst-nash) — Game-theoretic diagnostics for chaperone systems (FST-Biology; [DOI: 10.5281/zenodo.20402751](https://doi.org/10.5281/zenodo.20402751))
+`functional-stability-theory` is the central theoretical hub of the **research-line** initiative and connects across the **open-bricks** open science and toolchain ecosystem:
+
+| Repository / Package | Focus / Domain | Integration |
+|---|---|---|
+| [`research-line/fst-nash`](https://github.com/research-line/fst-nash) | Chaperone Game Theory | FST-Biology standalone companion ([DOI: 10.5281/zenodo.20402751](https://doi.org/10.5281/zenodo.20402751)) |
+| [`research-line/rh-even-dominance`](https://github.com/research-line/rh-even-dominance) | Number Theory | Riemann Hypothesis even-dominance trilogy foundation |
+| [`research-line/crm-cosmology`](https://github.com/research-line/crm-cosmology) | Cosmology | Cooperative Renormalization Model foundation |
+| [`research-line/prompt-archaeology-casestudy2`](https://github.com/research-line/prompt-archaeology-casestudy2) | AI & Epistemology | 4-Stage prompt archaeology & reproducibility artifacts |
+| [`research-line/ai-elite-swr`](https://github.com/research-line/ai-elite-swr) | AI & Society | AI elite structures & social welfare research |
+| [`research-line/economic-sanctions-coercive-diplomacy`](https://github.com/research-line/economic-sanctions-coercive-diplomacy) | Political Economy | Game-theoretic model of sanctions and coercive bargaining |
+| [`ellmos-ai/system-explorer`](https://github.com/ellmos-ai/system-explorer) | System Discovery | Compositional system exploration and topology inspection |
+| [`ellmos-ai/sqlite-transit-sync`](https://github.com/ellmos-ai/sqlite-transit-sync) | Data Transit | Deterministic snapshot retention and sync engine |
+| [`dev-bricks/DevCenter`](https://github.com/dev-bricks/DevCenter) | Developer Tooling | Unified developer dashboard and workspace management |
+| [`open-bricks`](https://github.com/open-bricks) | Umbrella Ecosystem | Open source & open science federation |
 
 ## Author
 
