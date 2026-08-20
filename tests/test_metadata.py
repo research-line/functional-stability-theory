@@ -33,20 +33,22 @@ def test_readme_and_readme_de_badges():
     assert "License-CC_BY_4.0" in readme_en
     assert "ORCID-0009--0005--7296--1534" in readme_en
     assert "Zenodo-10.5281" in readme_en
+    assert "Security-Research%20Integrity" in readme_en
     assert "Ecosystem-research--line" in readme_en
     assert "Umbrella-open--bricks" in readme_en
     assert "llms.txt" in readme_en
-    assert "Tests-8%2F8%20Passed" in readme_en
+    assert "Tests-10%2F10%20Passed" in readme_en
     assert "Python-3.10%2B" in readme_en
 
     # Required badge signatures in German README
     assert "Lizenz-CC_BY_4.0" in readme_de or "License-CC_BY_4.0" in readme_de
     assert "ORCID-0009--0005--7296--1534" in readme_de
     assert "Zenodo-10.5281" in readme_de
+    assert "Sicherheit-Open%20Science%20Integrit%C3%A4t" in readme_de
     assert "research--line" in readme_de
     assert "open--bricks" in readme_de
     assert "llms.txt" in readme_de
-    assert "Tests-8%2F8%20Bestanden" in readme_de or "Tests-8%2F8%20Passed" in readme_de
+    assert "Tests-10%2F10%20Bestanden" in readme_de
     assert "Python-3.10%2B" in readme_de
 
 
@@ -107,30 +109,68 @@ def test_llms_txt_structure_and_timestamp():
     """Validate llms.txt structure, canonical metadata, and verification date."""
     llms_txt = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8")
 
-    assert "## Last-checked: 2026-08-16" in llms_txt
+    assert "## Last-checked: 2026-08-21" in llms_txt
     assert "https://github.com/research-line/functional-stability-theory" in llms_txt
     assert "research-line" in llms_txt
     assert "Renormalized Free-Energy Principle" in llms_txt
     assert "Pattern A" in llms_txt
+    assert "SECURITY.md" in llms_txt
     assert "## Search Phrases" in llms_txt
 
 
 def test_changelog_entry():
-    """Validate that CHANGELOG.md documents the 2026-08-16 discoverability overhaul."""
+    """Validate that CHANGELOG.md documents the 2026-08-21 discoverability audit."""
     changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-    assert "2026-08-16" in changelog
-    assert "Discoverability" in changelog or "discoverability" in changelog or "metadata" in changelog
+    assert "2026-08-21" in changelog
+    assert "1.0.1" in changelog
+    assert "SECURITY.md" in changelog
 
 
 def test_mermaid_diagrams_parity():
-    """Validate that both English and German READMEs contain Mermaid diagrams."""
+    """Validate that both English and German READMEs contain all Mermaid diagrams."""
     readme_en = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
     readme_de = (REPO_ROOT / "README_de.md").read_text(encoding="utf-8")
 
-    assert "```mermaid" in readme_en
-    assert "flowchart TD" in readme_en
-    assert "subgraph MASTERS" in readme_en
+    for doc, name in [(readme_en, "README.md"), (readme_de, "README_de.md")]:
+        assert "```mermaid" in doc, f"{name} missing mermaid codeblock"
+        assert "flowchart TD" in doc, f"{name} missing flowchart TD"
+        assert "flowchart LR" in doc, f"{name} missing flowchart LR"
+        assert "subgraph MASTERS" in doc, f"{name} missing subgraph MASTERS"
+        assert "subgraph HYP" in doc, f"{name} missing subgraph HYP"
 
-    assert "```mermaid" in readme_de
-    assert "flowchart TD" in readme_de
-    assert "subgraph MASTERS" in readme_de
+
+def test_security_policy_bilingual_parity():
+    """Validate SECURITY.md exists and contains bilingual invariants and contact info."""
+    security_file = REPO_ROOT / "SECURITY.md"
+    assert security_file.is_file(), "SECURITY.md must exist"
+
+    content = security_file.read_text(encoding="utf-8")
+    assert "## English" in content
+    assert "## Deutsche Fassung" in content
+    assert "Zero-Egress" in content or "0% Netzwerk-Egress" in content
+    assert "security@ellmos.ai" in content
+    assert "support@lukasgeiger.com" in content
+
+
+def test_sibling_matrix_parity():
+    """Validate that sibling and ecosystem repositories are linked in both READMEs."""
+    readme_en = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    readme_de = (REPO_ROOT / "README_de.md").read_text(encoding="utf-8")
+
+    expected_siblings = [
+        "research-line/fst-nash",
+        "research-line/rh-even-dominance",
+        "research-line/crm-cosmology",
+        "biotec-line/VFDistiller",
+        "doc-bricks/MediaBrain",
+        "dev-bricks/CodeBox",
+        "dev-bricks/DevCenter",
+        "ellmos-ai/skills",
+        "ellmos-ai/sqlite-transit-sync",
+        "open-bricks",
+    ]
+
+    for sibling in expected_siblings:
+        assert sibling in readme_en, f"Sibling {sibling} missing in README.md"
+        assert sibling in readme_de, f"Sibling {sibling} missing in README_de.md"
+

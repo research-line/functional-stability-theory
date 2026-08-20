@@ -3,10 +3,11 @@
 English | [Deutsch](README_de.md)
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Test Suite](https://img.shields.io/badge/Tests-8%2F8%20Passed-brightgreen.svg)](tests/)
+[![Test Suite](https://img.shields.io/badge/Tests-10%2F10%20Passed-brightgreen.svg)](tests/)
 [![Python: >=3.10](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](pyproject.toml)
 [![ORCID: Lukas Geiger](https://img.shields.io/badge/ORCID-0009--0005--7296--1534-green.svg)](https://orcid.org/0009-0005-7296-1534)
 [![Zenodo Spectrum Duality](https://img.shields.io/badge/Zenodo-10.5281%2Fzenodo.19036190-blue.svg)](https://doi.org/10.5281/zenodo.19036190)
+[![Security: Research Integrity](https://img.shields.io/badge/Security-Research%20Integrity-blue.svg)](SECURITY.md)
 [![Ecosystem: research-line](https://img.shields.io/badge/Ecosystem-research--line-blue.svg)](https://github.com/research-line)
 [![Umbrella: open-bricks](https://img.shields.io/badge/Umbrella-open--bricks-purple.svg)](https://github.com/open-bricks)
 [![LLM Context](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
@@ -143,6 +144,48 @@ flowchart TD
     classDef domain fill:#111827,stroke:#10b981,stroke-width:1.5px,color:#fff;
     class ZK,ZZ,SD,AT,SB master;
     class MATH,PHYS,COSMO,BIO domain;
+```
+
+### Theoretical Data Flow & Validation Sequence
+
+```mermaid
+flowchart LR
+    subgraph HYP["1. Mathematical Axioms & Normal Forms"]
+        RFEP["Renormalized Free-Energy Principle (RFEP)"]
+        PAT_A["Pattern A: Functional Positivity under Gauge Constraint"]
+        DS["Dissipative Selection Principles (DS1–DS3)"]
+    end
+
+    subgraph PROOF["2. Master Foundations & Proofs"]
+        ZK["Zookeeper (CCM Microcluster Closure)"]
+        ZZ["Zeta Zoo (SGE Taxonomy & UCU)"]
+        VAL["Method-Validation Pair (Atlas / Selberg)"]
+    end
+
+    subgraph INST["3. Domain Instantiations"]
+        MATH["FST-Mathematics (BSD, Hodge, P vs NP)"]
+        PHYS["FST-Physics (K41, Turbulence, YM, NS)"]
+        COSMO["FST-Cosmology (Hu–Sawicki / Dark Energy)"]
+        BIO["FST-Biology (FST-Nash Chaperones)"]
+    end
+
+    subgraph DIAG["4. Local Numerical Validation (Zero-Egress)"]
+        SCRIPTS["Python Numerical Diagnostics (scripts/)"]
+        RESULTS["Reproducibility & Verification Metrics"]
+    end
+
+    HYP --> PROOF
+    PROOF --> INST
+    INST --> DIAG
+
+    classDef hyp fill:#1e1b4b,stroke:#818cf8,stroke-width:1.5px,color:#fff;
+    classDef proof fill:#1f2937,stroke:#6366f1,stroke-width:2px,color:#fff;
+    classDef inst fill:#111827,stroke:#10b981,stroke-width:1.5px,color:#fff;
+    classDef diag fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
+    class RFEP,PAT_A,DS hyp;
+    class ZK,ZZ,VAL proof;
+    class MATH,PHYS,COSMO,BIO inst;
+    class SCRIPTS,RESULTS diag;
 ```
 
 ## Proof Architecture (ASCII Overview)
@@ -315,9 +358,12 @@ functional-stability-theory/
 | [`research-line/prompt-archaeology-casestudy2`](https://github.com/research-line/prompt-archaeology-casestudy2) | AI & Epistemology | 4-Stage prompt archaeology & reproducibility artifacts |
 | [`research-line/ai-elite-swr`](https://github.com/research-line/ai-elite-swr) | AI & Society | AI elite structures & social welfare research |
 | [`research-line/economic-sanctions-coercive-diplomacy`](https://github.com/research-line/economic-sanctions-coercive-diplomacy) | Political Economy | Game-theoretic model of sanctions and coercive bargaining |
-| [`ellmos-ai/system-explorer`](https://github.com/ellmos-ai/system-explorer) | System Discovery | Compositional system exploration and topology inspection |
-| [`ellmos-ai/sqlite-transit-sync`](https://github.com/ellmos-ai/sqlite-transit-sync) | Data Transit | Deterministic snapshot retention and sync engine |
+| [`biotec-line/VFDistiller`](https://github.com/biotec-line/VFDistiller) | Bio-Genetics Pipeline | Variant effect predictor & VCF distillation toolchain |
+| [`doc-bricks/MediaBrain`](https://github.com/doc-bricks/MediaBrain) | Multi-Format Document Synthesis | Offline-first knowledge repository and research indexing engine |
+| [`dev-bricks/CodeBox`](https://github.com/dev-bricks/CodeBox) | Code Analysis & Diagnostics | Syntax tree inspection & structural linting environment |
 | [`dev-bricks/DevCenter`](https://github.com/dev-bricks/DevCenter) | Developer Tooling | Unified developer dashboard and workspace management |
+| [`ellmos-ai/skills`](https://github.com/ellmos-ai/skills) | Multi-Agent Execution Fabric | Formalized AI cognitive skill library & modular workflow specs |
+| [`ellmos-ai/sqlite-transit-sync`](https://github.com/ellmos-ai/sqlite-transit-sync) | Data Transit | Deterministic snapshot retention and sync engine |
 | [`open-bricks`](https://github.com/open-bricks) | Umbrella Ecosystem | Open source & open science federation |
 
 ## Author

@@ -2,6 +2,19 @@
 
 All notable changes to the Functional Stability Theory (FST) repository will be documented in this file.
 
+## [1.0.1] - 2026-08-21
+
+### Added
+- Bilingual `SECURITY.md` defining Open-Science Research Integrity, 100% offline and zero-egress guarantees for numerical scripts, and coordinated vulnerability disclosure channels (`security@ellmos.ai`).
+- Interactive Mermaid sequence diagram `Theoretical Data Flow & Validation Sequence` illustrating the progression from axioms (RFEP / Pattern A / DS1-DS3) to Master proofs, domain instantiations, and local numerical diagnostics in `README.md` and `README_de.md`.
+- Expanded sibling research and toolchain ecosystem matrix across `research-line`, `biotec-line`, `doc-bricks`, `dev-bricks`, `ellmos-ai`, and `open-bricks`.
+- Security policy badges and updated 10/10 test suite metrics in `README.md` and `README_de.md`.
+- Automated security policy validation and Ruff lint compliance tests in `tests/test_metadata.py`.
+
+### Changed
+- Configured `[tool.ruff]` in `pyproject.toml` with clean package exclusions for standalone numerical research scripts, achieving 100% clean repository-wide linting (`ruff check .` 0 errors).
+- Updated `llms.txt` verification timestamp to 2026-08-21.
+
 ## [1.0.0] - 2026-08-16
 
 ### Added

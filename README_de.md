@@ -3,10 +3,11 @@
 [English](README.md) | Deutsch
 
 [![Lizenz: CC BY 4.0](https://img.shields.io/badge/Lizenz-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Test Suite](https://img.shields.io/badge/Tests-8%2F8%20Bestanden-brightgreen.svg)](tests/)
+[![Test Suite](https://img.shields.io/badge/Tests-10%2F10%20Bestanden-brightgreen.svg)](tests/)
 [![Python: >=3.10](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](pyproject.toml)
 [![ORCID: Lukas Geiger](https://img.shields.io/badge/ORCID-0009--0005--7296--1534-green.svg)](https://orcid.org/0009-0005-7296-1534)
 [![Zenodo Spectrum Duality](https://img.shields.io/badge/Zenodo-10.5281%2Fzenodo.19036190-blue.svg)](https://doi.org/10.5281/zenodo.19036190)
+[![Sicherheit: Open Science Integrität](https://img.shields.io/badge/Sicherheit-Open%20Science%20Integrit%C3%A4t-blue.svg)](SECURITY.md)
 [![Ökosystem: research-line](https://img.shields.io/badge/%C3%96kosystem-research--line-blue.svg)](https://github.com/research-line)
 [![Dachorganisation: open-bricks](https://img.shields.io/badge/Dachorganisation-open--bricks-purple.svg)](https://github.com/open-bricks)
 [![LLM Kontext](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
@@ -95,6 +96,21 @@ Die eigenständige spieltheoretische Chaperon-Arbeit ist veröffentlicht: **FST-
 
 Geplant. Siehe [`fst-chemistry/`](fst-chemistry/).
 
+## Glossar — FST Kernbegriffe
+
+| Begriff | Bedeutung |
+|---------|-----------|
+| **v2.0** | Im RH-Programm entwickeltes Methodenpaket (Trilogie v2.1, [10.5281/zenodo.19035640](https://doi.org/10.5281/zenodo.19035640)): reduziert RH auf *Even Dominance* der Weil-Quadratform QW_λ via Shift-Parity-Lemma, Frontier-Prime-Dominanz, NE-A und NE-B. |
+| **NE-A** | *Nicht-Existenz-Satz A.* Der Fourier-Multiplikator des Prim-Shift-Operators A_λ auf der kritischen Geraden ist nicht-positiv — kann nicht als Hilbert–Pólya-Operator dienen. |
+| **NE-B** | *Nicht-Existenz-Satz B.* Kein universeller symmetrischer Operator kommutiert mit allen Shift-Parity-Differenzmatrizen D_N(r) (computergestützter Beweis für N ≤ 15). Schließt zusammen mit NE-A den klassischen Hilbert–Pólya-Weg aus — weshalb v2.0 für Riemann notwendig ist. |
+| **SGE** | *Halbgruppen-Gruppen-Äquivalenz.* Klassifikationsachse des Zeta Zoo: HP-BL-YES (kommutierender Operator existiert, z.B. Selberg/Casimir), HP-BL-NO (Kommutant blockiert, Riemann), HP-BL-OPEN (unentschieden, z.B. Prime-Hub). |
+| **Weil-Quadratform QW_λ** | Abgeschnittene Explizite-Formel-Quadratform, deren Positivität Nullstellenorte steuert. Universal über den gesamten Zeta Zoo; der dahinterliegende Operator ist familienabhängig. |
+| **Hilbert–Pólya** | Vermutung, dass Riemann-Nullstellen Eigenwerte eines selbstadjungierten Operators sind. v2.0 verallgemeinert dies: Wo Hilbert–Pólya funktioniert (SGE-YES), reproduziert v2.0 es; wo es blockiert ist (NE-B / Riemann), greift v2.0 weiterhin. |
+| **Muster A (Pattern A)** | Funktionelle Positivität unter einer Eichbedingung — das universelle Stabilitätsmuster von FST. |
+| **RFEP** | *Renormiertes Freie-Energie-Prinzip.* Mathematisches Kernprinzip von FST; liefert DS1–DS3. |
+| **CCM** | *Connes–Consani–Moscovici.* Fourier-Modell für die Weil-Quadratform im Zookeeper-Beweis. |
+| **UCU** | *Universelles Konvexitäts-Eindeutigkeitslemma.* Zusammen mit SGE und Weil die Dreiheit der Metaprinzipien des Zeta-Zweigs. |
+
 ## Beweisarchitektur
 
 ```mermaid
@@ -128,6 +144,48 @@ flowchart TD
     class MATH,PHYS,COSMO,BIO domain;
 ```
 
+### Theoretischer Datenfluss & Validierungssequenz
+
+```mermaid
+flowchart LR
+    subgraph HYP["1. Mathematische Axiome & Normalformen"]
+        RFEP["Renormiertes Freie-Energie-Prinzip (RFEP)"]
+        PAT_A["Muster A: Funktionelle Positivität unter Eichbedingung"]
+        DS["Dissipative Selektionsprinzipien (DS1–DS3)"]
+    end
+
+    subgraph PROOF["2. Master-Fundamente & Beweise"]
+        ZK["Zookeeper (CCM-Mikrocluster-Schließung)"]
+        ZZ["Zeta Zoo (SGE-Taxonomie & UCU)"]
+        VAL["Methoden-Validierungspaar (Atlas / Selberg)"]
+    end
+
+    subgraph INST["3. Domänen-Instanziierungen"]
+        MATH["FST-Mathematik (BSD, Hodge, P vs NP)"]
+        PHYS["FST-Physik (K41, Turbulenz, YM, NS)"]
+        COSMO["FST-Kosmologie (Hu–Sawicki / Dunkle Energie)"]
+        BIO["FST-Biologie (FST-Nash Chaperones)"]
+    end
+
+    subgraph DIAG["4. Lokale numerische Validierung (Zero-Egress)"]
+        SCRIPTS["Python Numerische Diagnostiken (scripts/)"]
+        RESULTS["Reproduzierbarkeit & Verifikationsmetriken"]
+    end
+
+    HYP --> PROOF
+    PROOF --> INST
+    INST --> DIAG
+
+    classDef hyp fill:#1e1b4b,stroke:#818cf8,stroke-width:1.5px,color:#fff;
+    classDef proof fill:#1f2937,stroke:#6366f1,stroke-width:2px,color:#fff;
+    classDef inst fill:#111827,stroke:#10b981,stroke-width:1.5px,color:#fff;
+    classDef diag fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#fff;
+    class RFEP,PAT_A,DS hyp;
+    class ZK,ZZ,VAL proof;
+    class MATH,PHYS,COSMO,BIO inst;
+    class SCRIPTS,RESULTS diag;
+```
+
 ## Numerische Validierungsskripte
 
 | Skript | Arbeit | Beschreibung |
@@ -148,32 +206,35 @@ flowchart TD
 | `scripts/dark-energy/compute_w_mapping.py` | Dunkle Energie | Exakte w_eff → w_DE Abbildung + DESI-Gitterscan |
 | `scripts/dark-energy/compute_husawicki_mcmc.py` | Dunkle Energie | Hu-Sawicki f(R) MCMC Fit gegen DESI+Planck+Cassini |
 | `scripts/bsd/compute_height_saturation.py` | BSD | Höhensättigungstest für quadratische Twists |
-| `scripts/bsd/compute_bsd_verification.py` | BSD | BSD-Formel Sanity Checks für ausgewählte LMFDB-Kurven |
-| `scripts/bsd/compute_rank2_lmfdb.py` | BSD | Rang-2 Regulator-Positivitätsstichprobe und Plot |
-| `scripts/hodge/compute_ghr_spectrum.py` | Hodge | GHR-Spektrum numerische Verifikation |
-| `scripts/hodge/compute_voisin_test.py` | Hodge | Voisin-Negativkontroll-Stresstest |
+| `scripts/bsd/compute_bsd_verification.py` | BSD | BSD Formel-Plausibilitätsprüfungen für LMFDB-Kurven |
+| `scripts/bsd/compute_rank2_lmfdb.py` | BSD | Rang-2 Regulator-Positivitätsstichprobe |
+| `scripts/hodge/compute_ghr_spectrum.py` | Hodge | Numerische GHR-Spektrumsverifikation |
+| `scripts/hodge/compute_voisin_test.py` | Hodge | Negativkontroll-Stresstest nach Voisin-Art |
 | `scripts/p-vs-np/compute_sat_entropy.py` | P vs NP | SAT-Slice-Entropieexperiment am 3-SAT-Phasenübergang |
-| `scripts/zeta-zoo/dedekind_ne_b_test.py` | Zeta Zoo | Dedekind Q(sqrt(-5)) NE-B Analog-Sonde |
-| `scripts/zeta-zoo/ihara_petersen_sge_test.py` | Zeta Zoo | Ihara/Petersen SGE YES-Seiten-Test |
+| `scripts/zeta-zoo/dedekind_ne_b_test.py` | Zeta Zoo | Dedekind Q(sqrt(-5)) NE-B Analogsonde |
+| `scripts/zeta-zoo/ihara_petersen_sge_test.py` | Zeta Zoo | Ihara/Petersen SGE YES-Seitentest |
 | `scripts/zeta-zoo/sge_control_experiment.py` | Zeta Zoo | SGE YES/NO diskriminierendes Kontrollexperiment |
 | `masters/atlas/scripts/` | Atlas | Galerkin-Berechnungspipeline (35 Skripte) |
 
 ## Ökosystem & Verwandte Forschungs-Repositories
 
-`functional-stability-theory` ist das zentrale theoretische Fundament der **research-line** Initiative und verknüpft sich im **open-bricks** Ökosystem für Open Science:
+`functional-stability-theory` ist das zentrale theoretische Fundament der **research-line** Initiative und verbindet sich über die **open-bricks** Föderation:
 
-| Repository / Paket | Fokus / Domäne | Integration |
+| Repository / Paket | Schwerpunkt / Domäne | Integration |
 |---|---|---|
-| [`research-line/fst-nash`](https://github.com/research-line/fst-nash) | Chaperon-Spieltheorie | FST-Biologie eigenständiger Begleiter ([DOI: 10.5281/zenodo.20402751](https://doi.org/10.5281/zenodo.20402751)) |
-| [`research-line/rh-even-dominance`](https://github.com/research-line/rh-even-dominance) | Zahlentheorie | Riemannsche Vermutung: Gerade-Dominanz-Trilogie Fundament |
-| [`research-line/crm-cosmology`](https://github.com/research-line/crm-cosmology) | Kosmologie | Cooperative Renormalization Model Fundament |
-| [`research-line/prompt-archaeology-casestudy2`](https://github.com/research-line/prompt-archaeology-casestudy2) | KI & Epistemologie | 4-Stufen Prompt-Archäologie & Reproduzierbarkeits-Artefakte |
+| [`research-line/fst-nash`](https://github.com/research-line/fst-nash) | Chaperon-Spieltheorie | FST-Biologie Begleitprojekt ([DOI: 10.5281/zenodo.20402751](https://doi.org/10.5281/zenodo.20402751)) |
+| [`research-line/rh-even-dominance`](https://github.com/research-line/rh-even-dominance) | Zahlentheorie | Riemann-Hypothese Even-Dominance Trilogie-Fundament |
+| [`research-line/crm-cosmology`](https://github.com/research-line/crm-cosmology) | Kosmologie | Kooperatives Renormierungsmodell (CRM I–V) |
+| [`research-line/prompt-archaeology-casestudy2`](https://github.com/research-line/prompt-archaeology-casestudy2) | KI & Epistemologie | 4-Stufen Prompt-Archäologie & Reproduzierbarkeitsartefakte |
 | [`research-line/ai-elite-swr`](https://github.com/research-line/ai-elite-swr) | KI & Gesellschaft | KI-Elitenstrukturen & Wohlfahrtsforschung |
-| [`research-line/economic-sanctions-coercive-diplomacy`](https://github.com/research-line/economic-sanctions-coercive-diplomacy) | Politische Ökonomie | Spieltheoretisches Modell zu Wirtschaftssanktionen |
-| [`ellmos-ai/system-explorer`](https://github.com/ellmos-ai/system-explorer) | System-Discovery | Kompositionelle Systemexploration & Topologie-Inspektion |
-| [`ellmos-ai/sqlite-transit-sync`](https://github.com/ellmos-ai/sqlite-transit-sync) | Datentransit | Deterministische Snapshot-Retention & Sync-Engine |
-| [`dev-bricks/DevCenter`](https://github.com/dev-bricks/DevCenter) | Entwickler-Werkzeuge | Einheitliches Entwickler-Dashboard & Workspace-Management |
-| [`open-bricks`](https://github.com/open-bricks) | Dachorganisation | Föderation für offene Software und Wissenschaft |
+| [`research-line/economic-sanctions-coercive-diplomacy`](https://github.com/research-line/economic-sanctions-coercive-diplomacy) | Politische Ökonomie | Spieltheoretisches Modell von Sanktionen und Zwangsbargaining |
+| [`biotec-line/VFDistiller`](https://github.com/biotec-line/VFDistiller) | Bio-Genetik Pipeline | Variant Effect Predictor & VCF-Destillations-Toolchain |
+| [`doc-bricks/MediaBrain`](https://github.com/doc-bricks/MediaBrain) | Multi-Format Dokumentensynthese | Offline-First Wissensdatenbank und Forschungsindexierung |
+| [`dev-bricks/CodeBox`](https://github.com/dev-bricks/CodeBox) | Codeanalyse & Diagnostik | Syntaxbaum-Inspektion & strukturelle Linting-Umgebung |
+| [`dev-bricks/DevCenter`](https://github.com/dev-bricks/DevCenter) | Entwickler-Werkzeuge | Einheitliches Entwickler-Dashboard und Workspace-Management |
+| [`ellmos-ai/skills`](https://github.com/ellmos-ai/skills) | Multi-Agent Ausführungsplattform | Formalisierte KI-Fähigkeitenbibliothek & modulare Workflows |
+| [`ellmos-ai/sqlite-transit-sync`](https://github.com/ellmos-ai/sqlite-transit-sync) | Datentransit | Deterministische Snapshot-Retention und Synchronisations-Engine |
+| [`open-bricks`](https://github.com/open-bricks) | Dachorganisation | Open-Source & Open-Science Föderation |
 
 ## Autor
 
@@ -182,4 +243,3 @@ Lukas Geiger — ORCID: [0009-0005-7296-1534](https://orcid.org/0009-0005-7296-1
 ## Lizenz
 
 [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)
-
