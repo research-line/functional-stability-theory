@@ -300,6 +300,11 @@ These stand independently of FST. The RFEP was abstracted from them; they are no
 | `scripts/yang-mills/compute_dobrushin_su2.py` | Yang-Mills | SU(2) lattice Dobrushin influence scan and gap plot |
 | `scripts/yang-mills/compute_birkhoff_rg.py` | Yang-Mills | Birkhoff contraction scan for hierarchical RG steps |
 | `scripts/yang-mills/compute_os_capacity_ledger.py` | Yang-Mills | OS-danger capacity ledger and negative-control diagnostic |
+| `scripts/yang-mills/compute_rp_os_transfer_ledger.py` | Yang-Mills | RP/OS transfer matrix positivity ledger |
+| `scripts/yang-mills/compute_rp_os_rfep_transfer_ledger.py` | Yang-Mills | RFEP transfer matrix diagnostic ledger |
+| `scripts/yang-mills/compute_u1_2d_strong_coupling_positive_control.py` | Yang-Mills | 2D U(1) strong-coupling positive control ledger |
+| `scripts/yang-mills/compute_ym_waisen_transfer_ledger.py` | Yang-Mills | Yang-Mills waisen transfer verification ledger |
+| `scripts/yang-mills/u1_strong_coupling_positive_control.py` | Yang-Mills | Direct U(1) character expansion positive control script |
 | `scripts/navier-stokes/compute_ds3_lorenz.py` | Navier-Stokes | DS3 stress test on Lorenz attractor; TV saturation |
 | `scripts/navier-stokes/compute_bv_selection.py` | Navier-Stokes | Balanced-viscosity selection test on the Lorenz attractor |
 | `scripts/navier-stokes/compute_bv_multi_attractor.py` | Navier-Stokes | BV-selection stress test on Lorenz, Roessler, and Chen attractors |

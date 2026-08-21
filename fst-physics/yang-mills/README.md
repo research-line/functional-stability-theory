@@ -24,6 +24,11 @@ input.
 | `../../scripts/yang-mills/compute_dobrushin_su2.py` | SU(2) lattice Dobrushin influence scan |
 | `../../scripts/yang-mills/compute_birkhoff_rg.py` | Birkhoff contraction scan for hierarchical RG steps |
 | `../../scripts/yang-mills/compute_os_capacity_ledger.py` | OS-danger capacity ledger and negative-control diagnostic |
+| `../../scripts/yang-mills/compute_rp_os_transfer_ledger.py` | RP/OS transfer matrix positivity ledger |
+| `../../scripts/yang-mills/compute_rp_os_rfep_transfer_ledger.py` | RFEP transfer matrix diagnostic ledger |
+| `../../scripts/yang-mills/compute_u1_2d_strong_coupling_positive_control.py` | 2D U(1) strong-coupling positive control ledger |
+| `../../scripts/yang-mills/compute_ym_waisen_transfer_ledger.py` | Yang-Mills waisen transfer verification ledger |
+| `../../scripts/yang-mills/u1_strong_coupling_positive_control.py` | Direct U(1) character expansion positive control script |
 | `../../scripts/yang-mills/compute_dobrushin_su2.png` | Generated Dobrushin result plot |
 | `../../scripts/yang-mills/compute_birkhoff_rg.png` | Generated Birkhoff/RG result plot |
 
@@ -35,6 +40,11 @@ From the repository root:
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_dobrushin_su2.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_birkhoff_rg.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_os_capacity_ledger.py
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_rp_os_transfer_ledger.py
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_rp_os_rfep_transfer_ledger.py
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_u1_2d_strong_coupling_positive_control.py
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_ym_waisen_transfer_ledger.py
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/u1_strong_coupling_positive_control.py
 ```
 
 The plotting scripts write their PNG outputs next to the scripts in

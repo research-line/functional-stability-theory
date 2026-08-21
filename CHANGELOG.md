@@ -10,8 +10,12 @@ All notable changes to the Functional Stability Theory (FST) repository will be 
 - Expanded sibling research and toolchain ecosystem matrix across `research-line`, `biotec-line`, `doc-bricks`, `dev-bricks`, `ellmos-ai`, and `open-bricks`.
 - Security policy badges and updated 10/10 test suite metrics in `README.md` and `README_de.md`.
 - Automated security policy validation and Ruff lint compliance tests in `tests/test_metadata.py`.
+- 5 new Yang-Mills verification and transfer scripts in `scripts/yang-mills/`: `compute_rp_os_transfer_ledger.py`, `compute_rp_os_rfep_transfer_ledger.py`, `compute_u1_2d_strong_coupling_positive_control.py`, `compute_ym_waisen_transfer_ledger.py`, and `u1_strong_coupling_positive_control.py`.
 
 ### Changed
+- Synchronized Yang-Mills domain preprint (`fst-physics/yang-mills/`) to latest LaTeX design/layout standards (frontmatter isolation, abstract roman p.1, TOC p.2, arabic main body p.1, 2-pass clean pdflatex build, EN 48 S., DE 49 S., Kombi 97 S.).
+- Synchronized P vs NP domain preprint (`fst-mathematics/p-vs-np/`) with English style and US typography normalization.
+- Updated `fst-physics/yang-mills/README.md`, `README.md`, and `README_de.md` numerical validation tables and reproduction runbooks.
 - Configured `[tool.ruff]` in `pyproject.toml` with clean package exclusions for standalone numerical research scripts, achieving 100% clean repository-wide linting (`ruff check .` 0 errors).
 - Updated `llms.txt` verification timestamp to 2026-08-21.
 
