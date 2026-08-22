@@ -2,6 +2,19 @@
 
 All notable changes to the Functional Stability Theory (FST) repository will be documented in this file.
 
+## [1.0.2] - 2026-08-23
+
+### Added
+- Multi-OS (`ubuntu-latest`, `windows-latest`, `macos-latest`) and multi-Python (`3.10`, `3.11`, `3.12`, `3.13`) GitHub Actions CI workflow in `.github/workflows/ci.yml`.
+- PEP 621 Operating System (`OS Independent`, `Microsoft Windows`, `POSIX Linux`, `MacOS`) and Python 3.13 classifiers in `pyproject.toml`.
+- Standard project URLs (`Issues`, `Changelog`, `Security`) in `pyproject.toml`.
+- CI workflow integrity and PEP 621 contract validation test cases in `tests/test_metadata.py` expanding test suite to 12/12 passing tests.
+- CI status badges in `README.md` and `README_de.md`.
+
+### Changed
+- Updated `llms.txt` verification timestamp to 2026-08-23 and updated test suite / CI matrix specifications.
+- Updated test suite badges in `README.md` and `README_de.md` to reflect 12/12 passing tests across Python 3.10–3.13.
+
 ## [1.0.1] - 2026-08-21
 
 ### Added

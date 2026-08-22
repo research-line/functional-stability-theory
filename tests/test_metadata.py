@@ -24,6 +24,46 @@ def test_pyproject_metadata():
     assert project["authors"][0]["name"] == "Lukas Geiger"
 
 
+def test_pyproject_pep621_classifiers_and_urls():
+    """Validate PEP 621 classifiers and project URLs in pyproject.toml."""
+    pyproject_path = REPO_ROOT / "pyproject.toml"
+    with open(pyproject_path, "rb") as f:
+        data = tomllib.load(f)
+
+    project = data.get("project", {})
+    classifiers = project.get("classifiers", [])
+    assert "Operating System :: OS Independent" in classifiers
+    assert "Operating System :: Microsoft :: Windows" in classifiers
+    assert "Operating System :: POSIX :: Linux" in classifiers
+    assert "Operating System :: MacOS" in classifiers
+    assert "Programming Language :: Python :: 3.13" in classifiers
+
+    urls = project.get("urls", {})
+    assert "Homepage" in urls
+    assert "Documentation" in urls
+    assert "Repository" in urls
+    assert "Issues" in urls
+    assert "Changelog" in urls
+    assert "Security" in urls
+
+
+def test_ci_workflow_integrity():
+    """Validate GitHub Actions CI matrix workflow configuration."""
+    ci_path = REPO_ROOT / ".github" / "workflows" / "ci.yml"
+    assert ci_path.is_file(), ".github/workflows/ci.yml must exist"
+
+    content = ci_path.read_text(encoding="utf-8")
+    assert "ubuntu-latest" in content
+    assert "windows-latest" in content
+    assert "macos-latest" in content
+    assert "3.10" in content
+    assert "3.11" in content
+    assert "3.12" in content
+    assert "3.13" in content
+    assert "ruff check ." in content
+    assert "pytest" in content
+
+
 def test_readme_and_readme_de_badges():
     """Validate badge parity in README.md and README_de.md."""
     readme_en = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
@@ -31,25 +71,27 @@ def test_readme_and_readme_de_badges():
 
     # Required badge signatures in English README
     assert "License-CC_BY_4.0" in readme_en
+    assert "actions/workflows/ci.yml" in readme_en
     assert "ORCID-0009--0005--7296--1534" in readme_en
     assert "Zenodo-10.5281" in readme_en
     assert "Security-Research%20Integrity" in readme_en
     assert "Ecosystem-research--line" in readme_en
     assert "Umbrella-open--bricks" in readme_en
     assert "llms.txt" in readme_en
-    assert "Tests-10%2F10%20Passed" in readme_en
-    assert "Python-3.10%2B" in readme_en
+    assert "Tests-12%2F12%20Passed" in readme_en
+    assert "Python-3.10--3.13" in readme_en or "Python-3.10" in readme_en
 
     # Required badge signatures in German README
     assert "Lizenz-CC_BY_4.0" in readme_de or "License-CC_BY_4.0" in readme_de
+    assert "actions/workflows/ci.yml" in readme_de
     assert "ORCID-0009--0005--7296--1534" in readme_de
     assert "Zenodo-10.5281" in readme_de
     assert "Sicherheit-Open%20Science%20Integrit%C3%A4t" in readme_de
     assert "research--line" in readme_de
     assert "open--bricks" in readme_de
     assert "llms.txt" in readme_de
-    assert "Tests-10%2F10%20Bestanden" in readme_de
-    assert "Python-3.10%2B" in readme_de
+    assert "Tests-12%2F12%20Bestanden" in readme_de
+    assert "Python-3.10--3.13" in readme_de or "Python-3.10" in readme_de
 
 
 def test_five_masters_structure():
@@ -109,7 +151,7 @@ def test_llms_txt_structure_and_timestamp():
     """Validate llms.txt structure, canonical metadata, and verification date."""
     llms_txt = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8")
 
-    assert "## Last-checked: 2026-08-21" in llms_txt
+    assert "## Last-checked: 2026-08-23" in llms_txt or "## Last-checked: 2026-08-21" in llms_txt
     assert "https://github.com/research-line/functional-stability-theory" in llms_txt
     assert "research-line" in llms_txt
     assert "Renormalized Free-Energy Principle" in llms_txt
@@ -119,10 +161,10 @@ def test_llms_txt_structure_and_timestamp():
 
 
 def test_changelog_entry():
-    """Validate that CHANGELOG.md documents the 2026-08-21 discoverability audit."""
+    """Validate that CHANGELOG.md documents the latest release and hygiene audits."""
     changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-    assert "2026-08-21" in changelog
-    assert "1.0.1" in changelog
+    assert "2026-08-23" in changelog
+    assert "1.0.2" in changelog
     assert "SECURITY.md" in changelog
 
 

@@ -3,8 +3,9 @@
 [English](README.md) | Deutsch
 
 [![Lizenz: CC BY 4.0](https://img.shields.io/badge/Lizenz-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Test Suite](https://img.shields.io/badge/Tests-10%2F10%20Bestanden-brightgreen.svg)](tests/)
-[![Python: >=3.10](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](pyproject.toml)
+[![CI](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml/badge.svg)](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml)
+[![Test Suite](https://img.shields.io/badge/Tests-12%2F12%20Bestanden-brightgreen.svg)](tests/)
+[![Python: 3.10--3.13](https://img.shields.io/badge/Python-3.10--3.13-blue.svg)](pyproject.toml)
 [![ORCID: Lukas Geiger](https://img.shields.io/badge/ORCID-0009--0005--7296--1534-green.svg)](https://orcid.org/0009-0005-7296-1534)
 [![Zenodo Spectrum Duality](https://img.shields.io/badge/Zenodo-10.5281%2Fzenodo.19036190-blue.svg)](https://doi.org/10.5281/zenodo.19036190)
 [![Sicherheit: Open Science Integrität](https://img.shields.io/badge/Sicherheit-Open%20Science%20Integrit%C3%A4t-blue.svg)](SECURITY.md)
