@@ -22,7 +22,7 @@ input.
 | `FST-YM_YangMills_MassGap_de.tex` / `FST-YM_YangMills_MassGap_de.pdf` | German paper source and PDF |
 | `FST-YM_YangMills_MassGap_kombi.pdf` | Combined bilingual PDF |
 | `../../scripts/yang-mills/compute_dobrushin_su2.py` | SU(2) lattice Dobrushin influence scan |
-| `../../scripts/yang-mills/compute_birkhoff_rg.py` | Birkhoff contraction scan for hierarchical RG steps |
+| `../../scripts/yang-mills/compute_birkhoff_rg.py` | Birkhoff scan with finite good-scale density, bad-defect sums, and saturation-zone diagnostics |
 | `../../scripts/yang-mills/compute_os_capacity_ledger.py` | OS-danger capacity ledger and negative-control diagnostic |
 | `../../scripts/yang-mills/compute_rp_os_transfer_ledger.py` | RP/OS transfer matrix positivity ledger |
 | `../../scripts/yang-mills/compute_rp_os_rfep_transfer_ledger.py` | RFEP transfer matrix diagnostic ledger |
@@ -46,6 +46,19 @@ PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_u1_2d_strong_coupling_p
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_ym_waisen_transfer_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/u1_strong_coupling_positive_control.py
 ```
+
+For a bounded diagnostic run that does not overwrite the tracked plot:
+
+```bash
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_birkhoff_rg.py --no-plot --epsilon 0.01 --n-levels 6
+```
+
+For a chosen margin `epsilon`, the script reports the observed fraction of
+scales satisfying `tau_B <= 1 - epsilon`, the cumulative excess
+`sum_k max(0, tau_B(R_k) - (1 - epsilon))`, and maximal contiguous saturation
+zones. These are finite-sequence diagnostics only; they do not establish
+Kingman hypotheses, scale-uniform coercivity, OS compactness, or a continuum
+Yang--Mills mass gap.
 
 The plotting scripts write their PNG outputs next to the scripts in
 `scripts/yang-mills/`. The ledger script writes local `_data/` and `_results/`
