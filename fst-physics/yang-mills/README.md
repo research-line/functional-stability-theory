@@ -67,6 +67,14 @@ depend only on scale index and run length; external CSV inputs must declare the
 window and pre-registration flag explicitly. These finite-window diagnostics
 do not establish OS compactness or a continuum mass gap.
 
+The generated controls include a dedicated Bad-Channel false positive: its
+mean log contraction is negative and its aggregate is labelled summable, so
+the base ledger accepts it, while a pre-registered one-percent half-scale
+window carries almost all OS-danger and nonlocal defect mass. The separate
+`transfer_decision` must therefore reject it as
+`rejected_bad_channel_false_positive`; the strong-coupling and summable
+positive controls remain `control_pass_windows_clear_no_claim`.
+
 For a chosen margin `epsilon`, the script reports the observed fraction of
 scales satisfying `tau_B <= 1 - epsilon`, the cumulative excess
 `sum_k max(0, tau_B(R_k) - (1 - epsilon))`, and maximal contiguous saturation

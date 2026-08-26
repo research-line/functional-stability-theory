@@ -67,16 +67,28 @@ WINDOW_LEDGER_FIELDS = [
 ]
 
 
+def predefined_probe_bounds(k_max: int) -> tuple[int, int]:
+    """Return the inclusive one-percent probe window around the half-scale."""
+    if k_max < 1:
+        raise ValueError("Expected k_max >= 1")
+    probe_count = max(1, math.ceil(0.01 * k_max))
+    probe_end = max(probe_count, math.ceil(0.50 * k_max))
+    return probe_end - probe_count + 1, probe_end
+
+
 def predefined_rg_window(k: int, k_max: int) -> str:
-    """Assign a window from scale indices only, before diagnostic values exist."""
+    """Assign an outcome-independent partition with a narrow half-scale probe."""
     if k_max < 1 or not 1 <= k <= k_max:
         raise ValueError("Expected 1 <= k <= k_max with k_max >= 1")
 
-    relative_start = (k - 1) / k_max
-    if relative_start < 0.10:
+    probe_start, probe_end = predefined_probe_bounds(k_max)
+    early_end = min(probe_start - 1, math.ceil(0.10 * k_max))
+    if k <= early_end:
         return "rg_early_10pct"
-    if relative_start < 0.50:
-        return "rg_middle_40pct"
+    if k < probe_start:
+        return "rg_pre_probe_39pct"
+    if k <= probe_end:
+        return "rg_probe_01pct"
     return "rg_late_50pct"
 
 
@@ -327,6 +339,9 @@ def generated_v2_control_rows(k_max: int = 500) -> list[dict]:
             }
         )
 
+    probe_start, probe_end = predefined_probe_bounds(k_max)
+    probe_count = probe_end - probe_start + 1
+
     for k in range(1, k_max + 1):
         rg_window_id = predefined_rg_window(k, k_max)
         add_row(
@@ -368,6 +383,33 @@ def generated_v2_control_rows(k_max: int = 500) -> list[dict]:
             circularity_status="pre_registered",
             cofactor_certificate_status="toy_repair_present",
             source_note="summable OS-danger control, still synthetic",
+        )
+        concentrated_capacity = 0.001 / ((k + 1.0) ** 2)
+        if rg_window_id == "rg_probe_01pct":
+            concentrated_capacity += 0.150 / probe_count
+        add_row(
+            scenario="concentrated_bad_channel_false_positive",
+            k=k,
+            rg_window_id=rg_window_id,
+            window_predefined=True,
+            source_kind="synthetic_window_concentration_control",
+            tail_model="summable",
+            tau_b=math.exp(-0.11 + 0.012 * math.sin(math.log(k + 2.0))),
+            epsilon_safe=0.015 / ((k + 1.0) ** 2),
+            eta_os_danger=concentrated_capacity,
+            cap_os_path=concentrated_capacity,
+            alternate_blocking_control=concentrated_capacity
+            * (1.25 if rg_window_id == "rg_probe_01pct" else 0.80),
+            local_visible_defect=0.008 / ((k + 1.0) ** 2),
+            nonlocal_tail_defect=concentrated_capacity,
+            target_gap=0.10,
+            rp_cone_status="pass",
+            circularity_status="pre_registered",
+            cofactor_certificate_status="toy_repair_present",
+            source_note=(
+                "negative mean contraction and bounded aggregate, but a pre-registered "
+                "one-percent RG window carries concentrated OS-danger"
+            ),
         )
         add_row(
             scenario="kingman_false_positive_harmonic",
@@ -658,20 +700,26 @@ def summarize_v2_windows(
         nonlocal_tail_cost = math.fsum(
             float(row["nonlocal_tail_defect"]) for row in window_rows
         )
+        capacity_reference_share = max(occupancy, safe_share or 0.0)
+        os_dominates_reference = bool(
+            capacity_share is not None
+            and capacity_share > capacity_reference_share + 1e-12
+        )
+        concentration_corroborated = bool(
+            (
+                defect_over_occupancy is not None
+                and defect_over_occupancy > 1.0 + 1e-12
+            )
+            or (alternate_ratio is not None and alternate_ratio > 1.0 + 1e-12)
+            or any(is_bad_v2_row(row) for row in window_rows)
+        )
 
         if not predefined:
             transfer_status = "blocked_post_hoc_window"
         elif base_decision != "control_pass_summable_no_claim":
             base_reason = base_decision.removeprefix("blocked_").removeprefix("rejected_")
             transfer_status = f"blocked_base_{base_reason}"
-        elif (
-            (capacity_share is not None and capacity_share > occupancy + 1e-12)
-            or (
-                defect_over_occupancy is not None
-                and defect_over_occupancy > 1.0 + 1e-12
-            )
-            or (alternate_ratio is not None and alternate_ratio > 1.0 + 1e-12)
-        ):
+        elif os_dominates_reference and concentration_corroborated:
             transfer_status = "flagged_bad_channel_control_only"
         else:
             transfer_status = "window_control_clear_no_claim"
@@ -713,6 +761,23 @@ def v2_payload(rows: list[dict], source_path: Path | None, date_tag: str) -> dic
         for scenario, group_rows in sorted(grouped.items())
         for window in summarize_v2_windows(scenario, group_rows, decisions[scenario])
     ]
+    windows_by_scenario: dict[str, list[dict]] = defaultdict(list)
+    for window in window_ledger:
+        windows_by_scenario[window["scenario"]].append(window)
+    for summary in summaries:
+        statuses = {
+            window["transfer_status"]
+            for window in windows_by_scenario[summary["scenario"]]
+        }
+        if summary["decision"] != "control_pass_summable_no_claim":
+            transfer_decision = summary["decision"]
+        elif "blocked_post_hoc_window" in statuses:
+            transfer_decision = "blocked_post_hoc_window"
+        elif "flagged_bad_channel_control_only" in statuses:
+            transfer_decision = "rejected_bad_channel_false_positive"
+        else:
+            transfer_decision = "control_pass_windows_clear_no_claim"
+        summary["transfer_decision"] = transfer_decision
 
     return {
         "date": date_tag,
@@ -747,6 +812,11 @@ def v2_payload(rows: list[dict], source_path: Path | None, date_tag: str) -> dic
                 "role": "large-field RG bookkeeping context; not a Yang-Mills claim",
                 "url": "https://arxiv.org/abs/1212.5562",
             },
+            {
+                "source": "arXiv:1304.0705",
+                "role": "small/large-field convergence context; not a Yang-Mills claim",
+                "url": "https://arxiv.org/abs/1304.0705",
+            },
         ],
     }
 
@@ -767,6 +837,7 @@ def write_v2_summary_csv(summaries: list[dict], path: Path) -> None:
         "circularity_status",
         "cofactor_certificate_status",
         "decision",
+        "transfer_decision",
     ]
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
@@ -815,12 +886,14 @@ def markdown_v2_report(payload: dict) -> str:
         "  von arXiv Admin zurückgezogen; es wird nicht als Projektnachweis genutzt.",
         "- `arXiv:1108.1335` und `arXiv:1212.5562` trennen in einer Darstellung des",
         "  Balaban-RG kleine und große Feldbeiträge. Das motiviert getrennte",
-        "  Fensterkosten, liefert aber keinen Yang-Mills-Transferbeweis.",
+        "  Fensterkosten; `arXiv:1304.0705` schließt die dortige Stabilitätsanalyse",
+        "  erst mit einem eigenen Konvergenzschritt. Keiner dieser Texte liefert den",
+        "  hier offenen Yang-Mills-Transferbeweis.",
         "",
         "## Ledger-Entscheidungen",
         "",
-        "| Szenario | mean log tau_B | Summe eps_safe | Summe eta_OS | GT2-Produkt | good-scale | RP | Zirkularität | Cofactor | Entscheidung |",
-        "|---|---:|---:|---:|---:|---:|---|---|---|---|",
+        "| Szenario | mean log tau_B | Summe eps_safe | Summe eta_OS | GT2-Produkt | good-scale | RP | Zirkularität | Cofactor | Basisentscheid | Transferentscheid |",
+        "|---|---:|---:|---:|---:|---:|---|---|---|---|---|",
     ]
 
     for summary in payload["summaries"]:
@@ -833,7 +906,7 @@ def markdown_v2_report(payload: dict) -> str:
             f"{'/'.join(summary['rp_cone_status'])} | "
             f"{'/'.join(summary['circularity_status'])} | "
             f"{'/'.join(summary['cofactor_certificate_status'])} | "
-            f"{summary['decision']} |"
+            f"{summary['decision']} | {summary['transfer_decision']} |"
         )
 
     lines.extend(
@@ -844,8 +917,10 @@ def markdown_v2_report(payload: dict) -> str:
             "Die Fenster werden nur aus Skalenindex und Skalenanzahl gebildet, bevor",
             "Diagnosewerte ausgewertet werden. `window_predefined` bleibt für externe",
             "CSV-Daten eine explizite, fail-closed Quellenangabe. Shares verwenden das",
-            "jeweilige Szenario als Nenner; `defect_share_over_occupancy > 1` markiert",
-            "überproportional konzentrierte nichtlokale Defektmasse. Der alternative",
+            "jeweilige Szenario als Nenner. Ein Bad-Channel wird nur markiert, wenn der",
+            "OS-Anteil sowohl Occupancy als auch Safe-Signal-Anteil übersteigt und dies",
+            "durch Defektkonzentration, alternative Kontrolle oder Bad-Scale-Flag",
+            "bestätigt wird. Der alternative",
             "Blocking-Ratio teilt eine unabhängig gelieferte Kontrollkostenreihe durch",
             "`cap_os_path` im selben Fenster.",
             "",
@@ -879,6 +954,10 @@ def markdown_v2_report(payload: dict) -> str:
             "weil die OS-gefährliche Kapazität nicht summierbar ist. Der RP-Kegel-Fail und",
             "der zirkuläre Quellen-Fail werden ebenfalls verworfen, obwohl ihre numerischen",
             "Summen harmlos aussehen.",
+            "Die neue konzentrierte Kontrolle besteht dagegen den summierbaren Basischeck",
+            "und hat ebenfalls negatives `mean_log_tau_B`, scheitert aber separat am",
+            "vorregistrierten Ein-Prozent-Fenster. Dadurch bleiben Global- und",
+            "Bad-Channel-Entscheid beobachtbar verschieden.",
             "",
             "Damit ist der nächste Beweisschritt präziser, aber nicht geschlossen:",
             "Ein echter Yang-Mills-Nachzug braucht nicht-zirkuläre RG-/Gauge-Blockdaten,",
