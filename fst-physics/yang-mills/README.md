@@ -25,6 +25,7 @@ input.
 | `../../scripts/yang-mills/compute_birkhoff_rg.py` | Birkhoff scan with finite good-scale density, bad-defect sums, and saturation-zone diagnostics |
 | `../../scripts/yang-mills/compute_casimir_corridor_ledger.py` | Predefined gauge-sector Casimir-window audit with commutator and matched post-hoc controls |
 | `../../scripts/yang-mills/compute_coercive_complement_ledger.py` | Finite self-adjoint outer-gap and residual/gap gate with bad-scale and Gribov matched controls |
+| `../../scripts/yang-mills/compute_continuum_gate_audit.py` | T0--T3 proof-status, FMS quantitative-rate, Kingman/GT2, and Gribov/Dobrushin audit |
 | `../../scripts/yang-mills/compute_k41_transfer_split_ledger.py` | K41-style local-positive-control versus OS/continuum-transfer audit with envelope and defect-budget gates |
 | `../../scripts/yang-mills/compute_orbit_rigidity_ledger.py` | Hodge-inspired bounded-component, gauge-origin, residue-gap, and limit-closure audit |
 | `../../scripts/yang-mills/compute_os_capacity_ledger.py` | OS-danger capacity ledger with pre-registered RG-window Tide-Clock fields and negative-control diagnostics |
@@ -45,6 +46,7 @@ PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_dobrushin_su2.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_birkhoff_rg.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_casimir_corridor_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_coercive_complement_ledger.py
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_continuum_gate_audit.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_k41_transfer_split_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_orbit_rigidity_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_os_capacity_ledger.py
@@ -155,6 +157,39 @@ ledger: its mean log RG contraction is negative and its finite local margin is
 positive, but the declared harmonic worst-scale corridor is non-summable, so
 the continuum transfer is blocked. A second control shows that an unresolved
 Gribov corridor independently blocks the same otherwise-good local baseline.
+
+The continuum-gate audit turns the current proof-note waterline into four
+machine-readable families. T0 remains open because finite-lattice reflection
+positivity is not an OS-positive, normalized continuum construction. T1 is
+partial: restricted single-link/typical-set controls do not instantiate the
+Fathi--Mikulincer--Shenfeld manifold theorem uniformly for gauge conditionals,
+do not justify restriction and bad-set extension, and do not identify its
+transport with the RG kernel. In asymptotic form the available general
+transport envelope has `log log K = O(L^2)`. Thus replacing
+`L=O(beta)` by `L_typ=O(sqrt(beta))` improves
+`exp(exp(O(beta^2)))` only to `exp(exp(O(beta)))`; it still does not certify
+the required contraction `1-c/sqrt(beta) < 1`.
+
+T2 remains open for a separate reason. Kingman's subadditive theorem can
+diagnose an asymptotic mean contraction only after stationarity, ergodicity,
+and integrability are proved for the physical RG cocycle. It neither derives
+the gap recursion `kappa_(k+1) >= kappa_k(1-epsilon_k)` nor the independent
+summability condition `sum epsilon_k < infinity`. The audit reuses the existing
+harmonic false positive and adds matched `1/k^2` and `1/k` analytical controls:
+the first validates only the conditional infinite-product lemma, while the
+second destroys the limiting lower bound despite a negative mean signal.
+
+T3 is partial at finite lattice scale. Singer's Gribov obstruction applies to
+a global continuous non-Abelian gauge section. It therefore does not directly
+enter the gauge-unfixed product specification on `SU(N)^E`, which chooses no
+global slice; the uniform single-site LSI and influence-matrix bounds remain
+open nonetheless. Any gauge-fixed or patchwise quotient route must separately
+control nonlocal/singular conditionals and seam or horizon capacity. A
+measure-zero Gribov horizon is not by itself such a capacity, gradient, or
+transport certificate. All bundled records are claim-neutral and
+`claim_pass=0`. The generated Markdown is the deterministic source for the
+T0--T3 proof-note update; direct OneDrive writeback remains blocked while the
+cloud-lock and host-suffixed-artifact gate is active.
 
 The OS-capacity ledger's window CSV and JSON expose `rg_window_id`,
 `window_predefined`, scale occupancy, safe-signal and OS-capacity shares,
