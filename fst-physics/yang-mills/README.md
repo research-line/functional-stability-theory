@@ -23,6 +23,7 @@ input.
 | `FST-YM_YangMills_MassGap_kombi.pdf` | Combined bilingual PDF |
 | `../../scripts/yang-mills/compute_dobrushin_su2.py` | SU(2) lattice Dobrushin influence scan |
 | `../../scripts/yang-mills/compute_birkhoff_rg.py` | Birkhoff scan with finite good-scale density, bad-defect sums, and saturation-zone diagnostics |
+| `../../scripts/yang-mills/compute_casimir_corridor_ledger.py` | Predefined gauge-sector Casimir-window audit with commutator and matched post-hoc controls |
 | `../../scripts/yang-mills/compute_coercive_complement_ledger.py` | Finite self-adjoint outer-gap and residual/gap gate with bad-scale and Gribov matched controls |
 | `../../scripts/yang-mills/compute_os_capacity_ledger.py` | OS-danger capacity ledger with pre-registered RG-window Tide-Clock fields and negative-control diagnostics |
 | `../../scripts/yang-mills/compute_rp_os_transfer_ledger.py` | RP/OS transfer matrix positivity ledger |
@@ -40,6 +41,7 @@ From the repository root:
 ```bash
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_dobrushin_su2.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_birkhoff_rg.py
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_casimir_corridor_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_coercive_complement_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_os_capacity_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_rp_os_transfer_ledger.py
@@ -77,6 +79,29 @@ complement were fixed before leakage measurement and an independently verified
 physical Yang--Mills predefinition certificate is supplied. All bundled
 fixtures are synthetic, no bundled row is transfer-eligible, and `claim_pass`
 remains zero.
+
+The Selberg-inspired Casimir-corridor audit can write a separate disposable
+ledger:
+
+```bash
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_casimir_corridor_ledger.py --output-dir /tmp/ym-casimir-corridor
+```
+
+It derives a Casimir-window projector inside a declared physical/Gauss-law
+sector and checks separately that the interval was fixed before spectral or
+commutator inspection, that both Hamiltonian and Casimir preserve the gauge
+sector, and that the Hamiltonian reduces the derived corridor. The matched
+post-hoc control uses the same matrices and interval as the positive fixture
+but is rejected on provenance. A second matched control is gauge invariant yet
+mixes the corridor with its physical exterior, showing why gauge invariance
+alone is insufficient. The finite compact-U(1) strong-coupling control uses the
+gauge-reduced loop-flux basis with electric Casimir `n^2`; its `n=±1` corridor
+has a unit spectral separation from the retained exterior. A reducing matched
+negative with a collapsed Hamiltonian separation still fails. The corridor
+provenance is explicitly gauge/Casimir-only: neither RG coercivity nor numerical
+residual smallness is used to define it. The U(1) row passes only as an analytic
+nonphysical calibration. None of these finite controls supplies an independently
+verified physical non-Abelian Yang--Mills corridor, and `claim_pass=0`.
 
 The OS-capacity ledger's window CSV and JSON expose `rg_window_id`,
 `window_predefined`, scale occupancy, safe-signal and OS-capacity shares,
