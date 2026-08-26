@@ -25,6 +25,7 @@ input.
 | `../../scripts/yang-mills/compute_birkhoff_rg.py` | Birkhoff scan with finite good-scale density, bad-defect sums, and saturation-zone diagnostics |
 | `../../scripts/yang-mills/compute_casimir_corridor_ledger.py` | Predefined gauge-sector Casimir-window audit with commutator and matched post-hoc controls |
 | `../../scripts/yang-mills/compute_coercive_complement_ledger.py` | Finite self-adjoint outer-gap and residual/gap gate with bad-scale and Gribov matched controls |
+| `../../scripts/yang-mills/compute_orbit_rigidity_ledger.py` | Hodge-inspired bounded-component, gauge-origin, residue-gap, and limit-closure audit |
 | `../../scripts/yang-mills/compute_os_capacity_ledger.py` | OS-danger capacity ledger with pre-registered RG-window Tide-Clock fields and negative-control diagnostics |
 | `../../scripts/yang-mills/compute_rp_os_transfer_ledger.py` | RP/OS transfer matrix positivity ledger |
 | `../../scripts/yang-mills/compute_rp_os_rfep_transfer_ledger.py` | RFEP transfer matrix diagnostic ledger |
@@ -43,6 +44,7 @@ PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_dobrushin_su2.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_birkhoff_rg.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_casimir_corridor_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_coercive_complement_ledger.py
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_orbit_rigidity_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_os_capacity_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_rp_os_transfer_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_rp_os_rfep_transfer_ledger.py
@@ -102,6 +104,21 @@ provenance is explicitly gauge/Casimir-only: neither RG coercivity nor numerical
 residual smallness is used to define it. The U(1) row passes only as an analytic
 nonphysical calibration. None of these finite controls supplies an independently
 verified physical non-Abelian Yang--Mills corridor, and `claim_pass=0`.
+
+The Hodge-inspired orbit-rigidity successor can write an isolated ledger:
+
+```bash
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_orbit_rigidity_ledger.py --output-dir /tmp/ym-orbit-rigidity
+```
+
+It records `bounded_scale_component`, `gauge_orbit_certificate`,
+`continuum_residue_gap`, and `bad_component_escape` for one predeclared finite
+component family and matched negatives. Perfect good-scale density cannot pay
+for unbounded component complexity; a gauge-orbit certificate derived from the
+successful gap signal is rejected as circular; residual-gap collapse and new
+remainder modes fail separately. A correct finite Dirichlet-form test is kept
+as diagnostic when independent physical origin or Mosco/compact limit closure
+is missing. All bundled rows remain finite controls and `claim_pass=0`.
 
 The OS-capacity ledger's window CSV and JSON expose `rg_window_id`,
 `window_predefined`, scale occupancy, safe-signal and OS-capacity shares,
