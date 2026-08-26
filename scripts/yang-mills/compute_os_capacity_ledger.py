@@ -8,7 +8,9 @@ Purpose:
 - keep the old Kingman/Birkhoff diagnostic,
 - add a separate OS-danger capacity proxy,
 - include a negative control where mean contraction is negative but the
-  dangerous capacity is not summable.
+  dangerous capacity is not summable,
+- audit pre-registered RG windows for concentrated OS-danger and nonlocal
+  defect costs.
 
 This is a ledger/prototype, not a Yang-Mills proof.
 """
@@ -27,18 +29,20 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parent
 RESULT_DIR = ROOT / "_results"
-RESULT_DIR.mkdir(exist_ok=True)
 DATA_DIR = ROOT / "_data"
 
 V2_FIELDS = [
     "scenario",
     "k",
+    "rg_window_id",
+    "window_predefined",
     "source_kind",
     "tail_model",
     "tau_B",
     "epsilon_safe",
     "eta_os_danger",
     "cap_os_path",
+    "alternate_blocking_control",
     "local_visible_defect",
     "nonlocal_tail_defect",
     "target_gap",
@@ -47,6 +51,33 @@ V2_FIELDS = [
     "cofactor_certificate_status",
     "source_note",
 ]
+
+WINDOW_LEDGER_FIELDS = [
+    "scenario",
+    "rg_window_id",
+    "window_predefined",
+    "scale_occupancy",
+    "safe_signal_share",
+    "os_capacity_share",
+    "defect_share_over_occupancy",
+    "bad_run_switch_share",
+    "alternate_blocking_control_ratio",
+    "nonlocal_tail_cost",
+    "transfer_status",
+]
+
+
+def predefined_rg_window(k: int, k_max: int) -> str:
+    """Assign a window from scale indices only, before diagnostic values exist."""
+    if k_max < 1 or not 1 <= k <= k_max:
+        raise ValueError("Expected 1 <= k <= k_max with k_max >= 1")
+
+    relative_start = (k - 1) / k_max
+    if relative_start < 0.10:
+        return "rg_early_10pct"
+    if relative_start < 0.50:
+        return "rg_middle_40pct"
+    return "rg_late_50pct"
 
 
 def compute_transfer_matrix(beta: float, n_bins: int = 16) -> np.ndarray:
@@ -256,12 +287,15 @@ def generated_v2_control_rows(k_max: int = 500) -> list[dict]:
     def add_row(
         scenario: str,
         k: int,
+        rg_window_id: str,
+        window_predefined: bool,
         source_kind: str,
         tail_model: str,
         tau_b: float,
         epsilon_safe: float,
         eta_os_danger: float,
         cap_os_path: float,
+        alternate_blocking_control: float,
         local_visible_defect: float,
         nonlocal_tail_defect: float,
         target_gap: float,
@@ -274,12 +308,15 @@ def generated_v2_control_rows(k_max: int = 500) -> list[dict]:
             {
                 "scenario": scenario,
                 "k": k,
+                "rg_window_id": rg_window_id,
+                "window_predefined": window_predefined,
                 "source_kind": source_kind,
                 "tail_model": tail_model,
                 "tau_B": tau_b,
                 "epsilon_safe": epsilon_safe,
                 "eta_os_danger": eta_os_danger,
                 "cap_os_path": cap_os_path,
+                "alternate_blocking_control": alternate_blocking_control,
                 "local_visible_defect": local_visible_defect,
                 "nonlocal_tail_defect": nonlocal_tail_defect,
                 "target_gap": target_gap,
@@ -291,15 +328,19 @@ def generated_v2_control_rows(k_max: int = 500) -> list[dict]:
         )
 
     for k in range(1, k_max + 1):
+        rg_window_id = predefined_rg_window(k, k_max)
         add_row(
             scenario="strong_coupling_positive_control",
             k=k,
+            rg_window_id=rg_window_id,
+            window_predefined=True,
             source_kind="finite_lattice_strong_coupling",
             tail_model="summable",
             tau_b=math.exp(-0.22 - 0.02 / (k + 1.0)),
             epsilon_safe=0.020 / ((k + 1.0) ** 2),
             eta_os_danger=0.006 / ((k + 1.0) ** 2),
             cap_os_path=0.006 / ((k + 1.0) ** 2),
+            alternate_blocking_control=0.005 / ((k + 1.0) ** 2),
             local_visible_defect=0.018 / ((k + 1.0) ** 2),
             nonlocal_tail_defect=0.004 / ((k + 1.0) ** 2),
             target_gap=0.18,
@@ -311,12 +352,15 @@ def generated_v2_control_rows(k_max: int = 500) -> list[dict]:
         add_row(
             scenario="summable_os_capacity_control",
             k=k,
+            rg_window_id=rg_window_id,
+            window_predefined=True,
             source_kind="synthetic_rg_input_csv",
             tail_model="summable",
             tau_b=math.exp(-0.09 + 0.018 * math.sin(math.log(k + 2.0))),
             epsilon_safe=0.018 / ((k + 1.0) ** 2),
             eta_os_danger=0.030 / ((k + 1.0) ** 2),
             cap_os_path=0.030 / ((k + 1.0) ** 2),
+            alternate_blocking_control=0.028 / ((k + 1.0) ** 2),
             local_visible_defect=0.012 / ((k + 1.0) ** 2),
             nonlocal_tail_defect=0.025 / ((k + 1.0) ** 2),
             target_gap=0.10,
@@ -328,12 +372,15 @@ def generated_v2_control_rows(k_max: int = 500) -> list[dict]:
         add_row(
             scenario="kingman_false_positive_harmonic",
             k=k,
+            rg_window_id=rg_window_id,
+            window_predefined=True,
             source_kind="synthetic_negative_control",
             tail_model="harmonic",
             tau_b=math.exp(-0.08 + 0.025 * math.sin(math.log(k + 1.0))),
             epsilon_safe=0.012 / ((k + 1.0) ** 2),
             eta_os_danger=0.080 / k,
             cap_os_path=0.080 / k,
+            alternate_blocking_control=0.090 / k,
             local_visible_defect=0.010 / ((k + 1.0) ** 2),
             nonlocal_tail_defect=0.080 / k,
             target_gap=0.10,
@@ -345,12 +392,15 @@ def generated_v2_control_rows(k_max: int = 500) -> list[dict]:
         add_row(
             scenario="rp_cone_fail_control",
             k=k,
+            rg_window_id=rg_window_id,
+            window_predefined=True,
             source_kind="synthetic_negative_control",
             tail_model="summable",
             tau_b=math.exp(-0.12),
             epsilon_safe=0.010 / ((k + 1.0) ** 2),
             eta_os_danger=0.010 / ((k + 1.0) ** 2),
             cap_os_path=0.010 / ((k + 1.0) ** 2),
+            alternate_blocking_control=0.010 / ((k + 1.0) ** 2),
             local_visible_defect=0.008 / ((k + 1.0) ** 2),
             nonlocal_tail_defect=0.006 / ((k + 1.0) ** 2),
             target_gap=0.11,
@@ -362,12 +412,15 @@ def generated_v2_control_rows(k_max: int = 500) -> list[dict]:
         add_row(
             scenario="circular_source_fail_control",
             k=k,
+            rg_window_id=rg_window_id,
+            window_predefined=True,
             source_kind="target_recycled_advice",
             tail_model="summable",
             tau_b=math.exp(-0.16),
             epsilon_safe=0.010 / ((k + 1.0) ** 2),
             eta_os_danger=0.004 / ((k + 1.0) ** 2),
             cap_os_path=0.004 / ((k + 1.0) ** 2),
+            alternate_blocking_control=0.004 / ((k + 1.0) ** 2),
             local_visible_defect=0.006 / ((k + 1.0) ** 2),
             nonlocal_tail_defect=0.003 / ((k + 1.0) ** 2),
             target_gap=0.16,
@@ -381,12 +434,21 @@ def generated_v2_control_rows(k_max: int = 500) -> list[dict]:
 
 
 def write_input_csv(rows: list[dict], path: Path) -> None:
-    path.parent.mkdir(exist_ok=True)
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=V2_FIELDS)
         writer.writeheader()
         for row in rows:
             writer.writerow({field: row[field] for field in V2_FIELDS})
+
+
+def parse_bool(value: str) -> bool:
+    normalized = value.strip().lower()
+    if normalized == "true":
+        return True
+    if normalized == "false":
+        return False
+    raise ValueError(f"Expected boolean 'true' or 'false', got {value!r}")
 
 
 def read_input_csv(path: Path) -> list[dict]:
@@ -401,16 +463,74 @@ def read_input_csv(path: Path) -> list[dict]:
                 {
                     **{field: row[field] for field in V2_FIELDS},
                     "k": int(row["k"]),
+                    "window_predefined": parse_bool(row["window_predefined"]),
                     "tau_B": float(row["tau_B"]),
                     "epsilon_safe": float(row["epsilon_safe"]),
                     "eta_os_danger": float(row["eta_os_danger"]),
                     "cap_os_path": float(row["cap_os_path"]),
+                    "alternate_blocking_control": float(row["alternate_blocking_control"]),
                     "local_visible_defect": float(row["local_visible_defect"]),
                     "nonlocal_tail_defect": float(row["nonlocal_tail_defect"]),
                     "target_gap": float(row["target_gap"]),
                 }
             )
     return rows
+
+
+def validate_v2_rows(rows: list[dict]) -> None:
+    if not rows:
+        raise ValueError("The v2 ledger requires at least one input row")
+
+    grouped: dict[str, list[dict]] = defaultdict(list)
+    nonnegative_fields = [
+        "epsilon_safe",
+        "eta_os_danger",
+        "cap_os_path",
+        "alternate_blocking_control",
+        "local_visible_defect",
+        "nonlocal_tail_defect",
+        "target_gap",
+    ]
+    for row in rows:
+        scenario = str(row["scenario"]).strip()
+        window_id = str(row["rg_window_id"]).strip()
+        if not scenario or not window_id:
+            raise ValueError("scenario and rg_window_id must be non-empty")
+        if not isinstance(row["window_predefined"], bool):
+            raise ValueError("window_predefined must be a boolean")
+        if int(row["k"]) < 1:
+            raise ValueError("k must be a positive scale index")
+        if not math.isfinite(float(row["tau_B"])) or float(row["tau_B"]) <= 0.0:
+            raise ValueError("tau_B must be finite and positive")
+        for field in nonnegative_fields:
+            value = float(row[field])
+            if not math.isfinite(value) or value < 0.0:
+                raise ValueError(f"{field} must be finite and nonnegative")
+        grouped[scenario].append(row)
+
+    for scenario, scenario_rows in grouped.items():
+        ordered = sorted(scenario_rows, key=lambda item: item["k"])
+        ks = [int(row["k"]) for row in ordered]
+        if len(ks) != len(set(ks)):
+            raise ValueError(f"Duplicate scale index in scenario {scenario!r}")
+
+        positions: dict[str, list[int]] = defaultdict(list)
+        for position, row in enumerate(ordered):
+            positions[str(row["rg_window_id"])].append(position)
+        for window_id, window_positions in positions.items():
+            expected = list(range(window_positions[0], window_positions[-1] + 1))
+            if window_positions != expected:
+                raise ValueError(
+                    f"RG window {window_id!r} is not contiguous in scenario {scenario!r}"
+                )
+
+
+def is_bad_v2_row(row: dict) -> bool:
+    return bool(
+        row["eta_os_danger"] > 0.02
+        or row["rp_cone_status"] != "pass"
+        or row["circularity_status"] != "pre_registered"
+    )
 
 
 def summarize_v2_group(scenario: str, rows: list[dict]) -> dict:
@@ -432,12 +552,7 @@ def summarize_v2_group(scenario: str, rows: list[dict]) -> dict:
     tail_models = sorted({row["tail_model"] for row in rows})
     source_kinds = sorted({row["source_kind"] for row in rows})
 
-    bad_flags = [
-        row["eta_os_danger"] > 0.02
-        or row["rp_cone_status"] != "pass"
-        or row["circularity_status"] != "pre_registered"
-        for row in rows
-    ]
+    bad_flags = [is_bad_v2_row(row) for row in rows]
     longest_bad_run = 0
     current = 0
     for flag in bad_flags:
@@ -488,7 +603,102 @@ def summarize_v2_group(scenario: str, rows: list[dict]) -> dict:
     }
 
 
+def _share(window_total: float, scenario_total: float) -> float | None:
+    if scenario_total <= 0.0:
+        return None
+    return float(window_total / scenario_total)
+
+
+def summarize_v2_windows(
+    scenario: str,
+    rows: list[dict],
+    base_decision: str,
+) -> list[dict]:
+    """Build a fail-closed Tide-Clock ledger over declared contiguous windows."""
+    ordered = sorted(rows, key=lambda item: item["k"])
+    total_scales = len(ordered)
+    total_safe = math.fsum(float(row["epsilon_safe"]) for row in ordered)
+    total_capacity = math.fsum(float(row["cap_os_path"]) for row in ordered)
+    total_defect = math.fsum(float(row["nonlocal_tail_defect"]) for row in ordered)
+
+    bad_flags = [is_bad_v2_row(row) for row in ordered]
+    switch_flags = [False]
+    switch_flags.extend(current != previous for previous, current in zip(bad_flags, bad_flags[1:]))
+
+    windows: dict[str, list[tuple[dict, bool]]] = defaultdict(list)
+    for row, switched in zip(ordered, switch_flags):
+        windows[str(row["rg_window_id"])].append((row, switched))
+
+    ledger: list[dict] = []
+    for window_id, entries in windows.items():
+        window_rows = [row for row, _ in entries]
+        occupancy = len(window_rows) / total_scales
+        safe_share = _share(
+            math.fsum(float(row["epsilon_safe"]) for row in window_rows),
+            total_safe,
+        )
+        capacity_share = _share(
+            math.fsum(float(row["cap_os_path"]) for row in window_rows),
+            total_capacity,
+        )
+        defect_share = _share(
+            math.fsum(float(row["nonlocal_tail_defect"]) for row in window_rows),
+            total_defect,
+        )
+        defect_over_occupancy = (
+            defect_share / occupancy if defect_share is not None and occupancy > 0.0 else None
+        )
+        capacity_cost = math.fsum(float(row["cap_os_path"]) for row in window_rows)
+        alternate_cost = math.fsum(
+            float(row["alternate_blocking_control"]) for row in window_rows
+        )
+        alternate_ratio = alternate_cost / capacity_cost if capacity_cost > 0.0 else None
+        predefined = all(bool(row["window_predefined"]) for row in window_rows)
+        switch_share = sum(1 for _, switched in entries if switched) / len(entries)
+        nonlocal_tail_cost = math.fsum(
+            float(row["nonlocal_tail_defect"]) for row in window_rows
+        )
+
+        if not predefined:
+            transfer_status = "blocked_post_hoc_window"
+        elif base_decision != "control_pass_summable_no_claim":
+            base_reason = base_decision.removeprefix("blocked_").removeprefix("rejected_")
+            transfer_status = f"blocked_base_{base_reason}"
+        elif (
+            (capacity_share is not None and capacity_share > occupancy + 1e-12)
+            or (
+                defect_over_occupancy is not None
+                and defect_over_occupancy > 1.0 + 1e-12
+            )
+            or (alternate_ratio is not None and alternate_ratio > 1.0 + 1e-12)
+        ):
+            transfer_status = "flagged_bad_channel_control_only"
+        else:
+            transfer_status = "window_control_clear_no_claim"
+
+        ledger.append(
+            {
+                "scenario": scenario,
+                "rg_window_id": window_id,
+                "window_predefined": predefined,
+                "scale_occupancy": float(occupancy),
+                "safe_signal_share": safe_share,
+                "os_capacity_share": capacity_share,
+                "defect_share_over_occupancy": defect_over_occupancy,
+                "bad_run_switch_share": float(switch_share),
+                "alternate_blocking_control_ratio": (
+                    float(alternate_ratio) if alternate_ratio is not None else None
+                ),
+                "nonlocal_tail_cost": float(nonlocal_tail_cost),
+                "transfer_status": transfer_status,
+            }
+        )
+
+    return ledger
+
+
 def v2_payload(rows: list[dict], source_path: Path | None, date_tag: str) -> dict:
+    validate_v2_rows(rows)
     grouped: dict[str, list[dict]] = defaultdict(list)
     for row in rows:
         grouped[row["scenario"]].append(row)
@@ -497,6 +707,12 @@ def v2_payload(rows: list[dict], source_path: Path | None, date_tag: str) -> dic
         summarize_v2_group(scenario, group_rows)
         for scenario, group_rows in sorted(grouped.items())
     ]
+    decisions = {summary["scenario"]: summary["decision"] for summary in summaries}
+    window_ledger = [
+        window
+        for scenario, group_rows in sorted(grouped.items())
+        for window in summarize_v2_windows(scenario, group_rows, decisions[scenario])
+    ]
 
     return {
         "date": date_tag,
@@ -504,6 +720,7 @@ def v2_payload(rows: list[dict], source_path: Path | None, date_tag: str) -> dic
         "input_path": str(source_path) if source_path else None,
         "rows": rows,
         "summaries": summaries,
+        "window_ledger": window_ledger,
         "external_short_check": [
             {
                 "source": "arXiv:2505.16585",
@@ -519,6 +736,16 @@ def v2_payload(rows: list[dict], source_path: Path | None, date_tag: str) -> dic
                 "source": "arXiv:2506.00284",
                 "role": "withdrawn proof claim; rejected as project input",
                 "url": "https://arxiv.org/abs/2506.00284",
+            },
+            {
+                "source": "arXiv:1108.1335",
+                "role": "small-field RG bookkeeping context; not a Yang-Mills claim",
+                "url": "https://arxiv.org/abs/1108.1335",
+            },
+            {
+                "source": "arXiv:1212.5562",
+                "role": "large-field RG bookkeeping context; not a Yang-Mills claim",
+                "url": "https://arxiv.org/abs/1212.5562",
             },
         ],
     }
@@ -557,6 +784,18 @@ def write_v2_summary_csv(summaries: list[dict], path: Path) -> None:
             )
 
 
+def write_v2_window_csv(window_ledger: list[dict], path: Path) -> None:
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=WINDOW_LEDGER_FIELDS)
+        writer.writeheader()
+        for row in window_ledger:
+            writer.writerow({field: row[field] for field in WINDOW_LEDGER_FIELDS})
+
+
+def format_optional(value: float | None) -> str:
+    return "n/a" if value is None else f"{value:.6f}"
+
+
 def markdown_v2_report(payload: dict) -> str:
     lines = [
         f"# OS-Capacity-Ledger v2 {payload['date']}",
@@ -574,6 +813,9 @@ def markdown_v2_report(payload: dict) -> str:
         "  aber den Kontinuums-/OS-Transfer dieses Projekts nicht.",
         "- `arXiv:2506.00284` behauptete einen konstruktiven SU(3)-Beweis, ist aber",
         "  von arXiv Admin zurückgezogen; es wird nicht als Projektnachweis genutzt.",
+        "- `arXiv:1108.1335` und `arXiv:1212.5562` trennen in einer Darstellung des",
+        "  Balaban-RG kleine und große Feldbeiträge. Das motiviert getrennte",
+        "  Fensterkosten, liefert aber keinen Yang-Mills-Transferbeweis.",
         "",
         "## Ledger-Entscheidungen",
         "",
@@ -597,6 +839,38 @@ def markdown_v2_report(payload: dict) -> str:
     lines.extend(
         [
             "",
+            "## Vorregistrierte RG-Fenster",
+            "",
+            "Die Fenster werden nur aus Skalenindex und Skalenanzahl gebildet, bevor",
+            "Diagnosewerte ausgewertet werden. `window_predefined` bleibt für externe",
+            "CSV-Daten eine explizite, fail-closed Quellenangabe. Shares verwenden das",
+            "jeweilige Szenario als Nenner; `defect_share_over_occupancy > 1` markiert",
+            "überproportional konzentrierte nichtlokale Defektmasse. Der alternative",
+            "Blocking-Ratio teilt eine unabhängig gelieferte Kontrollkostenreihe durch",
+            "`cap_os_path` im selben Fenster.",
+            "",
+            "| Szenario | RG-Fenster | vorab | Occupancy | safe share | OS share | defect/occ | switch share | alt/control | nonlocal tail | Transferstatus |",
+            "|---|---|---|---:|---:|---:|---:|---:|---:|---:|---|",
+        ]
+    )
+
+    for window in payload["window_ledger"]:
+        lines.append(
+            f"| {window['scenario']} | {window['rg_window_id']} | "
+            f"{str(window['window_predefined']).lower()} | "
+            f"{window['scale_occupancy']:.6f} | "
+            f"{format_optional(window['safe_signal_share'])} | "
+            f"{format_optional(window['os_capacity_share'])} | "
+            f"{format_optional(window['defect_share_over_occupancy'])} | "
+            f"{window['bad_run_switch_share']:.6f} | "
+            f"{format_optional(window['alternate_blocking_control_ratio'])} | "
+            f"{window['nonlocal_tail_cost']:.6f} | "
+            f"{window['transfer_status']} |"
+        )
+
+    lines.extend(
+        [
+            "",
             "## Interpretation",
             "",
             "Der starke Kontrollfall und der summierbare synthetische Kontrollfall zeigen",
@@ -615,8 +889,9 @@ def markdown_v2_report(payload: dict) -> str:
             "## Artefakte",
             "",
             f"- Input: `{payload['input_path']}`",
-            f"- Zusammenfassung: `_results/OS_CAPACITY_LEDGER_V2_{payload['date']}.csv`",
-            f"- JSON: `_results/OS_CAPACITY_LEDGER_V2_{payload['date']}.json`",
+            f"- Zusammenfassung: `OS_CAPACITY_LEDGER_V2_{payload['date']}.csv`",
+            f"- Fensterledger: `OS_CAPACITY_LEDGER_V2_WINDOWS_{payload['date']}.csv`",
+            f"- JSON: `OS_CAPACITY_LEDGER_V2_{payload['date']}.json`",
             "",
         ]
     )
@@ -624,6 +899,7 @@ def markdown_v2_report(payload: dict) -> str:
 
 
 def main_legacy() -> None:
+    RESULT_DIR.mkdir(parents=True, exist_ok=True)
     payload = {"runs": [], "synthetic_controls": synthetic_controls()}
 
     for beta in [2.0, 4.0, 8.0]:
@@ -639,41 +915,52 @@ def main_legacy() -> None:
     print(f"Wrote {md_path}")
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Build Yang-Mills OS-capacity ledgers.")
     parser.add_argument("--legacy", action="store_true", help="write the 2026-05-28 ledger")
     parser.add_argument("--input", type=Path, help="CSV input with v2 ledger fields")
     parser.add_argument("--date-tag", default="2026-06-04")
     parser.add_argument("--rows", type=int, default=500, help="rows per generated control")
-    args = parser.parse_args()
+    parser.add_argument("--output-dir", type=Path, default=RESULT_DIR)
+    parser.add_argument("--data-dir", type=Path, default=DATA_DIR)
+    args = parser.parse_args(argv)
 
     if args.legacy:
         main_legacy()
-        return
+        return 0
+
+    if args.rows < 1:
+        parser.error("--rows must be at least 1")
+
+    args.output_dir.mkdir(parents=True, exist_ok=True)
 
     if args.input:
         input_path = args.input
         rows = read_input_csv(input_path)
     else:
         rows = generated_v2_control_rows(args.rows)
-        input_path = DATA_DIR / f"OS_CAPACITY_LEDGER_V2_CONTROL_INPUT_{args.date_tag}.csv"
+        input_path = args.data_dir / f"OS_CAPACITY_LEDGER_V2_CONTROL_INPUT_{args.date_tag}.csv"
         write_input_csv(rows, input_path)
 
     payload = v2_payload(rows, input_path, args.date_tag)
 
-    json_path = RESULT_DIR / f"OS_CAPACITY_LEDGER_V2_{args.date_tag}.json"
-    csv_path = RESULT_DIR / f"OS_CAPACITY_LEDGER_V2_{args.date_tag}.csv"
-    md_path = RESULT_DIR / f"OS_CAPACITY_LEDGER_V2_{args.date_tag}.md"
+    json_path = args.output_dir / f"OS_CAPACITY_LEDGER_V2_{args.date_tag}.json"
+    csv_path = args.output_dir / f"OS_CAPACITY_LEDGER_V2_{args.date_tag}.csv"
+    window_csv_path = args.output_dir / f"OS_CAPACITY_LEDGER_V2_WINDOWS_{args.date_tag}.csv"
+    md_path = args.output_dir / f"OS_CAPACITY_LEDGER_V2_{args.date_tag}.md"
 
     json_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     write_v2_summary_csv(payload["summaries"], csv_path)
+    write_v2_window_csv(payload["window_ledger"], window_csv_path)
     md_path.write_text(markdown_v2_report(payload), encoding="utf-8")
 
     print(f"Wrote {input_path}")
     print(f"Wrote {json_path}")
     print(f"Wrote {csv_path}")
+    print(f"Wrote {window_csv_path}")
     print(f"Wrote {md_path}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

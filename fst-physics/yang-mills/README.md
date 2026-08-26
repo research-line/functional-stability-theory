@@ -23,7 +23,7 @@ input.
 | `FST-YM_YangMills_MassGap_kombi.pdf` | Combined bilingual PDF |
 | `../../scripts/yang-mills/compute_dobrushin_su2.py` | SU(2) lattice Dobrushin influence scan |
 | `../../scripts/yang-mills/compute_birkhoff_rg.py` | Birkhoff scan with finite good-scale density, bad-defect sums, and saturation-zone diagnostics |
-| `../../scripts/yang-mills/compute_os_capacity_ledger.py` | OS-danger capacity ledger and negative-control diagnostic |
+| `../../scripts/yang-mills/compute_os_capacity_ledger.py` | OS-danger capacity ledger with pre-registered RG-window Tide-Clock fields and negative-control diagnostics |
 | `../../scripts/yang-mills/compute_rp_os_transfer_ledger.py` | RP/OS transfer matrix positivity ledger |
 | `../../scripts/yang-mills/compute_rp_os_rfep_transfer_ledger.py` | RFEP transfer matrix diagnostic ledger |
 | `../../scripts/yang-mills/compute_u1_2d_strong_coupling_positive_control.py` | 2D U(1) strong-coupling positive control ledger |
@@ -52,6 +52,20 @@ For a bounded diagnostic run that does not overwrite the tracked plot:
 ```bash
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_birkhoff_rg.py --no-plot --epsilon 0.01 --n-levels 6
 ```
+
+The OS-capacity ledger can likewise write an isolated, disposable control run:
+
+```bash
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_os_capacity_ledger.py --rows 20 --date-tag smoke --data-dir /tmp/ym-os-data --output-dir /tmp/ym-os-results
+```
+
+Its window CSV and JSON expose `rg_window_id`, `window_predefined`, scale
+occupancy, safe-signal and OS-capacity shares, nonlocal defect concentration,
+bad-run switches, an independently supplied alternate blocking-control ratio,
+nonlocal tail cost, and a fail-closed `transfer_status`. The generated windows
+depend only on scale index and run length; external CSV inputs must declare the
+window and pre-registration flag explicitly. These finite-window diagnostics
+do not establish OS compactness or a continuum mass gap.
 
 For a chosen margin `epsilon`, the script reports the observed fraction of
 scales satisfying `tau_B <= 1 - epsilon`, the cumulative excess
