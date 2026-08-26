@@ -23,6 +23,7 @@ input.
 | `FST-YM_YangMills_MassGap_kombi.pdf` | Combined bilingual PDF |
 | `../../scripts/yang-mills/compute_dobrushin_su2.py` | SU(2) lattice Dobrushin influence scan |
 | `../../scripts/yang-mills/compute_birkhoff_rg.py` | Birkhoff scan with finite good-scale density, bad-defect sums, and saturation-zone diagnostics |
+| `../../scripts/yang-mills/compute_coercive_complement_ledger.py` | Finite self-adjoint outer-gap and residual/gap gate with bad-scale and Gribov matched controls |
 | `../../scripts/yang-mills/compute_os_capacity_ledger.py` | OS-danger capacity ledger with pre-registered RG-window Tide-Clock fields and negative-control diagnostics |
 | `../../scripts/yang-mills/compute_rp_os_transfer_ledger.py` | RP/OS transfer matrix positivity ledger |
 | `../../scripts/yang-mills/compute_rp_os_rfep_transfer_ledger.py` | RFEP transfer matrix diagnostic ledger |
@@ -39,6 +40,7 @@ From the repository root:
 ```bash
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_dobrushin_su2.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_birkhoff_rg.py
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_coercive_complement_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_os_capacity_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_rp_os_transfer_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_rp_os_rfep_transfer_ledger.py
@@ -59,8 +61,22 @@ The OS-capacity ledger can likewise write an isolated, disposable control run:
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_os_capacity_ledger.py --rows 20 --date-tag smoke --data-dir /tmp/ym-os-data --output-dir /tmp/ym-os-results
 ```
 
-Its window CSV and JSON expose `rg_window_id`, `window_predefined`, scale
-occupancy, safe-signal and OS-capacity shares, nonlocal defect concentration,
+The coercive-complement successor can likewise write an isolated ledger:
+
+```bash
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_coercive_complement_ledger.py --output-dir /tmp/ym-coercive-complement
+```
+
+It computes `s_lambda`, `p_lambda`, an explicit outer `g_*`, and
+`(s_lambda+p_lambda)/g_*` for one finite positive control and matched bad-scale
+and Gribov-complement negatives. Self-adjointness, orthogonal projection, and
+the reducing-subspace identity are fail-closed gates. The fixtures are
+synthetic and `claim_pass` remains zero; the script neither certifies a
+physical Yang--Mills target cluster nor makes a continuum transfer decision.
+
+The OS-capacity ledger's window CSV and JSON expose `rg_window_id`,
+`window_predefined`, scale occupancy, safe-signal and OS-capacity shares,
+nonlocal defect concentration,
 bad-run switches, an independently supplied alternate blocking-control ratio,
 nonlocal tail cost, and a fail-closed `transfer_status`. The generated windows
 depend only on scale index and run length; external CSV inputs must declare the

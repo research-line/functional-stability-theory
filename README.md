@@ -300,6 +300,7 @@ These stand independently of FST. The RFEP was abstracted from them; they are no
 | `scripts/turbulence/compute_goy_shell_dfc.py` | Turbulence / DFC Cascade | Sabra/GOY shell-model DFC1/DFC2 verification and result plot |
 | `scripts/yang-mills/compute_dobrushin_su2.py` | Yang-Mills | SU(2) lattice Dobrushin influence scan and gap plot |
 | `scripts/yang-mills/compute_birkhoff_rg.py` | Yang-Mills | Birkhoff contraction scan for hierarchical RG steps |
+| `scripts/yang-mills/compute_coercive_complement_ledger.py` | Yang-Mills | Finite outer-gap and residual/gap gate with bad-scale and Gribov matched controls |
 | `scripts/yang-mills/compute_os_capacity_ledger.py` | Yang-Mills | OS-danger capacity ledger and negative-control diagnostic |
 | `scripts/yang-mills/compute_rp_os_transfer_ledger.py` | Yang-Mills | RP/OS transfer matrix positivity ledger |
 | `scripts/yang-mills/compute_rp_os_rfep_transfer_ledger.py` | Yang-Mills | RFEP transfer matrix diagnostic ledger |
