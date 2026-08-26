@@ -32,6 +32,7 @@ def test_positive_control_computes_exact_outer_gap_and_leakage_bound():
     assert result.residual_split_bound_holds
     assert result.leakage_bound_holds
     assert result.diagnostic_status == "finite_control_pass"
+    assert result.transfer_decision == "blocked_predefinition_not_independently_verified"
     assert result.claim_status == "diagnostic_only_no_yang_mills_claim"
 
 
@@ -43,6 +44,7 @@ def test_bad_scale_control_rejects_residual_ratio_despite_negative_mean_contract
     assert result.residual_over_gap == pytest.approx(0.60)
     assert result.leakage_bound_holds
     assert result.diagnostic_status == "reject_residual_over_gap"
+    assert result.transfer_decision == "reject_numeric_coercive_complement_gate"
 
 
 def test_gribov_control_rejects_collapsed_outer_gap():
@@ -53,6 +55,35 @@ def test_gribov_control_rejects_collapsed_outer_gap():
     assert result.residual_over_gap == pytest.approx(0.10, rel=1e-6)
     assert result.leakage_bound_holds
     assert result.diagnostic_status == "reject_outer_gap_collapse"
+    assert result.transfer_decision == "reject_numeric_coercive_complement_gate"
+
+
+def test_posthoc_cluster_is_numerically_good_but_transfer_rejected_as_circular():
+    result = _results_by_id()["negative_posthoc_cluster_good_numbers"]
+
+    assert result.g_star == pytest.approx(3.0)
+    assert result.residual_over_gap == pytest.approx(0.05)
+    assert result.diagnostic_status == "finite_control_pass"
+    assert not result.cluster_fixed_before_leakage
+    assert not result.complement_fixed_before_leakage
+    assert result.transfer_decision == "reject_circular_target_or_complement"
+
+
+def test_only_independently_verified_physical_predefinition_becomes_review_eligible():
+    case = MODULE.build_matched_controls()[0]
+    case = replace(
+        case,
+        cluster_definition_source="unit_test_preregistered_physical_sector",
+        predefinition_scope="physical_yang_mills",
+        predefinition_certificate_id="UNIT_TEST_INDEPENDENT_CERTIFICATE",
+        predefinition_certificate_status="independently_verified",
+    )
+
+    result = MODULE.audit_case(case)
+
+    assert result.diagnostic_status == "finite_control_pass"
+    assert result.transfer_decision == "eligible_for_analytic_review_no_claim"
+    assert result.claim_status == "diagnostic_only_no_yang_mills_claim"
 
 
 def test_exactly_closed_complement_gap_reports_gap_collapse_not_a_bound():
@@ -65,6 +96,7 @@ def test_exactly_closed_complement_gap_reports_gap_collapse_not_a_bound():
     assert np.isinf(result.residual_over_gap)
     assert not result.leakage_bound_holds
     assert result.diagnostic_status == "reject_outer_gap_collapse"
+    assert result.transfer_decision == "reject_numeric_coercive_complement_gate"
 
 
 @pytest.mark.parametrize("failure_kind", ["non_self_adjoint", "non_projection", "non_reducing"])
@@ -98,6 +130,7 @@ def test_cli_writes_claim_neutral_reproducible_ledger(tmp_path, capsys):
     assert exit_code == 0
     assert "negative_bad_scale_residual" in output
     assert "negative_gribov_gap_collapse" in output
+    assert "negative_posthoc_cluster_good_numbers" in output
     assert "claim_pass=0" in output
 
     json_path = tmp_path / f"{MODULE.STEM}.json"
@@ -108,13 +141,19 @@ def test_cli_writes_claim_neutral_reproducible_ledger(tmp_path, capsys):
     assert md_path.is_file()
 
     payload = json.loads(json_path.read_text(encoding="utf-8"))
+    assert payload["schema_version"] == 2
     assert payload["claim_pass"] == 0
     assert payload["scope_status"] == "finite_synthetic_controls_only"
-    assert len(payload["rows"]) == 3
+    assert len(payload["rows"]) == 4
     assert {row["diagnostic_status"] for row in payload["rows"]} == {
         "finite_control_pass",
         "reject_outer_gap_collapse",
         "reject_residual_over_gap",
     }
+    assert {row["transfer_decision"] for row in payload["rows"]} == {
+        "blocked_predefinition_not_independently_verified",
+        "reject_circular_target_or_complement",
+        "reject_numeric_coercive_complement_gate",
+    }
     assert all(row["claim_status"] == "diagnostic_only_no_yang_mills_claim" for row in payload["rows"])
-    assert "not a physical Yang--Mills predefinition certificate" in md_path.read_text(encoding="utf-8")
+    assert "No bundled synthetic row is transfer-eligible" in md_path.read_text(encoding="utf-8")

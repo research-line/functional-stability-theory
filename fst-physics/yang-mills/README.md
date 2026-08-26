@@ -69,10 +69,14 @@ PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_coercive_complement_led
 
 It computes `s_lambda`, `p_lambda`, an explicit outer `g_*`, and
 `(s_lambda+p_lambda)/g_*` for one finite positive control and matched bad-scale
-and Gribov-complement negatives. Self-adjointness, orthogonal projection, and
-the reducing-subspace identity are fail-closed gates. The fixtures are
-synthetic and `claim_pass` remains zero; the script neither certifies a
-physical Yang--Mills target cluster nor makes a continuum transfer decision.
+and Gribov-complement negatives. A numerically identical post-hoc-cluster
+control is rejected separately as circular. Self-adjointness, orthogonal
+projection, and the reducing-subspace identity are fail-closed gates.
+`transfer_decision` becomes review-eligible only when target cluster and
+complement were fixed before leakage measurement and an independently verified
+physical Yang--Mills predefinition certificate is supplied. All bundled
+fixtures are synthetic, no bundled row is transfer-eligible, and `claim_pass`
+remains zero.
 
 The OS-capacity ledger's window CSV and JSON expose `rg_window_id`,
 `window_predefined`, scale occupancy, safe-signal and OS-capacity shares,
