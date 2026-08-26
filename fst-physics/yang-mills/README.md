@@ -143,6 +143,19 @@ overruns, and certificates derived from the successful local gap fail closed.
 No physical turbulence mechanism is transferred to gauge theory, all bundled
 rows are claim-neutral, and `claim_pass=0`.
 
+The strict-guardrail extension exposes the four review fields
+`local_gap_or_hessian_pass`, `global_LSI_or_Poincare_status`,
+`continuum_transfer_status`, and `penalty_bookkeeping_only` independently. A
+local Hessian or lattice-gap pass therefore never fills a global functional-
+inequality or continuum field by implication. Penalty bookkeeping remains a
+separate negative status until an existence/compactness argument for the hard
+problem is supplied. The matched
+`kingman_false_positive_harmonic` input is read from the existing OS-capacity
+ledger: its mean log RG contraction is negative and its finite local margin is
+positive, but the declared harmonic worst-scale corridor is non-summable, so
+the continuum transfer is blocked. A second control shows that an unresolved
+Gribov corridor independently blocks the same otherwise-good local baseline.
+
 The OS-capacity ledger's window CSV and JSON expose `rg_window_id`,
 `window_predefined`, scale occupancy, safe-signal and OS-capacity shares,
 nonlocal defect concentration,
