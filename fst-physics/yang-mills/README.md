@@ -25,6 +25,7 @@ input.
 | `../../scripts/yang-mills/compute_birkhoff_rg.py` | Birkhoff scan with finite good-scale density, bad-defect sums, and saturation-zone diagnostics |
 | `../../scripts/yang-mills/compute_casimir_corridor_ledger.py` | Predefined gauge-sector Casimir-window audit with commutator and matched post-hoc controls |
 | `../../scripts/yang-mills/compute_coercive_complement_ledger.py` | Finite self-adjoint outer-gap and residual/gap gate with bad-scale and Gribov matched controls |
+| `../../scripts/yang-mills/compute_k41_transfer_split_ledger.py` | K41-style local-positive-control versus OS/continuum-transfer audit with envelope and defect-budget gates |
 | `../../scripts/yang-mills/compute_orbit_rigidity_ledger.py` | Hodge-inspired bounded-component, gauge-origin, residue-gap, and limit-closure audit |
 | `../../scripts/yang-mills/compute_os_capacity_ledger.py` | OS-danger capacity ledger with pre-registered RG-window Tide-Clock fields and negative-control diagnostics |
 | `../../scripts/yang-mills/compute_rp_os_transfer_ledger.py` | RP/OS transfer matrix positivity ledger |
@@ -44,6 +45,7 @@ PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_dobrushin_su2.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_birkhoff_rg.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_casimir_corridor_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_coercive_complement_ledger.py
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_k41_transfer_split_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_orbit_rigidity_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_os_capacity_ledger.py
 PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_rp_os_transfer_ledger.py
@@ -119,6 +121,27 @@ successful gap signal is rejected as circular; residual-gap collapse and new
 remainder modes fail separately. A correct finite Dirichlet-form test is kept
 as diagnostic when independent physical origin or Mosco/compact limit closure
 is missing. All bundled rows remain finite controls and `claim_pass=0`.
+
+The K41-style review successor can write an isolated split ledger:
+
+```bash
+PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_k41_transfer_split_ledger.py --output-dir /tmp/ym-k41-transfer-split
+```
+
+K41 is used here only as an audit and wording model. Its static,
+reference-normalized variational result is kept distinct from dynamical cascade
+claims. Analogously, the Yang--Mills local strong-coupling/lattice gap is an
+`unconditional_positive_control`, while OS reconstruction, physical
+normalization, and the continuum limit remain a separate
+`transfer_hypothesis`. The ledger additionally requires a predeclared
+`state_correlation_envelope`, a finite cross-scale defect budget, and an
+independent bridge source. Its positive baseline is read directly from
+`compute_os_capacity_ledger.py:strong_coupling_positive_control` at ten RG
+levels; the negative rows are explicitly derived stress controls. Post-hoc
+envelopes, warm corridors, defect-budget
+overruns, and certificates derived from the successful local gap fail closed.
+No physical turbulence mechanism is transferred to gauge theory, all bundled
+rows are claim-neutral, and `claim_pass=0`.
 
 The OS-capacity ledger's window CSV and JSON expose `rg_window_id`,
 `window_predefined`, scale occupancy, safe-signal and OS-capacity shares,
