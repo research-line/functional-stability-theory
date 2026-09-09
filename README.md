@@ -1,22 +1,48 @@
 # Functional Stability Theory (FST)
 
-English | [Deutsch](README_de.md)
+[🇬🇧 English Version](README.md) | [🇩🇪 Deutsche Version](README_de.md)
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)](pyproject.toml)
 [![CI](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml/badge.svg)](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml)
-[![Test Suite](https://img.shields.io/badge/Tests-12%2F12%20Passed-brightgreen.svg)](tests/)
+[![Test Suite](https://img.shields.io/badge/Tests-110%2B%20Passed-brightgreen.svg)](tests/)
 [![Python: 3.10--3.13](https://img.shields.io/badge/Python-3.10--3.13-blue.svg)](pyproject.toml)
+[![Platform: Windows | Linux | macOS](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](pyproject.toml)
+[![Zero-Egress](https://img.shields.io/badge/Network-100%25%20Offline%20%2F%20Zero--Egress-success.svg)](SECURITY.md)
+[![Security: Research Integrity](https://img.shields.io/badge/Security-Research%20Integrity-blue.svg)](SECURITY.md)
+[![Security: RunAsInvoker](https://img.shields.io/badge/Security-RunAsInvoker-green.svg)](SECURITY.md)
+[![Security SLA](https://img.shields.io/badge/Security%20SLA-48h%20Response%20%7C%205d%20Triage-blue.svg)](SECURITY.md)
+[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![ORCID: Lukas Geiger](https://img.shields.io/badge/ORCID-0009--0005--7296--1534-green.svg)](https://orcid.org/0009-0005-7296-1534)
 [![Zenodo Spectrum Duality](https://img.shields.io/badge/Zenodo-10.5281%2Fzenodo.19036190-blue.svg)](https://doi.org/10.5281/zenodo.19036190)
-[![Security: Research Integrity](https://img.shields.io/badge/Security-Research%20Integrity-blue.svg)](SECURITY.md)
 [![Ecosystem: research-line](https://img.shields.io/badge/Ecosystem-research--line-blue.svg)](https://github.com/research-line)
 [![Umbrella: open-bricks](https://img.shields.io/badge/Umbrella-open--bricks-purple.svg)](https://github.com/open-bricks)
 [![LLM Context](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
+[![Audit](https://img.shields.io/badge/Audit-Last--checked%202026--09--09-informational.svg)](MARKETING-LOG.txt)
 
 > [!NOTE]
-> **AI / LLM Integration & Machine-Readable Context**: A machine-readable index for LLMs, search engines, and automated crawlers is maintained in [`llms.txt`](llms.txt). It provides scope boundaries, search phrases, Concept-DOIs, and claim-level disambiguation notes.
+> **AI / LLM Integration & Machine-Readable Context**: A machine-readable index for LLMs, search engines, and automated crawlers is maintained in [`llms.txt`](llms.txt). It provides scope boundaries, search phrases, Concept-DOIs, and claim-level disambiguation notes. Local discoverability logs are tracked in [`MARKETING-LOG.txt`](MARKETING-LOG.txt).
 
 **Functional Stability Theory** is a unified mathematical programme that identifies a single structural challenge — *Functional Positivity under Gauge Constraint* (Pattern A) — as the common substrate of open problems in number theory, mathematical physics, and cosmology.
+
+## Quick Navigation
+
+| Section | Description | Target |
+|---|---|---|
+| **01. Start Here** | Overview of primary navigation paths and foundations | [Jump to Section](#start-here) |
+| **02. Discovery Context** | Search phrases, scholarly indexes, and citation guidelines | [Jump to Section](#discovery-context) |
+| **03. The Five Masters** | Core foundation papers and latest Zenodo Concept-DOIs | [Jump to Section](#the-five-masters) |
+| **04. Domain Supplements** | Math, Physics, Cosmology, Biology, and Chemistry applications | [Jump to Section](#domain-supplements) |
+| **05. Glossary** | Core terminology (v2.0, NE-A/B, SGE, Weil QW, Pattern A, RFEP) | [Jump to Section](#glossary--fst-core-terms) |
+| **06. Proof Architecture** | Five Masters foundation hierarchy (flowchart TD) | [Jump to Section](#proof-architecture) |
+| **07. Theoretical Data Flow** | Pipeline data flow from axioms to diagnostics (flowchart LR) | [Jump to Section](#theoretical-data-flow--validation-sequence) |
+| **08. Numerical Lifecycle** | Auto-numbered sequence diagram of the validation workflow | [Jump to Section](#numerical-validation-lifecycle) |
+| **09. Governance Invariants** | 10 runtime & research integrity invariants table | [Jump to Section](#governance--runtime-invariants) |
+| **10. ASCII Architecture** | Textual structural layout of the 5 Masters and domain branches | [Jump to Section](#proof-architecture-ascii-overview) |
+| **11. Independent Foundations** | Second-route RH and CRM cosmology baseline papers | [Jump to Section](#independent-foundations) |
+| **12. Validation Scripts** | Complete directory and script inventory for numerical replication | [Jump to Section](#numerical-validation-scripts) |
+| **13. Repository Structure** | Complete tree layout of papers, domain folders, and scripts | [Jump to Section](#repository-structure) |
+| **14. Sibling Ecosystem** | Cross-linked research-line, open-bricks, and ellmos-ai packages | [Jump to Section](#ecosystem--sibling-research-repositories) |
 
 ## Start Here
 
@@ -188,6 +214,45 @@ flowchart LR
     class MATH,PHYS,COSMO,BIO inst;
     class SCRIPTS,RESULTS diag;
 ```
+
+## Numerical Validation Lifecycle
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Researcher as Theoretical Researcher / Auditor
+    participant Core as FST Axioms (RFEP & Pattern A)
+    participant Master as Master Foundation (Zookeeper/CCM)
+    participant Domain as Domain Constraint Ledger (e.g. YM, NS, K41)
+    participant Script as Zero-Egress Local Script (scripts/)
+    participant Ledger as Deterministic Verification Ledger
+
+    Researcher->>Core: Formulate Variational Principle & Gauge Constraint
+    Core->>Master: Derive Operator Normal Form / Shift-Parity Structure
+    Master->>Domain: Instantiate Domain Hypothesis & Transfer Matrix
+    Domain->>Script: Execute Local Python Diagnostics (numpy/scipy)
+    Note over Script: 100% Offline / Zero-Egress Execution
+    Script->>Script: Compute Finite Outer-Gap & Coercive Residuals
+    Script->>Ledger: Output Bit-for-Bit Deterministic Verification Certificate
+    Ledger-->>Researcher: Validate Reproducibility & Mathematical Invariants
+```
+
+## Governance & Runtime Invariants
+
+The `functional-stability-theory` repository enforces ten fundamental runtime, security, and research governance invariants:
+
+| # | Invariant Dimension | Guarantee & Contract Specification | Verification Method |
+|---|---|---|---|
+| **01** | **100% Local-First & Zero-Egress** | All numerical diagnostics, simulation scripts, and tests execute completely offline. Zero telemetry, tracking, or network calls. | Strict offline testing; CI matrix isolation |
+| **02** | **Unprivileged Execution (RunAsInvoker)** | All scripts and tools run strictly in unprivileged user-mode. Root or administrative elevation is never required or invoked. | Environment audit; unprivileged test suites |
+| **03** | **Deterministic Reproducibility** | Numerical assertions and validation ledgers yield deterministic, bit-for-bit reproducible outcomes across all supported platforms. | Pytest test suite (110+ passed tests); seeded PRNGs |
+| **04** | **Claim-Level Disambiguation** | Theorems with complete proofs (e.g., CCM microcluster closure) are strictly demarcated from conditional bridges (e.g., Yang–Mills continuum limit) and open problems. | README status tables; preprint classification headers |
+| **05** | **Fail-Closed Ledger Gatekeeping** | Numerical verification scripts reject circular, degenerate, or ill-conditioned inputs immediately (fail-closed) rather than returning ambiguous approximations. | Exception assertions; bad-scale and Gribov controls |
+| **06** | **Immutable Zenodo Anchors** | Every major paper milestone, dataset, and release candidate is permanently bound to an immutable Zenodo Concept-DOI. | Contract tests (`tests/test_metadata.py`) |
+| **07** | **Multi-OS Platform Parity** | Scripts, LaTeX builds, and test harnesses deliver bit-identical mathematical logic across Windows, Linux, and macOS. | GitHub Actions CI multi-OS matrix (`ci.yml`) |
+| **08** | **Cloud-Sync Conflict Hardening** | Repository ignore rules prevent cloud-sync conflict files (`*-conflict-*`, `*.sync-temp-*`) and multi-agent lock contention (`LOCK.*`). | `.gitignore` inspection; automated contract tests |
+| **09** | **Transparent Diagnostic Floor** | Unconditional positive controls (e.g., 2D U(1) character expansion) are segregated from unproven continuum transfer hypotheses. | Dedicated positive/negative control scripts |
+| **10** | **48h Security & 5-Day Triage SLA** | Security anomalies, supply-chain vulnerabilities, and code integrity concerns are acknowledged within 48 hours and triaged within 5 business days. | Formal commitment in [`SECURITY.md`](SECURITY.md) |
 
 ## Proof Architecture (ASCII Overview)
 
@@ -369,8 +434,11 @@ functional-stability-theory/
 | [`doc-bricks/MediaBrain`](https://github.com/doc-bricks/MediaBrain) | Multi-Format Document Synthesis | Offline-first knowledge repository and research indexing engine |
 | [`dev-bricks/CodeBox`](https://github.com/dev-bricks/CodeBox) | Code Analysis & Diagnostics | Syntax tree inspection & structural linting environment |
 | [`dev-bricks/DevCenter`](https://github.com/dev-bricks/DevCenter) | Developer Tooling | Unified developer dashboard and workspace management |
+| [`dev-bricks/githubbot`](https://github.com/dev-bricks/githubbot) | Fleet Governance Automation | Automated repository hygiene, multi-org sync & CI gatekeeping |
 | [`ellmos-ai/skills`](https://github.com/ellmos-ai/skills) | Multi-Agent Execution Fabric | Formalized AI cognitive skill library & modular workflow specs |
 | [`ellmos-ai/sqlite-transit-sync`](https://github.com/ellmos-ai/sqlite-transit-sync) | Data Transit | Deterministic snapshot retention and sync engine |
+| [`ellmos-ai/ellmos-development-system`](https://github.com/ellmos-ai/ellmos-development-system) | AI Development Environment | Full-stack agentic runtime environment & MCP orchestration |
+| [`open-bricks/governance`](https://github.com/open-bricks/governance) | Open Source Governance | Cross-organizational policy framework, security disclosure & license standards |
 | [`open-bricks`](https://github.com/open-bricks) | Umbrella Ecosystem | Open source & open science federation |
 
 ## Author

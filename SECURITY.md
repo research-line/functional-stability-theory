@@ -17,24 +17,35 @@ Security in this repository centers on:
 
 ---
 
-### 2. Threat Model & Invariants
+### 2. Supported Versions
+
+| Version | Supported | Notes |
+|---|---|---|
+| `1.0.x` | :white_check_mark: | Current active release branch with ongoing discoverability and research contract tests. |
+| `< 1.0.0` | :x: | Legacy development tags; please update to 1.0.x. |
+
+---
+
+### 3. Threat Model & Invariants
 
 | Dimension | Policy / Invariant |
 |---|---|
 | **Network Egress** | Zero network egress during script execution and test runs. |
-| **Execution Environment** | Unprivileged local execution; never requires administrator or root privileges. |
+| **Execution Environment** | Unprivileged local execution (RunAsInvoker); never requires administrator or root privileges. |
 | **Data Privacy** | No personally identifiable information (PII) or proprietary telemetry is collected or stored. |
-| **Reproducibility** | All numerical validation scripts are self-contained and reproducible. |
+| **Reproducibility** | All numerical validation scripts are self-contained, reproducible, and deterministic. |
 | **Provenance** | Key paper milestones and artifacts are anchored to immutable Zenodo Concept-DOIs. |
 
 ---
 
-### 3. Vulnerability & Anomaly Reporting
+### 4. Vulnerability & Anomaly Reporting
 
 If you identify a security vulnerability, anomalous script behavior, or supply-chain issue:
 
-- **Email**: Contact [`security@ellmos.ai`](mailto:security@ellmos.ai) or [`support@lukasgeiger.com`](mailto:support@lukasgeiger.com).
+- **Email**: Contact [`security@open-bricks.org`](mailto:security@open-bricks.org), [`security@ellmos.ai`](mailto:security@ellmos.ai), [`support@lukasgeiger.com`](mailto:support@lukasgeiger.com), or [`lukas@open-bricks.org`](mailto:lukas@open-bricks.org).
 - **GitHub Security Advisory**: Open a private advisory via [GitHub Security Advisories](https://github.com/research-line/functional-stability-theory/security/advisories/new).
+- **Response SLA**: We provide an initial acknowledgment and preliminary assessment within **48 hours**.
+- **Triage Commitment**: We commit to completing thorough triage and remediation planning within **5 business days** of submission.
 
 Please do not open public issues for sensitive security or integrity vulnerabilities before coordination.
 
@@ -54,23 +65,34 @@ Sicherheit und Integrität umfassen in diesem Kontext:
 
 ---
 
-### 2. Bedrohungsmodell & Invarianten
+### 2. Unterstützte Versionen
+
+| Version | Unterstützt | Hinweise |
+|---|---|---|
+| `1.0.x` | :white_check_mark: | Aktueller Release-Zweig mit aktiver Auffindbarkeit und Vertragstests. |
+| `< 1.0.0` | :x: | Frühere Entwicklungsstände; bitte auf Version 1.0.x aktualisieren. |
+
+---
+
+### 3. Bedrohungsmodell & Invarianten
 
 | Dimension | Richtlinie / Invariante |
 |---|---|
 | **Netzwerk-Egress** | 0% Netzwerk-Egress während der Skriptausführung und Testläufe. |
-| **Ausführungskontext** | Standard-Benutzerkontext; benötigt niemals Administrator- oder Root-Rechte. |
+| **Ausführungskontext** | Standard-Benutzerkontext (RunAsInvoker); benötigt niemals Administrator- oder Root-Rechte. |
 | **Datenschutz** | Keine Erfassung oder Übertragung von personenbezogenen Daten oder Telemetrie. |
 | **Reproduzierbarkeit** | Alle Validierungsskripte sind in sich geschlossen und deterministisch reproduzierbar. |
 | **Provenienz** | Wichtige Meilensteine und Arbeiten sind über unveränderliche Zenodo-Konzept-DOIs verankert. |
 
 ---
 
-### 3. Meldung von Schwachstellen & Anomalien
+### 4. Meldung von Schwachstellen & Anomalien
 
 Wenn Sie eine Sicherheitslücke, unerwartetes Skriptverhalten oder Integritätsprobleme entdecken:
 
-- **E-Mail**: Senden Sie einen Bericht an [`security@ellmos.ai`](mailto:security@ellmos.ai) oder [`support@lukasgeiger.com`](mailto:support@lukasgeiger.com).
+- **E-Mail**: Senden Sie einen Bericht an [`security@open-bricks.org`](mailto:security@open-bricks.org), [`security@ellmos.ai`](mailto:security@ellmos.ai), [`support@lukasgeiger.com`](mailto:support@lukasgeiger.com) oder [`lukas@open-bricks.org`](mailto:lukas@open-bricks.org).
 - **GitHub Security Advisory**: Erstellen Sie einen vertraulichen Hinweis via [GitHub Security Advisories](https://github.com/research-line/functional-stability-theory/security/advisories/new).
+- **Reaktions-SLA**: Wir bestätigen den Eingang und übermitteln eine Ersteinschätzung innerhalb von **48 Stunden**.
+- **Triage-Zusage**: Wir verpflichten uns zu einer vollständigen Prüfung und Maßnahmenfestlegung innerhalb von **5 Werktagen**.
 
 Bitte erstellen Sie keine öffentlichen GitHub-Issues für sicherheitsrelevante Schwachstellen vor Abschluss der Prüfung.

@@ -2,6 +2,24 @@
 
 All notable changes to the Functional Stability Theory (FST) repository will be documented in this file.
 
+## [1.0.3] - 2026-09-09
+
+### Added
+- 14-point quick navigation index in both `README.md` and `README_de.md` with full bidirectional anchor parity.
+- Auto-numbered Mermaid sequence diagram (`sequenceDiagram`) detailing the reproducible Zero-Egress Numerical Validation & Contract Audit Lifecycle.
+- 10-point Governance & Runtime Invariants table in both `README.md` and `README_de.md` covering local-first execution, non-elevation, claim-level disambiguation, and fail-closed gatekeeping.
+- Supported versions table (`1.0.x`), 48-hour response SLA, and binding 5 business days triage commitment in `SECURITY.md` (bilingual English & German).
+- Umbrella security contact (`security@open-bricks.org`) alongside existing disclosure routes.
+- GitHub Actions CI concurrency control (`cancel-in-progress: true`) and bytecode compilation gate (`python -m compileall -q .`).
+- `.gitignore` hardening against multi-host conflict copies (`*-conflict-*`, `*.sync-temp-*`, etc.) and multi-agent locks (`LOCK.*`, `*.lock`, `LOCK*.txt`).
+- Local `MARKETING-LOG.txt` documenting Pfad B discoverability, SEO badges, and contract testing metrics.
+- Comprehensive contract test suite expansion in `tests/test_metadata.py` verifying all metadata invariants and security commitments.
+
+### Changed
+- Bumped project version to `1.0.3` in `pyproject.toml` and updated project URLs to include `Parent Organization` and `Umbrella Ecosystem`.
+- Synchronized Shields.io badges in `README.md` and `README_de.md` (v1.0.3, 110+ passed tests, 48h Security SLA, RunAsInvoker, Last-checked 2026-09-09).
+- Updated `llms.txt` verification timestamp to 2026-09-09 with updated test suite count and invariants summary.
+
 ## [1.0.2] - 2026-08-23
 
 ### Added

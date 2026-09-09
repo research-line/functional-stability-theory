@@ -1,4 +1,4 @@
-"""
+r"""
 c2_quasimode_test.py — Quasimode-Argument fuer MS2
 
 ChatGPT-Audit-Route:

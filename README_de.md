@@ -1,22 +1,46 @@
 # Funktionelle Stabilitätstheorie (FST)
 
-[English](README.md) | Deutsch
+[🇬🇧 English Version](README.md) | [🇩🇪 Deutsche Version](README_de.md)
 
 [![Lizenz: CC BY 4.0](https://img.shields.io/badge/Lizenz-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Version](https://img.shields.io/badge/Version-1.0.3-blue.svg)](pyproject.toml)
 [![CI](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml/badge.svg)](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml)
-[![Test Suite](https://img.shields.io/badge/Tests-12%2F12%20Bestanden-brightgreen.svg)](tests/)
+[![Test Suite](https://img.shields.io/badge/Tests-110%2B%20Bestanden-brightgreen.svg)](tests/)
 [![Python: 3.10--3.13](https://img.shields.io/badge/Python-3.10--3.13-blue.svg)](pyproject.toml)
+[![Plattform: Windows | Linux | macOS](https://img.shields.io/badge/Plattform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](pyproject.toml)
+[![Zero-Egress](https://img.shields.io/badge/Netzwerk-100%25%20Offline%20%2F%20Zero--Egress-success.svg)](SECURITY.md)
+[![Sicherheit: Open Science Integrität](https://img.shields.io/badge/Sicherheit-Open%20Science%20Integrit%C3%A4t-blue.svg)](SECURITY.md)
+[![Sicherheit: RunAsInvoker](https://img.shields.io/badge/Sicherheit-RunAsInvoker-green.svg)](SECURITY.md)
+[![Sicherheits-SLA](https://img.shields.io/badge/Sicherheits--SLA-48h%20Antwort%20%7C%205d%20Triage-blue.svg)](SECURITY.md)
+[![Code-Stil: ruff](https://img.shields.io/badge/Code--Stil-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![ORCID: Lukas Geiger](https://img.shields.io/badge/ORCID-0009--0005--7296--1534-green.svg)](https://orcid.org/0009-0005-7296-1534)
 [![Zenodo Spectrum Duality](https://img.shields.io/badge/Zenodo-10.5281%2Fzenodo.19036190-blue.svg)](https://doi.org/10.5281/zenodo.19036190)
-[![Sicherheit: Open Science Integrität](https://img.shields.io/badge/Sicherheit-Open%20Science%20Integrit%C3%A4t-blue.svg)](SECURITY.md)
 [![Ökosystem: research-line](https://img.shields.io/badge/%C3%96kosystem-research--line-blue.svg)](https://github.com/research-line)
 [![Dachorganisation: open-bricks](https://img.shields.io/badge/Dachorganisation-open--bricks-purple.svg)](https://github.com/open-bricks)
 [![LLM Kontext](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
+[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--09--09-informational.svg)](MARKETING-LOG.txt)
 
 > [!NOTE]
-> **KI- / LLM-Integration & Maschinenlesbarer Kontext**: Ein maschinenlesbarer Index für LLMs, Suchmaschinen und automatisierte Crawler wird in [`llms.txt`](llms.txt) gepflegt. Er enthält Gültigkeitsgrenzen, Suchbegriffe, Konzept-DOIs und Abgrenzungshinweise.
+> **KI- / LLM-Integration & Maschinenlesbarer Kontext**: Ein maschinenlesbarer Index für LLMs, Suchmaschinen und automatisierte Crawler wird in [`llms.txt`](llms.txt) gepflegt. Er enthält Gültigkeitsgrenzen, Suchbegriffe, Konzept-DOIs und Abgrenzungshinweise. Lokale Discoverability-Logs werden in [`MARKETING-LOG.txt`](MARKETING-LOG.txt) geführt.
 
 Die **Funktionelle Stabilitätstheorie (FST)** ist ein einheitliches mathematisches Forschungsprogramm, das eine zentrale strukturelle Herausforderung — *Funktionelle Positivität unter Eichbedingung* (Muster A / Pattern A) — als gemeinsamen Kern offener Probleme in Zahlentheorie, mathematischer Physik und Kosmologie identifiziert.
+
+## Schnellnavigation
+
+| Abschnitt | Beschreibung | Sprungziel |
+|---|---|---|
+| **01. Einstieg** | Primäre Navigationspfade und Fundamente | [Zum Abschnitt](#einstieg) |
+| **02. Auffindbarkeit** | Suchbegriffe, Zitationsstandards und wissenschaftliche Indizes | [Zum Abschnitt](#auffindbarkeit--entdeckungskontext) |
+| **03. Die Fünf Master-Arbeiten** | Kernfundamente und aktuelle Zenodo Konzept-DOIs | [Zum Abschnitt](#die-fünf-master-arbeiten) |
+| **04. Domänen-Ergänzungen** | Mathematik-, Physik-, Kosmologie- und Biologie-Anwendungen | [Zum Abschnitt](#domänen-ergänzungen--anwendungen) |
+| **05. Glossar** | FST-Kernbegriffe (v2.0, NE-A/B, SGE, Weil QW, Muster A, RFEP) | [Zum Abschnitt](#glossar--fst-kernbegriffe) |
+| **06. Beweisarchitektur** | Fünf-Master-Hierarchie (flowchart TD) | [Zum Abschnitt](#beweisarchitektur-der-fünf-master-arbeiten) |
+| **07. Theoretischer Datenfluss** | Datenfluss von Axiomen bis zur Diagnostik (flowchart LR) | [Zum Abschnitt](#theoretischer-datenfluss--validierungssequenz) |
+| **08. Numerischer Lebenszyklus** | Nummeriertes Sequenzdiagramm des Validierungs-Workflows | [Zum Abschnitt](#numerischer-validierungs-lebenszyklus) |
+| **09. Governance-Invarianten** | 10 Laufzeit- und Forschungsintegritäts-Invarianten | [Zum Abschnitt](#governance---laufzeit-invarianten) |
+| **10. Numerische Validierungsskripte** | Vollständiges Skript- und Diagnostik-Inventar | [Zum Abschnitt](#numerische-validierungsskripte) |
+| **11. Ökosystem & Repositories** | Verbundene research-line, open-bricks und ellmos-ai Repositories | [Zum Abschnitt](#ökosystem--verwandte-forschungs-repositories) |
+| **12. Autor & Lizenz** | Wissenschaftliche Zitation, ORCID und CC-BY-4.0 Lizenz | [Zum Abschnitt](#autor) |
 
 ## Einstieg
 
@@ -187,6 +211,45 @@ flowchart LR
     class SCRIPTS,RESULTS diag;
 ```
 
+### Numerischer Validierungs-Lebenszyklus
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Forscher as Theoretischer Forscher / Auditor
+    participant Core as FST-Axiome (RFEP & Muster A)
+    participant Master as Master-Fundament (Zookeeper/CCM)
+    participant Domain as Domänen-Bedingungsledger (z.B. YM, NS, K41)
+    participant Script as Zero-Egress Lokales Skript (scripts/)
+    participant Ledger as Deterministisches Verifikationsledger
+
+    Forscher->>Core: Variationsprinzip & Eichbedingung formulieren
+    Core->>Master: Operator-Normalform / Shift-Paritätsstruktur ableiten
+    Master->>Domain: Domänen-Hypothese & Transfermatrix instanziieren
+    Domain->>Script: Lokale Python-Diagnostik ausführen (numpy/scipy)
+    Note over Script: 100% Offline / Zero-Egress Ausführung
+    Script->>Script: Endliche äußere Lücke & koerzive Residuen berechnen
+    Script->>Ledger: Bit-für-Bit deterministisches Verifikationszertifikat erzeugen
+    Ledger-->>Forscher: Reproduzierbarkeit & mathematische Invarianten bestätigen
+```
+
+### Governance- & Laufzeit-Invarianten
+
+Das `functional-stability-theory` Repository erzwingt zehn fundamentale Laufzeit-, Sicherheits- und Governance-Invarianten:
+
+| # | Invariante Dimension | Garantie & Vertragsspezifikation | Verifikationsmethode |
+|---|---|---|---|
+| **01** | **100% Local-First & Zero-Egress** | Sämtliche numerischen Diagnosen, Simulationsskripte und Tests laufen vollständig offline. Keine Telemetrie oder Netzwerkaufrufe. | Strikte Offline-Prüfung; CI-Matrix-Isolation |
+| **02** | **Rechtefreie Ausführung (RunAsInvoker)** | Alle Skripte laufen strikt im Standard-Benutzermodus. Administrator- oder Root-Rechte werden niemals angefordert oder benötigt. | Umgebungs-Audit; unprivilegierte Test-Suiten |
+| **03** | **Deterministische Reproduzierbarkeit** | Numerische Assertionen und Verifikationsledger liefern bit-identische Ergebnisse über alle unterstützten Plattformen hinweg. | Pytest-Suite (110+ Tests bestanden); feste Zufallssamen |
+| **04** | **Aussagen-Disambiguierung** | Vollständig bewiesene Theoreme (z.B. CCM-Mikroclusterschließung) sind strikt von konditionalen Brücken und offenen Problemen getrennt. | README-Statustabellen; Preprint-Klassifikationsheader |
+| **05** | **Fail-Closed Ledger-Gatekeeping** | Verifikationsskripte verwerfen zirkuläre, entartete oder schlecht konditionierte Eingaben sofort (Fail-Closed) statt unscharfe Werte zu liefern. | Exception-Assertions; Schlechtskalierungs- und Gribov-Kontrollen |
+| **06** | **Unveränderliche Zenodo-Anker** | Jeder Haupt-Meilenstein, Datensatz und Release-Kandidat ist dauerhaft an eine unveränderliche Zenodo-Konzept-DOI gebunden. | Vertragstests (`tests/test_metadata.py`) |
+| **07** | **Multi-OS Plattformparität** | Skripte, LaTeX-Builds und Test-Harnische garantieren identische mathematische Logik auf Windows, Linux und macOS. | GitHub Actions CI Multi-OS Matrix (`ci.yml`) |
+| **08** | **Cloud-Sync-Konflikthärtung** | Repository-Ignorierregeln verhindern Cloud-Sync-Konfliktdateien (`*-conflict-*`, `*.sync-temp-*`) und Multi-Agenten-Locks (`LOCK.*`). | `.gitignore`-Prüfung; automatisierte Vertragstests |
+| **09** | **Transparente Diagnostik-Basis** | Unbedingte Positivkontrollen (z.B. 2D U(1) Charakterentwicklung) sind strikt von unbewiesenen Kontinuums-Transferhypothesen getrennt. | Dedizierte Positiv-/Negativkontroll-Skripte |
+| **10** | **48h Sicherheits- & 5-Tage-Triage-SLA** | Sicherheitsmeldungen, Integritätsbedenken und Schwachstellen werden binnen 48 Stunden bestätigt und innerhalb von 5 Werktagen triagiert. | Verbindliche Zusage in [`SECURITY.md`](SECURITY.md) |
+
 ## Numerische Validierungsskripte
 
 | Skript | Arbeit | Beschreibung |
@@ -238,8 +301,11 @@ flowchart LR
 | [`doc-bricks/MediaBrain`](https://github.com/doc-bricks/MediaBrain) | Multi-Format Dokumentensynthese | Offline-First Wissensdatenbank und Forschungsindexierung |
 | [`dev-bricks/CodeBox`](https://github.com/dev-bricks/CodeBox) | Codeanalyse & Diagnostik | Syntaxbaum-Inspektion & strukturelle Linting-Umgebung |
 | [`dev-bricks/DevCenter`](https://github.com/dev-bricks/DevCenter) | Entwickler-Werkzeuge | Einheitliches Entwickler-Dashboard und Workspace-Management |
+| [`dev-bricks/githubbot`](https://github.com/dev-bricks/githubbot) | Governance-Automatisierung | Flottenverwaltung, Repository-Hygiene, Multi-Org-Sync & CI-Gates |
 | [`ellmos-ai/skills`](https://github.com/ellmos-ai/skills) | Multi-Agent Ausführungsplattform | Formalisierte KI-Fähigkeitenbibliothek & modulare Workflows |
 | [`ellmos-ai/sqlite-transit-sync`](https://github.com/ellmos-ai/sqlite-transit-sync) | Datentransit | Deterministische Snapshot-Retention und Synchronisations-Engine |
+| [`ellmos-ai/ellmos-development-system`](https://github.com/ellmos-ai/ellmos-development-system) | KI-Entwicklungssystem | Vollständige agentische Laufzeitumgebung & MCP-Orchestrierung |
+| [`open-bricks/governance`](https://github.com/open-bricks/governance) | Open-Source-Governance | Organisationsübergreifende Richtlinien, Sicherheitsstandards & Lizenzen |
 | [`open-bricks`](https://github.com/open-bricks) | Dachorganisation | Open-Source & Open-Science Föderation |
 
 ## Autor
