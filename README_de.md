@@ -3,9 +3,9 @@
 [🇬🇧 English Version](README.md) | [🇩🇪 Deutsche Version](README_de.md)
 
 [![Lizenz: CC BY 4.0](https://img.shields.io/badge/Lizenz-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Version](https://img.shields.io/badge/Version-1.0.3-blue.svg)](pyproject.toml)
+[![Version](https://img.shields.io/badge/Version-1.0.4-blue.svg)](pyproject.toml)
 [![CI](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml/badge.svg)](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml)
-[![Test Suite](https://img.shields.io/badge/Tests-110%2B%20Bestanden-brightgreen.svg)](tests/)
+[![Test Suite](https://img.shields.io/badge/Tests-115%2B%20Bestanden-brightgreen.svg)](tests/)
 [![Python: 3.10--3.13](https://img.shields.io/badge/Python-3.10--3.13-blue.svg)](pyproject.toml)
 [![Plattform: Windows | Linux | macOS](https://img.shields.io/badge/Plattform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](pyproject.toml)
 [![Zero-Egress](https://img.shields.io/badge/Netzwerk-100%25%20Offline%20%2F%20Zero--Egress-success.svg)](SECURITY.md)
@@ -18,7 +18,7 @@
 [![Ökosystem: research-line](https://img.shields.io/badge/%C3%96kosystem-research--line-blue.svg)](https://github.com/research-line)
 [![Dachorganisation: open-bricks](https://img.shields.io/badge/Dachorganisation-open--bricks-purple.svg)](https://github.com/open-bricks)
 [![LLM Kontext](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
-[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--09--09-informational.svg)](MARKETING-LOG.txt)
+[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--09--10-informational.svg)](MARKETING-LOG.txt)
 
 > [!NOTE]
 > **KI- / LLM-Integration & Maschinenlesbarer Kontext**: Ein maschinenlesbarer Index für LLMs, Suchmaschinen und automatisierte Crawler wird in [`llms.txt`](llms.txt) gepflegt. Er enthält Gültigkeitsgrenzen, Suchbegriffe, Konzept-DOIs und Abgrenzungshinweise. Lokale Discoverability-Logs werden in [`MARKETING-LOG.txt`](MARKETING-LOG.txt) geführt.

@@ -2,6 +2,18 @@
 
 All notable changes to the Functional Stability Theory (FST) repository will be documented in this file.
 
+## [1.0.4] - 2026-09-10
+
+### Added
+- Standardized pytest execution flags (`addopts = "-ra -v"`) in `pyproject.toml` and GitHub Actions CI runner (`.github/workflows/ci.yml`).
+- Extended `.gitignore` multi-host protection patterns (`*-ASUS-GEI.*`, `*-WORKSTATION-LG.*`, `*-WORKSTATION.*`, `* (kopie)*`, `* (copy)*`), multi-agent lock files (`LOCK.permissions.json`, `uv.lock`), and packaging caches (`wheelhouse/`, `.wheel-smoke/`).
+- Automated contract test expansion in `tests/test_metadata.py` verifying standard pytest CLI flags, CI workflow test step configuration, extended gitignore rules, and Pfad A changelog entry.
+
+### Changed
+- Bumped project version to `1.0.4` across `pyproject.toml`, test suites, and documentation.
+- Synchronized Shields.io badges in `README.md` and `README_de.md` (`v1.0.4`, test suite status, `Last-checked 2026-09-10`).
+- Updated `llms.txt` verification timestamp to `2026-09-10` with updated test suite count and release version.
+
 ## [1.0.3] - 2026-09-09
 
 ### Added

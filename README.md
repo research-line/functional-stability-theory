@@ -3,9 +3,9 @@
 [🇬🇧 English Version](README.md) | [🇩🇪 Deutsche Version](README_de.md)
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)](pyproject.toml)
+[![Version](https://img.shields.io/badge/version-1.0.4-blue.svg)](pyproject.toml)
 [![CI](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml/badge.svg)](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml)
-[![Test Suite](https://img.shields.io/badge/Tests-110%2B%20Passed-brightgreen.svg)](tests/)
+[![Test Suite](https://img.shields.io/badge/Tests-115%2B%20Passed-brightgreen.svg)](tests/)
 [![Python: 3.10--3.13](https://img.shields.io/badge/Python-3.10--3.13-blue.svg)](pyproject.toml)
 [![Platform: Windows | Linux | macOS](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](pyproject.toml)
 [![Zero-Egress](https://img.shields.io/badge/Network-100%25%20Offline%20%2F%20Zero--Egress-success.svg)](SECURITY.md)
@@ -18,7 +18,7 @@
 [![Ecosystem: research-line](https://img.shields.io/badge/Ecosystem-research--line-blue.svg)](https://github.com/research-line)
 [![Umbrella: open-bricks](https://img.shields.io/badge/Umbrella-open--bricks-purple.svg)](https://github.com/open-bricks)
 [![LLM Context](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
-[![Audit](https://img.shields.io/badge/Audit-Last--checked%202026--09--09-informational.svg)](MARKETING-LOG.txt)
+[![Audit](https://img.shields.io/badge/Audit-Last--checked%202026--09--10-informational.svg)](MARKETING-LOG.txt)
 
 > [!NOTE]
 > **AI / LLM Integration & Machine-Readable Context**: A machine-readable index for LLMs, search engines, and automated crawlers is maintained in [`llms.txt`](llms.txt). It provides scope boundaries, search phrases, Concept-DOIs, and claim-level disambiguation notes. Local discoverability logs are tracked in [`MARKETING-LOG.txt`](MARKETING-LOG.txt).

@@ -17,7 +17,7 @@ def test_pyproject_metadata():
 
     project = data.get("project", {})
     assert project.get("name") == "functional-stability-theory"
-    assert project.get("version") == "1.0.3"
+    assert project.get("version") == "1.0.4"
     assert project.get("requires-python") == ">=3.10"
     assert project.get("license", {}).get("text") == "CC-BY-4.0"
     assert len(project.get("authors", [])) >= 1
@@ -76,7 +76,7 @@ def test_readme_and_readme_de_badges():
 
     # Required badge signatures in English README
     assert "License-CC_BY_4.0" in readme_en
-    assert "version-1.0.3" in readme_en
+    assert "version-1.0.4" in readme_en
     assert "actions/workflows/ci.yml" in readme_en
     assert "ORCID-0009--0005--7296--1534" in readme_en
     assert "Zenodo-10.5281" in readme_en
@@ -86,14 +86,14 @@ def test_readme_and_readme_de_badges():
     assert "Ecosystem-research--line" in readme_en
     assert "Umbrella-open--bricks" in readme_en
     assert "llms.txt" in readme_en
-    assert "Tests-110%2B%20Passed" in readme_en
+    assert "Tests-115%2B%20Passed" in readme_en
     assert "Python-3.10--3.13" in readme_en or "Python-3.10" in readme_en
     assert "Platform-Windows" in readme_en
-    assert "Audit-Last--checked%202026--09--09" in readme_en
+    assert "Audit-Last--checked%202026--09--10" in readme_en
 
     # Required badge signatures in German README
     assert "Lizenz-CC_BY_4.0" in readme_de or "License-CC_BY_4.0" in readme_de
-    assert "Version-1.0.3" in readme_de
+    assert "Version-1.0.4" in readme_de
     assert "actions/workflows/ci.yml" in readme_de
     assert "ORCID-0009--0005--7296--1534" in readme_de
     assert "Zenodo-10.5281" in readme_de
@@ -103,10 +103,10 @@ def test_readme_and_readme_de_badges():
     assert "research--line" in readme_de
     assert "open--bricks" in readme_de
     assert "llms.txt" in readme_de
-    assert "Tests-110%2B%20Bestanden" in readme_de
+    assert "Tests-115%2B%20Bestanden" in readme_de
     assert "Python-3.10--3.13" in readme_de or "Python-3.10" in readme_de
     assert "Plattform-Windows" in readme_de
-    assert "Audit-Gepr%C3%BCft%202026--09--09" in readme_de
+    assert "Audit-Gepr%C3%BCft%202026--09--10" in readme_de
 
 
 def test_quick_navigation_parity():
@@ -236,14 +236,15 @@ def test_llms_txt_structure_and_timestamp():
     """Validate llms.txt structure, canonical metadata, and verification date."""
     llms_txt = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8")
 
-    assert "## Last-checked: 2026-09-09" in llms_txt
+    assert "## Last-checked: 2026-09-10" in llms_txt
     assert "https://github.com/research-line/functional-stability-theory" in llms_txt
     assert "research-line" in llms_txt
     assert "Renormalized Free-Energy Principle" in llms_txt
     assert "Pattern A" in llms_txt
+    assert "Version: 1.0.4" in llms_txt
     assert "SECURITY.md" in llms_txt
     assert "## Search Phrases" in llms_txt
-    assert "110+ Passed" in llms_txt
+    assert "115+ Passed" in llms_txt
     assert "Governance & Runtime Invariants" in llms_txt
     assert "MARKETING-LOG.txt" in llms_txt
 
@@ -251,8 +252,8 @@ def test_llms_txt_structure_and_timestamp():
 def test_changelog_entry():
     """Validate that CHANGELOG.md documents the latest release and hygiene audits."""
     changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-    assert "2026-09-09" in changelog
-    assert "1.0.3" in changelog
+    assert "2026-09-10" in changelog
+    assert "1.0.4" in changelog
     assert "SECURITY.md" in changelog
     assert "MARKETING-LOG.txt" in changelog
 
@@ -336,3 +337,74 @@ def test_marketing_log_exists():
     assert "Pfad B" in content
     assert "1.0.3" in content
     assert "research-line/functional-stability-theory" in content
+
+
+def test_gitignore_hygiene_patterns():
+    """Validate comprehensive .gitignore patterns for multi-host, lock, cache, and editor hygiene."""
+    gitignore = (REPO_ROOT / ".gitignore").read_text(encoding="utf-8")
+
+    # Multi-host sync conflict patterns
+    assert "*-conflict-*" in gitignore
+    assert "*.sync-temp-*" in gitignore
+    assert "*.sync-conflict-*" in gitignore
+    assert "*.conflict" in gitignore
+    assert "*-CONFLIT-*" in gitignore
+    assert "*-ASUS-GEI.*" in gitignore
+    assert "*-WORKSTATION-LG.*" in gitignore
+    assert "*-WORKSTATION.*" in gitignore
+    assert "* (kopie)*" in gitignore
+    assert "* (copy)*" in gitignore
+
+    # Multi-agent lock patterns
+    assert "LOCK.*" in gitignore
+    assert "*.lock" in gitignore
+    assert "LOCK*.txt" in gitignore
+    assert "LOCK" in gitignore
+    assert "LOCK.permissions.json" in gitignore
+    assert "uv.lock" in gitignore
+
+    # Packaging, build, and test cache patterns
+    assert ".pytest_cache/" in gitignore
+    assert ".ruff_cache/" in gitignore
+    assert ".coverage" in gitignore
+    assert "coverage/" in gitignore
+    assert "htmlcov/" in gitignore
+    assert "wheelhouse/" in gitignore
+    assert ".wheel-smoke/" in gitignore
+
+    # Editor and temp patterns
+    assert "*.tmp" in gitignore
+    assert "*.bak" in gitignore
+    assert "*.swp" in gitignore
+    assert "*~" in gitignore
+    assert "*.log" in gitignore
+
+
+def test_pytest_configuration_and_flags():
+    """Validate standard pytest configuration and addopts flags in pyproject.toml."""
+    pyproject_path = REPO_ROOT / "pyproject.toml"
+    with open(pyproject_path, "rb") as f:
+        data = tomllib.load(f)
+
+    pytest_opts = data.get("tool", {}).get("pytest", {}).get("ini_options", {})
+    assert pytest_opts.get("testpaths") == ["tests"]
+    assert pytest_opts.get("python_files") == ["test_*.py"]
+    assert pytest_opts.get("python_functions") == ["test_*"]
+    assert "-ra -v" in pytest_opts.get("addopts", "")
+
+
+def test_ci_workflow_pytest_flags():
+    """Validate that CI workflow executes pytest with standard -ra -v flags."""
+    ci_path = REPO_ROOT / ".github" / "workflows" / "ci.yml"
+    content = ci_path.read_text(encoding="utf-8")
+    assert "pytest -ra -v" in content
+    assert "python -m compileall -q ." in content
+    assert "cancel-in-progress: true" in content
+
+
+def test_changelog_recent_pfad_a_entry():
+    """Validate that CHANGELOG.md contains the latest Pfad A release entry."""
+    changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert "## [1.0.4] - 2026-09-10" in changelog
+    assert "addopts = \"-ra -v\"" in changelog
+    assert ".gitignore" in changelog
