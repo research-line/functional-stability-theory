@@ -2,6 +2,22 @@
 
 All notable changes to the Functional Stability Theory (FST) repository will be documented in this file.
 
+## [1.0.5] - 2026-09-12
+
+### Added
+- Audited software inventory in `THIRD_PARTY_LICENSES.md` certifying 100% permissive open-source dependencies (CC-BY-4.0, BSD-3-Clause, MIT, PSF-2.0), 0% copyleft risk (zero AGPL/GPL), 100% offline zero-egress compliance, and full alignment with 10 Governance Invariants (`INV-LOCAL-01` to `INV-SLA-10`).
+- Target Personas & Value Propositions (4 personas: Field Theorists, Millennium Researchers, Open-Science Curators, AI Research Agents) in `README.md` and `README_de.md`.
+- Expanded Quick Navigation to 16 points in `README.md` and 14 points in `README_de.md` with complete reciprocal anchor parity (`#target-personas--discoverability` / `#zielgruppen--auffindbarkeit`, `#third-party-licenses--transparency` / `#drittanbieter-lizenzen--transparenz`).
+- Dedicated Third-Party Licenses & Transparency sections in both `README.md` and `README_de.md`.
+- PEP 621 metadata URLs in `pyproject.toml` for `Third-Party Licenses`, `Marketing Log`, and `LLM Ready`.
+- Comprehensive Pfad B audit entry in `MARKETING-LOG.txt` featuring a 10-dimension 5-way competitive matrix, bilingual high-intent keyword search queries, and historical release tracking.
+- Expanded contract test suite in `tests/test_metadata.py` verifying `THIRD_PARTY_LICENSES.md` structure, 16-point quick navigation, target personas, third-party license disclosures, and PEP 621 URLs.
+
+### Changed
+- Bumped project version to `1.0.5` across `pyproject.toml`, test suites, and documentation.
+- Synchronized Shields.io badges in `README.md` and `README_de.md` (`v1.0.5`, `Tests 118+ Passed` / `118+ Bestanden`, `Third-Party Licenses: Audited`, `Marketing Log: Active`, `Last-checked 2026-09-12`).
+- Updated `llms.txt` verification timestamp to `2026-09-12` with updated test suite count (118+ Passed) and `THIRD_PARTY_LICENSES.md` reference.
+
 ## [1.0.4] - 2026-09-10
 
 ### Added

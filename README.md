@@ -3,9 +3,9 @@
 [🇬🇧 English Version](README.md) | [🇩🇪 Deutsche Version](README_de.md)
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Version](https://img.shields.io/badge/version-1.0.4-blue.svg)](pyproject.toml)
+[![Version](https://img.shields.io/badge/version-1.0.5-blue.svg)](pyproject.toml)
 [![CI](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml/badge.svg)](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml)
-[![Test Suite](https://img.shields.io/badge/Tests-115%2B%20Passed-brightgreen.svg)](tests/)
+[![Test Suite](https://img.shields.io/badge/Tests-118%2B%20Passed-brightgreen.svg)](tests/)
 [![Python: 3.10--3.13](https://img.shields.io/badge/Python-3.10--3.13-blue.svg)](pyproject.toml)
 [![Platform: Windows | Linux | macOS](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](pyproject.toml)
 [![Zero-Egress](https://img.shields.io/badge/Network-100%25%20Offline%20%2F%20Zero--Egress-success.svg)](SECURITY.md)
@@ -17,8 +17,10 @@
 [![Zenodo Spectrum Duality](https://img.shields.io/badge/Zenodo-10.5281%2Fzenodo.19036190-blue.svg)](https://doi.org/10.5281/zenodo.19036190)
 [![Ecosystem: research-line](https://img.shields.io/badge/Ecosystem-research--line-blue.svg)](https://github.com/research-line)
 [![Umbrella: open-bricks](https://img.shields.io/badge/Umbrella-open--bricks-purple.svg)](https://github.com/open-bricks)
+[![Third-Party Licenses](https://img.shields.io/badge/Third--Party%20Licenses-Audited-brightgreen.svg)](THIRD_PARTY_LICENSES.md)
+[![Marketing Log](https://img.shields.io/badge/Marketing%20Log-Active-blue.svg)](MARKETING-LOG.txt)
 [![LLM Context](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
-[![Audit](https://img.shields.io/badge/Audit-Last--checked%202026--09--10-informational.svg)](MARKETING-LOG.txt)
+[![Audit](https://img.shields.io/badge/Audit-Last--checked%202026--09--12-informational.svg)](MARKETING-LOG.txt)
 
 > [!NOTE]
 > **AI / LLM Integration & Machine-Readable Context**: A machine-readable index for LLMs, search engines, and automated crawlers is maintained in [`llms.txt`](llms.txt). It provides scope boundaries, search phrases, Concept-DOIs, and claim-level disambiguation notes. Local discoverability logs are tracked in [`MARKETING-LOG.txt`](MARKETING-LOG.txt).
@@ -43,6 +45,8 @@
 | **12. Validation Scripts** | Complete directory and script inventory for numerical replication | [Jump to Section](#numerical-validation-scripts) |
 | **13. Repository Structure** | Complete tree layout of papers, domain folders, and scripts | [Jump to Section](#repository-structure) |
 | **14. Sibling Ecosystem** | Cross-linked research-line, open-bricks, and ellmos-ai packages | [Jump to Section](#ecosystem--sibling-research-repositories) |
+| **15. Target Personas** | Four target scholarly and technical personas and architectural value | [Jump to Section](#target-personas--discoverability) |
+| **16. Third-Party Licenses** | Supply chain transparency, zero-copyleft audit, and invariant compliance | [Jump to Section](#third-party-licenses--transparency) |
 
 ## Start Here
 
@@ -440,6 +444,35 @@ functional-stability-theory/
 | [`ellmos-ai/ellmos-development-system`](https://github.com/ellmos-ai/ellmos-development-system) | AI Development Environment | Full-stack agentic runtime environment & MCP orchestration |
 | [`open-bricks/governance`](https://github.com/open-bricks/governance) | Open Source Governance | Cross-organizational policy framework, security disclosure & license standards |
 | [`open-bricks`](https://github.com/open-bricks) | Umbrella Ecosystem | Open source & open science federation |
+
+## Target Personas & Discoverability
+
+`functional-stability-theory` serves four core academic and computational research personas across mathematics, physics, and autonomous scientific discovery:
+
+| Persona | Core Research Question & Challenge | How FST Solves It | Architectural Value |
+|---|---|---|---|
+| **Theoretical Physicists & Field Theorists** | Identifying consistent non-perturbative stability mechanisms for Yang-Mills mass gap, Navier-Stokes regularity, and turbulent anomalous dissipation | Unifies dissipative selection under the Renormalized Free-Energy Principle (RFEP) and Pattern A (Functional Positivity under Gauge Constraint) | Single universal normal form across gauge theory, fluid mechanics, and cosmological screening |
+| **Analytic Number Theorists & Millennium Researchers** | Bypassing structural no-go theorems (NE-A/NE-B) in operator-theoretic approaches to the Riemann Hypothesis | Introduces the SGE taxonomy (Zeta Zoo) and v2.0 even-dominance of the Weil quadratic form, linking microcluster closure (Zookeeper) with Selberg validation | Rigorous algebraic bypass of classical Hilbert–Pólya obstructions without ad-hoc regularization |
+| **Open-Science Curators & Formal Verification Reviewers** | Validating sweeping mathematical claims against reproducible, air-gapped code and version-stable artifacts | Provides 100% offline, zero-egress numerical validation scripts, deterministic CSV/JSON ledgers, and CERN/Zenodo Concept-DOIs | Bit-for-bit verifiable computational evidence with transparent claim-level boundary tagging |
+| **AI Research Agents & Literature Synthesizers** | Disambiguating specialized mathematical stability theory from generic control engineering (Lyapunov) and software test suites | Publishes structured [`llms.txt`](llms.txt), PEP 621 metadata URLs, semantic search phrases, and explicit negative controls | High-precision LLM retrieval without hallucinations or domain cross-contamination |
+
+## Third-Party Licenses & Transparency
+
+`functional-stability-theory` enforces a strict open-science and permissive open-source supply chain:
+- **Primary Work License:** [Creative Commons Attribution 4.0 International (CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/) — unrestricted academic and commercial reuse with attribution.
+- **Zero Copyleft:** 0% AGPL, GPL, or LGPL components in codebase and verification tooling.
+- **100% Offline Zero-Egress:** Validation scripts run completely air-gapped without remote network requests or telemetry.
+
+| Component | License | Role in Programme | Supply Chain Status |
+|---|---|---|---|
+| Python Standard Library | PSF-2.0 | Core verification logic, math/cmath, hashing & ledgers | Audited / Permissive |
+| [`mpmath`](https://github.com/mpmath/mpmath) (optional) | BSD-3-Clause | Arbitrary-precision floating-point arithmetic | Audited / Permissive |
+| [`sympy`](https://github.com/sympy/sympy) (optional) | BSD-3-Clause | Symbolic algebra and identity verification | Audited / Permissive |
+| [`numpy`](https://github.com/numpy/numpy) (optional) | BSD-3-Clause | Vectorized numerical linear algebra | Audited / Permissive |
+| [`scipy`](https://github.com/scipy/scipy) (optional) | BSD-3-Clause | Numerical integration and ODE/PDE solvers | Audited / Permissive |
+| Development Tools (`pytest`, `ruff`, `setuptools`) | MIT / Apache-2.0 | Contract testing, static linting & build packaging | Audited / Permissive |
+
+For the complete software inventory, authoritative license texts, and invariant compliance details, see [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
 
 ## Author
 

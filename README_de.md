@@ -3,9 +3,9 @@
 [🇬🇧 English Version](README.md) | [🇩🇪 Deutsche Version](README_de.md)
 
 [![Lizenz: CC BY 4.0](https://img.shields.io/badge/Lizenz-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Version](https://img.shields.io/badge/Version-1.0.4-blue.svg)](pyproject.toml)
+[![Version](https://img.shields.io/badge/Version-1.0.5-blue.svg)](pyproject.toml)
 [![CI](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml/badge.svg)](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml)
-[![Test Suite](https://img.shields.io/badge/Tests-115%2B%20Bestanden-brightgreen.svg)](tests/)
+[![Test Suite](https://img.shields.io/badge/Tests-118%2B%20Bestanden-brightgreen.svg)](tests/)
 [![Python: 3.10--3.13](https://img.shields.io/badge/Python-3.10--3.13-blue.svg)](pyproject.toml)
 [![Plattform: Windows | Linux | macOS](https://img.shields.io/badge/Plattform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](pyproject.toml)
 [![Zero-Egress](https://img.shields.io/badge/Netzwerk-100%25%20Offline%20%2F%20Zero--Egress-success.svg)](SECURITY.md)
@@ -17,8 +17,10 @@
 [![Zenodo Spectrum Duality](https://img.shields.io/badge/Zenodo-10.5281%2Fzenodo.19036190-blue.svg)](https://doi.org/10.5281/zenodo.19036190)
 [![Ökosystem: research-line](https://img.shields.io/badge/%C3%96kosystem-research--line-blue.svg)](https://github.com/research-line)
 [![Dachorganisation: open-bricks](https://img.shields.io/badge/Dachorganisation-open--bricks-purple.svg)](https://github.com/open-bricks)
+[![Drittanbieter-Lizenzen](https://img.shields.io/badge/Drittanbieter--Lizenzen-Gepr%C3%BCft-brightgreen.svg)](THIRD_PARTY_LICENSES.md)
+[![Marketing-Log](https://img.shields.io/badge/Marketing--Log-Aktiv-blue.svg)](MARKETING-LOG.txt)
 [![LLM Kontext](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
-[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--09--10-informational.svg)](MARKETING-LOG.txt)
+[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--09--12-informational.svg)](MARKETING-LOG.txt)
 
 > [!NOTE]
 > **KI- / LLM-Integration & Maschinenlesbarer Kontext**: Ein maschinenlesbarer Index für LLMs, Suchmaschinen und automatisierte Crawler wird in [`llms.txt`](llms.txt) gepflegt. Er enthält Gültigkeitsgrenzen, Suchbegriffe, Konzept-DOIs und Abgrenzungshinweise. Lokale Discoverability-Logs werden in [`MARKETING-LOG.txt`](MARKETING-LOG.txt) geführt.
@@ -41,6 +43,8 @@ Die **Funktionelle Stabilitätstheorie (FST)** ist ein einheitliches mathematisc
 | **10. Numerische Validierungsskripte** | Vollständiges Skript- und Diagnostik-Inventar | [Zum Abschnitt](#numerische-validierungsskripte) |
 | **11. Ökosystem & Repositories** | Verbundene research-line, open-bricks und ellmos-ai Repositories | [Zum Abschnitt](#ökosystem--verwandte-forschungs-repositories) |
 | **12. Autor & Lizenz** | Wissenschaftliche Zitation, ORCID und CC-BY-4.0 Lizenz | [Zum Abschnitt](#autor) |
+| **13. Zielgruppen & Auffindbarkeit** | Vier wissenschaftliche Zielgruppen und ihr Mehrwert | [Zum Abschnitt](#zielgruppen--auffindbarkeit) |
+| **14. Drittanbieter-Lizenzen & Transparenz** | Open-Source-Transparenz, 0% Copyleft und Invarianten-Prüfung | [Zum Abschnitt](#drittanbieter-lizenzen--transparenz) |
 
 ## Einstieg
 
@@ -307,6 +311,35 @@ Das `functional-stability-theory` Repository erzwingt zehn fundamentale Laufzeit
 | [`ellmos-ai/ellmos-development-system`](https://github.com/ellmos-ai/ellmos-development-system) | KI-Entwicklungssystem | Vollständige agentische Laufzeitumgebung & MCP-Orchestrierung |
 | [`open-bricks/governance`](https://github.com/open-bricks/governance) | Open-Source-Governance | Organisationsübergreifende Richtlinien, Sicherheitsstandards & Lizenzen |
 | [`open-bricks`](https://github.com/open-bricks) | Dachorganisation | Open-Source & Open-Science Föderation |
+
+## Zielgruppen & Auffindbarkeit
+
+`functional-stability-theory` adressiert vier zentrale akademische und rechnergestützte Zielgruppen in Mathematik, Physik und autonomer Wissenschaft:
+
+| Zielgruppe / Persona | Kernfrage & Wissenschaftliche Herausforderung | FST-Lösung & Ansatz | Methodischer Mehrwert |
+|---|---|---|---|
+| **Theoretische Physiker & Quantenfeldtheoretiker** | Suche nach konsistenten, nicht-perturbativen Stabilitätsmechanismen für Yang-Mills Massenlücke, Navier-Stokes Regularität und turbulente Dissipation | Vereinheitlicht dissipative Selektion unter dem Renormierten Freie-Energie-Prinzip (RFEP) und Muster A (Funktionelle Positivität unter Eichbedingung) | Universelle Normalform über Eichtheorie, Hydrodynamik und kosmologisches Screening |
+| **Analytische Zahlentheoretiker & Millennium-Forscher** | Umgehung struktureller No-Go-Theoreme (NE-A/NE-B) bei Operator-Ansätzen zur Riemannschen Vermutung | Führt die SGE-Taxonomie (Zeta Zoo) und v2.0 Even-Dominance der Weil-Quadratform ein; verbindet Zookeeper mit Selberg-Validierung | Streng algebraische Umgehung klassischer Hilbert–Pólya-Obstruktionen ohne Ad-hoc-Regularisierung |
+| **Open-Science Archivare & Reviewer** | Verifikation weitreichender mathematischer Theoreme gegen reproduzierbare, luftspaltfähige Software und unveränderliche Artefakte | Bietet 100% lokale Zero-Egress Validierungsskripte, deterministische CSV/JSON-Ledgers und CERN/Zenodo Konzept-DOIs | Bit-für-Bit verifizierbare Berechnungen mit transparenter Kennzeichnung offener und bewiesener Schritte |
+| **KI-Forschungsagenten & Wissens-Synthesizer** | Disambiguierung spezialisierter mathematischer Stabilitätstheorie von technischer Regelungstechnik (Lyapunov) oder Software-Testsuiten | Bereitstellung strukturierter [`llms.txt`](llms.txt), semantischer Suchphrasen, PEP 621 URLs und expliziter Negativkontrollen | Präzise LLM-Kontextualisierung ohne Halluzinationen oder Domänen-Kollisionen |
+
+## Drittanbieter-Lizenzen & Transparenz
+
+`functional-stability-theory` folgt einer strikten Open-Science- und Permissive-Open-Source-Governance:
+- **Primäre Lizenz:** [Creative Commons Attribution 4.0 International (CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/) — uneingeschränkte wissenschaftliche und kommerzielle Nutzung mit Namensnennung.
+- **Zero Copyleft:** 0% AGPL, GPL oder LGPL Bestandteile im Quellcode und in den Prüfwerkzeugen.
+- **100% Offline & Zero-Egress:** Alle Validierungsskripte laufen vollständig offline ohne Telemetrie oder externe Netzwerkanfragen.
+
+| Komponente | Lizenz | Rolle im Forschungsprogramm | Status |
+|---|---|---|---|
+| Python Standardbibliothek | PSF-2.0 | Kern-Validierungslogik, math/cmath, Hashing & Ledgers | Geprüft / Permissiv |
+| [`mpmath`](https://github.com/mpmath/mpmath) (optional) | BSD-3-Clause | Beliebig genaue Gleitkomma-Arithmetik für Zeta-Nullstellen | Geprüft / Permissiv |
+| [`sympy`](https://github.com/sympy/sympy) (optional) | BSD-3-Clause | Computeralgebra und symbolische Identitätsprüfung | Geprüft / Permissiv |
+| [`numpy`](https://github.com/numpy/numpy) (optional) | BSD-3-Clause | Vektorisierte lineare Algebra und Gitterrechnungen | Geprüft / Permissiv |
+| [`scipy`](https://github.com/scipy/scipy) (optional) | BSD-3-Clause | Numerische Integration und ODE/PDE-Löser | Geprüft / Permissiv |
+| Entwicklungswerkzeuge (`pytest`, `ruff`, `setuptools`) | MIT / Apache-2.0 | Vertragstests, statische Analyse & Paketierung | Geprüft / Permissiv |
+
+Das vollständige Software-Inventar, autoritative Lizenztexte und Details zur Invarianten-Einhaltung finden sich in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
 
 ## Autor
 

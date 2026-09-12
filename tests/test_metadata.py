@@ -17,7 +17,7 @@ def test_pyproject_metadata():
 
     project = data.get("project", {})
     assert project.get("name") == "functional-stability-theory"
-    assert project.get("version") == "1.0.4"
+    assert project.get("version") == "1.0.5"
     assert project.get("requires-python") == ">=3.10"
     assert project.get("license", {}).get("text") == "CC-BY-4.0"
     assert len(project.get("authors", [])) >= 1
@@ -47,6 +47,9 @@ def test_pyproject_pep621_classifiers_and_urls():
     assert "Security" in urls
     assert "Parent Organization" in urls
     assert "Umbrella Ecosystem" in urls
+    assert "Third-Party Licenses" in urls
+    assert "Marketing Log" in urls
+    assert "LLM Ready" in urls
 
 
 def test_ci_workflow_integrity():
@@ -76,7 +79,7 @@ def test_readme_and_readme_de_badges():
 
     # Required badge signatures in English README
     assert "License-CC_BY_4.0" in readme_en
-    assert "version-1.0.4" in readme_en
+    assert "version-1.0.5" in readme_en
     assert "actions/workflows/ci.yml" in readme_en
     assert "ORCID-0009--0005--7296--1534" in readme_en
     assert "Zenodo-10.5281" in readme_en
@@ -85,15 +88,17 @@ def test_readme_and_readme_de_badges():
     assert "Security%20SLA" in readme_en
     assert "Ecosystem-research--line" in readme_en
     assert "Umbrella-open--bricks" in readme_en
+    assert "Third--Party%20Licenses-Audited-brightgreen" in readme_en
+    assert "Marketing%20Log-Active-blue" in readme_en
     assert "llms.txt" in readme_en
-    assert "Tests-115%2B%20Passed" in readme_en
+    assert "Tests-118%2B%20Passed" in readme_en
     assert "Python-3.10--3.13" in readme_en or "Python-3.10" in readme_en
     assert "Platform-Windows" in readme_en
-    assert "Audit-Last--checked%202026--09--10" in readme_en
+    assert "Audit-Last--checked%202026--09--12" in readme_en
 
     # Required badge signatures in German README
     assert "Lizenz-CC_BY_4.0" in readme_de or "License-CC_BY_4.0" in readme_de
-    assert "Version-1.0.4" in readme_de
+    assert "Version-1.0.5" in readme_de
     assert "actions/workflows/ci.yml" in readme_de
     assert "ORCID-0009--0005--7296--1534" in readme_de
     assert "Zenodo-10.5281" in readme_de
@@ -102,15 +107,17 @@ def test_readme_and_readme_de_badges():
     assert "Sicherheits--SLA" in readme_de
     assert "research--line" in readme_de
     assert "open--bricks" in readme_de
+    assert "Drittanbieter--Lizenzen-Gepr%C3%BCft-brightgreen" in readme_de
+    assert "Marketing--Log-Aktiv-blue" in readme_de
     assert "llms.txt" in readme_de
-    assert "Tests-115%2B%20Bestanden" in readme_de
+    assert "Tests-118%2B%20Bestanden" in readme_de
     assert "Python-3.10--3.13" in readme_de or "Python-3.10" in readme_de
     assert "Plattform-Windows" in readme_de
-    assert "Audit-Gepr%C3%BCft%202026--09--10" in readme_de
+    assert "Audit-Gepr%C3%BCft%202026--09--12" in readme_de
 
 
 def test_quick_navigation_parity():
-    """Validate 14-point quick navigation index parity in English and German READMEs."""
+    """Validate quick navigation index parity in English (16-point) and German (14-point) READMEs."""
     readme_en = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
     readme_de = (REPO_ROOT / "README_de.md").read_text(encoding="utf-8")
 
@@ -132,6 +139,8 @@ def test_quick_navigation_parity():
         "12. Validation Scripts",
         "13. Repository Structure",
         "14. Sibling Ecosystem",
+        "15. Target Personas",
+        "16. Third-Party Licenses",
     ]
     for point in en_points:
         assert point in readme_en, f"Quick nav point {point} missing in README.md"
@@ -149,6 +158,8 @@ def test_quick_navigation_parity():
         "10. Numerische Validierungsskripte",
         "11. Ökosystem & Repositories",
         "12. Autor & Lizenz",
+        "13. Zielgruppen & Auffindbarkeit",
+        "14. Drittanbieter-Lizenzen & Transparenz",
     ]
     for point in de_points:
         assert point in readme_de, f"Schnellnavigation point {point} missing in README_de.md"
@@ -236,24 +247,26 @@ def test_llms_txt_structure_and_timestamp():
     """Validate llms.txt structure, canonical metadata, and verification date."""
     llms_txt = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8")
 
-    assert "## Last-checked: 2026-09-10" in llms_txt
+    assert "## Last-checked: 2026-09-12" in llms_txt
     assert "https://github.com/research-line/functional-stability-theory" in llms_txt
     assert "research-line" in llms_txt
     assert "Renormalized Free-Energy Principle" in llms_txt
     assert "Pattern A" in llms_txt
-    assert "Version: 1.0.4" in llms_txt
+    assert "Version: 1.0.5" in llms_txt
     assert "SECURITY.md" in llms_txt
     assert "## Search Phrases" in llms_txt
-    assert "115+ Passed" in llms_txt
+    assert "118+ Passed" in llms_txt
     assert "Governance & Runtime Invariants" in llms_txt
+    assert "THIRD_PARTY_LICENSES.md" in llms_txt
     assert "MARKETING-LOG.txt" in llms_txt
 
 
 def test_changelog_entry():
     """Validate that CHANGELOG.md documents the latest release and hygiene audits."""
     changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-    assert "2026-09-10" in changelog
-    assert "1.0.4" in changelog
+    assert "2026-09-12" in changelog
+    assert "1.0.5" in changelog
+    assert "THIRD_PARTY_LICENSES.md" in changelog
     assert "SECURITY.md" in changelog
     assert "MARKETING-LOG.txt" in changelog
 
@@ -408,3 +421,66 @@ def test_changelog_recent_pfad_a_entry():
     assert "## [1.0.4] - 2026-09-10" in changelog
     assert "addopts = \"-ra -v\"" in changelog
     assert ".gitignore" in changelog
+
+
+def test_third_party_licenses_audit():
+    """Validate that THIRD_PARTY_LICENSES.md exists and contains permissive inventory and invariants."""
+    licenses_file = REPO_ROOT / "THIRD_PARTY_LICENSES.md"
+    assert licenses_file.is_file(), "THIRD_PARTY_LICENSES.md must exist"
+
+    content = licenses_file.read_text(encoding="utf-8")
+    assert "CC-BY-4.0" in content
+    assert "PSF-2.0" in content
+    assert "BSD-3-Clause" in content
+    assert "MIT" in content
+    assert "Zero AGPL" in content or "0 AGPL" in content
+    assert "Zero-Egress" in content
+    assert "INV-LOCAL-01" in content
+    assert "INV-SLA-10" in content
+    assert "mpmath" in content
+    assert "sympy" in content
+    assert "pytest" in content
+    assert "ruff" in content
+
+
+def test_target_personas_sections():
+    """Validate that target personas are documented in English and German READMEs."""
+    readme_en = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    readme_de = (REPO_ROOT / "README_de.md").read_text(encoding="utf-8")
+
+    assert "## Target Personas & Discoverability" in readme_en
+    assert "Theoretical Physicists & Field Theorists" in readme_en
+    assert "Analytic Number Theorists & Millennium Researchers" in readme_en
+    assert "Open-Science Curators & Formal Verification Reviewers" in readme_en
+    assert "AI Research Agents & Literature Synthesizers" in readme_en
+
+    assert "## Zielgruppen & Auffindbarkeit" in readme_de
+    assert "Theoretische Physiker & Quantenfeldtheoretiker" in readme_de
+    assert "Analytische Zahlentheoretiker & Millennium-Forscher" in readme_de
+    assert "Open-Science Archivare & Reviewer" in readme_de
+    assert "KI-Forschungsagenten & Wissens-Synthesizer" in readme_de
+
+
+def test_third_party_licenses_readme_sections():
+    """Validate that Third-Party Licenses sections are present in English and German READMEs."""
+    readme_en = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    readme_de = (REPO_ROOT / "README_de.md").read_text(encoding="utf-8")
+
+    assert "## Third-Party Licenses & Transparency" in readme_en
+    assert "THIRD_PARTY_LICENSES.md" in readme_en
+    assert "Zero Copyleft" in readme_en
+
+    assert "## Drittanbieter-Lizenzen & Transparenz" in readme_de
+    assert "THIRD_PARTY_LICENSES.md" in readme_de
+    assert "Zero Copyleft" in readme_de
+
+
+def test_marketing_log_pfad_b_v105_entry():
+    """Validate that MARKETING-LOG.txt documents the v1.0.5 Pfad B discoverability audit."""
+    content = (REPO_ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+    assert "1.0.5" in content
+    assert "2026-09-12" in content
+    assert "THIRD_PARTY_LICENSES" in content
+    assert "Wettbewerbsmatrix" in content
+    assert "INV-LOCAL-01" in content
+    assert "INV-SLA-10" in content
