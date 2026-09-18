@@ -2,6 +2,27 @@
 
 All notable changes to the Functional Stability Theory (FST) repository will be documented in this file.
 
+## [1.0.6] - 2026-09-18
+
+### Added
+- Hardened GitHub Actions CI/CD workflows:
+  - Top-level least-privilege `permissions: contents: read` and job `timeout-minutes: 15` in `.github/workflows/ci.yml`.
+  - Concurrency control (`cancel-in-progress: true`) and job `timeout-minutes: 10` in `.github/workflows/stale.yml`.
+  - Upgraded `actions/first-interaction` to `v3` with concurrency control and job `timeout-minutes: 5` in `.github/workflows/welcome.yml`.
+- Extended multi-host cloud-sync defense patterns in `.gitignore` (`*conflicted copy*`, `* (Kopie)*`, `* (Copy)*`, `*-ASUS*`, `*-ASUS-GEI*`, `*-LAPTOP*`, `*-WORKSTATION*`, `*-WORKSTATION-LG*`, `*-Mac Studio*`, `*-MacBook*`).
+- Extended canonical multi-agent lock patterns in `.gitignore` (`LOCK`, `LOCK.*`, `LOCK*.txt`, `LOCK.permissions.json`, `LOCK.user.*`, `LOCK.until.*`, `LOCK.condition.*`, `uv.lock`, with explicit negation `!package-lock.json`).
+- Extended build, cache, and test defense patterns in `.gitignore` (`.hypothesis/`, `.turbo/`, `.nyc_output/`, `*.orig`, `*.rej`).
+- Declared PEP 621 standard `license-files = ["LICENSE", "THIRD_PARTY_LICENSES.md"]` in `pyproject.toml`.
+- Configured pytest execution guardrails in `pyproject.toml`: `minversion = "7.0"` and `norecursedirs` excluding all non-test domain, script, and build directories.
+- Documented turnus Pfad A technical hygiene and CI hardening in `MARKETING-LOG.txt`.
+- Expanded metadata contract tests in `tests/test_metadata.py` covering least-privilege CI permissions, workflow timeouts, action versions, extended `.gitignore` patterns, pytest guardrails, PEP 621 license files, and audit records.
+
+### Changed
+- Bumped project version to `1.0.6` across `pyproject.toml`, test suites, and documentation.
+- Re-audited `THIRD_PARTY_LICENSES.md` to `2026-09-18` (v1.0.6, 100% permissive, 0% copyleft, 100% offline zero-egress).
+- Synchronized Shields.io badges in `README.md` and `README_de.md` (`v1.0.6`, `Tests 128+ Passed` / `128+ Bestanden`, `Last-checked 2026-09-18` / `Geprüft 2026-09-18`).
+- Updated `llms.txt` verification timestamp to `2026-09-18` with updated test suite count (128+ Passed) and release version `1.0.6`.
+
 ## [1.0.5] - 2026-09-12
 
 ### Added

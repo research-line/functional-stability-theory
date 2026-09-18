@@ -1,8 +1,8 @@
 # Third-Party Licenses & Software Inventory
 
 - **Repository:** `research-line/functional-stability-theory`
-- **Version:** `1.0.5`
-- **Audit Date:** `2026-09-12`
+- **Version:** `1.0.6`
+- **Audit Date:** `2026-09-18`
 - **License Status:** `100% Permissive Open Source (0 AGPL, 0 Copyleft, 0 Cloud Telemetry)`
 - **Umbrella:** [`open-bricks`](https://github.com/open-bricks) | **Parent Organization:** [`research-line`](https://github.com/research-line)
 - **Primary Work License:** [Creative Commons Attribution 4.0 International (CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/)

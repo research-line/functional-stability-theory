@@ -17,7 +17,7 @@ def test_pyproject_metadata():
 
     project = data.get("project", {})
     assert project.get("name") == "functional-stability-theory"
-    assert project.get("version") == "1.0.5"
+    assert project.get("version") == "1.0.6"
     assert project.get("requires-python") == ">=3.10"
     assert project.get("license", {}).get("text") == "CC-BY-4.0"
     assert len(project.get("authors", [])) >= 1
@@ -79,7 +79,7 @@ def test_readme_and_readme_de_badges():
 
     # Required badge signatures in English README
     assert "License-CC_BY_4.0" in readme_en
-    assert "version-1.0.5" in readme_en
+    assert "version-1.0.6" in readme_en
     assert "actions/workflows/ci.yml" in readme_en
     assert "ORCID-0009--0005--7296--1534" in readme_en
     assert "Zenodo-10.5281" in readme_en
@@ -91,14 +91,14 @@ def test_readme_and_readme_de_badges():
     assert "Third--Party%20Licenses-Audited-brightgreen" in readme_en
     assert "Marketing%20Log-Active-blue" in readme_en
     assert "llms.txt" in readme_en
-    assert "Tests-118%2B%20Passed" in readme_en
+    assert "Tests-128%2B%20Passed" in readme_en
     assert "Python-3.10--3.13" in readme_en or "Python-3.10" in readme_en
     assert "Platform-Windows" in readme_en
-    assert "Audit-Last--checked%202026--09--12" in readme_en
+    assert "Audit-Last--checked%202026--09--18" in readme_en
 
     # Required badge signatures in German README
     assert "Lizenz-CC_BY_4.0" in readme_de or "License-CC_BY_4.0" in readme_de
-    assert "Version-1.0.5" in readme_de
+    assert "Version-1.0.6" in readme_de
     assert "actions/workflows/ci.yml" in readme_de
     assert "ORCID-0009--0005--7296--1534" in readme_de
     assert "Zenodo-10.5281" in readme_de
@@ -110,10 +110,10 @@ def test_readme_and_readme_de_badges():
     assert "Drittanbieter--Lizenzen-Gepr%C3%BCft-brightgreen" in readme_de
     assert "Marketing--Log-Aktiv-blue" in readme_de
     assert "llms.txt" in readme_de
-    assert "Tests-118%2B%20Bestanden" in readme_de
+    assert "Tests-128%2B%20Bestanden" in readme_de
     assert "Python-3.10--3.13" in readme_de or "Python-3.10" in readme_de
     assert "Plattform-Windows" in readme_de
-    assert "Audit-Gepr%C3%BCft%202026--09--12" in readme_de
+    assert "Audit-Gepr%C3%BCft%202026--09--18" in readme_de
 
 
 def test_quick_navigation_parity():
@@ -247,15 +247,15 @@ def test_llms_txt_structure_and_timestamp():
     """Validate llms.txt structure, canonical metadata, and verification date."""
     llms_txt = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8")
 
-    assert "## Last-checked: 2026-09-12" in llms_txt
+    assert "## Last-checked: 2026-09-18" in llms_txt
     assert "https://github.com/research-line/functional-stability-theory" in llms_txt
     assert "research-line" in llms_txt
     assert "Renormalized Free-Energy Principle" in llms_txt
     assert "Pattern A" in llms_txt
-    assert "Version: 1.0.5" in llms_txt
+    assert "Version: 1.0.6" in llms_txt
     assert "SECURITY.md" in llms_txt
     assert "## Search Phrases" in llms_txt
-    assert "118+ Passed" in llms_txt
+    assert "128+ Passed" in llms_txt
     assert "Governance & Runtime Invariants" in llms_txt
     assert "THIRD_PARTY_LICENSES.md" in llms_txt
     assert "MARKETING-LOG.txt" in llms_txt
@@ -264,8 +264,8 @@ def test_llms_txt_structure_and_timestamp():
 def test_changelog_entry():
     """Validate that CHANGELOG.md documents the latest release and hygiene audits."""
     changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-    assert "2026-09-12" in changelog
-    assert "1.0.5" in changelog
+    assert "2026-09-18" in changelog
+    assert "1.0.6" in changelog
     assert "THIRD_PARTY_LICENSES.md" in changelog
     assert "SECURITY.md" in changelog
     assert "MARKETING-LOG.txt" in changelog
@@ -484,3 +484,108 @@ def test_marketing_log_pfad_b_v105_entry():
     assert "Wettbewerbsmatrix" in content
     assert "INV-LOCAL-01" in content
     assert "INV-SLA-10" in content
+
+
+def test_ci_workflow_least_privilege_and_timeouts():
+    """Validate that CI workflows enforce least-privilege permissions, concurrency, and timeouts."""
+    ci_path = REPO_ROOT / ".github" / "workflows" / "ci.yml"
+    ci_content = ci_path.read_text(encoding="utf-8")
+    assert "permissions:" in ci_content
+    assert "contents: read" in ci_content
+    assert "timeout-minutes: 15" in ci_content
+
+    stale_path = REPO_ROOT / ".github" / "workflows" / "stale.yml"
+    stale_content = stale_path.read_text(encoding="utf-8")
+    assert "actions/stale@v9" in stale_content
+    assert "concurrency:" in stale_content
+    assert "timeout-minutes: 10" in stale_content
+
+    welcome_path = REPO_ROOT / ".github" / "workflows" / "welcome.yml"
+    welcome_content = welcome_path.read_text(encoding="utf-8")
+    assert "actions/first-interaction@v3" in welcome_content
+    assert "concurrency:" in welcome_content
+    assert "timeout-minutes: 5" in welcome_content
+
+
+def test_multihost_cloud_sync_and_lock_hygiene():
+    """Validate extended multi-host conflict copies, lock files, and cache in .gitignore."""
+    gitignore = (REPO_ROOT / ".gitignore").read_text(encoding="utf-8")
+
+    # Cloud sync conflict patterns
+    assert "*conflicted copy*" in gitignore
+    assert "* (Kopie)*" in gitignore
+    assert "* (Copy)*" in gitignore
+    assert "*-ASUS*" in gitignore
+    assert "*-ASUS-GEI*" in gitignore
+    assert "*-LAPTOP*" in gitignore
+    assert "*-WORKSTATION*" in gitignore
+    assert "*-WORKSTATION-LG*" in gitignore
+    assert "*-Mac Studio*" in gitignore
+    assert "*-MacBook*" in gitignore
+
+    # Canonical lock patterns
+    assert "LOCK" in gitignore
+    assert "LOCK.*" in gitignore
+    assert "LOCK*.txt" in gitignore
+    assert "LOCK.permissions.json" in gitignore
+    assert "LOCK.user.*" in gitignore
+    assert "LOCK.until.*" in gitignore
+    assert "LOCK.condition.*" in gitignore
+    assert "uv.lock" in gitignore
+    assert "!package-lock.json" in gitignore
+
+    # Extended test/cache patterns
+    assert ".hypothesis/" in gitignore
+    assert ".turbo/" in gitignore
+    assert ".nyc_output/" in gitignore
+    assert "*.orig" in gitignore
+    assert "*.rej" in gitignore
+
+
+def test_pytest_guardrails_and_license_files():
+    """Validate pytest guardrails and license-files in pyproject.toml."""
+    pyproject_path = REPO_ROOT / "pyproject.toml"
+    with open(pyproject_path, "rb") as f:
+        data = tomllib.load(f)
+
+    project = data.get("project", {})
+    assert "license-files" in project
+    assert "LICENSE" in project["license-files"]
+    assert "THIRD_PARTY_LICENSES.md" in project["license-files"]
+
+    pytest_opts = data.get("tool", {}).get("pytest", {}).get("ini_options", {})
+    assert pytest_opts.get("minversion") == "7.0"
+    norecursedirs = pytest_opts.get("norecursedirs", [])
+    assert ".git" in norecursedirs
+    assert ".pytest_cache" in norecursedirs
+    assert "applications" in norecursedirs
+    assert "scripts" in norecursedirs
+
+
+def test_marketing_log_pfad_a_v106_entry():
+    """Validate that MARKETING-LOG.txt documents the v1.0.6 Pfad A technical hygiene audit."""
+    content = (REPO_ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+    assert "1.0.6" in content
+    assert "2026-09-18" in content
+    assert "GITHUBBOT_ONE_REPO_CLEANER" in content
+    assert "Pfad A" in content
+    assert "Least-Privilege" in content
+    assert "Pytest-Guardrails" in content or "Pytest Guardrails" in content
+
+
+def test_third_party_licenses_audit_v106():
+    """Validate that THIRD_PARTY_LICENSES.md has been audited to v1.0.6 on 2026-09-18."""
+    licenses_file = REPO_ROOT / "THIRD_PARTY_LICENSES.md"
+    content = licenses_file.read_text(encoding="utf-8")
+    assert "- **Version:** `1.0.6`" in content
+    assert "- **Audit Date:** `2026-09-18`" in content
+    assert "100% Permissive Open Source" in content
+
+
+def test_security_supported_versions_parity():
+    """Validate that SECURITY.md supported versions table documents 1.0.x active branch."""
+    security_file = REPO_ROOT / "SECURITY.md"
+    content = security_file.read_text(encoding="utf-8")
+    assert "1.0.x" in content
+    assert "< 1.0.0" in content
+    assert "RunAsInvoker" in content
