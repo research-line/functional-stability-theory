@@ -94,7 +94,7 @@ def test_readme_and_readme_de_badges():
     assert "Tests-128%2B%20Passed" in readme_en
     assert "Python-3.10--3.13" in readme_en or "Python-3.10" in readme_en
     assert "Platform-Windows" in readme_en
-    assert "Audit-Last--checked%202026--09--18" in readme_en
+    assert "Audit-Last--checked%202026--09--20" in readme_en
 
     # Required badge signatures in German README
     assert "Lizenz-CC_BY_4.0" in readme_de or "License-CC_BY_4.0" in readme_de
@@ -113,11 +113,11 @@ def test_readme_and_readme_de_badges():
     assert "Tests-128%2B%20Bestanden" in readme_de
     assert "Python-3.10--3.13" in readme_de or "Python-3.10" in readme_de
     assert "Plattform-Windows" in readme_de
-    assert "Audit-Gepr%C3%BCft%202026--09--18" in readme_de
+    assert "Audit-Gepr%C3%BCft%202026--09--20" in readme_de
 
 
 def test_quick_navigation_parity():
-    """Validate quick navigation index parity in English (16-point) and German (14-point) READMEs."""
+    """Validate quick navigation index parity in English and German (18-point) READMEs."""
     readme_en = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
     readme_de = (REPO_ROOT / "README_de.md").read_text(encoding="utf-8")
 
@@ -140,7 +140,9 @@ def test_quick_navigation_parity():
         "13. Repository Structure",
         "14. Sibling Ecosystem",
         "15. Target Personas",
-        "16. Third-Party Licenses",
+        "16. Comparative Matrix",
+        "17. Third-Party Licenses",
+        "18. Security Policy & Statutory Notice",
     ]
     for point in en_points:
         assert point in readme_en, f"Quick nav point {point} missing in README.md"
@@ -155,11 +157,15 @@ def test_quick_navigation_parity():
         "07. Theoretischer Datenfluss",
         "08. Numerischer Lebenszyklus",
         "09. Governance-Invarianten",
-        "10. Numerische Validierungsskripte",
-        "11. Ökosystem & Repositories",
-        "12. Autor & Lizenz",
-        "13. Zielgruppen & Auffindbarkeit",
-        "14. Drittanbieter-Lizenzen & Transparenz",
+        "10. ASCII-Übersicht",
+        "11. Unabhängige Fundamente",
+        "12. Validierungsskripte",
+        "13. Repository-Struktur",
+        "14. Ökosystem & Repositories",
+        "15. Zielgruppen & Auffindbarkeit",
+        "16. Vergleichsmatrix",
+        "17. Drittanbieter-Lizenzen",
+        "18. Sicherheitsrichtlinie & Haftung",
     ]
     for point in de_points:
         assert point in readme_de, f"Schnellnavigation point {point} missing in README_de.md"
@@ -171,7 +177,7 @@ def test_governance_invariants_table_parity():
     readme_de = (REPO_ROOT / "README_de.md").read_text(encoding="utf-8")
 
     assert "## Governance & Runtime Invariants" in readme_en
-    assert "### Governance- & Laufzeit-Invarianten" in readme_de
+    assert "## Governance- & Laufzeit-Invarianten" in readme_de or "### Governance- & Laufzeit-Invarianten" in readme_de
 
     # 10 numbered rows
     for i in range(1, 11):
@@ -247,7 +253,7 @@ def test_llms_txt_structure_and_timestamp():
     """Validate llms.txt structure, canonical metadata, and verification date."""
     llms_txt = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8")
 
-    assert "## Last-checked: 2026-09-18" in llms_txt
+    assert "## Last-checked: 2026-09-20" in llms_txt
     assert "https://github.com/research-line/functional-stability-theory" in llms_txt
     assert "research-line" in llms_txt
     assert "Renormalized Free-Energy Principle" in llms_txt
@@ -574,11 +580,11 @@ def test_marketing_log_pfad_a_v106_entry():
 
 
 def test_third_party_licenses_audit_v106():
-    """Validate that THIRD_PARTY_LICENSES.md has been audited to v1.0.6 on 2026-09-18."""
+    """Validate that THIRD_PARTY_LICENSES.md has been audited to v1.0.6 on 2026-09-20."""
     licenses_file = REPO_ROOT / "THIRD_PARTY_LICENSES.md"
     content = licenses_file.read_text(encoding="utf-8")
     assert "- **Version:** `1.0.6`" in content
-    assert "- **Audit Date:** `2026-09-18`" in content
+    assert "- **Audit Date:** `2026-09-20`" in content
     assert "100% Permissive Open Source" in content
 
 
@@ -589,3 +595,100 @@ def test_security_supported_versions_parity():
     assert "1.0.x" in content
     assert "< 1.0.0" in content
     assert "RunAsInvoker" in content
+
+
+def test_comparative_matrix_parity():
+    """Validate that Section 16 Comparative Matrix exists with 10 dimensions in EN and DE."""
+    readme_en = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    readme_de = (REPO_ROOT / "README_de.md").read_text(encoding="utf-8")
+
+    assert "## Comparative Matrix vs. Alternatives" in readme_en
+    assert "## Vergleichsmatrix vs. Alternative Methoden" in readme_de
+
+    # Check for all 10 numbered invariant dimensions
+    for i in range(1, 11):
+        num_str = f"**{i:02d}."
+        assert num_str in readme_en, f"Dimension {num_str} missing in README.md comparative matrix"
+        assert num_str in readme_de, f"Dimension {num_str} missing in README_de.md comparative matrix"
+
+    # Check key columns
+    assert "FST (research-line)" in readme_en
+    assert "Connes Noncommutative Geometry" in readme_en
+    assert "FST (research-line)" in readme_de
+    assert "Connes Nichtkommutative Geometrie" in readme_de
+
+
+def test_statutory_notice_bgb_521_parity():
+    """Validate that Section 18 documents author, license, and § 521 BGB statutory notice."""
+    readme_en = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    readme_de = (REPO_ROOT / "README_de.md").read_text(encoding="utf-8")
+
+    assert "## Security Policy, Author & Statutory Notice" in readme_en
+    assert "## Sicherheitsrichtlinie, Autor & Gesetzlicher Haftungsausschluss" in readme_de
+
+    assert "521 BGB" in readme_en
+    assert "521 BGB" in readme_de
+    assert "Gefälligkeitsrecht" in readme_de or "Gefaelligkeitsrecht" in readme_de
+    assert "0009-0005-7296-1534" in readme_en
+    assert "0009-0005-7296-1534" in readme_de
+
+
+def test_reciprocal_anchors_parity():
+    """Validate that reciprocal HTML anchor pairs exist for all 18 sections across READMEs."""
+    readme_en = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    readme_de = (REPO_ROOT / "README_de.md").read_text(encoding="utf-8")
+
+    anchors = [
+        "start-here",
+        "einstieg",
+        "discovery-context",
+        "auffindbarkeit--entdeckungskontext",
+        "the-five-masters",
+        "die-fuenf-master-arbeiten",
+        "domain-supplements",
+        "domaenen-ergaenzungen--anwendungen",
+        "glossary--fst-core-terms",
+        "glossar--fst-kernbegriffe",
+        "proof-architecture",
+        "beweisarchitektur",
+        "theoretical-data-flow--validation-sequence",
+        "theoretischer-datenfluss--validierungssequenz",
+        "numerical-validation-lifecycle",
+        "numerischer-validierungs-lebenszyklus",
+        "governance--runtime-invariants",
+        "governance---laufzeit-invarianten",
+        "proof-architecture-ascii-overview",
+        "ascii-uebersicht-der-beweisarchitektur",
+        "independent-foundations",
+        "unabhaengige-fundamente",
+        "numerical-validation-scripts",
+        "numerische-validierungsskripte",
+        "repository-structure",
+        "repository-struktur",
+        "ecosystem--sibling-research-repositories",
+        "oekosystem--verwandte-forschungs-repositories",
+        "target-personas--discoverability",
+        "zielgruppen--auffindbarkeit",
+        "comparative-matrix--alternatives",
+        "vergleichsmatrix--alternative-methoden",
+        "third-party-licenses--transparency",
+        "drittanbieter-lizenzen--transparenz",
+        "security-policy--statutory-notice",
+        "sicherheitsrichtlinie--gesetzlicher-haftungsausschluss",
+    ]
+
+    for anchor in anchors:
+        tag = f'id="{anchor}"'
+        assert tag in readme_en, f"Anchor {anchor} missing in README.md"
+        assert tag in readme_de, f"Anchor {anchor} missing in README_de.md"
+
+
+def test_marketing_log_pfad_b_v106_entry():
+    """Validate that MARKETING-LOG.txt documents the 2026-09-20 Pfad B audit."""
+    content = (REPO_ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+    assert "2026-09-20" in content
+    assert "GITHUBBOT_ONE_REPO_MARKETING_AND_DESIGN" in content
+    assert "Pfad B" in content
+    assert "18-Punkte" in content
+    assert "521 BGB" in content
+    assert "Vergleichsmatrix" in content

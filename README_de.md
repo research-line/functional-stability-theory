@@ -20,32 +20,42 @@
 [![Drittanbieter-Lizenzen](https://img.shields.io/badge/Drittanbieter--Lizenzen-Gepr%C3%BCft-brightgreen.svg)](THIRD_PARTY_LICENSES.md)
 [![Marketing-Log](https://img.shields.io/badge/Marketing--Log-Aktiv-blue.svg)](MARKETING-LOG.txt)
 [![LLM Kontext](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
-[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--09--18-informational.svg)](MARKETING-LOG.txt)
+[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--09--20-informational.svg)](MARKETING-LOG.txt)
 
 > [!NOTE]
 > **KI- / LLM-Integration & Maschinenlesbarer Kontext**: Ein maschinenlesbarer Index für LLMs, Suchmaschinen und automatisierte Crawler wird in [`llms.txt`](llms.txt) gepflegt. Er enthält Gültigkeitsgrenzen, Suchbegriffe, Konzept-DOIs und Abgrenzungshinweise. Lokale Discoverability-Logs werden in [`MARKETING-LOG.txt`](MARKETING-LOG.txt) geführt.
 
 Die **Funktionelle Stabilitätstheorie (FST)** ist ein einheitliches mathematisches Forschungsprogramm, das eine zentrale strukturelle Herausforderung — *Funktionelle Positivität unter Eichbedingung* (Muster A / Pattern A) — als gemeinsamen Kern offener Probleme in Zahlentheorie, mathematischer Physik und Kosmologie identifiziert.
 
+<a id="schnellnavigation"></a>
+<a id="quick-navigation"></a>
 ## Schnellnavigation
 
 | Abschnitt | Beschreibung | Sprungziel |
 |---|---|---|
 | **01. Einstieg** | Primäre Navigationspfade und Fundamente | [Zum Abschnitt](#einstieg) |
 | **02. Auffindbarkeit** | Suchbegriffe, Zitationsstandards und wissenschaftliche Indizes | [Zum Abschnitt](#auffindbarkeit--entdeckungskontext) |
-| **03. Die Fünf Master-Arbeiten** | Kernfundamente und aktuelle Zenodo Konzept-DOIs | [Zum Abschnitt](#die-fünf-master-arbeiten) |
-| **04. Domänen-Ergänzungen** | Mathematik-, Physik-, Kosmologie- und Biologie-Anwendungen | [Zum Abschnitt](#domänen-ergänzungen--anwendungen) |
+| **03. Die Fünf Master-Arbeiten** | Kernfundamente und aktuelle Zenodo Konzept-DOIs | [Zum Abschnitt](#die-fuenf-master-arbeiten) |
+| **04. Domänen-Ergänzungen** | Mathematik-, Physik-, Kosmologie- und Biologie-Anwendungen | [Zum Abschnitt](#domaenen-ergaenzungen--anwendungen) |
 | **05. Glossar** | FST-Kernbegriffe (v2.0, NE-A/B, SGE, Weil QW, Muster A, RFEP) | [Zum Abschnitt](#glossar--fst-kernbegriffe) |
-| **06. Beweisarchitektur** | Fünf-Master-Hierarchie (flowchart TD) | [Zum Abschnitt](#beweisarchitektur-der-fünf-master-arbeiten) |
+| **06. Beweisarchitektur** | Fünf-Master-Hierarchie (flowchart TD) | [Zum Abschnitt](#beweisarchitektur) |
 | **07. Theoretischer Datenfluss** | Datenfluss von Axiomen bis zur Diagnostik (flowchart LR) | [Zum Abschnitt](#theoretischer-datenfluss--validierungssequenz) |
 | **08. Numerischer Lebenszyklus** | Nummeriertes Sequenzdiagramm des Validierungs-Workflows | [Zum Abschnitt](#numerischer-validierungs-lebenszyklus) |
 | **09. Governance-Invarianten** | 10 Laufzeit- und Forschungsintegritäts-Invarianten | [Zum Abschnitt](#governance---laufzeit-invarianten) |
-| **10. Numerische Validierungsskripte** | Vollständiges Skript- und Diagnostik-Inventar | [Zum Abschnitt](#numerische-validierungsskripte) |
-| **11. Ökosystem & Repositories** | Verbundene research-line, open-bricks und ellmos-ai Repositories | [Zum Abschnitt](#ökosystem--verwandte-forschungs-repositories) |
-| **12. Autor & Lizenz** | Wissenschaftliche Zitation, ORCID und CC-BY-4.0 Lizenz | [Zum Abschnitt](#autor) |
-| **13. Zielgruppen & Auffindbarkeit** | Vier wissenschaftliche Zielgruppen und ihr Mehrwert | [Zum Abschnitt](#zielgruppen--auffindbarkeit) |
-| **14. Drittanbieter-Lizenzen & Transparenz** | Open-Source-Transparenz, 0% Copyleft und Invarianten-Prüfung | [Zum Abschnitt](#drittanbieter-lizenzen--transparenz) |
+| **10. ASCII-Übersicht** | Strukturelle Textübersicht der 5 Master und Domänenzweige | [Zum Abschnitt](#ascii-uebersicht-der-beweisarchitektur) |
+| **11. Unabhängige Fundamente** | Unabhängige RH- und CRM-Kosmologie-Basisarbeiten | [Zum Abschnitt](#unabhaengige-fundamente) |
+| **12. Validierungsskripte** | Vollständiges Skript- und Diagnostik-Inventar | [Zum Abschnitt](#numerische-validierungsskripte) |
+| **13. Repository-Struktur** | Vollständiger Verzeichnisbaum der Arbeiten und Skripte | [Zum Abschnitt](#repository-struktur) |
+| **14. Ökosystem & Repositories** | Verbundene research-line, open-bricks und ellmos-ai Repositories | [Zum Abschnitt](#oekosystem--verwandte-forschungs-repositories) |
+| **15. Zielgruppen & Auffindbarkeit** | Vier wissenschaftliche Zielgruppen und ihr methodischer Mehrwert | [Zum Abschnitt](#zielgruppen--auffindbarkeit) |
+| **16. Vergleichsmatrix** | Invarianten-Benchmark gegen 4 alternative Forschungsparadigmen | [Zum Abschnitt](#vergleichsmatrix--alternative-methoden) |
+| **17. Drittanbieter-Lizenzen** | Open-Source-Transparenz, 0% Copyleft und Invarianten-Prüfung | [Zum Abschnitt](#drittanbieter-lizenzen--transparenz) |
+| **18. Sicherheitsrichtlinie & Haftung** | Schwachstellen-SLA, Autorenschaft & § 521 BGB Gefälligkeitsrecht | [Zum Abschnitt](#sicherheitsrichtlinie--gesetzlicher-haftungsausschluss) |
 
+---
+
+<a id="start-here"></a>
+<a id="einstieg"></a>
 ## Einstieg
 
 | Wenn Sie suchen nach... | Beginnen Sie mit | Warum |
@@ -58,6 +68,8 @@ Die **Funktionelle Stabilitätstheorie (FST)** ist ein einheitliches mathematisc
 
 Dies ist ein Forschungs-Quellcode-Repository und kein installierbares Software-Paket. Der Status variiert je nach Arbeit und Ordner: Manche Beiträge sind veröffentlichte Zenodo-Datensätze, manche sind öffentliche Preprints vor Zenodo, und mehrere Domänen-Ergänzungen bleiben an benannten Brückenschritten explizit konditional.
 
+<a id="discovery-context"></a>
+<a id="auffindbarkeit--entdeckungskontext"></a>
 ## Auffindbarkeit & Entdeckungskontext
 
 Nutzen Sie den kanonischen GitHub-Pfad `research-line/functional-stability-theory`, wenn Sie auf dieses Repository verlinken. Allgemeine Websuchen nach "functional stability theory" überschneiden sich mit Regelungstechnik, Lyapunov-Stabilität und Ingenieurliteratur, während FST-spezifische Arbeiten über GitHub, Zenodo-Verzeichnisse und wissenschaftliche Indizes auffindbar sind. Nützliche Suchbegriffe:
@@ -71,6 +83,8 @@ Nutzen Sie den kanonischen GitHub-Pfad `research-line/functional-stability-theor
 
 Bei Zitierungen bevorzugen Sie bitte die unten angegebenen Konzept-DOIs für Arbeiten sowie diese Repository-URL für Quellcode, Skripte und öffentliche Reproduzierbarkeit.
 
+<a id="the-five-masters"></a>
+<a id="die-fuenf-master-arbeiten"></a>
 ## Die Fünf Master-Arbeiten
 
 Das Programm stützt sich auf fünf zentrale Master-Fundamente. Alle DOIs unten sind **Konzept-DOIs**, die stets zur neuesten Version auf Zenodo auflösen.
@@ -85,6 +99,8 @@ Das Programm stützt sich auf fünf zentrale Master-Fundamente. Alle DOIs unten 
 
 **Atlas + Selberg bilden das Methoden-Validierungspaar**: Atlas ist der *negative* Test (Galerkin-Diagnostik führender Ordnung reicht für Dirichlet-Charaktere nicht aus), Selberg ist der *positive* Test (v2.0 reproduziert ein klassisches Operatorergebnis für Selberg-Zeta).
 
+<a id="domain-supplements"></a>
+<a id="domaenen-ergaenzungen--anwendungen"></a>
 ## Domänen-Ergänzungen
 
 ### FST-Mathematik
@@ -125,6 +141,8 @@ Die eigenständige spieltheoretische Chaperon-Arbeit ist veröffentlicht: **FST-
 
 Geplant. Siehe [`fst-chemistry/`](fst-chemistry/).
 
+<a id="glossary--fst-core-terms"></a>
+<a id="glossar--fst-kernbegriffe"></a>
 ## Glossar — FST Kernbegriffe
 
 | Begriff | Bedeutung |
@@ -140,6 +158,8 @@ Geplant. Siehe [`fst-chemistry/`](fst-chemistry/).
 | **CCM** | *Connes–Consani–Moscovici.* Fourier-Modell für die Weil-Quadratform im Zookeeper-Beweis. |
 | **UCU** | *Universelles Konvexitäts-Eindeutigkeitslemma.* Zusammen mit SGE und Weil die Dreiheit der Metaprinzipien des Zeta-Zweigs. |
 
+<a id="proof-architecture"></a>
+<a id="beweisarchitektur"></a>
 ## Beweisarchitektur
 
 ```mermaid
@@ -173,7 +193,9 @@ flowchart TD
     class MATH,PHYS,COSMO,BIO domain;
 ```
 
-### Theoretischer Datenfluss & Validierungssequenz
+<a id="theoretical-data-flow--validation-sequence"></a>
+<a id="theoretischer-datenfluss--validierungssequenz"></a>
+## Theoretischer Datenfluss & Validierungssequenz
 
 ```mermaid
 flowchart LR
@@ -215,7 +237,9 @@ flowchart LR
     class SCRIPTS,RESULTS diag;
 ```
 
-### Numerischer Validierungs-Lebenszyklus
+<a id="numerical-validation-lifecycle"></a>
+<a id="numerischer-validierungs-lebenszyklus"></a>
+## Numerischer Validierungs-Lebenszyklus
 
 ```mermaid
 sequenceDiagram
@@ -237,7 +261,9 @@ sequenceDiagram
     Ledger-->>Forscher: Reproduzierbarkeit & mathematische Invarianten bestätigen
 ```
 
-### Governance- & Laufzeit-Invarianten
+<a id="governance--runtime-invariants"></a>
+<a id="governance---laufzeit-invarianten"></a>
+## Governance- & Laufzeit-Invarianten
 
 Das `functional-stability-theory` Repository erzwingt zehn fundamentale Laufzeit-, Sicherheits- und Governance-Invarianten:
 
@@ -254,6 +280,114 @@ Das `functional-stability-theory` Repository erzwingt zehn fundamentale Laufzeit
 | **09** | **Transparente Diagnostik-Basis** | Unbedingte Positivkontrollen (z.B. 2D U(1) Charakterentwicklung) sind strikt von unbewiesenen Kontinuums-Transferhypothesen getrennt. | Dedizierte Positiv-/Negativkontroll-Skripte |
 | **10** | **48h Sicherheits- & 5-Tage-Triage-SLA** | Sicherheitsmeldungen, Integritätsbedenken und Schwachstellen werden binnen 48 Stunden bestätigt und innerhalb von 5 Werktagen triagiert. | Verbindliche Zusage in [`SECURITY.md`](SECURITY.md) |
 
+<a id="proof-architecture-ascii-overview"></a>
+<a id="ascii-uebersicht-der-beweisarchitektur"></a>
+## ASCII-Übersicht der Beweisarchitektur
+
+```
+                               FÜNF MASTER-ARBEITEN
+   ┌────────────────┬────────────────┬─────────────────┬────────────────┐
+   │                │                │                 │                │
+Zookeeper       Zeta Zoo      Spectrum Duality      Atlas           Selberg
+(RH-Beweis)  (Klassifikation)   (Muster A,       (Dirichlet,        (NE-B
+              SGE / UCU /        DS1–DS3,         negativer          Fehlschlag;
+              Weil QW_λ)         RFEP)            Methodentest)      SGE-YES)
+   │                │                │                 │                │
+   │        FST-Mathematik       FST-Physik       Methoden-Validierungspaar
+   │                │                │
+   │        ┌───────┼───────┐  ┌─────┼─────┐
+   │        │       │       │  │     │     │
+   │      BSD†    Hodge†  PvNP†  TU   YM   NS
+   │                                       │
+   │                              FST-Kosmologie
+   │                                       │   NS-LDI
+   │                                      DE
+   │
+Status: BEWIESEN (unbedingt, CCM-Route)
+† = Brücken-Spezies (Mathematik + Physik)
+```
+
+### Hierarchie
+
+```
+FST (Funktionelle Stabilitätstheorie)
+│
+├── Master-Fundamente
+│   ├── Zookeeper          RH-Beweis (CCM-Mikroclusterschließung)
+│   ├── Zeta Zoo           Mathematische Klassifikation (SGE-Taxonomie)
+│   ├── Spectrum Duality   Physikalische Instanziierung (RFEP, Muster A)
+│   ├── Atlas              Mikrokartographie Dirichlet (negativer Methodentest)
+│   └── Selberg            SGE-YES Methoden-Validierung (positiv)
+│
+├── FST-Mathematik         BSD, Hodge, P vs NP
+├── FST-Physik             Turbulenz, Yang–Mills, Navier–Stokes, NS-LDI
+├── FST-Kosmologie         Dunkle Energie
+├── FST-Biologie           (in Entwicklung)
+└── FST-Chemie             (geplant)
+```
+
+### Chronologische Entwicklung
+
+```
+2025/2026  CRM I–IV (Dunkle Energie)   RH "light" Beweis (Even Dominance)
+           unabhängig entwickelt       unabhängig entwickelt
+                 \                       /
+                  +---------+---------+
+                            |
+                  Erkenntnis: Beide teilen dasselbe
+                  strukturelle Muster (Muster A)
+                            |
+                            v
+                  RFEP formuliert (allgemeines Prinzip)
+                            |
+                  Mehrere Sackgassen
+                            |
+                            v
+                  Idee: Klassifikation von Zeta-Familien
+                  mit Techniken aus dem RH-Beweis
+                            |
+                  Nicht ausreichend — tiefere Werkzeuge nötig
+                            |
+                            v
+         RH via Connes-Rahmenwerk (CCM)
+         Mikroclusterschließung → unbedingter Beweis
+                            |
+                            v
+                  Zeta Zoo öffnet: SGE-Taxonomie
+                  klassifiziert alle Zeta-Familien
+                            |
+                            v
+         Atlas (Dirichlet, negativ) + Selberg (SGE-YES, positiv)
+         Methoden-Validierungspaar vervollständigt
+                            |
+                            v
+                  CoreCore erweitert auf FÜNF Master
+                  (Zookeeper, Zeta Zoo, Spectrum Duality,
+                   Atlas, Selberg) + Domänen-Ergänzungen
+```
+
+### Kernfundamente — Prinzipien und Benennung
+
+| Ebene | Name | Akronym | Bedeutung | Konzept-DOI |
+|---|---|---|---|---|
+| Programm | Funktionelle Stabilitätstheorie | FST | Name des Programms (Dach über allem) | — |
+| Prinzip | Renormiertes Freie-Energie-Prinzip | RFEP | Das mathematische Kernprinzip | [10.5281/zenodo.19036190](https://doi.org/10.5281/zenodo.19036190) |
+| Muster | Muster A: Funktionelle Positivität unter Eichbedingung | Muster A | Das universelle Stabilitätsmuster | [10.5281/zenodo.19036190](https://doi.org/10.5281/zenodo.19036190) |
+
+<a id="independent-foundations"></a>
+<a id="unabhaengige-fundamente"></a>
+## Unabhängige Fundamente
+
+| Name | Rolle | Konzept-DOI |
+|---|---|---|
+| RH Even Dominance v2.1 (Trilogie, Teil I–III) | Unabhängiger RH-Beweis, zweite Route | [10.5281/zenodo.19035640](https://doi.org/10.5281/zenodo.19035640) |
+| RH Direkter Beweis (Even Dominance) | Direkte Frontier-Dominanz-Route | [10.5281/zenodo.19764771](https://doi.org/10.5281/zenodo.19764771) |
+| CRM Kosmologie (I–V) | Unabhängiges Modell Dunkler Energie | [10.5281/zenodo.18728935](https://doi.org/10.5281/zenodo.18728935) |
+
+Diese stehen unabhängig von FST. Das RFEP wurde aus ihnen abstrahiert; sie sind nicht daraus abgeleitet.
+
+<a id="numerical-validation-scripts"></a>
+<a id="numerische-validierungsskripte"></a>
 ## Numerische Validierungsskripte
 
 | Skript | Arbeit | Beschreibung |
@@ -289,6 +423,36 @@ Das `functional-stability-theory` Repository erzwingt zehn fundamentale Laufzeit
 | `scripts/zeta-zoo/sge_control_experiment.py` | Zeta Zoo | SGE YES/NO diskriminierendes Kontrollexperiment |
 | `masters/atlas/scripts/` | Atlas | Galerkin-Berechnungspipeline (35 Skripte) |
 
+<a id="repository-structure"></a>
+<a id="repository-struktur"></a>
+## Repository-Struktur
+
+```
+functional-stability-theory/
+├── masters/                      Fünf CoreCore Master-Fundamente
+│   ├── zookeeper/                RH-Beweis (CCM-Mikroclusterschließung)
+│   ├── zeta-zoo/                 Klassifikation (SGE-Taxonomie)
+│   ├── spectrum-duality/         Physikalische Axiome (RFEP, Muster A)
+│   ├── atlas/                    Dirichlet-Mikrokartographie (negativer Methodentest)
+│   └── selberg/                  NE-B-Fehlschlag als HP-Detektion (SGE-YES-Validierung)
+├── fst-mathematics/              Domänen-Ergänzungen — Mathematik
+│   ├── bsd/                      Rang-1 Positivität (Reformulierung)
+│   ├── hodge/                    No-Go + einfache Richtung
+│   └── p-vs-np/                  Zeugen-Entropielücke (Reformulierung)
+├── fst-physics/                  Domänen-Ergänzungen — Physik
+│   ├── k41-variational-minimiser/ K41-Spektrum (unbedingt)
+│   ├── turbulence/               DFC / anomale Dissipation Begleiter
+│   ├── yang-mills/               Massengap (konditional)
+│   └── navier-stokes/            Regularität + NS-LDI (konditional)
+├── fst-cosmology/                Domänen-Ergänzungen — Kosmologie
+│   └── dark-energy/              CRM-Screening (konditional, nicht Cassini-verifiziert)
+├── fst-biology/                  Domänen-Ergänzungen — Biologie (in Entwicklung)
+├── fst-chemistry/                Domänen-Ergänzungen — Chemie (geplant)
+└── scripts/                      Numerische Validierung (Unterordner je Arbeit)
+```
+
+<a id="ecosystem--sibling-research-repositories"></a>
+<a id="oekosystem--verwandte-forschungs-repositories"></a>
 ## Ökosystem & Verwandte Forschungs-Repositories
 
 `functional-stability-theory` ist das zentrale theoretische Fundament der **research-line** Initiative und verbindet sich über die **open-bricks** Föderation:
@@ -301,7 +465,7 @@ Das `functional-stability-theory` Repository erzwingt zehn fundamentale Laufzeit
 | [`research-line/prompt-archaeology-casestudy2`](https://github.com/research-line/prompt-archaeology-casestudy2) | KI & Epistemologie | 4-Stufen Prompt-Archäologie & Reproduzierbarkeitsartefakte |
 | [`research-line/ai-elite-swr`](https://github.com/research-line/ai-elite-swr) | KI & Gesellschaft | KI-Elitenstrukturen & Wohlfahrtsforschung |
 | [`research-line/economic-sanctions-coercive-diplomacy`](https://github.com/research-line/economic-sanctions-coercive-diplomacy) | Politische Ökonomie | Spieltheoretisches Modell von Sanktionen und Zwangsbargaining |
-| [`biotec-line/VFDistiller`](https://github.com/biotec-line/VFDistiller) | Bio-Genetik Pipeline | Variant Effect Predictor & VCF-Destillations-Toolchain |
+| [`biotec-line/VFDistiller`](https://github.com/biotec-line/VFDistiller) | Bio-Genetics Pipeline | Variant Effect Predictor & VCF-Destillations-Toolchain |
 | [`doc-bricks/MediaBrain`](https://github.com/doc-bricks/MediaBrain) | Multi-Format Dokumentensynthese | Offline-First Wissensdatenbank und Forschungsindexierung |
 | [`dev-bricks/CodeBox`](https://github.com/dev-bricks/CodeBox) | Codeanalyse & Diagnostik | Syntaxbaum-Inspektion & strukturelle Linting-Umgebung |
 | [`dev-bricks/DevCenter`](https://github.com/dev-bricks/DevCenter) | Entwickler-Werkzeuge | Einheitliches Entwickler-Dashboard und Workspace-Management |
@@ -312,6 +476,8 @@ Das `functional-stability-theory` Repository erzwingt zehn fundamentale Laufzeit
 | [`open-bricks/governance`](https://github.com/open-bricks/governance) | Open-Source-Governance | Organisationsübergreifende Richtlinien, Sicherheitsstandards & Lizenzen |
 | [`open-bricks`](https://github.com/open-bricks) | Dachorganisation | Open-Source & Open-Science Föderation |
 
+<a id="target-personas--discoverability"></a>
+<a id="zielgruppen--auffindbarkeit"></a>
 ## Zielgruppen & Auffindbarkeit
 
 `functional-stability-theory` adressiert vier zentrale akademische und rechnergestützte Zielgruppen in Mathematik, Physik und autonomer Wissenschaft:
@@ -323,6 +489,27 @@ Das `functional-stability-theory` Repository erzwingt zehn fundamentale Laufzeit
 | **Open-Science Archivare & Reviewer** | Verifikation weitreichender mathematischer Theoreme gegen reproduzierbare, luftspaltfähige Software und unveränderliche Artefakte | Bietet 100% lokale Zero-Egress Validierungsskripte, deterministische CSV/JSON-Ledgers und CERN/Zenodo Konzept-DOIs | Bit-für-Bit verifizierbare Berechnungen mit transparenter Kennzeichnung offener und bewiesener Schritte |
 | **KI-Forschungsagenten & Wissens-Synthesizer** | Disambiguierung spezialisierter mathematischer Stabilitätstheorie von technischer Regelungstechnik (Lyapunov) oder Software-Testsuiten | Bereitstellung strukturierter [`llms.txt`](llms.txt), semantischer Suchphrasen, PEP 621 URLs und expliziter Negativkontrollen | Präzise LLM-Kontextualisierung ohne Halluzinationen oder Domänen-Kollisionen |
 
+<a id="comparative-matrix--alternatives"></a>
+<a id="vergleichsmatrix--alternative-methoden"></a>
+## Vergleichsmatrix vs. Alternative Methoden
+
+Der folgende invariantenbasierte Benchmark stellt das Rahmenwerk der Funktionellen Stabilitätstheorie (FST) vier etablierten Paradigmen in theoretischer Physik, analytischer Zahlentheorie und wissenschaftlichem Rechnen gegenüber:
+
+| Invariante Dimension | FST (research-line) | Klassische Zahlentheorie | Connes Nichtkommutative Geometrie | Traditionelle CFD-Simulation | Geschlossene Mathematik-Suiten (Wolfram/MATLAB) |
+|---|---|---|---|---|---|
+| **01. Universelles Substrat** | RFEP / Muster A (Universelle Normalform) | Ad-hoc Einzelprobleme | Adèle-Klassenraum Spurformel | Navier-Stokes Diskretisierung (DNS/LES) | Proprietäre Black-Box-Routinen |
+| **02. Hilbert–Pólya-Bypass** | Bewiesener NE-A/NE-B Bypass (v2.0 Even-Dominance) | Klassisch blockiert | Analytische Fortsetzungshindernisse | Nicht anwendbar | Nicht anwendbar |
+| **03. Zero-Egress Reproduzierbarkeit** | 100% Offline Python-Ledgers (Deterministisch) | Selten / Nur Paper | Rein theoretisch / Paper | Cluster- / HPC-abhängig | Cloud-Lizenz / Online-Aktivierung |
+| **04. Aussagen-Disambiguierung** | Strikt (Theorem / Konditional / Offen) | Häufig informell | Hochkomplex / Implizit | Heuristisch / Empirisch | Geschlossene Herstellerdoku |
+| **05. Wissenschaftliche Provenienz** | Zenodo Konzept-DOIs (Unveränderlich) | Journal / ArXiv | ArXiv / Monographie | Konferenz / Journal | Geschlossene Hersteller-Builds |
+| **06. Open-Source-Lizenz** | CC-BY-4.0 (100% Freizügig) | Proprietär / ArXiv | Urheberrechtlich geschützt | Häufig GPL / Kommerziell | Proprietäre kommerzielle Lizenz |
+| **07. Drittanbieter-Lieferkette** | 100% Freizügige geprüfte SBOM (0% Copyleft) | Entfällt | Entfällt | Ungeprüfte Alt-Toolchains | Geschlossene Binär-Blobs |
+| **08. KI- & LLM-Fähigkeit** | `llms.txt` & PEP 621 Metadaten-Standards | Unstrukturiert | Nicht maschinenlesbar | Unstrukturiert | Restriktive geschlossene APIs |
+| **09. Plattform-Parität** | Win / Linux / macOS (CI-Matrix verifiziert) | Entfällt | Neutral (Textbasiert) | Überwiegend Linux HPC | OS-spezifischer Dongle / Installer |
+| **10. Sicherheit & SLA-Garantie** | 48h Reaktion / 5-Tage-Triage SLA | Informell | Informell | Informell | Hersteller-Helpdesk / Kein SLA |
+
+<a id="third-party-licenses--transparency"></a>
+<a id="drittanbieter-lizenzen--transparenz"></a>
 ## Drittanbieter-Lizenzen & Transparenz
 
 `functional-stability-theory` folgt einer strikten Open-Science- und Permissive-Open-Source-Governance:
@@ -341,10 +528,17 @@ Das `functional-stability-theory` Repository erzwingt zehn fundamentale Laufzeit
 
 Das vollständige Software-Inventar, autoritative Lizenztexte und Details zur Invarianten-Einhaltung finden sich in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
 
-## Autor
+<a id="security-policy--statutory-notice"></a>
+<a id="sicherheitsrichtlinie--gesetzlicher-haftungsausschluss"></a>
+## Sicherheitsrichtlinie, Autor & Gesetzlicher Haftungsausschluss
 
-Lukas Geiger — ORCID: [0009-0005-7296-1534](https://orcid.org/0009-0005-7296-1534)
+### Sicherheits- & Schwachstellenrichtlinie
+`functional-stability-theory` erzwingt eine strikte Zero-Egress-Richtlinie und einen formalen Prozess zur koordinierten Offenlegung von Sicherheitslücken. Schwachstellenmeldungen erhalten eine Eingangsbestätigung binnen 48 Stunden und eine formale Triage innerhalb von 5 Werktagen. Kontakt: `security@open-bricks.org` oder `support@lukasgeiger.com`. Vollständige Richtlinie siehe [`SECURITY.md`](SECURITY.md).
 
-## Lizenz
+### Autor & Urheberangaben
+- **Autor:** Lukas Geiger
+- **ORCID:** [0009-0005-7296-1534](https://orcid.org/0009-0005-7296-1534)
+- **Hauptlizenz:** [Creative Commons Attribution 4.0 International (CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/)
 
-[CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)
+### Gesetzlicher Haftungsausschluss (§ 521 BGB Gefälligkeitsrecht)
+Gemäß § 521 BGB (Gefälligkeitsrecht) wird diese wissenschaftliche Forschungssoftware und Quelltextdokumentation unentgeltlich und ohne jede Gewährleistung bereitgestellt. Haftung für Sach- und Rechtsmängel ist auf Vorsatz und grobe Fahrlässigkeit beschränkt. Die theoretischen Theoreme, numerischen Beweis-Ledger und Validierungsskripte dienen ausschließlich akademischen und Open-Science-Zwecken; jede weitergehende Haftung ist im gesetzlich zulässigen Rahmen ausgeschlossen.

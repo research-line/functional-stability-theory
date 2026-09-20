@@ -2,6 +2,22 @@
 
 All notable changes to the Functional Stability Theory (FST) repository will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- Complete 18-point bilingual navigation parity across `README.md` and `README_de.md` with reciprocal HTML anchors (`<a id="..."></a>`).
+- Elevated Theoretical Data Flow & Validation Sequence to Section 07 in both language surfaces.
+- Integrated Section 16: Comparative Matrix vs. Alternatives (10 invariant dimensions across FST, Classical Number Theory, Connes Noncommutative Geometry, Traditional CFD Simulation, and Closed Math Suites).
+- Integrated Section 18: Security Policy, Author & Statutory Notice (§ 521 BGB Gefälligkeitsrecht for gratuitous academic research software).
+- Synchronized ASCII Proof Architecture overview (Section 10), Independent Foundations (Section 11), and Repository Structure directory tree (Section 13) in `README_de.md`.
+- Expanded metadata contract test suite in `tests/test_metadata.py` to enforce full 18-point bilingual navigation parity, reciprocal anchors, Section 16 comparative matrix presence, and Section 18 statutory notice.
+
+### Changed
+- Re-audited `THIRD_PARTY_LICENSES.md` to `2026-09-20` (100% permissive open-source dependencies, 0% copyleft, 100% offline zero-egress).
+- Synchronized Shields.io audit badges in `README.md` and `README_de.md` to `Last-checked 2026-09-20` / `Geprüft 2026-09-20`.
+- Updated `llms.txt` verification timestamp to `2026-09-20` with references to the 18-point bilingual navigation table and comparative matrix.
+- Appended Pfad B discoverability and visual architecture audit entry in `MARKETING-LOG.txt`.
+
 ## [1.0.6] - 2026-09-18
 
 ### Added
