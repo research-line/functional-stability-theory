@@ -17,7 +17,8 @@ set -euo pipefail
 SERVER="root@46.62.243.71"
 SSH_KEY="$HOME/.ssh/id_ed25519_mcmc"
 REMOTE_DIR="/opt/fst_calculations/husawicki_mcmc"
-LOCAL_DIR="/c/Users/User/OneDrive/.RESEARCH/Natur&Technik/3 Folgebeweise/Dark Energy/results"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOCAL_DIR="${FST_MCMC_RESULTS_DIR:-$SCRIPT_DIR/../results/husawicki_mcmc}"
 
 # Dateien die heruntergeladen werden sollen
 FILES=(

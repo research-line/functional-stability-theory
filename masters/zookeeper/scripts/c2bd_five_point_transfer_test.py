@@ -27,10 +27,7 @@ from pathlib import Path
 import numpy as np
 
 
-SCRIPT_ROOT = Path(
-    r"C:\Users\User\OneDrive\.TOPICS\.RESEARCH\.PRIO-1\DRAFT__META_RH_TREE"
-    r"\02_FST_MATHEMATICS\fst_spectrum_duality\_scripts"
-)
+SCRIPT_ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_ROOT))
 
 from c2bd_derivative_matching import run  # noqa: E402
