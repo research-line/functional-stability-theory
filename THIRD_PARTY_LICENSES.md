@@ -2,10 +2,11 @@
 
 - **Repository:** `research-line/functional-stability-theory`
 - **Version:** `1.0.6`
-- **Audit Date:** `2026-09-20`
+- **Audit Date:** `2026-09-26`
 - **License Status:** `100% Permissive Open Source (0 AGPL, 0 Copyleft, 0 Cloud Telemetry)`
 - **Umbrella:** [`open-bricks`](https://github.com/open-bricks) | **Parent Organization:** [`research-line`](https://github.com/research-line)
 - **Primary Work License:** [Creative Commons Attribution 4.0 International (CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/)
+- **Attribution & Notice:** Canonical author copyright and open-science ecosystem attribution are declared in [`NOTICE`](NOTICE).
 
 ---
 
@@ -13,7 +14,7 @@
 
 `functional-stability-theory` is an open-science mathematical research programme and computational reproducibility repository under the `research-line` initiative and `open-bricks` federation. In strict compliance with open-science reproducibility standards and open-bricks governance policies, all direct runtime, optional scientific, and development-time dependencies undergo rigorous licensing audits.
 
-- **Primary Repository License:** Creative Commons Attribution 4.0 International (`CC-BY-4.0`), granting unrestricted scholarly use, adaptation, sharing, and commercial application with appropriate attribution.
+- **Primary Repository License:** Creative Commons Attribution 4.0 International (`CC-BY-4.0`), granting unrestricted scholarly use, adaptation, sharing, and commercial application with appropriate attribution (see [`NOTICE`](NOTICE) and [`LICENSE`](LICENSE)).
 - **Copyleft / Viral License Risk:** 0% (Zero AGPL, Zero GPL, Zero LGPL, Zero proprietary components).
 - **Zero-Egress & Air-Gap Compliance:** 100% Offline (No network sockets, no phone-home telemetry, no external cloud API requests during execution).
 - **Supply Chain Permissiveness:** All bundled, optional, and development dependencies are distributed under permissive open-source licenses (CC-BY-4.0, BSD-3-Clause, MIT, PSFL 2.0).

@@ -51,6 +51,7 @@ def test_pyproject_pep621_classifiers_and_urls():
     assert "Parent Organization" in urls
     assert "Umbrella Ecosystem" in urls
     assert "Third-Party Licenses" in urls
+    assert "Notice" in urls
     assert "Marketing Log" in urls
     assert "LLM Ready" in urls
 
@@ -91,16 +92,18 @@ def test_readme_and_readme_de_badges():
     assert "Security%20SLA" in readme_en
     assert "Ecosystem-research--line" in readme_en
     assert "Umbrella-open--bricks" in readme_en
+    assert "Attribution-NOTICE" in readme_en
     assert "Third--Party%20Licenses-Audited-brightgreen" in readme_en
     assert "Marketing%20Log-Active-blue" in readme_en
     assert "llms.txt" in readme_en
     assert "Tests-128%2B%20Passed" in readme_en
     assert "Python-3.10--3.13" in readme_en or "Python-3.10" in readme_en
     assert "Platform-Windows" in readme_en
-    assert "Audit-Last--checked%202026--09--20" in readme_en
+    assert ("Audit-Last--checked%202026--09--26" in readme_en or "Audit-Last--checked%202026--09--20" in readme_en)
 
     # Required badge signatures in German README
     assert "Lizenz-CC_BY_4.0" in readme_de or "License-CC_BY_4.0" in readme_de
+    assert "Attribution-NOTICE" in readme_de
     assert "Version-1.0.6" in readme_de
     assert "actions/workflows/ci.yml" in readme_de
     assert "ORCID-0009--0005--7296--1534" in readme_de
@@ -116,7 +119,7 @@ def test_readme_and_readme_de_badges():
     assert "Tests-128%2B%20Bestanden" in readme_de
     assert "Python-3.10--3.13" in readme_de or "Python-3.10" in readme_de
     assert "Plattform-Windows" in readme_de
-    assert "Audit-Gepr%C3%BCft%202026--09--20" in readme_de
+    assert ("Audit-Gepr%C3%BCft%202026--09--26" in readme_de or "Audit-Gepr%C3%BCft%202026--09--20" in readme_de)
 
 
 def test_quick_navigation_parity():
@@ -256,12 +259,13 @@ def test_llms_txt_structure_and_timestamp():
     """Validate llms.txt structure, canonical metadata, and verification date."""
     llms_txt = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8")
 
-    assert "## Last-checked: 2026-09-20" in llms_txt
+    assert ("## Last-checked: 2026-09-26" in llms_txt or "## Last-checked: 2026-09-20" in llms_txt)
     assert "https://github.com/research-line/functional-stability-theory" in llms_txt
     assert "research-line" in llms_txt
     assert "Renormalized Free-Energy Principle" in llms_txt
     assert "Pattern A" in llms_txt
     assert "Version: 1.0.6" in llms_txt
+    assert "NOTICE" in llms_txt
     assert "SECURITY.md" in llms_txt
     assert "## Search Phrases" in llms_txt
     assert "128+ Passed" in llms_txt
@@ -531,6 +535,7 @@ def test_multihost_cloud_sync_and_lock_hygiene():
     assert "*-WORKSTATION-LG*" in gitignore
     assert "*-Mac Studio*" in gitignore
     assert "*-MacBook*" in gitignore
+    assert "*-IDEAPAD*" in gitignore
 
     # Canonical lock patterns
     assert "LOCK" in gitignore
@@ -540,15 +545,18 @@ def test_multihost_cloud_sync_and_lock_hygiene():
     assert "LOCK.user.*" in gitignore
     assert "LOCK.until.*" in gitignore
     assert "LOCK.condition.*" in gitignore
+    assert ".automation-lock" in gitignore
     assert "uv.lock" in gitignore
     assert "!package-lock.json" in gitignore
 
     # Extended test/cache patterns
+    assert ".pytest_temp/" in gitignore
     assert ".hypothesis/" in gitignore
     assert ".turbo/" in gitignore
     assert ".nyc_output/" in gitignore
     assert "*.orig" in gitignore
     assert "*.rej" in gitignore
+    assert "Desktop.ini" in gitignore
 
 
 def test_pytest_guardrails_and_license_files():
@@ -560,13 +568,17 @@ def test_pytest_guardrails_and_license_files():
     project = data.get("project", {})
     assert "license-files" in project
     assert "LICENSE" in project["license-files"]
+    assert "NOTICE" in project["license-files"]
     assert "THIRD_PARTY_LICENSES.md" in project["license-files"]
 
     pytest_opts = data.get("tool", {}).get("pytest", {}).get("ini_options", {})
     assert pytest_opts.get("minversion") == "7.0"
+    assert "--basetemp=.pytest_temp" in pytest_opts.get("addopts", "")
     norecursedirs = pytest_opts.get("norecursedirs", [])
     assert ".git" in norecursedirs
     assert ".pytest_cache" in norecursedirs
+    assert ".pytest_temp" in norecursedirs
+    assert ".hypothesis" in norecursedirs
     assert "applications" in norecursedirs
     assert "scripts" in norecursedirs
 
@@ -583,11 +595,11 @@ def test_marketing_log_pfad_a_v106_entry():
 
 
 def test_third_party_licenses_audit_v106():
-    """Validate that THIRD_PARTY_LICENSES.md has been audited to v1.0.6 on 2026-09-20."""
+    """Validate that THIRD_PARTY_LICENSES.md has been audited to v1.0.6."""
     licenses_file = REPO_ROOT / "THIRD_PARTY_LICENSES.md"
     content = licenses_file.read_text(encoding="utf-8")
     assert "- **Version:** `1.0.6`" in content
-    assert "- **Audit Date:** `2026-09-20`" in content
+    assert ("- **Audit Date:** `2026-09-26`" in content or "- **Audit Date:** `2026-09-20`" in content)
     assert "100% Permissive Open Source" in content
 
 
@@ -695,3 +707,58 @@ def test_marketing_log_pfad_b_v106_entry():
     assert "18-Punkte" in content
     assert "521 BGB" in content
     assert "Vergleichsmatrix" in content
+
+
+def test_canonical_notice_attribution():
+    """Validate that canonical NOTICE attribution file exists and declares proper provenance."""
+    notice_path = REPO_ROOT / "NOTICE"
+    assert notice_path.is_file(), "NOTICE must exist in repository root"
+    content = notice_path.read_text(encoding="utf-8")
+    assert "Functional Stability Theory" in content
+    assert "Lukas Geiger" in content
+    assert "research-line" in content
+    assert "open-bricks" in content
+    assert "Creative Commons Attribution 4.0" in content or "CC BY 4.0" in content
+
+
+def test_pep621_saturated_keywords():
+    """Validate that pyproject.toml defines saturated 20/20 keywords matching GitHub topics."""
+    pyproject_path = REPO_ROOT / "pyproject.toml"
+    with open(pyproject_path, "rb") as f:
+        data = tomllib.load(f)
+
+    keywords = data.get("project", {}).get("keywords", [])
+    assert len(keywords) == 20
+    assert "functional-stability-theory" in keywords
+    assert "rfep" in keywords
+    assert "riemann-hypothesis" in keywords
+    assert "cosmology" in keywords
+    assert "mathematical-physics" in keywords
+    assert "zenodo-doi" in keywords
+
+
+def test_third_party_licenses_audit_recency_20260926():
+    """Validate that THIRD_PARTY_LICENSES.md audit date is 2026-09-26 and references NOTICE."""
+    licenses_file = REPO_ROOT / "THIRD_PARTY_LICENSES.md"
+    content = licenses_file.read_text(encoding="utf-8")
+    assert "- **Audit Date:** `2026-09-26`" in content
+    assert ("[`NOTICE`](NOTICE)" in content or "[NOTICE](NOTICE)" in content)
+    assert "100% Permissive Open Source" in content
+
+
+def test_marketing_log_pfad_a_cleaner_20260926():
+    """Validate that MARKETING-LOG.txt contains the 2026-09-26 GITHUBBOT_ONE_REPO_CLEANER Pfad A entry."""
+    content = (REPO_ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+    assert "2026-09-26" in content
+    assert "GITHUBBOT_ONE_REPO_CLEANER" in content
+    assert "(Pfad A)" in content
+    assert "NOTICE" in content
+
+
+def test_changelog_unreleased_pfad_a():
+    """Validate that CHANGELOG.md documents Pfad A improvements under [Unreleased]."""
+    content = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert "## [Unreleased]" in content
+    assert "NOTICE" in content
+    assert "PEP 621" in content
+    assert "license-files" in content

@@ -3,6 +3,7 @@
 [🇬🇧 English Version](README.md) | [🇩🇪 Deutsche Version](README_de.md)
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
 [![Version](https://img.shields.io/badge/version-1.0.6-blue.svg)](pyproject.toml)
 [![CI](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml/badge.svg)](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml)
 [![Test Suite](https://img.shields.io/badge/Tests-128%2B%20Passed-brightgreen.svg)](tests/)
@@ -20,7 +21,7 @@
 [![Third-Party Licenses](https://img.shields.io/badge/Third--Party%20Licenses-Audited-brightgreen.svg)](THIRD_PARTY_LICENSES.md)
 [![Marketing Log](https://img.shields.io/badge/Marketing%20Log-Active-blue.svg)](MARKETING-LOG.txt)
 [![LLM Context](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
-[![Audit](https://img.shields.io/badge/Audit-Last--checked%202026--09--20-informational.svg)](MARKETING-LOG.txt)
+[![Audit](https://img.shields.io/badge/Audit-Last--checked%202026--09--26-informational.svg)](MARKETING-LOG.txt)
 
 > [!NOTE]
 > **AI / LLM Integration & Machine-Readable Context**: A machine-readable index for LLMs, search engines, and automated crawlers is maintained in [`llms.txt`](llms.txt). It provides scope boundaries, search phrases, Concept-DOIs, and claim-level disambiguation notes. Local discoverability logs are tracked in [`MARKETING-LOG.txt`](MARKETING-LOG.txt).
@@ -542,6 +543,7 @@ For the complete software inventory, authoritative license texts, and invariant 
 - **Author:** Lukas Geiger
 - **ORCID:** [0009-0005-7296-1534](https://orcid.org/0009-0005-7296-1534)
 - **Primary License:** [Creative Commons Attribution 4.0 International (CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/)
+- **Canonical Notice:** [`NOTICE`](NOTICE)
 
 ### Statutory Notice (§ 521 BGB Gefälligkeitsrecht)
 Gemäß § 521 BGB (Gefälligkeitsrecht) wird diese wissenschaftliche Forschungssoftware und Quelltextdokumentation unentgeltlich und ohne jede Gewährleistung bereitgestellt. Haftung für Sach- und Rechtsmängel ist auf Vorsatz und grobe Fahrlässigkeit beschränkt. Die theoretischen Theoreme, numerischen Beweis-Ledger und Validierungsskripte dienen ausschließlich akademischen und Open-Science-Zwecken; jede weitergehende Haftung ist im gesetzlich zulässigen Rahmen ausgeschlossen.

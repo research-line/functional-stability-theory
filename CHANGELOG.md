@@ -5,18 +5,25 @@ All notable changes to the Functional Stability Theory (FST) repository will be 
 ## [Unreleased]
 
 ### Added
+- Canonical [`NOTICE`](NOTICE) attribution file formalizing copyright Lukas Geiger, research-line parent organization, and open-bricks umbrella under CC-BY-4.0.
+- Standardized PEP 621 metadata in `pyproject.toml`:
+  - Saturated 20/20 `keywords` in exact parity with GitHub repository topics.
+  - Included `NOTICE` in `license-files` whitelist (`["LICENSE", "NOTICE", "THIRD_PARTY_LICENSES.md"]`).
+  - Added canonical `Notice` entry to `[project.urls]`.
+  - Configured `addopts = "-ra -v --basetemp=.pytest_temp"` and added `.pytest_temp` and `.hypothesis` to `norecursedirs`.
+- Hardened `.gitignore` with `.pytest_temp/`, `.pytest_tmp*/`, `*-IDEAPAD*`, `.automation-lock`, and `Desktop.ini`.
+- Appended Pfad A technical hygiene and metadata contract audit entry to `MARKETING-LOG.txt`.
+- Expanded metadata contract tests in `tests/test_metadata.py` to assert NOTICE file presence, PEP 621 20/20 keywords parity, Notice URL, pytest options, and .gitignore hardening.
 - Complete 18-point bilingual navigation parity across `README.md` and `README_de.md` with reciprocal HTML anchors (`<a id="..."></a>`).
 - Elevated Theoretical Data Flow & Validation Sequence to Section 07 in both language surfaces.
 - Integrated Section 16: Comparative Matrix vs. Alternatives (10 invariant dimensions across FST, Classical Number Theory, Connes Noncommutative Geometry, Traditional CFD Simulation, and Closed Math Suites).
 - Integrated Section 18: Security Policy, Author & Statutory Notice (§ 521 BGB Gefälligkeitsrecht for gratuitous academic research software).
 - Synchronized ASCII Proof Architecture overview (Section 10), Independent Foundations (Section 11), and Repository Structure directory tree (Section 13) in `README_de.md`.
-- Expanded metadata contract test suite in `tests/test_metadata.py` to enforce full 18-point bilingual navigation parity, reciprocal anchors, Section 16 comparative matrix presence, and Section 18 statutory notice.
 
 ### Changed
-- Re-audited `THIRD_PARTY_LICENSES.md` to `2026-09-20` (100% permissive open-source dependencies, 0% copyleft, 100% offline zero-egress).
-- Synchronized Shields.io audit badges in `README.md` and `README_de.md` to `Last-checked 2026-09-20` / `Geprüft 2026-09-20`.
-- Updated `llms.txt` verification timestamp to `2026-09-20` with references to the 18-point bilingual navigation table and comparative matrix.
-- Appended Pfad B discoverability and visual architecture audit entry in `MARKETING-LOG.txt`.
+- Re-audited `THIRD_PARTY_LICENSES.md` to `2026-09-26` with explicit cross-reference to [`NOTICE`](NOTICE) and Level 1 SBOM invariant verification (100% permissive open-source dependencies, 0% copyleft, 100% offline zero-egress).
+- Synchronized Shields.io badges in `README.md` and `README_de.md` (`Attribution: NOTICE`, `Last-checked 2026-09-26` / `Geprüft 2026-09-26`).
+- Updated `llms.txt` verification timestamp to `2026-09-26` with canonical NOTICE attribution entrypoint and references to the 18-point bilingual navigation table and comparative matrix.
 
 ## [1.0.6] - 2026-09-18
 

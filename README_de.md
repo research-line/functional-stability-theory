@@ -3,6 +3,7 @@
 [🇬🇧 English Version](README.md) | [🇩🇪 Deutsche Version](README_de.md)
 
 [![Lizenz: CC BY 4.0](https://img.shields.io/badge/Lizenz-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
 [![Version](https://img.shields.io/badge/Version-1.0.6-blue.svg)](pyproject.toml)
 [![CI](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml/badge.svg)](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml)
 [![Test Suite](https://img.shields.io/badge/Tests-128%2B%20Bestanden-brightgreen.svg)](tests/)
@@ -20,7 +21,7 @@
 [![Drittanbieter-Lizenzen](https://img.shields.io/badge/Drittanbieter--Lizenzen-Gepr%C3%BCft-brightgreen.svg)](THIRD_PARTY_LICENSES.md)
 [![Marketing-Log](https://img.shields.io/badge/Marketing--Log-Aktiv-blue.svg)](MARKETING-LOG.txt)
 [![LLM Kontext](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
-[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--09--20-informational.svg)](MARKETING-LOG.txt)
+[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--09--26-informational.svg)](MARKETING-LOG.txt)
 
 > [!NOTE]
 > **KI- / LLM-Integration & Maschinenlesbarer Kontext**: Ein maschinenlesbarer Index für LLMs, Suchmaschinen und automatisierte Crawler wird in [`llms.txt`](llms.txt) gepflegt. Er enthält Gültigkeitsgrenzen, Suchbegriffe, Konzept-DOIs und Abgrenzungshinweise. Lokale Discoverability-Logs werden in [`MARKETING-LOG.txt`](MARKETING-LOG.txt) geführt.
@@ -539,6 +540,7 @@ Das vollständige Software-Inventar, autoritative Lizenztexte und Details zur In
 - **Autor:** Lukas Geiger
 - **ORCID:** [0009-0005-7296-1534](https://orcid.org/0009-0005-7296-1534)
 - **Hauptlizenz:** [Creative Commons Attribution 4.0 International (CC-BY-4.0)](https://creativecommons.org/licenses/by/4.0/)
+- **Kanonische Urheberrechts- und Attributionsnotiz:** [`NOTICE`](NOTICE)
 
 ### Gesetzlicher Haftungsausschluss (§ 521 BGB Gefälligkeitsrecht)
 Gemäß § 521 BGB (Gefälligkeitsrecht) wird diese wissenschaftliche Forschungssoftware und Quelltextdokumentation unentgeltlich und ohne jede Gewährleistung bereitgestellt. Haftung für Sach- und Rechtsmängel ist auf Vorsatz und grobe Fahrlässigkeit beschränkt. Die theoretischen Theoreme, numerischen Beweis-Ledger und Validierungsskripte dienen ausschließlich akademischen und Open-Science-Zwecken; jede weitergehende Haftung ist im gesetzlich zulässigen Rahmen ausgeschlossen.
