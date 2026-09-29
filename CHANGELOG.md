@@ -21,6 +21,8 @@ All notable changes to the Functional Stability Theory (FST) repository will be 
 - Synchronized ASCII Proof Architecture overview (Section 10), Independent Foundations (Section 11), and Repository Structure directory tree (Section 13) in `README_de.md`.
 
 ### Changed
+- Synchronized BSD Positivity domain supplement artifacts in `fst-mathematics/bsd/` (v1.5 maintenance release: 3-page frontmatter architecture, Chicago/APA title casing, author-pair en-dash typography, comprehensive RevTeX 4-2 table hardening across Tables 1–8, and 4-tier TikZ vector architecture schema `fig:bsd_architecture`; 29 pages EN, 31 pages DE, 60 pages kombi PDF; 0 replacement characters).
+- Added automated contract unit test suite `tests/test_compute_bsd.py` covering BSD formula verification across 4 reference curves, regulator positivity (Axiom II), and Cremona database rank-2 regulator sampling.
 - Re-audited `THIRD_PARTY_LICENSES.md` to `2026-09-26` with explicit cross-reference to [`NOTICE`](NOTICE) and Level 1 SBOM invariant verification (100% permissive open-source dependencies, 0% copyleft, 100% offline zero-egress).
 - Synchronized Shields.io badges in `README.md` and `README_de.md` (`Attribution: NOTICE`, `Last-checked 2026-09-26` / `Geprüft 2026-09-26`).
 - Updated `llms.txt` verification timestamp to `2026-09-26` with canonical NOTICE attribution entrypoint and references to the 18-point bilingual navigation table and comparative matrix.
