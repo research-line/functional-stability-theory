@@ -11,6 +11,7 @@ All notable changes to the Functional Stability Theory (FST) repository will be 
   - Included `NOTICE` in `license-files` whitelist (`["LICENSE", "NOTICE", "THIRD_PARTY_LICENSES.md"]`).
   - Added canonical `Notice` entry to `[project.urls]`.
   - Configured `addopts = "-ra -v --basetemp=.pytest_temp"` and added `.pytest_temp` and `.hypothesis` to `norecursedirs`.
+- Automated contract test suite `tests/test_compute_turbulence.py` covering turbulence paper artifact presence, dual DFC1 scenario evaluations across canonical controls, phi profile bounds, and flux profile properties.
 - Hardened `.gitignore` with `.pytest_temp/`, `.pytest_tmp*/`, `*-IDEAPAD*`, `.automation-lock`, and `Desktop.ini`.
 - Appended Pfad A technical hygiene and metadata contract audit entry to `MARKETING-LOG.txt`.
 - Expanded metadata contract tests in `tests/test_metadata.py` to assert NOTICE file presence, PEP 621 20/20 keywords parity, Notice URL, pytest options, and .gitignore hardening.
@@ -21,6 +22,7 @@ All notable changes to the Functional Stability Theory (FST) repository will be 
 - Synchronized ASCII Proof Architecture overview (Section 10), Independent Foundations (Section 11), and Repository Structure directory tree (Section 13) in `README_de.md`.
 
 ### Changed
+- Synchronized Turbulence Cascade companion paper artifacts in `fst-physics/turbulence/` (v1.8 maintenance release: isolated 3-page frontmatter architecture with table of contents on separate page, full bibliography Underfull/Badness-10000 elimination via `xurl` and `\doilink`, standardized bilingual AI disclosures `ai_disclosure_STANDARD_{en,de}.tex`, and verified 71-page combined bilingual PDF compilation; 35 pages EN, 36 pages DE, 71 pages kombi PDF; 0 replacement characters).
 - Synchronized BSD Positivity domain supplement artifacts in `fst-mathematics/bsd/` (v1.5 maintenance release: 3-page frontmatter architecture, Chicago/APA title casing, author-pair en-dash typography, comprehensive RevTeX 4-2 table hardening across Tables 1–8, and 4-tier TikZ vector architecture schema `fig:bsd_architecture`; 29 pages EN, 31 pages DE, 60 pages kombi PDF; 0 replacement characters).
 - Added automated contract unit test suite `tests/test_compute_bsd.py` covering BSD formula verification across 4 reference curves, regulator positivity (Axiom II), and Cremona database rank-2 regulator sampling.
 - Re-audited `THIRD_PARTY_LICENSES.md` to `2026-09-26` with explicit cross-reference to [`NOTICE`](NOTICE) and Level 1 SBOM invariant verification (100% permissive open-source dependencies, 0% copyleft, 100% offline zero-egress).

@@ -14,7 +14,12 @@ files synchronized for the published v1.8 maintenance release:
 <https://doi.org/10.5281/zenodo.21312807>. The DFC hierarchy is the
 conditional input. Version 1.8 updates source metadata, the official JHTDB
 forced-isotropic Reynolds-number reference, and the England/K41 scope language
-without upgrading any theorem, numerical result, or DFC claim. Version 1.7
+without upgrading any theorem, numerical result, or DFC claim. The September 2026
+manuscript synchronization incorporates an isolated 3-page frontmatter architecture
+(table of contents on separate page), complete elimination of bibliography Underfull/Badness-10000
+issues via `xurl` and `\doilink`, standardized bilingual AI disclosures
+(`ai_disclosure_STANDARD_{en,de}.tex`), and verified 71-page combined bilingual PDF compilation
+with 100% link/bookmark preservation. Version 1.7
 added the synchronized bibliography/disclosure maintenance, the initial
 Dual-DFC1 ledger, and the Shell-DFC waterline guardrail while keeping DFC1^vee
 as an empirical/projection bridge rather than a proved Navier-Stokes
