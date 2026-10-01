@@ -205,9 +205,10 @@ was $\pi_\Gamma(T) \sim e^T/T$ widerspiegelt.
 \item Weilsche quadratische Form: \textbf{natürliches Analogon $\QW^\Gamma_\lambda$} auf der
 Testfunktionsseite der Spurformel; die geometrische Seite wird über den
 Selberg-Transform gekoppelt.
-\item NE-A: \textbf{überträgt sich} -- nach Lokalisierung der Vorzeichenwechsel in den
-trivialen, topologischen und Identitätsbeiträgen der expliziten Formel und
-nicht in den Nullstellen auf der kritischen Linie.
+\item Selbergsche Plancherel-Positivität: \textbf{ersetzt die frühere
+NE-A-Transferlesart}. Der regularisierte Selberg-Multiplikator ist nach
+Nullstellen-Paarkürzung nichtnegativ; das Riemannsche NE-A-Hindernis
+überträgt sich also nicht auf diesen Kanal.
 \item NE-B: \textbf{das einschlägige Hindernis fehlt im sphärischen Kanal}. Ein
 universeller Kommutant existiert dort: der Casimir-/Laplace-Operator $\Delop$
 kommutiert mit radialen sphärischen Faltungsoperatoren. Dies ist nicht als
@@ -246,8 +247,9 @@ Selbergsche quadratische Form $\QW^\Gamma_\lambda$ anwendbar und reduziert die
 strenge Aussage für die nicht-trivialen spektralen Nullstellen im kritischen
 Streifen bedingt auf gerade Dominanz,
 $\lambda_1(\Delop)\ge 1/4$ und ein explizites
-$C2$/Minimizer-Identifikationsgate. Das Analogon von NE-A gilt. Das relevante
-NE-B-Hindernis ist im sphärischen Selberg-Kanal abwesend: der
+$C2$/Minimizer-Identifikationsgate. Das frühere Selberg-Analogon von NE-A
+wird durch Plancherel-Positivität des regularisierten Multiplikators ersetzt.
+Das relevante NE-B-Hindernis ist im sphärischen Selberg-Kanal abwesend: der
 Laplace--Beltrami-/Casimir-Operator $\Delop$ ist ein universeller Kommutant für
 radiale sphärische Faltungsoperatoren. Der resultierende Weg ist daher ein
 bedingter Konsistenztest und offenbart ein vorsichtiges Meta-Prinzip: die
@@ -260,8 +262,9 @@ Hilbert--Pólya-Operator zusätzliche operatorielle Struktur verlangt.
 Abbildung~\ref{fig:v2-transfer-architecture} veranschaulicht die zweigleisige
 Transfer-Architektur des v2.0-Frameworks über den arithmetischen (Riemann) und
 den geometrisch-spektralen (Selberg) Kanal und zeigt das Zusammenspiel
-zwischen Verschiebungs-Paritäts-Lemma, Frontier-Dominanz, den NE-A/NE-B-Gates
-und den fünf SGE-YES-Transferslots.
+zwischen Verschiebungs-Paritäts-Lemma, Frontier-Dominanz, den arithmetischen
+Obstruktionsgates, dem dual-obstruktionsfreien Selberg-Grundzustand
+und den fünf SGE-YES-Vergleichsslots.
 
 \begin{figure}[htbp]
 \centering
@@ -285,11 +288,11 @@ und den fünf SGE-YES-Transferslots.
 % Bottom Rail: Geometric (Selberg)
 \node[selbox, below=1.8cm of rie_obj] (sel_obj) {\textbf{Geometrischer Input}\\Geodäten $\gamma \in \mathcal{P}_\Gamma$\\$\pi_\Gamma(L) \sim e^L / L$};
 \node[selbox, right=of sel_obj] (sel_qw) {\textbf{Geometrische Form}\\Selberg--Weil $\QW^\Gamma_\lambda$\\Geod.\ Paritäts-Lemma};
-\node[selbox, right=of sel_qw] (sel_gates) {\textbf{Geometrischer Kommutant}\\NE-A: Gilt für Shifts\\NE-B scheitert: $[\Delop, R_k] = 0$};
+\node[selbox, right=of sel_qw] (sel_gates) {\textbf{Selberg-Grundzustand}\\Plancherel: $M^\Gamma(\xi)\ge 0$\\NE-B fehlt: $[\Delop, R_k]=0$};
 
 % Center Bridge: SGE-YES 5 Slots
 \node[bridgebox] (bridge) at ($(rie_qw)!0.5!(sel_gates) + (0.4, 0)$) {
-    \textbf{SGE-YES 5 Transfer-Slots}\\
+    \textbf{SGE-YES 5 Vergleichs-Slots}\\
     \scriptsize
     1. Form: $\QW_\lambda \leftrightarrow \QW^\Gamma_\lambda$\\
     2. Defekt: Gerade-Lücke $\leftrightarrow S_\Gamma(L,I)$\\
@@ -322,7 +325,8 @@ und den fünf SGE-YES-Transferslots.
 
 % Final Arrows to Goal
 \draw[->, very thick, purple!80!black] (bridge) -- (rh_goal);
-\draw[->, dashed, thick, teal!80!black] (sel_gates.east) -| (rh_goal.south);
+\draw[->, dashed, thick, teal!80!black] (sel_gates.east) -| (rh_goal.south)
+    node[arrowlabel, near start, below right] {Konsistenz, kein NE-A-Transfer};
 
 % Section / Track Indicators
 \node[tracklabel, above=0.15cm of rie_obj.north west, anchor=south west] {Arithmetischer Kanal: Riemann $\zeta(s)$ [Teil~II]};
@@ -330,7 +334,7 @@ und den fünf SGE-YES-Transferslots.
 
 \end{tikzpicture}%
 }
-\caption{Zweigleisige Transfer-Architektur des v2.0-Frameworks über den arithmetischen (Riemann) und den geometrisch-spektralen (Selberg) Kanal.}
+\caption{Zweigleisige Architektur des v2.0-Frameworks über den arithmetischen (Riemann) und den geometrisch-spektralen (Selberg) Kanal. Der Selberg-Kanal ist als dual-obstruktionsfreier Grundzustands-Testkörper dargestellt: Plancherel-Positivität ersetzt die frühere Selberg-NE-A-Transferlesart, während der sphärische Casimir-Kommutant das relevante NE-B-Hindernis beseitigt.}
 \label{fig:v2-transfer-architecture}
 \end{figure}
 
@@ -779,48 +783,50 @@ hyperbolische Fläche $M$ ein $\lambda_0 = \lambda_0(M) > 0$, sodass die
 Frontier-Dominanz-Konstante in \eqref{eq:frontier-bound-Sel} Folgendes erfüllt:
 \begin{equation}
 \label{eq:cGamma-explicit}
-c_\Gamma \;\ge\; \tfrac{1}{2}(1-e^{-1}) \;>\; 0
+c_\Gamma \;\ge\; 1-e^{-1/2} \;>\; 0
 \qquad\text{für alle }\lambda \ge \lambda_0.
 \end{equation}
 \end{lemma}
 
 \begin{remark}
 Die normierte vorzeichenlose Frontier-Summe $\lambda^{-1/2}\sum_{\ell_\gamma\in[L-1,L]}
-w^\Gamma_\gamma \to (1-e^{-1}) \approx 0.632$ für $\lambda\to\infty$.
+w^\Gamma_\gamma \to 2(1-e^{-1/2}) \approx 0.78694$ für $\lambda\to\infty$.
 Der Faktor $\tfrac{1}{2}$ in \eqref{eq:cGamma-explicit} ist konservativ: er verwendet
 die quantitative untere Schranke aus \cite[Lem.~A.3]{Geiger2026partII}, die
 eine vorzeichenbehaftete Magnitude $\ge\tfrac{1}{2}w^\Gamma_\gamma$ pro Frontier-Geodäte liefert.
 Proposition~\ref{prop:SPL-transfer} liefert allein das Vorzeichen ($\lambda_{\min}<0$);
 die Magnituden-Schranke und die globale Remainder-Kontrolle sind die bedingten
 Inputs dieses Lemmas.
-Unter der scharfen Schranke geht $c_\Gamma \to (1-e^{-1})$ asymptotisch.
+Unter der scharfen Schranke geht $c_\Gamma \to 2(1-e^{-1/2})$ asymptotisch.
 \end{remark}
 
 \begin{proof}[Beweisskizze]
-Unter den genannten Magnituden- und Remainder-Annahmen enthält das
-Frontier-Band $[L-1,L]$
-$(1-e^{-1})\,e^L/L\,(1+o(1)) = (1-e^{-1})\,\lambda/\log\lambda\,(1+o(1))$
-primitive Geodäten nach \eqref{eq:frontier-count-Sel}. Jede trägt das Gewicht
-$w^\Gamma_\gamma = L/(2\sinh(L/2)) \sim \log\lambda\cdot\lambda^{-1/2}$ nach
-\eqref{eq:frontier-weight-Sel} bei. Nach \cite[Lem.~A.3]{Geiger2026partII}
+Nach dem Primgeodätensatz in Stieltjes-Form erfüllt das gewichtete
+Frontier-Band
+\[
+\sum_{\ell_\gamma\in[L-1,L]} w^\Gamma_\gamma
+\sim
+\int_{L-1}^{L} \frac{t}{2\sinh(t/2)}\,\frac{e^t}{t}\,dt
+\sim
+\int_{L-1}^{L} e^{t/2}\,dt
+= 2(1-e^{-1/2})e^{L/2}.
+\]
+Damit gilt $\lambda^{-1/2}\sum_{\ell_\gamma\in[L-1,L]} w^\Gamma_\gamma
+\to 2(1-e^{-1/2})$. Nach \cite[Lem.~A.3]{Geiger2026partII}
 ist jeder Frontier-Summand für alle großen $\lambda$ negativ mit einer Größe von mindestens
 $\tfrac{1}{2}w^\Gamma_\gamma$.  Die Summation über das Frontier-Band
 und Division durch $\sqrt\lambda$ ergibt
 \[
 \sum_{\ell_\gamma\in[L-1,L]} w^\Gamma_\gamma \;\ge\;
-(1-e^{-1})\,\frac{\lambda}{\log\lambda}\cdot
-\frac{\log\lambda}{\sqrt\lambda}\cdot\tfrac{1}{2}\,(1+o(1))
-= \tfrac{1}{2}(1-e^{-1})\sqrt\lambda\,(1+o(1)),
+\bigl(1-e^{-1/2}\bigr)\sqrt\lambda\,(1+o(1)),
 \]
-was $c_\Gamma \ge (1-e^{-1})/2$ liefert.
+was $c_\Gamma \ge 1-e^{-1/2}$ liefert.
 \end{proof}
 
 \begin{remark}
-Der Faktor $(1-e^{-1}) \approx 0.632$ ist das geometrische Verhältnis der Frontier-Geodätendichte
-(exponentielles Regime) zur Frontier-Primzahldichte
-(polynomielles Regime): Selberg hat $(1-e^{-1})\lambda/\log\lambda$ Frontier-Geodäten,
-wo Riemann $\lambda/\log\lambda$ Frontier-Primzahlen hat.
-Dies erklärt den einzigen strukturellen Unterschied zwischen den beiden Frontier-Abschätzungen.
+Der Faktor $(1-e^{-1}) \approx 0.632$ gehört zur ungewichteten Frontier-Anzahl.
+Nach Einbezug des logarithmischen Gewichts besitzt die normierte Frontier-Summe
+in Selberg- und Riemann-Regime dieselbe Konstante $2(1-e^{-1/2})$.
 \end{remark}
 
 Die vollständige analytische und asymptotische Korrespondenz zwischen dem arithmetischen
@@ -852,11 +858,11 @@ Einzelobjekt-Gewicht
   & $w_p = \frac{\log p}{\sqrt{p}} \sim \log\lambda \cdot \lambda^{-1/2}$
   & $w^\Gamma_\gamma = \frac{\ell_\gamma}{2\sinh(\ell_\gamma/2)} \sim L e^{-L/2} = \log\lambda \cdot \lambda^{-1/2}$ \\[3pt]
 Frontier-Summen-\allowbreak normalisierung
-  & $\lambda^{-1/2}\sum_{p \in \mathrm{frontier}} w_p \to 1 - e^{-1} \approx 0.632$
-  & $\lambda^{-1/2}\sum_{\gamma \in \mathrm{frontier}} w^\Gamma_\gamma \to 1 - e^{-1} \approx 0.632$ \\[3pt]
+  & $\lambda^{-1/2}\sum_{p \in \mathrm{frontier}} w_p \to 2(1-e^{-1/2}) \approx 0.78694$
+  & $\lambda^{-1/2}\sum_{\gamma \in \mathrm{frontier}} w^\Gamma_\gamma \to 2(1-e^{-1/2}) \approx 0.78694$ \\[3pt]
 Frontier-Dominanzkonstante $c$
   & $c_{\mathrm{Riem}} \ge \tfrac{1}{2}$ (arithmetischer Paritätsvorteil)
-  & $c_\Gamma \ge \tfrac{1}{2}(1 - e^{-1}) \approx 0.316 > 0$ (Lemma~\ref{lem:frontier-constant}) \\[3pt]
+  & $c_\Gamma \ge 1 - e^{-1/2} \approx 0.39347 > 0$ (Lemma~\ref{lem:frontier-constant}) \\[3pt]
 Remainder- / Volumenskala
   & Archimedischer Beitrag: $O(\log\lambda)$
   & Identitätsbeitrag: $\frac{\mathrm{Area}(M)}{4\pi} O(L) = O(\log\lambda)$ \\[3pt]
@@ -1176,63 +1182,42 @@ Restterm-Schranke, und keine Schlussfolgerung dieses Papiers wird
 aufgewertet.
 \end{remark}
 
-\subsection{NE-A für Selberg}
+\subsection{Plancherel-Positivität für Selberg}
 
-Wir definieren den Selberg-Primzahl-Verschiebungs-Multiplikator
+Wir definieren den regularisierten Selberg-Primzahl-Verschiebungs-Multiplikator
 \begin{equation}
 \label{eq:Mxi-Sel}
 M^\Gamma(\xi) = -2\,\mathrm{Re}\Big[\frac{\Sel'}{\Sel}\Big(\tfrac{1}{2}+i\xi\Big)\Big].
 \end{equation}
 
-\begin{proposition}[NE-A für Selberg]
-\label{prop:NEA-Sel}
-Die Menge $\{\xi \in \RR : M^\Gamma(\xi) < 0\}$ hat ein positives Lebesgue-Maß.
-\end{proposition}
+\begin{theorem}[Selbergsche Plancherel-Positivität]
+\label{thm:plancherel-positivity}
+Nach symmetrischer Paarung der spektralen Nullstellen in der Selbergschen
+Funktionalgleichung erfüllt der regularisierte Multiplikator
+\begin{equation}
+\label{eq:plancherel-positivity}
+M^\Gamma(\xi)=\operatorname{Area}(M)\,\xi\,\tanh(\pi\xi)\ge 0
+\end{equation}
+für reelles $\xi$ außerhalb der diskreten Nullstellenmenge, also fast überall
+auf $\RR$. Insbesondere ist die frühere Selberg-NE-A-Behauptung
+$\{\xi\in\RR:M^\Gamma(\xi)<0\}$ von positivem Maß falsch.
+\end{theorem}
 
 \begin{proof}[Beweisskizze]
-Aus der Hadamard-Produkt-Darstellung der Selbergschen Zetafunktion auf einer
-kompakten hyperbolischen Fläche (\cite[Kap.~10]{Iwaniec2002}) ergibt sich
-\begin{equation}
-\label{eq:hadamard-Sel}
-\begin{aligned}
-\frac{\Sel'}{\Sel}(s)
-&= b_\Gamma + \sum_{\rho}\Big[\frac{1}{s-\rho}+\frac{1}{\rho}\Big] \\
-&\quad + (\text{Beiträge von trivialen Nullstellen und dem topologischen Faktor}),
-\end{aligned}
-\end{equation}
-wobei $\rho$ über die nicht-trivialen Nullstellen läuft (auf $\mathrm{Re}(s)=1/2$ nach
-Theorem~\ref{thm:Sel-RH}) und $b_\Gamma \in \RR$ eine Konstante ist, die von $\Gamma$ abhängt.
-
-Setzt man $s = 1/2 + i\xi$ und nimmt den Realteil, so liefert jede nicht-triviale Nullstelle
-$\rho_j = 1/2 + ir_j$ einen Beitrag
-\begin{equation}
-\label{eq:NEA-re}
-\mathrm{Re}\Big[\frac{1}{i(\xi-r_j)}+\frac{1}{1/2+ir_j}\Big]
-  = \frac{1/2}{1/4+r_j^2} > 0.
-\end{equation}
-Somit erzeugen die nicht-trivialen Nullstellen einen
-\emph{positiven konstanten} Beitrag; sie verursachen keine Vorzeichenoszillationen
-in $M^\Gamma(\xi)$.
-
-Die Vorzeichenoszillationen entstehen durch die trivialen Nullstellen (bei $s = -k$, $k \ge 0$)
-und den topologischen Faktor, deren Beiträge zu $\mathrm{Re}[\Sel'/\Sel]$
-die Form $\sum_{k\ge 0} c_k/[(\xi^2+(k+1/2)^2)]$ mit $c_k \in \RR$
-mit wechselndem Vorzeichen haben. Durch Kombination mit dem archimedischen Identitätsterm der
-expliziten Selberg-Spurformel \eqref{eq:Selberg-trace} findet man durch direkte
-Anwendung mit einer geeigneten Testfunktion (lokalisierend in $\xi$), dass
-$M^\Gamma(\xi)$ sowohl strikt positive als auch strikt negative Werte auf
-Mengen positiven Lebesgue-Maßes annimmt. Das Argument ist das direkte Analogon zu
-\cite[Lem.~A.3]{Geiger2026partII}; die einzige Ersetzung ist $\tanh(\pi r)$
-anstelle von $\Gamma'/\Gamma(1/4+ir/2)$ im archimedischen Kern.
+Die Funktionalgleichung von $\Sel(s)$ paart zusammen mit Schwarz-Symmetrie die
+Nullstellen bei $1/2+i r$ mit ihren gespiegelten Partnern. Auf der Geraden
+$s=1/2+i\xi$ löschen sich die Realteile der gepaarten nicht-trivialen
+Spektralbeiträge aus. Die Ausnahmenpaare $1/2\pm\delta$ löschen sich ebenso,
+und das Nullmodenpaar $s=1$ und $s=0$ trägt nach Paarung ebenfalls keinen
+Realteil bei. Übrig bleibt der regularisierte Plancherel-Dichteterm der
+Selbergschen Spurformel, also $\operatorname{Area}(M)\,\xi\,\tanh(\pi\xi)$,
+der für reelles~$\xi$ nichtnegativ ist.
 \end{proof}
 
-NE-A lässt sich also übertragen, aber mit der in der Beweisskizze sichtbaren
-Rollenverteilung: Im Selberg-Fall stammen die Vorzeichenwechsel aus den
-trivialen, topologischen und Identitätsbeiträgen der Spurformel, nicht aus den
-kritischen-Linien-Nullstellen selbst.  Die generische Aussage ist daher
-vorsichtiger: explizite Formeln enthalten typischerweise oszillatorische
-logarithmische Ableitungsbeiträge, deren Quelle je nach Zeta-Familie
-unterschiedlich ist.
+Das Riemannsche NE-A-Hindernis überträgt sich daher nicht auf den Selberg-Kanal.
+Selberg ist vielmehr der dual-obstruktionsfreie Grundzustands-Testkörper: der
+regularisierte Multiplikator ist Plancherel-positiv, und der sphärische Kanal
+besitzt zusätzlich den unten beschriebenen Casimir-Kommutanten.
 
 % =============================================================================
 \section[NE-B scheitert für Selberg: Der sphärische Casimir-Kanal]{NE-B scheitert für Selberg: Der sphärische Casimir-Kanal}
@@ -1739,10 +1724,11 @@ SGE-YES-Kontrollfall ein.  Spezifisch:
 % =============================================================================
 
 Wir haben die v2.0-Methodik an der Selbergschen Zetafunktion getestet. Das
-Verschiebungs-Paritäts-Lemma, die Frontier-Dominanz, die Weilsche quadratische Form
-und NE-A übertragen sich auf das Selberg-Setting mit bescheidenen Modifikationen
-(hauptsächlich Konstanten und Dichteregime), wobei die Frontier-Aussage als
-bedingte Dominanzschranke zu lesen ist. Die C2-/Minimizer-Gates für die
+Verschiebungs-Paritäts-Lemma, die Frontier-Dominanz und die Weilsche quadratische Form
+übertragen sich auf das Selberg-Setting nur mit den oben explizit gemachten
+Schutzplanken, während die frühere Selberg-NE-A-Transferlesart durch
+Theorem~\ref{thm:plancherel-positivity} ersetzt wird. Die Frontier-Aussage ist
+als bedingte Dominanzschranke zu lesen. Die C2-/Minimizer-Gates für die
 Selberg--Weilsche quadratische Form $\QW^\Gamma_\lambda$ liefern zusammen mit
 $\lambda_1(\Delop)\ge 1/4$ eine bedingte v2.0-Reduktion der strengen Aussage
 für die nicht-trivialen spektralen Nullstellen im kritischen Streifen,
