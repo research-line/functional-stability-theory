@@ -1,10 +1,11 @@
 % FST-DE_DarkEnergy_Skeleton_v1_en.tex
 % Skeleton draft -- Dark Energy as Residual Vacuum Free Energy
-% Status: SKETCH (v1)
+% Status: Corrective preprint v1.12; construction and physical gates remain open
 % Date: 2026-03-10
 
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage{cmap}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \input{glyphtounicode}
@@ -15,14 +16,22 @@
 \usepackage{booktabs}
 \usepackage{xcolor}
 \usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc, shapes.geometric, backgrounds, fit}
 \usepackage{geometry}
 \geometry{a4paper, margin=2.5cm}
 \usepackage[english]{babel}
 \usepackage{xurl}
 \usepackage{microtype}
-\def\HyperDestNameFilter#1{en.#1}
 \usepackage[unicode]{hyperref}
+\renewcommand*{\HyperDestNameFilter}[1]{en.#1}
 \hypersetup{
+  unicode=true,
+  bookmarksnumbered=true,
+  bookmarksopen=true,
+  pdfpagemode=UseOutlines,
+  pdfstartview={FitH},
+  pdflang={en-US},
   colorlinks=true,
   linkcolor=blue!70!black,
   citecolor=green!50!black,
@@ -32,8 +41,23 @@
   pdfsubject={Dark energy and cosmological constant preprint},
   pdfkeywords={dark energy, cosmological constant, vacuum energy, scalar-tensor gravity, f(R)}
 }
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.10}
+\renewcommand{\floatpagefraction}{0.80}
 \setlength{\emergencystretch}{2em}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash\hspace{0pt}}p{#1}}
+
+\definecolor{coregreen}{RGB}{20, 120, 40}
+\definecolor{ansatzorange}{RGB}{200, 100, 10}
+\definecolor{withdrawnred}{RGB}{170, 30, 30}
+\definecolor{gateblue}{RGB}{25, 80, 140}
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
@@ -55,13 +79,13 @@
 
 \title{\textbf{Dark Energy as Residual Vacuum Free Energy:\\
 A Thermodynamic Bound on the Cosmological Constant}\\
-\large\textit{Part of the FST Programme~\cite{GeigerFST-Hub-2026}}}
+\large\textit{Part of the FST Program~\cite{GeigerFST-Hub-2026}}}
 
 \author{Lukas Geiger\\
 \small Independent Researcher, Bernau, Germany\\
 \small ORCID: \href{https://orcid.org/0009-0005-7296-1534}{0009-0005-7296-1534}}
 
-\date{July 2026}
+\date{October 2026 --- Corrective revision v1.12}
 
 \begin{document}
 \maketitle
@@ -73,23 +97,23 @@ This revision audits the mathematical core of the proposed thermodynamic
 dark-energy framework.  For the dimensionally closed reduced function
 \(\Phi_{\rm red}=A+B\rho\ln(\rho/\rho_{\rm Pl})+C\rho^2\), \(B,C>0\),
 existence, uniqueness, strict convexity, and an explicit Lambert-\(W\)
-minimiser are proven.  The original momentum-space expression is
+minimizer are proven.  The original momentum-space expression is
 dimensionally inhomogeneous and does not determine the matching coefficients.
-Consequently the scaling
+Consequently, the scaling
 \(\Lambda_{\rm eff}\sim H_0^2/[c^2\ln(M_{\rm Pl}/H_0)]\) remains an external
 RG-matching ansatz.  Its corrected numerical value is
-\(3.8\times10^{-55}\,{\rm m}^{-2}\), about \(290\) below observation.
+\(3.8\times10^{-55}\,{\rm m}^{-2}\), about \(290\) times below observation.
 
 The scalar-sector audit also changes the physical status.  The
-P\"oschl--Teller potential \(V_0\,{\rm sech}^2(\phi/\phi_0)\) has an unstable
-maximum at \(\phi=0\); the earlier tanh history is a phenomenological proxy,
+Pöschl--Teller potential \(V_0\,{\rm sech}^2(\phi/\phi_0)\) has an unstable
+maximum at \(\phi=0\); the earlier $\tanh$ history is a phenomenological proxy,
 not a derived stable attractor.  Standard quasistatic metric \(f(R)\)
 perturbations approach a slip of \(1/2\) (or reciprocal \(2\), by convention)
 and a GR-like lensing combination \(\Sigma\simeq1/F\), not \(5/4\) and \(9/8\).
 Finally, the Hu--Sawicki environment ledger yields correct necessary
 curvature thresholds but no source-bound local profile, so neither
 \(|f_{R0}|=1.2\times10^{-5}\) nor \(10^{-6}\) is by itself a Cassini proof.
-The framework is therefore a conditional research programme, not a closed
+The framework is therefore a conditional research program, not a closed
 solution of the cosmological-constant or screening problems.
 \vspace{1.5em}
 \noindent\textbf{Keywords:} cosmological constant, dark energy, vacuum energy,
@@ -97,27 +121,120 @@ scalar-tensor gravity, gravitational slip
 \end{abstract}
 
 \clearpage
+\tableofcontents
+\clearpage
 % ============================================================
 \section{Introduction}\label{sec:intro}
 
 This revision records the mathematical status after a line-by-line proof/paper
-audit on 16 July 2026.  The purpose is narrower than that of the earlier
+audit on 16~July 2026.  The purpose is narrower than that of the earlier
 skeleton: it separates the statements that follow from a dimensionally closed
 one-variable model from the physical identifications that remain open.
 
 The audit changes four headline claims.  First, the original momentum-space
 integrand was dimensionally inhomogeneous and therefore did not define a
 physical free-energy density without explicit matching coefficients.  Second,
-the proposed P\"oschl--Teller saturation law was not derived from the canonical
+the proposed Pöschl--Teller saturation law was not derived from the canonical
 Klein--Gordon--Friedmann system and its hilltop is unstable.  Third, the
 thermodynamic beta function defined as the derivative of a stationarity
 condition is identically zero.  Fourth, standard metric \(f(R)\) perturbation
 theory does not predict the previously stated values \(\eta=5/4\) and
 \(\Sigma=9/8\).  These claims are withdrawn below.
+Table~\ref{tab:claim-gate-ledger} details the evidentiary gates for each sector, and Figure~\ref{fig:epistemic_architecture} provides an architectural schematic of the resulting four-tier epistemic hierarchy.
 
-\section{Dimensionally closed variational model}\label{sec:functional}
+\begin{table}[htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.15}
+\caption{Claim-Status and Evidence-Gate Ledger for the Present Revision.}
+\label{tab:claim-gate-ledger}
+\begin{tabularx}{\linewidth}{@{}lYY@{}}
+\toprule
+\textbf{Layer} & \textbf{What is established here} & \textbf{Stop gate before a stronger claim}\\
+\midrule
+Reduced variational core & Existence, uniqueness, strict convexity, and the Lambert-\(W\) minimizer for specified \(B,C>0\). & Independent physical derivation of \(B(H)\), \(C(H)\), and the subtraction scheme.\\
+Conditional cosmological scale & The corrected ansatz value is \(3.8\times10^{-55}\,{\rm m}^{-2}\), about \(290\) below observation. & No target-value input when fixing \(C/B\); compare only after the RG ledger is closed.\\
+Scalar and perturbation sector & Earlier hilltop, beta-response, \(\eta=5/4\), and \(\Sigma=9/8\) claims are withdrawn. & Stable scalar history and standard \(f(R)\) response must be derived from the full equations.\\
+Local and observational gates & Environment thresholds are arithmetically defined; proxy MCMC is background-level only. & Source-bound local \(f_R({\rm env})\) profile and official Planck/DESI likelihood.\\
+RVM/entropy audit & The 3~August 2026 evaluator is only an exploratory insertion calculation. & Derive \(\nu\), horizon entropy, \(A(E)\), ensemble, and Cassini convention without inserted pass values.\\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-\subsection{Raw motivation and its limitation}
+\begin{figure}[htbp]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  node distance=0.55cm and 0.65cm,
+  box/.style={rectangle, rounded corners=4pt, draw=#1!80!black, fill=#1!7, line width=0.85pt, inner sep=6pt, text width=7.0cm, font=\small},
+  titlebox/.style={font=\bfseries\footnotesize, text=#1!90!black, anchor=north west, yshift=-2pt, xshift=4pt},
+  badge/.style={rectangle, rounded corners=2pt, font=\scriptsize\bfseries, text=white, fill=#1, inner sep=2.5pt},
+  arrow/.style={-{Latex[length=2.5mm]}, line width=1pt, draw=gray!70}
+]
+
+% Node 1: Variational Core
+\node[box=coregreen] (core) {
+  \vspace{0.4cm}
+  $\Phi_{\rm red}(\rho) = A + B\rho\ln(\rho/\rho_{\rm Pl}) + C\rho^2$\\[2pt]
+  $\bullet$ Strict convexity: $\Phi_{\rm red}''(\rho) = \frac{B}{\rho} + 2C > 0$\\[2pt]
+  $\bullet$ Unique global ground state via Lambert-$W$:\\[1pt]
+  \phantom{$\bullet$} $\rho_\ast = \frac{B}{2C} W_0\!\left(\frac{2C\rho_{\rm Pl}}{eB}\right) > 0, \quad \Leff = \frac{8\pi G}{c^4}\rho_\ast$\\[2pt]
+  $\bullet$ Independent of raw inhomogeneous mode sum
+};
+\node[titlebox=coregreen] at (core.north west) {TIER 1: VARIATIONAL CORE};
+\node[badge=coregreen, anchor=north east, xshift=-4pt, yshift=-4pt] at (core.north east) {PROVEN (THM 3.1)};
+
+% Node 2: Cosmological Scaling
+\node[box=ansatzorange, right=of core] (ansatz) {
+  \vspace{0.4cm}
+  Ansatz: $\Leff^{\rm ansatz} \sim \frac{H_0^2}{c^2\ln(M_{\rm Pl}/H_0)}$\\[2pt]
+  $\bullet$ Evaluation ($L \simeq 140$): $\Leff^{\rm ansatz} \simeq 3.8\times 10^{-55}\,{\rm m}^{-2}$\\[2pt]
+  $\bullet$ Observation (Planck 2018): $\Lambda_{\rm obs} \simeq 1.11\times 10^{-52}\,{\rm m}^{-2}$\\[2pt]
+  $\bullet$ Deficit: $\Lambda_{\rm obs}/\Leff^{\rm ansatz} \approx 2.9\times 10^2$ ($\approx 290\times$)\\[2pt]
+  $\bullet$ Status: Open conditional matching $B(H), C(H)$
+};
+\node[titlebox=ansatzorange] at (ansatz.north west) {TIER 2: RG-MATCHING ANSATZ};
+\node[badge=ansatzorange, anchor=north east, xshift=-4pt, yshift=-4pt] at (ansatz.north east) {CONDITIONAL};
+
+% Node 3: Withdrawn Sector
+\node[box=withdrawnred, below=of core] (withdrawn) {
+  \vspace{0.4cm}
+  $\bullet$ Hilltop: $V_{\rm PT}''(0) = -2V_0/\phi_0^2 < 0$ (unstable maximum)\\[2pt]
+  $\bullet$ $\tanh$ history is phenomenological proxy $X_{\rm DE}^{\rm proxy}(a)$\\[2pt]
+  $\bullet$ Metric $f(R)$ limit: $\eta_{\rm std} \to 1/2$ (reciprocal $2$)\\[2pt]
+  $\bullet$ Lensing: $\Sigma \simeq 1/F \simeq 1$ (GR-like response)\\[2pt]
+  $\bullet$ Withdrawn: $\eta=5/4$, $\Sigma=9/8$, stable attractor
+};
+\node[titlebox=withdrawnred] at (withdrawn.north west) {TIER 3: DYNAMICS \& PERTURBATIONS};
+\node[badge=withdrawnred, anchor=north east, xshift=-4pt, yshift=-4pt] at (withdrawn.north east) {WITHDRAWN};
+
+% Node 4: Observational Gates
+\node[box=gateblue, below=of ansatz] (gates) {
+  \vspace{0.4cm}
+  $\bullet$ Cassini threshold ($n=1, \Phi_\odot = 2.12\times 10^{-6}$):\\[1pt]
+  \phantom{$\bullet$} $R_{\rm env}/R_0 \ge 350.8$ ($1.2\times 10^{-5}$), $\ge 101.3$ ($10^{-6}$)\\[2pt]
+  $\bullet$ Screening profile $f_R({\rm env})$ currently source-blocked\\[2pt]
+  $\bullet$ Exploratory MCMC: background-level proxy only\\[2pt]
+  $\bullet$ Gate requirement: official Planck / DESI DR2 likelihood
+};
+\node[titlebox=gateblue] at (gates.north west) {TIER 4: SCREENING \& OBSERVATION};
+\node[badge=gateblue, anchor=north east, xshift=-4pt, yshift=-4pt] at (gates.north east) {STOP-GATES};
+
+% Arrows
+\draw[arrow, dashed] (core.east) -- node[above, font=\scriptsize, text=gray!80!black] {RG closure} (ansatz.west);
+\draw[arrow] (core.south) -- node[right, font=\scriptsize, text=gray!80!black] {Separation} (withdrawn.north);
+\draw[arrow] (ansatz.south) -- node[right, font=\scriptsize, text=gray!80!black] {Falsification} (gates.north);
+\draw[arrow, dashed] (withdrawn.east) -- node[below, font=\scriptsize, text=gray!80!black] {Constraint} (gates.west);
+
+\end{tikzpicture}%
+}
+\caption{Epistemic architecture and falsification gate structure of the FST dark-energy framework. The mathematically rigorous variational core (Tier 1, green) is strictly decoupled from the conditional RG-matching ansatz (Tier 2, orange), the corrected/withdrawn dynamical and perturbation claims (Tier 3, red), and the unfulfilled local screening and official likelihood gates (Tier 4, blue).}
+\label{fig:epistemic_architecture}\label{fig:epistemische_architektur}
+\end{figure}
+
+\section{Dimensionally Closed Variational Model}\label{sec:functional}
+
+\subsection{Raw Motivation and Its Limitations}
 
 The earlier motivating expression was
 \begin{equation}\label{eq:Phi-raw}
@@ -137,9 +254,9 @@ cosmological scaling.  Equation~\eqref{eq:Phi-raw} is therefore only a
 schematic motivation, not a physical functional and not a derivation from a
 mode sum.
 
-\subsection{Reduced model}
+\subsection{Reduced Model}
 
-\begin{definition}[Reduced free-energy density]\label{def:functional}
+\begin{definition}[Reduced Free-Energy Density]\label{def:functional}
 For \(\rho>0\), let
 \begin{equation}\label{eq:Phi}
  \Phi_{\rm red}(\rho)
@@ -147,7 +264,7 @@ For \(\rho>0\), let
  \qquad B>0,\quad C>0 .
 \end{equation}
 Here \([\rho]=[\Phi_{\rm red}]=E^4\), \([A]=E^4\), \([B]=1\), and
-\([C]=E^{-4}\).  The constants \(B\) and \(C\) are renormalised matching
+\([C]=E^{-4}\).  The constants \(B\) and \(C\) are renormalized matching
 coefficients.  Their values are not supplied by Eq.~\eqref{eq:Phi-raw}.
 \end{definition}
 
@@ -163,11 +280,11 @@ inverse powers of \(k\) are imposed.  It does not establish uniqueness among
 general kernels, and a quasistatic \(4/3\) force enhancement does not by itself
 derive an off-shell free-energy functional.
 
-\section{Proven result and conditional scaling}\label{sec:main}
+\section{Proven Result and Conditional Scaling}\label{sec:main}
 
-\begin{theorem}[Unique minimiser of the reduced model]\label{thm:main}
+\begin{theorem}[Unique Minimizer of the Reduced Model]\label{thm:main}
 The function \(\Phi_{\rm red}\) in Definition~\ref{def:functional} has exactly
-one global minimiser \(\rho_\ast>0\).  It satisfies
+one global minimizer \(\rho_\ast>0\).  It satisfies
 \begin{equation}\label{eq:stationarity}
  B\left[1+\ln\!\left(\frac{\rho_\ast}{\rho_{\rm Pl}}\right)\right]
  +2C\rho_\ast=0
@@ -187,7 +304,7 @@ The first derivative tends to \(-\infty\) as \(\rho\to0^+\) and to
  \Phi_{\rm red}''(\rho)=\frac{B}{\rho}+2C>0 .
 \end{equation}
 Thus the derivative has exactly one zero and strict convexity makes that zero
-the unique global minimiser.  Rearranging Eq.~\eqref{eq:stationarity} gives
+the unique global minimizer.  Rearranging Eq.~\eqref{eq:stationarity} gives
 \((2C\rho_\ast/B)\exp(2C\rho_\ast/B)=
 2C\rho_{\rm Pl}/(eB)\), which yields Eq.~\eqref{eq:rho-lambert}.
 \end{proof}
@@ -205,7 +322,7 @@ The frequently used expression
 is therefore a conditional RG-matching ansatz, not a consequence of
 Theorem~\ref{thm:main}.
 
-\begin{corollary}[Arithmetic of the conditional ansatz]\label{cor:numerical}
+\begin{corollary}[Arithmetic of the Conditional Ansatz]\label{cor:numerical}
 For \(H_0=67.4\,{\rm km\,s^{-1}\,Mpc^{-1}}\) and
 \(L=\ln(M_{\rm Pl}/H_0)\simeq140\),
 \begin{equation}
@@ -214,11 +331,18 @@ For \(H_0=67.4\,{\rm km\,s^{-1}\,Mpc^{-1}}\) and
 Compared with
 \(\Lambda_{\rm obs}\simeq1.11\times10^{-52}\ {\rm m}^{-2}\)
 from Planck~2018~\cite{Planck2018}, the ansatz is low by a factor of about
-\(2.9\times10^2\).  This is an unresolved normalisation/matching factor, not
+\(2.9\times10^2\).  This is an unresolved normalization/matching factor, not
 order-of-magnitude agreement.
 \end{corollary}
 
-\subsection{Scalar-sector status}\label{sec:scalar-tensor}
+\noindent\textbf{Physical-identification gate.}
+The curvature convention in Eq.~\eqref{eq:Leff} is conditional on an
+independent identification of the model parameter with the gravitating
+energy density, including its conservation or exchange law and the
+subtraction term $A$. No external RVM or horizon result fixes these
+choices or removes the factor-$290$ matching deficit automatically.
+
+\subsection{Scalar-Sector Status}\label{sec:scalar-tensor}
 
 Consider the phenomenological Lagrangian
 \begin{equation}\label{eq:Lagrangian}
@@ -241,7 +365,7 @@ Hence \(\phi=0\) is a maximum, not a minimum.  Linear perturbations satisfy
 \]
 and the larger root is positive for every \(V_0>0\).  Hubble friction can
 delay the roll but cannot make the hilltop asymptotically stable.  The earlier
-stable-de-Sitter theorem and oscillation forecast are withdrawn.
+stable de~Sitter theorem and oscillation forecast are withdrawn.
 
 For a canonical scalar and pressureless matter, define
 \[
@@ -262,10 +386,10 @@ With \(\Omega_\phi=x^2+y^2\) and
  \frac{\dd\Omega_\phi}{\dd N}
  =-3w_\phi\,\Omega_\phi(1-\Omega_\phi).
 \end{equation}
-This does not reduce to the tanh equation printed in earlier versions.
+This does not reduce to the $\tanh$ equation printed in earlier versions.
 
-A bounded tanh curve may still be used as a data parametrisation if it is
-labelled as such.  A dimensionally consistent non-negative choice is
+A bounded $\tanh$ curve may still be used as a data parameterization if it is
+labeled as such.  A dimensionally consistent non-negative choice is
 \begin{align}
  X_{\rm DE}^{\rm proxy}(a)
  &=\frac{\Phi_0}{2}\left[1+
@@ -280,7 +404,7 @@ fraction \(\rho_{\rm DE}/\rho_{\rm crit}(a)\).  Equations
 \eqref{eq:tanh-solution}--\eqref{eq:saturation-ODE} are a phenomenological
 proxy and are not derived from Eq.~\eqref{eq:Lagrangian}.
 
-\section{Kinematic consequences of a density proxy}\label{sec:observations}
+\section{Kinematic Consequences of a Density Proxy}\label{sec:observations}
 
 The conditional estimate from Eq.~\eqref{eq:bound} is
 \(3.8\times10^{-55}\,{\rm m}^{-2}\), not
@@ -288,7 +412,7 @@ The conditional estimate from Eq.~\eqref{eq:bound} is
 below \(\Lambda_{\rm obs}\), not a factor of three.
 
 A bounded curve may be used as a phenomenological density history only if its
-normalisation is defined consistently.  Let
+normalization is defined consistently.  Let
 \(X_{\rm DE}(a)=\rho_{\rm DE}(a)/\rho_{\rm crit,0}\) and
 \[
  E^2(a)=\frac{H^2}{H_0^2}=\Omega_ma^{-3}+X_{\rm DE}(a).
@@ -303,18 +427,26 @@ Then
 \end{align}
 The earlier deceleration formula used the wrong coefficient for
 \(aX_{\rm DE}'\).  It also alternated between an instantaneous density
-fraction and a density normalised to today's critical density.  Consequently,
+fraction and a density normalized to today's critical density.  Consequently,
 the reported acceleration redshift, \(w_0\), CPL map, and proxy
 \(\chi^2\) are withdrawn pending recomputation from a physically derived
 history.  No official DESI likelihood evaluation is claimed.
 
-\begin{remark}[DESI DR2 phantom crossing and scalar-tensor reconstructions]
-Recent analyses of DESI DR2 data in combination with Planck 2018 and Supernovae Ia suggest an effective dark energy equation of state $w(z)$ that crosses the phantom divide $w=-1$. While minimally coupled single scalar fields (quintessence) cannot cross $w=-1$ without ghost degrees of freedom, reconstructed scalar-tensor gravity theories~\cite{Efstratiou2025} and interacting dark sector models with field-dependent dark matter masses~\cite{Antusch2026,Sahoo2026} naturally generate an apparent phantom divide $w_{\rm eff}(z) < -1$. The phenomenological proxy in Eq.~\eqref{eq:tanh-solution} serves as a kinematic testbed for such effective scalar-tensor evolution.
+\begin{remark}[DESI DR2 Comparators and the Open Model-Identification Gate]
+Scalar--tensor reconstructions~\cite{Efstratiou2025} and interacting
+quintessence with field-dependent dark-matter masses~\cite{Antusch2026}
+provide distinct mechanisms for an effective phantom crossing.
+The quintom model of~\cite{Sahoo2026} instead includes a canonical and a
+phantom field; it is not the same ghost-free interacting-quintessence
+mechanism. These external models do not identify the reduced minimizer
+with a conserved gravitational energy density or close its matching,
+exchange, horizon/ensemble, local-screening, or likelihood gates.
+The $\tanh$ proxy alone establishes no phantom-crossing mechanism.
 \end{remark}
 
-\section{Local consistency gates}
+\section{Local Consistency Gates}
 
-\subsection{Radiation-era trace}\label{sec:BBN}
+\subsection{Radiation-Era Trace}\label{sec:BBN}
 
 For an ideal perfect fluid with the sign convention used here,
 \[
@@ -325,18 +457,18 @@ leading classical trace source, but it is not a proof of BBN safety: massive
 species, trace anomalies, background evolution, and initial conditions must
 be propagated through a quantitative abundance calculation.
 
-\subsection{Convexity and screening}\label{sec:screening-gamma}
+\subsection{Convexity and Screening}\label{sec:screening-gamma}
 
-A fixed strictly convex function of \(\rho\) has one minimiser.  That elementary
+A fixed strictly convex function of \(\rho\) has one minimizer.  This elementary
 fact does not constitute a no-go theorem for chameleon screening.  In a
 chameleon model the effective scalar potential depends on ambient density, so
-the function being minimised changes with the environment.  The previous
+the function being minimized changes with the environment.  The previous
 \(\Gamma\)-convergence and energy-dissipation block did not supply a valid
 liminf/recovery proof and mixed gradients of different variables; it is
 withdrawn.  The accompanying numerical phase plot remains, at most, a toy
 illustration and not a Cassini calculation.
 
-\subsection{Scope of the variational statement}\label{sec:resolvent-vacuum}
+\subsection{Scope of the Variational Statement}\label{sec:resolvent-vacuum}
 
 The variational theorem below concerns only the reduced scalar function with
 specified positive coefficients.  It does not solve the radiative-stability
@@ -345,7 +477,7 @@ or derive a local screening profile.  Those are independent gates.  In
 particular, neither a resolvent analogy nor a metric on configuration space
 changes the zero set of the differential of a fixed scalar functional.
 
-\section{Renormalisation, beta response, and observational status}
+\section{Renormalization, Beta Response, and Observational Status}
 \label{sec:renorm}
 
 The physical scaling problem is concentrated in the matching coefficients
@@ -383,9 +515,9 @@ function and not evidence for that scaling.
 
 No Wilsonian beta function, fixed-point monotonicity, bound on \(\gamma\) at one loop,
 or Kullback--Leibler data-processing statement is promoted to a result in this
-revision. Each requires a dimensionally complete action, normalised
+revision. Each requires a dimensionally complete action, normalized
 probability objects where information inequalities are invoked, and an explicit
-renormalisation prescription.
+renormalization prescription.
 
 The conditional scale
 \[
@@ -395,7 +527,7 @@ is about \(290\) times below the observed value.  Accordingly, this paper does
 not claim a solution of the cosmological-constant or coincidence problems,
 a DESI-compatible equation of state, or a stable late-time attractor.
 
-\subsection{\texorpdfstring{Metric \(f(R)\) perturbations}{Metric f(R) perturbations}}\label{sec:predictions-falsifiable}
+\subsection{\texorpdfstring{Metric \(f(R)\) Perturbations}{Metric f(R) Perturbations}}\label{sec:predictions-falsifiable}
 
 Use the convention
 \[
@@ -432,13 +564,13 @@ Strict convexity of a fixed, environment-independent scalar function
 \(\Phi_{\rm red}(\rho)\) excludes a second minimum of that same function.
 It does not rule out chameleon screening, because the effective scalar
 potential itself changes with ambient density.  Likewise, changing only a
-positive-definite metric on configuration space cannot move the minimiser of
+positive-definite metric on configuration space cannot move the minimizer of
 a fixed scalar function: \({\rm grad}_g\Phi=0\) if and only if
 \(\dd\Phi=0\).
 
-\subsection{Source-bound local gate}\label{sec:mcmc-results}
+\subsection{Source-Bound Local Gate}\label{sec:mcmc-results}
 
-The 2 July 2026 environment ledger uses
+The 2~July 2026 environment ledger uses
 \begin{equation}\label{eq:environment-contract}
  |f_R({\rm env})|
  =|f_{R0}|\left(\frac{R_0}{R_{\rm env}}\right)^{n+1}
@@ -475,43 +607,91 @@ rather than the official Planck/DESI likelihoods and encoded Cassini through a
 linear hard proxy.  Its numerical samples may be retained as a background
 stress test only; they do not establish model preference, official parameter
 constraints, or local screening.
+Table~\ref{tab:parameter-bounds-ledger} provides a synoptic synthesis of the quantitative parameters, relations, and empirical thresholds governing each sector.
 
-\section{Proof status and next steps}\label{sec:discussion}
+\begin{table}[htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.15}
+\caption{Synoptic Parameter, Bound, and Falsification Ledger Across All Sectors of the Framework.}
+\label{tab:parameter-bounds-ledger}\label{tab:parameter-schranken-ledger}
+\begin{tabularx}{\linewidth}{@{}L{2.6cm}L{2.8cm}L{2.5cm}L{2.5cm}Y@{}}
+\toprule
+\textbf{Sector / Quantity} & \textbf{Formal Expression} & \textbf{Value / Bound} & \textbf{Reference / Gate} & \textbf{Epistemic Status}\\
+\midrule
+Variational minimizer & $\rho_\ast = \frac{B}{2C} W_0\!\left(\frac{2C\rho_{\rm Pl}}{eB}\right)$ & $\rho_\ast > 0$ for $B,C>0$ & Def.~\ref{def:functional}, Eq.~\eqref{eq:rho-lambert} & Proven (strictly convex ground state)\\
+Curvature mapping & $\Leff = 8\pi G\rho_\ast/c^4$ & Dependent on $B/C$ & Eq.~\eqref{eq:Leff} & Exact mapping\\
+Cosmological ansatz & $\Leff^{\rm ansatz} \sim \frac{H_0^2}{c^2\ln(M_{\rm Pl}/H_0)}$ & $3.8\times 10^{-55}\ {\rm m}^{-2}$ & Planck 2018 ($1.11\times 10^{-52}\ {\rm m}^{-2}$) & Conditional ($290\times$ deficit; $B, C$ open)\\
+Pöschl--Teller curvature & $V_{\rm PT}''(0) = -2V_0/\phi_0^2$ & Negative ($r_+ > 0$) & Eq.~\eqref{eq:VPT-curvature} & Unstable hilltop ($\tanh$ proxy only)\\
+Scalaron mass & $m_s^2 = 1/(6\gamma)$ & $\gamma > 0$ & Eq.~\eqref{eq:Lagrangian} & Standard $R^2$ gravity\\
+Gravitational slip & $\eta_{\rm std} = \frac{1-s/3}{1+s/3} \to 1/2$ & Reciprocal $\to 2$ & Eq.~\eqref{eq:grav-slip} & Standard metric limit ($5/4$ withdrawn)\\
+Lensing parameter & $\Sigma \simeq 1/F \simeq 1$ & GR-like response & Eq.~\eqref{eq:Sigma} & Standard metric limit ($9/8$ withdrawn)\\
+Cassini gate ($1.2\times 10^{-5}$) & $R_{\rm env}/R_0 \ge 350.787$ & $\epsilon_{\rm th} < 2.3\times 10^{-5}$ & Eq.~\eqref{eq:environment-contract} & Arithmetic pass; local profile source-blocked\\
+Cassini gate ($10^{-6}$) & $R_{\rm env}/R_0 \ge 101.264$ & $\epsilon_{\rm th} < 2.3\times 10^{-5}$ & Eq.~\eqref{eq:environment-contract} & Conservative guide; no screening proof\\
+Radiation trace & $T = (1-3w)\rho$ & $T = 0$ for $w=1/3$ & Massless fluid & Exact identity; BBN quantitative gate open\\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-\begin{center}
+\section{Proof Status and Next Steps}\label{sec:discussion}
+
+Table~\ref{tab:proof-status-audit} formalizes the post-audit status across all seven investigative components, strictly separating proven mathematical results from conditional ansätze and retracted assertions.
+
+\begin{table}[htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.15}
+\caption{Formal Audit Ledger of Mathematical and Physical Claims After the 16~July 2026 Audit.}
+\label{tab:proof-status-audit}
 \begin{tabularx}{\linewidth}{@{}lY@{}}
 \toprule
-\textbf{Item} & \textbf{Status after the 16 July 2026 audit}\\
+\textbf{Item} & \textbf{Status after the 16~July 2026 audit}\\
 \midrule
-Reduced functional & Proven: existence, uniqueness, strict convexity, and the Lambert-\(W\) minimiser for specified \(B,C>0\).\\
+Reduced functional & Proven: existence, uniqueness, strict convexity, and the Lambert-\(W\) minimizer for specified \(B,C>0\).\\
 Raw mode sum & Invalid as a dimensionally homogeneous functional; motivation only.\\
 Physical \(H_0^2/\ln\) scaling & Open and conditional on explicit RG matching; current arithmetic misses observation by about \(290\).\\
-P\"oschl--Teller dynamics & Hilltop transient; no stable de-Sitter attractor and no derived tanh law.\\
+Pöschl--Teller dynamics & Hilltop transient; no stable de~Sitter attractor and no derived $\tanh$ law.\\
 Metric \(f(R)\) slip/lensing & Standard unscreened limits are \(\eta_{\rm std}\to1/2\) (or reciprocal \(2\)) and \(\Sigma\simeq1/F\), not \(5/4\) and \(9/8\).\\
 Local screening & Open: threshold ledger correct, but all numerical passes are source-blocked.\\
 Exploratory MCMC & Background-level proxy only; no official Planck/DESI likelihood and no Cassini-safe classification.\\
 \bottomrule
 \end{tabularx}
-\end{center}
+\end{table}
 
 The next decisive calculations are: (i) determine dimensionally explicit,
-renormalised \(B(H)\) and \(C(H)\); (ii) replace the hilltop potential or
+renormalized \(B(H)\) and \(C(H)\); (ii) replace the hilltop potential or
 derive a stable scalar history from the full equations; (iii) supply an
 independent galactic/solar Hu--Sawicki profile whose curvature ratio meets the
 ledger threshold; and (iv) only then rerun an official cosmological
-likelihood.  No release or claim upgrade is warranted before those gates are
-closed.
+likelihood.  These gates block stronger physical claims and a validated-model release.
+A corrective transparency edition retains the reduced mathematical result
+and explicitly records the unfulfilled gates.
 
 \clearpage
 
-\subsection*{AI Disclosure}
-In the preparation of this manuscript, AI-assisted tools (Claude, Anthropic)
-were used in a supporting capacity, particularly for literature research,
-text structuring, and formulation assistance.  The conceptual design,
-scientific argumentation, and responsibility for the entire content
-rest solely with the author.
+\section*{AI Disclosure}
+
+\noindent
+AI systems were used extensively in all phases of this work: conception
+and research discussion, literature and source work, mathematical analysis
+and proof development, creation and checking of the computational scripts,
+execution and evaluation of the computational runs, text, translation, and
+typesetting.
+
+\medskip
+
+\noindent
+Quality assurance: use of several independent models from different
+providers with counter-checks and adversarial AI reviews; traceable,
+versioned computational scripts with stored result files and checksums;
+continuously maintained proof and register documents; strict claim hygiene
+(assertions only with documented evidence, addenda instead of silent
+corrections); changelogs across all versions.
 
 \begin{thebibliography}{99}
+\sloppy
+\raggedright
+\setlength{\emergencystretch}{3em}
 
 \bibitem{Weinberg1989}
 S.~Weinberg,
@@ -532,7 +712,7 @@ Rev.\ Mod.\ Phys.\ \textbf{75}, 559--606 (2003).
 \href{https://doi.org/10.1103/RevModPhys.75.559}{doi:10.1103/RevModPhys.75.559}.
 
 \bibitem{Planck2018}
-Planck Collaboration (N.~Aghanim et al.),
+Planck Collaboration (N.~Aghanim et~al.),
 \textit{Planck 2018 results. VI. Cosmological parameters},
 Astron.\ Astrophys.\ \textbf{641}, A6 (2020).
 \href{https://doi.org/10.1051/0004-6361/201833910}{doi:10.1051/0004-6361/201833910}.
@@ -544,14 +724,14 @@ Living Rev.\ Relativ.\ \textbf{4}, 1 (2001).
 \href{https://doi.org/10.12942/lrr-2001-1}{doi:10.12942/lrr-2001-1}.
 
 \bibitem{Riess1998}
-A.~G.~Riess et al.,
+A.~G.~Riess et~al.,
 \textit{Observational evidence from supernovae for an accelerating
 universe and a cosmological constant},
 Astron.\ J.\ \textbf{116}, 1009--1038 (1998).
 \href{https://doi.org/10.1086/300499}{doi:10.1086/300499}.
 
 \bibitem{Perlmutter1999}
-S.~Perlmutter et al.,
+S.~Perlmutter et~al.,
 \textit{Measurements of $\Omega$ and $\Lambda$ from 42 high-redshift
 supernovae},
 Astrophys.\ J.\ \textbf{517}, 565--586 (1999).
@@ -570,7 +750,7 @@ Phys.\ Lett.\ B \textbf{91}, 99--102 (1980).
 \href{https://doi.org/10.1016/0370-2693(80)90670-X}{doi:10.1016/0370-2693(80)90670-X}.
 
 \bibitem{DESI2025}
-DESI Collaboration (M.~Abdul-Karim et al.),
+DESI Collaboration (M.~Abdul-Karim et~al.),
 \textit{DESI DR2 Results II: Measurements of Baryon Acoustic Oscillations and Cosmological Constraints},
 Phys.\ Rev.\ D \textbf{112}, 083515 (2025).
 \href{https://doi.org/10.1103/tr6y-kpc6}{doi:10.1103/tr6y-kpc6}.
@@ -607,14 +787,14 @@ Cambridge Monographs on Mathematical Physics, Cambridge University Press, 1982.
 \href{https://doi.org/10.1017/CBO9780511622632}{doi:10.1017/CBO9780511622632}.
 
 \bibitem{MONDEntropy2025}
-{\"O}.~Sevin{\c c}, {\"O}.~{\"O}kc{\"u}, and E.~Aydiner,
+Ö.~Sevinç, Ö.~Ökcü, and E.~Aydiner,
 \textit{From MOND entropy to extended uncertainty principles: A unified framework},
 Phys.\ Lett.\ B \textbf{873}, 140169 (2026).
 \href{https://doi.org/10.1016/j.physletb.2026.140169}{doi:10.1016/j.physletb.2026.140169}.
 arXiv:2601.14353 [gr-qc].
 
 \bibitem{FinslerJCAP2025}
-C.~Pfeifer, N.~Voicu, A.~Friedl-Sz\'asz, and E.~Popovici-Popescu,
+C.~Pfeifer, N.~Voicu, A.~Friedl--Szász, and E.~Popovici-Popescu,
 \textit{From kinetic gases to an exponentially expanding universe -- the Finsler--Friedmann equation},
 JCAP \textbf{2025}(10), 050 (2025).
 \href{https://doi.org/10.1088/1475-7516/2025/10/050}{doi:10.1088/1475-7516/2025/10/050}.
@@ -626,25 +806,25 @@ Zenodo preprint (2026).
 \href{https://doi.org/10.5281/zenodo.18215660}{doi:10.5281/zenodo.18215660}.
 
 \bibitem{GeigerRH2026c}
-L.~Geiger, \emph{From Landscape to Proof: The Even-Dominance Route to the Riemann Hypothesis}, Zenodo preprint, 2026.
+L.~Geiger, \textit{From Landscape to Proof: The Even-Dominance Route to the Riemann Hypothesis}, Zenodo preprint, 2026.
 \href{https://doi.org/10.5281/zenodo.19035640}{doi:10.5281/zenodo.19035640}.
 
 \bibitem{FST-Unified2026}
-L.~Geiger, \emph{FST Spectrum Duality: The Renormalized Free Energy Principle as Physical Instantiation of Functional Stability Theory}, Zenodo preprint, 2026.
+L.~Geiger, \textit{FST Spectrum Duality: The Renormalized Free Energy Principle as Physical Instantiation of Functional Stability Theory}, Zenodo preprint, 2026.
 \href{https://doi.org/10.5281/zenodo.19036190}{doi:10.5281/zenodo.19036190}.
 
 \bibitem{FST-NS2026}
-L.~Geiger, \emph{A Thermodynamic Obstruction to Finite-Time Blow-Up in the 3D Navier--Stokes Equations},
+L.~Geiger, \textit{A Thermodynamic Obstruction to Finite-Time Blow-Up in the 3D Navier--Stokes Equations},
 Zenodo preprint, 2026.
 \href{https://doi.org/10.5281/zenodo.19087449}{doi:10.5281/zenodo.19087449}.
 
 \bibitem{Geiger2026-YM}
-L.~Geiger, \emph{Volume-Independent Spectral Gap for Strong-Coupling Lattice Gauge Theory via Poincar\'e--Dobrushin Machinery},
+L.~Geiger, \textit{Volume-Independent Spectral Gap for Strong-Coupling Lattice Gauge Theory via Poincaré--Dobrushin Machinery},
 Zenodo preprint, 2026.
 \href{https://doi.org/10.5281/zenodo.19087433}{doi:10.5281/zenodo.19087433}.
 
 \bibitem{Geiger2026-BSD}
-L.~Geiger, \emph{The BSD Conjecture as a Positivity Normal-Form Theorem},
+L.~Geiger, \textit{The BSD Conjecture as a Positivity Normal-Form Theorem},
 Zenodo preprint, 2026.
 \href{https://doi.org/10.5281/zenodo.19087443}{doi:10.5281/zenodo.19087443}.
 
@@ -690,20 +870,20 @@ C.~Wetterich,
 arXiv:2407.03465 [hep-th] (2024).
 
 \bibitem{VasakCCGG2020}
-D.~Vasak, J.~Struckmeier, and J.~Kirsch,
+D.~Vasak, J.~Kirsch, and J.~Struckmeier,
 \textit{Dark energy and inflation invoked in CCGG by locally contorted space-time},
 Eur.\ Phys.\ J.\ Plus \textbf{135}, 404 (2020).
 \href{https://doi.org/10.1140/epjp/s13360-020-00415-7}{doi:10.1140/epjp/s13360-020-00415-7}.
 
 \bibitem{ShapiroSola2009}
-I.~L.~Shapiro and J.~Sol\`{a},
+I.~L.~Shapiro and J.~Solà,
 \textit{The scaling evolution of the cosmological constant},
 JHEP \textbf{2002}(02), 006 (2002).
 \href{https://doi.org/10.1088/1126-6708/2002/02/006}{doi:10.1088/1126-6708/2002/02/006}.
 arXiv:hep-th/0012227.
 
 \bibitem{SolaPeracaula2022}
-J.~Sol\`{a} Peracaula,
+J.~Solà Peracaula,
 \textit{The cosmological constant problem and running vacuum in the expanding universe},
 Phil.\ Trans.\ R.\ Soc.\ A \textbf{380}, 20210182 (2022).
 \href{https://doi.org/10.1098/rsta.2021.0182}{doi:10.1098/rsta.2021.0182}.
@@ -716,24 +896,28 @@ Phys.\ Rev.\ Lett.\ \textbf{82}, 4971 (1999).
 
 \bibitem{GeigerFST-Hub-2026}
 L.~Geiger,
-\textit{Functional Stability Theory --- A Programmatic Hub: Universal Convexity-Uniqueness Across Scales (From Particles to Cosmology)},
+\textit{Functional Stability Theory -- A Programmatic Hub: Universal Convexity-Uniqueness Across Scales (From Particles to Cosmology)},
 Zenodo (2026).
 \href{https://doi.org/10.5281/zenodo.20130499}{doi:10.5281/zenodo.20130499}.
 
 \bibitem{Efstratiou2025}
 D.~Efstratiou, E.~A.~Paraskevas, and L.~Perivolaropoulos,
 \textit{Addressing the DESI DR2 Phantom-Crossing Anomaly and Enhanced $H_0$ Tension with Reconstructed Scalar-Tensor Gravity},
-arXiv:2511.04610 [astro-ph.CO] (2025).
+Phys.\ Rev.\ D \textbf{113}, 123525 (2026).
+\href{https://doi.org/10.1103/zdcg-4sdf}{doi:10.1103/zdcg-4sdf}.
+arXiv:2511.04610 [astro-ph.CO].
 
 \bibitem{Antusch2026}
 S.~Antusch, S.~F.~King, and X.~Wang,
 \textit{Coupled Dark Energy and Dark Matter for DESI: An Effective Guide to the Phantom Divide},
-arXiv:2604.08449 [hep-ph] (2026).
+arXiv:2604.08449 [astro-ph.CO] (2026).
 
 \bibitem{Sahoo2026}
 P.~Thanankullaphong, P.~Sahoo, P.~H.~Puttasiddappa, and N.~Roy,
-\textit{Quintom Dark Energy: Future Attractor and Phantom Crossing in Light of DESI DR2 Observation},
-arXiv:2601.02284 [gr-qc] (2026).
+\textit{Quintom Dark Energy: Future Attractor and Phantom Crossing in Light of DESI DR2 Observations},
+Phys.\ Rev.\ D \textbf{113}, 084069 (2026).
+\href{https://doi.org/10.1103/4b1x-6pcx}{doi:10.1103/4b1x-6pcx}.
+arXiv:2601.02284 [astro-ph.CO].
 
 \end{thebibliography}
 

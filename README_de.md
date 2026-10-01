@@ -132,7 +132,7 @@ Der kosmologische Zweig von FST. Die Arbeit zur Dunklen Energie instanziiert Mus
 
 | Arbeit | Version | Status | Offenes Problem | Konzept-DOI |
 |--------|---------|--------|-----------------|-------------|
-| [**Dunkle Energie**](fst-cosmology/dark-energy/) | v1.11 | Framework Note (korrigiertes Audit) | RG-Matching, stabile Skalarhistorie, Hu–Sawicki Profil | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
+| [**Dunkle Energie**](fst-cosmology/dark-energy/) | v1.12 | Korrekturpreprint; nur reduzierter Modellkern | Dichteidentifikation, RG-Matching, Skalarhistorie, Screening und offizielle Likelihood offen | [10.5281/zenodo.19036235](https://doi.org/10.5281/zenodo.19036235) |
 
 ### FST-Biologie
 
