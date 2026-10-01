@@ -1,8 +1,8 @@
-# Beal Height Dominance — corrective v1.1 candidate
+# Beal Height Dominance — published corrective v1.1
 
 *A Conditional Height-Dominance Architecture for Beal’s Conjecture: A Zookeeper-Style Reduction with a Power-Residue Sieve Companion*
 
-This curated companion contains manuscript sources and historical numerical diagnostics. The published predecessor is [Zenodo v1.0](https://doi.org/10.5281/zenodo.21916518); the [concept DOI](https://doi.org/10.5281/zenodo.21916517) follows subsequent versions. The corrective v1.1 record is pending until a verified DOI is recorded here.
+This curated companion contains manuscript sources and historical numerical diagnostics. The published predecessor is [Zenodo v1.0](https://doi.org/10.5281/zenodo.21916518); the [concept DOI](https://doi.org/10.5281/zenodo.21916517) follows subsequent versions. The corrective [v1.1 record](https://zenodo.org/records/23091637) is published (DOI [10.5281/zenodo.23091637](https://doi.org/10.5281/zenodo.23091637)). Both public PDF downloads were checked against the manuscript hashes; the description, latest-version link and DataCite DOI identity were verified.
 
 The Beal conjecture and the HD3′ arithmetic bridge remain open. Elementary normalizations, formal asymptotic sieve inputs, historical finite diagnostics, conditional reductions, and source-reported external results have distinct scopes. Local residue passes do not establish a global root, a common divisor, statistical significance, or a numerical height threshold. The proposed exponential bound on cumulative positive exact counts is of Beal strength and remains unproved.
 
