@@ -6,7 +6,8 @@
 [![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
 [![Version](https://img.shields.io/badge/Version-1.0.6-blue.svg)](pyproject.toml)
 [![CI](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml/badge.svg)](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml)
-[![Test Suite](https://img.shields.io/badge/Tests-128%2B%20Bestanden-brightgreen.svg)](tests/)
+[![Mitwirken](https://img.shields.io/badge/Mitwirken-Leitfaden-blue.svg)](CONTRIBUTING.md)
+[![Test Suite](https://img.shields.io/badge/Tests-146%2B%20Bestanden-brightgreen.svg)](tests/)
 [![Python: 3.10--3.13](https://img.shields.io/badge/Python-3.10--3.13-blue.svg)](pyproject.toml)
 [![Plattform: Windows | Linux | macOS](https://img.shields.io/badge/Plattform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](pyproject.toml)
 [![Zero-Egress](https://img.shields.io/badge/Netzwerk-100%25%20Offline%20%2F%20Zero--Egress-success.svg)](SECURITY.md)
@@ -19,9 +20,10 @@
 [![Ökosystem: research-line](https://img.shields.io/badge/%C3%96kosystem-research--line-blue.svg)](https://github.com/research-line)
 [![Dachorganisation: open-bricks](https://img.shields.io/badge/Dachorganisation-open--bricks-purple.svg)](https://github.com/open-bricks)
 [![Drittanbieter-Lizenzen](https://img.shields.io/badge/Drittanbieter--Lizenzen-Gepr%C3%BCft-brightgreen.svg)](THIRD_PARTY_LICENSES.md)
+[![Level 1 SBOM Text](https://img.shields.io/badge/SBOM-Level_1_Text-informational.svg)](THIRD_PARTY_LICENSES.txt)
 [![Marketing-Log](https://img.shields.io/badge/Marketing--Log-Aktiv-blue.svg)](MARKETING-LOG.txt)
 [![LLM Kontext](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
-[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--09--26-informational.svg)](MARKETING-LOG.txt)
+[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--10--03-informational.svg)](MARKETING-LOG.txt)
 
 > [!NOTE]
 > **KI- / LLM-Integration & Maschinenlesbarer Kontext**: Ein maschinenlesbarer Index für LLMs, Suchmaschinen und automatisierte Crawler wird in [`llms.txt`](llms.txt) gepflegt. Er enthält Gültigkeitsgrenzen, Suchbegriffe, Konzept-DOIs und Abgrenzungshinweise. Lokale Discoverability-Logs werden in [`MARKETING-LOG.txt`](MARKETING-LOG.txt) geführt.
@@ -527,14 +529,14 @@ Der folgende invariantenbasierte Benchmark stellt das Rahmenwerk der Funktionell
 | [`scipy`](https://github.com/scipy/scipy) (optional) | BSD-3-Clause | Numerische Integration und ODE/PDE-Löser | Geprüft / Permissiv |
 | Entwicklungswerkzeuge (`pytest`, `ruff`, `setuptools`) | MIT / Apache-2.0 | Vertragstests, statische Analyse & Paketierung | Geprüft / Permissiv |
 
-Das vollständige Software-Inventar, autoritative Lizenztexte und Details zur Invarianten-Einhaltung finden sich in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
+Das vollständige Software-Inventar, autoritative Lizenztexte und Details zur Invarianten-Einhaltung finden sich in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md). Eine bitgenaue, maschinenlesbare Text-Begleitdatei der Level 1 SBOM steht unter [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt) bereit.
 
 <a id="security-policy--statutory-notice"></a>
 <a id="sicherheitsrichtlinie--gesetzlicher-haftungsausschluss"></a>
 ## Sicherheitsrichtlinie, Autor & Gesetzlicher Haftungsausschluss
 
 ### Sicherheits- & Schwachstellenrichtlinie
-`functional-stability-theory` erzwingt eine strikte Zero-Egress-Richtlinie und einen formalen Prozess zur koordinierten Offenlegung von Sicherheitslücken. Schwachstellenmeldungen erhalten eine Eingangsbestätigung binnen 48 Stunden und eine formale Triage innerhalb von 5 Werktagen. Kontakt: `security@open-bricks.org` oder `support@lukasgeiger.com`. Vollständige Richtlinie siehe [`SECURITY.md`](SECURITY.md).
+`functional-stability-theory` erzwingt eine strikte Zero-Egress-Richtlinie und einen formalen Prozess zur koordinierten Offenlegung von Sicherheitslücken. Schwachstellenmeldungen erhalten eine Eingangsbestätigung binnen 48 Stunden und eine formale Triage innerhalb von 5 Werktagen. Kontakt: `security@open-bricks.org` oder `support@lukasgeiger.com`. Vollständige Richtlinie siehe [`SECURITY.md`](SECURITY.md). Entwickler-Leitlinien, der lokale Plan-D-Workflow und Governance-Invarianten sind in [`CONTRIBUTING.md`](CONTRIBUTING.md) dokumentiert.
 
 ### Autor & Urheberangaben
 - **Autor:** Lukas Geiger

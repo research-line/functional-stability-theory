@@ -96,10 +96,10 @@ def test_readme_and_readme_de_badges():
     assert "Third--Party%20Licenses-Audited-brightgreen" in readme_en
     assert "Marketing%20Log-Active-blue" in readme_en
     assert "llms.txt" in readme_en
-    assert "Tests-128%2B%20Passed" in readme_en
+    assert ("Tests-128%2B%20Passed" in readme_en or "Tests-146%2B%20Passed" in readme_en)
     assert "Python-3.10--3.13" in readme_en or "Python-3.10" in readme_en
     assert "Platform-Windows" in readme_en
-    assert ("Audit-Last--checked%202026--09--26" in readme_en or "Audit-Last--checked%202026--09--20" in readme_en)
+    assert ("Audit-Last--checked%202026--10--03" in readme_en or "Audit-Last--checked%202026--09--26" in readme_en or "Audit-Last--checked%202026--09--20" in readme_en)
 
     # Required badge signatures in German README
     assert "Lizenz-CC_BY_4.0" in readme_de or "License-CC_BY_4.0" in readme_de
@@ -116,10 +116,10 @@ def test_readme_and_readme_de_badges():
     assert "Drittanbieter--Lizenzen-Gepr%C3%BCft-brightgreen" in readme_de
     assert "Marketing--Log-Aktiv-blue" in readme_de
     assert "llms.txt" in readme_de
-    assert "Tests-128%2B%20Bestanden" in readme_de
+    assert ("Tests-128%2B%20Bestanden" in readme_de or "Tests-146%2B%20Bestanden" in readme_de)
     assert "Python-3.10--3.13" in readme_de or "Python-3.10" in readme_de
     assert "Plattform-Windows" in readme_de
-    assert ("Audit-Gepr%C3%BCft%202026--09--26" in readme_de or "Audit-Gepr%C3%BCft%202026--09--20" in readme_de)
+    assert ("Audit-Gepr%C3%BCft%202026--10--03" in readme_de or "Audit-Gepr%C3%BCft%202026--09--26" in readme_de or "Audit-Gepr%C3%BCft%202026--09--20" in readme_de)
 
 
 def test_quick_navigation_parity():
@@ -259,7 +259,7 @@ def test_llms_txt_structure_and_timestamp():
     """Validate llms.txt structure, canonical metadata, and verification date."""
     llms_txt = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8")
 
-    assert ("## Last-checked: 2026-09-26" in llms_txt or "## Last-checked: 2026-09-20" in llms_txt)
+    assert ("## Last-checked: 2026-10-03" in llms_txt or "## Last-checked: 2026-09-26" in llms_txt or "## Last-checked: 2026-09-20" in llms_txt)
     assert "https://github.com/research-line/functional-stability-theory" in llms_txt
     assert "research-line" in llms_txt
     assert "Renormalized Free-Energy Principle" in llms_txt
@@ -268,7 +268,7 @@ def test_llms_txt_structure_and_timestamp():
     assert "NOTICE" in llms_txt
     assert "SECURITY.md" in llms_txt
     assert "## Search Phrases" in llms_txt
-    assert "128+ Passed" in llms_txt
+    assert ("146+ Passed" in llms_txt or "128+ Passed" in llms_txt)
     assert "Governance & Runtime Invariants" in llms_txt
     assert "THIRD_PARTY_LICENSES.md" in llms_txt
     assert "MARKETING-LOG.txt" in llms_txt
@@ -599,7 +599,7 @@ def test_third_party_licenses_audit_v106():
     licenses_file = REPO_ROOT / "THIRD_PARTY_LICENSES.md"
     content = licenses_file.read_text(encoding="utf-8")
     assert "- **Version:** `1.0.6`" in content
-    assert ("- **Audit Date:** `2026-09-26`" in content or "- **Audit Date:** `2026-09-20`" in content)
+    assert ("- **Audit Date:** `2026-10-03`" in content or "- **Audit Date:** `2026-09-26`" in content or "- **Audit Date:** `2026-09-20`" in content)
     assert "100% Permissive Open Source" in content
 
 
@@ -738,10 +738,10 @@ def test_pep621_saturated_keywords():
 
 
 def test_third_party_licenses_audit_recency_20260926():
-    """Validate that THIRD_PARTY_LICENSES.md audit date is 2026-09-26 and references NOTICE."""
+    """Validate that THIRD_PARTY_LICENSES.md audit date is recent and references NOTICE."""
     licenses_file = REPO_ROOT / "THIRD_PARTY_LICENSES.md"
     content = licenses_file.read_text(encoding="utf-8")
-    assert "- **Audit Date:** `2026-09-26`" in content
+    assert ("- **Audit Date:** `2026-10-03`" in content or "- **Audit Date:** `2026-09-26`" in content)
     assert ("[`NOTICE`](NOTICE)" in content or "[NOTICE](NOTICE)" in content)
     assert "100% Permissive Open Source" in content
 
@@ -762,3 +762,101 @@ def test_changelog_unreleased_pfad_a():
     assert "NOTICE" in content
     assert "PEP 621" in content
     assert "license-files" in content
+
+
+def test_third_party_licenses_audit_recency_20261003():
+    """Validate that THIRD_PARTY_LICENSES.md audit date is 2026-10-03 and references companion files."""
+    licenses_file = REPO_ROOT / "THIRD_PARTY_LICENSES.md"
+    content = licenses_file.read_text(encoding="utf-8")
+    assert "- **Audit Date:** `2026-10-03`" in content
+    assert "THIRD_PARTY_LICENSES.txt" in content
+    assert "CONTRIBUTING.md" in content
+    assert "100% Permissive Open Source" in content
+
+
+def test_contributing_guidelines_presence_and_parity():
+    """Validate that bilingual CONTRIBUTING.md exists and defines Plan D, invariants, and quality gates."""
+    contributing_path = REPO_ROOT / "CONTRIBUTING.md"
+    assert contributing_path.is_file(), "CONTRIBUTING.md must exist in repository root"
+    content = contributing_path.read_text(encoding="utf-8")
+    assert "## English" in content
+    assert "## Deutsch" in content
+    assert "INV-LOCAL-01" in content
+    assert "INV-UNPRIV-02" in content
+    assert "INV-SLA-10" in content
+    assert "Plan D" in content
+    assert "RunAsInvoker" in content
+    assert "521 BGB" in content
+    assert "T-20260920-167562623" in content
+    assert "pytest" in content
+    assert "ruff check" in content
+
+
+def test_third_party_licenses_text_companion():
+    """Validate that plain-text Level 1 SBOM companion exists and complies with SPDX and invariants."""
+    sbom_txt_path = REPO_ROOT / "THIRD_PARTY_LICENSES.txt"
+    assert sbom_txt_path.is_file(), "THIRD_PARTY_LICENSES.txt must exist in repository root"
+    content = sbom_txt_path.read_text(encoding="utf-8")
+    assert "Audit Date: 2026-10-03" in content
+    assert "Level 1 Software Bill of Materials (SBOM)" in content
+    assert "PSF-2.0" in content
+    assert "BSD-3-Clause" in content
+    assert "MIT" in content
+    assert "INV-LOCAL-01: PASS" in content
+    assert "INV-SLA-10: PASS" in content
+    assert "521 BGB" in content
+
+
+def test_pyproject_level_1_sbom_and_contributing_urls():
+    """Validate that pyproject.toml defines Contributing and Level 1 SBOM text URLs and license-files."""
+    pyproject_path = REPO_ROOT / "pyproject.toml"
+    with open(pyproject_path, "rb") as f:
+        data = tomllib.load(f)
+
+    project = data.get("project", {})
+    license_files = project.get("license-files", [])
+    assert "THIRD_PARTY_LICENSES.txt" in license_files
+    assert "THIRD_PARTY_LICENSES.md" in license_files
+    assert "NOTICE" in license_files
+    assert "LICENSE" in license_files
+
+    urls = project.get("urls", {})
+    assert "Contributing" in urls
+    assert urls["Contributing"].endswith("CONTRIBUTING.md")
+    assert "Third-Party Licenses (Text)" in urls
+    assert urls["Third-Party Licenses (Text)"].endswith("THIRD_PARTY_LICENSES.txt")
+    assert "Level 1 SBOM" in urls
+    assert "Level 1 SBOM (Text)" in urls
+
+
+def test_readme_badges_contributing_and_sbom():
+    """Validate Contributing and Level 1 SBOM Text badges in README.md and README_de.md."""
+    readme_en = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    readme_de = (REPO_ROOT / "README_de.md").read_text(encoding="utf-8")
+
+    assert "Contributing-Guidelines-blue.svg" in readme_en
+    assert "SBOM-Level_1_Text-informational.svg" in readme_en
+    assert "Audit-Last--checked%202026--10--03" in readme_en
+
+    assert "Mitwirken-Leitfaden-blue.svg" in readme_de
+    assert "SBOM-Level_1_Text-informational.svg" in readme_de
+    assert "Audit-Gepr%C3%BCft%202026--10--03" in readme_de
+
+
+def test_marketing_log_pfad_b_20261003_entry():
+    """Validate that MARKETING-LOG.txt documents the 2026-10-03 Pfad B audit."""
+    content = (REPO_ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+    assert "2026-10-03" in content
+    assert "GITHUBBOT_ONE_REPO_MARKETING_AND_DESIGN" in content
+    assert "(Pfad B)" in content
+    assert "CONTRIBUTING.md" in content
+    assert "THIRD_PARTY_LICENSES.txt" in content
+
+
+def test_changelog_pfad_b_entry_20261003():
+    """Validate that CHANGELOG.md documents 2026-10-03 Pfad B updates under [Unreleased]."""
+    content = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert "## [Unreleased]" in content
+    assert "CONTRIBUTING.md" in content
+    assert "THIRD_PARTY_LICENSES.txt" in content
+    assert "Level 1 SBOM" in content

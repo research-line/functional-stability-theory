@@ -6,7 +6,8 @@
 [![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
 [![Version](https://img.shields.io/badge/version-1.0.6-blue.svg)](pyproject.toml)
 [![CI](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml/badge.svg)](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml)
-[![Test Suite](https://img.shields.io/badge/Tests-128%2B%20Passed-brightgreen.svg)](tests/)
+[![Contributing](https://img.shields.io/badge/Contributing-Guidelines-blue.svg)](CONTRIBUTING.md)
+[![Test Suite](https://img.shields.io/badge/Tests-146%2B%20Passed-brightgreen.svg)](tests/)
 [![Python: 3.10--3.13](https://img.shields.io/badge/Python-3.10--3.13-blue.svg)](pyproject.toml)
 [![Platform: Windows | Linux | macOS](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](pyproject.toml)
 [![Zero-Egress](https://img.shields.io/badge/Network-100%25%20Offline%20%2F%20Zero--Egress-success.svg)](SECURITY.md)
@@ -19,9 +20,10 @@
 [![Ecosystem: research-line](https://img.shields.io/badge/Ecosystem-research--line-blue.svg)](https://github.com/research-line)
 [![Umbrella: open-bricks](https://img.shields.io/badge/Umbrella-open--bricks-purple.svg)](https://github.com/open-bricks)
 [![Third-Party Licenses](https://img.shields.io/badge/Third--Party%20Licenses-Audited-brightgreen.svg)](THIRD_PARTY_LICENSES.md)
+[![Level 1 SBOM Text](https://img.shields.io/badge/SBOM-Level_1_Text-informational.svg)](THIRD_PARTY_LICENSES.txt)
 [![Marketing Log](https://img.shields.io/badge/Marketing%20Log-Active-blue.svg)](MARKETING-LOG.txt)
 [![LLM Context](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
-[![Audit](https://img.shields.io/badge/Audit-Last--checked%202026--09--26-informational.svg)](MARKETING-LOG.txt)
+[![Audit](https://img.shields.io/badge/Audit-Last--checked%202026--10--03-informational.svg)](MARKETING-LOG.txt)
 
 > [!NOTE]
 > **AI / LLM Integration & Machine-Readable Context**: A machine-readable index for LLMs, search engines, and automated crawlers is maintained in [`llms.txt`](llms.txt). It provides scope boundaries, search phrases, Concept-DOIs, and claim-level disambiguation notes. Local discoverability logs are tracked in [`MARKETING-LOG.txt`](MARKETING-LOG.txt).
@@ -530,14 +532,14 @@ The following invariant-mapped benchmark contrasts the Functional Stability Theo
 | [`scipy`](https://github.com/scipy/scipy) (optional) | BSD-3-Clause | Numerical integration and ODE/PDE solvers | Audited / Permissive |
 | Development Tools (`pytest`, `ruff`, `setuptools`) | MIT / Apache-2.0 | Contract testing, static linting & build packaging | Audited / Permissive |
 
-For the complete software inventory, authoritative license texts, and invariant compliance details, see [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
+For the complete software inventory, authoritative license texts, and invariant compliance details, see [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md). A bit-accurate, machine-readable plain-text Level 1 SBOM companion is available at [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt).
 
 <a id="security-policy--statutory-notice"></a>
 <a id="sicherheitsrichtlinie--gesetzlicher-haftungsausschluss"></a>
 ## Security Policy, Author & Statutory Notice
 
 ### Security & Vulnerability Disclosure
-`functional-stability-theory` enforces a strict zero-egress policy and a formal coordinated vulnerability disclosure workflow. Vulnerability reports receive initial acknowledgment within 48 hours and formal triage within 5 business days. Contact: `security@open-bricks.org` or `support@lukasgeiger.com`. See [`SECURITY.md`](SECURITY.md) for full policy details.
+`functional-stability-theory` enforces a strict zero-egress policy and a formal coordinated vulnerability disclosure workflow. Vulnerability reports receive initial acknowledgment within 48 hours and formal triage within 5 business days. Contact: `security@open-bricks.org` or `support@lukasgeiger.com`. See [`SECURITY.md`](SECURITY.md) for full policy details. For developer guidelines, Plan D local development workflow, and governance invariants, see [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ### Author & Attribution
 - **Author:** Lukas Geiger

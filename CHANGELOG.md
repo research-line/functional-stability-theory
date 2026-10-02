@@ -5,6 +5,12 @@ All notable changes to the Functional Stability Theory (FST) repository will be 
 ## [Unreleased]
 
 ### Added
+- Bilingual [`CONTRIBUTING.md`](CONTRIBUTING.md) developer guidelines formalizing all 10 Governance and Research Invariants (`INV-LOCAL-01` to `INV-SLA-10`), Plan D local clone development workflow (`C:\_Local_DEV\repos\functional-stability-theory`), unprivileged `RunAsInvoker` user-mode execution, strict version-freeze discipline (`T-20260920-167562623`), § 521 BGB statutory liability waiver, and 48-hour security response SLA.
+- Level 1 SBOM plain-text companion [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt) Stand 2026-10-03 with comprehensive runtime, scientific, and testing component inventory, zero-copyleft certification, and invariant compliance ledger.
+- Standardized PEP 621 metadata URLs in `pyproject.toml` registering `Contributing`, `Third-Party Licenses (Text)`, `Level 1 SBOM`, `Level 1 SBOM (Text)`, and `Plain-Text License`, and added `THIRD_PARTY_LICENSES.txt` to `license-files` whitelist.
+- Shields.io badges in `README.md` and `README_de.md` for Contributing Guidelines (`Contributing-Guidelines-blue.svg` / `Mitwirken-Leitfaden-blue.svg`), Level 1 SBOM Plain Text (`SBOM-Level_1_Text-informational.svg`), updated test suite count (`Tests-146+-Passed`), and refreshed audit timestamp (`2026-10-03`).
+- Documented turnus Pfad B Discoverability, Level 1 SBOM text companion, and bilingual developer guidelines in `MARKETING-LOG.txt`.
+- Expanded automated metadata contract test suite in `tests/test_metadata.py` asserting `CONTRIBUTING.md` presence and bilingual parity, `THIRD_PARTY_LICENSES.txt` structure, PEP 621 SBOM and Contributing URLs, badge parity, and audit currency (`2026-10-03`).
 - Canonical [`NOTICE`](NOTICE) attribution file formalizing copyright Lukas Geiger, research-line parent organization, and open-bricks umbrella under CC-BY-4.0.
 - Standardized PEP 621 metadata in `pyproject.toml`:
   - Saturated 20/20 `keywords` in exact parity with GitHub repository topics.
@@ -22,6 +28,9 @@ All notable changes to the Functional Stability Theory (FST) repository will be 
 - Synchronized ASCII Proof Architecture overview (Section 10), Independent Foundations (Section 11), and Repository Structure directory tree (Section 13) in `README_de.md`.
 
 ### Changed
+- Re-audited `THIRD_PARTY_LICENSES.md` to `2026-10-03` with cross-reference to plain-text Level 1 SBOM companion [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt) and developer guidelines [`CONTRIBUTING.md`](CONTRIBUTING.md).
+- Updated `llms.txt` verification timestamp to `2026-10-03` with 146+ passed tests baseline and links to `CONTRIBUTING.md` and `THIRD_PARTY_LICENSES.txt`.
+- Synchronized Shields.io badges in `README.md` and `README_de.md` (`Contributing Guidelines` / `Mitwirken-Leitfaden`, `Level 1 SBOM Text`, `Tests 146+ Passed` / `146+ Bestanden`, `Last-checked 2026-10-03` / `Geprüft 2026-10-03`).
 - Synchronized Turbulence Cascade companion paper artifacts in `fst-physics/turbulence/` (v1.8 maintenance release: isolated 3-page frontmatter architecture with table of contents on separate page, full bibliography Underfull/Badness-10000 elimination via `xurl` and `\doilink`, standardized bilingual AI disclosures `ai_disclosure_STANDARD_{en,de}.tex`, and verified 71-page combined bilingual PDF compilation; 35 pages EN, 36 pages DE, 71 pages kombi PDF; 0 replacement characters).
 - Synchronized BSD Positivity domain supplement artifacts in `fst-mathematics/bsd/` (v1.5 maintenance release: 3-page frontmatter architecture, Chicago/APA title casing, author-pair en-dash typography, comprehensive RevTeX 4-2 table hardening across Tables 1–8, and 4-tier TikZ vector architecture schema `fig:bsd_architecture`; 29 pages EN, 31 pages DE, 60 pages kombi PDF; 0 replacement characters).
 - Added automated contract unit test suite `tests/test_compute_bsd.py` covering BSD formula verification across 4 reference curves, regulator positivity (Axiom II), and Cremona database rank-2 regulator sampling.
