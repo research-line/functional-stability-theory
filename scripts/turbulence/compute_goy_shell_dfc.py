@@ -6,10 +6,15 @@ Turbulenz: Schalenmodell-DFC-Verifikation.
 Verwendet ein IMEX-Schema (implizite Dissipation, explizite Nichtlinearitaet)
 fuer das Sabra-Schalenmodell (L'vov, Podivilov, Pomyalov, Procaccia, Vandembroucq 1998):
 
-  du_n/dt = i*(k_n * u_{n+1}^* * u_{n+2}  [forward cascade]
-            - (1/2)*k_{n-1} * u_{n+1}^* * u_{n-1}  [local interaction]
-            - (1/4)*k_{n-2} * u_{n-1} * u_{n-2})    [backward cascade]
+  du_n/dt = i*(k_n * conj(u_{n+1}) * u_{n+2}  [forward cascade]
+            - (1/2)*k_{n-1} * u_{n+1} * conj(u_{n-1})  [local interaction]
+            + (1/2)*k_{n-2} * u_{n-1} * u_{n-2})    [backward cascade]
             - nu * k_n^2 * u_n + f * delta_{n,n_f}
+
+  (fixed 2026-10-03, Issue #1/48448f5: corrects the conjugation on the
+  local term and the backward-term coefficient (-1/4 -> +1/2); see
+  ``sabra_nonlinear`` below for the full derivation and the
+  energy-conservation condition a+b+c=0.)
 
 Sabra-Modell ist numerisch stabiler als GOY (gleiche Physik).
 

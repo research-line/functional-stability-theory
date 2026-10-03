@@ -43,7 +43,6 @@ of the closed form tested here), and checks that:
      module docstring, "Index convention vs. the primary source").
 """
 
-import importlib.util
 import sys
 from pathlib import Path
 
@@ -79,6 +78,31 @@ def goy_sabra_nonlinear():
     def wrapped(u, k_n):
         ns["k_n"] = k_n  # closes over module-level k_n
         return sabra_nonlinear(u)
+
+    return wrapped
+
+
+@pytest.fixture()
+def ledger_sabra_nonlinear():
+    """The CORRECTED sabra_nonlinear from
+    compute_shell_dfc_waterline_ledger.py (post commit 48448f5) -- the
+    OTHER actual production function, alongside goy_sabra_nonlinear.
+    Required by the 2026-10-03 Endabnahme (A3): dynamics/flux invariants
+    must be anchored to BOTH shipped production functions, not only to
+    the GOY script or to a helper reimplementation such as
+    ``_paper_literal_nonlinear``. Unlike the GOY version, this function
+    takes ``k`` as an explicit argument but still closes over the
+    module-level ``N_SHELLS`` for its slice bounds."""
+    ns = {"np": np}
+    func_src = _extract_function_source(
+        "compute_shell_dfc_waterline_ledger.py", "sabra_nonlinear"
+    )
+    exec(func_src, ns)  # noqa: S102 -- controlled, repo-local source extraction
+    sabra_nonlinear = ns["sabra_nonlinear"]
+
+    def wrapped(u, k_n):
+        ns["N_SHELLS"] = len(u)  # closes over module-level N_SHELLS
+        return sabra_nonlinear(u, k_n)
 
     return wrapped
 
@@ -299,7 +323,13 @@ def test_system_boundary_fluxes_are_zero(goy_sabra_nonlinear, N):
     dE/dt must vanish -- global energy conservation of the nonlinear term,
     independent of this test file; see test_sabra_energy_conservation.py).
     Neither condition says anything about Pi_0, Pi_{N-2}, or any other
-    *interior* Pi_n -- both are checked (non-tautologically) elsewhere."""
+    *interior* Pi_n -- those are checked elsewhere. NOTE (Endabnahme
+    2026-10-03, A3): check (a) below is a DEFINITIONAL/structural fact
+    about an empty prefix sum, not an independent measurement -- it is
+    recorded for documentation, not claimed as a correctness test. Check
+    (c) is the genuine flux-anchored last-boundary comparison; it is the
+    one that actually uses the closed-form ``sabra_energy_flux`` output,
+    unlike a bare re-sum of the same per-shell derivatives would."""
     rng = np.random.default_rng(555 + N)
     k_n = _k_of(N)
     u = rng.standard_normal(N) + 1j * rng.standard_normal(N)
@@ -307,10 +337,9 @@ def test_system_boundary_fluxes_are_zero(goy_sabra_nonlinear, N):
     nl = goy_sabra_nonlinear(u, k_n)
     de_dt = 2.0 * np.real(np.conj(u) * nl)
 
-    # (a) flux INTO the system before shell 0: the FULL brute-force
-    #     cumulative definition at "shell -1" is empty/zero by
-    #     construction (there is nothing to sum over before shell 0) --
-    #     checked via the empty-prefix sum, not a bare literal 0.0==0.0.
+    # (a) flux INTO the system before shell 0: there is nothing to sum
+    #     over before shell 0 -- this is definitional (an empty sum is
+    #     0.0 by construction), not a physical measurement.
     empty_prefix_sum = float(np.sum(de_dt[:0]))
     assert empty_prefix_sum == 0.0
 
@@ -326,12 +355,21 @@ def test_system_boundary_fluxes_are_zero(goy_sabra_nonlinear, N):
         f"(no flux can leave the system past the last shell)"
     )
 
-    # Cross-check: the closed-form Pi's last entry plus the last shell's
-    # own dE/dt must telescope down to exactly this total (Pi_{N-1}=0).
+    # (c) Real last-boundary cross-check that actually USES the closed-form
+    #     flux (fixes the previous tautological re-sum flagged by the
+    #     2026-10-03 Endabnahme, A3): with the telescoping identity
+    #     T_{N-1} = Pi_{N-2} - Pi_{N-1} and the structural Pi_{N-1}=0, the
+    #     quantity -Pi_{N-2} + T_{N-1} must equal the independently
+    #     measured sum_n T_n (= total_de_dt from (b)) -- this genuinely
+    #     depends on sabra_energy_flux's last returned entry, Pi_{N-2}.
     pi = sabra_energy_flux(u, k_n)
-    reconstructed_total = float(np.sum(de_dt[:-1]) + de_dt[-1])
-    assert abs(reconstructed_total - total_de_dt) < 1e-9 * max(
+    last_shell_de_dt = de_dt[-1]
+    flux_anchored_boundary_check = -pi[-1] + last_shell_de_dt
+    assert abs(flux_anchored_boundary_check - total_de_dt) < 1e-9 * max(
         1.0, abs(total_de_dt)
+    ), (
+        f"N={N}: -Pi_{{N-2}}+T_{{N-1}}={flux_anchored_boundary_check} "
+        f"should equal sum_n T_n={total_de_dt}"
     )
     assert pi.shape[0] == N - 1, f"N={N}: expected {N - 1} inner boundaries, got {pi.shape[0]}"
 
@@ -395,9 +433,43 @@ def test_h_invariant_catches_energy_conserving_wrong_coefficients(N):
     )
 
 
+@pytest.mark.parametrize("N", [5, 10, 22])
+@pytest.mark.parametrize(
+    "fixture_name", ["goy_sabra_nonlinear", "ledger_sabra_nonlinear"]
+)
+def test_h_invariant_conserved_by_production_functions(request, fixture_name, N):
+    """Endabnahme requirement (2026-10-03, A3): anchor the H-invariant
+    check to BOTH actual shipped production functions, not only to the
+    helper ``_paper_literal_nonlinear`` used by
+    ``test_h_invariant_catches_energy_conserving_wrong_coefficients``
+    above. H = sum_n (-2)^n |u_n|^2 must be conserved (dH/dt=0) by the
+    real ``sabra_nonlinear`` of both compute_goy_shell_dfc.py and
+    compute_shell_dfc_waterline_ledger.py for the standard model
+    (a,b,c)=(1,-1/2,-1/2). This is the regression anchor: a coefficient
+    mutation in either production function (e.g. -0.5->-0.3,
+    +0.5->+0.7 -- the same energy-conserving but H-violating triple as
+    the negative control above) must turn this test red for the mutated
+    fixture while leaving the other one green."""
+    nonlinear = request.getfixturevalue(fixture_name)
+    k_n = _k_of(N)
+    rng = np.random.default_rng(42 + N)
+    u = rng.standard_normal(N) + 1j * rng.standard_normal(N)
+    weights = (-2.0) ** np.arange(N)
+
+    nl = nonlinear(u, k_n)
+    dH = float(np.sum(weights * 2.0 * np.real(np.conj(u) * nl)))
+    assert abs(dH) < 1e-9 * max(1.0, np.sum(np.abs(u) ** 2) * 2.0 ** N), (
+        f"{fixture_name}, N={N}: dH/dt={dH} for the production "
+        f"nonlinearity, expected ~0"
+    )
+
+
 @pytest.mark.parametrize("N", [3, 5, 8, 15])
+@pytest.mark.parametrize(
+    "fixture_name", ["goy_sabra_nonlinear", "ledger_sabra_nonlinear"]
+)
 def test_literal_eq21_transcription_matches_code_under_k_over_lambda(
-    goy_sabra_nonlinear, N
+    request, fixture_name, N
 ):
     """Direct check (requested by independent review, 2026-10-03) of the
     code's sabra_nonlinear against a LITERAL, line-by-line transcription
@@ -405,17 +477,20 @@ def test_literal_eq21_transcription_matches_code_under_k_over_lambda(
     (k_{n+1}, k_n, k_{n-1}) index convention. Per sabra_flux.py's module
     docstring ("Index convention vs. the primary source"), the code
     convention (k_n, k_{n-1}, k_{n-2}) is equivalent to the paper form
-    evaluated at k -> k/LAM (LAM=2 here, geometric k_n=K0*LAM^n)."""
+    evaluated at k -> k/LAM (LAM=2 here, geometric k_n=K0*LAM^n).
+    Endabnahme requirement (2026-10-03, A3): run against BOTH actual
+    production functions (``fixture_name``), not only the GOY script."""
+    code_nonlinear = request.getfixturevalue(fixture_name)
     lam = 2.0
     k_n = (2.0 ** -4) * lam ** np.arange(N, dtype=float)
     rng = np.random.default_rng(1234 + N)
     u = rng.standard_normal(N) + 1j * rng.standard_normal(N)
 
-    code_nl = goy_sabra_nonlinear(u, k_n)
+    code_nl = code_nonlinear(u, k_n)
     paper_nl_over_lambda = _paper_literal_nonlinear(u, k_n / lam, a=1.0, b=-0.5, c=-0.5)
 
     assert np.allclose(code_nl, paper_nl_over_lambda, atol=1e-9, rtol=1e-7), (
-        f"N={N}: code sabra_nonlinear does not match the literal Eq. (21) "
-        f"transcription under k -> k/LAM "
+        f"{fixture_name}, N={N}: code sabra_nonlinear does not match the "
+        f"literal Eq. (21) transcription under k -> k/LAM "
         f"(max diff {np.max(np.abs(code_nl - paper_nl_over_lambda)):.3e})"
     )

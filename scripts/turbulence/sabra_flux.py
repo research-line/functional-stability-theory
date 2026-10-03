@@ -44,7 +44,8 @@ quadratic nonlinear term). The inviscid energy-conservation condition
 a+b+c=0 is unaffected by this rescaling (it is a statement about the
 nonlinear term alone), but any nu/f value quoted elsewhere (e.g. a
 docstring saying "nu=1e-7") is this *code*-convention nu, which equals
-LAM times the nu one would plug into the literal Eq. (21) form. This
+1/LAM times the nu one would plug into the literal Eq. (21) form (i.e.
+nu_code = nu_eff / LAM, consistent with nu_eff = LAM*nu_code above). This
 matches the independent review's finding (section 1.5 of the review
 note above); it does not change any already-verified energy-conservation
 result in this module.
