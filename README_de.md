@@ -90,15 +90,17 @@ Bei Zitierungen bevorzugen Sie bitte die unten angegebenen Konzept-DOIs für Arb
 <a id="die-fuenf-master-arbeiten"></a>
 ## Die Fünf Master-Arbeiten
 
-Das Programm stützt sich auf fünf zentrale Master-Fundamente. Alle DOIs unten sind **Konzept-DOIs**, die stets zur neuesten Version auf Zenodo auflösen.
+Das Programm stützt sich auf fünf zentrale Grundlagenarbeiten. Konzept-DOIs verweisen auf Versionsreihen und führen zur jeweils neuesten Fassung. Für eine feste Zitation verwenden Sie die versionsspezifische DOI des Zenodo-Records.
 
 | Master | Titel | Rolle | Konzept-DOI |
 |--------|-------|-------|-------------|
-| [**Zookeeper**](masters/zookeeper/) | The Spectral Zookeeper | RH-Beweis via CCM-Mikrocluster-Schließung | [10.5281/zenodo.19673126](https://doi.org/10.5281/zenodo.19673126) |
+| [**Zookeeper**](masters/zookeeper/) | The Spectral Zookeeper | Bedingte RH-Reduktion via CCM-Mikrocluster-Schließung | [10.5281/zenodo.19673126](https://doi.org/10.5281/zenodo.19673126) |
 | [**Zeta Zoo**](masters/zeta-zoo/) | The Zeta Zoo — The Mathematical Side of FST | Klassifikation (SGE-Taxonomie, Grenztextsätze) | [10.5281/zenodo.19673226](https://doi.org/10.5281/zenodo.19673226) |
 | [**Spectrum Duality**](masters/spectrum-duality/) | FST Spectrum Duality / RFEP | Physikalische Instanziierung (Muster A, DS1–DS3) | [10.5281/zenodo.19036190](https://doi.org/10.5281/zenodo.19036190) |
 | [**Atlas**](masters/atlas/) | Dirichlet Character Atlas | Mikrokartographie (Galerkin-Diagnostik; negativer Methodentest) | [10.5281/zenodo.19960809](https://doi.org/10.5281/zenodo.19960809) |
 | [**Selberg**](masters/selberg/) | NE-B Failure as Hilbert–Pólya Detection | SGE-YES-Validierung (v2.0 Universalität auf Selberg-Zeta) | [10.5281/zenodo.19962588](https://doi.org/10.5281/zenodo.19962588) |
+
+Zookeeper ist eine bedingte Reduktion, kein unbedingter RH-Beweis. Übernommene CCM-Eingaben sowie die offenen internen Mikrocluster-/Endgame- und Even-Dominance-Annahmen werden im [Paper](masters/zookeeper/paper/RH_Zookeeper_v1_en.tex) beschrieben; siehe den [v1.6-Record](https://zenodo.org/records/21953305).
 
 **Atlas + Selberg bilden das Methoden-Validierungspaar**: Atlas ist der *negative* Test (Galerkin-Diagnostik führender Ordnung reicht für Dirichlet-Charaktere nicht aus), Selberg ist der *positive* Test (v2.0 reproduziert ein klassisches Operatorergebnis für Selberg-Zeta).
 
@@ -122,8 +124,8 @@ Leiten Muster A + DS1–DS3 aus der Spektraldualität ab. Diese instanziieren da
 
 | Arbeit | Version | Status | Offenes Problem | Konzept-DOI |
 |--------|---------|--------|-----------------|-------------|
-| [**K41 Variational Minimiser**](fst-physics/k41-variational-minimiser/README.md) | v1.3 | Aktueller Live-Preprint; eindeutiger Minimierer | Geltungsbereich jenseits der Modellannahmen | [10.5281/zenodo.20131305](https://doi.org/10.5281/zenodo.20131305) |
-| [**Turbulenz / DFC Kaskade**](fst-physics/turbulence/README.md) | v1.8 | Konditionaler Begleiter; DFC-Hierarchie ist Input | DFC-Projektionsbrücke | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
+| [**K41 Variational Minimiser**](fst-physics/k41-variational-minimiser/README.md) | v1.3 | Eindeutiger Energieminimierer innerhalb des formulierten K41-normalisierten gemeinsamen Variationsproblems | Geltungsbereich jenseits der Modellannahmen | [10.5281/zenodo.20131305](https://doi.org/10.5281/zenodo.20131305) |
+| [**Turbulenz / DFC Kaskade**](fst-physics/turbulence/README.md) | v1.8 | Bedingte Ergänzung; die DFC-Hierarchie ist eine Eingabe. Sabra-Ergebnisse aus v1.8 stehen nach [Issue #1](https://github.com/research-line/functional-stability-theory/issues/1) unter Prüfung; Neuberechnungen mit korrigiertem Fluss sind noch nicht berichtet | DFC-Projektionsbrücke | [10.5281/zenodo.19056813](https://doi.org/10.5281/zenodo.19056813) |
 | [**Yang–Mills**](fst-physics/yang-mills/README.md) | v2.6 | Konditional; Kontinuums-Massengap-Schritt bleibt konditional | Volumenunabhängige lokale Transferlücke; analytische RG-Kontraktion | [10.5281/zenodo.19087433](https://doi.org/10.5281/zenodo.19087433) |
 | [**Navier–Stokes**](fst-physics/navier-stokes/README.md) | v2.6 | Konditional; strikte Gutachterformulierung beibehalten | Annahme G2 (Projektionsregularität) | [10.5281/zenodo.19087449](https://doi.org/10.5281/zenodo.19087449) |
 | [**NS Log-Distanz**](fst-physics/navier-stokes/README.md) | v1.6 | Proof of Life / Diagnostische Brücke | TLL für 3D NS analytisch offen | [10.5281/zenodo.19056807](https://doi.org/10.5281/zenodo.19056807) |
@@ -150,15 +152,15 @@ Geplant. Siehe [`fst-chemistry/`](fst-chemistry/).
 
 | Begriff | Bedeutung |
 |---------|-----------|
-| **v2.0** | Im RH-Programm entwickeltes Methodenpaket (Trilogie v2.1, [10.5281/zenodo.19035640](https://doi.org/10.5281/zenodo.19035640)): reduziert RH auf *Even Dominance* der Weil-Quadratform QW_λ via Shift-Parity-Lemma, Frontier-Prime-Dominanz, NE-A und NE-B. |
+| **v2.0** | Methodenpaket des RH-Programms (Trilogie v2.1, [10.5281/zenodo.19035640](https://doi.org/10.5281/zenodo.19035640)): schlägt einen bedingten Reduktionsweg von RH auf Even Dominance der Weil-Quadratform QW_λ vor, mit Shift-Parity, Frontier-Prime-Dominanz, NE-A und NE-B; die erforderlichen Abschlussannahmen bleiben offen. |
 | **NE-A** | *Nicht-Existenz-Satz A.* Der Fourier-Multiplikator des Prim-Shift-Operators A_λ auf der kritischen Geraden ist nicht-positiv — kann nicht als Hilbert–Pólya-Operator dienen. |
-| **NE-B** | *Nicht-Existenz-Satz B.* Kein universeller symmetrischer Operator kommutiert mit allen Shift-Parity-Differenzmatrizen D_N(r) (computergestützter Beweis für N ≤ 15). Schließt zusammen mit NE-A den klassischen Hilbert–Pólya-Weg aus — weshalb v2.0 für Riemann notwendig ist. |
-| **SGE** | *Halbgruppen-Gruppen-Äquivalenz.* Klassifikationsachse des Zeta Zoo: HP-BL-YES (kommutierender Operator existiert, z.B. Selberg/Casimir), HP-BL-NO (Kommutant blockiert, Riemann), HP-BL-OPEN (unentschieden, z.B. Prime-Hub). |
+| **NE-B** | Ergebnis für endliche Trunkierungen: Das computergestützte Resultat schließt nichtskalare symmetrische Operatoren aus, die im getesteten Prime-Shift-Bereich für N ≤ 15 mit jeder Matrix D_N(r) kommutieren; die Identität kommutiert trivialerweise. Die Übertragung auf den vollen Raum bleibt offen. |
+| **SGE** | Halbgruppen-Gruppen-Äquivalenz. Klassifikationsachse des Zeta Zoo: HP-BL-YES (kommutierender Operator vorhanden, z.B. Selberg/Casimir), HP-BL-NO (Riemann-Prime-Shift-Klasse, bedingt durch NE-B-full), HP-BL-OPEN (offen, z.B. Prime-Hub). |
 | **Weil-Quadratform QW_λ** | Abgeschnittene Explizite-Formel-Quadratform, deren Positivität Nullstellenorte steuert. Universal über den gesamten Zeta Zoo; der dahinterliegende Operator ist familienabhängig. |
-| **Hilbert–Pólya** | Vermutung, dass Riemann-Nullstellen Eigenwerte eines selbstadjungierten Operators sind. v2.0 verallgemeinert dies: Wo Hilbert–Pólya funktioniert (SGE-YES), reproduziert v2.0 es; wo es blockiert ist (NE-B / Riemann), greift v2.0 weiterhin. |
+| **Hilbert–Pólya** | Die klassische Vermutung fragt, ob Riemann-Nullstellen Eigenwerte eines selbstadjungierten Operators sind. Das endliche NE-B-Ergebnis betrifft die getestete Prime-Shift-Klasse und schließt nicht jeden möglichen Hilbert–Pólya-Operator aus; der Even-Dominance-Weg ist bedingt. |
 | **Muster A (Pattern A)** | Funktionelle Positivität unter einer Eichbedingung — das universelle Stabilitätsmuster von FST. |
 | **RFEP** | *Renormiertes Freie-Energie-Prinzip.* Mathematisches Kernprinzip von FST; liefert DS1–DS3. |
-| **CCM** | *Connes–Consani–Moscovici.* Fourier-Modell für die Weil-Quadratform im Zookeeper-Beweis. |
+| **CCM** | *Connes–Consani–Moscovici.* Fourier-Modell für die Weil-Quadratform in der bedingten Zookeeper-Reduktion. |
 | **UCU** | *Universelles Konvexitäts-Eindeutigkeitslemma.* Zusammen mit SGE und Weil die Dreiheit der Metaprinzipien des Zeta-Zweigs. |
 
 <a id="proof-architecture"></a>
@@ -168,7 +170,7 @@ Geplant. Siehe [`fst-chemistry/`](fst-chemistry/).
 ```mermaid
 flowchart TD
     subgraph MASTERS["Fünf Master-Fundamente"]
-        ZK["Zookeeper<br/><i>RH-Beweis via CCM</i>"]
+        ZK["Zookeeper<br/><i>Bedingte RH-Reduktion via CCM</i>"]
         ZZ["Zeta Zoo<br/><i>SGE-Taxonomie & Klassifikation</i>"]
         SD["Spectrum Duality<br/><i>RFEP & Muster A</i>"]
         AT["Atlas<br/><i>Dirichlet Cartography (Negativer Test)</i>"]
@@ -275,9 +277,9 @@ Das `functional-stability-theory` Repository erzwingt zehn fundamentale Laufzeit
 | **01** | **100% Local-First & Zero-Egress** | Sämtliche numerischen Diagnosen, Simulationsskripte und Tests laufen vollständig offline. Keine Telemetrie oder Netzwerkaufrufe. | Strikte Offline-Prüfung; CI-Matrix-Isolation |
 | **02** | **Rechtefreie Ausführung (RunAsInvoker)** | Alle Skripte laufen strikt im Standard-Benutzermodus. Administrator- oder Root-Rechte werden niemals angefordert oder benötigt. | Umgebungs-Audit; unprivilegierte Test-Suiten |
 | **03** | **Deterministische Reproduzierbarkeit** | Numerische Assertionen und Verifikationsledger liefern bit-identische Ergebnisse über alle unterstützten Plattformen hinweg. | Pytest-Suite (110+ Tests bestanden); feste Zufallssamen |
-| **04** | **Aussagen-Disambiguierung** | Vollständig bewiesene Theoreme (z.B. CCM-Mikroclusterschließung) sind strikt von konditionalen Brücken und offenen Problemen getrennt. | README-Statustabellen; Preprint-Klassifikationsheader |
+| **04** | **Aussagen-Disambiguierung** | Zookeeper ist eine bedingte RH-Reduktion mit übernommenen Eingaben und offenen internen Abschlussannahmen; der Status wird für jede Arbeit einzeln angegeben. | README-Statustabellen; Preprint-Klassifikationsheader |
 | **05** | **Fail-Closed Ledger-Gatekeeping** | Verifikationsskripte verwerfen zirkuläre, entartete oder schlecht konditionierte Eingaben sofort (Fail-Closed) statt unscharfe Werte zu liefern. | Exception-Assertions; Schlechtskalierungs- und Gribov-Kontrollen |
-| **06** | **Unveränderliche Zenodo-Anker** | Jeder Haupt-Meilenstein, Datensatz und Release-Kandidat ist dauerhaft an eine unveränderliche Zenodo-Konzept-DOI gebunden. | Vertragstests (`tests/test_metadata.py`) |
+| **06** | **Versionierte Zenodo-Records** | Konzept-DOIs verweisen auf Versionsreihen; für feste Zitationen ist die versionsspezifische DOI zu verwenden. | Zenodo-Versionsrecords |
 | **07** | **Multi-OS Plattformparität** | Skripte, LaTeX-Builds und Test-Harnische garantieren identische mathematische Logik auf Windows, Linux und macOS. | GitHub Actions CI Multi-OS Matrix (`ci.yml`) |
 | **08** | **Cloud-Sync-Konflikthärtung** | Repository-Ignorierregeln verhindern Cloud-Sync-Konfliktdateien (`*-conflict-*`, `*.sync-temp-*`) und Multi-Agenten-Locks (`LOCK.*`). | `.gitignore`-Prüfung; automatisierte Vertragstests |
 | **09** | **Transparente Diagnostik-Basis** | Unbedingte Positivkontrollen (z.B. 2D U(1) Charakterentwicklung) sind strikt von unbewiesenen Kontinuums-Transferhypothesen getrennt. | Dedizierte Positiv-/Negativkontroll-Skripte |
@@ -292,7 +294,7 @@ Das `functional-stability-theory` Repository erzwingt zehn fundamentale Laufzeit
    ┌────────────────┬────────────────┬─────────────────┬────────────────┐
    │                │                │                 │                │
 Zookeeper       Zeta Zoo      Spectrum Duality      Atlas           Selberg
-(RH-Beweis)  (Klassifikation)   (Muster A,       (Dirichlet,        (NE-B
+(RH-Red.)    (Klassifikation)   (Muster A,       (Dirichlet,        (NE-B
               SGE / UCU /        DS1–DS3,         negativer          Fehlschlag;
               Weil QW_λ)         RFEP)            Methodentest)      SGE-YES)
    │                │                │                 │                │
@@ -306,7 +308,7 @@ Zookeeper       Zeta Zoo      Spectrum Duality      Atlas           Selberg
    │                                       │   NS-LDI
    │                                      DE
    │
-Status: BEWIESEN (unbedingt, CCM-Route)
+Zookeeper: BEDINGTE RH-REDUKTION (CCM-Route)
 † = Brücken-Spezies (Mathematik + Physik)
 ```
 
@@ -316,7 +318,7 @@ Status: BEWIESEN (unbedingt, CCM-Route)
 FST (Funktionelle Stabilitätstheorie)
 │
 ├── Master-Fundamente
-│   ├── Zookeeper          RH-Beweis (CCM-Mikroclusterschließung)
+│   ├── Zookeeper          Bedingte RH-Reduktion (CCM-Mikroclusterschließung)
 │   ├── Zeta Zoo           Mathematische Klassifikation (SGE-Taxonomie)
 │   ├── Spectrum Duality   Physikalische Instanziierung (RFEP, Muster A)
 │   ├── Atlas              Mikrokartographie Dirichlet (negativer Methodentest)
@@ -332,7 +334,7 @@ FST (Funktionelle Stabilitätstheorie)
 ### Chronologische Entwicklung
 
 ```
-2025/2026  CRM I–IV (Dunkle Energie)   RH "light" Beweis (Even Dominance)
+2025/2026  CRM I–IV (Dunkle Energie)   Bedingte RH-Route (Even Dominance)
            unabhängig entwickelt       unabhängig entwickelt
                  \                       /
                   +---------+---------+
@@ -347,13 +349,13 @@ FST (Funktionelle Stabilitätstheorie)
                             |
                             v
                   Idee: Klassifikation von Zeta-Familien
-                  mit Techniken aus dem RH-Beweis
+                  mit Techniken aus dem RH-Programm
                             |
                   Nicht ausreichend — tiefere Werkzeuge nötig
                             |
                             v
          RH via Connes-Rahmenwerk (CCM)
-         Mikroclusterschließung → unbedingter Beweis
+         Mikroclusterschließung → bedingte Reduktion
                             |
                             v
                   Zeta Zoo öffnet: SGE-Taxonomie
@@ -383,8 +385,8 @@ FST (Funktionelle Stabilitätstheorie)
 
 | Name | Rolle | Konzept-DOI |
 |---|---|---|
-| RH Even Dominance v2.1 (Trilogie, Teil I–III) | Unabhängiger RH-Beweis, zweite Route | [10.5281/zenodo.19035640](https://doi.org/10.5281/zenodo.19035640) |
-| RH Direkter Beweis (Even Dominance) | Direkte Frontier-Dominanz-Route | [10.5281/zenodo.19764771](https://doi.org/10.5281/zenodo.19764771) |
+| RH Even Dominance v2.1 (Trilogie, Teil I–III) | Unabhängige bedingte RH-Reduktion, zweite Route | [10.5281/zenodo.19035640](https://doi.org/10.5281/zenodo.19035640) |
+| RH Direkter Beweis (Even Dominance) | Historischer Titel; bedingte Frontier-Dominanz-Route mit offenen analytischen Annahmen | [10.5281/zenodo.19764771](https://doi.org/10.5281/zenodo.19764771) |
 | CRM Kosmologie (I–V) | Unabhängiges Modell Dunkler Energie | [10.5281/zenodo.18728935](https://doi.org/10.5281/zenodo.18728935) |
 
 Diese stehen unabhängig von FST. Das RFEP wurde aus ihnen abstrahiert; sie sind nicht daraus abgeleitet.
@@ -433,7 +435,7 @@ Diese stehen unabhängig von FST. Das RFEP wurde aus ihnen abstrahiert; sie sind
 ```
 functional-stability-theory/
 ├── masters/                      Fünf CoreCore Master-Fundamente
-│   ├── zookeeper/                RH-Beweis (CCM-Mikroclusterschließung)
+│   ├── zookeeper/                Bedingte RH-Reduktion (CCM-Mikroclusterschließung)
 │   ├── zeta-zoo/                 Klassifikation (SGE-Taxonomie)
 │   ├── spectrum-duality/         Physikalische Axiome (RFEP, Muster A)
 │   ├── atlas/                    Dirichlet-Mikrokartographie (negativer Methodentest)
@@ -443,7 +445,7 @@ functional-stability-theory/
 │   ├── hodge/                    No-Go + einfache Richtung
 │   └── p-vs-np/                  Zeugen-Entropielücke (Reformulierung)
 ├── fst-physics/                  Domänen-Ergänzungen — Physik
-│   ├── k41-variational-minimiser/ K41-Spektrum (unbedingt)
+│   ├── k41-variational-minimiser/ K41-Energieminimum (formuliertes gemeinsames Problem)
 │   ├── turbulence/               DFC / anomale Dissipation Begleiter
 │   ├── yang-mills/               Massengap (konditional)
 │   └── navier-stokes/            Regularität + NS-LDI (konditional)
@@ -488,7 +490,7 @@ functional-stability-theory/
 | Zielgruppe / Persona | Kernfrage & Wissenschaftliche Herausforderung | FST-Lösung & Ansatz | Methodischer Mehrwert |
 |---|---|---|---|
 | **Theoretische Physiker & Quantenfeldtheoretiker** | Suche nach konsistenten, nicht-perturbativen Stabilitätsmechanismen für Yang-Mills Massenlücke, Navier-Stokes Regularität und turbulente Dissipation | Vereinheitlicht dissipative Selektion unter dem Renormierten Freie-Energie-Prinzip (RFEP) und Muster A (Funktionelle Positivität unter Eichbedingung) | Universelle Normalform über Eichtheorie, Hydrodynamik und kosmologisches Screening |
-| **Analytische Zahlentheoretiker & Millennium-Forscher** | Umgehung struktureller No-Go-Theoreme (NE-A/NE-B) bei Operator-Ansätzen zur Riemannschen Vermutung | Führt die SGE-Taxonomie (Zeta Zoo) und v2.0 Even-Dominance der Weil-Quadratform ein; verbindet Zookeeper mit Selberg-Validierung | Streng algebraische Umgehung klassischer Hilbert–Pólya-Obstruktionen ohne Ad-hoc-Regularisierung |
+| **Analytische Zahlentheoretiker & Millennium-Forscher** | Umgehung struktureller No-Go-Theoreme (NE-A/NE-B) bei Operator-Ansätzen zur Riemannschen Vermutung | Führt die SGE-Taxonomie (Zeta Zoo) und v2.0 Even-Dominance der Weil-Quadratform ein; verbindet Zookeeper mit Selberg-Validierung | Bedingter Rahmen mit ausdrücklich offenen analytischen Schritten |
 | **Open-Science Archivare & Reviewer** | Verifikation weitreichender mathematischer Theoreme gegen reproduzierbare, luftspaltfähige Software und unveränderliche Artefakte | Bietet 100% lokale Zero-Egress Validierungsskripte, deterministische CSV/JSON-Ledgers und CERN/Zenodo Konzept-DOIs | Bit-für-Bit verifizierbare Berechnungen mit transparenter Kennzeichnung offener und bewiesener Schritte |
 | **KI-Forschungsagenten & Wissens-Synthesizer** | Disambiguierung spezialisierter mathematischer Stabilitätstheorie von technischer Regelungstechnik (Lyapunov) oder Software-Testsuiten | Bereitstellung strukturierter [`llms.txt`](llms.txt), semantischer Suchphrasen, PEP 621 URLs und expliziter Negativkontrollen | Präzise LLM-Kontextualisierung ohne Halluzinationen oder Domänen-Kollisionen |
 
@@ -501,10 +503,10 @@ Der folgende invariantenbasierte Benchmark stellt das Rahmenwerk der Funktionell
 | Invariante Dimension | FST (research-line) | Klassische Zahlentheorie | Connes Nichtkommutative Geometrie | Traditionelle CFD-Simulation | Geschlossene Mathematik-Suiten (Wolfram/MATLAB) |
 |---|---|---|---|---|---|
 | **01. Universelles Substrat** | RFEP / Muster A (Universelle Normalform) | Ad-hoc Einzelprobleme | Adèle-Klassenraum Spurformel | Navier-Stokes Diskretisierung (DNS/LES) | Proprietäre Black-Box-Routinen |
-| **02. Hilbert–Pólya-Bypass** | Bewiesener NE-A/NE-B Bypass (v2.0 Even-Dominance) | Klassisch blockiert | Analytische Fortsetzungshindernisse | Nicht anwendbar | Nicht anwendbar |
+| **02. Hilbert–Pólya-Status** | Bedingter Even-Dominance-Weg; endliches NE-B-Hindernis | Hier kein allgemeiner Ausschluss belegt | Analytische Fortsetzungshindernisse | Nicht anwendbar | Nicht anwendbar |
 | **03. Zero-Egress Reproduzierbarkeit** | 100% Offline Python-Ledgers (Deterministisch) | Selten / Nur Paper | Rein theoretisch / Paper | Cluster- / HPC-abhängig | Cloud-Lizenz / Online-Aktivierung |
 | **04. Aussagen-Disambiguierung** | Strikt (Theorem / Konditional / Offen) | Häufig informell | Hochkomplex / Implizit | Heuristisch / Empirisch | Geschlossene Herstellerdoku |
-| **05. Wissenschaftliche Provenienz** | Zenodo Konzept-DOIs (Unveränderlich) | Journal / ArXiv | ArXiv / Monographie | Konferenz / Journal | Geschlossene Hersteller-Builds |
+| **05. Wissenschaftliche Provenienz** | Zenodo-Konzept-DOI-Versionsreihe; für feste Zitationen versionsspezifische DOI verwenden | Journal / ArXiv | ArXiv / Monographie | Konferenz / Journal | Geschlossene Hersteller-Builds |
 | **06. Open-Source-Lizenz** | CC-BY-4.0 (100% Freizügig) | Proprietär / ArXiv | Urheberrechtlich geschützt | Häufig GPL / Kommerziell | Proprietäre kommerzielle Lizenz |
 | **07. Drittanbieter-Lieferkette** | 100% Freizügige geprüfte SBOM (0% Copyleft) | Entfällt | Entfällt | Ungeprüfte Alt-Toolchains | Geschlossene Binär-Blobs |
 | **08. KI- & LLM-Fähigkeit** | `llms.txt` & PEP 621 Metadaten-Standards | Unstrukturiert | Nicht maschinenlesbar | Unstrukturiert | Restriktive geschlossene APIs |
