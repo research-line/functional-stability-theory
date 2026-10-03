@@ -1,0 +1,1387 @@
+% ===================================================================
+% FST-III: Biologische Stabilität und Nash-Frustration
+% Zieljournal: Journal of Theoretical Biology / BioSystems
+% Version: 1.7 (R119-Reparaturfassung, 2026-10-01; keine neue biologische Validierung)
+% ===================================================================
+
+\documentclass[12pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\input{glyphtounicode}
+\pdfgentounicode=1
+\usepackage[ngerman]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{natbib}
+\usepackage{enumitem}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage{xurl}
+\usepackage[unicode=true]{hyperref}
+\usepackage{cleveref}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds}
+
+\graphicspath{{../results/}{../fst_nash/results/}}
+\setlength{\emergencystretch}{3em}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash\hspace{0pt}}X}
+\makeatletter
+\renewcommand*{\HyperDestNameFilter}[1]{de.#1}
+\makeatother
+
+% Theorem environments
+\newtheorem{proposition}{Proposition}
+\newtheorem{conjecture}{Konjektur}
+\newtheorem{hypothesis}{Hypothese}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Bemerkung}
+
+% Title
+\title{Funktionale Stabilitätstheorie III: Biologische Stabilität und Nash-Frustration}
+
+\author{Lukas Geiger\\
+\textit{Unabhängiger Forscher, Bernau, Deutschland}\\
+ORCID: \url{https://orcid.org/0009-0005-7296-1534}}
+
+\date{Oktober 2026 --- Reparaturversion 1.7}
+
+\hypersetup{
+  pdftitle={Funktionale Stabilitätstheorie III: Biologische Stabilität und Nash-Frustration},
+  pdfauthor={Lukas Geiger},
+  pdfsubject={Biologische Stabilität über Skalen in der Funktionalen Stabilitätstheorie},
+  pdfkeywords={evolutionäre Spieltheorie, Proteinfaltung, Genregulation, dissipative Adaptation, Free Energy Principle, MEPP, Boolesche Netzwerke},
+  pdflang={de-DE},
+  bookmarksnumbered=true,
+  pdfpagemode=UseOutlines
+}
+
+\begin{document}
+
+\maketitle
+\begin{abstract}
+Dieser Beitrag entwickelt einen konjekturalen Rahmen für biologische Organisation von der molekularen bis zur Ökosystem-Skala, begründet in thermodynamischer Spieltheorie und dem Maximum Entropy Production Principle (MEPP). Er untersucht, ob biologische Stabilitätsprobleme als dissipative Strukturen modelliert werden können, deren Attraktoren Nash-artige Fixpunktbeschreibungen zulassen, sobald Spieler, Strategien und Payoffs auf der jeweiligen Skala spezifiziert sind. Der Rahmen bringt Jeremy Englands Theorie der dissipativen Adaptation, Karl Fristons Free Energy Principle, Stuart Kauffmans Boolesche Netzwerkdynamik und die klassische evolutionäre Spieltheorie in eine Arbeits-Hierarchie. Auf jeder Ebene -- von der Proteinfaltung über Genregulation, zelluläre Koalitionen bis zur Ökosystemdynamik -- bietet spieltheoretische Stabilität eine gemeinsame Sprache für biologische Organisation. Die Hauptübergänge der Evolution, identifiziert von Szathmáry und Maynard~Smith, werden als mögliche Grobkörnungsschritte gelesen, die diese Struktur über Skalen hinweg erhalten können. Wir führen das Konzept der \emph{Nash-Frustration} als Komplement zur energetischen Frustration in Proteinstrukturen ein und prüfen es vorläufig anhand von NMR-Chemical-Shift-Perturbation-(CSP)-Daten an einem einzelnen Protein (Spearman $\rho_S = 0{,}44$, $p = 0{,}033$, $n = 24$). Das normalisierte Residuenranking ist im geprüften lokalen $\eta$-Fenster unabhängig von~$\eta$; absolute Instabilitätsskalen einschließlich $\rho(J)$ bleiben Kalibrierungsziele. Dieser Score ist kein Nash- oder kinetisches Stabilitätszertifikat; MFG-Existenz, Eindeutigkeit und Konvergenz erfordern getrennte Annahmen. Der Rahmen formuliert testbare Hypothesen für Proteinfaltungslandschaften, Genregulationsnetzwerk-Attraktoren und Ökosystem-Resilienz. Kosmologische Erweiterungen werden kurz erwähnt, sind aber explizit spekulativ und werden in einen Begleitbeitrag ausgelagert; sie sind nicht Teil der hier entwickelten biologischen Theorie.
+\end{abstract}
+
+\textbf{Schlüsselwörter:} evolutionäre Spieltheorie, ESS, Proteinfaltung, Genregulation, MEPP, dissipative Adaptation, Free Energy Principle, Boolesche Netzwerke, Hauptübergänge, Grobkörnung
+
+\clearpage
+\tableofcontents
+\clearpage
+
+% ===================================================================
+\section{Einleitung}
+\label{sec:introduction}
+% ===================================================================
+
+Die Entstehung und Stabilisierung biologischer Komplexität stellt die moderne Wissenschaft vor die Herausforderung, die fundamentalen Gesetze der Physik und die dynamischen Strategien des Lebens zu verbinden. Der Rahmen der Funktionalen Stabilitätstheorie (FST-III) behandelt biologische Systeme nicht bloß als Produkte zufälliger Mutationen, sondern als Kandidaten dissipativer Strukturen, die innerhalb thermodynamischer Randbedingungen operieren~\citep{EcosystemMEPP}.
+
+Dieser Beitrag untersucht die vorgeschlagene Verbindung zwischen Spieltheorie und dem Maximum Entropy Production Principle (MEPP) und erforscht, ob biologische Stabilität durch die Perspektive spieltheoretischer Attraktoren innerhalb thermodynamischer Einschränkungen verstanden werden kann. Der Schwerpunkt ist primär biologisch (Abschnitte~\ref{sec:thermodynamics}--\ref{sec:ecosystem}); kosmologische Erweiterungen werden in Abschnitt~\ref{sec:cosmology} kurz erwähnt, sind aber nicht Teil des Kernarguments.
+
+Die klassische evolutionäre Spieltheorie, bahnbrechend von Maynard~Smith und Price~\citep{MaynardSmithPrice1973,MaynardSmith1982}, revolutionierte unser Verständnis biologischen Verhaltens. Doch die Standardbehandlung beschränkt sich weitgehend auf die Verhaltensökologie. Dieser Beitrag untersucht einen breiteren Vorschlag: spieltheoretische Beschreibungen können auf mehreren Ebenen biologischer Organisation formuliert werden, und diese Beschreibungen verbinden die Biologie mit der Physik durch eine analoge Stabilitätslogik, wie sie in FST-I~\citep{FSTI} und FST-II~\citep{FSTII} entwickelt wurde.
+
+% ===================================================================
+\section{Strukturelle Ausrichtung: FST-III als Pattern-A-Instanz}
+\label{sec:structural-alignment}
+% ===================================================================
+
+Der hier entwickelte biologische Stabilitätsrahmen (ESS/FEP) wird als \textbf{Pattern-A"=artige strukturelle Analogie} innerhalb des FST-Ökosystems vorgeschlagen (siehe~\cite{FST-Unified2026}), nicht als formale Ableitung aus dem mathematischen Pattern-A-Programm. Die jüngste \textbf{eichtheoretische Reformulierung der Riemannschen Vermutung} (siehe~\cite{GeigerRH2026c}) liefert ein motivierendes strukturelles Vorbild für diese Architektur.
+
+Innerhalb dieses hierarchischen Stabilitätsrahmens werden biologische Systeme wie folgt verstanden:
+\begin{enumerate}[label=\alph*)]
+    \item \textbf{Analytische Rang-Endlichkeit (Null-Tail):} Biologische Komplexität kann gegen die kombinatorische Explosion des \glqq toten\grqq{} Zustands eingeschränkt sein, weil bei gegebenen Umwelt-Randbedingungen nur eine begrenzte Menge von Genotyp-Konfigurationen gleichzeitig ESS- und FEP-Stabilität erfüllen kann. Diese Endlichkeit ist konjektural, nicht bewiesen; sie ist motiviert durch die Beobachtung, dass die Schnittmenge von ESS-Bedingungen (Stabilität gegen Invasion) und thermodynamischer Lebensfähigkeit (positive Dissipation) genügend viele unabhängige Einschränkungen auferlegt, um die Lösungsmenge auf eine diskrete Kollektion zu reduzieren. Das unorganisierte \glqq Rauschen\grqq{} wird durch die entropische Einschränkung gefiltert und kann robuste Persistenz unterstützen.
+    \item \textbf{Endliche Negativität als Eichsignal (Strukturelle Analogie):} Genetischer Konflikt, Krebs und Wettbewerb spielen eine Rolle analog zur endlichen Negativität im arithmetischen Kern. Sie werden hier nicht als zufällige Defekte behandelt, sondern als Signale unvollständiger organisatorischer Koordination, die durch neue Kooperationsebenen (Hauptübergänge) reduziert oder reorganisiert werden können. Diese Analogie ist strukturell, nicht formal: die mathematischen Mechanismen unterscheiden sich, aber das logische Muster (Destabilisierungssignale treiben Reorganisation) wird geteilt.
+    \item \textbf{Eingeschränkte funktionale Positivität (Biologische Attraktoren):} Die stabilen Attraktoren eines Gennetzwerks oder Ökosystems können als \glqq eichstabile\grqq{} Zustände dargestellt werden, in denen das Freie-Energie-Funktional ein eingeschränktes Minimum erreicht. In Analogie zu Rangreduktionsmechanismen im RH-Programm wird phänotypische Stabilität hier als Ergebnis einer endlichen Menge epigenetischer Einschränkungen interpretiert, die thermodynamische Lebensfähigkeit stützen.
+\end{enumerate}
+
+Diese Ausrichtung rahmt FST-III als strukturelle Analogie -- nicht als formale Ableitung -- zu \glqq Funktionale Positivität unter Einschränkung\grqq{}.
+
+\begin{definition}[Resolvent-stabiler Fixpunkt]
+\label{def:resolvent-stable}
+Ein Fixpunkt eines dynamischen Systems heißt \emph{resolvent-stabil}, wenn die Störungsanalyse zweiter Ordnung (Hesse-Eigenwerte oder Resolventen-Entwicklungskoeffizienten) in allen Nicht-Eich-Richtungen strikt positive Werte liefert -- d.\,h.\ alle Störungsmoden orthogonal zu symmetrieerzeugten Entartungen sind stabilisiert. In biologischen Systemen entsprechen \glqq Nicht-Eich-Richtungen\grqq{} Störungsmoden, die beobachtbare phänotypische Eigenschaften verändern (z.\,B.\ Proteinkonformation, Genexpression), während \glqq Eichrichtungen\grqq{} neutralen Freiheitsgraden entsprechen, die den Phänotyp invariant lassen (z.\,B.\ synonyme Codon-Substitutionen, neutrale Konformationsfluktuationen innerhalb eines Beckens). Dies ist eine strukturelle Analogie -- motiviert durch, aber nicht formal abgeleitet von -- der spektralen Lückeneigenschaft des FST-RH-Frameworks~\citep{GeigerRH2026b}; die Anwendung auf biologische Systeme erfordert domänenspezifische Verifikation, welche Richtungen wirklich \glqq Eich\grqq{} sind.
+\end{definition}
+
+% ===================================================================
+\section{Thermodynamische Grundlagen: MEPP und dissipative Adaptation}
+\label{sec:thermodynamics}
+% ===================================================================
+
+\subsection{Leben als Nicht-Gleichgewichts-Phänomen}
+
+Die Einordnung biologischer Prozesse in der Thermodynamik beginnt mit der Erkenntnis, dass Leben ein Phänomen weit vom thermodynamischen Gleichgewicht ist~\citep{EcosystemMEPP}. Während geschlossene Systeme unvermeidlich zum Zustand maximaler Entropie und Wärmetod tendieren, erhalten sich biologische Systeme durch kontinuierlichen Export von Entropie an ihre Umgebung -- ein Prozess, den Erwin Schrödinger 1944 als den Erwerb von \glqq Negentropie\grqq{} beschrieb~\citep{SchoolBiologicalPhysics,EcosystemMEPP,Kuzu2025}.
+
+\subsection{Drei thermodynamische Hypothesen}
+
+Innerhalb des FST-III-Rahmens beschreiben drei zentrale thermodynamische Hypothesen das Verhalten lebender Materie~\citep{EcosystemMEPP}:
+
+\begin{enumerate}
+    \item \textbf{Thermodynamischer Fingerabdruck des Lebens:} Lebende Gemeinschaften erhöhen die Rate der Entropieproduktion signifikant im Vergleich zu abiotischen Gegenstücken unter identischen Randbedingungen.
+
+    \item \textbf{Zustandsselektionsprinzip (Stabilitätsinterpretation):} Wenn ein System mehrere stabile Zustände erreichen kann, tendiert die resolvent-stabile Konfiguration -- bei der Destabilisierungskanäle zweiter Ordnung unterdrückt sind -- dazu, hohe (wenn auch nicht notwendigerweise maximale) Entropieproduktionsraten aufzuweisen.
+
+    \item \textbf{Gradientenantwortprinzip:} Wenn der äußere thermodynamische Gradient zunimmt, geht das System in einen neuen stabilen Zustand über, der durch noch höhere Entropieproduktion charakterisiert ist.
+\end{enumerate}
+
+\begin{table}[htbp]
+\centering
+\caption{Thermodynamische Prinzipien und ihre biologische Relevanz. MEPP gilt für stark getriebene Systeme; Prigogines minimale Entropieproduktion gilt nur nahe dem Gleichgewicht.}
+\label{tab:thermo-principles}
+\begin{tabularx}{\textwidth}{@{}L{0.22\textwidth} L{0.28\textwidth} Y@{}}
+\toprule
+\textbf{Prinzip} & \textbf{Beschreibung} & \textbf{Biologische Relevanz} \\
+\midrule
+MEPP & Stabilitätsfilter für hohe Dissipation & Metabolische Effizienzselektion \\
+Zustandsselektion & Stabilität korreliert mit hohem $\dot{S}$ & Stabilisierung komplexer Nahrungsnetze \\
+Gradientenantwort & Adaptation an zunehmenden Energieeintrag & Erhöhung photosynthetischer Effizienz \\
+Prigogine (LMEP) & Minimale Entropie nahe Gleichgewicht & Nur für lineare, schwach getriebene Systeme \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{remark}[MEPP als Stabilitätsfilter, nicht als Selektionsgesetz]
+\label{rem:mepp-stability-biology}
+Gemäß der Resolventenanalyse aus dem Riemannschen-Vermutungs-Programm~\citep{GeigerRH2026b} sollten die drei obigen thermodynamischen Hypothesen als \emph{Stabilitätsfilter} gelesen werden, nicht als Selektionsgesetze. MEPP treibt biologische Systeme nicht kausal in Richtung Zustände maximaler Entropieproduktion. Stattdessen ist die Dynamik führender Ordnung entartet: viele biologische Konfigurationen sind in erster Ordnung lebensfähig. MEPP wirkt in dieser Lesart als Filter zweiter Ordnung, der resolventeninstabile Konfigurationen eliminiert -- solche, die anfällig für störungsinduzierte Zusammenbrüche durch Kreuzkopplung zwischen metabolischen, strukturellen und replikativen Freiheitsgraden sind. Der Zustand mit \glqq höchster Entropieproduktion\grqq{} wird hier vorsichtiger als Kandidat eines resolventenstabilen Fixpunkts innerhalb der entarteten Mannigfaltigkeit thermodynamisch lebensfähiger Konfigurationen charakterisiert. Diese Verfeinerung greift die Gutachter-Kritik auf, dass MEPP als Selektionsgesetz verwendet wird: es ist ein Stabilitätskriterium, kein kausaler Treiber. Für die vollständige Entwicklung des MEPP-als-Stabilitätsfilter-Arguments im präbiotischen Kontext, einschließlich der formalen England-Ungleichung und der MEPP-Kontroverse, siehe FST-II~\citep{FSTII}; hier wenden wir dieses Prinzip spezifisch auf biologische Systeme an.
+\end{remark}
+
+\subsection{Dissipative Adaptation: Die Physik der Selbstorganisation}
+
+Ein entscheidender Brückenschlag zwischen reiner Thermodynamik und biologischer Struktur wird durch Jeremy Englands Theorie der dissipativen Adaptation geliefert~\citep{England2013,EnglandNano}. Für die vollständige formale Herleitung von Englands Dissipationsschranke aus dem Crooks-Fluktuationstheorem, die spieltheoretische Lesung der Ungleichung und den Kausalrichtungsvorbehalt siehe FST-II~\citep{FSTII}; hier fassen wir nur die für den biologischen Kontext relevanten Aspekte zusammen.
+
+England argumentiert, basierend auf Nicht-Gleichgewichtsstatistik, dass Materie, die einer starken externen Energiequelle ausgesetzt ist, dazu tendiert, sich in Konfigurationen zu organisieren, die besonders gut darin sind, Energie zu absorbieren und als Wärme zu dissipieren~\citep{England2013}.
+
+Der Mechanismus der dissipativen Adaptation beruht auf der Irreversibilität von Zustandsübergängen. Wenn ein System Energie aus einer externen Quelle absorbiert, kann es energetische Aktivierungsbarrieren überwinden, die durch rein thermische Fluktuationen unüberwindbar wären. Sobald diese Energie dissipiert ist, fehlt dem System die Energie, um zurück zum Anfangszustand zu springen. Über die Zeit akkumulieren sich Strukturen, die hohe Resonanz mit der externen Energiequelle aufweisen~\citep{EnglandNano}.
+
+Dieser Prozess erklärt die spontane Entstehung selbstreplizierender Strukturen: Replikation ist eine der effizientesten Methoden, um die Kapazität eines Systems zur Energieabsorption und -dissipation exponentiell zu steigern~\citep{EnglandNano}. In diesem Kontext erscheint \glqq Fitness\grqq{} nicht als rein biologisches Konzept, sondern als physikalische Eigenschaft struktureller Persistenz unter energetischem Antrieb~\citep{England2013}.
+
+% ===================================================================
+\section{Spieltheoretische Stabilität: Molekulare ESS}
+\label{sec:molecular}
+% ===================================================================
+
+Sobald physikalische Strukturen die Schwelle zur biologischen Reproduktion überschreiten, werden ihre Interaktionen durch spieltheoretische Regeln bestimmt.
+
+\subsection{Nash-Gleichgewicht und ESS}
+
+Das zentrale Konzept ist das Nash-Gleichgewicht, 1950 von John Nash definiert, das Zustände beschreibt, in denen kein Akteur seinen Payoff durch einseitige Änderung seiner Strategie verbessern kann~\citep{NashPNAS,NashSFI}. In der Biologie entwickelten John Maynard~Smith und George Price dies zur Evolutionarily Stable Strategy (ESS)~\citep{MaynardSmithPrice1973,MaynardSmith1982}.
+
+\begin{definition}[Evolutionarily Stable Strategy]
+Eine ESS ist eine Strategie, die, wenn sie von den meisten Mitgliedern einer Population angenommen wird, nicht von einer seltenen Mutanten-Strategie invadiert werden kann. Jede ESS ist ein Nash-Gleichgewicht, aber nicht jedes Nash-Gleichgewicht ist eine ESS, da ESS zusätzliche Stabilitätsbedingungen gegen Invasionen erfordert~\citep{MaynardSmith1982}.
+\end{definition}
+
+In FST-III wird dieses Prinzip auf die molekulare Ebene übertragen. Proteine, Enzyme und regulatorische RNAs werden als \glqq Spieler\grqq{} betrachtet, deren \glqq Strategien\grqq{} aus ihren strukturellen Konfigurationen und katalytischen Aktivitäten bestehen~\citep{GameBiochemistry}.
+
+\begin{remark}[ESS als resolventenstabiler Fixpunkt]
+\label{rem:ess-resolvent}
+Eine mögliche Lesart aus der Resolventenanalyse der Riemannschen Vermutung~\citep{GeigerRH2026b} verfeinert die Interpretation von ESS. Eine ESS ist in dieser Lesart \emph{kein} globales Fitnessoptimum; sie ist ein Kandidat für einen resolventenstabilen Fixpunkt. In führender Ordnung ist die Fitnesslandschaft entartet -- viele phänotypische Konfigurationen ergeben vergleichbare Payoffs. Die Selektion erfolgt in zweiter Ordnung durch resolventenartige Kopplungen zwischen den entarteten Modi: Invasionsdynamik, frequenzabhängige Interaktionen und räumliche Kopplung spalten die Entartung gemeinsam auf. Die ESS ist dann eine Kandidatenkonfiguration, bei der Destabilisierungskanäle zweiter Ordnung gleichzeitig unterdrückt sind. Nash-Frustration (Abschnitt~\ref{sec:molecular}) ist kein Defekt, sondern ein \emph{mögliches strukturelles Merkmal} dieser Resolventenarchitektur: sie reflektiert die residuale Kopplung zweiter Ordnung, die die Konfiguration stabilisieren und gleichzeitig eine Kristallisation in ein rigides, fragiles Optimum verhindern kann.
+\end{remark}
+
+\begin{table}[htbp]
+\centering
+\caption{Abbildung spieltheoretischer Konzepte auf physikalische und biologische Gegenstücke.}
+\label{tab:game-biology-mapping}
+\begin{tabularx}{\textwidth}{@{}L{0.18\textwidth} L{0.29\textwidth} Y@{}}
+\toprule
+\textbf{Spielkonzept} & \textbf{Physikalische Entsprechung} & \textbf{Biologisches Beispiel} \\
+\midrule
+Nash-Gleichgewicht & Keine profitable einseitige Abweichung & Bedingte Beschreibung im Spielmodell \\
+ESS & Attraktor mit lokaler Stabilität & Allel-Fixierung \\
+Payoff-Matrix & Energie-/Fitnesslandschaft & Enzym-Substrat-Affinität \\
+Gemischte Strategie & Populationsheterogenität & Arbeitsteilung in Kolonien \\
+Nash-Frustration & Schrittweitenabhängiger spektraler Überschuss & Unvalidierte Hypothese zur Proteinfunktion \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Proteinfaltung als Optimierungsspiel}
+
+Proteinfaltung kann heuristisch als Spiel gegen eine thermodynamische Landschaft modelliert werden~\citep{EnzymeFolding}. Die native Konformation ist ein Kandidat, kein zertifiziertes Gleichgewicht, in einem Modell mit $n$ Spielern und folgenden Festlegungen:
+
+\begin{itemize}
+    \item \textbf{Spieler:} Einzelne Aminosäurereste
+    \item \textbf{Strategien:} Rückgrat-Diederwinkel $(\phi, \psi)$
+    \item \textbf{Payoff:} $-\Delta G$ (negative Freie-Energie-Änderung)
+    \item \textbf{Gleichgewichtskandidat:} Native Konformation; Anfinsens thermodynamische Hypothese zertifiziert allein keine einseitige Optimalität im angepassten Modell~\citep{Anfinsen1973}
+\end{itemize}
+
+Fehlgefaltete Proteine und Prionen motivieren Fragen nach Metastabilität. Kinetisches Einfangen oder templategerichtete Ausbreitung etabliert jedoch für sich kein lokales Nash-Gleichgewicht. Dafür müssen die festgelegten Auszahlungen und zulässigen einseitigen Abweichungen geprüft werden. Das angepasste Torsionsmodell liefert hier kein solches Zertifikat für Prionenpropagation.
+
+\subsection{Nash-Frustration vs.\ energetische Frustration}
+
+\paragraph{Geltungsbereich der Reparatur (Version 1.7).}
+Diese Folgefassung korrigiert zwei Inventurbefunde: Das Hesse-basierte Gradientensurrogat zertifiziert keinen Nash-Status; MFG-Existenz ist von monotoniebasierter Eindeutigkeit und algorithmischer Konvergenz zu trennen. Historische Zahlen bleiben explorative Modellausgaben, ohne neue Rechnung oder biologische Validierung. Frühere uneingeschränkte \glqq Beweisreparaturen\grqq{} werden nicht übernommen; native HP35-Stationarität, tatsächliche sequenzielle Sweep-Ableitung, proteinspezifischer MFG-Regularitätsvertrag und vollständige Claim-/Quellenprüfung bleiben offen.
+
+\paragraph{Lokale und globale einseitige Optimalität.}
+Bei $C^2$-glatten gemeinsamen Kosten an einem inneren stationären Punkt genügt positive Definitheit jedes spielereigenen Hesse-Blocks für strikten lokalen Nash-Status; positive Semidefinitheit ist notwendig, nicht hinreichend. Positive Definitheit ist nicht notwendig. Diese einseitigen Tests betreffen nicht die Positivität der kollektiven Hesse-Matrix und zertifizieren keine globalen besten Antworten~\citep{RatliffBurdenSastry2016}. In der Ordnung $(\phi_1,\ldots,\phi_N,\psi_1,\ldots,\psi_N)$ verwendet Rest $i$ die Indizes $(i,N+i)$, keine benachbarten Paare. Für den angepassten nativen HP35-Zustand ist hier keine dieser Bedingungen nachgewiesen.
+
+
+
+
+\noindent\textit{Notation:} $\rho(J)$ bezeichnet den Spektralradius der Jacobi-Matrix, $\rho_S$ den Spearman-Korrelationskoeffizienten und $\rho_i$ den normalisierten residuen-spezifischen Frustrationswert. Diese unterschiedlichen Verwendungen von $\rho$ folgen den jeweiligen Community-Konventionen und werden durchgehend durch Indizes disambiguiert.
+
+Das Konzept der lokalen Frustration in Proteinstrukturen wurde extensiv durch das Protein Frustratometer~\citep{Ferreiro2007,Ferreiro2014} sowie proteom- und sequenzweite Deep-Learning-Modelle wie FrustraMPNN~\citep{Beining2026} und FrustrAI-Seq~\citep{Leusch2026} untersucht, die Reste identifizieren, bei denen die native Aminosäureidentität suboptimal ist, gegeben die lokale strukturelle Umgebung. Diese energetische Frustration korreliert mit funktionellen Stellen, Bindungsschnittstellen und allosterischen Regionen.
+
+Der historische Name \textbf{Nash-Frustration} bezeichnet eine Kandidatendiagnostik (Tabelle~\ref{tab:frustration-comparison}). Sie fragt hier, welche Reste spektralen Überschuss eines festgelegten Gradientensurrogats tragen; profitable einseitige Abweichungen weist sie nicht nach.
+
+Formal wird \emph{residuenspezifische Nash-Frustration} aus $J=I-\eta H$ berechnet, der Ableitung der synchronen Gradientenabbildung $\theta\mapsto\theta-\eta\nabla F(\theta)$. $H$ ist die $2n\times2n$ Hesse-Matrix des angepassten Potentials und $\eta>0$ eine gewählte Schrittweite. Dies ist nicht die Jacobi-Matrix der sequenziellen approximativen Best-Response-Routine. Der Score für Rest $i$ lautet:
+\begin{equation}
+\text{frustration}(i) = \sum_{k: |\lambda_k| > 1} (|\lambda_k| - 1) \left( v_{k,\phi_i}^2 + v_{k,\psi_i}^2 \right)
+\end{equation}
+wobei $\lambda_k,v_k$ Eigenpaare von $J$ sind. Spektralradius $\rho(J)=\max_k|\lambda_k|$ und Residuenprojektion beschreiben nur dieses Surrogat. An einem stationären Punkt signalisiert $\rho(J)>1$ einen linear expandierenden Surrogatmodus; ohne Stationarität ist dies nur eine lokale Ableitungsdiagnostik. Negative kollektive Krümmung oder übergroße Schritte in positiv gekrümmten Moden können Expansion verursachen. Weder $\rho(J)>1$ noch die Nähe zu eins entscheidet lokalen oder globalen Nash-Status.
+
+\paragraph{Koordinatenmetrik-Vorbehalt.}
+Die obige Projektion verwendet die euklidische Norm der Eigenvektor-Komponenten im lokalen Diederwinkel-Chart $(\phi,\psi)$. Sie ist daher eine Chart-Diagnostik, kein intrinsisches koordinateninvariantes biomolekulares Observable. Eine intrinsische oder massengewichtete Variante sollte die quadrierte Komponentensumme durch eine metrikgewichtete Projektion mit der geeigneten Torsions-/Mannigfaltigkeitsmetrik ersetzen; der vorliegende Einzelprotein-Benchmark verwendet einen festen Chart und ist unter dieser Konvention zu lesen.
+
+\paragraph{Vorläufige Konsistenzprüfung und $\eta$-Unabhängigkeit.}
+Wir prüften die Nash-Frustrations-Metrik gegen experimentelle NMR Chemical"=Shift"=Perturbation (CSP)-Daten, die aus BMRB-Eintrag~4428~\cite{BMRB4428} abgeleitet wurden. Dieser BMRB-Eintrag ist der HP67-Villin-Headpiece-NMR-Datensatz (primär PDB 1QQV); für den HP35-Strukturbenchmark (PDB 1YRF) wurde die dokumentierte Residuenabbildung vom C-terminalen HP67-Subdomänenbereich auf HP35 verwendet, wobei mutierte oder fehlende Positionen ausgeschlossen wurden. Die CSP pro Rest berechnet sich als $\text{CSP}_i = \sqrt{\Delta\delta_{\text{H}}^2 + (\Delta\delta_{\text{N}}/5)^2}$, wobei $\Delta\delta$ die sekundäre chemische Verschiebung relativ zu Random-Coil-Referenzwerten~\cite{Wishart1995} bezeichnet; der Faktor $1/5$ ist die Standard-Gewichtung für ${}^{15}$N~\cite{Williamson2013}.
+
+Die Spearman-Rangkorrelation zwischen residuen-spezifischer Nash-Frustration und CSP beträgt $\rho_S = 0{,}44$ ($p = 0{,}033$, $n = 24$ Reste) und liefert ein erstes Konsistenzsignal dafür, dass Frustrationswerte die Rangordnung der NMR-beobachteten strukturellen Perturbation teilweise abbilden können. Die statistische Power dieses Tests ist moderat ($\approx 60\,\%$ bei $\alpha = 0{,}05$ für die beobachtete Effektstärke), und Replikation an weiteren Proteinen ist erforderlich. Die fünf am stärksten frustrierten Reste (M11, T12, S1, L0, L19) weisen CSP-Werte von 1{,}26, 0{,}68, 2{,}13, 1{,}44 und 1{,}10\,ppm auf. Ein Ausreißer (K23, CSP~$= 2{,}67$\,ppm bei niedriger Frustration) ist auf den bekannten Trp-Ringstromeffekt an dieser Position zurückzuführen.
+
+Entscheidend ist, dass ein systematischer Scan über sieben $\eta$-Werte zwischen $0{,}001$ und $0{,}1$ zeigt, dass die Frustrations-CSP-Korrelation im geprüften lokalen Fenster \emph{unabhängig} von~$\eta$ ist (Variation~$< 10^{-6}$). Dies folgt aus der Struktur der Frustrationskarte, solange die instabilen Moden von negativen Hesse-Eigenwerten stammen ($h_k<0$) und keine positiven Überschussmoden ($h_k>2/\eta$) die Grenze $|\lambda_k|>1$ überschreiten: Dann skaliert $\eta$ das Instabilitätsgewicht linear, was sich unter Max-Normalisierung herauskürzt. Daher ist $\eta$ im geprüften Fenster kein Tuningparameter für das normalisierte Residuenranking; relevant bleibt es für absolute Score-Skalen, Spektralradius-Schwellen, Konvergenzdiagnostik und jedes Regime, in dem sich die aktive instabile Modenmenge ändert. Dieses Ergebnis, geprüft gegen zwei unabhängige Random-Coil-Referenzsätze (Wishart~1995, $r = 0{,}18$; Kjaergaard--Poulsen~2011~\cite{KjaergaardPoulsen2011}, $r = 0{,}20$; $|\Delta r| < 0{,}02$), stützt eine vorläufige Einzelprotein-Konsistenzdiagnostik, aber noch keinen extern kalibrierten Prädiktor.
+
+\paragraph{Absolutskalen-Gate (QUANT-III-2b).}
+Ein erster Audit der absoluten Kalibrierung schließt diese Aufgabe nicht positiv. Die gespeicherten Score-Vektoren verwenden eine separate Maximalwert-Normalisierung pro Protein, $s_{p,i}=r_{p,i}/\max_j r_{p,j}$; alle 21 Protein--$\eta$-Zeilen des aktuellen Scans haben daher $\max_i s_{p,i}=1$. Da jede positive proteinspezifische Reskalierung $r_{p,i}\mapsto c_p r_{p,i}$ den Wert $s_{p,i}$ unverändert lässt, sind die rohe proteinübergreifende Skala und damit eine absolute Schwelle aus diesen Artefakten nicht identifizierbar. Bei der Software-Konvention $\eta=0{,}015$ erklärt eine gewöhnliche Kleinste-Quadrate-Abbildung der 24 HP35-Scores auf absolute CSP in-sample nur $R^2=0{,}034$. Die Leave-one-residue-out-Kalibrierung ergibt $Q^2=-0{,}176$ und einen mittleren absoluten Fehler von $0{,}496$\,ppm, schlechter als die entsprechende Trainingsmittelwert-Baseline ($0{,}474$\,ppm). Als separate Diagnostik mit funktionellen Residuenlabels statt CSP transferiert die vorhandene HP35-Schwelle auf Protein~G mit Balanced Accuracy $0{,}630$ und Sensitivität $0{,}417$; der umgekehrte Transfer ergibt $0{,}583$ bzw. $0{,}214$. Diese Prüfungen tragen keinen absoluten Kalibrierungsclaim. Die Reparatur verlangt unnormalisierte Residuenbeiträge samt Normalisierungsfaktoren, eine vorab festgelegte $\eta$-/Metrikkonvention und eine einmalige Kalibrierung an einem Protein gegen ein kontinuierliches Observable, gefolgt von der unveränderten Prüfung an einem unabhängigen Protein-Holdout (Skript: \texttt{quant\_iii\_2b\_absolute\_threshold\_gate.py}).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{eta_calibration/eta_calibration_csp.pdf}
+\caption{Streudiagramm der residuenspezifischen Nash-Frustrationswerte gegen NMR-Chemical-Shift-Perturbation (CSP) für den HP35/1YRF-Benchmark, unter Verwendung von aus BMRB 4428 abgeleiteten HP67-Verschiebungen, die auf die C-terminale HP35-Subdomäne abgebildet wurden. Jeder Punkt repräsentiert einen Rest; die Spearman-Rangkorrelation beträgt $\rho_S = 0{,}44$ ($p = 0{,}033$). Die Farbkodierung zeigt den Lernraten-Parameter $\eta$ und demonstriert, dass die Frustrations-CSP-Beziehung im geprüften lokalen $\eta$-Scan invariant ist (alle $\eta$-Werte fallen auf dieselbe Kurve). Der Ausreißer K23 (hohe CSP, niedrige Frustration) ist auf den Trp-Ringstromeffekt zurückzuführen, nicht auf strukturelle Instabilität.}
+\label{fig:eta-calibration}
+\end{figure}
+
+\begin{remark}[Berechnungsprotokoll]\label{rem:comp-protocol}
+Die Nash-Frustrations-Analyse verwendet ein \emph{maßgeschneidertes spieltheoretisches Potential}, kein molekularmechanisches Kraftfeld (wie AMBER oder CHARMM).
+Jeder Rest~$i$ wird als Spieler mit Strategie $\theta_i = (\phi_i, \psi_i)$ behandelt.
+Das Potential $F = F_\phi + F_\psi$ besteht aus Einzelspieler-Termen -- aminosäurespezifischen Ramachandran-Präferenzen $\mu_\phi^{(a_i)}, \mu_\psi^{(a_i)}$ mit Steifigkeitskonstanten~$k^{(a_i)}$ -- und paarweisen Kopplungstermen, gewichtet durch einen Radialbasisfunktions-Kern
+\[
+  w(r_{ij}) = \sum_{b=1}^{B} c_b \exp\!\bigl(-\tfrac{(r_{ij}-\mu_b)^2}{2\sigma^2}\bigr),
+  \qquad B=12,\; \sigma = 1{,}0\,\text{\AA}.
+\]
+Kontakte werden durch einen C$_\alpha$--C$_\alpha$-Abstandscutoff von $r_\text{cut} = 8{,}0$\,\AA{} definiert.
+Parameter (Ramachandran-Präferenzen, Steifigkeitskonstanten, RBF-Koeffizienten) werden aus der nativen PDB-Struktur durch regularisierte Kleinste-Quadrate-Anpassung rückentwickelt (Regularisierungsgewicht $\lambda_{\text{reg}} = 0{,}01$; Multi-Start-Gradientenabstieg mit 64 zufälligen Initialisierungen, je 6\,000 Schritte).
+
+\textbf{Zirkularitätsvorbehalt.} Die Anpassung des Potentials an die native Struktur beweist weder Stationarität noch garantiert sie Konvergenz zu dieser Struktur. Die berichtete CSP-Korrelation ($\rho_S=0{,}44$) ist ein historisches Einzelprotein-Konsistenzsignal des normalisierten Hesse-basierten Rankings. Sie validiert weder einseitige Optimalität noch Faltungskinetik oder die tatsächliche sequenzielle Update-Jacobi-Matrix. Physikalisch fundierte Potentiale, unabhängige Kontrollen und Replikation außerhalb der Anpassungsdaten bleiben erforderlich.
+
+Für das Surrogat $J=I-\eta H$ beträgt der CLI-Diagnostikstandard $\eta=0{,}015$; die historische HP35-Pilotstudie verwendet $\eta=0{,}01$. Die Hesse-Matrix nutzt zentrale finite Differenzen ($\epsilon=10^{-4}$). Davon getrennt ist die Standardschrittweite $0{,}05$ des sequenziellen Solvers.
+Die historischen Konvergenzläufe verwenden 300 Sweeps und 16 Zufallsstarts. Die approximative Antwortroutine aktualisiert Reste sequenziell mit zehn Gradientenschritten ohne Präkonditionierung je Rest; sie ist weder ein exakter Best-Response-Operator noch die synchrone Abbildung, die $J$ definiert.
+Der berichtete Score projiziert Moden mit $|\lambda_k|>1$ und normalisiert auf $[0,1]$. Der Code zählt im Instabilitätsanteil auch $|\lambda_k|\geq1$: Neutrale Moden gehen dort ein, obwohl ihr überschussgewichteter Score null ist. Die Randkonventionen sind getrennt zu dokumentieren.
+
+Wie oben gezeigt, wird $\eta$ nicht optimiert, um die normalisierte CSP-Korrelation zu maximieren: Das rangbasierte Frustrationsmuster ist im geprüften Bereich $[0{,}001;\; 0{,}1]$ stabil, solange die aktive instabile Modenmenge gleich bleibt. Weitere Arbeiten sollten die absolute Score-Skala und $\rho(J)$-basierte Schwellen gegen unabhängige Observablen wie Wasserstoff-Deuterium-Austausch-Schutzfaktoren (McKnight et~al.\ 1996~\cite{McKnight1996}) kalibrieren.
+Quellcode: \texttt{protein\_fold\_nash\_pdb.py} (Python~3, BioPython, SciPy, NumPy).
+Erweiterte Drei-Proteine-Analyse (LaTeX-Tabellenerzeugung, Konvergenzdiagnostik): \texttt{run\_extended\_analysis.py}.
+\end{remark}
+
+Tabelle~\ref{tab:nash-validation-ledger} trennt die empirischen und rechnerischen Evidenzblöcke von den jeweils nächsten Validierungsgates. Diese Trennung ist wichtig, weil der aktuelle Datensatz eine lokale, selbstparametrisierte Konsistenzprüfung stützt, während prädiktive Nutzung unabhängige Kontrollen und absolute Skalenkalibrierung verlangt.
+
+\begin{table}[htbp]
+\centering
+\caption{Validierungs-Gate-Ledger für die Nash-Frustrations-Evidenz. Die Tabelle trennt aktuelle Observablen vom Mindestgate, das vor stärkeren prädiktiven Behauptungen nötig ist.}
+\label{tab:nash-validation-ledger}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{0.21\textwidth} L{0.25\textwidth} L{0.22\textwidth} Y@{}}
+\toprule
+\textbf{Evidenzblock} & \textbf{Aktuelle Observable} & \textbf{Derzeitiger Status} & \textbf{Nächstes Gate} \\
+\midrule
+HP35/CSP-Rangprüfung & Aus BMRB 4428 abgeleitete CSP auf HP35 abgebildet; $\rho_S=0{,}44$, $p=0{,}033$, $n=24$ & Einzelprotein-Konsistenzsignal; kein extern kalibrierter Prädiktor & Replikation an weiteren Proteinen mit vorregistrierter Residuenabbildung und fester Skalenkonvention \\
+$\eta$-Scan & Sieben Werte in $\{0{,}001,\ldots,0{,}1\}$; Variation des normalisierten Rankings $<10^{-6}$ & Lokale Ranginvarianz bei unveränderter instabiler aktiver Modenmenge & Absolute Scores und $\rho(J)$-Schwellen out-of-sample kalibrieren; aktive-Moden-Wechsel und positive Krümmungsüberschüsse verfolgen \\
+Proteinübergreifende Konvergenz & HP35-gelernte Parameter auf 1PGA und 2XWR angewendet; alle Läufe konvergieren, aber $\phi_{\text{rms}}\approx1{,}25$--$1{,}30$ rad für Testproteine & Nur Konvergenzdiagnostik; kein Anspruch auf Strukturvorhersagegenauigkeit & 2XWR-Provenienz fixieren und reichere Potentiale mit Seitenketten-, Lösungsmittel- und Elektrostatiktermen prüfen \\
+Benchmark funktioneller Reste & AUC 0{,}616 für HP35 und 0{,}688 für Protein~G & Schwaches bis moderates Signal über Zufall; unterhalb eigenständiger Diagnosestärke & Direkter Vergleich mit Ferreiro-Frustration, B-Faktoren/NMA, pLDDT und gematchten Sequenz-/Strukturkontrollen \\
+Prospektive molekulare Tests & HDX-Schutzfaktoren, $\phi$-Werte, allosterische/Interface-Annotationen, Helix-Schmelzreihenfolge & Falsifizierbare Agenda spezifiziert; noch nicht ausgeführt & Multi-Protein-Tests mit vorregistrierten Schwellen durchführen und Negativkontrollen neben positiven Korrelationen berichten \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Methodologischer Vergleich zwischen lokaler energetischer Frustration (Wolynes, Ferreiro et~al., FrustraMPNN) und spieltheoretischer Nash-Frustration (FST-Nash, diese Arbeit). Komplementarität ist eine Hypothese, kein durch den angepassten Modellscore etablierter Befund.}
+\label{tab:frustration-comparison}
+\small
+\begin{tabularx}{\textwidth}{@{}L{0.20\textwidth} L{0.37\textwidth} Y@{}}
+\toprule
+\textbf{Dimension} & \textbf{Energetische Frustration (Wolynes / Ferreiro)} & \textbf{Nash-Frustration (FST-Nash, diese Arbeit)} \\
+\midrule
+\textbf{Kernfrage} & Ist die lokale atomare Kontaktenergie gegenüber Decoy-Permutationen optimal? & Welche Residuenkoordinaten tragen expandierende Moden des gewählten Gradientensurrogats? \\
+\addlinespace
+\textbf{Leitmetrik} & Kontakt-Z-Score $F_{ij} = \frac{\langle E_{ij}^{\text{decoy}} \rangle - E_{ij}^{\text{native}}}{\sigma(E_{ij}^{\text{decoy}})}$; minimal frustriert falls $F_{ij} < -1$, hoch frustriert falls $F_{ij} > 0{,}78$. & Projizierte spektrale Instabilität $\rho_i = \sum_{k: |\lambda_k|>1} (|\lambda_k|-1)(v_{k,\phi_i}^2 + v_{k,\psi_i}^2)$ aus Jacobi-Matrix $J = I - \eta H$; Spektralradius $\rho(J) = \max_k |\lambda_k|$. \\
+\addlinespace
+\textbf{Zustandsraum} & 3D-kartesische Koordinaten $\mathbf{x} \in \mathbb{R}^{3N}$ und paarweise Kontaktabstandsmatrizen $r_{ij} = \|\mathbf{x}_i - \mathbf{x}_j\|$. & Strategischer Torsionsraum $(\phi_i, \psi_i) \in \mathbb{T}^2$ mit inter-residuellen Hesse-Kopplungen $H_{ij} = \frac{\partial^2 F}{\partial \theta_i \partial \theta_j}$. \\
+\addlinespace
+\textbf{Algorithmen / Werkzeuge} & Protein Frustratometer~2.0 (AWSEM); proteomweite Skalierung durch FrustraMPNN und FrustrAI-Seq~\citep{Beining2026,Leusch2026}. & Hesse-basierter Surrogatscore; sequenzielle approximative Gradientenantworten in \texttt{protein\_fold\_nash\_pdb.py}; Gleichheit der beiden Jacobi-Matrizen nicht etabliert. \\
+\addlinespace
+\textbf{Physikalischer Treiber} & Trichterförmige Energielandschaft; Selektion minimiert konfligierende native Wechselwirkungen. & Angepasstes Torsionsmodell und gewählte Schrittweite; keine zertifizierte Nash- oder Stabilitätsgrenze der nativen Faltung. \\
+\addlinespace
+\textbf{Biologische Signatur} & Katalytische Stellen, Bindungsschnittstellen und allosterische Regionen. & Kandidatenkorrelationen mit Scharnieren, funktionellen Stellen oder Intermediaten; unabhängige Validierung offen. \\
+\addlinespace
+\textbf{Bekannter blinder Fleck} & Unempfindlich gegenüber dynamischer kinetischer Erreichbarkeit und kooperativen Mehrfachkontakten; abhängig vom Decoy-Pool. & Anfällig für Zirkularität bei Selbstparametrisierung an der nativen PDB; unkalibrierte Absolutskala; erfordert Out-of-Sample-Regularisierung. \\
+\addlinespace
+\textbf{FST-Multiskalenrolle} & Thermodynamische Landschaft führender Ordnung ($H_0$): leitet Kettenkollaps entlang trichterförmiger Pfade. & Konjekturale Stabilitätsanalogie; keine nachgewiesene Unterdrückung von Fehlfaltungskanälen durch den Score. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Rechnerische Experimente an drei strukturell verschiedenen Proteinen untersuchen, ob Nash-Frustration biologisch bedeutsame Reste lokalisiert und ob sequenzielle approximative Gradientenantworten jenseits der Trainingsstruktur konvergiert. Tabelle~\ref{tab:nash-results} fasst die Ergebnisse zusammen.
+
+\begin{table}[htbp]
+\centering
+\caption{Nash-Gleichgewichtsanalyse von Proteinfaltungen. Parameter gelernt aus HP35 (Villin Headpiece, 1YRF) und angewendet, um Konvergenz der sequenzielle approximative Gradientenantworten für Protein G (1PGA, 56 Reste) und die hier genutzte p53-DNA-Bindungsdomänenstruktur (2XWR, 199 modellierte Reste) zu testen. sequenzielle approximative Gradientenantworten konvergiert über alle drei Proteine trotz mehrerer Proteingrößen; die großen $\phi_{\text{rms}}$-Werte zeigen jedoch, dass die konvergierten Strukturen den nativen Faltungen nicht eng entsprechen.}
+\label{tab:nash-results}
+\begin{tabularx}{\textwidth}{@{}L{0.28\textwidth} c c c c Y@{}}
+\toprule
+\textbf{Protein} & \textbf{Reste} & $\phi_{\text{rms}}$ [rad] & $\psi_{\text{rms}}$ [rad] & \textbf{Konvergiert} & $F_{\text{best}}$ \\
+\midrule
+HP35 (1YRF, Training) & 35 & 1{,}054 & 1{,}661 & Ja (267 Sw) & $-4{,}61$ \\
+Protein G (1PGA) & 56 & 1{,}300 & 2{,}002 & Ja (282 Sw) & $-10{,}61$ \\
+p53 DBD (2XWR) & 199 & 1{,}247 & 2{,}114 & Ja & $-39{,}43$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Referenzprotein (HP35).} Historische Modellausgaben ordnen Met11 und Pro20 hohe Scores zu (1{,}0 und 0{,}49), mehreren Helixkernresten niedrige. Berichtete $\rho(J)=1{,}013$, 80\% positive Hesse-Eigenwerte und mittlerer Score 0{,}082 charakterisieren das gewählte Surrogat des angepassten Potentials, keine \glqq Near-Nash\grqq{}-Struktur oder verifizierte Ankermechanik.
+
+\textbf{Proteinübergreifender Konvergenztest.} Die aus HP35 gelernten Modellparameter wurden verwendet, um zu testen, ob sequenzielle approximative Gradientenantworten für Protein G (1PGA, 56 Reste) und die hier genutzte p53-Tumorsuppressor-DNA-Bindungsdomänenstruktur (2XWR, 199 modellierte Reste) konvergiert. Beide Läufe konvergierten zu wohldefinierten Fixpunkten (Tabelle~\ref{tab:nash-results}). Die p53-Domäne -- ungefähr sechsmal größer als das Referenzprotein und einer anderen Faltungsklasse zugehörig (Immunglobulin-artiges $\beta$-Sandwich vs.\ $\alpha$-helikal) -- erreichte einen $\phi_{\text{rms}}$ von 1{,}25\,rad, vergleichbar mit Protein G (1{,}30\,rad). Diese $\phi_{\text{rms}}$-Werte entsprechen mittleren Abweichungen von etwa 72$^\circ$ pro Rest und zeigen, dass die konvergierten Strukturen \emph{nicht} nahe an den nativen Faltungen liegen. Die Schlüsselbeobachtung ist daher auf \emph{Konvergenz} der sequenzielle approximative Gradientenantworten über Proteine verschiedener Größe und Faltungsklasse begrenzt, nicht auf strukturelle Vorhersagegenauigkeit. Die Potentialspiel-Formulierung erfasst Konvergenzeigenschaften der angepassten Dynamik; Strukturvorhersage würde ein reichhaltigeres Potential mit Seitenkettenwechselwirkungen, Lösungsmitteleffekten und Elektrostatik erfordern.
+
+\paragraph{Rechnerische Beobachtung (Surrogatspektrum).}
+Die historische HP35-Ausgabe berichtet $\rho(J)=1{,}013$ und 14 von 70 Moden im berichteten Instabilitätszähler unter der gewählten Konvention. Dies etabliert weder, dass die native Faltung kein Nash-Gleichgewicht ist, noch ihre annähernde Selbststabilisierung oder kinetische Instabilität. Stationarität, korrekte Residuenblöcke, zulässige Abweichungen und die Ableitung des tatsächlichen sequenziellen Sweeps sind unabhängig zu prüfen.
+
+Bei gemeinsamem Potential schließt ein gemeinsames lokales Energieminimum bereits hinreichend kleine profitable einseitige Abweichungen aus. Umgekehrt kann lokaler Nash-Status mit negativer kollektiver Krümmung bestehen; er ist nicht im behaupteten Sinn strenger als gemeinsame Energieminimierung. Ein lokaler Hesse-Test zertifiziert keine globalen besten Antworten im zulässigen Torsionsbereich. Die Met11/Pro20-Maxima bleiben parameterabhängige Illustrationen ohne nachgewiesene allosterische, kinetische oder prädiktive Bedeutung.
+Im Sinne der FEP-MEPP-Kompatibilität (Konjektur~\ref{conj:fep-mepp}) kann Nash-Frustration $\rho(J)$ als Modelldiagnostik für lokale Spannung zwischen interner Freie-Energie-Minimierung (mEPP-Regime) und externer Entropieproduktions-Maximierung (MEPP-Regime) gelesen werden: Hohe Frustration markiert Reste, an denen der angepasste gefaltete Zustand dissipative Effizienz gegen strukturelle Stabilität abwägen könnte. Dies ist eine Stabilitätsinterpretation des Modells, keine direkte organismische Wahlhandlung.
+
+\paragraph{Geplanter quantitativer Vergleich.}
+Ein systematischer Vergleich der Nash-Frustrationswerte auf Residuen-Ebene mit den energetischen Frustrationsindizes des Protein Frustratometer~2.0~\cite{ParraFerreiro2016} sowie moderner struktur- und sequenzbasierter Prädiktoren wie FrustraMPNN~\citep{Beining2026} und FrustrAI-Seq~\citep{Leusch2026} stellt einen zentralen zukünftigen Validierungsschritt dar. Die Kernfrage ist, ob Nash-frustrierte Reste (hohe $|\lambda_k|-1$-Beiträge) mit energetisch frustrierten Resten überlappen, diese komplementär ergänzen oder orthogonal zu ihnen sind. Vorläufige Erwartungen legen partielle Komplementarität nahe: Energetische Frustration identifiziert evolutionäre Einschränkungen und Bindungsstellen, während Nash-Frustration kinetische Fallen und Faltungsintermediate hervorheben sollte (Tabelle~\ref{tab:frustration-comparison}). Ein Datensatz von Proteinen mit bekannten allosterischen Stellen und experimentell bestimmten $\phi$-Werten würde die empirische Grundlage für diesen Vergleich liefern. Vergleiche rangbasierter Karten erfordern kein optimiertes $\eta$; absolute Schwellen und globale $\rho(J)$-Vergleiche erfordern eine explizite Skalenkonvention oder eine Kalibrierung an unabhängigen Daten (siehe Bemerkung~\ref{rem:comp-protocol}).
+
+\subsection{Benchmark: Nash-Frustration vs.\ funktionelle Reste}
+\label{sec:frustration-benchmark}
+
+Um explorativ zu beurteilen, ob Nash-Frustration Information über biologische Funktion tragen könnte, führten wir eine Benchmark-Analyse durch, die residuenspezifische Nash-Frustrationswerte mit experimentell annotierten funktionellen Resten für HP35 (1YRF) und Protein~G (1PGA) vergleicht. Für jedes Protein wurden Reste als \emph{funktionell} (katalytische Stellen, Bindungsschnittstellen, allosterische Regionen aus UniProt-Annotationen) oder \emph{passiv} (alle anderen) klassifiziert, und der Nash-Frustrationswert wurde als binärer Klassifikator mittels ROC- und Precision-Recall-Analyse bewertet. Tabelle~\ref{tab:frustration-benchmark} fasst die Ergebnisse zusammen.
+
+\begin{table}[htbp]
+\centering
+\caption{Explorativer Benchmark der Nash-Frustration als Klassifikator funktioneller Reste. AUC: Fläche unter der ROC-Kurve; AUPRC: Fläche unter der Precision-Recall-Kurve. Mittlere Frustrationswerte als Mittelwert $\pm$ Standardabweichung. Skript: \texttt{frustration\_benchmark.py}.}
+\label{tab:frustration-benchmark}
+\begin{tabularx}{\textwidth}{@{}L{0.18\textwidth} c c Y Y@{}}
+\toprule
+\textbf{Protein} & \textbf{AUC} & \textbf{AUPRC} & \textbf{Mittl.\ Frust.\ (funktionell)} & \textbf{Mittl.\ Frust.\ (passiv)} \\
+\midrule
+HP35 (1YRF) & 0{,}616 & 0{,}550 & $0{,}160 \pm 0{,}269$ & $0{,}031 \pm 0{,}082$ \\
+Protein G (1PGA) & 0{,}688 & 0{,}618 & $0{,}229 \pm 0{,}247$ & $0{,}096 \pm 0{,}101$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Die AUC-Werte von 0{,}62 (HP35) und 0{,}69 (Protein~G) zeigen eine schwache bis moderate explorative Trennung -- unterhalb der Schwelle $\text{AUC} = 0{,}7$, die in diagnostischen Anwendungen häufig als \glqq akzeptabel\grqq{} gilt~\citep{Ferreiro2014}. Sie liegen in diesem kleinen Machbarkeitsnachweis über der Zufallsbasislinie, aber die aktuellen Benchmark-Dateien berichten noch keine Konfidenzintervalle und keinen formalen Signifikanztest für AUC-Werte über 0{,}5. Zum Kontext: Der Protein Frustratometer erreicht für die Identifikation funktioneller Stellen typischerweise AUC $> 0{,}75$; ein direkter Head-to-head-Vergleich an denselben Proteinen ist nötig, um zu quantifizieren, ob Nash-Frustration komplementäre oder lediglich schwächere Information liefert. Funktionelle Reste weisen in beiden Proteinen höhere mittlere Nash-Frustration auf als passive Reste ($0{,}160$ vs.\ $0{,}031$ für HP35; $0{,}229$ vs.\ $0{,}096$ für Protein~G), kompatibel mit, aber kein Beweis für die Interpretation, dass spieltheoretische Instabilität bevorzugt an biologisch aktiven Stellen lokalisiert ist. Die moderaten AUC-Werte sind angesichts des Charakters der Analyse als Machbarkeitsnachweis erwartbar: absolute Score-Schwellen bleiben unkalibriert, und das spieltheoretische Potential lässt Seitenketten-Wechselwirkungen, Lösungsmitteleffekte und Elektrostatik außer Acht. Diese Ergebnisse bleiben kompatibel mit der Interpretation, dass Nash-Frustration ein komplementäres Signal zur energetischen Frustration erfasst -- eines, das spektralen Surrogatüberschuss statt energetischer Suboptimalität reflektiert -- aber weitere Kalibrierung erfordert, bevor es als eigenständiger Prädiktor dienen kann.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{benchmark/frustration_benchmark_roc.png}
+\caption{Receiver-Operating-Characteristic (ROC)-Kurven für Nash-Frustration als binärer Klassifikator funktioneller versus passiver Reste. HP35 (1YRF, AUC\,=\,0{,}62) und Protein~G (1PGA, AUC\,=\,0{,}69) liegen beide über der Zufallsbasislinie (gestrichelte Diagonale), kompatibel mit der Hypothese einer bevorzugten Lokalisierung spieltheoretischer Instabilität an biologisch aktiven Stellen. Die moderaten AUC-Werte spiegeln den Charakter der Analyse als Machbarkeitsnachweis wider; Verbesserungen müssen durch reichere Potentiale und unabhängige Kontrollen gezeigt werden.}
+\label{fig:frustration-benchmark-roc}
+\end{figure}
+
+\subsection{Genregulation als Signalspiel}
+
+Genregulationsnetzwerke (GRNs) steuern Genexpressionsmuster und können als Signalspiele modelliert werden~\citep{GameBiochemistry}:
+
+\begin{itemize}
+    \item \textbf{Spieler:} Transkriptionsfaktoren und DNA-Bindungsstellen
+    \item \textbf{Strategien:} Binden/Nicht-Binden (mit kontinuierlicher Affinität als Strategieintensität)
+    \item \textbf{Payoff:} Organismische Fitness, vermittelt durch Genexpressionsniveaus
+\end{itemize}
+
+Die mathematische Verbindung zwischen Spieltheorie und Populationsdynamik wird durch die Replikatorgleichung hergestellt, die formal äquivalent zu Lotka--Volterra-Modellen ist~\citep{HofbauerSigmund1998}. Genauer gilt diese Äquivalenz für symmetrische Spiele mit linearen Fitnessfunktionen; bei frequenzabhängigen oder nichtlinearen Payoffs erfordert die Korrespondenz die Transformation $x_i = y_i / \sum_j y_j$ und beschränkt sich auf das Innere des Simplex (Hofbauer \& Sigmund 1998, Kapitel~7). Ein stabiler Fixpunkt in diesen Gleichungen entspricht einer ESS und somit einem Verhaltensattraktor, der die Langzeitstruktur des Systems bestimmt.
+
+\paragraph{Illustratives Beispiel: das lac-Operon.}
+Das Laktose-Verwertungssystem von \textit{E.\ coli} exemplifiziert die Signalspiel-Logik. Der lac-Repressor (LacI) und der CAP-Aktivator konkurrieren um die regulatorische Kontrolle des \textit{lac}-Operons. In Abwesenheit von Laktose stellt die LacI-Bindung ein Nash-Gleichgewicht dar: keine einseitige Änderung des Bindungszustands eines regulatorischen Faktors verbessert die organismische Fitness. Wenn Laktose vorhanden ist, inaktiviert Allolaktose LacI, verschiebt die Payoff-Matrix und etabliert ein neues Gleichgewicht mit Operon-Expression. Der bistabile Schalter zwischen diesen Zuständen ist präzise die Art von spieltheoretischem Attraktor, den der FST-III-Rahmen als ESS auf der Regulationsebene identifiziert.
+
+% ===================================================================
+\section{Das Free Energy Principle und Active Inference}
+\label{sec:fep}
+% ===================================================================
+
+Das Free Energy Principle (FEP), primär entwickelt von Karl Friston, liefert eine vereinigende Theorie für biologische Selbstorganisation, die Informationstheorie und Thermodynamik verschmilzt~\citep{FristonFreeEnergy,FristonPDF}. \textbf{Hinweis:} Die Behauptung, dass FEP und MEPP kompatibel oder äquivalent sind, ist nicht unumstritten. FEP minimiert variationelle freie Energie (eine informationstheoretische Größe, die Surprise begrenzt), während MEPP die thermodynamische Entropieproduktionsrate maximiert. Die Verbindung zwischen diesen beiden Prinzipien ist ein aktives Diskussionsgebiet~\citep{FristonFreeEnergy}; die vorliegende Arbeit behandelt sie als komplementäre Perspektiven auf verschiedenen Analyseebenen, leitet aber nicht formal eines aus dem anderen ab. Für eine kritische Bewertung der philosophischen Ansprüche des FEP (z.\,B.\ Markovian Monism) gegenüber seiner wissenschaftlichen Reichweite als heuristisches Vereinheitlichungsprinzip siehe~\cite{SanchezCanizares2021}.
+
+\subsection{Theoretischer Rahmen}
+
+FEP postuliert, dass jedes biologische System, das sich erfolgreich gegen Entropie (Zerfall) verteidigt, seine \glqq variationelle freie Energie\grqq{} minimieren muss~\citep{FristonFreeEnergy}. Diese Größe repräsentiert eine mathematische obere Schranke der \glqq Surprise\grqq{} (Surprisal), die das System durch sensorische Inputs erlebt~\citep{FristonFreeEnergy}.
+
+Ein biologischer Agent existiert innerhalb einer \glqq Markov-Decke\grqq{} -- einer statistischen Grenze, die interne Zustände von externen Zuständen trennt~\citep{FristonPDF}. Um zu überleben, muss der Agent sicherstellen, dass seine sensorischen Zustände innerhalb physiologischer Grenzen bleiben. Dies wird durch zwei Mechanismen erreicht:
+
+\begin{enumerate}
+    \item \textbf{Wahrnehmung:} Das System passt seine internen Modelle an, um die Ursachen sensorischer Daten besser vorherzusagen (Minimierung des Vorhersagefehlers)~\citep{FristonFreeEnergy}
+    \item \textbf{Active Inference:} Das System handelt, um die Welt zu verändern oder sensorische Daten zu selektieren, die seinen internen Erwartungen entsprechen~\citep{FristonFreeEnergy}
+\end{enumerate}
+
+Durch Minimierung der freien Energie wird das System implizit zu einem Modell seiner Umgebung. Dieser Prozess ist eng mit MEPP verknüpft: während das System intern seine freie Energie minimiert (Ordnung schafft), maximiert es die Entropieproduktion in der Umgebung durch metabolische und agentive Aktivitäten~\citep{FristonPDF}.
+
+In FST-III sind Verhaltensattraktoren diejenigen Zustände, in denen die freie Energie minimal ist und der Agent eine stabile, vorhersagbare Interaktion mit seiner Nische erreicht hat~\citep{FristonFreeEnergy}.
+
+\subsection{Freie-Energie-Minimierung als Nash-Fixpunkt}
+
+Die Verbindung zwischen FEP und Nash-Gleichgewicht kann unter bestimmten Bedingungen formalisiert werden. Sei $p(o,s_1,\dots,s_N)$ ein gemeinsames generatives Modell für $N$ interagierende Agenten, wobei jeder Agent $i$ eine faktorisierte approximative Posterior $q_i(s_i)$ über seine latenten Zustände kontrolliert. Die gemeinsame variationelle freie Energie ist:
+\begin{equation}
+F(q; o) = \mathbb{E}_q\!\left[\ln q(s) - \ln p(o, s)\right], \qquad q(s) = \prod_{i=1}^{N} q_i(s_i).
+\end{equation}
+
+Definiere ein Spiel, in dem jeder Agent $i$ die Kontrolle über $q_i$ hat und alle Agenten das Kostenfunktional $J_i(q_i, q_{-i}) := F(\prod_j q_j; o)$ teilen. Dann ist die beste Antwort von Agent $i$ gegen festes $q_{-i}$ präzise das koordinatenweise variationelle Update (Mean-Field-VI), und ein Nash-Gleichgewicht $q^* = (q_1^*, \dots, q_N^*)$ ist ein Fixpunkt verteilter Freie-Energie-Minimierung. Dies konstituiert ein \emph{Potentialspiel} mit Potential $F$ im Sinne von~\citet{MondererShapley1996}: Nash-Gleichgewichte fallen mit koordinatenweisen Minima der gemeinsamen freien Energie zusammen.
+
+\paragraph{Gültigkeitsbereich der Brücke.} Diese formale Äquivalenz gilt für die Belief-Optimierungskomponente von FEP (variationelle Inferenz) und beruht auf der \emph{Potentialspiel}-Struktur: alle Agenten teilen dasselbe Kostenfunktional $F$. In der biologischen Realität haben interagierende Organismen typischerweise heterogene Zielfunktionen (Räuber vs.\ Beute, Wirt vs.\ Parasit), was die Potentialspiel-Annahme bricht. Die FEP-als-Nash-Brücke gilt daher strikt für intra-organismische Inferenz (wo alle Subsysteme das Ziel organismischen Überlebens teilen) und für symmetrische Mehr-Agenten-Szenarien; sie lässt sich nicht ohne Modifikation auf antagonistische ökologische Interaktionen übertragen. Für Active Inference, wo Agenten zusätzlich Policies $\pi_i$ selektieren, um die erwartete freie Energie $G(\pi_i, \pi_{-i})$ zu minimieren, wird die Nash-Bedingung: kein Agent kann einseitig seine Policy ändern, um seine erwartete freie Energie zu reduzieren -- ein genuines Mehr-Agenten-Gleichgewicht, das Interaktion durch Zustandsdynamik involviert. Die vorliegende Arbeit entwickelt diese Erweiterung nicht formal; der Beitrag besteht darin, die präzise Demarkation zu liefern: FEP-als-Nash ist mehr als Metapher, wenn das Spiel explizit als variationelles/Potentialspiel über Verteilungen definiert ist, und bloß konzeptuell, wenn \glqq Nash\grqq{} als Synonym für \glqq Fixpunkt\grqq{} verwendet wird.
+
+\subsection{Skalentrennung: Auflösung des FEP-MEPP-Paradoxons}
+\label{sec:fep-mepp-paradox}
+
+Eine persistente konzeptuelle Spannung in der theoretischen Biologie fragt, wie ein System seine interne freie Energie \emph{minimieren} (FEP) kann, während es gleichzeitig die Entropieproduktion in der Umgebung \emph{maximiert} (MEPP). Die folgende Konjektur greift diese Spannung durch Skalentrennung über die Markov-Decke auf.
+
+\begin{conjecture}[FEP-MEPP-Kompatibilität via Markov-Decke]
+\label{conj:fep-mepp}
+Sei $\mathcal{B}$ ein selbstorganisierendes System mit Markov-Decke $\partial\mathcal{B}$, internen Zuständen $s$ und Umgebungszuständen $e$. Definiere:
+\begin{itemize}
+  \item $F_{\mathrm{int}}(q) :=
+    \mathbb{E}_{q}\!\bigl[\ln q(s) - \ln p(o, s)\bigr]$,
+    die variationelle freie Energie des internen Modells;
+  \item $\dot{S}_{\mathrm{ext}} :=
+    \frac{\dd S_{\mathrm{env}}}{\dd t} =
+    \frac{1}{T}\,\frac{\dd Q}{\dd t}$,
+    die Rate der Entropieproduktion in der Umgebung.
+\end{itemize}
+Wenn $\mathcal{B}$ $F_{\mathrm{int}}$ minimiert (FEP), indem es ein akkurates internes Modell aufrechterhält und Aktionen wählt, die Surprise reduzieren, dann:
+\begin{enumerate}
+  \item[\emph{(i)}] Die strukturelle Integrität von $\mathcal{B}$ wird aufrechterhalten: $\mathcal{B}$ widersteht der Auflösung und erhält die Markov-Decke (niedrige interne Entropie);
+  \item[\emph{(ii)}] Die intakte, fernab-vom-Gleichgewicht-Struktur $\mathcal{B}$ fungiert als effiziente dissipative Maschine, die Energiegradienten aus der Umgebung durch metabolische und agentive Aktivitäten kanalisiert;
+  \item[\emph{(iii)}] Unter allen Randbedingungen, die konsistent mit dem Überleben von $\mathcal{B}$ sind, tendiert die tatsächliche Dynamik zu Konfigurationen mit hoher (wenn auch nicht notwendigerweise maximaler) Rate der Entropieproduktion $\dot{S}_{\mathrm{ext}}$ in der Umgebung, konsistent mit der Stabilitätsinterpretation von MEPP (Hypothese~2 oben). Der Schlüsselmechanismus, der (ii) mit (iii) verbindet, ist \emph{kompetitive Selektion}: Unter mehreren intakten dissipativen Strukturen erwerben diejenigen, die Energiegradienten effizienter kanalisieren, mehr Ressourcen, replizieren schneller und verdrängen langsamere Dissipatoren. Dieser Selektionsdruck -- abwesend bei passiven Strukturen wie Kristallen -- treibt die Korrelation zwischen struktureller Integrität und hoher Entropieproduktion im biologischen Bereich.
+\end{enumerate}
+Kurz: \emph{interne Freie-Energie-Minimierung kann externe Entropieproduktions-Zunahme unterstützen}. Die beiden Prinzipien müssen nicht im direkten Widerspruch stehen, wenn sie komplementären Seiten der Markov-Decke zugeordnet werden.
+\end{conjecture}
+
+\noindent\textbf{Status:} Diese Konjektur ist gestützt auf qualitative Argumente. Ein formaler Beweis würde erfordern, dass FEP-minimierende Systeme notwendigerweise die Entropieproduktion in der Umgebung unter den genannten Randbedingungen maximieren -- ein Resultat, das in der Literatur nicht demonstriert wurde.
+
+\begin{remark}[Spieltheoretische Interpretation]
+In der Sprache der vorliegenden Arbeit entspricht die FEP-MEPP-Kompatibilität einem Zweistufen-Spiel:
+\begin{itemize}
+  \item \emph{Inneres Spiel} (innerhalb $\partial\mathcal{B}$): Agenten minimieren die variationelle freie Energie $F_{\mathrm{int}}$ über den Nash-Fixpunkt des in Abschnitt~\ref{sec:fep} beschriebenen Potentialspiels.
+  \item \emph{Äußeres Spiel} (über $\partial\mathcal{B}$): Das Ensemble überlebender Organismen konkurriert um Energiegradienten. Organismen, die effizienter dissipieren (höheres $\dot{S}_{\mathrm{ext}}$), können langsamere Dissipatoren verdrängen, wodurch MEPP als makroskaliger Selektionskandidat unter den genannten Randbedingungen erscheint.
+\end{itemize}
+Dies formuliert das von Martyushev~\cite{Martyushev2010} und Sawada et al.~\citep{Toma2025} aufgeworfene MEPP-Paradoxon neu: MEPP gilt für das \emph{umgebungsgekoppelte} System, nicht für die internen Freiheitsgrade, wo minimale Entropieproduktion (Prigogine) lokal gelten kann. Die Nash-Frustration $\rho(J)$ aus Abschnitt~\ref{sec:molecular} wird hier als Modelldiagnostik für residuale Spannung zwischen innerer Optimalität und äußerem dissipativem Druck verwendet.
+\end{remark}
+
+\subsection{Nash-Gleichgewicht als Mean-Field-Game-Fixpunkt}\label{sec:mfg-fixpoint}
+
+
+Die vorgeschlagene FEP-Nash-Brücke lässt sich mit Mean Field Games (MFG) vergleichen~\citep{LasryLions2007}. Residuentorsionen als Zustände repräsentativer Agenten motivieren die folgenden formalen Gleichungen. Ein Grenzwertsatz für das sparse heterogene Proteinkontaktnetz bei großem $N$ ist hier nicht etabliert.
+\textbf{Approximationsvorbehalt.} Wechselwirkungen über Populationsverteilungen idealisieren das sparse heterogene Proteinkontaktnetz. Auch dichte homogene Kopplung erfordert einen eigenen Mean-Field-Grenzwertsatz. Quantitative MFG-Genauigkeit für HP35 ist nicht etabliert; quadratische Kontrollkosten sind eine formale Modellwahl, keine hergeleitete physikalische Torsionsbarriere.
+
+Die HJB-Gleichung beschreibt die optimale Steuerung jedes Agenten. Der zugehörige Hamiltonian lautet
+\begin{equation}\label{eq:mfg-hamiltonian}
+  H(\theta,p,m) \;=\; \tfrac{1}{2}\|p\|^{2}
+    - \sum_{i<j}\int E_{ij}(\theta_i,\theta_j)\,m_j(\theta_j)\,\mathrm{d}\theta_j\,,
+\end{equation}
+wobei $p=\nabla V$ der konjugierte Impuls ist, $E_{ij}$ paarweise Rest-Rest-Wechselwirkungen kodiert und $m_j$ die Populationsdichte der Diederwinkel-Zustände an Position $j$ ist. Die Fokker--Planck-Gleichung propagiert die Agentendichte unter dem optimalen Drift und thermischem Rauschen:
+\begin{equation}\label{eq:mfg-fp}
+  \partial_t m \;=\; \nabla\!\cdot\!\bigl(m\,\nabla V\bigr) + \sigma\,\Delta m\,,
+  \qquad \sigma = k_B T / \gamma\,.
+\end{equation}
+Ein MFG-Nash-Gleichgewicht ist ein Paar $(V^{*},m^{*})$, das beide Gleichungen simultan erfüllt. Im thermischen Gleichgewicht ist die stationäre Dichte
+\begin{equation}\label{eq:mfg-boltzmann}
+  m^{*}(\theta) \;\propto\; \exp\!\bigl(-V(\theta)/k_B T\bigr)\,,
+\end{equation}
+Für Drift und Diffusion in Gl.~\eqref{eq:mfg-fp} ergibt flussfreies detailliertes Gleichgewicht formal $m^*\propto\exp(-V/\sigma)$, also Gl.~\eqref{eq:mfg-boltzmann} nur in Einheiten mit $\gamma=1$ und geeigneter Normierung und Randbedingungen. Bei positiver Temperatur konzentriert sich die Verteilung nicht notwendig allein auf Minima. Dies löst kein gekoppeltes HJB-FP-System und identifiziert die Kontrollwertfunktion nicht mit einer angepassten Molekülenergie; die biologische Brücke bleibt konjektural.
+
+\textbf{Existenz, Eindeutigkeit und Algorithmen sind zu trennen.} In Cardaliaguets MFG-Modell zweiter Ordnung mit endlichem Zeithorizont auf $\mathbb R^d$ beweist Satz~3.1 Existenz ohne Lasry-Lions-Monotonie: vorausgesetzt sind beschränkte Lipschitz-regulierende laufende und terminale Kopplungen, auf eins normierte Diffusion und eine anfängliche H\"older-Dichte mit endlichem zweitem Moment. Die Schauder-Konstruktion betrifft zeitabhängige Maßpfade~\citep{Cardaliaguet2013}.
+
+Satz~3.6 ergänzt strikte Monotonie der laufenden Kopplung und Monotonie der terminalen Kopplung für Eindeutigkeit. Er ist kein Konvergenzsatz für den Proteinalgorithmus. Gebiet, Diffusion, Kopplung und Daten des Proteinmodells erfüllen diesen Vertrag hier nicht nachgewiesenermaßen. Repulsion oder Attraktion allein entscheidet die erforderliche Integralungleichung nicht; fehlende Monotonie allein beweist weder Nichtexistenz noch mehrere Gleichgewichte~\citep{Cardaliaguet2013}.
+
+\begin{remark}[Versagensmodi]\label{rem:mfg-failure}
+Aus der ungeprüften MFG-Einbettung folgt keine Konvergenz-, Aggregations- oder Prionenpathologievorhersage. Kinetisches Einfangen widerlegt allein keine Potentialspiel-Darstellung. Randwertproblem, Regularität, Kopplungsmonotonie und algorithmische Konvergenz sind getrennt nachzuweisen; eine endlichdimensionale statische Fixpunktrechnung erfüllt diese PDE-Pflichten nicht.
+\end{remark}
+
+% ===================================================================
+\section{Boolesche Netzwerke und der Rand des Chaos}
+\label{sec:boolean}
+% ===================================================================
+
+Auf der Ebene der Genregulation manifestiert sich Stabilität in der Dynamik Boolescher Netzwerke, wie sie von Stuart Kauffman eingeführt wurden~\citep{BooleanPost,KauffmanOrigins}. Boolesche Netzwerkmodelle sind ein aktives Forschungsfeld; für umfassende Behandlungen von Netzwerkmotiven und Designprinzipien siehe~\citet{AlonSystems2007}, und für Robustheit und Evolvabilität in genetischen Netzwerken siehe~\citet{WagnerRobustness2005}.
+
+\subsection{Netzwerkdynamik}
+
+Diese Netzwerke modellieren Gene als binäre Schalter, deren Zustände durch regulatorische Logik verknüpft sind~\citep{BooleanPost}. Die Langzeitdynamik solcher Netzwerke fließt in Attraktoren, die biologisch als spezifische Zelltypen oder funktionelle Zustände interpretiert werden~\citep{BooleanEvolution}.
+
+Kauffman argumentierte, dass Netzwerkstabilität von der Konnektivität und dem Typ der Booleschen Funktionen abhängt~\citep{BooleanPost}. Netzwerke am \glqq Rand des Chaos\grqq{} -- einer kritischen Übergangsregion zwischen rigider Ordnung und unvorhersagbarem Chaos -- weisen hypothetisch hohe Evolvabilität und Informationsverarbeitungskapazität auf, obwohl diese Behauptung in der Literatur umstritten bleibt~\citep{KauffmanOrigins}:
+
+\begin{table}[htbp]
+\centering
+\caption{Regime Boolescher Netzwerke und häufig vorgeschlagene biologische Interpretationen. Für kritische Netzwerke wird eine Balance von Robustheit und Anpassungsfähigkeit hypothetisiert; weder maximale Evolvabilität noch ein universelles biologisches Optimum werden hier vorausgesetzt.}
+\label{tab:network-regimes}
+\begin{tabularx}{\textwidth}{@{}L{0.22\textwidth} L{0.28\textwidth} Y@{}}
+\toprule
+\textbf{Netzwerkregime} & \textbf{Dynamisches Verhalten} & \textbf{Biologische Funktion} \\
+\midrule
+Geordnet & Eingefrorene Zustände, geringe Variabilität & Strukturelle Integrität, Basalmetabolismus \\
+Kritisch (Rand des Chaos) & Komplexe Muster, hoher Informationsfluss & Adaptives Verhalten, Differenzierung, Lernen \\
+Chaotisch & Hohe Sensitivität, Instabilität & Pathologische Zustände, Malignität \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Diese Attraktoren in Genregulationsnetzwerken bilden die materielle Basis für die spieltheoretischen Strategien auf höheren Ebenen. Eine ESS auf der Makroebene erfordert stabile genetische Attraktoren auf der Mikroebene, die zuverlässig die notwendigen phänotypischen Merkmale produzieren~\citep{BooleanMicroarray,KauffmanOrigins}.
+
+\paragraph{Boolesche Attraktoren als Nash-Gleichgewichte.}
+Die Verbindung zwischen Booleschen Netzwerk-Attraktoren und Nash-Gleichgewichten kann explizit gemacht werden. Jedes Gen $g_i$ in einem Booleschen Netzwerk von $n$ Genen ist ein \glqq Spieler\grqq{}, dessen Strategie sein Expressionszustand $\sigma_i \in \{0, 1\}$ ist. Die Boolesche Update-Funktion $f_i(\sigma_{-i})$ definiert die beste Antwort von Gen $i$ gegeben die Zustände seiner Regulatoren. Ein Fixpunkt-Attraktor $\sigma^* = (f_1(\sigma^*_{-1}), \dots, f_n(\sigma^*_{-n}))$ ist dann präzise ein Nash-Gleichgewicht in reinen Strategien dieses $n$-Spieler-Spiels: kein Gen kann einseitig seinen Zustand ändern, um seinen \glqq Payoff\grqq{} (definiert als Übereinstimmung mit der regulatorischen Logik) zu verbessern. \textbf{Hinweis:} Diese Nash-Charakterisierung ist formal statt substantiell -- sie reformuliert die Fixpunktbedingung in spieltheoretischer Sprache. Der nicht-triviale Gehalt entsteht erst, wenn der Payoff an ein externes Fitnessmaß gekoppelt wird (z.\,B.\ organismische Lebensfähigkeit), sodass nicht alle Booleschen Fixpunkte gleichermaßen \glqq Nash-stabil\grqq{} unter Selektion sind. Grenzzyklus-Attraktoren entsprechen periodischen Orbits statt reinen Nash-Gleichgewichten, können aber als korrelierte Gleichgewichte im wiederholten Spiel interpretiert werden. Diese spieltheoretische Perspektive auf Boolesche Netzwerke liefert die formale Brücke zwischen Kauffmans Attraktor-Dynamik und der hierarchischen Nash-Architektur von FST-III.
+
+% ===================================================================
+\section{Zelluläre Ebene: Multizellularität als Koalitionsspiel}
+\label{sec:multicellularity}
+% ===================================================================
+
+\subsection{Das Kooperationsproblem}
+
+In einem multizellulären Organismus \glqq opfern\grqq{} einzelne Zellen ihr Reproduktionspotential zugunsten des Ganzen. Somatische Zellen reproduzieren sich nicht direkt; nur Keimbahnzellen übertragen Gene.
+
+Dies repräsentiert extreme Kooperation: Zellen adoptieren eine Strategie (Differenzierung, Nicht-Reproduktion), die dem Kollektiv auf individuelle Kosten nützt.
+
+\subsection{Koalitionsspiel-Formulierung}
+
+\begin{itemize}
+    \item \textbf{Spieler:} Einzelne Zellen innerhalb des Organismus
+    \item \textbf{Strategien:} Kooperieren (Entwicklungsprogramm folgen) oder Defektieren (autonom proliferieren)
+    \item \textbf{Payoff:} Genetische Fitness (über Keimbahn übertragen)
+\end{itemize}
+
+In erster Näherung sind alle Zellen in einem Organismus genetisch nahezu identisch (klonal) und teilen die überwältigende Mehrheit ihres Genoms. Daher entspricht der Payoff für jede Zelle näherungsweise dem Payoff der Keimbahn: wenn sich der Organismus reproduziert, werden die gemeinsamen Gene übertragen. (In der Praxis führen somatische Mutationen, V(D)J-Rekombination in Immunzellen und mitochondriale Heteroplasie zu begrenzter genetischer Divergenz, was präzise das Krebs-als-Defektion-Szenario ermöglicht, das unten diskutiert wird.)
+
+\begin{proposition}[Multizellularität als Nash-Gleichgewicht]
+\label{prop:multicellularity}
+In einem klonalen Organismus, in dem alle Zellen den Verwandtschaftsgrad $r \approx 1$ teilen, ist Kooperation (Befolgen des Entwicklungsprogramms) ein Nash-Gleichgewicht, sofern die individuellen Kosten der Kooperation geringer sind als der inklusive Fitnessnutzen: $c < r \cdot b$ (Hamiltons Regel~\citep{Hamilton1964}). Im Grenzfall $r = 1$ genügt jeder positive Nettonutzen $b > c$. Der Beitrag hier besteht in der Einbettung dieses klassischen Resultats in den hierarchischen FST-Rahmen; das Nash-Gleichgewicht wird aufrechterhalten, solange die klonale Identität erhalten bleibt.
+\end{proposition}
+
+\subsection{Krebs als Koalitionszusammenbruch}
+
+Krebs als Zusammenbruch multizellulärer Kooperation ist ein gut etablierter Rahmen~\citep{AktipisCancer}. Die spieltheoretische Rahmung hier folgt~\citet{AktipisCancer}, die evolutionäre Spieltheorie anwenden, um somatische Evolution und Krebsprogression zu erklären. Der FST-III-Beitrag besteht darin, diesen Rahmen in das hierarchische Nash-Gleichgewichts-Bild einzubetten: Krebs repräsentiert nicht bloß einen selektiven Vorteil für einzelne Zellen, sondern einen Phasenübergang auf der Koalitionsebene, analog zum Parasitenproblem in der präbiotischen Chemie, das in FST-II diskutiert wird. Formal repräsentiert Krebs einen Koalitionszusammenbruch:
+\begin{enumerate}
+    \item Somatische Mutationen erzeugen genetische Divergenz
+    \item Mutierte Zellen teilen nicht mehr alle Gene mit anderen Zellen
+    \item Defektion (Proliferation) nützt nun der mutierten Linie
+    \item Das Nash-Gleichgewicht bricht zusammen; Krebszellen \glqq defektieren\grqq{}
+\end{enumerate}
+
+Dies verbindet sich mit dem Parasitenproblem in Hyperzyklen~\citep{FSTII}: sowohl Krebs als auch chemische Parasiten nutzen kooperative Systeme aus, indem sie Bedingungen brechen, die Kooperation stabilisieren. Die Parallele zwischen Krebs als Koalitionszusammenbruch und dem Hyperzyklus-Parasitenproblem wird als \emph{strukturelle Analogie} präsentiert, nicht als abgeleitetes Resultat. Eine formale Verbindung würde erfordern zu zeigen, dass onkogene Mutationen auf parasitäre Replikatoren im Sinne von Eigen \& Schuster abbilden; dies bleibt ein offenes Problem.
+
+% ===================================================================
+\section{Skalierung und die Renormierungsgruppe}
+\label{sec:renormalization}
+% ===================================================================
+
+Ein zentrales Element von FST-III ist die Erkenntnis, dass biologische Prinzipien skaleninvariant über viele Ebenen operieren~\citep{ScaleRGFrontiers,ScaleRGResearch}.
+
+\subsection{Der RG-Rahmen}
+
+\textbf{Terminologischer Vorbehalt:} Der Begriff \glqq Renormierungsgruppe\grqq{} wird in diesem Abschnitt in einem erweiterten, metaphorischen Sinne verwendet. In der Physik der kondensierten Materie bezieht sich die Renormierungsgruppe (RG) auf einen präzisen mathematischen Rahmen mit Flussgleichungen, Fixpunkten und Skalenexponenten~\citep{ScaleRGResearch}. Die vorliegende Verwendung -- die beschreibt, wie effektive spieltheoretische Parameter sich ändern, wenn man auf sukzessive größeren biologischen Skalen betrachtet -- ruft die \emph{konzeptuelle Logik} der Grobkörnung auf, liefert aber keine RG-Flussgleichungen, Fixpunktanalyse oder dimensionelle Skalengesetze für biologische Systeme. Ob eine rigorose RG-Behandlung evolutionärer Übergänge erreichbar ist, bleibt eine offene Frage~\citep{ScaleRGFrontiers}.
+
+Mit diesem Vorbehalt im Hinterkopf: Die Grobkörnungsperspektive postuliert, dass biologische Systeme oft hierarchisch organisiert sind -- von fraktaler Verzweigung in Blutgefäßen bis zu hierarchischen neuronalen Architekturen~\citep{SelfSimilarNetworks}.
+
+Renormalizing Generative Models (RGM) zeigen, dass Prinzipien der freien Energie und spieltheoretischen Optimierung rekursiv auf jeder Ebene angewandt werden~\citep{ScaleRGFrontiers}. Ein Organismus kann als Grobkörnung über Milliarden von Zellen betrachtet werden, wobei Zellen als \glqq Atome\grqq{} in einem Spiel höherer Ordnung fungieren, dessen Regeln durch die evolutionäre Geschichte der Spezies festgelegt sind~\citep{ReplicatorOptimization}.
+
+\subsection{Das skalenrelative Kernmodell}
+
+Diese Instanziierung wird durch skalenrelative Fitnessmodelle der Mehrebenenselektion beschrieben~\citep{Okasha2006,Michod1999,ReplicatorOptimization}:
+
+\begin{table}[htbp]
+\centering
+\caption{Skalenrelatives Kernmodell: Fitnessdefinitionen und Strategietypen auf jeder biologischen Organisationsebene.}
+\label{tab:scale-kernel}
+\begin{tabular}{ll}
+\toprule
+\textbf{Ebene} & \textbf{Fitness/Strategie} \\
+\midrule
+Zellulär & Replikationsrate als Fitness, Mutationen als Strategiewechsel \\
+Organismisch & Darwinsche Fitness, Verhaltensstrategien \\
+Agentiv & Intentionalität, Lernen durch Imitation \\
+Institutionell & Legitimität und soziale Kooperation als ESS \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Diese hierarchische Struktur stellt sicher, dass Konflikte zwischen Skalen (z.\,B.\ Krebs als Defektion einzelner Zellen gegen den Organismus) durch übergeordnete Selektionsdrücke minimiert werden~\citep{ReplicatorOptimization}.
+
+\subsection{Hauptübergänge als RG-Schritte}
+
+Die Hauptübergänge der Evolution, identifiziert von Szathmáry und Maynard~Smith \citep{SzathmaryMaynardSmith1995}, bilden auf diesen Rahmen ab:
+
+\begin{itemize}
+    \item Gene $\to$ Chromosomen (Block 1)
+    \item Prokaryoten $\to$ Eukaryoten (Block 2)
+    \item Einzeller $\to$ Vielzeller (Block 3)
+    \item Individuen $\to$ Gesellschaften (Block 4)
+\end{itemize}
+
+Jeder Übergang schafft eine neue Ebene von \glqq Spielern\grqq{} aus Koalitionen niedrigerer Spieler und erhält spieltheoretische Struktur durch Grobkörnung.
+
+\paragraph{Ein Toy-Renormierungsschritt für räumliche evolutionäre Spiele.}
+Betrachte ein 2D-Gitter-Spiel mit Strategien $\sigma_x\in\{C,D\}$ und Payoff-Matrix
+$A=\begin{pmatrix}R&S\\ T&P\end{pmatrix}$.
+Für einen $2\times 2$-Block $B$ definiere eine Blockstrategie $\Sigma_B=\mathcal B(\sigma|_B)$ durch Mehrheitsregel.
+Für benachbarte Blöcke $B,B'$ definiere den effektiven Block-Payoff durch Randmittelung
+
+\[
+A'_{s,t}
+:=\frac{1}{|\partial(B,B')|}\,
+\mathbb E\!\left[\sum_{\langle x,y\rangle\in\partial(B,B')} A_{\sigma_x,\sigma_y}\ \Big|\ \Sigma_B=s,\ \Sigma_{B'}=t\right],
+\qquad s,t\in\{C,D\}.
+\]
+
+In einer Frozen-Interior-Approximation, sei
+$q_s=\mathbb P(\sigma_x=C\mid \Sigma_B=s,\ x\in\partial B)$.
+Dann erfüllt die RG-Abbildung $R_2:(A,\beta)\mapsto(A',\beta')$ die explizite Mischungsformel
+
+\[
+A'_{s,t}
+= q_s q_t\,R + q_s(1-q_t)\,S + (1-q_s)q_t\,T + (1-q_s)(1-q_t)\,P,
+\]
+
+mit $q_C\approx 1-\varepsilon$ und $q_D\approx \varepsilon$, kontrolliert durch die Within-Block-Dynamik (Selektionsstärke $\beta$ und interne Durchsetzungsmechanismen).
+Fixpunkte umfassen die geordneten Phasen (All-$C$, All-$D$), während Änderungen in Within-Block-Einschränkungen den RG-Fluss durch Modifikation von $q_C-q_D$ verschieben.
+Dies liefert einen konkreten Sinn, in dem evolutionäre Hauptübergänge Grobkörnungsschritten zusammen mit der Aktivierung neuer relevanter Operatoren (z.\,B.\ Policing, Bottlenecks) entsprechen, die kooperative Makrovariablen stabilisieren. Biologisch entspricht die Blockstrategie $\Sigma_B$ einem höherstufigen Phänotyp (z.\,B.\ multizelluläre Kooperation), während die Randparameter $q_C, q_D$ Durchsetzungsmechanismen kodieren (z.\,B.\ Immunüberwachung, reproduktive Bottlenecks), die Innergruppen-Defektion unterdrücken.
+
+% ===================================================================
+\section{Ökosystem-Ebene: Das ökologische Spiel}
+\label{sec:ecosystem}
+% ===================================================================
+
+\subsection{Arten als Spieler}
+
+Im ökologischen Spiel:
+\begin{itemize}
+    \item \textbf{Spieler:} Artenpopulationen
+    \item \textbf{Strategien:} Ökologische Rollen (Räuber, Beute, Konkurrent, Mutualist)
+    \item \textbf{Payoff:} Populationswachstumsrate
+\end{itemize}
+
+\subsection{Ökologische stationäre Zustände als mögliche spieltheoretische Analogien}
+
+Eine ökologische Nische ist nicht selbst ein Nash-Gleichgewicht; sie beschreibt Umweltanforderungen und Interaktionen einer Art. Eine Nash- oder ESS-Deutung ist erst nach expliziter Festlegung vererbbarer Strategien, frequenzabhängiger Payoffs und zulässiger einseitiger Abweichungen möglich. Populationsdynamische Fixpunkte können dann unter einer expliziten Replikator--Lotka--Volterra-Abbildung mit Spielgleichgewichten verglichen werden; ihre dynamische Stabilität ist jedoch separat nachzuweisen.
+
+\paragraph{Beispiel: Räuber-Beute-Koexistenz.}
+In einem klassischen Lotka--Volterra-Räuber-Beute-System erfüllt der innere Fixpunkt -- an dem Räuber- und Beutepopulationen bei konstanten Dichten koexistieren -- die Nash-Gleichgewichtsbedingung des ökologischen Spiels: weder die Beuteart (durch Änderung ihrer Reproduktionsstrategie) noch der Räuber (durch Änderung seiner Jagdstrategie) kann an diesem Punkt einseitig seine Populationswachstumsrate verbessern. \textbf{Vorbehalt:} Im einfachen Lotka--Volterra-Modell ist dieser Fixpunkt ein Zentrum (neutral stabil mit geschlossenen Orbits), kein asymptotisch stabiler Attraktor; ESS-artige Stabilität erfordert zusätzliche Mechanismen wie dichteabhängige Mortalität oder räumliche Struktur. Die Äquivalenz zwischen Lotka--Volterra-Fixpunkten und Replikatordynamik-Gleichgewichten~\citep{HofbauerSigmund1998} bildet das ökologische Spiel auf die evolutionäre Dynamik ab, aber der Stabilitätstyp des resultierenden Gleichgewichts hängt von der spezifischen Payoff-Struktur ab.
+
+\subsection{Massenaussterben als Phasenübergänge}
+
+Massenaussterbe-Ereignisse repräsentieren Phasenübergänge im ökologischen Spiel:
+\begin{enumerate}
+    \item Umweltstörung verändert die Payoff-Matrix
+    \item Vorherige Nash-Gleichgewichte werden instabil
+    \item System geht in neues Gleichgewicht mit anderer Artenzusammensetzung über
+\end{enumerate}
+
+Auf struktureller Ebene gleicht diese Logik Phasenübergängen in physikalischen Systemen allgemein: veränderte Randbedingungen destabilisieren bestehende Gleichgewichte und treiben Übergänge zu neuen Konfigurationen. Es sei angemerkt, dass diese spieltheoretische Rahmung ein \emph{post hoc} interpretatives Modell ist: Massenaussterben sind komplexe Ereignisse, angetrieben durch Asteroideneinschläge, Vulkanismus oder Ozean-Anoxie, und inwieweit sie produktiv als Payoff-Matrix-Perturbationen modelliert werden können -- statt als katastrophale Regimewechsel außerhalb des Gleichgewichtsrahmens -- bleibt eine empirische Frage~\citep{GouldEldredge1977}.
+
+% ===================================================================
+\section{Synthese: Drei Phasen biologischer Organisation}
+\label{sec:synthesis}
+% ===================================================================
+
+FST-III liefert ein integriertes Bild biologischer Organisation, das sich in drei Phasen entfaltet. Tabelle~\ref{tab:biological-game-hierarchy} und Abbildung~\ref{fig:biological-game-hierarchy} fassen die hierarchische Spiel- und Stabilitätsarchitektur über alle Organisationsebenen zusammen.
+\begin{table}[htbp]
+\centering
+\caption{Synthesematrix: Hierarchische Spiel- und Stabilitätsarchitektur über biologische Organisationsebenen. Jede Ebene instanziiert spieltheoretische Gleichgewichte unter thermodynamischen und dissipativen Nebenbedingungen.}
+\label{tab:biological-game-hierarchy}
+\small
+\begin{tabularx}{\textwidth}{@{}L{0.17\textwidth} L{0.19\textwidth} L{0.19\textwidth} L{0.21\textwidth} Y@{}}
+\toprule
+\textbf{Ebene} & \textbf{Spieler} & \textbf{Strategieraum} & \textbf{Auszahlung / Kosten} & \textbf{Gleichgewicht \& Stabilität} \\
+\midrule
+Molekular & Aminosäurereste & Diederwinkel $(\phi, \psi)$ & $-\Delta G$ (Freie Energie) & Modellkandidat / Surrogatdiagnostik \\
+Gen\-re\-gu\-la\-to\-risch & Trans\-krip\-ti\-ons\-fak\-to\-ren / DNA & Bindungszustände $\sigma_i \in \{0,1\}$ & Fitness / Expressionslogik & Boolesche Fixpunkte / Signal-Attraktoren \\
+Zellulär & Somatische / Keimbahn-Zellen & Kooperation vs.\ Defektion & Inklusive Fitness ($c < r \cdot b$) & Klonaler Nash-Zustand (Krebs = Kollaps) \\
+Agentisch & Organismus / Subsysteme & Active-Inference-Policies $\pi$ & Variationelle Freie Energie $F$ & Dy\-na\-mi\-scher Bayes\-scher Nash-At\-trak\-tor \\
+Ökologisch & Ar\-ten\-po\-pu\-la\-ti\-o\-nen & Nischenrollen / Strategien & Po\-pu\-la\-ti\-ons\-wachs\-tums\-ra\-te & Lotka--Volterra ESS / Resolventen-Resilienz \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[box/.style={draw=blue!60!black, rounded corners, fill=blue!4, text width=12cm, align=center, minimum height=1.15cm, font=\small}]
+\node[box] (L0) at (0,0) {\textbf{Ökologische Populationen} \\
+Festgelegte ökologische Spiele; dynamische Stabilität getrennt prüfen};
+\node[box] (L1) at (0,-1.7) {\textbf{Organismische Policies} \\
+Bedingte Active-Inference-Analogie};
+\draw[->,thick] (L1.north) -- (L0.south);
+\node[box] (L2) at (0,-3.4) {\textbf{Zelluläre Koalitionen} \\
+Bedingtes Modell gemeinsamer Kosten oder klonaler Spiele};
+\draw[->,thick] (L2.north) -- (L1.south);
+\node[box] (L3) at (0,-5.1) {\textbf{Genregulation} \\
+Regulatorische Fixpunktbeschreibung; Payoff-Annahmen explizit};
+\draw[->,thick] (L3.north) -- (L2.south);
+\node[box] (L4) at (0,-6.8) {\textbf{Molekulare Torsionen} \\
+Angepasster Gradientensurrogatscore; kein natives Nash-Zertifikat};
+\draw[->,thick] (L4.north) -- (L3.south);
+\end{tikzpicture}
+\caption{Konzeptionelle Hierarchie biologischer Spielmodelle. Pfeile bezeichnen vorgeschlagene Skalenwechsel, keine hergeleiteten Renormierungsflüsse. Jede Ebene erfordert eigene Auszahlungen, Dynamik und Evidenz; ein universeller spektraler Stabilitätsfilter ist nicht etabliert.}
+\label{fig:biological-game-hierarchy}
+\end{figure}
+
+
+\subsection{Phase 1: Thermodynamische Dissipation}
+
+Der Energiefluss des jungen Universums zwingt einfache Materie in dissipative Strukturen. Hier wirkt MEPP als Stabilitätsfilter (Abschnitt~\ref{sec:thermodynamics}): unter den vielen möglichen Konfigurationen persistieren diejenigen mit resolvent-stabilen Dissipationsmustern. Es ist die Ära schneller Entropieproduktion und der Entstehung von Englands dissipativen Adaptoren~\citep{EcosystemMEPP}.
+
+\subsection{Phase 2: Strategische Konsolidierung}
+
+Sobald dissipative Strukturen die Schwelle zur Selbstreplikation überschreiten, führt Wettbewerb um Ressourcen zu spieltheoretischer Dynamik. Die Entstehung von Evolutionarily Stable Strategies (ESS) stabilisiert molekulare Populationen gegen parasitäre Invasion (Abschnitt~\ref{sec:molecular}). Die \glqq Spieler\grqq{} sind noch rein chemisch, aber ihre Interaktionen können bereits eine Nash-Gleichgewichts-Struktur aufweisen, die in späteren Ebenen wiederkehrt~\citep{MaynardSmithPrice1973}. Die evolutionären Hauptübergänge (Abschnitt~\ref{sec:renormalization}) körnen niedrigere Spielerebenen iterativ zu höheren Koalitionen, wobei die spieltheoretische Logik auf neuen Skalen teilweise erhalten bleiben kann.
+
+\subsection{Phase 3: Kognitive Inferenz}
+
+Organismen entwickeln interne Modelle ihrer Umgebung, um ihre freie Energie zu minimieren. Die Entstehung der Markov-Decke (Abschnitt~\ref{sec:fep}) erlaubt die Trennung von Selbst und Welt und motiviert die FEP-MEPP-Kompatibilität der Konjektur~\ref{conj:fep-mepp}: interner Modellbau (Freie-Energie-Minimierung) könnte äußere dissipative Effizienz (hohe Entropieproduktion) unterstützen.
+
+Diese dritte Phase markiert einen qualitativen Wandel in der spieltheoretischen Hierarchie. In Phase~2 sind die \glqq Spieler\grqq{} molekulare oder zelluläre Agenten, deren Strategien durch physikalische Chemie bestimmt werden. In Phase~3 erwerben Agenten \emph{generative Modelle} ihrer Umgebung: die Strategien sind nicht mehr fixierte phänotypische Zustände, sondern Policies -- Sequenzen von Aktionen, bedingt auf inferierte Umgebungszustände. Active Inference~\citep{FristonFreeEnergy} liefert den Mechanismus: Agenten wählen Aktionen, die die erwartete freie Energie minimieren (d.\,h.\ sie handeln, um ihre Vorhersagen zu bestätigen oder Unsicherheit zu reduzieren). Dies konvertiert die statischen Nash-Gleichgewichte von Phase~2 in dynamische Bayessche Nash-Gleichgewichte, bei denen die Strategie jedes Agenten von seinen Überzeugungen über andere abhängt. Die verschachtelte Hierarchie der Inferenz -- von interozeptiver Homöostase über Wahrnehmung bis zur Planung -- spiegelt die Grobkörnungslogik von Abschnitt~\ref{sec:renormalization}: jede Inferenzebene integriert über die Freiheitsgrade darunter und produziert ein zunehmend abstraktes Spiel auf höheren zeitlichen und räumlichen Skalen. Der Endpunkt dieser Hierarchie -- Bewusstsein, Sprache und Kultur -- kann als hochkomprimierte Form der spieltheoretischen Stabilitätslogik \emph{interpretiert} werden, wobei die \glqq Strategien\grqq{} symbolische Repräsentationen und der \glqq Payoff\grqq{} prädiktive Genauigkeit über beliebig lange Zeithorizonte ist~\citep{FristonPDF}. Diese Extrapolation ist spekulativ und geht über das hinaus, was der vorliegende Rahmen formal ableiten kann.
+
+% ===================================================================
+\section{Testbare Vorhersagen}
+\label{sec:predictions}
+% ===================================================================
+
+\noindent\textit{Hinweis:} Die folgenden Vorhersagen sind mit P1--P5 gekennzeichnet, um sie von den mathematischen Propositionen (z.\,B.\ Proposition~\ref{prop:multicellularity}) in den vorangehenden Abschnitten zu unterscheiden. Propositionen sind formale Aussagen innerhalb des theoretischen Rahmens; Vorhersagen (Predictions) sind empirisch testbare Hypothesen, die daraus abgeleitet werden.
+
+\subsection{P1: Proteinfaltungslandschaften}
+
+\begin{hypothesis}[Nash-Frustration sagt faltungsrelevante Reste vorher]
+Die Energielandschaft der Proteinfaltung kann durch Nash-Gleichgewichts-Stabilitätsanalyse charakterisiert werden. Reste mit hoher Nash-Frustration entsprechen experimentell identifizierten Faltungskeimen und allosterischen Stellen.
+\end{hypothesis}
+
+\textbf{Test:} Berechne Nash-Frustrationswerte für Proteine mit experimentell charakterisierten Faltungsintermediaten (z.\,B.\ via Wasserstoff-Deuterium-Austausch oder $\phi$-Wert-Analyse). Ein Korrelationskoeffizient $r > 0{,}3$ zwischen Nash-Frustrations-Rang und experimentellen $\phi$-Werten würde positive Evidenz darstellen.
+
+\subsection{P2: Genregulationsnetzwerk-Attraktoren}
+
+\begin{hypothesis}[GRN-Attraktoren als Nash-Gleichgewichte]
+Zelltyp-Attraktoren in Genregulationsnetzwerken können durch Nash-Analyse des TF-DNA-Bindungsspiels modelliert und getestet werden.
+\end{hypothesis}
+
+\textbf{Test:} Berechne für gut charakterisierte GRNs Nash-Gleichgewichte des TF-DNA-Bindungsspiels, etwa für das \textit{Drosophila}-Segmentpolaritätsnetzwerk oder für ein hämatopoietisches Differenzierungsnetzwerk von Säugetieren. Vergleiche Anzahl und Identität der vorhergesagten Attraktorzustände mit experimentell beobachteten Zelltypen. Erfolgskriterium: Die vorhergesagte Attraktorzahl sollte mit der bekannten Zelltypzahl innerhalb eines Faktors zwei übereinstimmen.
+
+\subsection{P3: Krebs und Koalitionsstabilität}
+
+\begin{hypothesis}[Krebs als Koalitionszusammenbruch]
+Die Krebsinzidenz korreliert invers mit der multizellulären Koalitionsstabilität, gemessen an der spieltheoretischen Defektionsschwelle.
+\end{hypothesis}
+
+\textbf{Test:} Über Gewebetypen hinweg, berechne die Defektionsschwelle $\Delta r$, bei der Hamiltons Bedingung $c < r \cdot b$ versagt (gegeben gewebespezifische Mutationsraten und Kooperationskosten). Sage vorher, dass Gewebe mit niedrigeren $\Delta r$-Schwellen höhere Krebsinzidenz aufweisen. Vergleiche mit epidemiologischen Daten aus der SEER-Datenbank. Ein besonders stringenter Test ergibt sich aus Petos Paradoxon: große, langlebige Arten zeigen keine proportional höheren Krebsraten trotz mehr Zellen und Zellteilungen. Das Koalitionsmodell erwartet, dass diese Arten stärkere Durchsetzungsmechanismen aufweisen könnten (niedrigeres effektives $\Delta r$), eine Vorhersage, die durch Vergleich der Immunüberwachungsintensität über Arten verschiedener Körpergrößen testbar ist.
+
+\subsection{P4: Metabolische Rate und Fortpflanzungserfolg}
+
+\begin{hypothesis}[MEPP-Fitness-Korrelation]
+Über Arten hinweg korreliert die massenspezifische Stoffwechselrate mit der Fortpflanzungsrate nach Kontrolle für Körpergröße.
+\end{hypothesis}
+
+\textbf{Test:} Stelle Stoffwechselraten und Fortpflanzungsleistungen über Taxa zusammen. Eine positive Partialkorrelation (kontrolliert für Körpermasse) unterstützt die MEPP-Fitness-Verbindung. Kleibers Gesetz liefert die Körpergrößen-Skalierung. \textbf{Kontext:} Die Metabolic Theory of Ecology~\citep{BrownMTE2004} etabliert bereits quantitative Beziehungen zwischen Stoffwechselrate, Körpergröße und Life-History-Merkmalen. Die FST-III-Vorhersage geht über MTE hinaus, indem sie die Korrelation nicht bloß auf allometrische Skalierung, sondern auf den thermodynamischen Stabilitätsfilter (MEPP) zurückführt: Arten, die pro Masseeinheit effizienter dissipieren, sind nicht nur schnellere Reproduzierer, sondern sollten auch resilienter gegenüber Störungen sein.
+
+\subsection{P5: Ökosystem-Resilienz}
+
+\begin{hypothesis}[Ökosystem-Resilienz aus Nash-Stabilität]
+Ökosystem-Resilienz wird als korreliert mit der spektralen Lücke der Nash-Stabilitätsmatrix des ökologischen Gleichgewichts hypothesiert.
+\end{hypothesis}
+
+\textbf{Test:} Berechne für gut charakterisierte Ökosysteme die Jacobi-Eigenwert-Lücke am Nash-Gleichgewicht, etwa für das Yellowstone-Nahrungsnetz oder für Korallenriff-Gemeinschaften. Sage vorher, dass Ökosysteme mit größerer spektraler Lücke sich schneller von Störungen erholen. Vergleiche dies mit empirischen Resilienzmaßen wie der Erholungszeit nach Störungsereignissen.
+
+% ===================================================================
+\section{Diskussion}
+\label{sec:discussion}
+% ===================================================================
+
+\subsection{Was ist wirklich neu?}
+
+Die klassische evolutionäre Spieltheorie ist auf der organismischen Ebene gut etabliert. Die Beiträge dieses Beitrags sind:
+\begin{enumerate}
+    \item \textbf{Vertikale Integration:} Verbindung molekularer, zellulärer, organismischer und ökosystemarer Spiele.
+    \item \textbf{Nash-Frustrationskarten:} Eine Kandidatenprojektion schrittweitenabhängigen spektralen Surrogatüberschusses auf Reste; zusätzliche biologische Information gegenüber energetischer Frustration und NMA ist unbestätigt.
+    \item \textbf{Thermodynamische Fundierung:} Verankerung von Fitness in MEPP und dissipativer Adaptation.
+    \item \textbf{Grobkörnungsinterpretation:} Interpretation von evolutionären Hauptübergängen als Grobkörnung.
+    \item \textbf{MEPP als Stabilitätsfilter:} Reformulierung von MEPP als Stabilitätskriterium zweiter Ordnung statt eines reinen Maximierungsprinzips.
+\end{enumerate}
+
+\subsection{Skalierbarkeit und die AlphaFold-Ära}
+\label{sec:alphafold-scalability}
+
+Die Nash-Frustrations-Pipeline operiert auf experimentell ermittelten oder computergestützt vorhergesagten dreidimensionalen Strukturen. Die Verfügbarkeit von über 200~Millionen vorhergesagten Proteinstrukturen durch AlphaFold2~\citep{JumperAF2021} und nachfolgende Deep-Learning-Modelle (AlphaFold3, Chai-1, Boltz-2) erweitert den Anwendungsbereich der Methode dramatisch: Nash-Frustrationsscores können im Prinzip für jedes Protein mit vorhergesagter Struktur berechnet werden, was proteomweite Frustrationskarten ermöglicht.
+
+Jüngste Arbeiten aus den Jahren 2024--2026 unterstreichen jedoch kritische strukturelle Grenzen rein Deep-Learning-basierter Vorhersagesysteme:
+\begin{enumerate}
+    \item \textbf{Struktur-Memorierung vs.\ Zustandslernen:} Neuere Studien zeigen, dass AlphaFold2-Vorhersagen alternativer phasen- beziehungsweise faltungsgeschalteter Konformationen stark durch PDB-Struktur"=Me\-mo\-rie\-rung und MSA"=Sub\-sam\-pling getrieben sind statt durch echte physikalische Energielandschafts-Berechnungen~\citep{NatureComms2024}.
+    \item \textbf{Persistenter PDB-Dominanz-Bias:} Benchmarks über Architekturen der nächsten Generation (AlphaFold3, Chai-1, Boltz-2, BioEmu) offenbaren einen anhaltenden Bias zugunsten der in der PDB hinterlegten Grundzustandskonformation, wodurch metamorphe Faltungsübergänge verfehlt werden~\citep{Ye2026}.
+    \item \textbf{Unzuverlässigkeit von pLDDT (\glqq FalseVerify\grqq{}-Rate):} Während AlphaFold2s residuenspezifische Konfidenzmetrik (pLDDT) weit verbreitet als Proxy für strukturelle Stabilität genutzt wird, identifiziert das Screening metamorpher Proteine eine \glqq FalseVerify\grqq{}-Rate von 33{,}6\,\% (hohes pLDDT-Vertrauen $\ge 80$ bei fehlerhaften alternativen Zustandsvorhersagen), die bei Sekundärstruktur-Neuverdrahtungen auf bis zu 97\,\% ansteigt~\citep{Thacker2026}.
+    \item \textbf{Generative Ensembles vs.\ Gleichgewichtsklassifikation:} Moderne generative Modelle wie sequenzkonditioniertes Flow Matching (AlphaFlow;~\citealp{JingFlow2024}) und harmonische Diffusion (EigenFold;~\citealp{JingDiffusion2023}) erzeugen kontinuierliche Struktur-Ensembles, benötigen jedoch spieltheoretische Diagnosewerkzeuge wie FST-Nash, um stabile Gleichgewichtsbecken von transienten Sampling-Artefakten zu unterscheiden.
+\end{enumerate}
+Tabelle~\ref{tab:conformational-paradigms} vergleicht Modellparadigmen. Der Score des angepassten Potentials und pLDDT messen verschiedene Modellgrößen; weder dieser Unterschied noch Datenbankunabhängigkeit etabliert den Score als physikalisch validiertes Stabilitätsobservable.
+
+\begin{table}[htbp]
+\centering
+\caption{Taxonomie makromolekularer Konformations- und Stabilitätsparadigmen: Überwachtes Deep Learning (AlphaFold2/3, Boltz-2), Generativer Flow/Diffusion (AlphaFlow, EigenFold), Physikalische Energielandschaften (Frustratometer, FrustraMPNN) und Spieltheoretische Resolventen-Stabilität (FST-Nash).}
+\label{tab:conformational-paradigms}
+\scriptsize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabularx}{\textwidth}{@{}L{0.14\textwidth} L{0.20\textwidth} L{0.18\textwidth} L{0.16\textwidth} Y@{}}
+\toprule
+\textbf{Paradigma} & \textbf{Kernmechanismus} & \textbf{Multi-State-Behandlung} & \textbf{Interne Metrik} & \textbf{Dokumentierte Limitationen} \\
+\midrule
+\textbf{Überwachtes DL} \newline (AlphaFold2/3, Boltz-2) & Evoformer- / Pairformer-Attention über MSAs; direkte Koordinaten-Regression. & Kollaps auf einen einzelnen Grundzustand; erfordert künstliches MSA-Subsampling für alternative Faltungen. & pLDDT ($[0,100]$) und PAE (vorhergesagter ausgerichteter Fehler). & PDB-Datenbank-Memorierung; 33{,}6\,\% FalseVerify-Rate bei metamorphen Proteinen ($\text{pLDDT}\ge 80$ bei fehlerhaften Faltungen; \citealp{NatureComms2024,Thacker2026,Ye2026}). \\
+\addlinespace
+\textbf{Generativer Flow} \newline (AlphaFlow, EigenFold) & Stochastische Differentialgleichungen, Flow Matching, harmonische Diffusion auf $SE(3)$. & Kontinuierliche Konformations-Ensembles und Übergangstrajektorien. & Empirische Sampling-Dichte entlang von Flow-Trajektorien. & Unbeschränkte Metrik-Interpolationen; kann echte thermodynamische Becken nicht von transienten Artefakten unterscheiden. \\
+\addlinespace
+\textbf{Energielandschaften} \newline (Frustratometer, FrustraMPNN) & AWSEM-Grobkörnung und neuronales Message Passing über lokale Kontaktnetzwerke. & Energetische Konfliktkarten auf Kontaktebene über Sequenz-/Decoy-Varianten. & Kontakt-Z-Score $F_{ij}$ und lokale Decoys $\Delta E / \delta E$. & Verfehlt kollektive nichtlokale Übergänge und kinetische Barrieren; sensitiv gegenüber Referenz-Decoy-Zusammensetzung~\citep{Beining2026,Leusch2026}. \\
+\addlinespace
+\textbf{Spiel-Stabilität} \newline (FST-Nash, diese Arbeit) & Angepasstes Torsionspotential; synchrones Gradientensurrogat $J=I-\eta H$. & Historische sequenzielle Iterationsausgaben; keine zertifizierten Gleichgewichtsbecken. & Residuenprojektion $\rho_i$ und schrittweitenabhängiges $\rho(J)$; kein Nash-Zertifikat. & Selbstparametrisierung; Stationarität und tatsächliche Sweep-Ableitung offen; kein etablierter Resolventenfilter. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Punktiertes Gleichgewicht als Resolventen-Übergang}
+\begin{remark}[Biologische Stase und plötzliche Übergänge]
+\label{rem:punctuated-equilibrium}
+Das Muster lang anhaltender biologischer Stase, unterbrochen von plötzlichen evolutionären Übergängen (Punktiertes Gleichgewicht, \emph{Punctuated Equilibrium}~\citep{GouldEldredge1977}; siehe auch~\citealp{KauffmanOrigins}), kann im Resolventen-Formalismus strukturell interpretiert werden~\citep{GeigerRH2026b}. Phasen der Stase entsprechen resolventenstabilen Phasen: Die Kopplungsstruktur zweiter Ordnung hält die aktuelle Konfiguration gegenüber Störungen aufrecht. Plötzliche Übergänge treten auf, wenn Umwelt- oder interne Änderungen die Kopplungsarchitektur zweiter Ordnung reorganisieren, analog zu Phasenübergängen in physikalischen Systemen, bei denen kritische Parameteränderungen eine qualitative Reorganisation der Stabilitätslandschaft auslösen. Große evolutionäre Übergänge -- vom Prokaryoten zum Eukaryoten, von Einzelligkeit zu Mehrzelligkeit -- werden hier daher nicht als graduelle Optimierungen, sondern als \emph{Resolventen-Übergänge} interpretiert: Reorganisationen der Kopplungsstruktur, die einen qualitativ neuen stabilen Fixpunkt etablieren.
+\end{remark}
+
+\subsection{Stabilität vs.\ Maximierung: Die Resolventen-Perspektive}
+
+Der FST-Rahmen beschreibt \emph{Stabilitätsprinzipien}, keine Maximierungsprinzipien. Die allgemeine Resolventen-Perspektive -- die in allen drei FST-Arbeiten anwendbar ist -- wird in FST-II entwickelt~\citep{FSTII}; hier konzentrieren wir uns auf ihre biologischen Implikationen. Die Kernlogik besteht darin, dass Dynamiken führender Ordnung degeneriert sind (viele Konfigurationen bleiben möglich) und Selektion auf zweiter Ordnung über resolventenartige Kopplung erfolgt. MEPP, ESS und Nash-Frustration werden hier als Ausprägungen dieser Stabilitätsarchitektur zweiter Ordnung behandelt (siehe Bemerkungen~\ref{rem:mepp-stability-biology} und~\ref{rem:ess-resolvent} für die detaillierten Argumente). Die Arbeitshypothese lautet, dass Nash-Gleichgewichte über alle FST-Arbeiten hinweg keine Optima, sondern resolventenstabile Fixpunkte sind~\citep{GeigerRH2026b}.
+
+Die native Faltung ist ein Kandidat der Interpretation des angepassten Potentials. Weder $\rho(J)\approx1$ noch das vorhandene Residuenranking etabliert die Unterdrückung von Fehlfaltungs-, Aggregations- oder Proteolysekanälen. Die Resolventenanalogie bleibt konjektural und liefert kein biologisches Stabilitätszertifikat.
+
+\subsection{MEPP: Geltungsbereich und Limitationen}
+
+Das Prinzip maximaler Entropieproduktion (Maximum Entropy Production Principle, MEPP) wird in diesem Beitrag als heuristisches Organisationsprinzip verwendet, nicht als bewiesenes physikalisches Gesetz. Die MEPP-Kontroverse -- einschließlich der Grinstein--Linsker-Kritik, Martyushevs Anwendbarkeitsbedingungen, der Trennung zwischen mEPP- und MEPP-Regimen sowie der Resolventen-Reinterpretation -- wird in FST-II ausführlich diskutiert~\citep{FSTII}; hier fassen wir nur die für den biologischen Bereich relevantesten Limitationen zusammen:
+\begin{itemize}
+\item Die theoretischen Grundlagen von MEPP erfordern lokales thermodynamisches Gleichgewicht und bilineare Entropieproduktion~\citep{Martyushev2010}. Biologische Systeme fernab des Gleichgewichts verletzen diese Bedingungen im Allgemeinen.
+\item Die Resolventen-Perspektive (Abschnitt~\ref{sec:discussion}) begegnet dieser Einschränkung durch die Reinterpretation von MEPP als Stabilitätsfilter: Unter den vielen auf führender Ordnung lebensfähigen Konfigurationen identifiziert MEPP Kandidaten für resolventenstabile Fixpunkte -- nicht notwendigerweise Zustände mit maximaler Dissipation, sondern Konfigurationen, in denen Destabilisierungskanäle zweiter Ordnung gemeinsam unterdrückt sind.
+\item Diese schwächere Interpretation ist kompatibel mit Prigogines minimaler Entropieproduktion nahe dem Gleichgewicht: Intern können Organismen Entropieproduktion minimieren (FEP), während sie extern eine höhere Entropieproduktion unterstützen (MEPP), wie in Konjektur~\ref{conj:fep-mepp} formuliert.
+\item Eine neuere Übersichtsarbeit von~\citet{Toma2025} behandelt MEPP als thermodynamischen Rahmen für das Verständnis der Entstehung und Evolution des Lebens auf makroskopischen Skalen, räumt jedoch ein, dass eine fundamentale First-Principles-Ableitung fernab des Gleichgewichts aussteht. Dies ist kompatibel mit der hier gewählten Nutzung von MEPP als heuristischem Organisationsprinzip.
+\end{itemize}
+
+\paragraph{Zirkularitäts-Vorbehalt.} Wenn MEPP als Auszahlungsfunktion dient und Nash-Gleichgewichte als MEPP-maximierende Zustände definiert werden, ist die Aussage, dass biologische Systeme Nash-Gleichgewichte besetzen, \emph{weil} sie die Entropieproduktion maximieren, definitionsgemäß zirkulär. Der nicht-zirkuläre Gehalt dieses Rahmens ist die \emph{Stabilitätsaussage}: Biologische Attraktoren sind nicht bloß entropieproduzierende Konfigurationen, sondern stabilisierte Fixpunkte zweiter Ordnung, an denen alle Destabilisierungskanäle (Parasitismus, Mutation, ökologische Invasion) simultan unterdrückt sind. Diese Stabilitätseigenschaft ist unabhängig von der Auszahlungsdefinition empirisch prüfbar (Vorhersagen P1--P5).
+
+\subsection{Nash-Frustration jenseits der Hesse-Matrix}
+
+Ein naheliegender Einwand gegen den Formalismus der Nash-Frustration lautet: Wenn die Auszahlung gleich $-\Delta G$ (der negativen Änderung der freien Energie) ist, ist die Jacobi-Matrix des synchronen Gradientensurrogats $J = I - \eta H$ eine lineare Transformation der Hesse-Matrix $H$, und die Nash-Frustration reduziert sich auf eine Eigenwertanalyse der Energielandschaft -- im Wesentlichen eine Normalmoden-Analyse (NMA) im spieltheoretischen Gewand. Dieser Einwand identifiziert den mathematischen Kern korrekt, übersieht jedoch den konzeptionellen und praktischen Gehalt, der über die Standard-Hesse-Analyse hinausgeht:
+
+\begin{enumerate}
+    \item \textbf{Residuenbasierte Dekomposition:} Der Score projiziert Surrogatmoden mit $|\lambda_k|>1$ mit Überschussgewichten $(|\lambda_k|-1)$. Residuenprojektionen werden auch in NMA verwendet; andere Gewichte beweisen weder unabhängige biologische Information noch einseitige Instabilität. Der direkte Vergleich mit NMA/$B$-Faktor-Profilen bleibt offen.
+    \item \textbf{Getrennte Rechenverträge:} Die Anpassung nutzt 64 Starts und 6\,000 Schritte; der historische sequenzielle Antwortlauf 16 Starts und 300 Sweeps. Diese Laufzahlen zertifizieren weder exakte beste Antworten noch native Stationarität oder die Identität des synchronen Surrogats mit dem tatsächlichen Sweep.
+    \item \textbf{Bedingter MFG-Vergleich:} Existenz- und Eindeutigkeitsresultate der Quellen erfordern ihre PDE-Annahmen; aus einem lokalen Hesse-Spektrum folgt hier keine globale Proteinfaltungsexistenz, Eindeutigkeit oder algorithmische Konvergenz.
+    \item \textbf{Skalenübergreifende Sprache:} Spieler, Strategien, Auszahlungen und festgelegte Update-Abbildungen können Modelle unterschiedlicher Skalen ordnen. Dies ist ein konzeptioneller Vergleich, kein universeller Stabilitätssatz.
+\end{enumerate}
+
+\subsection{Konsolidierte Limitationen}
+
+Die folgenden Limitationen sollten bei der Bewertung des Rahmens berücksichtigt werden:
+\begin{enumerate}
+    \item \textbf{Kalibrierung der Nash-Frustration:} Während das Frustrations-\emph{Ranking} im verifizierten lokalen Scanfenster $\eta$-unabhängig ist (Abschnitt~\ref{sec:molecular}), hängen die absoluten Frustrationswerte und der globale Spektralradius $\rho(J)$ von $\eta$ ab. Die Kalibrierung an experimentellen Observablen (HDX-Protektionsfaktoren, $\phi$-Werte) bleibt eine offene Aufgabe.
+    \item \textbf{Potential- und MFG-Grenzen:} Eine gemeinsame Kostenfunktion oder exakte Potentialdarstellung muss für das festgelegte Spiel etabliert werden. Antagonismus allein entscheidet die Potentialstruktur nicht. MFG-Existenz, monotoniebasierte Eindeutigkeit und algorithmische Konvergenz haben getrennte Annahmen; für das Proteinmodell ist hier keine davon zertifiziert.
+    \item \textbf{Skalenübergreifende Phänomenologie:} Die Verbindung zwischen mikroskopischer Moleküldynamik und makroskopischer Ökologie ist analytisch als Analogie formuliert; eine strikte mathematische Derivation über alle Ebenen hinweg steht aus.
+\end{enumerate}
+
+\subsection{Status der Aussagen}
+
+Tabelle~\ref{tab:status-claims} klassifiziert die zentralen Aussagen dieser Arbeit nach ihrem epistemischen Status.
+
+\begin{table}[htbp]
+\centering
+\caption{Epistemischer Status der zentralen Aussagen. \textsc{Etabliert}: bewiesene oder weitgehend akzeptierte Resultate; \textsc{Konjiziert}: neue, aber empirisch prüfbare Hypothesen; \textsc{Spekulativ}: Vorschläge auf Rahmenebene ohne direkten empirischen Test.}
+\label{tab:status-claims}
+\small
+\begin{tabularx}{\textwidth}{@{}L{0.32\textwidth} l Y@{}}
+\toprule
+\textbf{Aussage} & \textbf{Status} & \textbf{Evidenz / Referenz} \\
+\midrule
+Replikator--Nash-Äquivalenz & \textsc{Etabliert} & Hofbauer \& Sigmund~\citep{HofbauerSigmund1998} \\
+ESS als Nash-Verfeinerung & \textsc{Etabliert} & Maynard~Smith (1982) \\
+MEPP-Literatur als heuristischer thermodynamischer Rahmen & \textsc{Etabliert} &~\citet{Martyushev2010};~\citet{Toma2025};~\citet{EcosystemMEPP} \\
+FST-Interpretation von MEPP als Stabilitätsfilter & \textsc{Konjiziert} & Abschnitt~\ref{sec:discussion}; keine First-Principles-Derivation \\
+Nash-Frustration als Stabilitätsprädiktor (P1) & \textsc{Konjiziert} & Nur vorläufige HP35/CSP- und Benchmark-Signale; Validierungsgates in Tabelle~\ref{tab:nash-validation-ledger} \\
+FEP--MEPP-Kompatibilität über Markov-Decke & \textsc{Konjiziert} & Konjektur~\ref{conj:fep-mepp}; kein formaler Beweis \\
+Hierarchische Spielstruktur über Skalen hinweg & \textsc{Konjiziert} & Abschnitt~\ref{sec:renormalization}; nur qualitativ \\
+Boolesche Netzwerkattraktoren als Nash-Gleichgewichte & \textsc{Konjiziert} & Abschnitt~\ref{sec:boolean}; formale Reformulierung, empirischer Test ausstehend \\
+Nash-Gleichgewicht als MFG-Fixpunkt & \textsc{Konjiziert} & Abschnitt~\ref{sec:mfg-fixpoint}; Quellexistenz und monotoniebasierte Eindeutigkeit getrennt; Protein-PDE-Vertrag offen \\
+RG-Analogie für Hauptübergänge & \textsc{Spekulativ} & Konzeptionelle Parallele; kein RG-Fluss berechnet \\
+Kosmologische Erweiterung der Spielstruktur & \textsc{Spekulativ} & Abschnitt~\ref{sec:cosmology}; an das FST-Rahmenpapier delegiert \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Falsifizierbare Vorhersagen und experimentelle Protokolle}
+\label{sec:falsifiable-predictions}
+
+Die Vorhersagen P1--P5 (Abschnitt~\ref{sec:predictions}) identifizieren prüfbare Hypothesen auf Rahmenebene. Um dem Einwand zu begegnen, dass diesen Vorhersagen die spezifische Schärfe für eine empirische Widerlegung fehlt, formulieren wir hier vier konkrete, falsifizierbare Vorhersagen mit detaillierten experimentellen Protokollen und expliziten Falsifikationskriterien.
+
+\paragraph{PRED-BIO-1: Nash-Frustration korreliert mit HDX-Protektionsfaktoren.}
+
+\textit{Vorhersage.}
+Residuen mit hohen Nash-Frustrationsscores (oberes Quartil) zeigen systematisch \emph{niedrigere} Wasserstoff-Deuterium-Austausch-(HDX-)Protektionsfaktoren als Residuen mit niedriger Nash-Frustration (unteres Quartil). Die Begründung ist, dass die residuenbasierte Surrogatprojektion mit struktureller Spannung, Lösungsmittelzugänglichkeit und konformationeller Dynamik korrelieren könnte; dies ist keine validierte mechanistische Folgerung.
+
+\textit{Protokoll.}
+(i)~Berechnung residuenspezifischer Nash-Frustrationsscores für HP35 (Villin Headpiece, PDB: 1YRF) mit dem in Bemerkung~\ref{rem:comp-protocol} beschriebenen spieltheoretischen Potential.
+(ii)~HDX-Protektionsfaktoren aus McKnight et~al.~\cite{McKnight1996} entnehmen oder HDX-MS an rekombinantem HP35 unter nativen Bedingungen durchführen (pH~7{,}0, 25$\,^\circ$C, $\text{D}_2\text{O}$-Austausch von 10\,s bis 10\,h).
+(iii)~Spearman-Rangkorrelation $\rho_S$ zwischen residuenspezifischer Nash-Frustration und $\log(P_f)$ berechnen, wobei $P_f$ der Protektionsfaktor ist.
+(iv)~Für mindestens zwei weitere kleine Proteine mit publizierten HDX-Daten (z.\,B.\ Ubiquitin, BPTI) wiederholen, um Generalisierbarkeit zu prüfen.
+
+\textit{Falsifikationskriterium.}
+Die Vorhersage gilt als falsifiziert, wenn über alle drei Proteine hinweg $\rho_S > -0{,}15$ ist, also keine sinnvolle negative Korrelation vorliegt. Eine positive Korrelation ($\rho_S > 0$) würde der Vorhersage direkt widersprechen. Erwartete Effektgröße: $\rho_S \in [-0{,}5, -0{,}25]$.
+
+\paragraph{PRED-BIO-2: Globaler Spektralradius sagt Entfaltungskinetik voraus.}
+
+\textit{Vorhersage.}
+Diese Vorhersage ist derzeit \emph{blockiert statt positiv operationalisiert}: Rohwerte von $\rho(J)$ sind proteinübergreifend nicht vergleichbar, solange keine gemeinsame physikalische Energiekonvention, Torsionsmetrik, Hesse-Skalierung und dimensionslose Schrittweitenkonvention vor der Betrachtung kinetischer Zielgrößen fixiert wurden. Unter einer solchen vorregistrierten Konvention kann ein dimensionsloser Instabilitätsindex auf positive Assoziation mit Entfaltungsraten getestet werden. Ein gemeinsamer numerischer Wert von $\eta$ allein reicht nicht aus, wenn proteinspezifisch angepasste Potentiale unterschiedliche Skalen tragen können.
+
+\textit{Protokoll.}
+(i)~Auswahl eines Panels von 15--20 kleinen eindomänigen Proteinen ($< 100$ Residuen) aus verschiedenen Faltungsklassen ($\alpha$, $\beta$, $\alpha/\beta$) mit experimentell bestimmten Entfaltungsraten $k_u$ aus Temperature-Jump- oder Stopped-Flow-Experimenten.
+(ii)~Vor der Betrachtung von $k_u$ eine gemeinsame Energiekonvention und Torsionsmetrik vorregistrieren und eine dimensionslose Hesse-Matrix $\widetilde H_p$ sowie $J_p=I-\alpha\widetilde H_p$ mit derselben dimensionslosen Schrittweite $\alpha$ für jedes Protein definieren. Rohbeiträge der Residuen, Fit-Skala, aktive Moden, Metrik und $\rho(J_p)$ werden für das Audit erhalten; zielgrößenbasierte Anpassung von $\alpha$, Metrik oder Potentialskala ist nicht erlaubt.
+(iii)~Die Assoziation zwischen $I_p=\max(0,\rho(J_p)-1)$ und $\log(k_u)$ out-of-sample auswerten, mindestens kontrolliert für Contact Order, Kettenlänge, Faltungsklasse, Temperatur, Denaturierungsmittel und Assay-Typ. Leave-one-protein-out-Analyse und final verriegeltes Protein-Holdout verwenden; Effektschätzer mit Protein-Bootstrap-Konfidenzintervall berichten.
+
+\textit{Falsifikationskriterium.}
+Kein Test der aktuellen rohen $\rho(J)$-Werte kann die Vorhersage falsifizieren oder stützen, weil QUANT-III-2b ihre proteinübergreifende Skala offenlässt. Nach Verriegelung der vorregistrierten dimensionslosen Konvention zählt das Ausbleiben einer positiven Out-of-Sample-Assoziation oder materielle Vorzeichen-/Größendrift über den vorab spezifizierten $\alpha$-Sensitivitätsbereich gegen die Vorhersage. Die Analyse beansprucht keine Überlegenheit gegenüber Contact Order; zusätzliche Information muss an gehaltenen Proteinen gezeigt werden.
+
+\paragraph{PRED-BIO-3: Anreicherung der Nash-Frustration an allosterischen und Bindungsstellen.}
+
+\textit{Vorhersage.}
+Residuen, die als allosterisch klassifiziert sind oder an Protein-Protein-Bindungsflächen liegen, sind relativ zum Proteindurchschnitt in hohen Nash-Frustrationsscores angereichert. Dies ergänzt die bekannte Anreicherung \emph{energetischer} Frustration an solchen Stellen~\citep{Ferreiro2014} und sagt voraus, dass spieltheoretisches spektralen Surrogatüberschuss (Nash-Frustration) und energetische Suboptimalität (Ferreiro-Frustration) teilweise überlappende, aber unterschiedliche Signale sind.
+
+\textit{Protokoll.}
+(i)~Datensatz von Proteinen mit experimentell annotierten allosterischen Stellen aus der Allosteric Database (ASD, \texttt{asd.pharm.umich.edu}) oder CASBench zusammenstellen; Mindestumfang 30 Proteine für statistische Power.
+(ii)~Für jedes Protein residuenspezifische Nash-Frustrationsscores berechnen und Residuen als allosterisch/Interface oder nicht-funktionell klassifizieren.
+(iii)~Scores in vorregistrierte Within-Protein-Perzentilränge überführen, rohe Scores aber separat erhalten. Anreicherung innerhalb jedes Proteins schätzen und proteinbezogene Effekte mit Mixed-Effects-Modell oder proteinbezogener Meta-Analyse kombinieren. Unsicherheit durch Cluster-Bootstrap über Proteine und Label-Permutationen innerhalb von Proteinen bestimmen; ein gepoolter Residuenplot ist nur deskriptiv.
+(iv)~Makro-gemittelte und Leave-one-protein-out-AUC mit proteinbezogenen Konfidenzintervallen berichten. Head-to-head mit Ferreiro-Frustration, B-Faktor/NMA, pLDDT, Lösungsmittelzugänglichkeit, Kontaktgrad, Sekundärstruktur, Residuenkonservierung und Proteinlänge vergleichen.
+
+\textit{Falsifikationskriterium.}
+Ein proteinspezifischer AUC-Wert von $\le 0{,}50$ oder ein Konfidenzintervall, das die Null einschließt, falsifiziert die Vorhersage.
+
+\paragraph{PRED-BIO-4: Frustrationskarte sagt die Helix-Schmelzreihenfolge voraus.}
+
+\textit{Vorhersage.}
+In Multi-Helix-Proteinen schmelzen Helices mit höherer mittlerer Nash-Frustration während thermischer Denaturierung früher.
+
+\textit{Protokoll.}
+(i)~Auswahl von 3--5 Multi-Helix-Proteinen mit experimentell ermittelter Schmelzreihenfolge aus NMR-Relaxationsdispersion ($R_2$-Dispersion).
+(ii)~Berechnung der mittleren Frustration pro Helix und Vergleich via Kendalls $\tau$.
+
+\textit{Falsifikationskriterium.}
+Kendalls $\tau < 0{,}2$ in $\ge 3/5$ der Testproteine falsifiziert die Vorhersage. Speziell für HP35: Wenn Helix 1 (Met11/Pro20) nach Helix 3 schmilzt.
+
+\medskip
+
+\noindent\textit{Zusammenfassung.} Diese vier Vorhersagen bieten eine konkrete empirische Agenda für die molekulare Validierung (Tabelle~\ref{tab:pred-bio-summary}).
+
+\begin{table}[htbp]
+\centering
+\caption{Zusammenfassung der falsifizierbaren empirischen Vorhersagen (PRED-BIO-1 bis PRED-BIO-4), experimentellen Protokolle und Falsifikationskriterien.}
+\label{tab:pred-bio-summary}
+\small
+\begin{tabularx}{\textwidth}{@{}L{0.16\textwidth} L{0.24\textwidth} L{0.24\textwidth} Y@{}}
+\toprule
+\textbf{Vorhersage} & \textbf{Ziel-Observable / Daten} & \textbf{Schlüsselmetrik \& Modell} & \textbf{Falsifikationskriterium} \\
+\midrule
+PRED-BIO-1 & HDX-MS Protektionsfaktoren ($\log P_f$) auf HP35, Ubiquitin, BPTI & Spearman-Rangkorrelation $\rho_S$ (Frustration vs.\ $\log P_f$) & $\rho_S > -0{,}15$ über Testproteine (keine negative Korrelation) \\
+PRED-BIO-2 & $k_u$ Entfaltungsraten (T-Jump/Stopped-Flow, ACPro) & Instabilitätsindex $I_p$ vs.\ $\log(k_u)$ out-of-sample & Fehlen einer positiven Out-of-Sample-Assoziation \\
+PRED-BIO-3 & Allosterische Zentren (ASD) \& Bindungsstellen & Perzentilränge & Protein-AUC $\le 0{,}50$ oder Konfidenzintervall schließt Null ein \\
+PRED-BIO-4 & NMR $R_2$-Dispersion / Helix-Schmelzen & Kendalls $\tau$ zwischen Frustrationsrang & Kendalls $\tau < 0{,}2$ in $\ge 3/5$ Proteinen (HP35: Helix 1 schmilzt nach Helix 3) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Ist Biologie \glqq nur Physik\grqq{}?}
+
+Die Antwort ist differenziert:
+\begin{itemize}
+    \item \textbf{Ja, als Arbeitsmodell:} MEPP-artige Stabilitätsfilter und Nash-artige Fixpunktstrukturen lassen sich über mehrere biologische Skalen hinweg formulieren.
+    \item \textbf{Nein:} Höhere Ebenen führen emergente Nebenbedingungen und kausale Beschreibungen ein, die sich nicht einfach aus niederen Ebenen vorhersagen lassen.
+\end{itemize}
+
+Der Rahmen ist nicht eliminativ-reduktionistisch. Er identifiziert eine gemeinsame logische Struktur, die auf jeder Skala unterschiedlich instanziiert wird.
+
+\subsection{Kosmologische Erweiterungen}
+\label{sec:cosmology}
+
+Der in diesem Beitrag entwickelte biologische spieltheoretische Rahmen ist in sich geschlossen. Spekulative Erweiterungen auf physikalische und kosmologische Skalen werden separat im FST-Rahmenwerk-Beitrag~\citep{FST-Unified2026} entwickelt und sind nicht Teil der hier vorgestellten biologischen Theorie.
+
+
+\section{Schlussfolgerung}
+\label{sec:conclusion}
+% ===================================================================
+
+FST-III argumentiert, dass die Trennung zwischen physikalischen Gesetzen und den Strategien des Lebens weniger scharf sein könnte als gemeinhin angenommen. Biologische Stabilität kann produktiv mit spieltheoretischen und thermodynamischen Werkzeugen analysiert werden, die auch in physikalischen Systemen eingesetzt werden. Das Maximum Entropy Production Principle fungiert hier als heuristischer thermodynamischer Stabilitätsfilter, dissipative Adaptation als Mechanismusvorschlag der Formbildung, die spieltheoretische ESS als Langzeitstabilitätskriterium und das Free Energy Principle als Grundlage für adaptives Verhalten.
+
+Die primären Beiträge sind dreifach: (i) der Nash-Frustrations-Formalismus, der ein spieltheoretisches Komplement zur energetischen Frustration in Proteinstrukturen liefert und einer vorläufigen Konsistenzprüfung an NMR-Daten eines einzelnen Proteins unterzogen wurde (HP35, $\rho_S = 0{,}44$, $p = 0{,}033$, $n = 24$); (ii) die hierarchische Spielinterpretation evolutionärer Hauptübergänge als Grobkörnungsschritte; und (iii) das Koalitionszusammenbruch-Modell von Krebs, das den Rahmen von Aktipis et al.\ in die FST-Stabilitätshierarchie einbettet. Vier konkrete falsifizierbare Vorhersagen (PRED-BIO-1 bis PRED-BIO-4) mit expliziten Protokollen und Falsifikationskriterien liefern eine empirische Agenda für die Behauptungen auf molekularer Ebene.
+
+Die zentralen offenen Herausforderungen sind die Kalibrierung der absoluten Nash-Frustrationsskala gegen experimentelle Observablen (HDX-Schutzfaktoren, $\phi$-Werte), die Formalisierung der RG-artigen Grobkörnung als explizite Renormierungsflüsse und die rigorose Herleitung der FEP-MEPP-Kompatibilitätskonjektur. Von der Aminosäure bis zum Ökosystem wird die spieltheoretische Stabilitätslogik hier als vereinheitlichende konjekturale Perspektive vorgeschlagen; ihre Erweiterung auf kosmologische Skalen~\citep{FST-Unified2026} bleibt spekulativ.
+
+\begingroup
+\small
+\paragraph*{KI-Offenlegung.} Diese Arbeit wurde von Claude (Anthropic), Codex (OpenAI) und Antigravity (Google DeepMind) bei der Literatursynthese, mathematischen Verifikation, redaktionellen Pflege, LaTeX-Typographie und Texterstellung unterstützt. Alle wissenschaftlichen Behauptungen, originalen Argumente und theoretischen Beiträge liegen in der alleinigen Verantwortung des menschlichen Autors. Kein KI-System ist als Koautor gelistet.
+\endgroup
+
+% ===================================================================
+% Literaturverzeichnis
+% ===================================================================
+
+\bibliographystyle{plainnat}
+\begin{thebibliography}{99}
+\bibitem[Cardaliaguet(2013)]{Cardaliaguet2013}
+Cardaliaguet, P. (2013).
+\newblock \textit{Notes on Mean Field Games (from P.-L.\ Lions' lectures)}.
+\newblock Version September 27, 2013, Theorems 3.1 and 3.6.
+\newblock \url{https://www.ceremade.dauphine.fr/~cardaliaguet/MFG20130420.pdf}
+
+\bibitem[Ratliff et~al.(2016)]{RatliffBurdenSastry2016}
+Ratliff, L.~J., Burden, S.~A., and Sastry, S.~S. (2016).
+\newblock On the Characterization of Local Nash Equilibria in Continuous Games.
+\newblock \textit{IEEE Transactions on Automatic Control}, 61(8), 2301--2307.
+\newblock \url{https://doi.org/10.1109/TAC.2016.2583518}
+
+
+
+\bibitem[Geiger(2026a)]{FSTI}
+Geiger, L. (2026).
+\newblock Functional Stability Theory I: A Game-Theoretic Framework for the Thermodynamic Stability of Fundamental Parameters.
+\newblock \textit{Zenodo preprint}, v1.4.
+\newblock Concept DOI: 10.5281/zenodo.20130544.
+
+\bibitem[Geiger(2026b)]{FSTII}
+Geiger, L. (2026).
+\newblock Functional Stability Theory II: Chemical Stability and Autocatalytic Selection (DRAFT).
+\newblock \textit{Zenodo preprint}, v1.5.
+\newblock Concept DOI: 10.5281/zenodo.20130563.
+
+\bibitem[Aktipis et~al.(2015)]{AktipisCancer}
+Aktipis, C.~A. et~al. (2015).
+\newblock Cancer across the tree of life: cooperation and cheating in multicellularity.
+\newblock \textit{Phil. Trans. R. Soc. B}, 370, 20140219.
+\newblock DOI: 10.1098/rstb.2014.0219.
+
+\bibitem[Anfinsen(1973)]{Anfinsen1973}
+Anfinsen, C.~B. (1973).
+\newblock Principles that govern the folding of protein chains.
+\newblock \textit{Science}, 181(4096), 223--230.
+\newblock DOI: 10.1126/science.181.4096.223.
+
+\bibitem[Graudenzi et~al.(2011)]{BooleanEvolution}
+Graudenzi, A., Serra, R., Villani, M., Damiani, C., Colacci, A. \& Kauffman, S.~A. (2011).
+\newblock Dynamical properties of a Boolean model of gene regulatory network with memory.
+\newblock \textit{Journal of Computational Biology}, 18(10), 1291--1303.
+\newblock DOI: 10.1089/cmb.2010.0069.
+
+\bibitem[Müssel et~al.(2010)]{BooleanMicroarray}
+Müssel, C., Hopfensitz, M. \& Kestler, H.~A. (2010).
+\newblock BoolNet -- an R package for generation, reconstruction and analysis of Boolean networks.
+\newblock \textit{Bioinformatics}, 26(10), 1378--1380.
+\newblock DOI: 10.1093/bioinformatics/btq124.
+
+\bibitem[Kauffman(1969)]{BooleanPost}
+Kauffman, S.~A. (1969).
+\newblock Metabolic stability and epigenesis in randomly constructed genetic nets.
+\newblock \textit{Journal of Theoretical Biology}, 22(3), 437--467.
+\newblock DOI: 10.1016/0022-5193(69)90015-0.
+
+\bibitem[Kauffman(1993)]{KauffmanOrigins}
+Kauffman, S.~A. (1993).
+\newblock \textit{The Origins of Order: Self-Organization and Selection in Evolution}.
+\newblock Oxford University Press. ISBN: 978-0195058116.
+
+\bibitem[Hofbauer \& Sigmund(1998)]{HofbauerSigmund1998}
+Hofbauer, J. \& Sigmund, K. (1998).
+\newblock \textit{Evolutionary Games and Population Dynamics}.
+\newblock Cambridge University Press. (Ch. 7: Lotka--Volterra and replicator equivalence).
+\newblock DOI: 10.1017/CBO9781139173179.
+
+\bibitem[Monderer \& Shapley(1996)]{MondererShapley1996}
+Monderer, D. \& Shapley, L.~S. (1996).
+\newblock Potential games.
+\newblock \textit{Games and Economic Behavior}, 14(1), 124--143.
+\newblock DOI: 10.1006/game.1996.0044.
+
+\bibitem[England(2013)]{England2013}
+England, J.~L. (2013).
+\newblock Statistical physics of self-replication.
+\newblock \textit{Journal of Chemical Physics}, 139, 121923.
+\newblock DOI: 10.1063/1.4818538.
+
+\bibitem[England(2015)]{EnglandNano}
+England, J.~L. (2015).
+\newblock Dissipative adaptation in driven self-assembly.
+\newblock \textit{Nature Nanotechnology}, 10, 919--923.
+\newblock DOI: 10.1038/nnano.2015.250.
+
+\bibitem[Kleidon(2010)]{EcosystemMEPP}
+Kleidon, A. (2010).
+\newblock Life, hierarchy, and the thermodynamic machinery of planet Earth.
+\newblock \textit{Physics of Life Reviews}, 7(4), 424--460.
+\newblock DOI: 10.1016/j.plrev.2010.10.002.
+
+\bibitem[Bryngelson \& Wolynes(1989)]{EnzymeFolding}
+Bryngelson, J.~D. \& Wolynes, P.~G. (1989).
+\newblock Intermediates and barrier crossing in a random energy model (with applications to protein folding).
+\newblock \textit{The Journal of Physical Chemistry}, 93(19), 6902--6915.
+\newblock DOI: 10.1021/j100356a007.
+
+\bibitem[Friston(2009)]{FristonFreeEnergy}
+Friston, K. (2009).
+\newblock The free-energy principle: a rough guide to the brain?
+\newblock \textit{Trends in Cognitive Sciences}, 13(7), 293--301.
+\newblock DOI: 10.1016/j.tics.2009.04.005.
+
+\bibitem[Friston(2010)]{FristonPDF}
+Friston, K. (2010).
+\newblock The free-energy principle: a unified brain theory?
+\newblock \textit{Nature Reviews Neuroscience}, 11, 127--138.
+\newblock DOI: 10.1038/nrn2787.
+
+\bibitem[Hamilton(1964)]{Hamilton1964}
+Hamilton, W.~D. (1964).
+\newblock The genetical evolution of social behaviour. I.
+\newblock \textit{Journal of Theoretical Biology}, 7(1), 1--16.
+\newblock DOI: 10.1016/0022-5193(64)90038-4.
+
+\bibitem[Maynard Smith \& Price(1973)]{MaynardSmithPrice1973}
+Maynard Smith, J. \& Price, G.~R. (1973).
+\newblock The logic of animal conflict.
+\newblock \textit{Nature}, 246, 15--18.
+\newblock DOI: 10.1038/246015a0.
+
+\bibitem[Bohl et~al.(2014)]{GameBiochemistry}
+Bohl, K., Hummert, S., Werner, S., Basanta, D., Deutsch, A., Schuster, S., Theissen, G. \& Schroeter, A. (2014).
+\newblock Evolutionary game theory: molecules as players.
+\newblock \textit{Molecular BioSystems}, 10(12), 3066--3074.
+\newblock DOI: 10.1039/C3MB70601J.
+
+\bibitem[Maynard Smith(1982)]{MaynardSmith1982}
+Maynard Smith, J. (1982).
+\newblock \textit{Evolution and the Theory of Games}.
+\newblock Cambridge University Press.
+\newblock DOI: 10.1017/CBO9780511806292.
+
+\bibitem[Holt \& Roth(2004)]{NashPNAS}
+Holt, C.~A. \& Roth, A.~E. (2004).
+\newblock The Nash equilibrium: A perspective.
+\newblock \textit{PNAS}, 101(12), 3999--4002.
+\newblock DOI: 10.1073/pnas.0308738101.
+
+\bibitem[Nash(1950)]{NashSFI}
+Nash, J.~F. (1950).
+\newblock Equilibrium points in n-person games.
+\newblock \textit{PNAS}, 36(1), 48--49.
+\newblock DOI: 10.1073/pnas.36.1.48.
+
+\bibitem[Okasha(2006)]{Okasha2006}
+Okasha, S. (2006).
+\newblock \textit{Evolution and the Levels of Selection}.
+\newblock Oxford University Press.
+\newblock DOI: 10.1093/acprof:oso/9780199267972.001.0001.
+
+\bibitem[Michod(1999)]{Michod1999}
+Michod, R.~E. (1999).
+\newblock \textit{Darwinian Dynamics: Evolutionary Transitions in Fitness and Individuality}.
+\newblock Princeton University Press. ISBN: 978-0691050119.
+
+\bibitem[Farzulla(2026)]{ReplicatorOptimization}
+Farzulla, M. (2026).
+\newblock The replicator-optimization mechanism: A scale-relative formalism for persistence-conditioned dynamics with application to consent-based metaethics.
+\newblock \textit{arXiv preprint}, arXiv:2601.06363.
+
+\bibitem[Friston et~al.(2025)]{ScaleRGFrontiers}
+Friston, K. et~al. (2025).
+\newblock From pixels to planning: scale-free active inference.
+\newblock \textit{Frontiers in Network Physiology}, 5, 1521963.
+\newblock DOI: 10.3389/fnetp.2025.1521963.
+
+\bibitem[Wilson(1975)]{ScaleRGResearch}
+Wilson, K.~G. (1975).
+\newblock The renormalization group: critical phenomena and the Kondo problem.
+\newblock \textit{Reviews of Modern Physics}, 47(4), 773--840.
+\newblock DOI: 10.1103/RevModPhys.47.773.
+
+\bibitem[Schrödinger(1944)]{SchoolBiologicalPhysics}
+Schrödinger, E. (1944).
+\newblock \textit{What is Life? The Physical Aspect of the Living Cell}.
+\newblock Cambridge University Press.
+\newblock DOI: 10.1017/CBO9781107295629.
+
+\bibitem[Sánchez-Cañizares(2021)]{SanchezCanizares2021}
+Sánchez-Cañizares, J. (2021).
+\newblock The Free Energy Principle: Good Science and Questionable Philosophy in a Grand Unifying Theory.
+\newblock \textit{Entropy}, 23(2), 238.
+\newblock DOI: 10.3390/e23020238.
+
+\bibitem[Gallos et~al.(2012)]{SelfSimilarNetworks}
+Gallos, L.~K., Makse, H.~A. \& Sigman, M. (2012).
+\newblock A small world of weak ties provides optimal global integration of self-similar modules in functional brain networks.
+\newblock \textit{PNAS}, 109(8), 2825--2830.
+\newblock DOI: 10.1073/pnas.1106612109.
+
+\bibitem[Szathmáry \& Maynard~Smith(1995)]{SzathmaryMaynardSmith1995}
+Szathmáry, E. \& Maynard~Smith, J. (1995).
+\newblock The major evolutionary transitions.
+\newblock \textit{Nature}, 374, 227--232.
+\newblock DOI: 10.1038/374227a0.
+
+\bibitem[Ferreiro et~al.(2007)]{Ferreiro2007}
+Ferreiro, D.~U., Hegler, J.~A., Komives, E.~A. \& Wolynes, P.~G. (2007).
+\newblock Localizing frustration in native proteins and protein assemblies.
+\newblock \textit{PNAS}, 104(49), 19819--19824.
+\newblock DOI: 10.1073/pnas.0709915104.
+
+\bibitem[Ferreiro et~al.(2014)]{Ferreiro2014}
+Ferreiro, D.~U., Komives, E.~A. \& Wolynes, P.~G. (2014).
+\newblock Frustration in biomolecules.
+\newblock \textit{Quarterly Reviews of Biophysics}, 47(4), 285--363.
+\newblock DOI: 10.1017/S0033583514000092.
+
+\bibitem[Parra et~al.(2016)]{ParraFerreiro2016}
+Parra, R.~G., Schafer, N.~P., Radusky, L.~G., Tsai, M.-Y., Guzovsky, A.~B., Wolynes, P.~G. \& Ferreiro, D.~U. (2016).
+\newblock Protein Frustratometer 2: a tool to localize energetic frustration in protein molecules, now with electrostatics.
+\newblock \textit{Nucleic Acids Research}, 44(W1), W356--W360.
+\newblock DOI: 10.1093/nar/gkw304.
+
+\bibitem[Martyushev(2010)]{Martyushev2010}
+Martyushev, L.~M. (2010).
+\newblock The maximum entropy production principle: two basic questions.
+\newblock \textit{Phil.\ Trans.\ R.\ Soc.\ B}, 365, 1333--1334.
+\newblock DOI: 10.1098/rstb.2009.0295.
+
+\bibitem[Gould \& Eldredge(1977)]{GouldEldredge1977}
+Gould, S.~J. \& Eldredge, N. (1977).
+\newblock Punctuated equilibria: the tempo and mode of evolution reconsidered.
+\newblock \textit{Paleobiology}, 3(2), 115--151.
+\newblock DOI: 10.1017/S0094837300005224.
+
+\bibitem[Brown et~al.(2004)]{BrownMTE2004}
+Brown, J.~H., Gillooly, J.~F., Allen, A.~P., Savage, V.~M. \& West, G.~B. (2004).
+\newblock Toward a metabolic theory of ecology.
+\newblock \textit{Ecology}, 85(7), 1771--1789.
+\newblock DOI: 10.1890/03-9000.
+
+\bibitem[Geiger(2026c)]{GeigerRH2026c}
+Geiger, L. (2026).
+\newblock From Landscape to Atlas: Multi-Route Cartography of an Ongoing Expedition Toward the Riemann Hypothesis.
+\newblock \textit{Zenodo preprint}, v3.1.
+\newblock Concept DOI: 10.5281/zenodo.19035640.
+
+\bibitem[Geiger(2026e)]{GeigerRH2026b}
+Geiger, L. (2026).
+\newblock A Conditional Reduction of the Riemann Hypothesis to Even Dominance of the Weil Quadratic Form.
+\newblock \textit{Zenodo preprint}, v1.9.
+\newblock Concept DOI: 10.5281/zenodo.19764771.
+
+\bibitem[Geiger(2026d)]{FST-Unified2026}
+Geiger, L. (2026).
+\newblock Functional Stability Theory --- Physical Instantiation via the Renormalized Free Energy Principle.
+\newblock \textit{Zenodo preprint}, v1.8.
+\newblock Concept DOI: 10.5281/zenodo.19036190.
+
+\bibitem[Sawada et~al.(2025)]{Toma2025}
+Sawada, Y., Daigaku, Y. \& Toma, K. (2025).
+\newblock Maximum entropy production principle of thermodynamics for the birth and evolution of life.
+\newblock \textit{Entropy}, 27(4), 449.
+\newblock DOI: 10.3390/e27040449.
+
+\bibitem[Alon(2007)]{AlonSystems2007}
+Alon, U. (2007).
+\newblock \textit{An Introduction to Systems Biology: Design Principles of Biological Circuits}.
+\newblock Chapman \& Hall/CRC, Boca Raton, FL.
+\newblock DOI: 10.1201/9780429283321.
+
+\bibitem[Wagner(2005)]{WagnerRobustness2005}
+Wagner, A. (2005).
+\newblock \textit{Robustness and Evolvability in Living Systems}.
+\newblock Princeton University Press, Princeton, NJ. ISBN: 978-0691122403.
+
+\bibitem[Kjaergaard \& Poulsen(2011)]{KjaergaardPoulsen2011}
+Kjaergaard, M. \& Poulsen, F.~M. (2011).
+\newblock Sequence correction of random coil chemical shifts: correlation between neighbor correction factors and changes in the Ramachandran distribution.
+\newblock \textit{Journal of Biomolecular NMR}, 50, 157--165.
+\newblock DOI: 10.1007/s10858-011-9508-2.
+
+\bibitem[Jumper et~al.(2021)]{JumperAF2021}
+Jumper, J. et~al. (2021).
+\newblock Highly accurate protein structure prediction with AlphaFold.
+\newblock \textit{Nature}, 596, 583--589.
+\newblock DOI: 10.1038/s41586-021-03819-2.
+
+\bibitem[Lasry \& Lions(2007)]{LasryLions2007}
+Lasry, J.-M. \& Lions, P.-L. (2007).
+\newblock Mean Field Games.
+\newblock \textit{Japanese Journal of Mathematics}, 2, 229--260.
+\newblock DOI: 10.1007/s11537-007-0657-8.
+
+\bibitem[Vardar et~al.(1999)]{BMRB4428}
+Vardar, D., Buckley, D.~A., Frank, B.~S. \& McKnight, C.~J. (1999).
+\newblock NMR structure of an F-actin-binding ``headpiece'' motif from villin.
+\newblock \textit{Journal of Molecular Biology}, 294(5), 1299--1310.
+\newblock DOI: 10.1006/jmbi.1999.3321.
+\newblock BMRB entry 4428; BMRB DOI: 10.13018/BMR4428.
+
+\bibitem[Wishart et~al.(1995)]{Wishart1995}
+Wishart, D.~S., Bigam, C.~G., Holm, A., Hodges, R.~S. \& Sykes, B.~D. (1995).
+\newblock $^1$H, $^{13}$C and $^{15}$N random coil NMR chemical shifts of the common amino acids.~I. Investigations of nearest-neighbor effects.
+\newblock \textit{Journal of Biomolecular NMR}, 5(1), 67--81.
+\newblock DOI: 10.1007/BF00227471.
+
+\bibitem[Williamson(2013)]{Williamson2013}
+Williamson, M.~P. (2013).
+\newblock Using chemical shift perturbation to characterise ligand binding.
+\newblock \textit{Progress in Nuclear Magnetic Resonance Spectroscopy}, 73, 1--16.
+\newblock DOI: 10.1016/j.pnmrs.2013.02.001.
+
+\bibitem[McKnight et~al.(1996)]{McKnight1996}
+McKnight, C.~J., Doering, D.~S., Matsudaira, P.~T. \& Kim, P.~S. (1996).
+\newblock A thermostable 35-residue subdomain within villin headpiece.
+\newblock \textit{Journal of Molecular Biology}, 260(2), 126--134.
+\newblock DOI: 10.1006/jmbi.1996.0387.
+
+\bibitem[Chakravarty et~al.(2024)]{NatureComms2024}
+Chakravarty, D., Schafer, J.~W., Chen, E.~A., Thole, J.~F., Ronish, L.~A., Lee, M. \& Porter, L.~L. (2024).
+\newblock AlphaFold predictions of fold-switched conformations are driven by structure memorization.
+\newblock \textit{Nature Communications}, 15, 7296.
+\newblock DOI: 10.1038/s41467-024-51801-z.
+
+\bibitem[Ye et~al.(2026)]{Ye2026}
+Ye, M., Wang, Y.-H., Brogi, M., Parks, J.~M., Kuo, K.~M. \& Gumbart, J.~C. (2026).
+\newblock Benchmarking AI Protein Structure Predictors Reveals a Persistent Bias in Multi-State Proteins.
+\newblock \textit{bioRxiv preprint}, 10.64898/2026.07.10.737860.
+\newblock DOI: 10.64898/2026.07.10.737860.
+
+\bibitem[Thacker(2026)]{Thacker2026}
+Thacker, R. (2026).
+\newblock Confidence Without Verification: Screening pLDDT Unreliability in AlphaFold2 Fold-Switching Predictions.
+\newblock \textit{bioRxiv preprint}, 10.64898/2026.02.19.706878.
+\newblock DOI: 10.64898/2026.02.19.706878.
+
+\bibitem[Jing et~al.(2024)]{JingFlow2024}
+Jing, B., Berger, B. \& Jaakkola, T. (2024).
+\newblock AlphaFold Meets Flow Matching for Generating Protein Ensembles.
+\newblock In \textit{Proceedings of the 41st International Conference on Machine Learning (ICML 2024)}. arXiv:2402.04845.
+
+\bibitem[Jing et~al.(2023)]{JingDiffusion2023}
+Jing, B., Erives, E., Pao-Huang, P., Corso, G., Berger, B. \& Jaakkola, T. (2023).
+\newblock EigenFold: Generative Protein Structure Prediction with Diffusion Models.
+\newblock \textit{arXiv preprint}, arXiv:2304.02198.
+
+\bibitem[Leusch et~al.(2026)]{Leusch2026}
+Leusch, J.-P., Poley-Gil, M., Fernandez-Martin, M., Bordin, N., Rost, B., Parra, R.~G. \& Heinzinger, M. (2026).
+\newblock FrustrAI-Seq: Scaling Local Energetic Frustration to the Protein Sequence Space.
+\newblock \textit{bioRxiv preprint}, 10.64898/2026.02.03.703498.
+\newblock DOI: 10.64898/2026.02.03.703498.
+
+\bibitem[Beining et~al.(2026)]{Beining2026}
+Beining, M., Engelberger, F., Parra, R.~G., Schoeder, C.~T. et~al. (2026).
+\newblock FrustraMPNN: An ultra-fast deep learning tool for proteome-scale analysis of deep mutational single-residue local energetic frustration.
+\newblock \textit{bioRxiv preprint}, 10.64898/2026.01.22.701012.
+\newblock DOI: 10.64898/2026.01.22.701012.
+
+\bibitem[Kuzu et~al.(2025)]{Kuzu2025}
+Kuzu, O.~F., Granerud, L.~J.~T. \& Saatcioglu, F. (2025).
+\newblock Navigating the landscape of protein folding and proteostasis: from molecular chaperones to therapeutic innovations.
+\newblock \textit{Signal Transduction and Targeted Therapy}, 10, 358.
+\newblock DOI: 10.1038/s41392-025-02439-w.
+
+\end{thebibliography}
+
+\end{document}
