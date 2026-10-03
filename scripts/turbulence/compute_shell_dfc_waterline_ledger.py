@@ -16,12 +16,17 @@ from __future__ import annotations
 import csv
 import json
 import math
+import os
+import sys
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 
 import numpy as np
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sabra_flux import sabra_energy_flux  # noqa: E402
 
 
 DATE_TAG = "2026-06-05"
@@ -78,10 +83,15 @@ class LedgerRow:
 
 
 def sabra_nonlinear(u: np.ndarray, k: np.ndarray) -> np.ndarray:
+    """Fix (2026-10-03, Issue #1): conjugation corrected in the local term
+    (conj on u_{n-1} instead of u_{n+1}) and the backward-term coefficient
+    corrected from -0.25 to +0.5, matching L'vov et al. 1998 Eq.(21) with
+    a=1, b=-0.5, c=-0.5 (a+b+c=0). See compute_goy_shell_dfc.py::sabra_nonlinear
+    for the full derivation and the counterexample from the issue."""
     out = np.zeros_like(u)
     out[: N_SHELLS - 2] += k[: N_SHELLS - 2] * np.conj(u[1 : N_SHELLS - 1]) * u[2:N_SHELLS]
-    out[1 : N_SHELLS - 1] += -0.5 * k[: N_SHELLS - 2] * np.conj(u[2:N_SHELLS]) * u[: N_SHELLS - 2]
-    out[2:N_SHELLS] += -0.25 * k[: N_SHELLS - 2] * u[1 : N_SHELLS - 1] * u[: N_SHELLS - 2]
+    out[1 : N_SHELLS - 1] += -0.5 * k[: N_SHELLS - 2] * u[2:N_SHELLS] * np.conj(u[: N_SHELLS - 2])
+    out[2:N_SHELLS] += 0.5 * k[: N_SHELLS - 2] * u[1 : N_SHELLS - 1] * u[: N_SHELLS - 2]
     return 1j * out
 
 
@@ -115,9 +125,14 @@ def run_sabra_smoke() -> tuple[np.ndarray, np.ndarray, SimulationSummary]:
             continue
 
         energy = np.abs(u) ** 2
-        flux = np.zeros(N_SHELLS - 1, dtype=float)
-        for n in range(N_SHELLS - 2):
-            flux[n] = np.imag(k[n] * u[n] * np.conj(u[n + 1]) * u[n + 2])
+        # Energiefluss: energiekonsistente Pi_n (Issue #1 Folgefix, 2026-10-03;
+        # siehe sabra_flux.sabra_energy_flux). Die alte Formel
+        # Im(k_n*u_n*conj(u_{n+1})*u_{n+2}) gehoerte zur VOR der Dynamik-
+        # Korrektur verwendeten (fehlerhaften) Nichtlinearitaet.
+        # Randkorrektur (unabhaengiger Review, 2026-10-03): sabra_energy_flux
+        # liefert bereits alle N_SHELLS-1 inneren Grenzfluesse -- kein
+        # Auffuellen mit 0 an der (falschen) Stelle N_SHELLS-2 mehr noetig.
+        flux = sabra_energy_flux(u, k)
         energies.append(energy)
         fluxes.append(flux)
         dissipations.append(float(2.0 * NU * np.sum(k * k * energy)))

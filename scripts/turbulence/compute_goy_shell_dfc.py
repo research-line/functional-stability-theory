@@ -6,10 +6,15 @@ Turbulenz: Schalenmodell-DFC-Verifikation.
 Verwendet ein IMEX-Schema (implizite Dissipation, explizite Nichtlinearitaet)
 fuer das Sabra-Schalenmodell (L'vov, Podivilov, Pomyalov, Procaccia, Vandembroucq 1998):
 
-  du_n/dt = i*(k_n * u_{n+1}^* * u_{n+2}  [forward cascade]
-            - (1/2)*k_{n-1} * u_{n+1}^* * u_{n-1}  [local interaction]
-            - (1/4)*k_{n-2} * u_{n-1} * u_{n-2})    [backward cascade]
+  du_n/dt = i*(k_n * conj(u_{n+1}) * u_{n+2}  [forward cascade]
+            - (1/2)*k_{n-1} * u_{n+1} * conj(u_{n-1})  [local interaction]
+            + (1/2)*k_{n-2} * u_{n-1} * u_{n-2})    [backward cascade]
             - nu * k_n^2 * u_n + f * delta_{n,n_f}
+
+  (fixed 2026-10-03, Issue #1/48448f5: corrects the conjugation on the
+  local term and the backward-term coefficient (-1/4 -> +1/2); see
+  ``sabra_nonlinear`` below for the full derivation and the
+  energy-conservation condition a+b+c=0.)
 
 Sabra-Modell ist numerisch stabiler als GOY (gleiche Physik).
 
@@ -21,7 +26,11 @@ Autor: Lukas Geiger (Skript erstellt per Claude, 2026)
 
 import numpy as np
 import os
+import sys
 import time
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sabra_flux import sabra_energy_flux  # noqa: E402
 
 # ==========================================================================
 # Parameter
@@ -40,18 +49,46 @@ k_n = K0 * LAM**np.arange(N, dtype=float)
 
 
 def sabra_nonlinear(u):
-    """Nichtlinearer Teil des Sabra-Modells (vektorisiert)"""
+    """Nichtlinearer Teil des Sabra-Modells (vektorisiert).
+
+    Fix (2026-10-03, Issue #1): Das urspruengliche Vorzeichen-/Konjugationsschema
+    verletzte die quadratische Energieerhaltung dE/dt=0 im inviszid-ungetriebenen
+    Fall (Gegenbeispiel aus Issue #1: u=[1,1,i], k_n=0.125 -> dE/dt=-7k_n/2 statt 0).
+    Nach L'vov, Podivilov, Pomyalov, Procaccia, Vandembroucq, "Improved shell model
+    of turbulence", Phys. Rev. E 58, 1811 (1998), Eq. (21):
+        du_n/dt = i(a*k_{n+1}*u_{n+2}*conj(u_{n+1}) + b*k_n*u_{n+1}*conj(u_{n-1})
+                    - c*k_{n-1}*u_{n-1}*u_{n-2}) - nu*k_n^2*u_n + f_n
+    mit Energieerhaltung fuer a+b+c=0 (Standardwahl a=1, b=-1/2, c=-1/2, Eq. (3)/(4)).
+    Zwei Korrekturen gegenueber der Vorversion:
+      (1) Im lokalen Term wird u_{n-1} konjugiert, nicht u_{n+1} (die Vorversion
+          hatte die Konjugation auf dem falschen Faktor).
+      (2) Der Rueckwaerts-Term-Koeffizient ist +1/2 (code-interne Vorzeichenkonvention,
+          entspricht c=-1/2 in Eq.(21), da dort bereits ein Minus vor c steht),
+          nicht -1/4.
+    Mit k_n = K0*LAM^n (geometrisch) ist die Wahl k_n,k_{n-1},k_{n-2} statt
+    k_{n+1},k_n,k_{n-1} eine globale Reskalierung der Nichtlinearitaet um
+    1/LAM und aendert die inviszide Erhaltungsbedingung a+b+c=0 nicht. Bei
+    FESTEM nu/f ist das aber KEINE blosse Zeit-Reskalierung: aequivalent zur
+    woertlichen Paper-Form (21) in t'=t/LAM mit nu_eff=LAM*nu, f_eff=LAM*f
+    (unabhaengig geprueft, siehe
+    _proof-notes/SABRA_FABLE_REVIEW_2026-10-03.md Abschnitt 1.5) -- das
+    oben gedruckte "nu = 1e-7" ist also diese Code-Konvention, nicht die
+    woertliche Paper-Viskositaet. Verifiziert: dE/dt=0 bis Maschinengenauigkeit
+    fuer zufaellige Zustaende, N=3..30 (siehe tests/test_sabra_energy_conservation.py).
+    Konsistent mit der bereits korrekten Parallel-Implementierung in
+    compute_shell_dfc_waterline_tangential_ledger.py (a=1,b=-0.5,c=0.5, "a+b-c=0").
+    """
     N = len(u)
     nl = np.zeros(N, dtype=complex)
 
     # Forward: k_n * conj(u_{n+1}) * u_{n+2}
     nl[:N-2] += k_n[:N-2] * np.conj(u[1:N-1]) * u[2:N]
 
-    # Local: -(1/2) * k_{n-1} * conj(u_{n+1}) * u_{n-1}
-    nl[1:N-1] += -0.5 * k_n[:N-2] * np.conj(u[2:N]) * u[:N-2]
+    # Local: -(1/2) * k_{n-1} * u_{n+1} * conj(u_{n-1})
+    nl[1:N-1] += -0.5 * k_n[:N-2] * u[2:N] * np.conj(u[:N-2])
 
-    # Backward: -(1/4) * k_{n-2} * u_{n-1} * u_{n-2}
-    nl[2:N] += -0.25 * k_n[:N-2] * u[1:N-1] * u[:N-2]
+    # Backward: +(1/2) * k_{n-2} * u_{n-1} * u_{n-2}
+    nl[2:N] += 0.5 * k_n[:N-2] * u[1:N-1] * u[:N-2]
 
     return 1j * nl
 
@@ -126,10 +163,17 @@ for step in range(n_data):
         E_snap = np.abs(u)**2
         E_all.append(E_snap.copy())
 
-        # Energiefluss: Pi_n = Im(k_n * u_n * conj(u_{n+1}) * u_{n+2})
+        # Energiefluss: energiekonsistente Pi_n (Issue #1 Folgefix, 2026-10-03;
+        # siehe sabra_flux.sabra_energy_flux fuer die Herleitung/Verifikation).
+        # Die alte Formel Im(k_n*u_n*conj(u_{n+1})*u_{n+2}) gehoerte zur
+        # VOR der Dynamik-Korrektur verwendeten (fehlerhaften) Nichtlinearitaet
+        # und wurde bei deren Fix nicht neu hergeleitet.
+        # Randkorrektur (unabhaengiger Review, 2026-10-03): sabra_energy_flux
+        # liefert jetzt N-1 Werte (Pi_0..Pi_{N-2}, alle inneren Grenzen);
+        # Pi[N-1] bleibt die einzige echte Systemgrenze (= 0, strukturell,
+        # NICHT mehr an der falschen Stelle N-2 aufgefuellt).
         Pi = np.zeros(N)
-        for nn in range(N-2):
-            Pi[nn] = np.imag(k_n[nn] * u[nn] * np.conj(u[nn+1]) * u[nn+2])
+        Pi[:N-1] = sabra_energy_flux(u, k_n)
         Pi_all.append(Pi.copy())
 
         eps_diss = 2 * NU * np.sum(k_n**2 * E_snap)
@@ -279,7 +323,7 @@ try:
     ax.legend(); ax.grid(True, alpha=0.3, which='both')
 
     ax = axes[0, 1]
-    ax.semilogx(k_n[:N-2], Pi_mean[:N-2], 'ro-', lw=2, ms=5)
+    ax.semilogx(k_n[:N-1], Pi_mean[:N-1], 'ro-', lw=2, ms=5)
     ax.axhline(y=0, color='k', lw=0.5)
     ax.axhline(y=eps_mean, color='green', ls='--', label=r'$\langle\varepsilon\rangle$')
     ax.axvspan(k_n[inertial_start], k_n[min(inertial_end, N-1)], alpha=0.1, color='green')
