@@ -129,8 +129,10 @@ def run_sabra_smoke() -> tuple[np.ndarray, np.ndarray, SimulationSummary]:
         # siehe sabra_flux.sabra_energy_flux). Die alte Formel
         # Im(k_n*u_n*conj(u_{n+1})*u_{n+2}) gehoerte zur VOR der Dynamik-
         # Korrektur verwendeten (fehlerhaften) Nichtlinearitaet.
-        flux = np.zeros(N_SHELLS - 1, dtype=float)
-        flux[: N_SHELLS - 2] = sabra_energy_flux(u, k)
+        # Randkorrektur (unabhaengiger Review, 2026-10-03): sabra_energy_flux
+        # liefert bereits alle N_SHELLS-1 inneren Grenzfluesse -- kein
+        # Auffuellen mit 0 an der (falschen) Stelle N_SHELLS-2 mehr noetig.
+        flux = sabra_energy_flux(u, k)
         energies.append(energy)
         fluxes.append(flux)
         dissipations.append(float(2.0 * NU * np.sum(k * k * energy)))

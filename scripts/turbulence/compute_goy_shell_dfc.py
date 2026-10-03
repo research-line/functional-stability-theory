@@ -61,9 +61,15 @@ def sabra_nonlinear(u):
           entspricht c=-1/2 in Eq.(21), da dort bereits ein Minus vor c steht),
           nicht -1/4.
     Mit k_n = K0*LAM^n (geometrisch) ist die Wahl k_n,k_{n-1},k_{n-2} statt
-    k_{n+1},k_n,k_{n-1} nur eine globale Reskalierung um LAM und aendert die
-    Erhaltungsbedingung nicht. Verifiziert: dE/dt=0 bis Maschinengenauigkeit fuer
-    zufaellige Zustaende, N=3..30 (siehe tests/test_sabra_energy_conservation.py).
+    k_{n+1},k_n,k_{n-1} eine globale Reskalierung der Nichtlinearitaet um
+    1/LAM und aendert die inviszide Erhaltungsbedingung a+b+c=0 nicht. Bei
+    FESTEM nu/f ist das aber KEINE blosse Zeit-Reskalierung: aequivalent zur
+    woertlichen Paper-Form (21) in t'=t/LAM mit nu_eff=LAM*nu, f_eff=LAM*f
+    (unabhaengig geprueft, siehe
+    _proof-notes/SABRA_FABLE_REVIEW_2026-10-03.md Abschnitt 1.5) -- das
+    oben gedruckte "nu = 1e-7" ist also diese Code-Konvention, nicht die
+    woertliche Paper-Viskositaet. Verifiziert: dE/dt=0 bis Maschinengenauigkeit
+    fuer zufaellige Zustaende, N=3..30 (siehe tests/test_sabra_energy_conservation.py).
     Konsistent mit der bereits korrekten Parallel-Implementierung in
     compute_shell_dfc_waterline_tangential_ledger.py (a=1,b=-0.5,c=0.5, "a+b-c=0").
     """
@@ -157,8 +163,12 @@ for step in range(n_data):
         # Die alte Formel Im(k_n*u_n*conj(u_{n+1})*u_{n+2}) gehoerte zur
         # VOR der Dynamik-Korrektur verwendeten (fehlerhaften) Nichtlinearitaet
         # und wurde bei deren Fix nicht neu hergeleitet.
+        # Randkorrektur (unabhaengiger Review, 2026-10-03): sabra_energy_flux
+        # liefert jetzt N-1 Werte (Pi_0..Pi_{N-2}, alle inneren Grenzen);
+        # Pi[N-1] bleibt die einzige echte Systemgrenze (= 0, strukturell,
+        # NICHT mehr an der falschen Stelle N-2 aufgefuellt).
         Pi = np.zeros(N)
-        Pi[:N-2] = sabra_energy_flux(u, k_n)
+        Pi[:N-1] = sabra_energy_flux(u, k_n)
         Pi_all.append(Pi.copy())
 
         eps_diss = 2 * NU * np.sum(k_n**2 * E_snap)
@@ -308,7 +318,7 @@ try:
     ax.legend(); ax.grid(True, alpha=0.3, which='both')
 
     ax = axes[0, 1]
-    ax.semilogx(k_n[:N-2], Pi_mean[:N-2], 'ro-', lw=2, ms=5)
+    ax.semilogx(k_n[:N-1], Pi_mean[:N-1], 'ro-', lw=2, ms=5)
     ax.axhline(y=0, color='k', lw=0.5)
     ax.axhline(y=eps_mean, color='green', ls='--', label=r'$\langle\varepsilon\rangle$')
     ax.axvspan(k_n[inertial_start], k_n[min(inertial_end, N-1)], alpha=0.1, color='green')

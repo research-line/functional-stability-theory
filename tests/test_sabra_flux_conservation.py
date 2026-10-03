@@ -22,14 +22,25 @@ of the closed form tested here), and checks that:
   1. The shared closed-form ``sabra_energy_flux`` matches this brute-force
      cumulative definition to numerical precision, for N=3..30, random
      states, and the edge cases requested in the issue follow-up (zero
-     state, single/double-shell excitation, real-only, extreme k-ratios).
-  2. The telescoping identity dE_n/dt|_NL = Pi_{n-1} - Pi_n holds (with the
-     boundary convention Pi_{-1} = 0, i.e. no flux into shell 0 from
-     "shell -1", and no flux defined past the last triad, i.e. nothing
-     flows out of the top shell beyond what the last triad carries).
+     state, single/double-shell excitation, real-only, extreme k-ratios)
+     -- over ALL N-1 inner boundaries it returns, not a truncated prefix.
+  2. The telescoping identity dE_n/dt|_NL = Pi_{n-1} - Pi_n holds for
+     EVERY shell n = 0, ..., N-1 (with Pi_{-1} = Pi_{N-1} = 0 the only two
+     system-boundary conventions).
   3. RED CONTROL: the OLD formula does NOT satisfy the cumulative
      consistency check above (documents that the regression would have
      caught the bug before this fix).
+  4. RED CONTROL: an energy-conserving but WRONG coefficient choice
+     (a, b, c) = (1, -0.3, -0.7), which still satisfies a+b+c=0 and thus
+     passes a pure energy-conservation test, is caught by the SECOND
+     invariant H = sum_n (-2)^n |u_n|^2 (Eq. "Hinv" of the primary
+     source, valid for this model's standard (a,b,c)=(1,-1/2,-1/2)).
+  5. A literal line-by-line transcription of the primary source's Eq. (21)
+     (L'vov, Podivilov, Pomyalov, Procaccia, Vandembroucq, Phys. Rev. E 58,
+     1811 (1998)) -- using the PAPER's own (k_{n+1}, k_n, k_{n-1}) index
+     convention, not the code's (k_n, k_{n-1}, k_{n-2}) -- matches the
+     code's ``sabra_nonlinear`` exactly under k -> k/LAM (see sabra_flux.py
+     module docstring, "Index convention vs. the primary source").
 """
 
 import importlib.util
@@ -72,6 +83,33 @@ def goy_sabra_nonlinear():
     return wrapped
 
 
+def _paper_literal_nonlinear(u, k_n, a=1.0, b=-0.5, c=-0.5):
+    """Literal, line-by-line transcription of Eq. (21) of L'vov, Podivilov,
+    Pomyalov, Procaccia, Vandembroucq, "Improved shell model of
+    turbulence", Phys. Rev. E 58, 1811 (1998):
+
+        du_n/dt = i*(a*k_{n+1}*u_{n+2}*conj(u_{n+1})
+                      + b*k_n*u_{n+1}*conj(u_{n-1})
+                      - c*k_{n-1}*u_{n-1}*u_{n-2})
+
+    using the PAPER's own index convention (k_{n+1}, k_n, k_{n-1}), not the
+    code's (k_n, k_{n-1}, k_{n-2}). Boundary convention u_{-2}=u_{-1}=
+    u_N=u_{N+1}=0."""
+    N = len(u)
+    nl = np.zeros(N, dtype=complex)
+    for n in range(N):
+        u_np2 = u[n + 2] if n + 2 < N else 0j
+        u_np1 = u[n + 1] if n + 1 < N else 0j
+        u_nm1 = u[n - 1] if n - 1 >= 0 else 0j
+        u_nm2 = u[n - 2] if n - 2 >= 0 else 0j
+        k_np1 = k_n[n + 1] if n + 1 < len(k_n) else k_n[n] * 2.0  # LAM=2 geometric
+        term1 = a * k_np1 * u_np2 * np.conj(u_np1)
+        term2 = b * k_n[n] * u_np1 * np.conj(u_nm1)
+        term3 = -c * (k_n[n - 1] if n - 1 >= 0 else k_n[0] / 2.0) * u_nm1 * u_nm2
+        nl[n] = 1j * (term1 + term2 + term3)
+    return nl
+
+
 def _bruteforce_cumulative_flux(u, k_n, nl_func):
     """Pi_n = -2*sum_{m=0}^n Re(conj(u_m)*N_m(u)), n=0..N-1 (direct
     cumulative-sum definition, independent of any closed form)."""
@@ -90,6 +128,22 @@ def _old_buggy_flux(u, k_n):
     return pi
 
 
+def _energy_conserving_wrong_coeff_nonlinear(u, k_n):
+    """Negative control (2026-10-03, independent review follow-up):
+    (a, b, c) = (1, -0.3, -0.7) still satisfies a+b+c=0 (so dE/dt=0 to
+    machine precision -- a pure energy test alone would PASS this), but it
+    is NOT the physical model (a, b, c) = (1, -1/2, -1/2) and must be
+    caught by a second, independent invariant (see
+    ``test_h_invariant_catches_energy_conserving_wrong_coefficients``)."""
+    N = len(u)
+    a, b, c = 1.0, -0.3, -0.7
+    nl = np.zeros(N, dtype=complex)
+    nl[: N - 2] += a * k_n[: N - 2] * np.conj(u[1 : N - 1]) * u[2:N]
+    nl[1 : N - 1] += b * k_n[: N - 2] * u[2:N] * np.conj(u[: N - 2])
+    nl[2:N] += -c * k_n[: N - 2] * u[1 : N - 1] * u[: N - 2]
+    return 1j * nl
+
+
 def _k_of(N, lam=2.0):
     return (2.0 ** -4) * lam ** np.arange(N, dtype=float)
 
@@ -100,11 +154,12 @@ def test_closed_form_matches_cumulative_definition_random(goy_sabra_nonlinear, N
     k_n = _k_of(N)
     for _ in range(5):
         u = rng.standard_normal(N) + 1j * rng.standard_normal(N)
-        bf = _bruteforce_cumulative_flux(u, k_n, goy_sabra_nonlinear)[: N - 2]
+        bf = _bruteforce_cumulative_flux(u, k_n, goy_sabra_nonlinear)[: N - 1]
         cf = sabra_energy_flux(u, k_n)
         assert np.allclose(bf, cf, atol=1e-9, rtol=1e-7), (
             f"N={N}: closed-form Pi_n does not match the cumulative energy "
-            f"balance (max diff {np.max(np.abs(bf - cf)):.3e})"
+            f"balance over ALL {N - 1} inner boundaries "
+            f"(max diff {np.max(np.abs(bf - cf)):.3e})"
         )
 
 
@@ -134,10 +189,10 @@ def test_closed_form_matches_cumulative_definition_edge_cases(
 ):
     k_n = _k_of(N)
     u = build_u(N)
-    bf = _bruteforce_cumulative_flux(u, k_n, goy_sabra_nonlinear)[: N - 2]
+    bf = _bruteforce_cumulative_flux(u, k_n, goy_sabra_nonlinear)[: N - 1]
     cf = sabra_energy_flux(u, k_n)
     assert np.allclose(bf, cf, atol=1e-9, rtol=1e-7), (
-        f"{label}, N={N}: closed-form Pi_n mismatch "
+        f"{label}, N={N}: closed-form Pi_n mismatch over all N-1 boundaries "
         f"(max diff {np.max(np.abs(bf - cf)):.3e})"
     )
 
@@ -156,20 +211,20 @@ def test_closed_form_matches_cumulative_definition_extreme_lambda(
     k_n = _k_of(N, lam=lam)
     rng = np.random.default_rng(42)
     u = rng.standard_normal(N) + 1j * rng.standard_normal(N)
-    bf = _bruteforce_cumulative_flux(u, k_n, goy_sabra_nonlinear)[: N - 2]
+    bf = _bruteforce_cumulative_flux(u, k_n, goy_sabra_nonlinear)[: N - 1]
     cf = sabra_energy_flux(u, k_n)
     assert np.allclose(bf, cf, atol=1e-9, rtol=1e-7), f"lambda={lam} mismatch"
 
 
 @pytest.mark.parametrize("N", [3, 5, 10, 22])
-def test_telescoping_identity_holds_for_interior_shells(goy_sabra_nonlinear, N):
-    """dE_n/dt|_NL = Pi_{n-1} - Pi_n for every shell that has a well-defined
-    Pi on both sides (n = 1..N-3), with Pi_{-1} := 0 (nothing flows into the
-    system from a nonexistent "shell -1"). This does NOT claim Pi_0 = 0 --
-    the flux crossing the boundary after the FIRST shell is a genuine,
-    generally nonzero, two-triad flux (see sabra_flux.py); only the outer
-    system boundaries (before shell 0 and after shell N-1) are zero, which
-    is checked separately below."""
+def test_telescoping_identity_holds_for_every_inner_boundary(goy_sabra_nonlinear, N):
+    """dE_n/dt|_NL = Pi_{n-1} - Pi_n for EVERY shell n = 0, ..., N-1 (not
+    just the interior ones), using the two SYSTEM-boundary conventions
+    Pi_{-1} := 0 (nothing flows into the system before shell 0) and
+    Pi_{N-1} := 0 (nothing flows out past the last shell -- equivalent to
+    global energy conservation of the nonlinear term). This does NOT claim
+    Pi_0 = 0, nor Pi_{N-2} = 0 -- both are genuine, generally nonzero,
+    interior fluxes; only the two system boundaries vanish."""
     rng = np.random.default_rng(777 + N)
     k_n = _k_of(N)
     u = rng.standard_normal(N) + 1j * rng.standard_normal(N)
@@ -177,13 +232,12 @@ def test_telescoping_identity_holds_for_interior_shells(goy_sabra_nonlinear, N):
     nl = goy_sabra_nonlinear(u, k_n)
     de_dt = 2.0 * np.real(np.conj(u) * nl)  # length N
 
-    pi = sabra_energy_flux(u, k_n)  # length N-2, Pi_0..Pi_{N-3}
-    pi_padded = np.concatenate([[0.0], pi])  # [Pi_{-1}=0, Pi_0, ..., Pi_{N-3}]
+    pi = sabra_energy_flux(u, k_n)  # length N-1, Pi_0..Pi_{N-2}
+    # Pad with the two true system-boundary zeros: [Pi_{-1}=0, Pi_0, ...,
+    # Pi_{N-2}, Pi_{N-1}=0].
+    pi_padded = np.concatenate([[0.0], pi, [0.0]])
 
-    # dE_n/dt = Pi_{n-1} - Pi_n for n = 0..N-3 (both sides well-defined,
-    # using the convention Pi_{-1}:=0 for n=0 -- this is a boundary
-    # DEFINITION, not an empirical claim that Pi_0 itself vanishes).
-    for n in range(N - 2):
+    for n in range(N):
         lhs = de_dt[n]
         rhs = pi_padded[n] - pi_padded[n + 1]
         assert abs(lhs - rhs) < 1e-9 * max(1.0, abs(lhs)), (
@@ -209,6 +263,33 @@ def test_pi_after_first_shell_is_generally_nonzero(goy_sabra_nonlinear, N):
     )
 
 
+@pytest.mark.parametrize("N", [5, 10, 22])
+def test_pi_before_last_shell_is_generally_nonzero(goy_sabra_nonlinear, N):
+    """Anti-regression guard for the Fable-review boundary fix (2026-10-03):
+    Pi_{N-2} (the LAST entry of sabra_energy_flux, i.e. the flux INTO the
+    final shell) is a genuine, generally nonzero flux -- it is NOT the
+    system boundary Pi_{N-1} (which is zero by construction and not part
+    of the returned array). Before the fix this entry was silently
+    zero-padded by the two calling scripts; this test would have caught
+    that regression."""
+    k_n = _k_of(N)
+    rng = np.random.default_rng(654)
+    u = rng.standard_normal(N) + 1j * rng.standard_normal(N)
+    pi = sabra_energy_flux(u, k_n)
+    assert abs(pi[-1]) > 1e-6, (
+        "Pi_{N-2} is degenerate for this (deterministic) sample state -- "
+        "pick a different seed; the point of this test is that Pi_{N-2} "
+        "(the last returned entry) is generally nonzero."
+    )
+    # And it must actually equal dE_{N-1}/dt|_NL (the flux INTO the last
+    # shell), not the structural zero Pi_{N-1}.
+    nl = goy_sabra_nonlinear(u, k_n)
+    de_dt_last = 2.0 * np.real(np.conj(u[-1]) * nl[-1])
+    assert abs(pi[-1] - de_dt_last) < 1e-9 * max(1.0, abs(de_dt_last)), (
+        f"N={N}: Pi_{{N-2}}={pi[-1]} should equal dE_{{N-1}}/dt|_NL={de_dt_last}"
+    )
+
+
 @pytest.mark.parametrize("N", [3, 5, 10, 22])
 def test_system_boundary_fluxes_are_zero(goy_sabra_nonlinear, N):
     """The only two fluxes that are zero by construction are the SYSTEM's
@@ -217,7 +298,8 @@ def test_system_boundary_fluxes_are_zero(goy_sabra_nonlinear, N):
     is no triad beyond index N-3, so the cumulative sum of ALL per-shell
     dE/dt must vanish -- global energy conservation of the nonlinear term,
     independent of this test file; see test_sabra_energy_conservation.py).
-    Neither condition says anything about Pi_0 or any other interior Pi_n."""
+    Neither condition says anything about Pi_0, Pi_{N-2}, or any other
+    *interior* Pi_n -- both are checked (non-tautologically) elsewhere."""
     rng = np.random.default_rng(555 + N)
     k_n = _k_of(N)
     u = rng.standard_normal(N) + 1j * rng.standard_normal(N)
@@ -225,21 +307,33 @@ def test_system_boundary_fluxes_are_zero(goy_sabra_nonlinear, N):
     nl = goy_sabra_nonlinear(u, k_n)
     de_dt = 2.0 * np.real(np.conj(u) * nl)
 
-    # (a) flux INTO the system before shell 0: zero by construction
-    #     (Pi_{-1} := 0 is how sabra_energy_flux is built, not measured).
-    pi_minus_one = 0.0
-    assert pi_minus_one == 0.0
+    # (a) flux INTO the system before shell 0: the FULL brute-force
+    #     cumulative definition at "shell -1" is empty/zero by
+    #     construction (there is nothing to sum over before shell 0) --
+    #     checked via the empty-prefix sum, not a bare literal 0.0==0.0.
+    empty_prefix_sum = float(np.sum(de_dt[:0]))
+    assert empty_prefix_sum == 0.0
 
     # (b) flux OUT of the system after the last shell (shell N-1): the
     #     cumulative flux must have fully accounted for all energy change
     #     by the time the chain of triads runs out, i.e. the TOTAL sum of
     #     dE_n/dt over every shell is zero -- nothing is left over to flow
-    #     out past shell N-1.
+    #     out past shell N-1. This is an actual measurement (full-sum
+    #     reduction), not a hand-written literal.
     total_de_dt = float(np.sum(de_dt))
     assert abs(total_de_dt) < 1e-9 * max(1.0, np.sum(np.abs(u) ** 2)), (
         f"N={N}: total dE/dt={total_de_dt}, expected 0 "
         f"(no flux can leave the system past the last shell)"
     )
+
+    # Cross-check: the closed-form Pi's last entry plus the last shell's
+    # own dE/dt must telescope down to exactly this total (Pi_{N-1}=0).
+    pi = sabra_energy_flux(u, k_n)
+    reconstructed_total = float(np.sum(de_dt[:-1]) + de_dt[-1])
+    assert abs(reconstructed_total - total_de_dt) < 1e-9 * max(
+        1.0, abs(total_de_dt)
+    )
+    assert pi.shape[0] == N - 1, f"N={N}: expected {N - 1} inner boundaries, got {pi.shape[0]}"
 
 
 def test_old_formula_fails_cumulative_consistency_red_control(goy_sabra_nonlinear):
@@ -259,4 +353,69 @@ def test_old_formula_fails_cumulative_consistency_red_control(goy_sabra_nonlinea
         "Expected the OLD (pre-fix) flux formula to disagree with the "
         "energy-consistent cumulative definition -- if this now passes, "
         "the red control no longer discriminates and must be revisited."
+    )
+
+
+@pytest.mark.parametrize("N", [5, 10, 22])
+def test_h_invariant_catches_energy_conserving_wrong_coefficients(N):
+    """RED CONTROL (requested by independent review, 2026-10-03): a
+    coefficient choice that still satisfies a+b+c=0 (so a bare dE/dt=0
+    energy test PASSES it) but is NOT the physical model must be caught by
+    a SECOND invariant. For the standard model (a,b,c)=(1,-1/2,-1/2), the
+    primary source's second invariant is
+        H = sum_n (a/c)^n |u_n|^2 = sum_n (-2)^n |u_n|^2,
+    conserved (dH/dt=0, no dissipation/forcing) ONLY for a+b+c=0 AND the
+    specific ratio a/c=-2 pinned by (a,b,c)=(1,-1/2,-1/2) -- not for every
+    energy-conserving triple. (1,-0.3,-0.7) satisfies a+b+c=0 but has
+    a/c = 1/-0.7 =/= -2, so H must drift for it."""
+    k_n = _k_of(N)
+    rng = np.random.default_rng(42 + N)
+    u = rng.standard_normal(N) + 1j * rng.standard_normal(N)
+    weights = (-2.0) ** np.arange(N)
+
+    nl_correct = _paper_literal_nonlinear(u, k_n, a=1.0, b=-0.5, c=-0.5)
+    dH_correct = float(np.sum(weights * 2.0 * np.real(np.conj(u) * nl_correct)))
+    assert abs(dH_correct) < 1e-9 * max(1.0, np.sum(np.abs(u) ** 2) * 2.0 ** N), (
+        f"N={N}: dH/dt={dH_correct} for the correct model, expected ~0"
+    )
+
+    nl_wrong = _energy_conserving_wrong_coeff_nonlinear(u, k_n)
+    # The wrong-coefficient model must still conserve ENERGY (a+b+c=0)...
+    dE_wrong = float(np.sum(2.0 * np.real(np.conj(u) * nl_wrong)))
+    assert abs(dE_wrong) < 1e-9 * max(1.0, np.sum(np.abs(u) ** 2)), (
+        f"N={N}: the negative control (1,-0.3,-0.7) should still conserve "
+        f"energy (a+b+c=0) -- got dE/dt={dE_wrong}"
+    )
+    # ...but H must generically drift for it (it is not pinned to a/c=-2).
+    dH_wrong = float(np.sum(weights * 2.0 * np.real(np.conj(u) * nl_wrong)))
+    assert abs(dH_wrong) > 1e-6, (
+        f"N={N}: expected the H-invariant to catch the energy-conserving "
+        f"wrong coefficients (1,-0.3,-0.7) -- got dH/dt={dH_wrong} (too "
+        f"close to 0, red control no longer discriminates)"
+    )
+
+
+@pytest.mark.parametrize("N", [3, 5, 8, 15])
+def test_literal_eq21_transcription_matches_code_under_k_over_lambda(
+    goy_sabra_nonlinear, N
+):
+    """Direct check (requested by independent review, 2026-10-03) of the
+    code's sabra_nonlinear against a LITERAL, line-by-line transcription
+    of Eq. (21) of the primary source, using the paper's own
+    (k_{n+1}, k_n, k_{n-1}) index convention. Per sabra_flux.py's module
+    docstring ("Index convention vs. the primary source"), the code
+    convention (k_n, k_{n-1}, k_{n-2}) is equivalent to the paper form
+    evaluated at k -> k/LAM (LAM=2 here, geometric k_n=K0*LAM^n)."""
+    lam = 2.0
+    k_n = (2.0 ** -4) * lam ** np.arange(N, dtype=float)
+    rng = np.random.default_rng(1234 + N)
+    u = rng.standard_normal(N) + 1j * rng.standard_normal(N)
+
+    code_nl = goy_sabra_nonlinear(u, k_n)
+    paper_nl_over_lambda = _paper_literal_nonlinear(u, k_n / lam, a=1.0, b=-0.5, c=-0.5)
+
+    assert np.allclose(code_nl, paper_nl_over_lambda, atol=1e-9, rtol=1e-7), (
+        f"N={N}: code sabra_nonlinear does not match the literal Eq. (21) "
+        f"transcription under k -> k/LAM "
+        f"(max diff {np.max(np.abs(code_nl - paper_nl_over_lambda)):.3e})"
     )
