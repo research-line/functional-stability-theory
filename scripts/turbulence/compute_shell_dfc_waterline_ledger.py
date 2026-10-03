@@ -78,10 +78,15 @@ class LedgerRow:
 
 
 def sabra_nonlinear(u: np.ndarray, k: np.ndarray) -> np.ndarray:
+    """Fix (2026-10-03, Issue #1): conjugation corrected in the local term
+    (conj on u_{n-1} instead of u_{n+1}) and the backward-term coefficient
+    corrected from -0.25 to +0.5, matching L'vov et al. 1998 Eq.(21) with
+    a=1, b=-0.5, c=-0.5 (a+b+c=0). See compute_goy_shell_dfc.py::sabra_nonlinear
+    for the full derivation and the counterexample from the issue."""
     out = np.zeros_like(u)
     out[: N_SHELLS - 2] += k[: N_SHELLS - 2] * np.conj(u[1 : N_SHELLS - 1]) * u[2:N_SHELLS]
-    out[1 : N_SHELLS - 1] += -0.5 * k[: N_SHELLS - 2] * np.conj(u[2:N_SHELLS]) * u[: N_SHELLS - 2]
-    out[2:N_SHELLS] += -0.25 * k[: N_SHELLS - 2] * u[1 : N_SHELLS - 1] * u[: N_SHELLS - 2]
+    out[1 : N_SHELLS - 1] += -0.5 * k[: N_SHELLS - 2] * u[2:N_SHELLS] * np.conj(u[: N_SHELLS - 2])
+    out[2:N_SHELLS] += 0.5 * k[: N_SHELLS - 2] * u[1 : N_SHELLS - 1] * u[: N_SHELLS - 2]
     return 1j * out
 
 

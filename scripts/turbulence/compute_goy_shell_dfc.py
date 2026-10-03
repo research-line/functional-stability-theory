@@ -40,18 +40,40 @@ k_n = K0 * LAM**np.arange(N, dtype=float)
 
 
 def sabra_nonlinear(u):
-    """Nichtlinearer Teil des Sabra-Modells (vektorisiert)"""
+    """Nichtlinearer Teil des Sabra-Modells (vektorisiert).
+
+    Fix (2026-10-03, Issue #1): Das urspruengliche Vorzeichen-/Konjugationsschema
+    verletzte die quadratische Energieerhaltung dE/dt=0 im inviszid-ungetriebenen
+    Fall (Gegenbeispiel aus Issue #1: u=[1,1,i], k_n=0.125 -> dE/dt=-7k_n/2 statt 0).
+    Nach L'vov, Podivilov, Pomyalov, Procaccia, Vandembroucq, "Improved shell model
+    of turbulence", Phys. Rev. E 58, 1811 (1998), Eq. (21):
+        du_n/dt = i(a*k_{n+1}*u_{n+2}*conj(u_{n+1}) + b*k_n*u_{n+1}*conj(u_{n-1})
+                    - c*k_{n-1}*u_{n-1}*u_{n-2}) - nu*k_n^2*u_n + f_n
+    mit Energieerhaltung fuer a+b+c=0 (Standardwahl a=1, b=-1/2, c=-1/2, Eq. (3)/(4)).
+    Zwei Korrekturen gegenueber der Vorversion:
+      (1) Im lokalen Term wird u_{n-1} konjugiert, nicht u_{n+1} (die Vorversion
+          hatte die Konjugation auf dem falschen Faktor).
+      (2) Der Rueckwaerts-Term-Koeffizient ist +1/2 (code-interne Vorzeichenkonvention,
+          entspricht c=-1/2 in Eq.(21), da dort bereits ein Minus vor c steht),
+          nicht -1/4.
+    Mit k_n = K0*LAM^n (geometrisch) ist die Wahl k_n,k_{n-1},k_{n-2} statt
+    k_{n+1},k_n,k_{n-1} nur eine globale Reskalierung um LAM und aendert die
+    Erhaltungsbedingung nicht. Verifiziert: dE/dt=0 bis Maschinengenauigkeit fuer
+    zufaellige Zustaende, N=3..30 (siehe tests/test_sabra_energy_conservation.py).
+    Konsistent mit der bereits korrekten Parallel-Implementierung in
+    compute_shell_dfc_waterline_tangential_ledger.py (a=1,b=-0.5,c=0.5, "a+b-c=0").
+    """
     N = len(u)
     nl = np.zeros(N, dtype=complex)
 
     # Forward: k_n * conj(u_{n+1}) * u_{n+2}
     nl[:N-2] += k_n[:N-2] * np.conj(u[1:N-1]) * u[2:N]
 
-    # Local: -(1/2) * k_{n-1} * conj(u_{n+1}) * u_{n-1}
-    nl[1:N-1] += -0.5 * k_n[:N-2] * np.conj(u[2:N]) * u[:N-2]
+    # Local: -(1/2) * k_{n-1} * u_{n+1} * conj(u_{n-1})
+    nl[1:N-1] += -0.5 * k_n[:N-2] * u[2:N] * np.conj(u[:N-2])
 
-    # Backward: -(1/4) * k_{n-2} * u_{n-1} * u_{n-2}
-    nl[2:N] += -0.25 * k_n[:N-2] * u[1:N-1] * u[:N-2]
+    # Backward: +(1/2) * k_{n-2} * u_{n-1} * u_{n-2}
+    nl[2:N] += 0.5 * k_n[:N-2] * u[1:N-1] * u[:N-2]
 
     return 1j * nl
 
