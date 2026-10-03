@@ -21,7 +21,11 @@ Autor: Lukas Geiger (Skript erstellt per Claude, 2026)
 
 import numpy as np
 import os
+import sys
 import time
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sabra_flux import sabra_energy_flux  # noqa: E402
 
 # ==========================================================================
 # Parameter
@@ -148,10 +152,13 @@ for step in range(n_data):
         E_snap = np.abs(u)**2
         E_all.append(E_snap.copy())
 
-        # Energiefluss: Pi_n = Im(k_n * u_n * conj(u_{n+1}) * u_{n+2})
+        # Energiefluss: energiekonsistente Pi_n (Issue #1 Folgefix, 2026-10-03;
+        # siehe sabra_flux.sabra_energy_flux fuer die Herleitung/Verifikation).
+        # Die alte Formel Im(k_n*u_n*conj(u_{n+1})*u_{n+2}) gehoerte zur
+        # VOR der Dynamik-Korrektur verwendeten (fehlerhaften) Nichtlinearitaet
+        # und wurde bei deren Fix nicht neu hergeleitet.
         Pi = np.zeros(N)
-        for nn in range(N-2):
-            Pi[nn] = np.imag(k_n[nn] * u[nn] * np.conj(u[nn+1]) * u[nn+2])
+        Pi[:N-2] = sabra_energy_flux(u, k_n)
         Pi_all.append(Pi.copy())
 
         eps_diss = 2 * NU * np.sum(k_n**2 * E_snap)

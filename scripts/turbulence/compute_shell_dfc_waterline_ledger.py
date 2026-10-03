@@ -16,12 +16,17 @@ from __future__ import annotations
 import csv
 import json
 import math
+import os
+import sys
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 
 import numpy as np
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sabra_flux import sabra_energy_flux  # noqa: E402
 
 
 DATE_TAG = "2026-06-05"
@@ -120,9 +125,12 @@ def run_sabra_smoke() -> tuple[np.ndarray, np.ndarray, SimulationSummary]:
             continue
 
         energy = np.abs(u) ** 2
+        # Energiefluss: energiekonsistente Pi_n (Issue #1 Folgefix, 2026-10-03;
+        # siehe sabra_flux.sabra_energy_flux). Die alte Formel
+        # Im(k_n*u_n*conj(u_{n+1})*u_{n+2}) gehoerte zur VOR der Dynamik-
+        # Korrektur verwendeten (fehlerhaften) Nichtlinearitaet.
         flux = np.zeros(N_SHELLS - 1, dtype=float)
-        for n in range(N_SHELLS - 2):
-            flux[n] = np.imag(k[n] * u[n] * np.conj(u[n + 1]) * u[n + 2])
+        flux[: N_SHELLS - 2] = sabra_energy_flux(u, k)
         energies.append(energy)
         fluxes.append(flux)
         dissipations.append(float(2.0 * NU * np.sum(k * k * energy)))
