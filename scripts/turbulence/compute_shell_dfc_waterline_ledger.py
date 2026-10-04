@@ -16,6 +16,8 @@ from __future__ import annotations
 import csv
 import json
 import math
+import os
+import sys
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
@@ -23,8 +25,16 @@ from pathlib import Path
 
 import numpy as np
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from sabra_flux import sabra_energy_flux  # noqa: E402
 
-DATE_TAG = "2026-06-05"
+
+# Result identity: model version + date of the corrected-dynamics run.  The
+# 2026-06-05 snapshots were computed with the faulty Sabra dynamics (before
+# Issue #1) and are superseded; see _results/SUPERSEDED.md.  Do not reuse the
+# old tag, otherwise a new run would overwrite them under the same identity.
+MODEL_TAG = "sabra-v2"
+DATE_TAG = f"2026-10-04_{MODEL_TAG}"
 OUT_DIR = Path(__file__).with_name("_results")
 
 N_SHELLS = 18
@@ -78,10 +88,15 @@ class LedgerRow:
 
 
 def sabra_nonlinear(u: np.ndarray, k: np.ndarray) -> np.ndarray:
+    """Fix (2026-10-03, Issue #1): conjugation corrected in the local term
+    (conj on u_{n-1} instead of u_{n+1}) and the backward-term coefficient
+    corrected from -0.25 to +0.5, matching L'vov et al. 1998 Eq.(21) with
+    a=1, b=-0.5, c=-0.5 (a+b+c=0). See compute_goy_shell_dfc.py::sabra_nonlinear
+    for the full derivation and the counterexample from the issue."""
     out = np.zeros_like(u)
     out[: N_SHELLS - 2] += k[: N_SHELLS - 2] * np.conj(u[1 : N_SHELLS - 1]) * u[2:N_SHELLS]
-    out[1 : N_SHELLS - 1] += -0.5 * k[: N_SHELLS - 2] * np.conj(u[2:N_SHELLS]) * u[: N_SHELLS - 2]
-    out[2:N_SHELLS] += -0.25 * k[: N_SHELLS - 2] * u[1 : N_SHELLS - 1] * u[: N_SHELLS - 2]
+    out[1 : N_SHELLS - 1] += -0.5 * k[: N_SHELLS - 2] * u[2:N_SHELLS] * np.conj(u[: N_SHELLS - 2])
+    out[2:N_SHELLS] += 0.5 * k[: N_SHELLS - 2] * u[1 : N_SHELLS - 1] * u[: N_SHELLS - 2]
     return 1j * out
 
 
@@ -115,9 +130,14 @@ def run_sabra_smoke() -> tuple[np.ndarray, np.ndarray, SimulationSummary]:
             continue
 
         energy = np.abs(u) ** 2
-        flux = np.zeros(N_SHELLS - 1, dtype=float)
-        for n in range(N_SHELLS - 2):
-            flux[n] = np.imag(k[n] * u[n] * np.conj(u[n + 1]) * u[n + 2])
+        # Energiefluss: energiekonsistente Pi_n (Issue #1 Folgefix, 2026-10-03;
+        # siehe sabra_flux.sabra_energy_flux). Die alte Formel
+        # Im(k_n*u_n*conj(u_{n+1})*u_{n+2}) gehoerte zur VOR der Dynamik-
+        # Korrektur verwendeten (fehlerhaften) Nichtlinearitaet.
+        # Randkorrektur (unabhaengiger Review, 2026-10-03): sabra_energy_flux
+        # liefert bereits alle N_SHELLS-1 inneren Grenzfluesse -- kein
+        # Auffuellen mit 0 an der (falschen) Stelle N_SHELLS-2 mehr noetig.
+        flux = sabra_energy_flux(u, k)
         energies.append(energy)
         fluxes.append(flux)
         dissipations.append(float(2.0 * NU * np.sum(k * k * energy)))
@@ -256,10 +276,88 @@ def fmt(value: float | None) -> str:
     return f"{value:.6g}"
 
 
+def build_findings(rows: list[LedgerRow]) -> list[str]:
+    """Findings text derived from the computed rows (no hard-coded results)."""
+    by_name = {row.scenario: row for row in rows}
+    transition = by_name["sabra_transition_window_4_12"]
+    actual = by_name["sabra_tail_window_actual_order_8_14"]
+    high = by_name["sabra_tail_window_sorted_high_weight_control"]
+    low = by_name["sabra_tail_window_sorted_low_weight_control"]
+    lines: list[str] = []
+
+    if transition.dual_dfc1_status == "blocked":
+        lines.extend(
+            [
+                "- Das feste Übergangsfenster `4-12` wird blockiert, weil die",
+                "  Free-Energy-Gewichte nicht monoton sind. Das verhindert einen",
+                "  nachträglichen Kaskadenfront-Claim.",
+            ]
+        )
+    else:
+        lines.extend(
+            [
+                "- Das feste Übergangsfenster `4-12` wird nicht blockiert; Urteil:",
+                f"  `{transition.verdict}` (`weighted/target={fmt(transition.weighted_flux_ratio)}`,",
+                f"  `residual/allowance={fmt(transition.residual_over_allowance)}`).",
+            ]
+        )
+
+    figures = (
+        f"`weighted/target={fmt(actual.weighted_flux_ratio)}`, "
+        f"`residual/allowance={fmt(actual.residual_over_allowance)}`"
+    )
+    if actual.dual_dfc1_status == "blocked":
+        lines.append("- Im Tail-Waterline-Fenster `8-14` sind die Gewichte nicht monoton (blockiert).")
+    elif actual.dual_dfc1_status == "pass":
+        lines.extend(
+            [
+                "- Im Tail-Waterline-Fenster `8-14` sind die Gewichte monoton und die",
+                f"  tatsächliche Flux-Platzierung besteht `DFC1^vee` ({figures}).",
+            ]
+        )
+    else:
+        lines.extend(
+            [
+                "- Im Tail-Waterline-Fenster `8-14` sind die Gewichte monoton, aber die",
+                f"  tatsächliche Flux-Platzierung besteht `DFC1^vee` nicht ({figures}).",
+            ]
+        )
+
+    lines.append(
+        f"- Sortierte High-Weight-Kontrolle: `{high.dual_dfc1_status}` "
+        f"(`weighted/target={fmt(high.weighted_flux_ratio)}`, "
+        f"`residual/allowance={fmt(high.residual_over_allowance)}`); "
+        f"sortierte Low-Weight-Kontrolle: `{low.dual_dfc1_status}` "
+        f"(`weighted/target={fmt(low.weighted_flux_ratio)}`, "
+        f"`residual/allowance={fmt(low.residual_over_allowance)}`)."
+    )
+    if (
+        actual.weighted_flux_ratio is not None
+        and high.weighted_flux_ratio is not None
+        and low.weighted_flux_ratio is not None
+    ):
+        if low.weighted_flux_ratio < actual.weighted_flux_ratio < high.weighted_flux_ratio:
+            lines.append(
+                "  Dasselbe Flux-Multiset liefert je nach Platzierung deutlich verschiedene"
+                " Ergebnisse: Nicht der Mittelwert entscheidet, sondern die feste"
+                " Abel-gewichtete Platzierung des Flux."
+            )
+        else:
+            lines.append(
+                "  Die erwartete Ordnung low < actual < high der gewichteten Flux-Verhältnisse"
+                " wird in diesem Lauf nicht beobachtet; die Platzierungsaussage ist hier"
+                " nicht belegt."
+            )
+    return lines
+
+
 def build_markdown(rows: list[LedgerRow], summary: SimulationSummary) -> str:
     now = datetime.now().astimezone().isoformat(timespec="seconds")
     lines = [
-        "# Shell-DFC-Waterline-Ledger 2026-06-05",
+        f"# Shell-DFC-Waterline-Ledger {DATE_TAG}",
+        "",
+        "> Modellstand `sabra-v2`: korrigierte Sabra-Dynamik und energiekonsistenter Fluss",
+        "> (Issue #1). Überholt die Snapshots vom 2026-06-05 (fehlerhafte Dynamik).",
         "",
         f"Abschlusszeit: `{now}`",
         "",
@@ -326,16 +424,7 @@ def build_markdown(rows: list[LedgerRow], summary: SimulationSummary) -> str:
             "",
             "## Befund",
             "",
-            "- Das feste Übergangsfenster `4-12` wird blockiert, weil die",
-            "  Free-Energy-Gewichte nicht monoton sind. Das verhindert einen",
-            "  nachträglichen Kaskadenfront-Claim.",
-            "- Im Tail-Waterline-Fenster `8-14` sind die Gewichte monoton, aber die",
-            "  tatsächliche Flux-Platzierung besteht `DFC1^vee` nicht",
-            "  (`weighted/target=0.217790`, `residual/allowance=5.21473`).",
-            "- Die sortierte High-Weight-Kontrolle besteht mit demselben Flux-Multiset",
-            "  nur nach künstlicher Platzierung. Die sortierte Low-Weight-Kontrolle",
-            "  scheitert noch stärker. Damit ist nicht der Mittelwert entscheidend,",
-            "  sondern die feste Abel-gewichtete Platzierung des Flux.",
+            *build_findings(rows),
             "",
             "## Konsequenz für den Beweisstand",
             "",
