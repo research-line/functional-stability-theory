@@ -18,9 +18,8 @@ Testfaelle:
 Autor: Lukas Geiger (Skript erstellt per Claude, 2026)
 """
 
-import numpy as np
-from scipy.linalg import eigh
 import os
+import numpy as np
 
 np.random.seed(42)
 
