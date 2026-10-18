@@ -1,6 +1,7 @@
 """Metadata and discoverability parity tests for Functional Stability Theory (FST)."""
 
 import pathlib
+import re
 try:
     import tomllib
 except ModuleNotFoundError:  # Python 3.10 compatibility
@@ -509,7 +510,10 @@ def test_ci_workflow_least_privilege_and_timeouts():
 
     stale_path = REPO_ROOT / ".github" / "workflows" / "stale.yml"
     stale_content = stale_path.read_text(encoding="utf-8")
-    assert "actions/stale@v9" in stale_content
+    assert re.search(
+        r"(?m)^[ \t]*-[ \t]*uses:[ \t]*actions/stale@v[0-9]+[ \t]*$",
+        stale_content,
+    )
     assert "concurrency:" in stale_content
     assert "timeout-minutes: 10" in stale_content
 
