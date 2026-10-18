@@ -5,6 +5,7 @@ All notable changes to the Functional Stability Theory (FST) repository will be 
 ## [Unreleased]
 
 ### Added
+- Automated contract test suite [`tests/test_compute_navier_stokes.py`](tests/test_compute_navier_stokes.py) covering Navier-Stokes paper artifact presence (10 artifacts across EN/DE/Kombi and NS-LDI), Lorenz vector field fixed-point evaluations ($C_\pm$ and origin), and total variation operator verification.
 - Dependabot ecosystem security configuration ([`.github/dependabot.yml`](.github/dependabot.yml)) provisioned with security-only pip dependencies policy (`open-pull-requests-limit: 0` with grouped security updates) and weekly GitHub Actions dependency updates (`open-pull-requests-limit: 3`, Monday 06:00 Europe/Berlin schedule).
 - Build and distribution defense in [`.gitignore`](.gitignore) adding `.wheel-smoke/`, `wheelhouse/`, `dist/`, `build/`, and `*.egg-info/` patterns to defend clean checkout state.
 - Documented turnus Pfad A technical hygiene and repository defense in [`MARKETING-LOG.txt`](MARKETING-LOG.txt).

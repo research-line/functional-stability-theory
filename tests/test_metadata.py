@@ -906,3 +906,12 @@ def test_changelog_pfad_a_entry_20261018():
     assert ".wheel-smoke/" in content
     assert "Tests-271 Passed" in content
     assert "2026-10-18" in content
+
+
+def test_navier_stokes_contract_test_presence():
+    """Validate that test_compute_navier_stokes.py exists and is documented in CHANGELOG.md."""
+    ns_test = REPO_ROOT / "tests" / "test_compute_navier_stokes.py"
+    assert ns_test.is_file(), "test_compute_navier_stokes.py must exist"
+    changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert "test_compute_navier_stokes.py" in changelog
+
