@@ -5,6 +5,10 @@ All notable changes to the Functional Stability Theory (FST) repository will be 
 ## [Unreleased]
 
 ### Added
+- Dependabot ecosystem security configuration ([`.github/dependabot.yml`](.github/dependabot.yml)) provisioned with security-only pip dependencies policy (`open-pull-requests-limit: 0` with grouped security updates) and weekly GitHub Actions dependency updates (`open-pull-requests-limit: 3`, Monday 06:00 Europe/Berlin schedule).
+- Build and distribution defense in [`.gitignore`](.gitignore) adding `.wheel-smoke/`, `wheelhouse/`, `dist/`, `build/`, and `*.egg-info/` patterns to defend clean checkout state.
+- Documented turnus Pfad A technical hygiene and repository defense in [`MARKETING-LOG.txt`](MARKETING-LOG.txt).
+- Expanded automated metadata contract tests in [`tests/test_metadata.py`](tests/test_metadata.py) verifying `.github/dependabot.yml` policy, `.gitignore` build patterns, 271 test badge count, and audit currency (`2026-10-18`).
 - Bilingual [`CONTRIBUTING.md`](CONTRIBUTING.md) developer guidelines formalizing all 10 Governance and Research Invariants (`INV-LOCAL-01` to `INV-SLA-10`), Plan D local clone development workflow (`C:\_Local_DEV\repos\functional-stability-theory`), unprivileged `RunAsInvoker` user-mode execution, strict version-freeze discipline (`T-20260920-167562623`), § 521 BGB statutory liability waiver, and 48-hour security response SLA.
 - Level 1 SBOM plain-text companion [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt) Stand 2026-10-03 with comprehensive runtime, scientific, and testing component inventory, zero-copyleft certification, and invariant compliance ledger.
 - Standardized PEP 621 metadata URLs in `pyproject.toml` registering `Contributing`, `Third-Party Licenses (Text)`, `Level 1 SBOM`, `Level 1 SBOM (Text)`, and `Plain-Text License`, and added `THIRD_PARTY_LICENSES.txt` to `license-files` whitelist.
@@ -28,6 +32,9 @@ All notable changes to the Functional Stability Theory (FST) repository will be 
 - Synchronized ASCII Proof Architecture overview (Section 10), Independent Foundations (Section 11), and Repository Structure directory tree (Section 13) in `README_de.md`.
 
 ### Changed
+- Synchronized Shields.io test suite badges in [`README.md`](README.md) and [`README_de.md`](README_de.md) to `Tests-271 Passed` / `Tests-271 Bestanden` (100% green).
+- Synchronized Shields.io audit badges in [`README.md`](README.md) and [`README_de.md`](README_de.md) to `Audit-Last--checked 2026-10-18` / `Audit-Geprüft 2026-10-18`.
+- Refreshed [`llms.txt`](llms.txt) verification timestamp to `2026-10-18` with Dependabot configuration reference and 271 passed tests baseline.
 - Re-audited `THIRD_PARTY_LICENSES.md` to `2026-10-03` with cross-reference to plain-text Level 1 SBOM companion [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt) and developer guidelines [`CONTRIBUTING.md`](CONTRIBUTING.md).
 - Updated `llms.txt` verification timestamp to `2026-10-03` with 146+ passed tests baseline and links to `CONTRIBUTING.md` and `THIRD_PARTY_LICENSES.txt`.
 - Synchronized Shields.io badges in `README.md` and `README_de.md` (`Contributing Guidelines` / `Mitwirken-Leitfaden`, `Level 1 SBOM Text`, `Tests 146+ Passed` / `146+ Bestanden`, `Last-checked 2026-10-03` / `Geprüft 2026-10-03`).

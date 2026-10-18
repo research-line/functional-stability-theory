@@ -7,7 +7,7 @@
 [![Version](https://img.shields.io/badge/Version-1.0.6-blue.svg)](pyproject.toml)
 [![CI](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml/badge.svg)](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml)
 [![Mitwirken](https://img.shields.io/badge/Mitwirken-Leitfaden-blue.svg)](CONTRIBUTING.md)
-[![Test Suite](https://img.shields.io/badge/Tests-146%2B%20Bestanden-brightgreen.svg)](tests/)
+[![Test Suite](https://img.shields.io/badge/Tests-271%20Bestanden-brightgreen.svg)](tests/)
 [![Python: 3.10--3.13](https://img.shields.io/badge/Python-3.10--3.13-blue.svg)](pyproject.toml)
 [![Plattform: Windows | Linux | macOS](https://img.shields.io/badge/Plattform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](pyproject.toml)
 [![Zero-Egress](https://img.shields.io/badge/Netzwerk-100%25%20Offline%20%2F%20Zero--Egress-success.svg)](SECURITY.md)
@@ -23,7 +23,7 @@
 [![Level 1 SBOM Text](https://img.shields.io/badge/SBOM-Level_1_Text-informational.svg)](THIRD_PARTY_LICENSES.txt)
 [![Marketing-Log](https://img.shields.io/badge/Marketing--Log-Aktiv-blue.svg)](MARKETING-LOG.txt)
 [![LLM Kontext](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
-[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--10--03-informational.svg)](MARKETING-LOG.txt)
+[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--10--18-informational.svg)](MARKETING-LOG.txt)
 
 > [!NOTE]
 > **KI- / LLM-Integration & Maschinenlesbarer Kontext**: Ein maschinenlesbarer Index für LLMs, Suchmaschinen und automatisierte Crawler wird in [`llms.txt`](llms.txt) gepflegt. Er enthält Gültigkeitsgrenzen, Suchbegriffe, Konzept-DOIs und Abgrenzungshinweise. Lokale Discoverability-Logs werden in [`MARKETING-LOG.txt`](MARKETING-LOG.txt) geführt.

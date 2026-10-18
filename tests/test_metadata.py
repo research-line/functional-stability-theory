@@ -96,10 +96,10 @@ def test_readme_and_readme_de_badges():
     assert "Third--Party%20Licenses-Audited-brightgreen" in readme_en
     assert "Marketing%20Log-Active-blue" in readme_en
     assert "llms.txt" in readme_en
-    assert ("Tests-128%2B%20Passed" in readme_en or "Tests-146%2B%20Passed" in readme_en)
+    assert ("Tests-271%20Passed" in readme_en or "Tests-146%2B%20Passed" in readme_en)
     assert "Python-3.10--3.13" in readme_en or "Python-3.10" in readme_en
     assert "Platform-Windows" in readme_en
-    assert ("Audit-Last--checked%202026--10--03" in readme_en or "Audit-Last--checked%202026--09--26" in readme_en or "Audit-Last--checked%202026--09--20" in readme_en)
+    assert ("Audit-Last--checked%202026--10--18" in readme_en or "Audit-Last--checked%202026--10--03" in readme_en or "Audit-Last--checked%202026--09--26" in readme_en or "Audit-Last--checked%202026--09--20" in readme_en)
 
     # Required badge signatures in German README
     assert "Lizenz-CC_BY_4.0" in readme_de or "License-CC_BY_4.0" in readme_de
@@ -116,10 +116,10 @@ def test_readme_and_readme_de_badges():
     assert "Drittanbieter--Lizenzen-Gepr%C3%BCft-brightgreen" in readme_de
     assert "Marketing--Log-Aktiv-blue" in readme_de
     assert "llms.txt" in readme_de
-    assert ("Tests-128%2B%20Bestanden" in readme_de or "Tests-146%2B%20Bestanden" in readme_de)
+    assert ("Tests-271%20Bestanden" in readme_de or "Tests-146%2B%20Bestanden" in readme_de)
     assert "Python-3.10--3.13" in readme_de or "Python-3.10" in readme_de
     assert "Plattform-Windows" in readme_de
-    assert ("Audit-Gepr%C3%BCft%202026--10--03" in readme_de or "Audit-Gepr%C3%BCft%202026--09--26" in readme_de or "Audit-Gepr%C3%BCft%202026--09--20" in readme_de)
+    assert ("Audit-Gepr%C3%BCft%202026--10--18" in readme_de or "Audit-Gepr%C3%BCft%202026--10--03" in readme_de or "Audit-Gepr%C3%BCft%202026--09--26" in readme_de or "Audit-Gepr%C3%BCft%202026--09--20" in readme_de)
 
 
 def test_quick_navigation_parity():
@@ -259,7 +259,7 @@ def test_llms_txt_structure_and_timestamp():
     """Validate llms.txt structure, canonical metadata, and verification date."""
     llms_txt = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8")
 
-    assert ("## Last-checked: 2026-10-03" in llms_txt or "## Last-checked: 2026-09-26" in llms_txt or "## Last-checked: 2026-09-20" in llms_txt)
+    assert ("## Last-checked: 2026-10-18" in llms_txt or "## Last-checked: 2026-10-03" in llms_txt or "## Last-checked: 2026-09-26" in llms_txt or "## Last-checked: 2026-09-20" in llms_txt)
     assert "https://github.com/research-line/functional-stability-theory" in llms_txt
     assert "research-line" in llms_txt
     assert "Renormalized Free-Energy Principle" in llms_txt
@@ -268,7 +268,7 @@ def test_llms_txt_structure_and_timestamp():
     assert "NOTICE" in llms_txt
     assert "SECURITY.md" in llms_txt
     assert "## Search Phrases" in llms_txt
-    assert ("146+ Passed" in llms_txt or "128+ Passed" in llms_txt)
+    assert ("271 Passed" in llms_txt or "267 Passed" in llms_txt or "146+ Passed" in llms_txt or "128+ Passed" in llms_txt)
     assert "Governance & Runtime Invariants" in llms_txt
     assert "THIRD_PARTY_LICENSES.md" in llms_txt
     assert "MARKETING-LOG.txt" in llms_txt
@@ -836,11 +836,11 @@ def test_readme_badges_contributing_and_sbom():
 
     assert "Contributing-Guidelines-blue.svg" in readme_en
     assert "SBOM-Level_1_Text-informational.svg" in readme_en
-    assert "Audit-Last--checked%202026--10--03" in readme_en
+    assert ("Audit-Last--checked%202026--10--18" in readme_en or "Audit-Last--checked%202026--10--03" in readme_en)
 
     assert "Mitwirken-Leitfaden-blue.svg" in readme_de
     assert "SBOM-Level_1_Text-informational.svg" in readme_de
-    assert "Audit-Gepr%C3%BCft%202026--10--03" in readme_de
+    assert ("Audit-Gepr%C3%BCft%202026--10--18" in readme_de or "Audit-Gepr%C3%BCft%202026--10--03" in readme_de)
 
 
 def test_marketing_log_pfad_b_20261003_entry():
@@ -860,3 +860,49 @@ def test_changelog_pfad_b_entry_20261003():
     assert "CONTRIBUTING.md" in content
     assert "THIRD_PARTY_LICENSES.txt" in content
     assert "Level 1 SBOM" in content
+
+
+def test_dependabot_ecosystem_security():
+    """Validate Dependabot configuration enforces security-only pip limits and weekly Actions updates."""
+    dependabot_path = REPO_ROOT / ".github" / "dependabot.yml"
+    assert dependabot_path.is_file(), ".github/dependabot.yml must exist"
+    content = dependabot_path.read_text(encoding="utf-8")
+    assert "version: 2" in content
+    assert 'package-ecosystem: "pip"' in content
+    assert "open-pull-requests-limit: 0" in content
+    assert 'package-ecosystem: "github-actions"' in content
+    assert "open-pull-requests-limit: 3" in content
+    assert "Europe/Berlin" in content
+
+
+def test_gitignore_build_defense_patterns():
+    """Validate .gitignore contains build, wheelhouse, and distribution defense patterns."""
+    gitignore_path = REPO_ROOT / ".gitignore"
+    assert gitignore_path.is_file(), ".gitignore must exist"
+    content = gitignore_path.read_text(encoding="utf-8")
+    assert ".wheel-smoke/" in content
+    assert "wheelhouse/" in content
+    assert "dist/" in content
+    assert "build/" in content
+    assert "*.egg-info/" in content
+
+
+def test_marketing_log_pfad_a_20261018_entry():
+    """Validate that MARKETING-LOG.txt documents the 2026-10-18 Pfad A technical hygiene audit."""
+    content = (REPO_ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+    assert "2026-10-18" in content
+    assert "GITHUBBOT_ONE_REPO_CLEANER" in content
+    assert "(Pfad A)" in content
+    assert "dependabot.yml" in content
+    assert ".wheel-smoke/" in content
+    assert "Tests-271-Passed" in content or "271 Tests" in content
+
+
+def test_changelog_pfad_a_entry_20261018():
+    """Validate that CHANGELOG.md documents 2026-10-18 Pfad A updates under [Unreleased]."""
+    content = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert "## [Unreleased]" in content
+    assert "dependabot.yml" in content
+    assert ".wheel-smoke/" in content
+    assert "Tests-271 Passed" in content
+    assert "2026-10-18" in content
