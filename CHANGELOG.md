@@ -5,6 +5,9 @@ All notable changes to the Functional Stability Theory (FST) repository will be 
 ## [Unreleased]
 
 ### Added
+- Automated contract test suite [	ests/test_compute_k41.py](tests/test_compute_k41.py) covering K41 Variational Minimiser paper artifact presence (EN/DE/Kombi PDFs and TeX sources), free-energy functional [E]$ minimizer uniqueness ([E^*] = 0$, [E] > 0$ for  \neq E^*$), Kolmogorov scaling law exponent (^*(k) \propto k^{-5/3}$), and DFC1/DFC2 steepness criteria.
+- Synchronized K41 Variational Minimiser companion paper artifacts in st-physics/k41-variational-minimiser/ (v1.4 maintenance release: isolated frontmatter architecture, Chicago/APA typography, ooktabs table hardening, TikZ vector graphic schema, and verified 44-page combined bilingual PDF compilation; 21 pages EN, 23 pages DE, 44 pages kombi PDF; 0 replacement characters).
+- Updated [st-physics/k41-variational-minimiser/README.md](fst-physics/k41-variational-minimiser/README.md) to reference Zenodo v1.4 publication record (10.5281/zenodo.21914775, Record 21914775).
 - Automated contract test suite [`tests/test_compute_navier_stokes.py`](tests/test_compute_navier_stokes.py) covering Navier-Stokes paper artifact presence (10 artifacts across EN/DE/Kombi and NS-LDI), Lorenz vector field fixed-point evaluations ($C_\pm$ and origin), and total variation operator verification.
 - Dependabot ecosystem security configuration ([`.github/dependabot.yml`](.github/dependabot.yml)) provisioned with security-only pip dependencies policy (`open-pull-requests-limit: 0` with grouped security updates) and weekly GitHub Actions dependency updates (`open-pull-requests-limit: 3`, Monday 06:00 Europe/Berlin schedule).
 - Build and distribution defense in [`.gitignore`](.gitignore) adding `.wheel-smoke/`, `wheelhouse/`, `dist/`, `build/`, and `*.egg-info/` patterns to defend clean checkout state.

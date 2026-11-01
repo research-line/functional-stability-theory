@@ -919,3 +919,11 @@ def test_navier_stokes_contract_test_presence():
     changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
     assert "test_compute_navier_stokes.py" in changelog
 
+
+
+def test_k41_contract_test_presence():
+    """Validate that test_compute_k41.py exists and is documented in CHANGELOG.md."""
+    k41_test = REPO_ROOT / "tests" / "test_compute_k41.py"
+    assert k41_test.is_file(), "test_compute_k41.py must exist"
+    changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert "test_compute_k41.py" in changelog
