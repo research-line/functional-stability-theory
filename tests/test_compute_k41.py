@@ -17,6 +17,7 @@ K41_DIR = REPO_ROOT / "fst-physics" / "k41-variational-minimiser"
 SCRIPTS_DIR = REPO_ROOT / "scripts" / "k41"
 
 # Dynamically import compute_F_spectrum with headless matplotlib mock isolation
+_mocked_matplotlib = False
 if "matplotlib" not in sys.modules:
     mock_plt = MagicMock()
     mock_plt.subplots.return_value = (MagicMock(), (MagicMock(), MagicMock()))
@@ -24,12 +25,17 @@ if "matplotlib" not in sys.modules:
     mock_mpl.pyplot = mock_plt
     sys.modules["matplotlib"] = mock_mpl
     sys.modules["matplotlib.pyplot"] = mock_plt
+    _mocked_matplotlib = True
 
 F_SPEC_PATH = SCRIPTS_DIR / "compute_F_spectrum.py"
 SPEC_F = importlib.util.spec_from_file_location("compute_F_spectrum", F_SPEC_PATH)
 MODULE_F = importlib.util.module_from_spec(SPEC_F)
 sys.modules[SPEC_F.name] = MODULE_F
 SPEC_F.loader.exec_module(MODULE_F)
+
+if _mocked_matplotlib:
+    sys.modules.pop("matplotlib.pyplot", None)
+    sys.modules.pop("matplotlib", None)
 
 
 def test_k41_paper_artifacts_presence():

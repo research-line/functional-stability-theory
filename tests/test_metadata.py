@@ -927,3 +927,11 @@ def test_k41_contract_test_presence():
     assert k41_test.is_file(), "test_compute_k41.py must exist"
     changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
     assert "test_compute_k41.py" in changelog
+
+
+def test_fst2_chemical_contract_test_presence():
+    """Validate that test_compute_fst2.py exists and is documented in CHANGELOG.md."""
+    fst2_test = REPO_ROOT / "tests" / "test_compute_fst2.py"
+    assert fst2_test.is_file(), "test_compute_fst2.py must exist"
+    changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert "test_compute_fst2.py" in changelog
