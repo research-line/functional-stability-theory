@@ -7,7 +7,8 @@
 [![Version](https://img.shields.io/badge/Version-1.0.6-blue.svg)](pyproject.toml)
 [![CI](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml/badge.svg)](https://github.com/research-line/functional-stability-theory/actions/workflows/ci.yml)
 [![Mitwirken](https://img.shields.io/badge/Mitwirken-Leitfaden-blue.svg)](CONTRIBUTING.md)
-[![Test Suite](https://img.shields.io/badge/Tests-271%20Bestanden-brightgreen.svg)](tests/)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
+[![Test Suite](https://img.shields.io/badge/Tests-292%20Bestanden-brightgreen.svg)](tests/)
 [![Python: 3.10--3.13](https://img.shields.io/badge/Python-3.10--3.13-blue.svg)](pyproject.toml)
 [![Plattform: Windows | Linux | macOS](https://img.shields.io/badge/Plattform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](pyproject.toml)
 [![Zero-Egress](https://img.shields.io/badge/Netzwerk-100%25%20Offline%20%2F%20Zero--Egress-success.svg)](SECURITY.md)
@@ -23,7 +24,8 @@
 [![Level 1 SBOM Text](https://img.shields.io/badge/SBOM-Level_1_Text-informational.svg)](THIRD_PARTY_LICENSES.txt)
 [![Marketing-Log](https://img.shields.io/badge/Marketing--Log-Aktiv-blue.svg)](MARKETING-LOG.txt)
 [![LLM Kontext](https://img.shields.io/badge/LLM-llms.txt-purple.svg)](llms.txt)
-[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--10--18-informational.svg)](MARKETING-LOG.txt)
+[![Produkt-Skill](https://img.shields.io/badge/Skill-SKILL.md-blueviolet.svg)](SKILL.md)
+[![Audit](https://img.shields.io/badge/Audit-Gepr%C3%BCft%202026--11--07-informational.svg)](MARKETING-LOG.txt)
 
 > [!NOTE]
 > **KI- / LLM-Integration & Maschinenlesbarer Kontext**: Ein maschinenlesbarer Index für LLMs, Suchmaschinen und automatisierte Crawler wird in [`llms.txt`](llms.txt) gepflegt. Er enthält Gültigkeitsgrenzen, Suchbegriffe, Konzept-DOIs und Abgrenzungshinweise. Lokale Discoverability-Logs werden in [`MARKETING-LOG.txt`](MARKETING-LOG.txt) geführt.
@@ -264,6 +266,27 @@ sequenceDiagram
     Script->>Script: Endliche äußere Lücke & koerzive Residuen berechnen
     Script->>Ledger: Bit-für-Bit deterministisches Verifikationszertifikat erzeugen
     Ledger-->>Forscher: Reproduzierbarkeit & mathematische Invarianten bestätigen
+`
+
+### Wissenschaftlicher Replikations- & Peer-Audit-Ablauf
+
+`mermaid
+sequenceDiagram
+    autonumber
+    actor Auditor as Externer Auditor / Autonomer Agent
+    participant Hub as GitHub-Repo (research-line/functional-stability-theory)
+    participant Skill as Produkt-Skill (SKILL.md / llms.txt)
+    participant Runner as Lokale Python-Umgebung (Zero-Egress)
+    participant Ledger as Ausgabe-Zertifikate (CSV / JSON)
+    participant Zenodo as CERN / Zenodo Open-Science Archiv
+
+    Auditor->>Hub: Repository klonen via Plan D (git clone / fetch)
+    Auditor->>Skill: Operative Runbooks & Invarianten prüfen (INV-LOCAL-01..10)
+    Auditor->>Runner: Standalone-Testbeds ausführen (pytest tests/ / python scripts/...)
+    Note over Runner: Strikt unprivilegierter RunAsInvoker ohne Netzwerkanfragen
+    Runner->>Ledger: Deterministische Spektral- & Korridor-Ledger erzeugen
+    Ledger->>Auditor: Mathematische Zertifikate gegen publizierte Schranken validieren
+    Auditor->>Zenodo: Konzept-DOIs & archivierte Preprints gegenchecken
 ```
 
 <a id="governance--runtime-invariants"></a>
