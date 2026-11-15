@@ -1,8 +1,8 @@
-# Beal Height Dominance — published corrective v1.1
+# Beal Height Dominance — curated v1.2 package
 
 *A Conditional Height-Dominance Architecture for Beal’s Conjecture: A Zookeeper-Style Reduction with a Power-Residue Sieve Companion*
 
-This curated companion contains manuscript sources and historical numerical diagnostics. The published predecessor is [Zenodo v1.0](https://doi.org/10.5281/zenodo.21916518); the [concept DOI](https://doi.org/10.5281/zenodo.21916517) follows subsequent versions. The corrective [v1.1 record](https://zenodo.org/records/23091637) is published (DOI [10.5281/zenodo.23091637](https://doi.org/10.5281/zenodo.23091637)). Both public PDF downloads were checked against the manuscript hashes; the description, latest-version link and DataCite DOI identity were verified.
+This curated companion contains manuscript sources and historical numerical diagnostics. The published predecessors are [Zenodo v1.0](https://doi.org/10.5281/zenodo.21916518) and corrective [Zenodo v1.1](https://doi.org/10.5281/zenodo.23091637) ([record 23091637](https://zenodo.org/records/23091637)); the [concept DOI](https://doi.org/10.5281/zenodo.21916517) resolves to the latest version, including bibliography-correction follow-up v1.2. Version 1.2 incorporates the intervening bilingual typography, citation-tie, layout, and PDF metadata updates and refines two bibliographic entries (`Weil1948` monograph attribution without the 1979 introduction DOI; `KatzTwistedL` 2002 print vs. 2009 electronic edition) without changing the mathematical body or claim boundaries of v1.1.
 
 The Beal conjecture and the HD3′ arithmetic bridge remain open. Elementary normalizations, formal asymptotic sieve inputs, historical finite diagnostics, conditional reductions, and source-reported external results have distinct scopes. Local residue passes do not establish a global root, a common divisor, statistical significance, or a numerical height threshold. The proposed exponential bound on cumulative positive exact counts is of Beal strength and remains unproved.
 
@@ -10,7 +10,7 @@ The corrected manuscripts restrict the asymptotic sieve to fixed K ≥ 4, suffic
 
 ## Contents and provenance
 
-- `paper/`: EN/DE TeX and PDFs, with the two canonical disclosure inputs.
+- `paper/`: EN/DE v1.2 TeX and standalone PDFs, with the two canonical disclosure inputs.
 - `evidence/`: eight original historical diagnostic producers and 17 original CSV files.
 - `manifest.json`: SHA-256, byte lengths, CSV schemas and row counts for the curated artifacts.
 - `tests/test_results.py`: offline integrity, row-alignment and finite-diagnostic checks using the Python standard library.
@@ -33,7 +33,7 @@ The tests verify manifest identities, arithmetic row consistency, input/output a
 
 ## Replaying diagnostics
 
-Run replays in a copy of this directory: several historical producers default to overwriting their output tables. The following commands give the recorded setup, rather than evidence that a new full computation was performed for v1.1:
+Run replays in a copy of this directory: several historical producers default to overwriting their output tables. The following commands give the recorded setup, rather than evidence that a new full computation was performed for v1.1 or v1.2:
 
 ```powershell
 cd evidence
@@ -52,6 +52,6 @@ The final two scripts expose output-path options via `--help`; supply paths with
 
 ## Building the papers
 
-From `paper/`, run `pdflatex -interaction=nonstopmode -halt-on-error BEAL_Height_Dominance_v1_1_en.tex` and the corresponding `_de.tex` command three times each. Both disclosure inputs are included. A current TeX distribution with the declared standard packages is required.
+From `paper/`, run `pdflatex -interaction=nonstopmode -halt-on-error BEAL_Height_Dominance_v1_2_en.tex` and the corresponding `_de.tex` command three times each. Both disclosure inputs are included. A current TeX distribution with the declared standard packages is required.
 
-Author: Lukas Geiger. License: [CC BY 4.0](../../LICENSE), consistent with the existing research repository and predecessor Zenodo record.
+Author: Lukas Geiger. License: [CC BY 4.0](../../LICENSE), consistent with the existing research repository and predecessor Zenodo records.
