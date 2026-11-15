@@ -55,3 +55,10 @@ The final two scripts expose output-path options via `--help`; supply paths with
 From `paper/`, run `pdflatex -interaction=nonstopmode -halt-on-error BEAL_Height_Dominance_v1_2_en.tex` and the corresponding `_de.tex` command three times each. Both disclosure inputs are included. A current TeX distribution with the declared standard packages is required.
 
 Author: Lukas Geiger. License: [CC BY 4.0](../../LICENSE), consistent with the existing research repository and predecessor Zenodo records.
+
+## Live Zenodo Release Stamp (v1.2)
+
+- **Record:** `24237107` (`10.5281/zenodo.24237107`)
+- **Concept DOI:** `10.5281/zenodo.21916517`
+- **Published:** `2026-11-15`
+- **Bound Source Tree Commit:** `3a60e82b8078e1c3ce2cd9e4f7667458c05498f9`
