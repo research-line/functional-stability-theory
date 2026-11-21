@@ -4,6 +4,7 @@ Public reproducibility package for the Yang-Mills domain supplement in the
 Functional Stability Theory program.
 
 Zenodo concept DOI: <https://doi.org/10.5281/zenodo.19087433>
+Latest corrected v2.7 DOI: <https://doi.org/10.5281/zenodo.24410760>
 Earlier Zenodo v2.6 record DOI: <https://doi.org/10.5281/zenodo.20716608>
 
 ## Status — corrected interim version 2.7 (21 November 2026)
@@ -20,7 +21,7 @@ The four-dimensional Yang--Mills continuum mass gap remains **open**.
 This repository contains the corrected 6-page English and German
 paper sources and PDFs, plus the public version-2.7 changelog.
 The historical v2.6 remains available by its DOI and Git history.
-The v2.7 DOI will be crosslinked after Zenodo finishes publication.
+The corrected v2.7 release is live at <https://doi.org/10.5281/zenodo.24410760>.
 
 ## Outlook toward version 2.8
 
