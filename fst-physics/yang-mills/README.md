@@ -4,15 +4,33 @@ Public reproducibility package for the Yang-Mills domain supplement in the
 Functional Stability Theory program.
 
 Zenodo concept DOI: <https://doi.org/10.5281/zenodo.19087433>
-Latest Zenodo v2.6 record DOI: <https://doi.org/10.5281/zenodo.20716608>
+Earlier Zenodo v2.6 record DOI: <https://doi.org/10.5281/zenodo.20716608>
 
-## Status
+## Status — corrected interim version 2.7 (21 November 2026)
 
-This folder contains the public v2.6 release package synchronized from the
-local strict-review, design-check, and citation-checked working state. The
-Zenodo v2.6 record is live under the record DOI above. The continuum mass-gap
-step remains conditional on the analytical renormalization-group contraction
-input.
+**Major corrective replacement.** The historical v2.6 preprint
+asserted a volume-independent physical transfer-operator gap on
+insufficient grounds. Version 2.7 explicitly withdraws that claim,
+corrects the 6-versus-18 Dobrushin incidence count, removes the
+invalid typical-set argument, and retains only a conservative
+strong-coupling uniqueness criterion, a fixed-finite-volume transfer
+bound and conditional abstract Schur/RG bookkeeping lemmas.
+
+The four-dimensional Yang--Mills continuum mass gap remains **open**.
+This repository contains the corrected 6-page English and German
+paper sources and PDFs, plus the public version-2.7 changelog.
+The historical v2.6 remains available by its DOI and Git history.
+The v2.7 DOI will be crosslinked after Zenodo finishes publication.
+
+## Outlook toward version 2.8
+
+A fuller, independently checked research manuscript is planned:
+finite-lattice calculations, local Schrieffer--Wolff and Schur/RG
+ideas, and the still-open uniform physical gap/OS continuum bridge.
+No date or continuum mass-gap theorem is promised.
+
+**Reproducibility limitation:** The legacy diagnostic scripts below
+are finite-model controls, not proofs of a 4D physical continuum gap.
 
 ## Files
 
@@ -20,7 +38,6 @@ input.
 |------|---------|
 | `FST-YM_YangMills_MassGap_en.tex` / `FST-YM_YangMills_MassGap_en.pdf` | English paper source and PDF |
 | `FST-YM_YangMills_MassGap_de.tex` / `FST-YM_YangMills_MassGap_de.pdf` | German paper source and PDF |
-| `FST-YM_YangMills_MassGap_kombi.pdf` | Combined bilingual PDF |
 | `../../scripts/yang-mills/compute_dobrushin_su2.py` | SU(2) lattice Dobrushin influence scan |
 | `../../scripts/yang-mills/compute_birkhoff_rg.py` | Birkhoff scan with finite good-scale density, bad-defect sums, and saturation-zone diagnostics |
 | `../../scripts/yang-mills/compute_casimir_corridor_ledger.py` | Predefined gauge-sector Casimir-window audit with commutator and matched post-hoc controls |
@@ -132,10 +149,11 @@ PYTHONIOENCODING=utf-8 python scripts/yang-mills/compute_k41_transfer_split_ledg
 
 K41 is used here only as an audit and wording model. Its static,
 reference-normalized variational result is kept distinct from dynamical cascade
-claims. Analogously, the Yang--Mills local strong-coupling/lattice gap is an
-`unconditional_positive_control`, while OS reconstruction, physical
-normalization, and the continuum limit remain a separate
-`transfer_hypothesis`. The ledger additionally requires a predeclared
+claims. The legacy Yang--Mills `unconditional_positive_control` is only a
+finite synthetic diagnostic label: the earlier volume-independent physical
+transfer-gap proof claim has been withdrawn in version 2.7. A genuine
+operator-gap comparison, physical normalization, and the OS continuum
+limit remain separate `transfer_hypothesis` obligations. The ledger additionally requires a predeclared
 `state_correlation_envelope`, a finite cross-scale defect budget, and an
 independent bridge source. Its positive baseline is read directly from
 `compute_os_capacity_ledger.py:strong_coupling_positive_control` at ten RG
