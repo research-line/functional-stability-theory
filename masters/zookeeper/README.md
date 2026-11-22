@@ -1,6 +1,6 @@
 # The Spectral Zookeeper
 
-**The Riemann Hypothesis via Spectral Microcluster Closure in the CCM Framework**
+**A Conditional Reduction toward the Riemann Hypothesis via Spectral Microcluster Closure in the Connes-Consani-Moscovici Framework**
 
 Lukas Geiger (2026)
 
@@ -33,7 +33,7 @@ The paper studies the Riemann Hypothesis conditionally on external CCM inputs vi
 2. **Projected Poisson Quasimode** - ||h|| <= 3e-6 (12-digit verified)
 3. **Coercive Complement** - g* >= 5 (mass-based effective gap)
 
-Combined: ||(I - P_V)k|| <= 6e-7, implying MS2, hence RH via CCM + Hurwitz.
+Combined via a quasimode-to-projector argument: ||(I - P_V)k|| <= 6e-7 on the tested range. The three bounds are supported by stable numerics, not by uniform proofs. Together with two external CCM inputs (truncation faithfulness and the Hurwitz passage, stated in the source literature as proof strategies), this gives a conditional reduction: RH follows if the three closure statements hold uniformly and the CCM transfer is rigorously established. The paper is a contribution to the architecture and numerical phenomenology of the CCM programme, not a proof of RH.
 
 ## Public / Private Boundary
 
