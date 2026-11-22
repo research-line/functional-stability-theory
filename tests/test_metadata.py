@@ -2,6 +2,7 @@
 
 import pathlib
 import re
+import pytest
 try:
     import tomllib
 except ModuleNotFoundError:  # Python 3.10 compatibility
@@ -97,10 +98,10 @@ def test_readme_and_readme_de_badges():
     assert "Third--Party%20Licenses-Audited-brightgreen" in readme_en
     assert "Marketing%20Log-Active-blue" in readme_en
     assert "llms.txt" in readme_en
-    assert ("Tests-271%20Passed" in readme_en or "Tests-146%2B%20Passed" in readme_en)
+    assert ("Tests-292%20Passed" in readme_en or "Tests-271%20Passed" in readme_en or "Tests-146%2B%20Passed" in readme_en)
     assert "Python-3.10--3.13" in readme_en or "Python-3.10" in readme_en
     assert "Platform-Windows" in readme_en
-    assert ("Audit-Last--checked%202026--10--18" in readme_en or "Audit-Last--checked%202026--10--03" in readme_en or "Audit-Last--checked%202026--09--26" in readme_en or "Audit-Last--checked%202026--09--20" in readme_en)
+    assert ("Audit-Last--checked%202026--11--07" in readme_en or "Audit-Last--checked%202026--10--18" in readme_en or "Audit-Last--checked%202026--10--03" in readme_en or "Audit-Last--checked%202026--09--26" in readme_en or "Audit-Last--checked%202026--09--20" in readme_en)
 
     # Required badge signatures in German README
     assert "Lizenz-CC_BY_4.0" in readme_de or "License-CC_BY_4.0" in readme_de
@@ -117,10 +118,10 @@ def test_readme_and_readme_de_badges():
     assert "Drittanbieter--Lizenzen-Gepr%C3%BCft-brightgreen" in readme_de
     assert "Marketing--Log-Aktiv-blue" in readme_de
     assert "llms.txt" in readme_de
-    assert ("Tests-271%20Bestanden" in readme_de or "Tests-146%2B%20Bestanden" in readme_de)
+    assert ("Tests-292%20Bestanden" in readme_de or "Tests-271%20Bestanden" in readme_de or "Tests-146%2B%20Bestanden" in readme_de)
     assert "Python-3.10--3.13" in readme_de or "Python-3.10" in readme_de
     assert "Plattform-Windows" in readme_de
-    assert ("Audit-Gepr%C3%BCft%202026--10--18" in readme_de or "Audit-Gepr%C3%BCft%202026--10--03" in readme_de or "Audit-Gepr%C3%BCft%202026--09--26" in readme_de or "Audit-Gepr%C3%BCft%202026--09--20" in readme_de)
+    assert ("Audit-Gepr%C3%BCft%202026--11--07" in readme_de or "Audit-Gepr%C3%BCft%202026--10--18" in readme_de or "Audit-Gepr%C3%BCft%202026--10--03" in readme_de or "Audit-Gepr%C3%BCft%202026--09--26" in readme_de or "Audit-Gepr%C3%BCft%202026--09--20" in readme_de)
 
 
 def test_quick_navigation_parity():
@@ -260,7 +261,7 @@ def test_llms_txt_structure_and_timestamp():
     """Validate llms.txt structure, canonical metadata, and verification date."""
     llms_txt = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8")
 
-    assert ("## Last-checked: 2026-10-18" in llms_txt or "## Last-checked: 2026-10-03" in llms_txt or "## Last-checked: 2026-09-26" in llms_txt or "## Last-checked: 2026-09-20" in llms_txt)
+    assert ("## Last-checked: 2026-11-07" in llms_txt or "## Last-checked: 2026-10-18" in llms_txt or "## Last-checked: 2026-10-03" in llms_txt or "## Last-checked: 2026-09-26" in llms_txt or "## Last-checked: 2026-09-20" in llms_txt)
     assert "https://github.com/research-line/functional-stability-theory" in llms_txt
     assert "research-line" in llms_txt
     assert "Renormalized Free-Energy Principle" in llms_txt
@@ -269,7 +270,7 @@ def test_llms_txt_structure_and_timestamp():
     assert "NOTICE" in llms_txt
     assert "SECURITY.md" in llms_txt
     assert "## Search Phrases" in llms_txt
-    assert ("271 Passed" in llms_txt or "267 Passed" in llms_txt or "146+ Passed" in llms_txt or "128+ Passed" in llms_txt)
+    assert ("292 Passed" in llms_txt or "271 Passed" in llms_txt or "267 Passed" in llms_txt or "146+ Passed" in llms_txt or "128+ Passed" in llms_txt)
     assert "Governance & Runtime Invariants" in llms_txt
     assert "THIRD_PARTY_LICENSES.md" in llms_txt
     assert "MARKETING-LOG.txt" in llms_txt
@@ -358,7 +359,8 @@ def test_gitignore_hygiene():
 def test_marketing_log_exists():
     """Validate that local MARKETING-LOG.txt exists and contains Pfad B audit metadata."""
     log_file = REPO_ROOT / "MARKETING-LOG.txt"
-    assert log_file.is_file(), "MARKETING-LOG.txt must exist"
+    if not log_file.is_file():
+        pytest.skip("MARKETING-LOG.txt is untracked per GITHUB-POLICY and absent in CI clones")
 
     content = log_file.read_text(encoding="utf-8")
     assert "Pfad B" in content
@@ -405,6 +407,7 @@ def test_gitignore_hygiene_patterns():
     assert "*.swp" in gitignore
     assert "*~" in gitignore
     assert "*.log" in gitignore
+    assert "MARKETING-LOG.txt" in gitignore
 
 
 def test_pytest_configuration_and_flags():
@@ -491,6 +494,9 @@ def test_third_party_licenses_readme_sections():
 
 def test_marketing_log_pfad_b_v105_entry():
     """Validate that MARKETING-LOG.txt documents the v1.0.5 Pfad B discoverability audit."""
+    log_file = REPO_ROOT / "MARKETING-LOG.txt"
+    if not log_file.is_file():
+        pytest.skip("MARKETING-LOG.txt is untracked per GITHUB-POLICY and absent in CI clones")
     content = (REPO_ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
     assert "1.0.5" in content
     assert "2026-09-12" in content
@@ -589,6 +595,9 @@ def test_pytest_guardrails_and_license_files():
 
 def test_marketing_log_pfad_a_v106_entry():
     """Validate that MARKETING-LOG.txt documents the v1.0.6 Pfad A technical hygiene audit."""
+    log_file = REPO_ROOT / "MARKETING-LOG.txt"
+    if not log_file.is_file():
+        pytest.skip("MARKETING-LOG.txt is untracked per GITHUB-POLICY and absent in CI clones")
     content = (REPO_ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
     assert "1.0.6" in content
     assert "2026-09-18" in content
@@ -704,6 +713,9 @@ def test_reciprocal_anchors_parity():
 
 def test_marketing_log_pfad_b_v106_entry():
     """Validate that MARKETING-LOG.txt documents the 2026-09-20 Pfad B audit."""
+    log_file = REPO_ROOT / "MARKETING-LOG.txt"
+    if not log_file.is_file():
+        pytest.skip("MARKETING-LOG.txt is untracked per GITHUB-POLICY and absent in CI clones")
     content = (REPO_ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
     assert "2026-09-20" in content
     assert "GITHUBBOT_ONE_REPO_MARKETING_AND_DESIGN" in content
@@ -752,6 +764,9 @@ def test_third_party_licenses_audit_recency_20260926():
 
 def test_marketing_log_pfad_a_cleaner_20260926():
     """Validate that MARKETING-LOG.txt contains the 2026-09-26 GITHUBBOT_ONE_REPO_CLEANER Pfad A entry."""
+    log_file = REPO_ROOT / "MARKETING-LOG.txt"
+    if not log_file.is_file():
+        pytest.skip("MARKETING-LOG.txt is untracked per GITHUB-POLICY and absent in CI clones")
     content = (REPO_ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
     assert "2026-09-26" in content
     assert "GITHUBBOT_ONE_REPO_CLEANER" in content
@@ -840,15 +855,18 @@ def test_readme_badges_contributing_and_sbom():
 
     assert "Contributing-Guidelines-blue.svg" in readme_en
     assert "SBOM-Level_1_Text-informational.svg" in readme_en
-    assert ("Audit-Last--checked%202026--10--18" in readme_en or "Audit-Last--checked%202026--10--03" in readme_en)
+    assert ("Audit-Last--checked%202026--11--07" in readme_en or "Audit-Last--checked%202026--10--18" in readme_en or "Audit-Last--checked%202026--10--03" in readme_en)
 
     assert "Mitwirken-Leitfaden-blue.svg" in readme_de
     assert "SBOM-Level_1_Text-informational.svg" in readme_de
-    assert ("Audit-Gepr%C3%BCft%202026--10--18" in readme_de or "Audit-Gepr%C3%BCft%202026--10--03" in readme_de)
+    assert ("Audit-Gepr%C3%BCft%202026--11--07" in readme_de or "Audit-Gepr%C3%BCft%202026--10--18" in readme_de or "Audit-Gepr%C3%BCft%202026--10--03" in readme_de)
 
 
 def test_marketing_log_pfad_b_20261003_entry():
     """Validate that MARKETING-LOG.txt documents the 2026-10-03 Pfad B audit."""
+    log_file = REPO_ROOT / "MARKETING-LOG.txt"
+    if not log_file.is_file():
+        pytest.skip("MARKETING-LOG.txt is untracked per GITHUB-POLICY and absent in CI clones")
     content = (REPO_ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
     assert "2026-10-03" in content
     assert "GITHUBBOT_ONE_REPO_MARKETING_AND_DESIGN" in content
@@ -893,6 +911,9 @@ def test_gitignore_build_defense_patterns():
 
 def test_marketing_log_pfad_a_20261018_entry():
     """Validate that MARKETING-LOG.txt documents the 2026-10-18 Pfad A technical hygiene audit."""
+    log_file = REPO_ROOT / "MARKETING-LOG.txt"
+    if not log_file.is_file():
+        pytest.skip("MARKETING-LOG.txt is untracked per GITHUB-POLICY and absent in CI clones")
     content = (REPO_ROOT / "MARKETING-LOG.txt").read_text(encoding="utf-8")
     assert "2026-10-18" in content
     assert "GITHUBBOT_ONE_REPO_CLEANER" in content
@@ -935,3 +956,86 @@ def test_fst2_chemical_contract_test_presence():
     assert fst2_test.is_file(), "test_compute_fst2.py must exist"
     changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
     assert "test_compute_fst2.py" in changelog
+
+
+def test_code_of_conduct_presence_and_parity():
+    """Validate that CODE_OF_CONDUCT.md exists, follows Contributor Covenant v2.1, and has bilingual reporting."""
+    coc = REPO_ROOT / "CODE_OF_CONDUCT.md"
+    assert coc.is_file(), "CODE_OF_CONDUCT.md must exist"
+    content = coc.read_text(encoding="utf-8")
+    assert "## Deutsch" in content
+    assert "## English" in content
+    assert "Contributor Covenant v2.1" in content
+    assert "conduct@ellmos.ai" in content
+    assert "lukas.geiger@outlook.com" in content or "support@lukasgeiger.com" in content
+
+
+def test_skill_and_llm_txt_presence_and_parity():
+    """Validate that SKILL.md and llm.txt exist, have correct metadata, and are registered in pyproject.toml."""
+    skill = REPO_ROOT / "SKILL.md"
+    assert skill.is_file(), "SKILL.md must exist"
+    skill_content = skill.read_text(encoding="utf-8")
+    assert "name: functional-stability-theory" in skill_content
+    assert 'version: "1.0.6"' in skill_content
+    assert "type: research-toolkit" in skill_content
+    assert "INV-LOCAL-01" in skill_content
+
+    llm_pointer = REPO_ROOT / "llm.txt"
+    assert llm_pointer.is_file(), "llm.txt must exist"
+    llm_content = llm_pointer.read_text(encoding="utf-8")
+    assert "llms.txt" in llm_content
+    assert "SKILL.md" in llm_content
+
+    pyproject = (REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    assert "Skill" in pyproject
+    assert "LLM Index" in pyproject
+    assert "Code of Conduct" in pyproject
+
+
+def test_community_health_templates_presence():
+    """Validate that .github/FUNDING.yml and .github/ISSUE_TEMPLATE/ files exist and conform to standards."""
+    funding = REPO_ROOT / ".github" / "FUNDING.yml"
+    assert funding.is_file(), ".github/FUNDING.yml must exist"
+    assert "github: lukisch" in funding.read_text(encoding="utf-8")
+
+    bug_template = REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "bug_report.md"
+    feature_template = REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "feature_request.md"
+    assert bug_template.is_file(), ".github/ISSUE_TEMPLATE/bug_report.md must exist"
+    assert feature_template.is_file(), ".github/ISSUE_TEMPLATE/feature_request.md must exist"
+
+
+def test_readme_badges_code_of_conduct_and_skill():
+    """Validate that CODE_OF_CONDUCT.md and SKILL.md badges and diagrams exist in both READMEs."""
+    readme_en = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    readme_de = (REPO_ROOT / "README_de.md").read_text(encoding="utf-8")
+
+    assert "Contributor%20Covenant-2.1" in readme_en
+    assert "Contributor%20Covenant-2.1" in readme_de
+    assert "Skill-SKILL.md-blueviolet" in readme_en
+    assert "Skill-SKILL.md-blueviolet" in readme_de
+    assert "Scholarly Replication & Peer Audit Flow" in readme_en
+    assert "Wissenschaftlicher Replikations- & Peer-Audit-Ablauf" in readme_de
+
+
+def test_marketing_log_pfad_b_20261107_entry():
+    """Validate that MARKETING-LOG.txt documents the 2026-11-07 Pfad B marketing and discoverability audit."""
+    log_file = REPO_ROOT / "MARKETING-LOG.txt"
+    if not log_file.is_file():
+        pytest.skip("MARKETING-LOG.txt is untracked per GITHUB-POLICY")
+    content = log_file.read_text(encoding="utf-8")
+    assert "2026-11-07" in content
+    assert "GITHUBBOT_ONE_REPO_MARKETING_AND_DESIGN" in content
+    assert "(Pfad B)" in content
+    assert "CODE_OF_CONDUCT.md" in content
+    assert "SKILL.md" in content
+    assert "llm.txt" in content
+
+
+def test_changelog_pfad_b_entry_20261107():
+    """Validate that CHANGELOG.md documents 2026-11-07 Pfad B updates under [Unreleased]."""
+    content = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert "## [Unreleased]" in content
+    assert "CODE_OF_CONDUCT.md" in content
+    assert "SKILL.md" in content
+    assert "llm.txt" in content
+    assert "FUNDING.yml" in content
