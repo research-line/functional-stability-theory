@@ -2,10 +2,11 @@
 
 \input{glyphtounicode}
 \pdfgentounicode=1
+\usepackage{cmap}
+\usepackage[T1]{fontenc}
 \usepackage[english]{babel}
 \usepackage{microtype}
 \usepackage{lmodern}
-
 
 \usepackage{amsmath}
 \usepackage{mathtools}
@@ -17,6 +18,21 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{mathrsfs}
+\usepackage{xurl}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,shapes.misc,calc,fit}
+
+\definecolor{pblue}{RGB}{24,76,140}
+\definecolor{pbluelight}{RGB}{236,243,252}
+\definecolor{porange}{RGB}{180,60,30}
+\definecolor{porangelight}{RGB}{254,242,238}
+\definecolor{ppurple}{RGB}{95,40,145}
+\definecolor{ppurplelight}{RGB}{246,238,252}
+\definecolor{pgray}{RGB}{70,75,80}
+\definecolor{pgraylight}{RGB}{245,247,250}
+\definecolor{pteal}{RGB}{0,115,115}
+\definecolor{pteallight}{RGB}{235,247,247}
+
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -66,15 +82,37 @@
 \email{https://orcid.org/0009-0005-7296-1534}
 \affiliation{Independent Researcher, Bernau, Germany}
 
-\date{August 3, 2026 -- Version 1.7}
+\date{November 2026}
 
 \begin{abstract}
-We present a unified framework for the well-known equivalence between the $\PP$ vs $\NP$ problem and resource-bounded Kolmogorov complexity, framing it as an \textit{entropic reformulation}: $\PP \neq \NP$ is equivalent to the absence of a polynomial-time witness selector whose outputs have only logarithmic resource-bounded conditional complexity. This equivalence has been known in various forms since the work of Orponen et al.\ (1994) and Fortnow (2000). This paper does not prove $\PP \neq \NP$; rather, it provides a unified information-theoretic presentation that identifies the precise structure of what must be shown and why classical barrier techniques are not obstructions to this approach. We introduce the concept of \textit{algorithmic positivity} -- an NP language is algorithmically positive if it admits a polynomially scaling witness-producing function whose output has low resource-bounded conditional Kolmogorov complexity $K^t(W(x) \mid x) \leq O(\log|x|)$ -- and characterize the \textit{Entropic Separation Conjecture} (no NP-complete language is algorithmically positive) as \textit{equivalent} to $\PP \neq \NP$, establishing ESC as a reformulation of the P vs NP problem in information-theoretic language rather than an independent result. We conduct a systematic barrier analysis, arguing that arguments based on unbounded Kolmogorov complexity $K$ are not naturally subject to the three classical barriers (relativization, natural proofs, algebrization), while noting that the barrier status for the resource-bounded variant $K^t$ used in our core results remains to be fully established. The central characterization is the \textit{witness entropy gap}: $\PP = \NP$ would imply the existence of a canonical polynomial-time witness selector with $K^t(W(x) \mid x) = O(\log|x|)$, while $\PP \neq \NP$ implies that, for every fixed polynomial time bound and logarithmic constant, infinitely many instances admit no valid witness with such a short resource-bounded conditional description. The stronger near-maximal bound $K^t(w \mid x) \geq |w| - O(\log n)$ is treated below as an additional bridge hypothesis, not as a consequence of $\PP \neq \NP$. We identify the precise remaining challenge: converting this characterization into a proof requires a \textit{uniformity bridge} -- a new connection between algorithmic information theory and uniform complexity theory.
+This revised paper explains the established connection between
+polynomial-time SAT witness search and resource-bounded conditional
+Kolmogorov complexity. For a fixed polynomially balanced SAT verifier,
+the existence of a polynomial-time witness finder is equivalent to
+$\PP=\NP$. The criterion in terms of short time-bounded witness
+descriptions is a reformulation, not a new lower bound.
+The revision corrects substantive errors in the previously
+published version. The sequential Entropy Hardness Hypothesis for
+standard SAT slices is false: their full $2^n$-bit truth table has
+an $O(\log n)$-bit generator running in $\poly(2^n)$ time.
+Cook--Reckhow boundedness characterizes $\NP=\coNP$, not $\PP=\NP$;
+long proofs and random-looking witnesses do not automatically
+possess high unrestricted conditional Kolmogorov complexity.
+The use of uncomputable $K$ does not itself bypass relativization,
+natural proofs, or algebrization. We retain explicit conditional
+directions involving restricted algorithms and search-preserving
+partial-MCSP/CMMSA reductions, whose technical hypotheses remain
+to be checked. No new unrestricted complexity lower bound,
+complete extraction theorem, or proof of $\PP\ne\NP$ is claimed.
 \end{abstract}
+% NACHTRAG [P 2026-11-21] — PRÄZISIERT: Encoding-/ESC-Konsistenzpass
+% NACHTRAG [P 2026-11-21] — PRÄZISIERT: weitere Quellenkorrekturen und offene MCSP-Route
+
+% NACHTRAG [P 2026-11-21] — WIDERLEGT / PRÄZISIERT: Arbeits-Erratum zur öffentlichen v1.6
+% Details unter _proof-notes/PNP_ENTROPIC_ERRATA_R3P_2026-11-21.md.
 
 \keywords{P vs NP, Kolmogorov complexity, algorithmic entropy, reformulation, barrier analysis, witness compression, computational complexity}
 
-\thanks{AI systems were used across all phases of this work (conception, literature review, mathematical formalization, computational scripts, typesetting, and adversarial AI review). All mathematical content, verification, and responsibility lie solely with the author.}
 
 \maketitle
 \clearpage
@@ -122,10 +160,15 @@ We observe a \textit{superficial structural parallel} across several major mathe
 \textbf{Problem} & \textbf{Positive structure} & \textbf{Status} \\
 \midrule
 Weil conjectures & Frobenius eigenvalues & Proven \\
+\addlinespace[3pt]
 BSD (rank $\leq 1$) & N\'eron-Tate height & Proven \\
+\addlinespace[3pt]
 Hodge conjecture & Hodge--Riemann form & Open \\
+\addlinespace[3pt]
 RH & Spectral zeta flow & \cite{GeigerRH2026c} \\
+\addlinespace[4pt]
 \textbf{P vs NP} & \textbf{Kolmogorov complexity} & \textbf{This paper} \\
+\addlinespace[3pt]
 Broader program & Free energy framework & \cite{FST-Unified2026} \\
 \bottomrule
 \end{tabular}%
@@ -134,7 +177,9 @@ Broader program & Free energy framework & \cite{FST-Unified2026} \\
 
 \noindent\textit{Caveat:} This table illustrates structural parallels at the level of proof strategy; it does not claim that P vs NP is solved or simplified by the positivity perspective. The positivity structures involved are fundamentally different in each case.
 
-The organizing observation: \textit{Kolmogorov complexity serves as a natural non-negative quantity for computational complexity}. It is non-negative ($K(x) \geq 0$), machine-invariant (up to additive constants), and fundamentally non-constructive (not computable) -- properties that allow unbounded $K$ to bypass the three barriers. The resource-bounded variant $K^t$, which is essential for the core results, inherits some but not all of these properties; its barrier status is discussed in Section~\ref{sec:entropy}.
+The global conceptual architecture of this reformulation, linking classical barriers, witness entropy, candidate bridge strategies, and diagnostic guardrails, is visualised in Figure~\ref{fig:entropic_p_vs_np_architecture}.
+
+The organizing distinction is between short descriptions and efficient computation. Unbounded $K$ is non-negative, uncomputable, and invariant up to machine-dependent additive constants; these facts do not by themselves establish a new lower bound or bypass classical barriers.
 
 This paper is a \textbf{presentation and framework paper}: it presents the known equivalence between $\PP \neq \NP$ and an entropic condition in a unified framework (structured by the claim-evidence-gate ledger in Table~\ref{tab:claim-evidence-gate-ledger}), but does not prove the separation itself and does not claim the equivalence as a new result (see Related Work, Section~\ref{sec:related}, for the priority of Fortnow~\cite{Fortnow2000} and Orponen et al.~\cite{OrponenKoSchoeningWatanabe1994}). The paper is self-contained; all main results depend only on definitions and proofs within this document. Connections to the broader FST program are cited for context but are not logically required.
 
@@ -149,9 +194,13 @@ This paper is a \textbf{presentation and framework paper}: it presents the known
 \textbf{Layer} & \textbf{Visible evidence in the paper} & \textbf{Permitted reading} & \textbf{Stop gate before stronger claims} \\
 \midrule
 Entropic equivalence & ESC/EH propositions and remarks, Secs.~\ref{sec:positivity}--\ref{sec:slices} & Known-equivalence framework & EH or Uniformity Bridge proof \\
+\addlinespace[3.5pt]
 Barrier analysis & S1--S5 and $K$ versus $K^t$ caveat & $K$ motivates; $K^t$ remains hard case & No resource-bounded bypass claim \\
+\addlinespace[3.5pt]
 Restricted-model guardrails & OGP, low-degree, stability, AC0, MCSP & Restricted-front obstruction only & Map uniform search to exact front class \\
+\addlinespace[3.5pt]
 Illustrative numerics & SAT entropy diagnostics & Exploratory stress test & Asymptotic family, null model, denominator \\
+\addlinespace[3.5pt]
 Open bridge program & UB, advice erosion, flow, capillary, Williams slice entropy & Lemma targets & Theorem: search implies entropy collapse \\
 \bottomrule
 \end{tabular}%
@@ -160,59 +209,159 @@ Open bridge program & UB, advice erosion, flow, capillary, Williams slice entrop
 
 
 % ===================================================================
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+    scale=0.86, every node/.style={transform shape},
+    barrier/.style={rectangle, draw=porange, fill=porangelight, rounded corners=3pt, line width=0.8pt, inner sep=4pt, align=center},
+    engine/.style={rectangle, draw=pblue, fill=pbluelight, rounded corners=3pt, line width=0.8pt, inner sep=5pt, align=center},
+    bridge/.style={rectangle, draw=ppurple, fill=ppurplelight, rounded corners=3pt, line width=0.8pt, inner sep=4pt, align=center},
+    guard/.style={rectangle, draw=pteal, fill=pteallight, rounded corners=3pt, line width=0.8pt, inner sep=4pt, align=center},
+    arrow/.style={->, >=Stealth, line width=1pt, draw=pgray},
+    darrow/.style={<->, >=Stealth, line width=1pt, draw=pblue},
+    barrarrow/.style={->, >=Stealth, line width=1pt, draw=porange, dashed}
+]
+
+% Panel A: Classical Barriers
+\node[barrier, text width=4.8cm] (bgs) at (0, 4.2) {
+    \textbf{1. Relativization (BGS 1975)}\\[1pt]
+    \scriptsize $\exists A, B: \PP^A = \NP^A \;\wedge\; \PP^B \neq \NP^B$\\[1pt]
+    \textit{Blocks black-box oracle simulations}
+};
+
+\node[barrier, text width=4.8cm, below=0.35cm of bgs] (rr) {
+    \textbf{2. Natural Proofs (RR 1997)}\\[1pt]
+    \scriptsize Constructiveness + Largeness vs PRGs\\[1pt]
+    \textit{Blocks dense, efficient circuit lower bounds}
+};
+
+\node[barrier, text width=4.8cm, below=0.35cm of rr] (aw) {
+    \textbf{3. Algebrization (AW 2009)}\\[1pt]
+    \scriptsize Holds under low-degree polynomial lifts\\[1pt]
+    \textit{Blocks arithmetization \& IP=PSPACE lifts}
+};
+
+\node[draw=porange, dashed, line width=0.8pt, rounded corners=4pt, fit=(bgs)(rr)(aw), inner sep=5pt, label={[porange, font=\bfseries\footnotesize]above:CLASSICAL COMPLEXITY BARRIERS}] (barriers_box) {};
+
+% Panel B: Entropic Core Engine
+\node[engine, text width=5.8cm] (core_pnp) at (7.2, 3.8) {
+    \textbf{Witness Space \& Algorithmic Positivity}\\[2pt]
+    \footnotesize NP Relation $R(x,w)$, Witness Selector $w(x)$,\\[1pt]
+    \footnotesize Resource-bounded Kolmogorov Complexity $K^t(w \mid x)$
+};
+
+\node[engine, text width=5.8cm, below=0.55cm of core_pnp] (collapse) {
+    \textbf{$\PP = \NP \implies$ Compressibility Collapse}\\[1pt]
+    \footnotesize Canonical polynomial-time selector yields:\\[1pt]
+    \footnotesize $\exists \text{ poly } t: K^t(w(x) \mid x) \le O(\log |x|)$
+};
+
+\node[engine, text width=5.8cm, below=0.55cm of collapse] (positivity) {
+    \textbf{$\PP \neq \NP \iff$ Entropic Separation (ESC)}\\[1pt]
+    \footnotesize Impossibility of universal logarithmic compression:\\[1pt]
+    \footnotesize $\forall \text{ poly } t, c>0, \exists^{\infty} x \in L: \min_{w} K^t(w \mid x) > c \log |x|$
+};
+
+\node[draw=pblue, line width=1pt, rounded corners=4pt, fit=(core_pnp)(collapse)(positivity), inner sep=6pt, label={[pblue, font=\bfseries\footnotesize]above:ENTROPIC REFORMULATION ENGINE}] (engine_box) {};
+
+% Panel C: Uniformity Bridge & Strategies
+\node[bridge, text width=4.8cm] (b1) at (14.2, 4.4) {
+    \textbf{(B1) Dense Witness Families}\\[1pt]
+    \scriptsize Reductions from random strings to SAT
+};
+
+\node[bridge, text width=4.8cm, below=0.25cm of b1] (b2) {
+    \textbf{(B2) Self-Referential Diag.}\\[1pt]
+    \scriptsize Encoding $|A|$ into witness; non-circularity open
+};
+
+\node[bridge, text width=4.8cm, below=0.25cm of b2] (b3) {
+    \textbf{(B3) SAT Slices [Withdrawn]}\\[1pt]
+    \scriptsize Refuted for standard SAT (Prop.~\ref{prop:sat-slice-counterexample})
+};
+
+\node[bridge, text width=4.8cm, below=0.25cm of b3] (b4) {
+    \textbf{(B4) MCSP Hardness Routes}\\[1pt]
+    \scriptsize Circuit size vs $K^t$; derandomization
+};
+
+\node[draw=ppurple, line width=0.8pt, rounded corners=4pt, fit=(b1)(b2)(b3)(b4), inner sep=5pt, label={[ppurple, font=\bfseries\footnotesize]above:THE UNIFORMITY BRIDGE}] (bridge_box) {};
+
+% Panel D: Diagnostic Guardrails (Bottom)
+\node[guard, text width=5.0cm] (g1) at (1.5, -2.2) {
+    \textbf{OGP \& Solution Shattering}\\[1pt]
+    \scriptsize Clustering of solution space on random SAT;\\[1pt]
+    \scriptsize obstructs stable/local continuous search
+};
+
+\node[guard, text width=5.0cm] (g2) at (7.2, -2.2) {
+    \textbf{Low-Degree Hardness on $\{0,1\}^n$}\\[1pt]
+    \scriptsize Degree-$d$ projection bounds (low-degree barriers);\\[1pt]
+    \scriptsize negative guardrail for polynomial algorithms
+};
+
+\node[guard, text width=5.0cm] (g3) at (12.9, -2.2) {
+    \textbf{Search-Flow \& Capillary Fronts}\\[1pt]
+    \scriptsize Restricted MCMC drift fails at energy walls;\\[1pt]
+    \scriptsize separates heuristic search from uniform bounds
+};
+
+\node[draw=pteal, line width=0.8pt, rounded corners=4pt, fit=(g1)(g2)(g3), inner sep=5pt, label={[pteal, font=\bfseries\footnotesize]above:DIAGNOSTIC GUARDRAILS \& RESTRICTED-MODEL OBSTRUCTIONS}] (guard_box) {};
+
+% Connecting arrows
+\draw[barrarrow] (barriers_box.east) -- node[above, font=\scriptsize\bfseries, text=porange] {Not automatically bypassed} node[below, font=\scriptsize, text=pgray] {(formal proof needed)} (engine_box.west);
+\draw[arrow, draw=ppurple] (engine_box.east) -- node[above, font=\scriptsize\bfseries, text=ppurple] {Requires} node[below, font=\scriptsize, text=pgray] {Uniformity Bridge} (bridge_box.west);
+\draw[arrow, draw=pteal, dashed] (engine_box.south) -- node[right, font=\scriptsize, text=pteal] {Demarcated by} (guard_box.north);
+
+% Internal arrows
+\draw[arrow, draw=pblue] (core_pnp) -- (collapse);
+\draw[arrow, draw=pblue] (collapse) -- (positivity);
+
+\end{tikzpicture}
+\caption{Conceptual architecture of the Entropic Reformulation of P vs.\ NP: classical barrier questions, witness entropy gap, the uniformity bridge, and diagnostic guardrails.}
+\label{fig:entropic_p_vs_np_architecture}
+\end{figure*}
+
+
 % 2. BARRIER ANALYSIS
 % ===================================================================
 \section{Systematic Barrier Analysis}
 \label{sec:barriers}
 
-\subsection{Why constructive methods fail}
+\subsection{Scope of the classical barriers}
+Relativization, natural proofs, and algebrization are distinct
+formal limitations on particular proof techniques. They neither
+share a single mathematical cause nor rule out all constructive
+or algebraic lower-bound arguments.
 
-All three barriers share a common cause: they block proofs that treat computational problems as \textit{black boxes} or that rely on \textit{statistical} properties of Boolean functions.
-
-\begin{itemize}
-\item \textbf{Relativization} blocks proofs that treat the computation as input-output behavior (oracle access), ignoring internal structure.
-\item \textbf{Natural proofs} block proofs that identify hard functions via efficiently testable, statistically dense properties.
-\item \textbf{Algebrization} blocks proofs that use only the polynomial structure of arithmetized computations.
-\end{itemize}
-
-The common thread: all three barriers apply to \textit{model-dependent} arguments -- arguments that work within a specific computational model (oracle machines, circuits, algebraic extensions) rather than targeting the \textit{intrinsic information content} of the computation.
-
-\subsection{The specification for a valid proof}
-
-From the barrier analysis, we derive necessary conditions for any proof of $\PP \neq \NP$:
-
+\subsection{Five diagnostic questions}
+The following specifications are a checklist rather than
+theorematic bypass properties:
 \begin{enumerate}
-\item[\textbf{(S1)}] \textbf{Non-relativizing:} The argument must exploit internal computational structure, not just oracle behavior.
-\item[\textbf{(S2)}] \textbf{Non-natural:} The argument must not define a ``largeness'' property that is efficiently computable. It must target individual objects or non-constructive properties.
-\item[\textbf{(S3)}] \textbf{Non-algebrizing:} The argument must go beyond polynomial identity testing and arithmetization.
-\item[\textbf{(S4)}] \textbf{Model-independent:} The argument must not depend on a specific computational model (circuits, Turing machines, etc.) but on an invariant structural property.
-\item[\textbf{(S5)}] \textbf{Robust:} The argument must not break when moving from restricted models (monotone circuits, $\mathrm{AC}^0$) to general computation.
+\item[(S1)] Does the proposed proof relativize?
+\item[(S2)] Does it define a constructive and large circuit property?
+\item[(S3)] Does it algebrize?
+\item[(S4)] Which machine, encoding, and time bounds apply?
+\item[(S5)] Does the claim extend beyond its restricted model?
 \end{enumerate}
-
-We summarize the five barrier specifications and their corresponding entropic bypass mechanisms in Table~\ref{tab:barriers-bypass}. We now show that algorithmic entropy satisfies all five specifications.
-
 \begin{table*}[t]
-\caption{Synoptic barrier analysis and Kolmogorov complexity bypass mechanism.}
+\caption{Classical barriers and unresolved obligations for a proposed proof.}
 \label{tab:barriers-bypass}
-\centering
-\footnotesize
+\centering\footnotesize
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}lllll@{}}
+\begin{tabular}{@{}llll@{}}
 \toprule
-\textbf{Barrier} & \textbf{Foundational Reference} & \textbf{Blocked Proof Mechanism} & \textbf{Specification} & \textbf{Kolmogorov Complexity Bypass Mechanism} \\
+\textbf{Barrier} & \textbf{Reference} & \textbf{Scope} & \textbf{Required check}\\
 \midrule
-Relativization & Baker--Gill--Solovay (1975)~\cite{BakerGillSolovay1975} & Input-output oracle simulations & (S1) Non-relativizing & Defined over fixed machine; intrinsic information; robust under polynomial slowdowns \\
-Natural Proofs & Razborov--Rudich (1997)~\cite{RazborovRudich1997} & Efficiently testable, dense properties & (S2) Non-natural & Non-computability of $K(x)$ prevents polynomial-time largeness testing \\
-Algebrization & Aaronson--Wigderson (2009)~\cite{AaronsonWigderson2009} & Low-degree polynomial extensions & (S3) Non-algebrizing & Minimization of program length invariant under algebraic oracle lifts \\
-Model Dependence & Classical circuit bounds & Gates/depth-specific combinatorial arguments & (S4) Model-independent & Universal invariance theorem up to machine-dependent constants \\
-Non-Robustness & Restriction-specific collapses & Methods failing outside $\mathrm{AC}^0$/monotone & (S5) Robust & Information-theoretic gap $\Omega(|w|)$ vs $O(\log n)$ independent of gate primitives \\
+Relativization & Baker--Gill--Solovay~\cite{BakerGillSolovay1975} & Oracle-relative proofs & Exhibit a non-relativizing step\\
+Natural proofs & Razborov--Rudich~\cite{RazborovRudich1997} & Large constructive properties & Evaluate largeness and constructiveness\\
+Algebrization & Aaronson--Wigderson~\cite{AaronsonWigderson2009} & Algebraic-oracle lifts & Test the precise argument\\
+Machine model & Invariance theory & Cost-model dependence & Track clock and simulation overhead\\
+Restricted classes & Circuit/solver bounds & Depth, monotonicity, or locality & Prove any generalization separately\\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular}}
 \end{table*}
 
-
-% ===================================================================
 % 3. ALGORITHMIC ENTROPY
 % ===================================================================
 \section{Algorithmic Entropy as Positivity Structure}
@@ -243,7 +392,7 @@ where $c_{U,U'}$ is a constant independent of $x$.
 
 \begin{theorem}[Incomputability]
 \label{thm:incomputable}
-$K(x)$ is not computable. More precisely: for every total computable function $f$, there exists $x$ with $K(x) > f(x)$.
+$K(x)$ is not computable; in particular, every total computable pointwise lower bound for $K$ is bounded.
 \end{theorem}
 
 \begin{theorem}[Incompressibility]
@@ -260,38 +409,24 @@ K(x, y) = K(x) + K(y \mid x, K(x)) + O(\log(K(x, y)))\,.
 This implies that conditional complexity is well-behaved: the information in the pair $(x, y)$ decomposes additively (up to logarithmic terms) into the information in $x$ plus the additional information in $y$ given $x$.
 \end{theorem}
 
-\subsection{Why unbounded Kolmogorov complexity bypasses the barriers}
 
-\textbf{Critical scope limitation.} The barrier immunity analysis below applies to \emph{unbounded} Kolmogorov complexity $K$, which is not the quantity used in the core results of this paper. The core results (Theorem~\ref{thm:high_entropy}, the witness entropy gap) use \emph{resource-bounded} $K^t$, for which barrier immunity is weaker and partially open. This section therefore provides \emph{motivation} for the entropy approach but does \emph{not} establish barrier immunity for the paper's actual technical results. The reader should consult Remark~\ref{rem:barrier-K-vs-Kt} for the precise status of $K^t$.
-
-\begin{claim}[Barrier immunity]
+\subsection{Limits of the barrier analogy}
+\begin{claim}[No formal barrier immunity is established]
 \label{claim:barrier_immune}
-Arguments based on \emph{unbounded} Kolmogorov complexity $K$ plausibly satisfy specifications (S1)--(S5). We present heuristic arguments for each; a fully rigorous treatment is an open research question (see Limitations, Section~\ref{sec:discussion}). \textbf{Important caveat:} The core technical results of this paper use \emph{resource-bounded} $K^t$, for which barrier immunity is weaker and partially open -- see Remark~\ref{rem:barrier-K-vs-Kt} below.
+Neither the uncomputability of unbounded $K$ nor its invariance under
+a change of universal machine proves that a particular complexity
+lower-bound argument escapes relativization, natural proofs, or
+algebrization. This must be checked for the actual proof and its
+precise resource bounds.
 \end{claim}
-
-\begin{enumerate}
-\item[\textbf{(S1)}] \textbf{Non-relativizing.} $K(x)$ is defined without reference to any oracle -- it is an absolute, fixed quantity for each string $x$. The witness entropy gap (Theorem~\ref{thm:high_entropy}) uses $K^t(w \mid x)$ (resource-bounded conditional complexity). We note an important subtlety: the invariance theorem for resource-bounded $K^t$ is weaker than for unbounded $K$ -- changing the universal machine can introduce a \textit{polynomial} slowdown factor rather than just an additive constant~\cite{LiVitanyi2008}. However, the argument remains non-relativizing because $K^t$ is defined over a fixed computational model without oracle access. A relativizing proof would need to hold for all oracles $A$, but our argument targets oracle-independent quantities: the gap between $O(\log n)$ and $\Omega(|w|)$ is superpolynomial and thus robust under polynomial slowdown factors.
-
-\item[\textbf{(S2)}] \textbf{Non-natural.} $K(x)$ is not computable (Theorem~\ref{thm:incomputable}), so no efficient procedure can test whether a specific function has ``high Kolmogorov complexity.'' This directly violates the ``constructiveness'' requirement of natural proofs.
-
-\item[\textbf{(S3)}] \textbf{Non-algebrizing.} Algebrization applies to proof techniques that use only the polynomial structure of arithmetized computations. Arguments based on $K^t$ operate over the full power of Turing machine computation, not polynomial identity testing. While it remains a research question whether $K^t$-based arguments are formally non-algebrizing in the technical sense of~\cite{AaronsonWigderson2009}, the entropy framework is not naturally expressible as an algebraic identity, suggesting it escapes this barrier.
-
-\item[\textbf{(S4)}] \textbf{Model-independent.} The invariance theorem ensures that $K(x)$ is the same (up to $O(1)$) for all universal machines -- Turing machines, circuits, $\lambda$-calculus, etc.
-
-\item[\textbf{(S5)}] \textbf{Robust.} $K(x)$ does not depend on the computational model used to define it.
-\end{enumerate}
-
-\begin{remark}[Barrier immunity: unbounded $K$ vs.\ resource-bounded $K^t$]
+\begin{remark}[Unbounded $K$ versus time-bounded $K^t$]
 \label{rem:barrier-K-vs-Kt}
-The barrier immunity claimed above applies to unbounded Kolmogorov complexity $K$, which is an absolute, uncomputable quantity invariant up to $O(1)$ under change of universal machine. However, the core technical results of this paper (Theorem~\ref{thm:high_entropy}, the witness entropy gap) necessarily use \emph{resource-bounded} $K^t$, which is computable and whose invariance is weaker (polynomial slowdown rather than additive constant). The barrier status of $K^t$-based arguments is therefore less clear-cut:
-\begin{itemize}
-\item \textbf{Relativization:} $K^t(w \mid x)$ is defined without oracles, so our arguments are non-relativizing in the sense that they do not hold ``for all oracles.'' However, $K^{t,A}(w \mid x)$ (with oracle access) can differ substantially from $K^t(w \mid x)$, and a full barrier-immunity proof for the resource-bounded case remains open.
-\item \textbf{Natural proofs:} $K^t$ is computable, so unlike $K$, it does not automatically escape the constructiveness requirement. The argument that our approach avoids natural proofs rests on the fact that we do not use $K^t$ as an efficiently testable ``largeness'' property of Boolean functions, but this distinction deserves further formalization.
-\item \textbf{Algebrization:} No formal proof exists that $K^t$-based arguments are non-algebrizing in the technical sense of~\cite{AaronsonWigderson2009}. S3 (non-algebrization for $K^t$) remains an open question; we make no claim that our framework provably evades this barrier.
-\end{itemize}
-In summary: the barrier bypass is rigorous for unbounded $K$ but remains heuristic for resource-bounded $K^t$. Since the witness entropy gap requires $K^t$, establishing formal barrier immunity for the resource-bounded case is an important open problem.
+A canonical first valid SAT witness has $K(w_0(x)\mid x)=O(1)$ by
+unbounded enumeration. Hardness of witness search, if established,
+must therefore be resource-bounded. A fixed time-limited universal
+machine introduces clock and simulation costs; no immunity from the
+classical barriers follows from its definition.
 \end{remark}
-
 
 % ===================================================================
 % 4. THE WITNESS ENTROPY GAP
@@ -339,7 +474,9 @@ If $\PP = \NP$, the search version of SAT is solvable in polynomial time (by sel
 
 \begin{remark}[Unbounded vs.\ resource-bounded complexity -- why $K^t$ is essential]
 \label{rem:bounded-vs-unbounded}
-The distinction between $K(w \mid x)$ and $K^t(w \mid x)$ is crucial and must be understood before the main theorem. For any decidable language $L$ and any $(x, w)$ with $V(x,w) = 1$, the brute-force verifier-search has $K(w \mid x) \leq O(1)$ (the search program has constant length -- it simply enumerates all candidates and checks each). The information-theoretic content of NP-hardness lies entirely in the \textit{time} required to extract the witness, not in the \textit{description length}. This is why $K^t$ with polynomial $t$ is the correct measure: it captures the computational cost of witness extraction, which is the essence of the $\PP$ vs $\NP$ question.
+The distinction between $K(w \mid x)$ and $K^t(w \mid x)$ is crucial and must be understood before the main theorem. For any satisfiable instance $x$, the first valid witness $w_0(x)$ found
+by exhaustive search satisfies $K(w_0(x)\mid x)=O(1)$, while this bound
+need not hold for all valid witnesses. The information-theoretic content of NP-hardness lies entirely in the \textit{time} required to extract the witness, not in the \textit{description length}. This is why $K^t$ with polynomial $t$ is the correct measure: it captures the computational cost of witness extraction, which is the essence of the $\PP$ vs $\NP$ question.
 \end{remark}
 
 \begin{theorem}[Superlogarithmic witness obstruction -- resource-bounded, conditional {\normalfont (cf.\ Fortnow~\cite{Fortnow2000}, Allender~\cite{Allender2001})}]
@@ -363,7 +500,10 @@ We prove the contrapositive for SAT. Suppose some polynomial $q$ and constant $C
 
 The ``infinitely many'' clause follows by the same contrapositive plus finite hardcoding: if only finitely many formulas failed the bound, their witnesses could be stored in a finite lookup table and the above enumeration would solve all remaining instances in polynomial time. Constructing such hard instances explicitly is not provided by the argument; the theorem is a non-constructive reformulation.
 
-\textit{Why unbounded $K$ fails:} For any SAT instance $x$ with a satisfying assignment $w$, the brute-force program ``enumerate all assignments, test each, output the first satisfying one'' has length $O(1)$ and finds $w$ from $x$ in time $O(2^{|x|})$. Thus $K(w \mid x) \leq O(1)$ -- the unbounded conditional complexity is trivially small. This is why the resource bound is essential: the information-theoretic content of NP-hardness lies in the \textit{time} required to extract the witness, not in the description length.
+\textit{Why unbounded $K$ fails:} The fixed exhaustive SAT search outputs
+a canonical first satisfying assignment $w_0(x)$, showing
+$\min_{w:V(x,w)=1}K(w\mid x)=O(1)$. This is not a statement
+about every valid witness; the polynomial time budget is essential.
 \end{proof}
 
 \begin{conjecture}[Near-maximal witness entropy]
@@ -424,12 +564,16 @@ The witness production is ``entropically cheap'': the witness $W(x)$ adds at mos
 \end{enumerate}
 \end{definition}
 
+\begin{remark}[Redundancy of AP2]
+Since AP1 already posits a fixed polynomial-time witness-producing function $W$, AP2 follows automatically for a suitable polynomial clock and a constant description of $W$. Thus algorithmic positivity in this definition adds no information-theoretic restriction beyond uniform polynomial-time witness search.
+\end{remark}
+
 \begin{remark}
 Note that (AP2) targets the \textit{witness} $W(x)$, not just the decision bit. A single decision bit $D(x) \in \{0,1\}$ trivially satisfies $K(D(x) \mid x) \leq 1$, so entropic convexity would be vacuous for decision functions. The meaningful measure is the resource-bounded complexity of producing a \textit{witness} -- this is where the information-theoretic content of NP-hardness resides.
 \end{remark}
 
 \begin{remark}
-Every $\PP$-decidable NP language is algorithmically positive: if $L \in \PP \cap \NP$, then the polynomial-time search algorithm (obtained via self-reducibility for NP-complete problems, or directly for natural NP problems) produces a witness $W(x)$ with $K^{q(|x|)}(W(x) \mid x) \leq |W_{\text{prog}}| + O(\log|x|) = O(\log|x|)$.
+For any fixed polynomially balanced NP verifier, $\PP=\NP$ yields a polynomial-time witness finder through NP prefix-extension queries. Membership of the language $L$ alone in $\PP$ does not imply that an arbitrary associated verifier relation admits polynomial-time witness search.
 \end{remark}
 
 \begin{remark}[Heuristic properties of P-decidable NP languages]
@@ -447,9 +591,12 @@ These properties are motivated by the structure of $\NP$-complete problems but a
 
 \begin{conjecture}[Entropic Separation -- ESC]
 \label{conj:entropic}
-No NP-complete language is algorithmically positive. That is: for every NP-complete language $L$ and every polynomial-time witness-producing function $W$, there exist infinitely many yes-instances $x \in L$ such that $W$ fails to produce a valid witness for $x$ (i.e., $V(x, W(x)) = 0$), or $K^{q(|x|)}(W(x) \mid x) \geq \omega(\log|x|)$ for all polynomials $q$.
-
-A stronger parallel truth-table bridge target (see Theorem~\ref{thm:slice_nogo}) is: for some NP-complete language $L$, for every polynomial $q$, infinitely many $n$ satisfy $K^{q(2^n)}(L_n) \geq n$. This truth-table statement is not claimed to be equivalent to ESC as stated here; Theorem~\ref{thm:slice_nogo} shows that it is a sufficient route to $\PP\neq\NP$ and a circuit-lower-bound-style bridge target.
+No NP-complete search problem admits a uniform polynomial-time witness
+finder that succeeds on every positive instance. In the setting of
+the fixed SAT verifier, this is equivalent to $\PP\ne\NP$,
+not an independently established information-theoretic theorem.
+The former sequential SAT-EH strengthening is refuted for standard SAT;
+see the explicit enumeration in the slice section.
 \end{conjecture}
 
 \begin{proposition}
@@ -468,20 +615,23 @@ The converse of Proposition~\ref{prop:equiv} also holds: $\PP \neq \NP$ implies 
 \textit{Priority note:} This equivalence is a reformulation of the known equivalence between $\PP \neq \NP$ and unbounded time-bounded instance complexity of SAT, established by Fortnow~\cite{Fortnow2000} building on the instance complexity framework of Orponen et al.~\cite{OrponenKoSchoeningWatanabe1994}. Our contribution is the specific formulation in terms of conditional witness entropy $K^t(w \mid x)$ rather than instance complexity $\mathrm{ic}_t(x : \mathrm{SAT})$.
 \end{remark}
 
-\subsection{Why NP-complete problems resist algorithmic positivity}
+\subsection{Conditional witness-search interpretation}
+If $\PP\ne\NP$, then no uniformly polynomial-time
+witness finder for SAT can succeed on all positive instances.
+Theorem~\ref{thm:high_entropy} restates this conditional
+obstruction using fixed polynomial running-time and logarithmic
+program-length budgets. Since (AP2) follows from (AP1), this
+obstruction is not an independent property in the present definition.
 
-The failure of each condition for NP-complete problems:
+The heuristic properties (H1)--(H2) are not consequences of
+NP-completeness. Sharing variables between two formulas shows
+that satisfiability of their conjunction is not determined by
+the two separate satisfiability bits. Structural clustering
+phenomena studied in random $k$-SAT depend on distributions and
+parameter regimes and do not yield an unrestricted witness
+search lower bound.
 
-\textbf{(AP2) fails:} For NP-complete problems, producing a witness $w$ for $x \in L$ requires extracting information that is not uniformly logarithmically compressible relative to the instance. Theorem~\ref{thm:high_entropy} shows, conditional on $\PP \neq \NP$, that for every fixed polynomial time bound and logarithmic constant, infinitely many SAT instances have no valid witness within that description budget. The stronger near-maximal bound $K^t(w \mid x)=\Omega(|w|)$ is an additional bridge hypothesis, not a theorem. No polynomial-time witness-producing function $W$ can achieve $K^{\poly}(W(x) \mid x) \leq O(\log|x|)$ for all SAT instances.
-
-As additional heuristic evidence (not part of the formal argument), the properties (H1)--(H2) from Remark~\ref{rem:heuristic-ap} also fail for NP-complete problems:
-
-\textbf{(H1) fails:} SAT is not compositionally decomposable in the required sense. The satisfiability of a conjunction $\varphi_1 \wedge \varphi_2$ is not determined by the satisfiability of $\varphi_1$ and $\varphi_2$ individually (they share variables). This non-decomposability is precisely the source of NP-hardness.
-
-\textbf{(H2) fails for random $k$-SAT near the threshold:} For random $k$-SAT instances near the satisfiability threshold, SAT exhibits extreme sensitivity in its search version: flipping a single clause can restructure the entire witness space. Specifically, near the phase transition (clause-to-variable ratio $\alpha \approx \alpha_c(k)$), a single clause addition can fragment the solution cluster into exponentially many components, producing witnesses of unbounded additional complexity~\cite{AchlioptasRicci2006,MezardZecchina2002}. \textbf{Scope limitation:} This instability is rigorously established only for random $k$-SAT in the near-threshold regime $\alpha \approx \alpha_c(k)$. For structured, planted, or under-constrained instances ($\alpha \ll \alpha_c$), the witness space may be well-connected, and monotone stability can hold. The heuristic argument for (H2) failure as a general NP-hardness phenomenon thus rests on the assumption that the near-threshold regime is representative of the combinatorial difficulty of NP-complete problems.
-
-
-% ===================================================================
+% 6. THE NO-GO THEOREM
 % 6. THE NO-GO THEOREM
 % ===================================================================
 \section{The No-Go Theorem}
@@ -495,7 +645,7 @@ The following are equivalent:
 \item[(ii)] The Entropic Separation Conjecture~\ref{conj:entropic} holds.
 \item[(iii)] No NP-complete language is decidable in polynomial time. That is: for every NP-complete language $L$ and every polynomial-time algorithm $A$, there exist instances $x$ where $A(x) \neq L(x)$.
 \end{enumerate}
-The equivalence $(i) \Leftrightarrow (ii)$ shows that $\PP \neq \NP$ is \textit{equivalent} to an entropy obstruction: polynomial-time algorithms cannot compress NP-witnesses below their intrinsic Kolmogorov complexity.
+The equivalence $(i) \Leftrightarrow (ii)$ restates the nonexistence of a uniform polynomial-time witness finder. Because (AP2) follows from (AP1), it is not an independently established information-theoretic obstruction.
 \end{theorem}
 
 \begin{proof}
@@ -508,23 +658,21 @@ $(i) \Leftrightarrow (iii)$: (iii) states that for every NP-complete language $L
 The content of the theorem is not a new separation result, but a \textit{unified presentation} of the known equivalence between $\PP \neq \NP$ and entropic incompressibility of NP-witnesses (cf.\ Fortnow~\cite{Fortnow2000}, Orponen et al.~\cite{OrponenKoSchoeningWatanabe1994}). The specific framing in terms of algorithmic positivity and the No-Go structure is the contribution of this paper.
 \end{proof}
 
-\subsection{Exclusion of alternative scenarios}
-
-\begin{proposition}[Excluded scenarios]
+\subsection{Diagnostics, not excluded complexity scenarios}
+\begin{remark}[Limits of structural exclusion arguments]
 \label{prop:excluded}
-The following scenarios are incompatible with the conjunction of entropic positivity and Kolmogorov obstruction:
+A fixed deterministic polynomial-time program has a short
+time-bounded conditional description of its output given the
+input. This is a basic coding observation, not a lower bound
+against SAT solvers. Shared variables obstruct a naive
+independent-clause decomposition, but this does not exclude
+all polynomial-time algorithms. Phase-transition phenomena
+in random SAT do not prove a worst-case lower bound.
+These observations must not be promoted to a general
+no-go theorem about arbitrary computation.
+\end{remark}
 
-\begin{enumerate}
-\item[\textbf{(X1)}] \textbf{Polynomial algorithm with exponential entropy production.} An algorithm that ``invents'' new information during computation. Excluded because for any deterministic algorithm $A$ running in time $t_A(|x|)$, the resource-bounded conditional complexity satisfies $K^{t_A(|x|)}(A(x) \mid x) \leq |A| + O(\log|x|)$: the program ``run $A$ on input $x$'' has constant description length. In particular, the \textit{conditional} algorithmic information of $A(x)$ given $x$ is at most $O(1)$ bits at the time scale of $A$'s own computation -- meaning $A$ cannot ``create'' information that was not already implicit in the input. (For randomized algorithms, the random bits $r$ provide additional input, so $K(A(x,r) \mid x)$ can be high. However, the P vs NP question concerns deterministic computation; moreover, under widely believed derandomization assumptions, $\BPP = \PP$~\cite{ImpagliazzoWigderson1997}, so randomness does not provide additional power.)
-
-\item[\textbf{(X2)}] \textbf{Compositional collapse of NP.} All SAT instances decompose into independently solvable parts. Excluded by the NP-completeness of SAT: if SAT decomposed compositionally, then all NP problems would decompose (via reduction). However, general SAT instances involve shared variables across clauses, so the satisfiability of a conjunction $\varphi_1 \wedge \varphi_2$ is not determined by the satisfiability of the parts individually. The Valiant--Vazirani theorem~\cite{ValiantVazirani1986} further strengthens this: SAT reduces (under randomized reductions) to instances with a unique satisfying assignment, where compositional decomposition is impossible since the unique witness encodes global correlations across all variables.
-
-\item[\textbf{(X3)}] \textbf{Smooth decision landscape.} All SAT instances have monotonically stable decision boundaries. Excluded by phase-transition phenomena in random SAT: near the satisfiability threshold, the decision changes discontinuously under small clause additions.
-\end{enumerate}
-\end{proposition}
-
-
-% ===================================================================
+% 7. RESOURCE-BOUNDED SLICE ENTROPY
 % 7. RESOURCE-BOUNDED SLICE ENTROPY
 % ===================================================================
 \section{Resource-Bounded Slice Entropy}
@@ -550,15 +698,16 @@ K^t(x) := \min\{|p| : U(p) = x \text{ in at most } t(|x|) \text{ steps}\}\,.
 
 \begin{lemma}[P implies low slice entropy]
 \label{lem:p_low_entropy}
-If $L \in \PP$, then there exists a polynomial $q$ and a constant $c$ such that for all $n$:
+If $L \in \PP$, then there exists a polynomial $q$ and a constant $c > 0$ such that for all $n$:
 \begin{equation}
-K^{q(2^n)}(L_n) \leq c + \lceil \log n \rceil\,.
+K^{q(2^n)}(L_n) \leq c \log(n+2)\,,
 \label{eq:p_entropy}
 \end{equation}
+that is, $K^{q(2^n)}(L_n) = O(\log(n+2))$.
 \end{lemma}
 
 \begin{proof}
-Let $A$ be a polynomial-time algorithm deciding $L$ in time $n^d$. The program $p$: ``read $n$ from input; for each $x \in \{0,1\}^n$, run $A(x)$ and output the result bit'' has length $|A| + O(\log n)$ (to encode $n$). Its runtime is $2^n \cdot n^d = \poly(2^n)$. Thus $K^{q(2^n)}(L_n) \leq |A| + O(\log n) = c + \lceil \log n \rceil$.
+Let $A$ be a polynomial-time algorithm deciding $L$ in time $n^d$. The program $p$: ``read $n$ from input; for each $x \in \{0,1\}^n$, run $A(x)$ and output the result bit'' has length $|A| + O(\log n)$ (to encode $n$). Its runtime is $2^n \cdot n^d = \poly(2^n)$. Thus $K^{q(2^n)}(L_n) \leq |A|+O(\log(n+2))=O(\log(n+2))$.
 \end{proof}
 
 \subsection{The No-Go theorem via slice entropy}
@@ -580,17 +729,32 @@ then $\PP \neq \NP$.
 Immediate from Lemma~\ref{lem:p_low_entropy}: $L \in \PP$ would give $K^{\poly(2^n)}(L_n) = O(\log n)$, contradicting~\eqref{eq:eh} for large $n$.
 \end{proof}
 
-\begin{remark}
-The Entropy Hardness Hypothesis (EH) is a concrete, well-defined conjecture about a specific NP-complete language (e.g., SAT). It asserts that the truth table of SAT on $n$-bit formulas cannot be compressed to fewer than $n$ bits, even when the compression algorithm is allowed $\poly(2^n)$ time.
-
-This is a clean sufficient No-Go formulation: the ``easy direction'' ($L \in \PP \Rightarrow$ low entropy) is a theorem; the ``hard direction'' (EH for SAT) is a stronger truth-table/circuit-lower-bound route to $\PP \neq \NP$, not a consequence of $\PP \neq \NP$ alone.
-
-Note that the threshold $n$ in EH is much smaller than the truth-table length $2^n$: a random string of length $2^n$ has $K \approx 2^n$. The threshold $n$ is chosen because Lemma~\ref{lem:p_low_entropy} gives $K^{\poly(2^n)}(L_n) = O(\log n)$ for $L \in \PP$; any threshold $\omega(\log n)$ would suffice to separate from P, and $n$ provides a clean, moderate lower bound that is already superpolynomial in the input length.
+\begin{remark}[Erratum: standard SAT-EH is false]
+The conditional implication in Theorem~\ref{thm:slice_nogo} remains valid,
+but its proposed instantiation for standard explicitly encoded SAT is false.
 \end{remark}
+\begin{proposition}[Sequential SAT-slice counterexample]
+\label{prop:sat-slice-counterexample}
+For standard explicit SAT encodings with $O(n)$ variables and a polynomial
+parser for an $n$-bit formula, some fixed polynomial $Q$ satisfies
+\[
+K^{Q(2^n)}(\SAT_n)=O(\log(n+2)).
+\]
+\end{proposition}
+\begin{proof}
+A fixed program stores $n$ and enumerates all $2^n$ length-$n$ strings,
+testing each valid formula by enumeration of at most $2^{O(n)}$
+assignments. It prints the complete table in $2^{O(n)}\poly(n)$ time,
+polynomial in the table length $2^n$, from $O(\log(n+2))$ bits.
+\end{proof}
 
-\begin{remark}[Encoding sensitivity of EH]
+\begin{remark}[Encoding sensitivity and the corrected resource contract]
 \label{rem:encoding}
-The Entropy Hardness Hypothesis depends on the encoding of SAT instances as binary strings. Different encodings yield truth tables $\SAT_n$ of different lengths and potentially different Kolmogorov complexities. The hypothesis should be understood as: there exists a \emph{standard} polynomial-time encoding $\mathrm{enc}: \mathrm{Formulas} \to \{0,1\}^*$ such that $K^{q(2^n)}(\SAT_n^{\mathrm{enc}}) \geq n$ for infinitely many $n$. For resource-bounded $K^t$, changing the universal machine introduces a polynomial slowdown rather than just an additive constant. However, since EH quantifies over \emph{all} polynomials $q$, a polynomial slowdown in the time bound does not affect the hypothesis: if $K^{q(2^n)}(\SAT_n) \geq n$ for all $q$, the same holds after re-parameterization. The \emph{length} of the truth table (and hence the threshold $n$) is encoding-dependent.
+The sequential SAT-EH hypothesis is false for standard explicit codings:
+a complete slice can be generated in $\poly(2^n)$ time regardless
+of whether SAT belongs to $\PP$. An alternative coding must be analyzed
+on its own merits. A sequential output bound does not imply a
+$\poly(n)$ \emph{random-access} decision procedure.
 \end{remark}
 
 \begin{remark}[Connection to circuit lower bounds]
@@ -605,25 +769,17 @@ This keeps the entropy framework aligned with circuit complexity without oversta
 
 \begin{remark}[SAT slice entropy at the phase transition -- exploratory numerics]
 \label{rem:sat-entropy}
-As a purely illustrative exercise (not constituting evidence for or against the ESC), we computed the Shannon entropy $H_{\mathrm{slice}}$ of the truth table of random 3-SAT at the phase transition $\alpha \approx 4.267$ for $n = 8, 10, 12, 14, 16$. The entropy grows from $H \approx 1.5$ ($n=8$) to $H \approx 2.3$ ($n=14$). \textbf{Limitations:} (i) Only 5 data points are available, which is far too few to determine asymptotic growth behavior -- any monotone function (including logarithmic growth, which would \emph{refute} the ESC) is consistent with these data. (ii) The Shannon entropy $H_{\mathrm{slice}}$ of the truth table is \emph{not} the same as the Kolmogorov complexity $K^t(\mathrm{SAT}_n)$; the relationship is not formally established here. (iii) $n \leq 16$ is far below the asymptotic regime relevant to the ESC. Full validation would require $n \geq 30$, which is computationally infeasible. Script: \texttt{compute\_sat\_entropy.py}.
+As a purely illustrative exercise (not constituting evidence for or against the ESC), we computed the Shannon entropy $H_{\mathrm{slice}}$ of the truth table of random 3-SAT at the phase transition $\alpha \approx 4.267$ (cf.~\cite{Monasson1999,MezardZecchina2002,AchlioptasRicci2006}) for $n = 8, 10, 12, 14, 16$. The entropy grows from $H \approx 1.5$ ($n=8$) to $H \approx 2.3$ ($n=14$). \textbf{Limitations:} (i) Only 5 data points are available, which is far too few to determine asymptotic growth behavior -- any monotone function (including logarithmic growth, which would \emph{refute} the ESC) is consistent with these data. (ii) The Shannon entropy $H_{\mathrm{slice}}$ of the truth table is \emph{not} the same as the Kolmogorov complexity $K^t(\mathrm{SAT}_n)$; the relationship is not formally established here. (iii) $n \leq 16$ is far below the asymptotic regime relevant to the ESC. Full validation would require $n \geq 30$, which is computationally infeasible. Script: \texttt{compute\_sat\_entropy.py}.
 \end{remark}
 
-\subsection{Why (EH) should be true}
+\subsection{Why the former SAT-EH route fails}
+The claim that no short sequential SAT-slice generator was known was wrong.
+The explicit enumeration above gives such a generator.
+Random-SAT phase transitions do not prove a lower bound on the full
+deterministic truth table. Fast random access to individual bits is a
+different, still open computational question.
 
-The truth table $\SAT_n$ has length $2^n$ and describes the satisfiability of all $n$-bit encodings of Boolean formulas. There are $2^{2^n}$ possible truth tables of this length, and $\SAT_n$ is a \textit{specific} one determined by a complete mathematical definition ($\SAT$). Nevertheless:
-
-\begin{enumerate}
-\item \textbf{Pseudorandom structure.} The satisfiability boundary in the space of formulas exhibits phase-transition behavior~\cite{Monasson1999}: near the threshold, the pattern of satisfiable vs.\ unsatisfiable instances has high apparent randomness.
-
-\item \textbf{No known compression.} Despite decades of SAT-solver research, no method compresses $\SAT_n$ to $o(2^n)$ bits in $\poly(2^n)$ time. The best algorithms (CDCL solvers) run in time $2^{\Theta(n)}$ in the worst case.
-
-\item \textbf{Hardness-vs-randomness evidence.} Explicit truth-table incompressibility is closely tied to circuit lower bounds and derandomization~\cite{ImpagliazzoWigderson1997}. Thus EH is a natural strengthening to test in the same ecosystem as PRG and MCSP routes, but its failure would only close this particular truth-table route, not refute $\PP\neq\NP$.
-\end{enumerate}
-
-
-% ===================================================================
 % 8. THE PRECISE OBSTRUCTION
-% ===================================================================
 \section{The Precise Obstruction}
 \label{sec:obstruction}
 
@@ -631,9 +787,14 @@ The truth table $\SAT_n$ has length $2^n$ and describes the satisfiability of al
 
 The main argument (Section~\ref{sec:gap}) has a precise gap that we now identify.
 
-\textbf{What is proven:} There \textit{exist} NP instances whose witnesses have high conditional Kolmogorov complexity (Theorem~\ref{thm:high_entropy}). This is a \textit{non-uniform} statement about individual strings.
-
-\textbf{What is needed:} A \textit{uniform} statement: for every polynomial-time algorithm $A$, there exist infinitely many instances $x$ where $A(x)$ fails. This requires converting the existential entropy bound into an \textit{adversarial} bound against all efficient algorithms simultaneously.
+\textbf{What is proven:} Theorem~\ref{thm:high_entropy} is a
+\emph{conditional} characterization under $\PP\ne\NP$, not an
+unconditional existence theorem for hard witness instances.
+\textbf{What remains open:} A new unconditional lower bound excluding
+all sufficiently short, polynomial-time witness programs is required.
+At logarithmic description length, exhaustive enumeration already
+uniformizes the individual programs; there is no separate missing
+elementary uniformization step.
 
 \begin{definition}[The uniformity bridge]
 \label{def:uniformity}
@@ -679,37 +840,46 @@ The entropy approach \textit{reformulates} the problem but does not \textit{simp
 \textit{P vs NP is equivalent to asking whether Kolmogorov complexity can be polynomially compressed for NP-witness structures~\cite{Fortnow2000}. The entropy framework makes this equivalence explicit in the language of witness entropy and identifies concrete bridge strategies, but converting this to a proof against all algorithms remains the central challenge -- which is P vs NP itself in different language.}
 \end{quote}
 
-\subsection{Four candidate bridge strategies}
 
-We identify four concrete research directions for closing the uniformity gap (summarized with their core mechanisms and technical bottlenecks in Table~\ref{tab:bridge-strategies}):
-
+\subsection{Four research routes and a corrected no-go}
 \begin{table*}[t]
-\caption{Taxonomy of candidate strategies for bridging the uniformity gap.}
+\caption{Research directions, with the historical SAT slice target withdrawn.}
 \label{tab:bridge-strategies}
-\centering
-\footnotesize
+\centering\footnotesize
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}lllll@{}}
+\begin{tabular}{@{}llll@{}}
 \toprule
-\textbf{Strategy} & \textbf{Core Mathematical Mechanism} & \textbf{Key Technical Bottleneck} & \textbf{Barrier Status} & \textbf{Paper Connection} \\
+\textbf{Route} & \textbf{Question} & \textbf{Obligation} & \textbf{Status}\\
 \midrule
-\textbf{(B1) Dense Families} & Reductions from random strings to SAT instances & Ensuring non-vanishing density $|S_n|/2^{\poly(n)}$ & Non-relativizing by construction & Theorem~\ref{thm:high_entropy} (Witness Entropy Gap) \\
-\textbf{(B2) Self-Referential Diag.} & Encoding machine description $|A|$ into witness $w$ & Superpolynomial length gap maintenance & Targets description, not oracle & Diagonalization avoiding BGS \\
-\textbf{(B3) Slice Complexity} & Uniform truth-table bound $K^{\poly(2^n)}(\SAT_n) \ge 2^{n-o(n)}$ & Non-constructive lower bounds on slices & Bypasses natural proofs via slice incomputability & Theorem~\ref{thm:slice_nogo} (Slice Entropy No-Go) \\
-\textbf{(B4) MCSP Hardness} & Circuit minimization hardness via $K^t$ connections & Quantitative losses along MCSP $\Rightarrow$ circuit $\Rightarrow$ EH & Connects $K^t$ to derandomization & Allender et al.~\cite{Allender2006}, Rem.~\ref{rem:mcsp-internalization} \\
+(B1) Witness families & Explicit hard verifier relations & Quantifiers and lower bound & Open\\
+(B2) Diagonalization & Uniform search lower bounds & Non-circular argument & Open\\
+(B3) Sequential SAT slices & $K^{\poly(2^n)}(\SAT_n)\ge n$ & Contradicted by exhaustive output & Refuted\\
+(B4) Partial MCSP & Given small circuit to CMMSA witness & Hybrid and Oracle accounting & Conditional\\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular}}
 \end{table*}
+\textbf{(B1)} High-complexity strings, uniqueness, or density alone
+do not imply hard NP witness relations; a verifier and proof are needed.
 
-\textbf{(B1) Dense families with unique random witnesses.} Construct \textit{dense} families $S_n \subseteq \{0,1\}^{\poly(n)}$ with $|S_n|/2^{\poly(n)}$ non-vanishing, such that every $x \in S_n$ has a unique valid witness $w_x$ with $K^{\poly(n)}(w_x \mid x) \geq |w_x| - O(\log n)$. Density ensures that no polynomial-time algorithm can ``avoid'' all hard instances. The construction requires efficient reductions from Kolmogorov-random strings to SAT instances with unique solutions -- a non-trivial but plausible coding-theoretic task.
+\textbf{(B2)} Self-reference does not by itself make a machine
+incapable of producing a witness encoding its own description.
 
-\textbf{(B2) Self-referential diagonalization.} For each polynomial-time machine $A$, construct an instance $x_A$ whose unique valid witness $w$ contains (or encodes) a description of $A$ itself, so that $K^{\poly(|x_A|)}(w \mid x_A) \geq |A|$. This creates a self-referential obstruction: $A$ cannot produce a witness that is ``about itself'' without exceeding its own description length. The approach combines Gödel-style diagonalization with Kolmogorov complexity and avoids relativization because the self-reference targets the machine's \textit{description}, not its oracle behavior.
+\textbf{(B3) Withdrawn.} For standard SAT encodings,
+Proposition~\ref{prop:sat-slice-counterexample} contradicts
+both the former threshold $n$ and the stronger
+$2^{n-o(n)}$ lower-bound target with the same
+sequential $\poly(2^n)$ time budget. Polynomial-time
+random access to an individual SAT bit is a different question.
 
-\textbf{(B3) Resource-bounded slice complexity.} Prove that for SAT (or another NP-complete language), the resource-bounded complexity satisfies $K^{\poly(2^n)}(\SAT_n) \geq 2^{n-o(n)}$ for infinitely many $n$. This is a \textit{uniform} statement about the truth table and directly implies $\PP \neq \NP$ via the Slice Entropy No-Go (Theorem~\ref{thm:slice_nogo}). The strategy connects to proof complexity: if every short proof of an instance's satisfiability has high Kolmogorov complexity, then no polynomial-time algorithm can systematically produce such proofs.
-
-\textbf{(B4) Minimum Circuit Size Problem (MCSP).} Recent work connects resource-bounded Kolmogorov complexity to circuit complexity via the \textit{Minimum Circuit Size Problem} ($\mathrm{MCSP}$): given a truth table $t \in \{0,1\}^{2^n}$ and a parameter $s$, decide whether there exists a circuit of size $\leq s$ computing $t$. Allender et al.~\cite{Allender2006} established deep connections between $\mathrm{MCSP}$ and $K^t$. While $\mathrm{MCSP} \in \NP$, its complexity status is open: it is not known to be $\NP$-complete, yet proving $\mathrm{MCSP} \in \PP$ would have strong derandomization consequences. Strong MCSP lower bounds or hardness results may feed into circuit-lower-bound programs; they imply the Entropy Hardness Hypothesis only after an additional step that yields sufficiently strong SAT-slice truth-table incompressibility. The chain is therefore conditional rather than automatic: \textit{MCSP hardness $\Rightarrow$ circuit lower bounds $\Rightarrow$ truth-table incompressibility $\Rightarrow$ EH}, with quantitative losses at each arrow.
-
+\textbf{(B4)} NP-hardness of the partial MCSP variant under
+randomized reductions was established by Hirahara
+\cite{Hirahara2022PartialMCSP}. Hirahara and Moshkovitz
+\cite{HiraharaMoshkovitz2023} developed low-error PCP
+regularization and unweighted CMMSA. Our proposed constructive
+search refinement remains conditional on an all-pattern
+hybrid, an explicit information bound, and compatible
+amplified-oracle costs. It establishes neither hardness of
+total MCSP nor $\PP\ne\NP$ and cannot restore the refuted SAT-EH.
 
 % ===================================================================
 % 9. CONNECTION TO PROOF COMPLEXITY
@@ -727,14 +897,15 @@ A deep connection exists between algorithms and proofs:
 & \text{has a short refutation,}
 \end{aligned}
 \end{equation}
-in a proof system at least as strong as Extended Frege.
+in some efficiently checkable proof system; no such bound for Extended Frege follows.
 
-\begin{proposition}[Proof complexity formulation -- Cook {\cite{Cook1975}}]
+\begin{proposition}[Cook--Reckhow characterization {\cite{CookReckhow1979}}]
 \label{prop:proof_complexity}
-If $\PP \neq \NP$, then there is no polynomially bounded proof system for tautologies. Equivalently: $\PP = \NP$ if and only if there exists a proof system in which every tautology of length $n$ has a proof of length $\poly(n)$.
+A polynomially bounded propositional proof system for TAUT exists
+if and only if $\NP=\coNP$, not if and only if $\PP=\NP$.
 \end{proposition}
-
-This is Cook's reformulation~\cite{Cook1975}: proving superpolynomial lower bounds on proof length in every propositional proof system is equivalent to showing $\PP \neq \coNP$ (which follows from $\PP \neq \NP$).
+The previous implication from $\PP\ne\NP$ was incorrect. This does
+not establish polynomial-size proofs in Extended Frege.
 
 \subsection{Entropy of proofs}
 
@@ -742,25 +913,26 @@ The entropy framework connects to proof complexity via the following question: f
 
 This provides a concrete testing ground: if one can show that for random unsatisfiable $3$-SAT near the threshold, the shortest refutation in Extended Frege has both superpolynomial length and high conditional Kolmogorov complexity, this would be strong evidence for the entropy obstruction.
 
-\begin{conjecture}[Resolution width and Kolmogorov complexity]
+\begin{remark}[Withdrawal of the unbounded-$K$ width conjecture]
 \label{conj:resolution-width}
-For unsatisfiable CNF formulas $\varphi_n$ on $n$ variables, the minimum resolution width $w(\varphi_n \vdash \bot)$ satisfies
-\[
-w(\varphi_n \vdash \bot) \geq \Omega\left( K(\pi^* \mid \varphi_n) / \log n \right),
-\]
-where $\pi^*$ is the shortest resolution refutation of $\varphi_n$. In particular, formulas whose refutations have high Kolmogorov complexity require wide clauses.
-\end{conjecture}
-
-\textit{Motivation.} Ben-Sasson and Wigderson~\cite{BenSasson2001} showed that resolution width lower bounds imply resolution length lower bounds via $|\pi| \geq 2^{w - O(n)}$. Our conjecture reverses the direction: high complexity of the proof object (measured by $K$) forces width. If true, this would provide an information-theoretic characterization of resolution width, connecting proof complexity to the ESC framework.
-
-\begin{remark}[Resolution width as thermodynamic observable]\label{rem:width-observable}
-Resolution width $w(\varphi_n \vdash \bot)$ is robust under time-bounding: unlike Kolmogorov complexity~$K$, the width of a Resolution refutation is a \emph{syntactic} invariant that does not depend on computational resources. This makes it a natural ``thermodynamic observable'' in the proof-complexity analogy: large width forces any time-bounded description to be complex, providing a concrete route from $K$-lower bounds to $K^t$-lower bounds for specific formula families. The conditional MCSP hardness results of Hirahara and Ilango~\cite{Ilango2025} motivate MCSP as a bridge object, without requiring general decidability of~$K$.
+For each unsatisfiable formula $\varphi$, the lexicographically first
+shortest Resolution refutation $\pi_0(\varphi)$ has
+$K(\pi_0(\varphi)\mid\varphi)=O(1)$, since a fixed unbounded program
+enumerates potential proofs in length-lexicographic order and verifies
+them. The earlier proposed width lower bound based on high
+\emph{unbounded} conditional complexity of this canonical proof
+therefore supplies no hardness mechanism and is withdrawn in that form.
+Time-bounded proof search is a distinct open question.
 \end{remark}
 
-\subsection{\texorpdfstring{Entropy proof of $\SAT \notin \mathrm{AC}^0$}{Entropy proof of SAT not in AC0}}
+\begin{remark}[Resolution width as thermodynamic observable]\label{rem:width-observable}
+Resolution width $w(\varphi_n \vdash \bot)$ is robust under time-bounding: unlike Kolmogorov complexity~$K$, the width of a Resolution refutation is a \emph{syntactic} invariant that does not depend on computational resources. This makes it a natural ``thermodynamic observable'' in the proof-complexity analogy: large width can force longer Resolution refutations, but does not by itself give a $K$- or $K^t$-lower bound for canonical proofs. The conditional MCSP hardness results of Hirahara and Ilango~\cite{Ilango2025} motivate MCSP as a bridge object, without requiring general decidability of~$K$.
+\end{remark}
+
+\subsection{\texorpdfstring{Entropy perspective on $\SAT \notin \mathrm{AC}^0$}{Entropy perspective on SAT not in AC0}}
 \label{sec:ac0}
 
-As a concrete instantiation of the entropy framework, we give an entropy-based argument for the classical result $\mathrm{PAR} \notin \mathrm{AC}^0$ (Furst--Saxe--Sipser 1984, Ajtai 1983). Since $\mathrm{AC}^0$ is closed under $\mathrm{AC}^0$-reductions and parity is $\mathrm{AC}^0$-reducible to SAT (via a standard reduction that encodes the parity constraint as a CNF formula using constant-depth circuitry), this also implies $\SAT \notin \mathrm{AC}^0$.
+As a concrete instantiation of the entropy framework, we reframe the classical result $\mathrm{PAR} \notin \mathrm{AC}^0$ (Furst--Saxe--Sipser 1984, Ajtai 1983). Since $\mathrm{AC}^0$ is closed under $\mathrm{AC}^0$-reductions and parity is $\mathrm{AC}^0$-reducible to SAT (via a standard reduction that encodes the parity constraint as a CNF formula using constant-depth circuitry), this also implies $\SAT \notin \mathrm{AC}^0$.
 
 \begin{proposition}[Entropy obstruction for $\mathrm{AC}^0$]
 \label{prop:ac0}
@@ -774,7 +946,10 @@ for some constant $c$ depending on the depth and size bound. In contrast, a \tex
 \begin{proof}[Proof sketch]
 A depth-$d$ circuit of size $s$ on $n$ inputs is described by $O(s \cdot \log s)$ bits (gate types and wiring). Given this description, the truth table on all $2^n$ inputs is computed in time $O(s \cdot 2^n)$ by brute-force evaluation. Thus $K^{O(s \cdot 2^n)}(f_n) \leq O(s \cdot \log s) + O(\log n)$. For polynomial size $s = n^c$: $K^{n^c \cdot 2^n}(f_n) \leq O(n^c \log n)$.
 
-The classical result $\mathrm{PAR}_n \notin \mathrm{AC}^0$ (Furst--Saxe--Sipser 1984, Ajtai 1983, H\r{a}stad 1987) shows that the parity function cannot be computed by polynomial-size constant-depth circuits. In the entropy framework, this means: any circuit computing $\mathrm{PAR}_n$ requires super-polynomial size $s(n) = 2^{n^{\Omega(1/d)}}$, so $K^{\mathrm{poly}(2^n)}(\mathrm{PAR}_n)$ is \textit{not} bounded by $O(n^c \log n)$ when computed via $\mathrm{AC}^0$ circuits. The entropy method does not \textit{reprove} $\mathrm{PAR} \notin \mathrm{AC}^0$, but it \textit{reframes} the separation: $\mathrm{AC}^0$-computable truth tables occupy a negligible fraction of the space of all Boolean functions, and parity lies outside this low-entropy region.
+The classical result $\mathrm{PAR}_n \notin \mathrm{AC}^0$ (Furst--Saxe--Sipser 1984, Ajtai 1983, H\r{a}stad 1987) shows that the parity function cannot be computed by polynomial-size constant-depth circuits. This is a circuit-class lower bound, not an unrestricted algorithmic-entropy
+lower bound: a fixed parity evaluator prints the entire truth table
+in $2^n\poly(n)$ time from an $O(\log n)$-bit description.
+The entropy method does not \textit{reprove} $\mathrm{PAR} \notin \mathrm{AC}^0$, but it \textit{reframes} the separation: $\mathrm{AC}^0$-computable truth tables occupy a negligible fraction of the space of all Boolean functions, but short sequential descriptions alone do not characterize membership in that circuit class.
 \end{proof}
 
 This demonstrates the entropy perspective on a known separation. For general $\PP/\mathrm{poly}$, the analogous bound would give $K^{\mathrm{poly}(2^n)}(f_n) \leq O(n^c \log n)$ for any $f \in \PP/\mathrm{poly}$. Proving that $\SAT_n$ exceeds this bound would establish $\NP \not\subseteq \PP/\mathrm{poly}$ -- a major open problem that implies $\PP \neq \NP$.
@@ -790,7 +965,7 @@ Mulmuley's Geometric Complexity Theory (GCT) \cite{Mulmuley2011} approaches $\PP
 
 In the entropy framework, GCT obstructions are a specific type of \textit{algebraic entropy certificate}: they certify that a function has high ``algebraic complexity'' by exhibiting an invariant that polynomial-size circuits cannot match.
 
-The connection to algorithmic positivity: GCT obstructions are \textit{non-natural} (they are not efficiently computable properties of truth tables) and \textit{non-relativizing} (they depend on algebraic structure). They thus satisfy specifications (S1)--(S2). Whether they satisfy (S3) (non-algebrization) is an active research question.
+The connection to algorithmic positivity: informally, GCT obstructions are often discussed as non-natural (not efficiently computable properties of truth tables) and non-relativizing (depending on algebraic structure) in the spirit of diagnostic questions (S1)--(S2). Whether any concrete GCT lower-bound proof satisfies (S1)--(S3) must be verified for the actual argument.
 
 
 % ===================================================================
@@ -811,7 +986,7 @@ Allender et al.~\cite{Allender2006} established deep connections between the Min
 Santhanam~\cite{Santhanam2023} proposed an algorithmic approach to uniform lower bounds using probabilistic time-bounded Kolmogorov complexity ($\mathrm{pK}^{\mathrm{poly}}$). His approach yields \emph{actual new results} (uniform $\mathrm{AC}^0$ lower bounds) from non-trivial sampling algorithms, without relying on hierarchy theorems. The uniformity bridge of our paper (Section~\ref{sec:uniformity-bridge}) addresses the same conceptual gap that Santhanam tackles with concrete algorithmic tools; his work demonstrates that the gap is partially closable in restricted settings.
 
 \textbf{MCSP and NP-hardness.}
-Hirahara~\cite{Hirahara2018} showed that the NP-hardness of MCSP under certain reductions would imply new circuit lower bounds, providing a concrete path from $K^t$-based hardness to P vs NP separations. The chain ``hardness of MCSP $\Rightarrow$ circuit lower bounds $\Rightarrow$ truth-table incompressibility $\Rightarrow$ EH'' motivates our bridge strategy B4.
+Hirahara~\cite{Hirahara2018} showed that the NP-hardness of MCSP under certain reductions would imply new circuit lower bounds, providing a concrete path from $K^t$-based hardness to P vs NP separations. The chain from MCSP hardness to circuit lower bounds motivates our conditional bridge strategy B4 (separately from the refuted sequential SAT-EH target).
 
 \textbf{Natural proofs and pseudorandomness.}
 The natural proofs barrier~\cite{RazborovRudich1997} is closely connected to the non-computability of $K$: a ``natural'' property must be efficiently computable, but high Kolmogorov complexity is not. Our approach exploits this connection systematically. Impagliazzo and Wigderson~\cite{ImpagliazzoWigderson1997} showed that strong circuit lower bounds imply derandomization ($\mathrm{P} = \mathrm{BPP}$), which in Impagliazzo's ``Five Worlds'' framework~\cite{Impagliazzo1995} corresponds to Heuristica or beyond. EH should therefore be read as a strong truth-table bridge target in the hardness-vs-randomness ecosystem; failure of EH would not by itself place us in Algorithmica.
@@ -823,7 +998,7 @@ Liu and Pass~\cite{LiuPass2020} proved the landmark result that one-way function
 The ESC can be situated within Impagliazzo's ``Five Worlds'' framework~\cite{Impagliazzo1995}: ESC holds in Heuristica, Pessiland, Minicrypt, and Cryptomania, and is false only in Algorithmica (where P $=$ NP). The min-entropy variant (Remark~\ref{rem:min-entropy}) distinguishes further: in Pessiland, average-case NP-hardness holds but OWFs do not exist, so the distributional ESC holds but the PRG-based Bridge Target~3 is unavailable. This motivates Bridge Targets~1 and~2 as alternatives that do not require cryptographic assumptions.
 
 \textbf{Distinction from prior work.}
-This paper does not claim to establish new connections between Kolmogorov complexity and $\PP$ vs $\NP$ -- such connections have been known since the work of Orponen et al.~\cite{OrponenKoSchoeningWatanabe1994} and Fortnow~\cite{Fortnow2000}, and have been developed further by Allender~\cite{Allender2001,Allender2006}, Hirahara~\cite{Hirahara2018}, Liu--Pass~\cite{LiuPass2020}, and Santhanam~\cite{Santhanam2023}. Our contribution is the specific \emph{presentation}: the framing as a No-Go theorem via algorithmic positivity, the systematic barrier analysis (rigorous for $K$, heuristic for $K^t$), the identification of the uniformity bridge as the precise remaining gap, and the connection to proof complexity via the resolution-width conjecture.
+This paper does not claim to establish new connections between Kolmogorov complexity and $\PP$ vs $\NP$ -- such connections have been known since the work of Orponen et al.~\cite{OrponenKoSchoeningWatanabe1994} and Fortnow~\cite{Fortnow2000}, and have been developed further by Allender~\cite{Allender2001,Allender2006}, Hirahara~\cite{Hirahara2018}, Liu--Pass~\cite{LiuPass2020}, and Santhanam~\cite{Santhanam2023}. Our contribution is the specific \emph{presentation}: the framing as a No-Go theorem via algorithmic positivity, the barrier diagnostic checklist (with no formal barrier immunity established for $K$ or $K^t$), the demarcation of the uniformity bridge as the remaining open gap, and the boundary analysis against proof complexity (including withdrawal of the unbounded-$K$ resolution-width conjecture).
 
 % ===================================================================
 % 11. DISCUSSION
@@ -831,21 +1006,40 @@ This paper does not claim to establish new connections between Kolmogorov comple
 \section{Discussion}
 \label{sec:discussion}
 
-\subsection{What has been achieved}
+\subsection{Conditional partial-MCSP witness-extraction research}
+\label{sec:partial-mcsp-transfer}
+A separate project investigates a search-preserving form of reductions
+from collective minimum monotone satisfying assignment (CMMSA)
+to partial MCSP. For a \emph{given} small consistent circuit $C$, a
+candidate proof seeks a uniform local hybrid bound
+$|F_j(A)-F_j(A\setminus\{k\})|\le\tau$ for $k\notin B_C$ and a
+description-count estimate $|B_C|\le G\theta$. Under these
+\emph{explicit unverified integration hypotheses}, greedy deletion
+extracts a satisfying CMMSA assignment $H$ of weight at most
+$G\theta$. The disjoint-seed amplification, the full gate accounting
+and the final randomized reduction require independent verification.
+Neither the existence of this conditional extraction nor an adaptive
+SAT search reduction proves a lower bound on finding the circuit
+or establishes $\PP\ne\NP$.
 
+
+
+\subsection{Results and corrections}
 \begin{enumerate}
-\item \textbf{Unified presentation.} The known equivalence between $\PP \neq \NP$ and resource-bounded incompressibility of NP-witnesses~\cite{Fortnow2000,OrponenKoSchoeningWatanabe1994} is presented in the unified language of algorithmic positivity and entropic No-Go theorems.
-
-\item \textbf{Barrier analysis.} Arguments based on \emph{unbounded} Kolmogorov complexity $K$ satisfy all five barrier specifications: non-relativizing, non-natural, non-algebrizing, model-independent, and robust. For the \emph{resource-bounded} variant $K^t$ used in the core results, the barrier status is heuristic: $K^t$ is computable, so it does not automatically escape the natural proofs barrier, and formal non-algebrization remains open (see Remark~\ref{rem:barrier-K-vs-Kt}).
-
-\item \textbf{Witness entropy gap.} Conditional on $\PP \neq \NP$, there exist SAT instances whose valid witnesses are not logarithmically compressible within any fixed polynomial time bound and logarithmic constant. The stronger claim that witnesses have near-maximal conditional Kolmogorov complexity is isolated as Conjecture~\ref{conj:near-maximal-witness-entropy}.
-
-\item \textbf{Algorithmic positivity.} The concept identifies two core structural properties (polynomial-time witness extraction and entropic cheapness of witnesses) that $\PP$-decidable NP languages satisfy and NP-complete problems violate, supplemented by heuristic properties (compositional and monotone stability of witnesses) that provide additional separation evidence.
+\item \textbf{Reformulation.} Polynomial-time SAT witness search is
+equivalent to $\PP=\NP$; logarithmic time-bounded descriptions restate
+the same threshold, not an additional established lower bound.
+\item \textbf{Critical erratum.} The old sequential SAT-slice
+hardness target is false for standard explicit encodings.
+\item \textbf{Barrier status.} No formal bypass of the classical
+barriers has been demonstrated for $K$ or $K^t$.
+\item \textbf{Conditional routes.} Restricted models and partial-MCSP
+search transfers do not prove unrestricted algorithmic hardness.
 \end{enumerate}
 
 \subsection{What remains open}
 
-The central open problem -- the \textit{uniformity bridge} -- is the conversion of existential entropy bounds (``there exist hard instances'') to universal algorithm bounds (``no algorithm solves all instances''). At a high level, this gap -- between establishing a non-constructive property and closing the loop with a constructive coupling -- appears in other mathematical contexts as well (see Table~\ref{tab:missing-couplings}), though the analogy is at the level of proof strategy, not mathematical content:
+The remaining challenge is an unconditional uniform search lower bound; the existing conditional characterization does not provide such a lower bound. Conceptual parallels are discussed only as analogies. The historical phrasing describes the conversion of existential entropy bounds (``there exist hard instances'') to universal algorithm bounds (``no algorithm solves all instances''). At a high level, this gap -- between establishing a non-constructive property and closing the loop with a constructive coupling -- appears in other mathematical contexts as well (see Table~\ref{tab:missing-couplings}), though the analogy is at the level of proof strategy, not mathematical content:
 
 \begin{table}[htbp]
 \caption{Structural analogy of non-negative quantities and missing couplings across mathematical and complexity problems.}
@@ -857,31 +1051,34 @@ The central open problem -- the \textit{uniformity bridge} -- is the conversion 
 \textbf{Problem} & \textbf{Non-negative quantity} & \textbf{Missing coupling} \\
 \midrule
 Hodge & HR-form $\geq 0$ & $\mathrm{AP} \Rightarrow$ algebraic \\
+\addlinespace[3.5pt]
 BSD & $\hat{h} \geq 0$ & Higher Gross--Zagier \\
+\addlinespace[3.5pt]
 P vs NP & $K^t(w \mid x)$ high & Uniformity bridge \\
 \bottomrule
 \end{tabular}%
 }
 \end{table}
 
-\subsection{Limitations and intellectual honesty}
-
-\textbf{This paper does not prove $\PP \neq \NP$.} We state this unambiguously. The contributions are: (1) a clean reformulation that identifies \textit{what} must be shown (witness incompressibility), (2) a barrier analysis arguing \textit{why} this approach is not blocked by known meta-theorems, and (3) concrete research directions (bridge strategies B1--B4) for closing the remaining gap.
-
+\subsection{Limitations and corrected claim boundaries}
+This paper does not prove $\PP\ne\NP$, a new hardness theorem,
+or a bypass of relativization, natural proofs, or algebrization.
 \begin{enumerate}
-\item \textbf{Non-computability of $K$.} Kolmogorov complexity is not computable, which means the entropy obstruction cannot be directly ``run'' as an algorithm. This is a feature (it bypasses natural proofs) but also a limitation (it makes the argument non-constructive).
-
-\item \textbf{The unique-witness requirement.} The entropy gap argument is strongest for instances with unique witnesses. For instances with many witnesses, a polynomial-time algorithm might select a low-complexity witness even if high-complexity witnesses exist.
-
-\item \textbf{Equivalence, not implication.} The Entropic Separation Conjecture is logically equivalent to $\PP \neq \NP$ (Remark~\ref{rem:esc-equivalence}). Therefore, this paper's No-Go theorem is a \textit{reformulation}, not an independent proof strategy. The value lies in identifying the information-theoretic structure of the problem.
-
-\item \textbf{Barrier analysis: rigorous for $K$, heuristic for $K^t$.} For \emph{unbounded} $K$, the barrier bypass is well-motivated: $K$ is non-computable (defeating natural proofs), oracle-independent (defeating relativization), and non-algebraic (plausibly defeating algebrization). However, the core results use \emph{resource-bounded} $K^t$, which is computable and whose invariance is only up to polynomial slowdown. For $K^t$, the natural proofs barrier is not automatically bypassed, and formal non-algebrization remains open (Remark~\ref{rem:barrier-K-vs-Kt}). Establishing full barrier immunity for $K^t$-based arguments is an important research direction.
+\item A canonical SAT witness has $K(w_0(x)\mid x)=O(1)$
+by unbounded exhaustive search.
+\item The time-bounded witness lower bound \emph{assumes}
+$\PP\ne\NP$; it supplies no unconditional hard family.
+\item Lower bounds for restricted solvers, proof systems,
+or circuit classes do not transfer automatically to all algorithms.
+\item Cook--Reckhow characterizes $\NP=\coNP$, not $\PP=\NP$.
+\item Sequential SAT-EH, including its stronger variant with
+the same $\poly(2^n)$ budget, is refuted for standard SAT.
 \end{enumerate}
 
 \subsection{The Uniformity Bridge: lemma targets}
 \label{sec:uniformity-bridge}
 
-The central open problem of this paper is the \emph{Uniformity Bridge}: transferring the entropy separation from unbounded Kolmogorov complexity $K$ (where barrier immunity holds) to resource-bounded complexity $K^t$ (where computational relevance lies). We identify three concrete lemma targets. In a sufficiently strong and uniform form, any one of them would amount to a conditional closure of the bridge; as stated here they are targets and diagnostics, not established reductions.
+The central open problem is an unconditional lower bound against uniform polynomial-time witness search. No unbounded-$K$ separation or barrier-immunity theorem has been proved to transfer. We identify three concrete lemma targets. In a sufficiently strong and uniform form, any one of them would amount to a conditional closure of the bridge; as stated here they are targets and diagnostics, not established reductions.
 
 \paragraph*{Bridge Target 1: instance compression.}
 \emph{Statement:} If no polynomial-time algorithm can compress satisfying assignments of $\varphi_n$ below $|\varphi_n|^{1-\varepsilon}$ bits, then $K^{n^c}(w \mid \varphi_n) \geq |\varphi_n|^{1-\varepsilon}$, or in the strongest unique-witness form $K^{n^c}(w \mid \varphi_n) \geq |w| - O(\log n)$, for every valid witness $w$.
@@ -889,14 +1086,17 @@ The central open problem of this paper is the \emph{Uniformity Bridge}: transfer
 \emph{Why it suffices:} Instance compression hardness is a well-studied notion in parameterized complexity~\cite{FortnowSanthanam2011,DellMelkebeek2014}. The missing step is a genuine witness-to-compression transfer lemma: a short program that computes $w$ from $\varphi_n$ must be converted into a short, verifier-independent representation in the precise sense used by kernelization or OR-compression lower bounds. Such a transfer is not automatic from the mere existence of a witness selector; it is the content of this bridge target.
 
 \paragraph*{Bridge Target 2: proof complexity.}
-\emph{Statement:} For any propositional proof system $P$ and tautology $\tau_n$ encoding the unsatisfiability of $\bar{\varphi}_n$, the proof $\pi$ satisfies $K(\pi \mid \tau_n) \geq |\pi|^{1-\varepsilon}$.
-
-\emph{Why it suffices:} High proof complexity (superpolynomial proof length) implies that proofs themselves carry high entropy. Combined with the Entropic Separation Conjecture, this yields: no polynomial-time proof search can uniformly find proofs, because the proof objects are incompressible. This route connects to the Razborov--Rudich natural proofs barrier in a constructive way.
+\emph{Open goal:} Establish superpolynomial proof-length lower
+bounds for explicit tautologies in a specified proof system.
+That would not imply an unrestricted conditional
+Kolmogorov lower bound for proofs: the first shortest proof
+has $K(\pi_0(\tau)\mid\tau)=O(1)$ by exhaustive enumeration.
+A time-bounded formulation requires a separate argument.
 
 \paragraph*{Bridge Target 3: PRG-based families.}
 \emph{Statement:} There exists an explicit family $\{\varphi_n\}$ of SAT instances such that (i) each $\varphi_n$ has a unique satisfying assignment $w_n$, (ii) $w_n$ is the output of a pseudorandom generator $G: \{0,1\}^{n/2} \to \{0,1\}^n$, and (iii) $K^{n^c}(w_n \mid \varphi_n) \geq n/2 - O(\log n)$.
 
-\emph{Why it suffices:} If $G$ is a secure PRG (e.g., based on factoring or lattice assumptions), then (iii) follows from the pseudorandomness: any efficient compression of $w_n$ would break $G$. The unique-witness property (i) ensures the entropy gap applies (Corollary~\ref{cor:gap}). The equivalence of OWF existence and average-case hardness of $K^t$~\cite{LiuPass2020} provides a direct cryptographic interpretation: Bridge Target~3 reduces the Uniformity Bridge to a standard cryptographic assumption.
+\emph{Why it suffices:} PRG security alone does not establish (iii) for the given NP witness relation; PRG outputs have short seed descriptions, and a lower bound relative to the instance needs a separate proof. The unique-witness property (i) ensures the entropy gap applies (Corollary~\ref{cor:gap}). The equivalence of OWF existence and average-case hardness of $K^t$~\cite{LiuPass2020} provides a direct cryptographic interpretation: Bridge Target~3 reduces the Uniformity Bridge to a standard cryptographic assumption.
 
 \begin{remark}[Minimal sufficient bridge]
 \label{rem:minimal-bridge}
@@ -918,7 +1118,7 @@ The known instance compression impossibility results~\cite{FortnowSanthanam2011,
 \textbf{Step C: Translation to $K^t$.}
 If such a compression-transfer lemma were proved and the corresponding compression were impossible (under PH non-collapse), then for infinitely many instances $x$ every polynomial-time witness production would fail in the logarithmic-description regime. An additional quantitative argument would still be needed to upgrade this to $K^{n^c}(w \mid x) \geq |w| - O(\log n)$ for all witnesses $w$. This quantitative upgrade is the near-maximal bridge, not a consequence of the basic reformulation.
 
-The remaining gaps are therefore twofold: first the witness-to-compression transfer itself, and then the quantifier order. Even a successful Step~B would typically give ``for each $A$, there exist hard instances'' (non-uniform), while the Uniformity Bridge needs ``there exist instances hard for all $A$'' (uniform). Closing this gap requires either (i) a \emph{universal} compression impossibility (not just for each compressor individually), or (ii) a diagonalization argument that uniformizes over all polynomial-time algorithms simultaneously.
+The remaining gap is a valid witness-to-compression theorem with its exact resource bounds, not an interchange of quantifiers. An unrestricted SAT-search lower bound has quantifier order $\forall A\in\mathrm{FP}\,\exists^\infty x$ on which $A$ fails. It does not demand a single instance hard for every algorithm; for a fixed positive instance a program may hard-code a witness. Any proposed transfer from compression hardness to this search lower bound must be established separately.
 \end{remark}
 
 \begin{remark}[The Uniformity Bridge as a mixing obstruction]
@@ -1014,7 +1214,7 @@ To locate where uniformity breaks, scan the proof for these four signatures:
 \item \textbf{Diagonalization without uniformization:} An object defined by a pure existence argument (Cantor/König) that yields no uniform construction.
 \item \textbf{Coded instance families:} Hardness shifted into a specially prepared family that already contains $n$-dependent advice.
 \end{enumerate}
-In the current ESC framework, the $n$-leak sits in Theorem~\ref{thm:slice_nogo}: the hard instance $\varphi_n$ is produced by contradiction (``if all instances were easy, $A$ would solve SAT''), yielding existence without construction. Bridge Target~B3 (PRG-based families) is the most direct attempt to close this leak.
+In the current ESC framework, the $n$-leak sits in Theorem~\ref{thm:high_entropy}: the hard instance $\varphi_n$ is produced non-constructively by contradiction (``if all instances were easy, $A$ would solve SAT''), yielding existence without construction. Bridge Target~3 (PRG-based families, distinct from the withdrawn slice strategy B3) is the most direct conditional attempt to close this leak.
 \end{remark}
 
 \begin{remark}[No-go mechanisms as hardness localization]\label{rem:ub-nogo}
@@ -1064,10 +1264,10 @@ models) induces distributions
 on $\Omega_x$.  Informally, $\Phi_{\mathcal{C}}(x)$ is the smallest flow
 capacity across a cut separating the initial mass from $S_x$.
 
-For such restricted models one can aim for a standard bottleneck lemma:
-if $\mu_0(S_x)$ is negligible and every separating cut has capacity
-$\Phi_{\mathcal{C}}(x)\leq \exp(-n^\varepsilon)$, then no
-$\poly(n)$-step process in $\mathcal{C}$ can put constant mass on $S_x$.
+For such restricted models one can aim for a warm-start bottleneck lemma relative to a stationary reference measure $\pi$ with initial density factor $R := \|d\mu_0/d\pi\|_\infty$:
+if $\mu_0(S_x)$ is negligible and every separating cut has conductance capacity
+$\Phi_{\mathcal{C}}(x)$ satisfying $R \cdot \Phi_{\mathcal{C}}(x)\leq \exp(-n^\varepsilon)$, then no
+$\poly(n)$-step process in $\mathcal{C}$ can put constant mass on $S_x$. (Without controlling the density factor $R$, the unqualified bottleneck statement is false, as shown by a reversible three-state counterexample.)
 This is only a restricted-model obstruction.  The genuinely hard
 ``flow-shadow'' lemma would have to show that any uniform polynomial-time
 witness producer for the chosen SAT family admits such a canonical flow
@@ -1159,7 +1359,7 @@ Across all the problems in this research program, the structure is:
 \item \textbf{Close the loop with a composition/coupling theorem.}
 \end{enumerate}
 
-For P vs NP, steps 1--3 are established in this paper. Step 4 -- the uniformity bridge -- remains the central challenge.
+For P vs NP, this paper supplies a reformulation and restricted diagnostics only. No general hardness direction or coupling theorem has been established.
 
 \subsection{Open directions}
 
@@ -1170,7 +1370,7 @@ Levin's universal search algorithm $U$ runs all programs of length $\leq l$ in d
 
 \begin{remark}[Valiant--Vazirani reduction and few-witness amplification]
 \label{rem:valiant-vazirani}
-The Valiant--Vazirani theorem reduces SAT to Unique-SAT with high probability via random hash functions. If the near-maximal witness-entropy conjecture holds for the resulting unique-witness instances, then for a random hash $h$ the unique witness $w_h$ of $\varphi \wedge h(w) = 0^k$ satisfies $K^t(w_h \mid \varphi, h) \geq |w_h| - O(\log n)$ with high probability (over $h$). This ``few-witness amplification'' would transfer the stronger near-maximal variant to generic SAT instances, at the cost of a randomized reduction. Derandomization via Nisan--Wigderson generators would be an additional bridge target.
+The Valiant--Vazirani theorem~\cite{ValiantVazirani1986} reduces SAT to Unique-SAT with high probability via random hash functions. If the near-maximal witness-entropy conjecture holds for the resulting unique-witness instances, then for a random hash $h$ the unique witness $w_h$ of $\varphi \wedge h(w) = 0^k$ satisfies $K^t(w_h \mid \varphi, h) \geq |w_h| - O(\log n)$ with high probability (over $h$). This ``few-witness amplification'' would transfer the stronger near-maximal variant to generic SAT instances, at the cost of a randomized reduction. Derandomization via Nisan--Wigderson generators would be an additional bridge target.
 \end{remark}
 
 \begin{remark}[Min-entropy variant]
@@ -1185,7 +1385,7 @@ A stronger variant of the ESC constructs an explicit \emph{adversarial} witness 
 
 \begin{remark}[Compression-to-circuit transfer]
 \label{rem:compression-circuit}
-For restricted circuit classes $\mathcal{C}$ (e.g., $\mathrm{AC}^0$, monotone circuits), the compression-to-circuit transfer takes a sharper form: if $\varphi_n$ has no $\mathcal{C}$-circuit of size $s$ computing its witness, then $K^t_{\mathcal{C}}(w | \varphi_n) \geq \log \binom{2^n}{s}$ where $K^t_{\mathcal{C}}$ denotes the $\mathcal{C}$-restricted Kolmogorov complexity. For $\mathrm{AC}^0$, Razborov--Smolensky lower bounds give $s \geq 2^{n^{\Omega(1)}}$, yielding superpolynomial $K^t_{\mathrm{AC}^0}$ unconditionally. This provides a ``proof of concept'' for Bridge Target~1 in a restricted model.
+For restricted circuit classes $\mathcal{C}$ (e.g., $\mathrm{AC}^0$, monotone circuits), circuit lower bounds yield direct model-restricted description bounds: if no $\mathcal{C}$-circuit of size $s$ computes the witness mapping for $\varphi_n$, then any $\mathcal{C}$-restricted program encoding a valid witness producer requires circuit size exceeding $s$. For $\mathrm{AC}^0$ (H\r{a}stad~\cite{Hastad1987}) and $\mathrm{AC}^0[2]$ (Razborov~\cite{Razborov1987}), exponential lower bounds hold unconditionally for explicit functions such as parity or majority. This serves only as a restricted-model analogy for Bridge Target~1, not a transfer to general polynomial-time computation.
 \end{remark}
 
 \begin{remark}[MCSP internalization route]
@@ -1229,14 +1429,14 @@ The near-maximal witness-entropy variant can be translated into the language of 
 
 \begin{remark}[Self-referential perspective -- informal]
 \label{rem:self-referential}
-A heuristic perspective on why closing the uniformity bridge is hard: for any fixed polynomial-time machine $A$ of description length $|A|$ and running-time polynomial $q_A$, Theorem~\ref{thm:high_entropy} (conditional on $\PP \neq \NP$) gives, for every sufficiently large logarithmic constant $C$, infinitely many instances $\varphi$ whose valid witnesses all satisfy $K^{q_A} (w \mid \varphi) > C\log|\varphi|$. Since $A$ is a fixed program, $K^{q_A}(A(x) \mid x) \leq |A| + O(\log |x|) \leq C\log |x|$ for all large $x$. These two bounds are incompatible on the corresponding hard instances: $A$ cannot produce a valid witness there. This is simply the non-uniform direction of the witness entropy gap (already established in Theorem~\ref{thm:high_entropy}) and does \emph{not} close the uniformity bridge, which requires hard instances that resist \emph{all} algorithms simultaneously, not just each algorithm individually.
+A heuristic perspective on why closing the uniformity bridge is hard: for any fixed polynomial-time machine $A$ of description length $|A|$ and running-time polynomial $q_A$, Theorem~\ref{thm:high_entropy} (conditional on $\PP \neq \NP$) gives, for every sufficiently large logarithmic constant $C$, infinitely many instances $\varphi$ whose valid witnesses all satisfy $K^{q_A} (w \mid \varphi) > C\log|\varphi|$. Since $A$ is a fixed program, $K^{q_A}(A(x) \mid x) \leq |A| + O(\log |x|) \leq C\log |x|$ for all large $x$. These two bounds are incompatible on the corresponding hard instances: $A$ cannot produce a valid witness there. This is simply the non-uniform direction of the witness entropy gap (already established in Theorem~\ref{thm:high_entropy}) and does \emph{not} close the uniformity bridge, which requires an unconditional lower bound of quantifier order $\forall A \in \mathrm{FP}\,\exists^\infty x$ (not a single instance resisting all algorithms simultaneously, since any fixed positive instance can have a witness hard-coded into a constant-size algorithm).
 \end{remark}
 
 \begin{remark}[Extended Frege and MCSP]
 \label{rem:frege-mcsp}
 Two concrete targets for unconditional progress:
 \begin{enumerate}
-\item \emph{Extended Frege:} If superpolynomial lower bounds on Extended Frege proof length can be established for tautologies encoding the unsatisfiability of ESC-hard instances, then the proof objects themselves have high entropy ($K(\pi \mid \tau) \geq |\pi|^{1-\varepsilon}$), realizing Bridge Target~2.
+\item \emph{Extended Frege:} If superpolynomial lower bounds on Extended Frege proof length can be established for tautologies encoding the unsatisfiability of ESC-hard instances, this would establish a proof-length lower bound in that system, not an unrestricted conditional Kolmogorov-complexity lower bound.
 \item \emph{MCSP and non-uniformity:} The Minimum Circuit Size Problem (Allender--Hirahara~\cite{AllenderHirahara2019}) is the natural decision version of Kolmogorov complexity for circuits. MCSP lower bounds are a neighboring route for converting compression statements into circuit lower bounds, but $\mathrm{MCSP}\notin\PP/\poly$ would not by itself imply EH without an additional reduction from small SAT-slice descriptions to small MCSP circuits, or a comparable uniform compression-to-circuit theorem.
 \end{enumerate}
 \end{remark}
@@ -1252,15 +1452,16 @@ At a very high level, the ESC framework shares a structural pattern with the Hod
 \label{subsec:zookeeper-pnp-transfer}
 
 The post-Zookeeper role of the present paper is to make the uniformity
-gap operational.  The relevant recent input is Williams' square-root-space
+gap operational.  The relevant recent input is Williams' square-root-space~\cite{Williams2025}
 simulation of time-bounded computation: time $t$ can be simulated in
 space $O(\sqrt{t\log t})$ for the relevant Turing-machine model.  This
 does not resolve P versus NP, but it changes the geometry of the
 resources that the entropy obstruction must survive.
 
-Relative to the current CORE status, the Zookeeper closure of
-Riemann-$C2/MS2$ is a \emph{normal-form constraint}, not a transfer proof
-for complexity theory.  It licenses the five-slot bookkeeping below, but
+Relative to the current CORE status, the conditional window-concentration
+framework of the Spectral Zookeeper program (where the Riemann-$MS2$ limit step
+remains open) is only a \emph{bookkeeping analogy}, not a transfer proof
+for complexity theory.  It motivates the five-slot bookkeeping below, but
 it does not close the uniformity bridge.  The open mathematical step in
 this paper remains the passage from non-uniform high-entropy witnesses to
 a uniform lower bound that survives the best available time--space
@@ -1295,6 +1496,36 @@ this Williams-normalized slice entropy must collapse along the associated
 resource surface.  MCSP-style candidates and resolution-width families are
 then the natural stress tests for non-collapse.
 
+\subsection{Synoptic Diagnostic and Demarcation Matrix}
+\label{subsec:diagnostic_matrix}
+
+To systematically structure the landscape of candidate proof channels and prevent overclaiming, Table~\ref{tab:diagnostic_guardrails_matrix} provides a synoptic comparison of the investigated diagnostic regimes, mathematical mechanisms, structural obstructions, permitted epistemic readings, and demarcation gates.
+
+\begin{table*}[t]
+\caption{Synoptic matrix of diagnostic regimes, structural obstructions, permitted readings, and demarcation gates across all investigated proof channels.}
+\label{tab:diagnostic_guardrails_matrix}
+\centering
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\textbf{Regime / Model Class} & \textbf{Mathematical Mechanism} & \textbf{Structural Obstruction / Failure Mode} & \textbf{Permitted Epistemic Reading} & \textbf{Status \& Gate} \\
+\midrule
+\textbf{Low-Degree Polynomials} & Degree-$d$ projection pursuit and multilinear Boolean functionals on $\{0,1\}^n$~\cite{GongHuangLiSellke2026,TsirkasWangZadik2026} & Overlap Gap Property (OGP) clustering and solution shattering on random constraint satisfaction & Restricted evidence for specified low-degree methods and distributions & \textsc{Negative Guardrail} \\
+\addlinespace[4pt]
+\textbf{Local Search Flows / MCMC} & Single-bit Metropolis search, Glauber dynamics, and $L^2$-spectral gap contraction & Energy-barrier cavitation and killed-boundary density ratio decay $O((2/3)^n)$ & Algorithmic solver diagnosis; explains empirical slowdown of local heuristic walks & \textsc{Restricted Obstruction} \\
+\addlinespace[4pt]
+\textbf{Bounded-Depth ($\mathrm{AC}^0$, Monotone)} & Switching lemmas, random restrictions, and low-degree polynomial approximations~\cite{Razborov1985,Razborov1987,Hastad1987} & Natural proofs barrier; constructiveness and density prevent separation against general $\PP/\poly$ & Classical model-bound; unconditionally separates restricted circuits without lifting to $\PP$ & \textsc{Classical Bound} \\
+\addlinespace[4pt]
+\textbf{MCSP \& Derandomization} & Equivalence between average-case $K^t$ hardness and one-way functions~\cite{LiuPass2020,Hirahara2018,Allender2006} & Hardness-vs-randomness circularity; non-black-box reductions require distributional assumptions & Plausible structural bridge connecting computational incompressibility to circuit size & \textsc{Conditional Bridge} \\
+\addlinespace[4pt]
+\textbf{Slice Entropy / Uniformity} & Williams-normalized space--time simulations and truth-table bounds $K^{\poly(2^n)}(\SAT_n)$~\cite{Fortnow2000,OrponenKoSchoeningWatanabe1994,Santhanam2023} & Uniformity gap; non-uniform high-entropy witness existence does not directly yield universal lower bounds & Sequential SAT-slice hardness refuted; random-access complexity remains a different open question & \textsc{Refuted Sequential Target} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+
 \subsection*{Result classification}
 
 This paper is a \textbf{framework and presentation paper}: it presents the known equivalence between the P\,$\neq$\,NP conjecture and an entropic condition (ESC) in a unified framework, without proving the separation itself (see Table~\ref{tab:result-classification} for a comprehensive classification of proven equivalences, structural contributions, exploratory numerics, and open bridge targets).
@@ -1310,26 +1541,40 @@ This paper is a \textbf{framework and presentation paper}: it presents the known
 \textbf{Result} & \textbf{Type} & \textbf{Reference} \\
 \midrule
 \multicolumn{3}{@{}l}{\textit{Proven equivalences:}} \\
+\addlinespace[2.5pt]
 ESC $\Leftrightarrow \PP \neq \NP$ & Proposition + Remark & Prop.~\ref{prop:equiv}, Rem.~\ref{rem:esc-equivalence} \\
+\addlinespace[2.5pt]
 EH $\Rightarrow$ P\,$\neq$\,NP & Theorem & Thm.~\ref{thm:slice_nogo} \\
 \midrule
 \multicolumn{3}{@{}l}{\textit{Structural contributions:}} \\
-Barrier immunity (S1--S5 for $K$; heuristic for $K^t$) & Analysis & Sec.~\ref{sec:barriers}, Rem.~\ref{rem:barrier-K-vs-Kt} \\
-Resolution-width conjecture & Conjecture & Conj.~\ref{conj:resolution-width} \\
+\addlinespace[2.5pt]
+Barrier scope: no automatic immunity for $K$ or $K^t$ & Critical analysis & Sec.~\ref{sec:barriers}, Rem.~\ref{rem:barrier-K-vs-Kt} \\
+\addlinespace[2.5pt]
+Withdrawn unbounded-$K$ width hypothesis & Corrected remark & Rem.~\ref{conj:resolution-width} \\
+\addlinespace[2.5pt]
 MCSP internalization route & Remark & Rem.~\ref{rem:mcsp-internalization} \\
+\addlinespace[2.5pt]
 Advice-erosion curve & Bridge target & Rem.~\ref{rem:advice-erosion} \\
+\addlinespace[2.5pt]
 Search-flow conductance & Bridge target & Rem.~\ref{rem:search-flow-conductance} \\
+\addlinespace[2.5pt]
 Capillary-front filtration & Bridge target & Rem.~\ref{rem:capillary-front} \\
+\addlinespace[2.5pt]
 OGP/low-degree literature gate & Negative guardrail & Project ledger, 2026-06-28 \\
+\addlinespace[2.5pt]
 PNP-R1 front-family falsifier & Negative guardrail & Project ledger, 2026-07-06 \\
 \midrule
 \multicolumn{3}{@{}l}{\textit{Exploratory numerics (not constituting evidence):}} \\
+\addlinespace[2.5pt]
 Phase transition structure observed & Illustrative & Rem.~\ref{rem:sat-entropy} \\
+\addlinespace[2.5pt]
 $H_{\mathrm{slice}}$ growth trend ($n \leq 16$, 5 points) & Illustrative & Rem.~\ref{rem:sat-entropy} \\
 \midrule
 \multicolumn{3}{@{}l}{\textit{Open bridge targets:}} \\
+\addlinespace[2.5pt]
 Uniformity Bridge & Open problem & Sec.~\ref{sec:uniformity-bridge} \\
-Entropy Hardness (EH) & Strong sufficient conjecture & Sec.~\ref{sec:slices} \\
+\addlinespace[2.5pt]
+SAT-EH sequential & Refuted for standard SAT & Sec.~\ref{sec:slices} \\
 \bottomrule
 \end{tabular}
 }
@@ -1343,12 +1588,14 @@ Entropy Hardness (EH) & Strong sufficient conjecture & Sec.~\ref{sec:slices} \\
 
 The equivalence between $\PP \neq \NP$ and the incompressibility of NP-witnesses (under resource-bounded Kolmogorov complexity) has been known in various forms since the work of Orponen et al.~\cite{OrponenKoSchoeningWatanabe1994} and Fortnow~\cite{Fortnow2000}. This paper presents these known connections in a unified framework, introducing the terminology of algorithmic positivity and the entropic No-Go theorem.
 
-The witness entropy gap -- the discrepancy between the high conditional complexity of witnesses (under $\PP \neq \NP$) and the low complexity that polynomial-time algorithms can produce -- provides a clean characterization of what any proof of $\PP \neq \NP$ must establish. The barrier analysis argues that $K$-based arguments are not blocked by the three classical barriers, though this immunity is rigorous only for unbounded $K$ and remains heuristic for the resource-bounded $K^t$ used in the core results.
+The witness entropy gap -- the discrepancy between the high conditional complexity of witnesses (under $\PP \neq \NP$) and the low complexity that polynomial-time algorithms can produce -- provides a clean characterization of what any proof of $\PP \neq \NP$ must establish. The barrier analysis raises methodological questions but establishes no formal immunity to the classical barriers for either unbounded $K$ or resource-bounded $K^t$.
 
-The remaining challenge is the uniformity bridge: converting the existential entropy bound into a universal lower bound against all polynomial-time algorithms. The bridge strategies identified (instance compression, proof complexity, PRG-based families, MCSP) are themselves major open problems, each essentially equivalent to or harder than P vs NP itself. The value of the framework lies in making this structure explicit.
+The remaining challenge is an unconditional witness-search lower bound; logarithmic program-length uniformization already follows by enumerating candidate programs. The bridge strategies identified (instance compression, proof complexity, PRG-based families, MCSP) are themselves major open problems, each essentially equivalent to or harder than P vs NP itself. The value of the framework lies in making this structure explicit.
 
 \begin{quote}
-\textit{`P vs NP does not ask whether hard problems exist. It asks whether the universe is efficient at finding answers once they exist. The entropy perspective shows: if the universe is not efficient, it is because the answers themselves carry too much information to be short.''}
+\textit{Short descriptions and efficient computation are distinct
+resources. This reformulation makes the distinction explicit
+without proving a separation of complexity classes.}
 \end{quote}
 
 
@@ -1356,18 +1603,17 @@ The remaining challenge is the uniformity bridge: converting the existential ent
 % ACKNOWLEDGMENTS
 % ===================================================================
 \begin{acknowledgments}
-This work was conducted as independent research without institutional funding.
-
-\textit{AI tools.} AI systems were used across all phases of this work (conception, literature review, mathematical analysis, computational scripts, typesetting, and adversarial AI review). All content and responsibility for correctness lie solely with the author.
-
-\textit{Funding information.} This research received no external funding.
+This work was carried out as independent research and received no
+external funding.
 \end{acknowledgments}
+
+\input{../../../../_templates/disclosure/ai_disclosure_STANDARD_en}
 
 
 % ===================================================================
 % BIBLIOGRAPHY
 % ===================================================================
-\begin{thebibliography}{33}
+\begin{thebibliography}{50}
 
 \bibitem{BakerGillSolovay1975}
 T.~Baker, J.~Gill, \& R.~Solovay (1975).
@@ -1393,11 +1639,11 @@ M.~Li \& P.~Vit\'anyi (2008).
 Springer.
 DOI: 10.1007/978-0-387-49820-1.
 
-\bibitem{Cook1975}
-S.~A.~Cook (1975).
-Feasibly constructive proofs and the propositional calculus.
-\textit{Proceedings of the 7th ACM Symposium on Theory of Computing}, pp.\ 83--97.
-DOI: 10.1145/800116.803756.
+\bibitem{CookReckhow1979}
+S.~A.~Cook \& R.~A.~Reckhow (1979).
+The relative efficiency of propositional proof systems.
+\textit{The Journal of Symbolic Logic}, 44(1), 36--50.
+DOI: 10.2307/2273702.
 
 \bibitem{BenSasson2001}
 E.~Ben-Sasson \& A.~Wigderson (2001).
@@ -1420,13 +1666,13 @@ DOI: 10.1007/BF01137685.
 D.~Grigoriev (2001).
 Linear lower bound on degrees of Positivstellensatz calculus proofs for the parity.
 \textit{Theoretical Computer Science}, 259(1--2), 613--622.
-DOI: 10.1016/S0304-3975(00)00403-7.
+DOI: 10.1016/S0304-3975(00)00157-2.
 
 \bibitem{Mulmuley2011}
 K.~D.~Mulmuley (2011).
 On P vs.\ NP and geometric complexity theory.
-\textit{Journal of the ACM}, 58(2), 5.
-DOI: 10.1145/1667053.1667055.
+\textit{Journal of the ACM}, 58(2), Article~5.
+DOI: 10.1145/1944345.1944346.
 
 \bibitem{Arora2009}
 S.~Arora \& B.~Barak (2009).
@@ -1458,13 +1704,13 @@ DOI: 10.1145/258533.258590.
 
 \bibitem{FST-Unified2026}
 L.~Geiger (2026).
-The Renormalized Free Energy Framework.
+Functional Stability Theory --- Physical Instantiation via the Renormalized Free Energy Principle.
 Zenodo preprint.
 \href{https://doi.org/10.5281/zenodo.19036190}{doi:10.5281/zenodo.19036190}.
 
 \bibitem{GeigerRH2026c}
 L.~Geiger (2026).
-The Riemann Hypothesis Part III: The Analytical Rank-Finite Certificate.
+From Landscape to Atlas: Multi-Route Cartography of an Ongoing Expedition Toward the Riemann Hypothesis.
 Zenodo preprint.
 \href{https://doi.org/10.5281/zenodo.19035640}{doi:10.5281/zenodo.19035640}.
 
@@ -1495,7 +1741,7 @@ DOI: 10.1016/0304-3975(86)90135-0.
 R.~J.~Solomonoff (1964).
 A formal theory of inductive inference, Parts I and II.
 \textit{Information and Control}, 7(1), 1--22 and 7(2), 224--254.
-DOI: 10.1016/S0019-9958(64)90131-7.
+DOI: 10.1016/S0019-9958(64)90223-2 and 10.1016/S0019-9958(64)90131-7.
 
 \bibitem{Allender2001}
 E.~Allender (2001).
@@ -1506,7 +1752,7 @@ DOI: 10.1007/3-540-45294-X\_1.
 \bibitem{Fortnow2000}
 L.~Fortnow (2000).
 Kolmogorov complexity and computational complexity.
-Lecture notes, Mathematics Workshop, Kaikoura, New Zealand; published as survey in \textit{Quaderni di Matematica}.
+Lecture notes, Mathematics Workshop, Kaikoura, New Zealand; survey in \textit{Complexity of Computations and Proofs}, Quaderni di Matematica (2004).
 
 \bibitem{OrponenKoSchoeningWatanabe1994}
 P.~Orponen, K.-I.~Ko, U.~Schöning, \& O.~Watanabe (1994).
@@ -1581,48 +1827,85 @@ MIP* = RE.
 DOI: 10.1145/3485628.
 
 \bibitem{Ilango2025}
-S.~Hirahara and R.~Ilango,
-\textit{NP-hardness of the Minimum Circuit Size Problem from Well-Studied Assumptions},
-FOCS Proceedings, 2025.
+S.~Hirahara and R.~Ilango (2025).
+NP-hardness of the Minimum Circuit Size Problem from Well-Studied Assumptions.
+\textit{Proceedings of the 66th IEEE FOCS}, 2025.
+DOI: 10.1109/FOCS63196.2025.00087.
 
 \bibitem{GamarnikSudan2017}
-D.~Gamarnik and M.~Sudan, \emph{Limits of local algorithms over sparse random graphs}, Ann.\ Probab.\ \textbf{45} (2017), 2353--2376.
+D.~Gamarnik and M.~Sudan (2017).
+Limits of local algorithms over sparse random graphs.
+\textit{Annals of Probability}, 45(4), 2353--2376.
+DOI: 10.1214/16-AOP1114.
 
 \bibitem{Gamarnik2021}
-D.~Gamarnik, \emph{The overlap gap property: a topological barrier to optimizing over random structures}, Proc.\ Natl.\ Acad.\ Sci.\ \textbf{118}(41) (2021), e2108492118.
+D.~Gamarnik (2021).
+The overlap gap property: A topological barrier to optimizing over random structures.
+\textit{Proc.\ Natl.\ Acad.\ Sci.}, 118(41), e2108492118.
+DOI: 10.1073/pnas.2108492118.
 
 \bibitem{AchlioptasCO2008}
-D.~Achlioptas and A.~Coja-Oghlan, \emph{Algorithmic barriers from phase transitions}, Proc.\ 49th FOCS (2008), 793--802.
+D.~Achlioptas and A.~Coja-Oghlan (2008).
+Algorithmic barriers from phase transitions.
+\textit{Proceedings of the 49th IEEE FOCS}, pp.\ 793--802.
+DOI: 10.1109/FOCS.2008.11.
 
 \bibitem{GamarnikJW2020}
-D.~Gamarnik, A.~Jagannath, and A.~S.~Wein, \emph{Hardness of random optimization problems for Boolean circuits, low-degree polynomials, and Langevin dynamics}, preprint, arXiv:2004.12063 (2020).
+D.~Gamarnik, A.~Jagannath, and A.~S.~Wein (2020).
+Hardness of random optimization problems for Boolean circuits, low-degree polynomials, and Langevin dynamics.
+Preprint, arXiv:2004.12063.
 
 \bibitem{BreslerHuang2022}
-G.~Bresler and B.~Huang, \emph{The algorithmic phase transition of random $k$-SAT for low degree polynomials},
-\textit{Proceedings of the 63rd IEEE FOCS} (2022), pp.\ 298--309.
+G.~Bresler and B.~Huang (2022).
+The algorithmic phase transition of random $k$-SAT for low degree polynomials.
+\textit{Proceedings of the 63rd IEEE FOCS}, pp.\ 298--309.
 arXiv:2106.02129.
 
 \bibitem{TsirkasWangZadik2026}
-K.~Tsirkas, L.~Wang, and I.~Zadik, \emph{The monotonicity of the Franz--Parisi potential is equivalent with low-degree MMSE lower bounds}, preprint, arXiv:2603.20070 (2026).
+K.~Tsirkas, L.~Wang, and I.~Zadik (2026).
+The monotonicity of the Franz--Parisi potential is equivalent with low-degree MMSE lower bounds.
+Preprint, arXiv:2603.20070.
 
 \bibitem{GongHuangLiSellke2026}
-S.~Gong, B.~Huang, S.~Li, and M.~Sellke, \emph{Stable algorithms cannot reliably find isolated perceptron solutions}, preprint, arXiv:2604.00328 (2026).
+S.~Gong, B.~Huang, S.~Li, and M.~Sellke (2026).
+Stable algorithms cannot reliably find isolated perceptron solutions.
+Preprint, arXiv:2604.00328.
 
 \bibitem{LiuPass2020}
 Y.~Liu and R.~Pass (2020).
 On one-way functions and Kolmogorov complexity.
 \textit{Proceedings of the 61st IEEE FOCS}, pp.\ 1243--1254.
-DOI: 10.1109/FOCS46700.2020.00119. arXiv:2009.11514.
+DOI: 10.1109/FOCS46700.2020.00118. arXiv:2009.11514.
+
+\bibitem{Williams2025}
+R.~Williams (2025).
+Simulating Time with Square-Root Space.
+\textit{Proceedings of the 57th Annual ACM STOC}, pp.\ 13--23.
+DOI: 10.1145/3717823.3718225. arXiv:2502.17779.
 
 \bibitem[Geiger(2026d)]{Geiger2026-TU}
-Geiger, L. (2026).
-\newblock Functional Stability Theory: Turbulence and the K41 Spectrum as Free-Energy Minimum.
-\newblock Preprint (FST-TU).
+L.~Geiger (2026).
+Anomalous Dissipation and the Turbulent Cascade: A Variational Free-Energy Characterisation of Kolmogorov Scaling.
+Zenodo preprint (FST-TU).
+\href{https://doi.org/10.5281/zenodo.19056813}{doi:10.5281/zenodo.19056813}.
 
 \bibitem[Geiger(2026e)]{Geiger2026-YM}
-Geiger, L. (2026).
-\newblock Functional Stability Theory: Volume-Independent Spectral Gap for Lattice Yang--Mills.
-\newblock Preprint (FST-YM).
+L.~Geiger (2026).
+Strong-Coupling Lattice Gauge Theory: Corrections to Poincar\'e--Dobrushin Bounds and Conditional Gap-Transport Criteria.
+Zenodo preprint (FST-YM).
+\href{https://doi.org/10.5281/zenodo.19087433}{doi:10.5281/zenodo.19087433}.
+
+\bibitem{Hirahara2022PartialMCSP}
+S.~Hirahara (2022).
+NP-Hardness of Learning Programs and Partial MCSP.
+\textit{63rd IEEE Symposium on Foundations of Computer Science (FOCS 2022)}.
+DOI: 10.1109/FOCS54457.2022.00095.
+
+\bibitem{HiraharaMoshkovitz2023}
+S.~Hirahara and D.~Moshkovitz (2023).
+Regularization of Low Error PCPs and an Application to MCSP.
+\textit{LIPIcs 283, ISAAC 2023}, Article~39.
+DOI: 10.4230/LIPIcs.ISAAC.2023.39.
 
 \end{thebibliography}
 
